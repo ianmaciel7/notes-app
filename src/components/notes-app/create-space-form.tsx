@@ -11,6 +11,8 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
 import {
   type AllowedSpaceIcon,
@@ -78,7 +80,7 @@ export function CreateSpaceForm({
       {...props}
     >
       <FieldGroup>
-        <Field>
+        <Field data-invalid={Boolean(error) || undefined}>
           <FieldLabel htmlFor="space-name-input">{t("spaceName")}</FieldLabel>
           <Input
             id="space-name-input"
@@ -90,6 +92,7 @@ export function CreateSpaceForm({
             }}
             autoFocus
             data-testid="space-name-input"
+            aria-invalid={Boolean(error) || undefined}
             disabled={isLoading}
           />
           {error && (
@@ -99,31 +102,35 @@ export function CreateSpaceForm({
 
         <Field>
           <FieldLabel>{t("icon")}</FieldLabel>
-          <div
+          <ToggleGroup
+            value={[selectedIcon]}
+            onValueChange={(val) => {
+              if (val.length > 0) {
+                setSelectedIcon(val[0] as AllowedSpaceIcon);
+              }
+            }}
+            disabled={isLoading}
+            variant="outline"
             className="flex items-center gap-2 pt-1"
             data-testid="space-icon-selector"
           >
             {(["folder", "book", "briefcase", "code"] as const).map(
               (iconKey) => {
                 const IconComp = ICON_COMPONENTS[iconKey];
-                const isSelected = selectedIcon === iconKey;
                 return (
-                  <Button
+                  <ToggleGroupItem
                     key={iconKey}
-                    type="button"
-                    variant={isSelected ? "default" : "outline"}
-                    size="icon-sm"
-                    onClick={() => setSelectedIcon(iconKey)}
-                    disabled={isLoading}
+                    value={iconKey}
+                    size="sm"
                     aria-label={t("selectIconAria", { icon: iconKey })}
                     data-testid={`icon-btn-${iconKey}`}
                   >
-                    <IconComp className="size-4" />
-                  </Button>
+                    <IconComp />
+                  </ToggleGroupItem>
                 );
               },
             )}
-          </div>
+          </ToggleGroup>
         </Field>
       </FieldGroup>
 
@@ -144,6 +151,7 @@ export function CreateSpaceForm({
           disabled={isLoading || !name.trim()}
           data-testid="submit-create-space"
         >
+          {isLoading && <Spinner data-icon="inline-start" />}
           {isLoading ? t("creating") : t("createSpace")}
         </Button>
       </div>

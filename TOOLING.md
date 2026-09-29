@@ -78,7 +78,7 @@ The stable interface is the command surface in `package.json`; implementation fi
 
 | Directory | Responsibility | Entry points |
 | :--- | :--- | :--- |
-| `scripts/guards/` | Deterministic policy and architecture checks that fail on contract violations. | `scripts/guards/floor-guard.mjs`, `scripts/guards/guard-component-naming.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/guards/guard-rsc-boundaries.mjs` |
+| `scripts/guards/` | Deterministic policy and architecture checks that fail on contract violations. | `scripts/guards/floor-guard.mjs`, `scripts/guards/guard-component-naming.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/guards/guard-i18n-strings.mjs`, `scripts/guards/guard-no-emojis.mjs`, `scripts/guards/guard-rsc-boundaries.mjs` |
 | `scripts/hooks/` | Agent/editor hook adapters and shared hook parsing/path logic. | `scripts/hooks/hook-biome-on-edit.mjs`, `scripts/hooks/hook-guard-paths.mjs` |
 | `scripts/verify/` | Repository-wide verification and health orchestration. | `scripts/verify/verify-ai-tooling.mjs`, `scripts/verify/verify-control-docs.mjs`, `scripts/verify/verify-docs.mjs`, `scripts/verify/verify-health.mjs` |
 | `scripts/tooling/` | Small adapters around external development CLIs. | `scripts/tooling/run-agents-cli.mjs` |

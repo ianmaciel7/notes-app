@@ -7,6 +7,7 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { User, UserCredential } from "firebase/auth";
+import { useTranslations } from "next-intl";
 import { type ComponentProps, useCallback, useRef } from "react";
 import {
   Card,
@@ -31,6 +32,7 @@ export function SignUpCard({
   ...props
 }: SignUpAuthScreenProps) {
   const ui = useUI();
+  const t = useTranslations("auth");
   const handledUserIdRef = useRef<string | null>(null);
 
   const titleText = getTranslation(ui, "labels", "signUp");
@@ -80,7 +82,7 @@ export function SignUpCard({
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-card px-2 text-muted-foreground">
-                    ou continue com
+                    {t("orContinueWith")}
                   </span>
                 </div>
               </div>

@@ -7,6 +7,7 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { UserCredential } from "firebase/auth";
+import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import {
   Card,
@@ -18,7 +19,7 @@ import {
 import { cn } from "@/lib/utils";
 import { LoginForm } from "./login-form";
 
-export interface SignInAuthScreenProps
+export interface LoginCardProps
   extends FirebaseSignInAuthScreenProps,
     Omit<ComponentProps<"div">, "children"> {}
 
@@ -30,8 +31,9 @@ export function LoginCard({
   className,
   ref,
   ...props
-}: SignInAuthScreenProps) {
+}: LoginCardProps) {
   const ui = useUI();
+  const t = useTranslations("auth");
 
   const titleText = getTranslation(ui, "labels", "signIn");
   const subtitleText = getTranslation(ui, "prompts", "signInToAccount");
@@ -69,7 +71,7 @@ export function LoginCard({
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-card px-2 text-muted-foreground">
-                    ou continue com
+                    {t("orContinueWith")}
                   </span>
                 </div>
               </div>
@@ -84,5 +86,5 @@ export function LoginCard({
 
 export {
   LoginCard as SignInAuthScreen,
-  type SignInAuthScreenProps as LoginCardProps,
+  type LoginCardProps as SignInAuthScreenProps,
 };

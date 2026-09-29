@@ -12,12 +12,37 @@
     "defaultUser": "User",
     "anonymous": "Guest",
     "signIn": "Sign in",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "orContinueWith": "Or continue with"
   },
   "language": {
     "label": "Language",
     "en": "English",
     "ptBR": "Português (Brasil)",
     "es": "Español"
+  },
+  "spaces": {
+    "connectionError": "Connection Error",
+    "offlineDescription": "Your device is currently offline. Please check your network connection.",
+    "databaseErrorDescription": "Unable to reach database services. Verify that local emulators or network services are accessible.",
+    "retryConnection": "Retry Connection",
+    "emptyTitle": "No Spaces Found",
+    "emptyDescription": "Create your first space to start organizing notes and objects.",
+    "createFirstSpace": "Create your first Space",
+    "selectSpace": "Select Space",
+    "spacesLabel": "Spaces",
+    "createSpace": "Create Space",
+    "enterSpace": "Enter Space",
+    "operatingOffline": "Operating in offline mode",
+    "dialogTitle": "Create Space",
+    "dialogDescription": "Create an isolated knowledge space for your notes and objects.",
+    "spaceName": "Space Name",
+    "spaceNamePlaceholder": "e.g. Personal, Work, Research",
+    "icon": "Icon",
+    "cancel": "Cancel",
+    "creating": "Creating...",
+    "selectIconAria": "Select {icon} icon",
+    "nameRequired": "Space name is required",
+    "failedToCreate": "Failed to create space"
   }
 }

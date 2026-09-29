@@ -12,12 +12,37 @@
     "defaultUser": "Usuário",
     "anonymous": "Convidado",
     "signIn": "Entrar",
-    "signOut": "Sair"
+    "signOut": "Sair",
+    "orContinueWith": "Ou continue com"
   },
   "language": {
     "label": "Idioma",
     "en": "English",
     "ptBR": "Português (Brasil)",
     "es": "Español"
+  },
+  "spaces": {
+    "connectionError": "Erro de conexão",
+    "offlineDescription": "Seu dispositivo está offline. Verifique sua conexão de rede.",
+    "databaseErrorDescription": "Não foi possível conectar aos serviços do banco de dados. Verifique emuladores ou serviços de rede.",
+    "retryConnection": "Tentar novamente a conexão",
+    "emptyTitle": "Nenhum espaço encontrado",
+    "emptyDescription": "Crie seu primeiro espaço para começar a organizar notas e objetos.",
+    "createFirstSpace": "Criar seu primeiro espaço",
+    "selectSpace": "Selecionar espaço",
+    "spacesLabel": "Espaços",
+    "createSpace": "Criar espaço",
+    "enterSpace": "Entrar no espaço",
+    "operatingOffline": "Operando em modo offline",
+    "dialogTitle": "Criar espaço",
+    "dialogDescription": "Crie um espaço isolado de conhecimento para suas notas e objetos.",
+    "spaceName": "Nome do espaço",
+    "spaceNamePlaceholder": "ex: Pessoal, Trabalho, Pesquisa",
+    "icon": "Ícone",
+    "cancel": "Cancelar",
+    "creating": "Criando...",
+    "selectIconAria": "Selecionar ícone {icon}",
+    "nameRequired": "O nome do espaço é obrigatório",
+    "failedToCreate": "Falha ao criar espaço"
   }
 }

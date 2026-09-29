@@ -88,10 +88,7 @@ Detailed command, search, and tool invariants are canonical in `.agents/rules/co
 - **Repomix**: `repomix.config.json` MUST be used for broad repository snapshots.
 - **Context7**: `ctx7 library` → `ctx7 docs` MUST be used before writing code against third-party library APIs (see `.agents/skills/context7-cli/SKILL.md`).
 
-When the active agent exposes a matching configured MCP, use it rather than creating
-parallel configuration. A required tool may be bypassed only when unavailable,
-broken, incompatible, or under investigation; state the reason and use the narrowest
-fallback.
+When an agent exposes a configured MCP, use it. Bypassing requires stating the reason and using the narrowest fallback.
 
 ## Skill routing
 

@@ -237,6 +237,48 @@ export function checkPrimaryExportMatchesFilename(sf, filePath) {
   };
 }
 
+/**
+ * Specifically validates that login-card.tsx declares `LoginCardProps` directly as its
+ * canonical props interface/type rather than `SignInAuthScreenProps`.
+ * (SignInAuthScreenProps may only be re-exported as a backwards-compatible alias).
+ */
+export function checkLoginCardProps(sf, filePath) {
+  const baseName = path.basename(filePath);
+  if (baseName !== "login-card.tsx") {
+    return null;
+  }
+
+  const declaredPropNames = [];
+  ts.forEachChild(sf, (node) => {
+    if (
+      (ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node)) &&
+      node.name?.text.endsWith("Props")
+    ) {
+      declaredPropNames.push(node.name.text);
+    }
+  });
+
+  if (declaredPropNames.includes("SignInAuthScreenProps")) {
+    return {
+      file: path.relative(root, filePath),
+      propName: "SignInAuthScreenProps",
+      message:
+        "login-card.tsx must declare 'LoginCardProps' as its canonical props interface, not 'SignInAuthScreenProps'. Re-export SignInAuthScreenProps as an alias if needed.",
+    };
+  }
+
+  if (!declaredPropNames.includes("LoginCardProps")) {
+    return {
+      file: path.relative(root, filePath),
+      propName: "LoginCardProps",
+      message:
+        "login-card.tsx must declare 'LoginCardProps' as its canonical props interface.",
+    };
+  }
+
+  return null;
+}
+
 export function checkPropsInFile(filePath, content) {
   const sf = ts.createSourceFile(
     filePath,
@@ -256,6 +298,9 @@ export function checkPropsInFile(filePath, content) {
     filePath,
   );
   if (primaryExportViolation) violations.push(primaryExportViolation);
+
+  const loginCardPropsViolation = checkLoginCardProps(sf, filePath);
+  if (loginCardPropsViolation) violations.push(loginCardPropsViolation);
 
   ts.forEachChild(sf, (node) => {
     if (ts.isInterfaceDeclaration(node) && node.name.text.endsWith("Props")) {

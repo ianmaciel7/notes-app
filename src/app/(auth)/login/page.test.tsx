@@ -12,8 +12,10 @@ import {
   signInWithRedirect,
   type UserCredential,
 } from "firebase/auth";
+import { NextIntlClientProvider } from "next-intl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthProvider } from "@/components/notes-app/auth-provider";
+import messages from "@/messages/en.json";
 import LoginPage from "./page";
 
 const { mockReplace, mockPush, mockSearchParamsGet, MockGoogleAuthProvider } =
@@ -68,9 +70,11 @@ describe("LoginPage", () => {
 
   function renderLoginPage() {
     return render(
-      <AuthProvider>
-        <LoginPage />
-      </AuthProvider>,
+      <NextIntlClientProvider locale="en" messages={messages}>
+        <AuthProvider>
+          <LoginPage />
+        </AuthProvider>
+      </NextIntlClientProvider>,
     );
   }
 

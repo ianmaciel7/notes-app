@@ -40,6 +40,7 @@ flowchart TD
 ### Step 3: Delegation & Parallel Fan-Out (Scatter)
 - **Single-Message Batch Dispatch**: Always call `invoke_subagent` with all concurrent tasks in a single array call. Never dispatch parallel workers sequentially across separate turns.
 - **Homogeneous Parallel Scaling**: When a single domain task is broad or slow (e.g., codebase audits, test suite generation across multiple packages, or multi-directory exploration), instantiate multiple concurrent subagents of the *same* role (e.g., 3 `research` subagents or 2 `test-engineer` subagents) with non-overlapping scopes.
+- **Per-File Subagent Delegation**: When auditing, refactoring, generating tests, or processing a discrete set of files, partition the work by file and instantiate a dedicated subagent per file (or small file batch). Each subagent operates on its assigned file with focused prompts to isolate context and maximize parallelism.
 - **Multi-Worktree Fan-Out**: When scouting prior art or comparing implementations across `.worktrees/`, follow the `.agents/skills/find-worktrees/` skill. Dispatch one dedicated `research` subagent per worktree (e.g., dedicated workers for `.worktrees/old-2`, `.worktrees/old-4`, `.worktrees/old-9`), using lightweight/fast model tiers available in the active environment.
 - **Reactive Wakeup**: Do not poll or query status loops. Rely on the system's asynchronous notification to wake up upon subagent completion.
 

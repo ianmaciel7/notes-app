@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Policies } from "./auth-policies-card";
 
-export interface SignInAuthFormProps
+export interface LoginFormProps
   extends Omit<ComponentProps<"form">, "onSubmit">,
     FirebaseSignInAuthFormProps {}
 
@@ -27,7 +27,7 @@ export function LoginForm({
   onSignUpClick,
   className,
   ...props
-}: SignInAuthFormProps) {
+}: LoginFormProps) {
   const ui = useUI();
   const schema = useSignInAuthFormSchema();
   const action = useSignInAuthFormAction();
@@ -153,5 +153,5 @@ export function LoginForm({
 
 export {
   LoginForm as SignInAuthForm,
-  type SignInAuthFormProps as LoginFormProps,
+  type LoginFormProps as SignInAuthFormProps,
 };

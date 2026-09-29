@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import test from "node:test";
 import ts from "typescript";
 import {
+  checkLoginCardProps,
   checkPrimaryExportMatchesFilename,
   checkPropsInFile,
 } from "./guard-component-props.mjs";
@@ -164,4 +165,53 @@ test("checkPropsInFile catches primary export mismatch via integration", () => {
   );
   assert.ok(exportViolation, "expected a primary-export violation");
   assert.match(exportViolation.message, /SignInAuthScreen/);
+});
+
+// ─── checkLoginCardProps ───────────────────────────────────────────────────
+
+test("checkLoginCardProps passes when LoginCardProps is declared canonically", () => {
+  const sample = `
+    export interface LoginCardProps extends ComponentProps<"div"> {}
+    export function LoginCard(props: LoginCardProps) { return null; }
+    export { LoginCard as SignInAuthScreen, type LoginCardProps as SignInAuthScreenProps };
+  `;
+  const sf = parseTsx(sample, "login-card.tsx");
+  const result = checkLoginCardProps(sf, "login-card.tsx");
+  assert.equal(result, null);
+});
+
+test("checkLoginCardProps fails when SignInAuthScreenProps is declared instead of LoginCardProps", () => {
+  const sample = `
+    export interface SignInAuthScreenProps extends ComponentProps<"div"> {}
+    export function LoginCard(props: SignInAuthScreenProps) { return null; }
+    export { LoginCard as SignInAuthScreen, type SignInAuthScreenProps as LoginCardProps };
+  `;
+  const sf = parseTsx(sample, "login-card.tsx");
+  const result = checkLoginCardProps(sf, "login-card.tsx");
+  assert.ok(result !== null);
+  assert.equal(result.propName, "SignInAuthScreenProps");
+  assert.match(
+    result.message,
+    /must declare 'LoginCardProps' as its canonical props interface/,
+  );
+});
+
+test("checkLoginCardProps fails when LoginCardProps is missing", () => {
+  const sample = `
+    export function LoginCard() { return null; }
+  `;
+  const sf = parseTsx(sample, "login-card.tsx");
+  const result = checkLoginCardProps(sf, "login-card.tsx");
+  assert.ok(result !== null);
+  assert.equal(result.propName, "LoginCardProps");
+  assert.match(result.message, /must declare 'LoginCardProps'/);
+});
+
+test("checkLoginCardProps ignores other files", () => {
+  const sample = `
+    export interface SignInAuthScreenProps extends ComponentProps<"div"> {}
+  `;
+  const sf = parseTsx(sample, "other-component.tsx");
+  const result = checkLoginCardProps(sf, "other-component.tsx");
+  assert.equal(result, null);
 });

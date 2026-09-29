@@ -24,6 +24,7 @@ not be weakened merely to make a change pass.
 | Architecture | Zero dependency-cruiser violations | `pnpm run deps:check` | task end |
 | RSC Boundaries | Zero server component boundary findings | `pnpm run check:rsc` | task end |
 | Component Props | Zero invalid component prop interface findings | `pnpm run check:props` | task end |
+| i18n Strings | Zero hardcoded user-facing strings or forbidden copy in UI components | `pnpm run check:i18n` | task end |
 | Duplication | At most 10% by configured jscpd threshold | `pnpm run check:duplication` | task end |
 | Dependency audit | No high/critical package-manager advisories | `pnpm run check:security` | dependency/security review |
 | Dependency vulnerability regression | No newly introduced known vulnerability | OSV-Scanner differential workflow | PR |

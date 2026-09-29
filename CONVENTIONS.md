@@ -35,6 +35,7 @@ contributor workflow to `CONTRIBUTING.md`.
   - `-alert` / `*Alert` for notification and error banners (e.g. `redirect-error-alert.tsx` -> `RedirectErrorAlert`)
   - `-button` / `*Button`, `-select` / `*Select`, `-menu` / `*Menu`, `-switcher` / `*Switcher` for interactive UI controls
   - `-provider` / `*Provider` for React context providers
+- **Canonical Props Naming (`${ComponentName}Props`)**: Component prop interfaces/types must be declared canonically using the component's canonical PascalCase name (e.g. `login-card.tsx` must declare and use `export interface LoginCardProps`, never `SignInAuthScreenProps` as the primary interface). Legacy or library names may only be re-exported as backwards-compatible aliases (e.g. `export type { LoginCardProps as SignInAuthScreenProps }`). Enforced by `check:props`.
 
 ## 3. Component Composition
 
@@ -97,6 +98,9 @@ contributor workflow to `CONTRIBUTING.md`.
 ### Asynchronous Lifecycle & Background Work
 - **`after()` for Post-Response Tasks**: Use Next.js `after()` (or `unstable_after`) to schedule asynchronous work (logging, analytics, cache warming) that should execute after the HTTP response has finished streaming, preventing background tasks from blocking user TTFB.
 
+### App Router Page & Layout Props
+- **Next.js `PageProps` Helper**: Use Next.js's globally generated `PageProps<Route>` (generated via `next dev`, `next build`, or `next typegen`) for typing route entrypoint props rather than closed ad-hoc interfaces. Remember that `params` and `searchParams` are asynchronous `Promise` instances since Next.js version 15. In unit tests for route page files, pass `params` and `searchParams` as resolved promises (`Promise.resolve(...)`).
+
 ### Hook Placement & Usage
 - **Co-located Component Hooks (inside component file):** Keep custom hooks co-located
   within the component file when they are strictly coupled to that component family's
@@ -107,6 +111,10 @@ contributor workflow to `CONTRIBUTING.md`.
   are generic, shared across multiple independent components or routes (e.g., `useIsMobile`,
   `useAuth`), encapsulate reusable browser APIs (media queries, listeners, sensors), or require
   isolated unit testing. Hooks in `src/hooks/` must never depend on application routes (`src/app/`).
+
+### Internationalization (i18n) & Localized Strings
+- **No Hardcoded User-Facing Text**: Hardcoding user-facing strings (such as button labels like "Retry Connection", "Sign in", headings, error messages, or placeholders) directly in JSX or UI components is strictly forbidden.
+- **Mandatory i18n Translation Keys**: Always use the internationalization framework (`next-intl`, e.g. `useTranslations`) or Firebase UI translation mechanisms (`getTranslation(ui, ...)`). All user-facing strings must be defined across message catalogs (`src/messages/{locale}.json`).
 
 ## 6. Styling
 
@@ -136,6 +144,7 @@ Do not:
 
 - bypass Biome or TypeScript merely to obtain a pass;
 - hardcode visual tokens owned by `DESIGN.md`;
+- hardcode user-facing copy, labels, or error messages (e.g. 'Retry Connection') in UI components instead of using i18n dictionaries;
 - rebuild an existing shadcn/Base UI primitive with custom markup;
 - put notes-domain behavior inside `src/components/ui/`;
 - introduce a global state/data/auth pattern without an architectural decision;
