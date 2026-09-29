@@ -17,7 +17,7 @@ Furthermore, user-visible terminology across spaces and object types must remain
 We adopt `next-intl` using a cookie-driven request configuration without URL path prefixes, paired with Firebase Authentication user language synchronization following official Firebase recommendations:
 
 1. **Clean URL Strategy**: Routes remain un-prefixed (e.g., `/`, `/editor`, `/settings`). The active locale is resolved on the server in e.g. `src/i18n/request.ts` via the `NEXT_LOCALE` cookie using `next-intl/server` (`getRequestConfig`), falling back to `en` by default.
-2. **Supported Locales**: The default locale is `en` (English), with support for `pt-BR` (Português - Brasil) and `es` (Español).
+2. **Supported Locales**: The default locale is `en` (English), with support for `pt-BR` (Portuguese - Brazil) and `es` (Spanish).
 3. **Firebase Auth Synchronization**: `auth.useDeviceLanguage()` is called strictly as an initial fallback for unauthenticated guest sessions. When an explicit language preference is set or retrieved from the user's profile document (e.g. Firestore `/users/{uid}`), client handlers assign `auth.languageCode = selectedLocale` on the Firebase `Auth` instance (localizing Auth emails, SMS, reCAPTCHA, and OAuth popups) and synchronize the `NEXT_LOCALE` cookie for server-side `next-intl` rendering.
 4. **Canonical Domain Separation**: Persisted entities, database models, and built-in object type records preserve canonical English identifiers (e.g. `singularName`, `pluralName`, `spaceId`), while all UI surfaces (menus, command palette, tabs, notifications, Firebase error codes) resolve dynamic display labels from `src/messages/*.json`.
 
