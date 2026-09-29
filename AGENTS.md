@@ -23,8 +23,6 @@ Preserve marked tool-generated blocks verbatim.
   16,000 UTF-8 bytes.
 - Ownership rules (one fact, one canonical owner): `.agents/skills/context-manager/SKILL.md`.
 - All documentation, specs, and execution plans MUST be written in English unless explicitly requested otherwise by the user (`CONTRIBUTING.md`).
-- Do not weaken quality controls, tests, thresholds, hooks, or suppressions merely
-  to make a task pass.
 
 ## Context routing
 
@@ -34,9 +32,11 @@ Read only the owner relevant to the task:
 | --- | --- |
 | Human setup and project entry point | `README.md` |
 | Product scope, goals, non-goals | `INTENT.md` |
-| Detailed product requirements, invariants, phases, decisions | `docs/product-specs/index.md` |
+| Product requirements, invariants, phases, decisions | `docs/product-specs/index.md` |
 | Complex multi-step work state | `docs/exec-plans/README.md` |
 | Domain language and concepts | `CONTEXT.md` |
+| Bounded contexts | `CONTEXT-MAP.md` |
+| Entity-relationship model & Firestore schema | `DER.md` |
 | Architecture and boundaries | `ARCHITECTURE.md` |
 | Code-writing rules | `CONVENTIONS.md` |
 | UI/UX system | `DESIGN.md` |
@@ -176,8 +176,8 @@ Use `CONSTRAINTS.md` for blocking floors, `TESTING.md` for verification strategy
 and `CONTRIBUTING.md` for pre-PR checks. Run the smallest risk-appropriate set.
 Do not duplicate command matrices here.
 
-Do not bypass hooks/checks with `--no-verify`, lowered thresholds, removed tests,
-or new suppressions merely to obtain a pass.
+Do not weaken quality controls or bypass hooks/checks (`--no-verify`, lowered
+thresholds, removed tests, new suppressions) merely to obtain a pass.
 
 ## Definition of done
 
@@ -202,7 +202,7 @@ GitHub Issues via `gh` CLI. See `docs/agents/issue-tracker.md`.
 
 ### Domain docs
 
-Single-context (`CONTEXT.md` + `docs/adr/`). See `docs/agents/domain.md`.
+See `docs/agents/domain.md` (glossary, context map, DER, ADRs).
 
 ## Maintenance
 

@@ -6,7 +6,10 @@ How the engineering skills should consume this repo's domain documentation when 
 
 - **`CONTEXT.md`** at the repo root, or
 - **`CONTEXT-MAP.md`** at the repo root if it exists: it points at one `CONTEXT.md` per context. Read each one relevant to the topic.
+- **`DER.md`** at the repo root if it exists: the entity-relationship model and Firestore schema. Read it before touching persistence, queries, indexes, or `firestore.rules`.
 - **`docs/adr/`**: read ADRs that touch the area you're about to work in. In multi-context repos, also check `src/<context>/docs/adr/` for context-scoped decisions.
+
+**This repo's shape**: one root `CONTEXT.md` (the single glossary) plus a root `CONTEXT-MAP.md` that indexes bounded contexts as sections *within* that glossary. There are no per-context `CONTEXT.md` files under `src/`, so do not look for them.
 
 If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill (reached via `/grill-with-docs` and `/improve-codebase-architecture`) creates them lazily when terms or decisions actually get resolved.
 
