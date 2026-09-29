@@ -22,6 +22,7 @@ describe("SpacePage", () => {
   it("renders space page with active spaceId and space switcher", async () => {
     const pageComponent = await SpacePage({
       params: Promise.resolve({ spaceId: "test-space-456" }),
+      searchParams: Promise.resolve({}),
     });
 
     render(pageComponent);

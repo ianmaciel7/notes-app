@@ -9,7 +9,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "@/lib/firebase/firestore";
 import { validateCreateSpaceInput } from "@/lib/validators/space";
@@ -23,6 +23,8 @@ export interface UseSpacesResult {
   spaces: Space[];
   loading: boolean;
   error: Error | null;
+  isOffline: boolean;
+  retry: () => void;
   createSpace: (input: CreateSpaceInput) => Promise<string>;
 }
 
@@ -31,8 +33,43 @@ export function useSpaces(): UseSpacesResult {
   const [spaces, setSpaces] = useState<Space[]>([]);
   const [loading, setLoading] = useState(Boolean(user));
   const [error, setError] = useState<Error | null>(null);
+  const [retryKey, setRetryKey] = useState(0);
+  const [isOffline, setIsOffline] = useState(() => {
+    return typeof navigator !== "undefined" && !navigator.onLine;
+  });
+
+  const retry = useCallback(() => {
+    setError(null);
+    setLoading(true);
+    setRetryKey((prev) => prev + 1);
+  }, []);
+
+  // W3C Network Information / HTML5 Online Status handling
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleOnline = () => {
+      setIsOffline(false);
+      retry();
+    };
+
+    const handleOffline = () => {
+      setIsOffline(true);
+    };
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, [retry]);
 
   useEffect(() => {
+    // Reference retryKey to re-subscribe on manual retry
+    if (retryKey < 0) return;
+
     if (!user) {
       setSpaces([]);
       setLoading(false);
@@ -67,7 +104,7 @@ export function useSpaces(): UseSpacesResult {
     return () => {
       unsubscribe();
     };
-  }, [user]);
+  }, [user, retryKey]);
 
   const createSpace = async (input: CreateSpaceInput): Promise<string> => {
     if (!user) {
@@ -107,6 +144,8 @@ export function useSpaces(): UseSpacesResult {
     spaces,
     loading,
     error,
+    isOffline,
+    retry,
     createSpace,
   };
 }

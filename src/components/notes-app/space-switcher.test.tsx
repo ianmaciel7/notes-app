@@ -31,6 +31,8 @@ describe("SpaceSwitcher", () => {
       spaces: [],
       loading: false,
       error: null,
+      isOffline: false,
+      retry: vi.fn(),
       createSpace: vi.fn(),
     });
   });
@@ -49,11 +51,65 @@ describe("SpaceSwitcher", () => {
     expect(container.firstChild).toBeNull();
   });
 
+  it("renders accessible error alert with retry button when error occurs", () => {
+    const retryMock = vi.fn();
+    mockUseSpaces.mockReturnValue({
+      spaces: [],
+      loading: false,
+      error: new Error("auth/network-request-failed"),
+      isOffline: false,
+      retry: retryMock,
+      createSpace: vi.fn(),
+    });
+
+    render(<SpaceSwitcher />);
+
+    expect(screen.getByTestId("space-switcher-error")).toBeDefined();
+    expect(screen.getByRole("alert")).toBeDefined();
+    expect(screen.getByText("Connection Error")).toBeDefined();
+
+    const retryBtn = screen.getByTestId("space-switcher-retry-btn");
+    fireEvent.click(retryBtn);
+    expect(retryMock).toHaveBeenCalled();
+  });
+
+  it("renders offline status indicator when isOffline is true", () => {
+    const spaces: Space[] = [
+      {
+        id: "space-1",
+        ownerId: "uid-1",
+        name: "Personal",
+        description: "",
+        icon: "folder",
+        stateVersion: 1,
+        schemaVersion: 1,
+        createdAt: null,
+        updatedAt: null,
+      },
+    ];
+
+    mockUseSpaces.mockReturnValue({
+      spaces,
+      loading: false,
+      error: null,
+      isOffline: true,
+      retry: vi.fn(),
+      createSpace: vi.fn(),
+    });
+
+    render(<SpaceSwitcher currentSpaceId="space-1" />);
+
+    expect(screen.getByTestId("offline-status-indicator")).toBeDefined();
+    expect(screen.getByText("Operating in offline mode")).toBeDefined();
+  });
+
   it("renders loading state", () => {
     mockUseSpaces.mockReturnValue({
       spaces: [],
       loading: true,
       error: null,
+      isOffline: false,
+      retry: vi.fn(),
       createSpace: vi.fn(),
     });
 
@@ -67,6 +123,8 @@ describe("SpaceSwitcher", () => {
       spaces: [],
       loading: false,
       error: null,
+      isOffline: false,
+      retry: vi.fn(),
       createSpace: vi.fn(),
     });
 
@@ -95,6 +153,8 @@ describe("SpaceSwitcher", () => {
       spaces,
       loading: false,
       error: null,
+      isOffline: false,
+      retry: vi.fn(),
       createSpace: vi.fn(),
     });
 

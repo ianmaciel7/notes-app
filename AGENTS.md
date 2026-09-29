@@ -47,6 +47,7 @@ Read only the owner relevant to the task:
 | Tool catalog & capabilities | `TOOLING.md` |
 | Search, discovery, and navigation hierarchy | `.agents/rules/search-and-discovery.md` |
 | Lead Orchestrator & subagent execution | `.agents/rules/orchestration.md` |
+| Emoji prohibition & icon standards | `.agents/rules/no-emojis.md` |
 
 The complete ownership/boundary map is canonical in
 `.agents/skills/context-manager/SKILL.md`.
@@ -139,8 +140,7 @@ skill behavior from its name alone.
 | Health check for quality, tests, context, and token savings | `verify-health` |
 
 Treat project-owned skills and `skills-lock.json` as controlled configuration.
-Never edit remote skills authored by others or modify installed third-party skills directly.
-Do not add, refresh, replace, or remove remote skills unless explicitly requested by the user.
+Do not edit, add, refresh, replace, or remove remote skills unless requested by the user.
 Follow the applicable skill-management workflow for lifecycle and lock updates.
 
 ## Change workflow
@@ -151,6 +151,7 @@ Before changing code:
 2. For Next.js work, follow the generated Next.js instructions at the top of this file.
 3. For third-party behavior, use the applicable documentation skill before relying on
    memory.
+4. **shadcn-first for UI**: Always prefer existing shadcn/ui components (`src/components/ui/`) before writing custom markup or ad-hoc wrappers. Compose existing primitives (`FieldGroup`, `Card`, `Button`, `Badge`, `Alert`, etc.) and search registries (`rtk pnpm dlx shadcn@latest search`) before building from scratch.
 
 While changing code:
 

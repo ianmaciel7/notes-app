@@ -118,6 +118,8 @@ contributor workflow to `CONTRIBUTING.md`.
 - Avoid `!important` and consumer-level overlay stacking overrides.
 - Use configured Lucide components explicitly and give icon-only controls accessible
   names.
+- Emojis are forbidden in UI components, icon defaults, fallbacks, and domain entities;
+  Lucide icons or semantic identifier strings must be used.
 
 ## 7. Performance-Sensitive Code
 
@@ -137,5 +139,7 @@ Do not:
 - rebuild an existing shadcn/Base UI primitive with custom markup;
 - put notes-domain behavior inside `src/components/ui/`;
 - introduce a global state/data/auth pattern without an architectural decision;
+- use emojis in UI components, icon defaults, fallbacks, or domain entities (use
+  Lucide icons or semantic identifier strings instead);
 - treat compilation as UI verification — visual/test requirements live in
   `TESTING.md`.

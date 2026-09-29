@@ -215,5 +215,6 @@ implementation. `CONVENTIONS.md` owns component API/anatomy rules.
 - hardcode component-specific colors when a semantic token owns the role;
 - invent a spacing, breakpoint, radius, or elevation system for one component;
 - use color alone to communicate selected, error, disabled, or loading state;
+- use emojis as icons or visual indicators (use Lucide icons instead);
 - omit descriptive titles or `<h1>` heading elements on page routes;
 - put testing commands or React implementation patterns in this document.

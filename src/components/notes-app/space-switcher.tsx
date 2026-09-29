@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  AlertCircle,
   Book,
   Briefcase,
   Check,
@@ -8,10 +9,12 @@ import {
   Code,
   Folder,
   Plus,
+  RefreshCw,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type ComponentProps, useState } from "react";
 import { CreateSpaceForm } from "@/components/notes-app/create-space-form";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -67,7 +70,7 @@ export function SpaceSwitcher({
 }: SpaceSwitcherProps) {
   const router = useRouter();
   const { user } = useAuth();
-  const { spaces, loading, createSpace } = useSpaces();
+  const { spaces, loading, error, isOffline, retry, createSpace } = useSpaces();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
@@ -94,6 +97,38 @@ export function SpaceSwitcher({
       setIsCreating(false);
     }
   };
+
+  if (error) {
+    return (
+      <div
+        data-testid="space-switcher-error"
+        className={cn(
+          "flex flex-col items-center justify-center w-full max-w-sm mx-auto gap-3",
+          className,
+        )}
+        {...props}
+      >
+        <Alert variant="destructive" role="alert" aria-live="assertive">
+          <AlertCircle className="size-4" />
+          <AlertTitle>Connection Error</AlertTitle>
+          <AlertDescription>
+            {isOffline
+              ? "Your device is currently offline. Please check your network connection."
+              : "Unable to reach database services. Verify that local emulators or network services are accessible."}
+          </AlertDescription>
+        </Alert>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={retry}
+          data-testid="space-switcher-retry-btn"
+        >
+          <RefreshCw className="mr-1.5 size-3.5" />
+          Retry Connection
+        </Button>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -224,6 +259,16 @@ export function SpaceSwitcher({
           </Button>
         )}
       </div>
+
+      {isOffline && (
+        <output
+          aria-live="polite"
+          className="text-[11px] text-amber-600 dark:text-amber-400"
+          data-testid="offline-status-indicator"
+        >
+          Operating in offline mode
+        </output>
+      )}
 
       <CreateSpaceForm
         open={createDialogOpen}

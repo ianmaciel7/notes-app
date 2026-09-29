@@ -64,7 +64,7 @@ Pick by the **subject** of the fact, not by where you happen to be working.
 | Feature spec synthesized from discussion | Issue tracker issue (per `to-spec`) or `docs/product-specs/` | Follow `to-spec` template (Problem, Solution, User Stories, Implementation/Testing Decisions). Trim ephemeral code. |
 | Throwaway prototype, spike, or exploratory UI/state | `prototype/<name>` git branch off `main` | Primary source kept on branch. Link gist and branch from ticket/spec. Follow `/prototype`. |
 | Portable session or phase handoff | `.scratch/<feature>/handoff.md` (or task path) | Portable markdown summary between phases/sessions. Follow `/handoff`. |
-| Code-writing rule (naming, file shape, patterns) | `CONVENTIONS.md` | Tool-owned rules stay with the tool config. |
+| Code-writing rule (naming, file shape, patterns) | `CONVENTIONS.md` | Tool-owned rules stay with the tool config. Code style, formatting, complexity, and import conventions are owned and validated by Biome (`biome.json`, via `rtk pnpm lint` / `rtk pnpm format`). |
 | UI tokens, visual or interaction rules | `DESIGN.md` | Frontmatter tokens are normative. |
 | Verification strategy, test commands | `TESTING.md` | |
 | Security posture, secrets, validation | `SECURITY.md` | |
@@ -73,7 +73,7 @@ Pick by the **subject** of the fact, not by where you happen to be working.
 | Always-on agent invariant or enforcement rule | `.agents/rules/<topic>.md` | Plus one routing line in `AGENTS.md`. |
 | Which doc, tool, or skill to route to | `AGENTS.md` | Routing only. Edit outside any tool-generated block. Stay under its size budget. |
 | Tool catalog, capabilities & tool decision flows | `TOOLING.md` | Comprehensive inventory of project tools, scripts, guards, and MCP servers. |
-| Tool configuration & machine-enforced rules | Tool config files (e.g. `.dependency-cruiser.cjs`, `biome.json`, `tsconfig.json`) | Enforced directly by tools; explain intent in owner doc (`ARCHITECTURE.md`, `CONVENTIONS.md`, `TESTING.md`). |
+| Tool configuration & machine-enforced rules (code style, imports, types) | Tool config files (e.g. `biome.json` for code style/lint/formatting, `.dependency-cruiser.cjs`, `tsconfig.json`) | Enforced directly by tools. Biome validators include: (1) Formatter (spaces, indent 2), (2) Linter (recommended rules, `complexity.noExcessiveCognitiveComplexity` threshold 15, `next` and `react` domains), and (3) Assist (`organizeImports`). Run via `rtk pnpm lint` or `rtk pnpm format`; explain intent in owner doc (`ARCHITECTURE.md`, `CONVENTIONS.md`, `TESTING.md`). |
 | Multi-session task state | `docs/exec-plans/active/<name>.md` | Copy `template.md`. Deferred debt goes in `tech-debt-tracker.md`. |
 | Operational directive for all coding agents | `.serena/memories/<topic>/<name>.md` | Use Serena `write_memory`. Git-tracked. |
 | MCP servers, integrations, targets | `.agents/agents.json` | Use the `agents` CLI (`agents-dev-cli`). |

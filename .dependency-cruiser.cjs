@@ -100,6 +100,17 @@ module.exports = {
       },
     },
     {
+      name: "no-emoji-packages",
+      severity: "error",
+      comment:
+        "Emojis are strictly prohibited across the project (DESIGN.md / CONVENTIONS.md). Do not import emoji packages or libraries.",
+      from: { path: "^src" },
+      to: {
+        path: "(emoji|unicode-emoji|emoji-mart|emoji-regex)",
+        pathNot: "(^src/lib/validators/emoji|@/lib/validators/emoji)",
+      },
+    },
+    {
       name: "shadcn-ui-does-not-depend-on-lib-internals",
       severity: "error",
       comment:
@@ -176,6 +187,18 @@ module.exports = {
       },
       to: {
         path: "\\.stories\\.[tj]sx?$",
+      },
+    },
+    {
+      name: "shadcn-first-prefer-ui-layer",
+      severity: "error",
+      comment:
+        "shadcn-first: Application and domain components must consume UI primitives from '@/components/ui/*' rather than directly importing raw external headless UI engines (e.g. @base-ui/react or @floating-ui) outside the UI adapter layer.",
+      from: {
+        path: "^src/(app|components/notes-app)",
+      },
+      to: {
+        path: "^(@base-ui/react|@floating-ui)",
       },
     },
   ],
