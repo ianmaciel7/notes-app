@@ -1,14 +1,11 @@
 name: Setup project toolchain
-description: Install the repository-pinned pnpm and Node.js runtime, then restore dependencies.
+description: Install repository-pinned pnpm and Node.js, restore the pnpm store, and install from the committed lockfile.
 
 runs:
   using: composite
   steps:
-    - name: Set up pnpm and Node.js
+    - name: Set up pnpm, Node.js, cache, and dependencies
       uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
       with:
         cache: true
-        install: false
-    - name: Install dependencies
-      shell: bash
-      run: pnpm install --frozen-lockfile
+        require-lockfile: true

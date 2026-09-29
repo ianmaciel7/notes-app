@@ -9,7 +9,7 @@ The repository follows a multi-track testing strategy with a clear division of t
 
 - **Unit Tests & Scoped Coverage (Vitest >=80%)**: Enforced on business logic, data transformers, custom hooks, and state management (`src/lib/**/*.ts`, `src/hooks/**/*.ts`).
 - **Component Workbench & Visual Verification (Ladle)**: Declarative UI primitives under `src/components/ui/` are developed, previewed, and tested for accessibility and themes via isolated Ladle stories (`*.stories.tsx`).
-- **End-to-End Testing (Playwright)**: Full cross-browser user journeys, Next.js App Router navigation, and Firebase Auth local emulator interactions verified under `e2e/`.
+- **End-to-End Testing (Playwright)**: Full browser user journeys, Next.js App Router navigation, and Firebase Auth local emulator interactions verified under `e2e/`.
 - **Quality Floors & Automated Guards**: Enforced via `scripts/guards/floor-guard.mjs` and `scripts/hooks/hooks.test.mjs` (merge-base non-regression, path protection, and Biome auto-formatting hooks).
 - **Audits & Mutation Verification**: Lighthouse CI for production-browser accessibility/performance auditing; StrykerJS mutation testing for focused production logic.
 
@@ -19,7 +19,7 @@ Agent behavioral evaluations are configured separately under `.agents/evals/`.
 
 - **Vitest**: unit test runner and scoped V8 coverage reporter.
 - **Ladle**: component story workbench.
-- **Playwright**: cross-browser end-to-end (E2E) testing framework with Next.js webServer lifecycle management ([ADR 0012](./docs/adr/0012-adopt-playwright-for-e2e-testing.md)).
+- **Playwright**: end-to-end (E2E) browser testing framework with Next.js webServer lifecycle management ([ADR 0012](./docs/adr/0012-adopt-playwright-for-e2e-testing.md)).
 - **StrykerJS**: mutation testing.
 - **Lighthouse CI**: production-browser audit.
 - **Automated Guards**: custom floor, React Server Component boundary, component-prop, and hook regression guards (`scripts/guards/floor-guard.mjs`, `scripts/guards/guard-rsc-boundaries.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/hooks/hooks.test.mjs`).
@@ -95,6 +95,6 @@ The repository employs a multi-layered testing strategy for Firebase Authenticat
 
 ## 7. Automation Status
 
-`.github/workflows/quality.yml` runs the deterministic repository gate (`pnpm check:ci`) on pull requests and the main development branches. It includes types, lint, architecture, the diff floor, unit tests, duplication, agent-config drift, control-doc verifiers, evaluator unit tests, floor-guard unit tests, coverage, and a production build.
+`.github/workflows/quality.yml` runs the deterministic repository gate (`pnpm check:ci`) on pull requests and the main development branches. It includes types, Biome CI lint/format verification, architecture, the diff floor, unit tests, duplication, repository-wide documentation verification, evaluator/guard tests, coverage, agent-config materialization/drift verification, and a production build.
 
 Ladle visual review, Lighthouse, mutation testing, and live model behavioral trials remain risk/cadence-based rather than every-PR gates. Agent-behavior evaluations live under `.agents/evals/`; they use multiple independent trials and score traces plus workspace outcomes rather than final prose alone.

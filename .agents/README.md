@@ -4,10 +4,10 @@ Project-local source of truth for AGENTS.md, MCP configuration, skills, and edit
 
 ## Quick workflow
 
-- `agents status` inspects enabled integrations and MCP state.
-- `agents mcp add <url-or-name>` adds one server to the shared source.
-- `agents mcp test --runtime` validates configured servers.
-- `agents sync` materializes tool-specific configuration.
+- `rtk agents status` inspects enabled integrations and MCP state.
+- `rtk agents mcp add <url-or-name>` adds one server to the shared source.
+- `rtk agents mcp test --runtime` validates configured servers.
+- `rtk pnpm run .agents:sync` materializes tool-specific configuration.
 - `rtk pnpm run check:agents` performs the repository's CI-safe sync verification.
 
 ## Source files

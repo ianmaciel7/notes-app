@@ -1,6 +1,6 @@
 # Constraints
 
-Last reviewed: 2026-09-23
+Last reviewed: 2026-09-28
 
 This file is the non-regression quality contract. Checks may be tightened, but must
 not be weakened merely to make a change pass.
@@ -19,7 +19,7 @@ not be weakened merely to make a change pass.
 | Dimension | Rule | Checked by | Runs at |
 | --- | --- | --- | --- |
 | Types | Zero type errors | `pnpm run check:types` | task end |
-| Lint | Zero Biome errors in the targets covered by `check:lint` | `pnpm run check:lint` | task end |
+| Lint | Zero Biome CI errors across project-owned application, script, eval, and configuration targets | `pnpm run check:lint` | task end |
 | Architecture | Zero dependency-cruiser violations | `pnpm run deps:check` | task end |
 | RSC Boundaries | Zero server component boundary findings | `pnpm run check:rsc` | task end |
 | Component Props | Zero invalid component prop interface findings | `pnpm run check:props` | task end |
@@ -29,7 +29,7 @@ not be weakened merely to make a change pass.
 | Accessibility | Lighthouse accessibility score at least 0.90 | `pnpm run lighthouse` | relevant UI changes |
 | Diff floor | Zero floor-guard findings | `pnpm run check:floor` | every task end |
 | Coverage | ≥ 80% lines, functions, branches, and statements | `pnpm run test:coverage` | CI |
-| Control-doc drift | Zero verifier failures | `pnpm run check:docs` | CI |
+| Documentation drift | Zero repository documentation verifier errors | `pnpm run verify:docs` | CI |
 | Harness evaluator | Deterministic evaluator tests pass | `pnpm run test:harness` | CI |
 | Guard implementation | Deterministic floor-guard tests pass | `pnpm run test:guards` | CI |
 

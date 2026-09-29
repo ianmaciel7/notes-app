@@ -48,7 +48,7 @@ The following table lists the command-line and developer tooling configured for 
 | Tool | Category | Purpose | When to Use | Invocation / Command Example | Governing Doc / Rule |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **RTK** (*Rust Token Killer*) | Shell CLI Proxy | Compresses, deduplicates, and optimizes shell command output to conserve LLM context tokens. | **Mandatory** prefix for all shell command execution. Direct execution is strictly forbidden unless RTK is broken or running meta commands. | `rtk pnpm build`<br/>`rtk git status`<br/>`rtk gain` | [RTK.md](./RTK.md), [.agents/rules/command-invariants.md](./.agents/rules/command-invariants.md) |
-| **Graphify** | Architecture & Knowledge Graph | AST-based static code graph generator that detects god nodes, community clusters, and dependency paths. | Querying cross-file architecture, module relationships, circular references, or call graphs when `graphify-out/` exists. | `graphify query "auth flow"`<br/>`graphify path "A" "B"`<br/>`graphify explain "SyncEngine"` | [.agents/skills/graphify/skill.md](./.agents/skills/graphify/skill.md) |
+| **Graphify** | Architecture & Knowledge Graph | AST-based static code graph generator that detects god nodes, community clusters, and dependency paths. | Querying cross-file architecture, module relationships, circular references, or call graphs when `graphify-out/` exists. | `rtk graphify query "auth flow"`<br/>`rtk graphify path "A" "B"`<br/>`rtk graphify explain "SyncEngine"` | [.agents/skills/graphify/skill.md](./.agents/skills/graphify/skill.md) |
 | **Repomix** | Context Packing | Bundles an entire repository or sub-tree into a clean, structured, AI-friendly markdown/xml file using pre-configured ignore patterns. | Generating broad portable repository snapshots or exporting large context chunks without manual file concatenation. | `rtk repomix`<br/>`rtk pnpm dlx repomix` | [repomix.config.json](./repomix.config.json), [.agents/skills/repomix/SKILL.md](./.agents/skills/repomix/SKILL.md) |
 | **Context7** (`ctx7`) | Documentation Fetcher | Retrieves up-to-date, versioned API documentation and code examples directly from library documentation repositories. | Before writing code against third-party libraries, SDKs, frameworks (React, Next.js, etc.) or checking API version breaking changes. | `rtk ctx7 library Next.js`<br/>`rtk ctx7 docs /vercel/next.js "server actions"` | [.agents/skills/context7-cli/SKILL.md](./.agents/skills/context7-cli/SKILL.md) |
 | **Biome** | Linter & Formatter | Rust-based toolchain that provides instant linting, formatting, and import organization. | Enforcing code style, catching syntax errors, auto-sorting imports, and running pre-commit sanity checks. | `rtk pnpm lint`<br/>`rtk pnpm format` | [biome.json](./biome.json), [.agents/skills/biome/SKILL.md](./.agents/skills/biome/SKILL.md) |
@@ -67,7 +67,7 @@ The following table lists the command-line and developer tooling configured for 
 | **OSV-Scanner** | Vulnerability Scanner | Open Source Vulnerability scanner checking dependencies against Google's OSV database. | Scanning lockfiles and project dependencies for published CVEs. | `rtk pnpm run check:osv` | [CONSTRAINTS.md](./CONSTRAINTS.md), [osv-scanner.toml](./osv-scanner.toml) |
 | **actionlint** | Workflow Linter | Static checker for GitHub Actions workflow files. | Validating `.github/workflows/*.yml` syntax, expressions, and runner types. | `rtk pnpm run lint:actions` | [.github/actionlint.yaml](./.github/actionlint.yaml) |
 | **Firebase CLI & Emulators** | Auth & Backend Emulation | Local offline emulator suite running Firebase Auth and state seeds. | Running local development or integration tests against reproducible auth state without cloud costs. | `rtk pnpm emulator`<br/>`rtk pnpm emulator:start` | [docs/adr/0009-adopt-firebase-auth-with-local-emulator.md](./docs/adr/0009-adopt-firebase-auth-with-local-emulator.md) |
-| **agents CLI** (`@agents-dev/cli`) | Agent Multi-Config | Synchronizes and manages MCP servers, agent configurations, skills, and integrations across AI tools. | Configuring `.agents/agents.json`, linking new MCP plugins, or verifying multi-agent configuration consistency. | `agents status`<br/>`agents mcp list` | [.agents/agents.json](./.agents/agents.json), [.agents/skills/agents-dev-cli/SKILL.md](./.agents/skills/agents-dev-cli/SKILL.md) |
+| **agents CLI** (`@agents-dev/cli`) | Agent Multi-Config | Synchronizes and manages MCP servers, agent configurations, skills, and integrations across AI tools. | Configuring `.agents/agents.json`, linking new MCP plugins, or verifying multi-agent configuration consistency. | `rtk agents status`<br/>`rtk agents mcp list` | [.agents/agents.json](./.agents/agents.json), [.agents/skills/agents-dev-cli/SKILL.md](./.agents/skills/agents-dev-cli/SKILL.md) |
 
 ---
 
@@ -80,13 +80,36 @@ The stable interface is the command surface in `package.json`; implementation fi
 | `scripts/guards/` | Deterministic policy and architecture checks that fail on contract violations. | `floor-guard.mjs`, `guard-component-naming.mjs`, `guard-component-props.mjs`, `guard-rsc-boundaries.mjs` |
 | `scripts/hooks/` | Agent/editor hook adapters and shared hook parsing/path logic. | `hook-biome-on-edit.mjs`, `hook-guard-paths.mjs` |
 | `scripts/verify/` | Repository-wide verification and health orchestration. | `verify-ai-tooling.mjs`, `verify-control-docs.mjs`, `verify-docs.mjs`, `verify-health.mjs` |
-| `scripts/tooling/` | Small adapters around external development CLIs. | `run-agents-cli.mjs` |
+| `scripts/tooling/` | Small adapters around external development CLIs. | `scripts/tooling/run-agents-cli.mjs` |
 
 Tests and helper modules stay beside the entry point they validate. Scripts must remain deterministic, non-interactive in CI, repository-relative, and free of product-domain behavior. Add a new public command to `package.json` instead of asking contributors to memorize internal script paths.
 
 The agent hook bridge under `.agents/scripts/` remains intentionally tiny and delegates to `scripts/hooks/`.
 
-## 4. Model Context Protocol (MCP) Specialized Servers
+## 4. Tooling Automation Boundaries
+
+### GitHub Actions setup
+
+`.github/actions/setup-project/action.yml` is the repository-local composite action for the repeated Node.js/pnpm/dependency setup shared by CI workflows. It consumes `packageManager`, `.node-version`, and `pnpm-lock.yaml` rather than duplicating versions in every workflow.
+
+Third-party actions remain pinned to full commit SHAs. Workflow-level permissions stay read-only by default and are elevated only by the job that needs them.
+
+### agents CLI
+
+`.agents/agents.json` is the canonical source. The repository uses `syncMode: "source-only"`, so tool-specific materializations are generated locally and are not canonical Git sources.
+
+- `rtk pnpm run .agents:sync` materializes local outputs.
+- `rtk pnpm run check:agents` materializes, then verifies that a second sync is clean.
+- Generated files such as `.agents/generated/*`, `.mcp.json`, and `CLAUDE.md` remain gitignored.
+
+### Graphify hooks
+
+Graphify's Git hooks are installed **per clone** with `rtk graphify hook install`. The generated hook records the interpreter available on that machine, so `.husky/post-commit` and `.husky/post-checkout` are intentionally gitignored and must not be committed.
+
+The repository stores Graphify policy and skill configuration, not machine-generated hook bodies.
+
+
+## 5. Model Context Protocol (MCP) Specialized Servers
 
 This workspace integrates several MCP servers providing specialized capabilities without terminal overhead:
 
@@ -122,7 +145,7 @@ Provides clean HTTP page content retrieval for external documentation and public
 
 ---
 
-## 5. Tool Invariants & Anti-Bypass Policy
+## 6. Tool Invariants & Anti-Bypass Policy
 
 1. **No Bare Shell Commands**:
    Direct commands like `pnpm test` or `git status` MUST NOT be run without `rtk`.
