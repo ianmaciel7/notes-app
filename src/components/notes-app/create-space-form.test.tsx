@@ -1,6 +1,17 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
+import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import messages from "@/messages/en.json";
 import { CreateSpaceForm } from "./create-space-form";
+
+function renderWithIntl(ui: ReactNode) {
+  return render(
+    <NextIntlClientProvider locale="en" messages={messages}>
+      {ui}
+    </NextIntlClientProvider>,
+  );
+}
 
 describe("CreateSpaceForm", () => {
   afterEach(() => {
@@ -8,20 +19,17 @@ describe("CreateSpaceForm", () => {
     vi.clearAllMocks();
   });
 
-  it("renders when open and handles space creation submission", async () => {
-    const onOpenChange = vi.fn();
+  it("renders form fields and handles space creation submission", async () => {
     const onSubmitSpace = vi.fn().mockResolvedValue(undefined);
+    const onCancel = vi.fn();
 
-    const { unmount } = render(
-      <CreateSpaceForm
-        open={true}
-        onOpenChange={onOpenChange}
-        onSubmitSpace={onSubmitSpace}
-      />,
+    renderWithIntl(
+      <CreateSpaceForm onSubmitSpace={onSubmitSpace} onCancel={onCancel} />,
     );
 
     expect(screen.getByTestId("create-space-form")).toBeDefined();
-    expect(screen.getByRole("heading", { name: "Create Space" })).toBeDefined();
+    expect(screen.getByLabelText("Space Name")).toBeDefined();
+    expect(screen.getByTestId("space-icon-selector")).toBeDefined();
 
     const nameInput = screen.getByTestId("space-name-input");
     const bookIconBtn = screen.getByTestId("icon-btn-book");
@@ -32,20 +40,26 @@ describe("CreateSpaceForm", () => {
     fireEvent.click(submitBtn);
 
     expect(onSubmitSpace).toHaveBeenCalledWith("Engineering Notes", "book");
-    unmount();
+  });
+
+  it("handles cancel button click", () => {
+    const onSubmitSpace = vi.fn();
+    const onCancel = vi.fn();
+
+    renderWithIntl(
+      <CreateSpaceForm onSubmitSpace={onSubmitSpace} onCancel={onCancel} />,
+    );
+
+    const cancelBtn = screen.getByTestId("cancel-create-space");
+    fireEvent.click(cancelBtn);
+
+    expect(onCancel).toHaveBeenCalled();
   });
 
   it("shows error if submitting with empty name", async () => {
-    const onOpenChange = vi.fn();
     const onSubmitSpace = vi.fn();
 
-    const { unmount } = render(
-      <CreateSpaceForm
-        open={true}
-        onOpenChange={onOpenChange}
-        onSubmitSpace={onSubmitSpace}
-      />,
-    );
+    renderWithIntl(<CreateSpaceForm onSubmitSpace={onSubmitSpace} />);
 
     const nameInput = screen.getByTestId("space-name-input");
     const submitBtn = screen.getByTestId("submit-create-space");
@@ -54,6 +68,5 @@ describe("CreateSpaceForm", () => {
     fireEvent.click(submitBtn);
 
     expect(onSubmitSpace).not.toHaveBeenCalled();
-    unmount();
   });
 });

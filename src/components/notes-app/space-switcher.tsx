@@ -12,10 +12,18 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { type ComponentProps, useState } from "react";
 import { CreateSpaceForm } from "@/components/notes-app/create-space-form";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -69,6 +77,7 @@ export function SpaceSwitcher({
   className,
   ...props
 }: SpaceSwitcherProps) {
+  const t = useTranslations("spaces");
   const router = useRouter();
   const { user } = useAuth();
   const { spaces, loading, error, isOffline, retry, createSpace } = useSpaces();
@@ -93,6 +102,7 @@ export function SpaceSwitcher({
     setIsCreating(true);
     try {
       const newSpaceId = await createSpace({ name, icon });
+      setCreateDialogOpen(false);
       handleSelect(newSpaceId);
     } finally {
       setIsCreating(false);
@@ -111,11 +121,11 @@ export function SpaceSwitcher({
       >
         <Alert variant="destructive" role="alert" aria-live="assertive">
           <AlertCircle className="size-4" />
-          <AlertTitle>Connection Error</AlertTitle>
+          <AlertTitle>{t("connectionError")}</AlertTitle>
           <AlertDescription>
             {isOffline
-              ? "Your device is currently offline. Please check your network connection."
-              : "Unable to reach database services. Verify that local emulators or network services are accessible."}
+              ? t("offlineDescription")
+              : t("databaseErrorDescription")}
           </AlertDescription>
         </Alert>
         <Button
@@ -125,7 +135,7 @@ export function SpaceSwitcher({
           data-testid="space-switcher-retry-btn"
         >
           <RefreshCw className="mr-1.5 size-3.5" />
-          Retry Connection
+          {t("retryConnection")}
         </Button>
       </div>
     );
@@ -161,10 +171,8 @@ export function SpaceSwitcher({
             <EmptyMedia variant="icon">
               <Folder className="size-4" />
             </EmptyMedia>
-            <EmptyTitle>No Spaces Found</EmptyTitle>
-            <EmptyDescription>
-              Create your first space to start organizing notes and objects.
-            </EmptyDescription>
+            <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+            <EmptyDescription>{t("emptyDescription")}</EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
             <Button
@@ -173,17 +181,24 @@ export function SpaceSwitcher({
               data-testid="empty-create-space-btn"
             >
               <Plus className="mr-1.5 size-4" />
-              Create your first Space
+              {t("createFirstSpace")}
             </Button>
           </EmptyContent>
         </Empty>
 
-        <CreateSpaceForm
-          open={createDialogOpen}
-          onOpenChange={setCreateDialogOpen}
-          onSubmitSpace={handleCreateSpace}
-          isLoading={isCreating}
-        />
+        <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+          <DialogContent data-testid="create-space-dialog">
+            <DialogHeader>
+              <DialogTitle>{t("dialogTitle")}</DialogTitle>
+              <DialogDescription>{t("dialogDescription")}</DialogDescription>
+            </DialogHeader>
+            <CreateSpaceForm
+              onSubmitSpace={handleCreateSpace}
+              onCancel={() => setCreateDialogOpen(false)}
+              isLoading={isCreating}
+            />
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
@@ -211,14 +226,14 @@ export function SpaceSwitcher({
           >
             <SpaceIcon iconKey={activeSpace?.icon} />
             <span className="truncate max-w-[140px]">
-              {activeSpace ? activeSpace.name : "Select Space"}
+              {activeSpace ? activeSpace.name : t("selectSpace")}
             </span>
             <ChevronsUpDown className="size-3.5 opacity-50 shrink-0" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="center" className="w-56">
             <DropdownMenuGroup>
               <DropdownMenuLabel className="text-xs text-muted-foreground">
-                Spaces
+                {t("spacesLabel")}
               </DropdownMenuLabel>
               {spaces.map((space) => {
                 const isSelected = space.id === activeSpace?.id;
@@ -247,7 +262,7 @@ export function SpaceSwitcher({
               data-testid="new-space-item"
             >
               <Plus className="size-4" />
-              <span>Create Space</span>
+              <span>{t("createSpace")}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -258,7 +273,7 @@ export function SpaceSwitcher({
             onClick={() => handleSelect(activeSpace.id)}
             data-testid="enter-space-btn"
           >
-            Enter Space
+            {t("enterSpace")}
           </Button>
         )}
       </div>
@@ -269,16 +284,23 @@ export function SpaceSwitcher({
           className="text-[11px] text-amber-600 dark:text-amber-400"
           data-testid="offline-status-indicator"
         >
-          Operating in offline mode
+          {t("operatingOffline")}
         </output>
       )}
 
-      <CreateSpaceForm
-        open={createDialogOpen}
-        onOpenChange={setCreateDialogOpen}
-        onSubmitSpace={handleCreateSpace}
-        isLoading={isCreating}
-      />
+      <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+        <DialogContent data-testid="create-space-dialog">
+          <DialogHeader>
+            <DialogTitle>{t("dialogTitle")}</DialogTitle>
+            <DialogDescription>{t("dialogDescription")}</DialogDescription>
+          </DialogHeader>
+          <CreateSpaceForm
+            onSubmitSpace={handleCreateSpace}
+            onCancel={() => setCreateDialogOpen(false)}
+            isLoading={isCreating}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
