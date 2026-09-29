@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -215,28 +216,30 @@ export function SpaceSwitcher({
             <ChevronsUpDown className="size-3.5 opacity-50 shrink-0" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="center" className="w-56">
-            <DropdownMenuLabel className="text-xs text-muted-foreground">
-              Spaces
-            </DropdownMenuLabel>
-            {spaces.map((space) => {
-              const isSelected = space.id === activeSpace?.id;
-              return (
-                <DropdownMenuItem
-                  key={space.id}
-                  onClick={() => handleSelect(space.id)}
-                  className="flex items-center justify-between cursor-pointer"
-                  data-testid={`space-item-${space.id}`}
-                >
-                  <div className="flex items-center gap-2 truncate">
-                    <SpaceIcon iconKey={space.icon} />
-                    <span className="truncate">{space.name}</span>
-                  </div>
-                  {isSelected && (
-                    <Check className="size-4 text-primary shrink-0" />
-                  )}
-                </DropdownMenuItem>
-              );
-            })}
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="text-xs text-muted-foreground">
+                Spaces
+              </DropdownMenuLabel>
+              {spaces.map((space) => {
+                const isSelected = space.id === activeSpace?.id;
+                return (
+                  <DropdownMenuItem
+                    key={space.id}
+                    onClick={() => handleSelect(space.id)}
+                    className="flex items-center justify-between cursor-pointer"
+                    data-testid={`space-item-${space.id}`}
+                  >
+                    <div className="flex items-center gap-2 truncate">
+                      <SpaceIcon iconKey={space.icon} />
+                      <span className="truncate">{space.name}</span>
+                    </div>
+                    {isSelected && (
+                      <Check className="size-4 text-primary shrink-0" />
+                    )}
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => setCreateDialogOpen(true)}
