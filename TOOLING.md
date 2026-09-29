@@ -77,9 +77,9 @@ The stable interface is the command surface in `package.json`; implementation fi
 
 | Directory | Responsibility | Entry points |
 | :--- | :--- | :--- |
-| `scripts/guards/` | Deterministic policy and architecture checks that fail on contract violations. | `floor-guard.mjs`, `guard-component-naming.mjs`, `guard-component-props.mjs`, `guard-rsc-boundaries.mjs` |
-| `scripts/hooks/` | Agent/editor hook adapters and shared hook parsing/path logic. | `hook-biome-on-edit.mjs`, `hook-guard-paths.mjs` |
-| `scripts/verify/` | Repository-wide verification and health orchestration. | `verify-ai-tooling.mjs`, `verify-control-docs.mjs`, `verify-docs.mjs`, `verify-health.mjs` |
+| `scripts/guards/` | Deterministic policy and architecture checks that fail on contract violations. | `scripts/guards/floor-guard.mjs`, `scripts/guards/guard-component-naming.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/guards/guard-rsc-boundaries.mjs` |
+| `scripts/hooks/` | Agent/editor hook adapters and shared hook parsing/path logic. | `scripts/hooks/hook-biome-on-edit.mjs`, `scripts/hooks/hook-guard-paths.mjs` |
+| `scripts/verify/` | Repository-wide verification and health orchestration. | `scripts/verify/verify-ai-tooling.mjs`, `scripts/verify/verify-control-docs.mjs`, `scripts/verify/verify-docs.mjs`, `scripts/verify/verify-health.mjs` |
 | `scripts/tooling/` | Small adapters around external development CLIs. | `scripts/tooling/run-agents-cli.mjs` |
 
 Tests and helper modules stay beside the entry point they validate. Scripts must remain deterministic, non-interactive in CI, repository-relative, and free of product-domain behavior. Add a new public command to `package.json` instead of asking contributors to memorize internal script paths.
