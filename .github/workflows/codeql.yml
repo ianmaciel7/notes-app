@@ -9,7 +9,8 @@ on:
   pull_request:
     branches:
       - main
-      - context-engineering
+      - dev
+      - stag
   schedule:
     - cron: "30 4 * * 1"
   workflow_dispatch:
@@ -17,10 +18,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: codeql-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: read
       security-events: write

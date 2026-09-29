@@ -59,7 +59,7 @@ runStep("Test Coverage Floor", "pnpm", ["run", "test:coverage"]);
 runStep("Guard & Hook Tests", "pnpm", ["run", "test:guards"]);
 
 // 3. Context & Documentation Governance
-runStep("Control Docs Verifier", "pnpm", ["run", "check:docs"]);
+runStep("Repository Docs", "pnpm", ["run", "verify:docs"]);
 runStep("Agents Config Sync", "pnpm", ["run", "check:agents"]);
 
 // 4. Harness & AI Tooling Verification

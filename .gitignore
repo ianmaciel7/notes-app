@@ -81,3 +81,7 @@ RTK.md.bak
 .firebase/logs/
 .firebase/logs/*
 .firebase/logs/vsce-debug.log
+
+# Graphify installs machine-specific hooks per clone.
+/.husky/post-commit
+/.husky/post-checkout
