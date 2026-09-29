@@ -2,13 +2,13 @@
 
 ## 1. System Context & Overview
 
-`notes-app` is a Next.js App Router application with Firebase Authentication, Dexie IndexedDB local-first data storage, and cookie-based internationalization (`next-intl`). Product scope details defer to `INTENT.md`.
+`notes-app` is a Next.js App Router application with Firebase Authentication, native Firebase Firestore with persistent local cache (IndexedDB), and cookie-based internationalization (`next-intl`). Product scope details defer to `INTENT.md`.
 
 ```mermaid
 flowchart TD
   User[User / Browser] --> App[Notes App - Next.js App Router]
   App --> Auth[Firebase Auth / Local Emulator]
-  App --> IndexedDB[(Dexie - IndexedDB Data Layer)]
+  App --> Firestore[(Firebase Firestore / Persistent Local Cache)]
 ```
 
 The current runtime boundary is the client web application and local emulator environment.
@@ -69,13 +69,13 @@ architectural choices rather than duplicating version pins.
 | Authentication provider | Firebase Auth + Emulator | User identity with local auth emulator support ([ADR 0009](./docs/adr/0009-adopt-firebase-auth-with-local-emulator.md)) |
 | Internationalization | next-intl | Cookie-driven App Router internationalization with Firebase locale sync ([ADR 0011](./docs/adr/0011-adopt-cookie-based-next-intl-with-firebase-sync.md)) |
 | End-to-end testing | Playwright | Cross-browser E2E testing with Next.js webServer integration and local emulator support ([ADR 0012](./docs/adr/0012-adopt-playwright-for-e2e-testing.md)) |
-| Local data persistence | Dexie (IndexedDB) | Local-first browser database and schema indexing |
+| Database & offline persistence | Firebase Firestore + Persistent Local Cache | Zero-latency local-first IndexedDB persistence, multi-tab sync, and cloud synchronization ([ADR 0013](./docs/adr/0013-adopt-native-firebase-firestore-with-persistent-local-cache.md)) |
 
 ## 4. Runtime State & Data Flow
 
 - **Theme:** `ThemeProvider` wraps `next-themes`, controlling root theme class consumed by CSS variables.
 - **Authentication & State Sync:** `AuthProvider` wraps Firebase Authentication observer (`onAuthStateChanged`) and `@firebase-oss/ui-react` store, providing authenticated `User` context and local Firebase Auth Emulator support. Client handlers synchronize active user locale preferences with the `NEXT_LOCALE` cookie and local storage ([ADR 0011](./docs/adr/0011-adopt-cookie-based-next-intl-with-firebase-sync.md)).
-- **Local Storage & Data Layer:** Dexie IndexedDB provides local-first client storage for local caching, schema indexing, and offline-capable data management.
+- **Database & Local Persistence:** Firebase Firestore configured with `persistentLocalCache` and `persistentMultipleTabManager` (`src/lib/firebase/firestore.ts`) provides offline-first IndexedDB persistence, zero-latency optimistic writes, multi-tab synchronization, and seamless emulator connectivity ([ADR 0013](./docs/adr/0013-adopt-native-firebase-firestore-with-persistent-local-cache.md)).
 - **Internationalization:** `next-intl` resolves locale via the `NEXT_LOCALE` cookie in e.g. `src/i18n/request.ts` without URL path prefixes, keeping routes clean while maintaining canonical English identifiers for persisted database entities.
 
 ## 5. Cross-Cutting Architecture
@@ -102,3 +102,4 @@ architectural choices rather than duplicating version pins.
 - [`docs/adr/0010-adopt-firebase-ui-v7-and-auth-resilience.md`](./docs/adr/0010-adopt-firebase-ui-v7-and-auth-resilience.md)
 - [`docs/adr/0011-adopt-cookie-based-next-intl-with-firebase-sync.md`](./docs/adr/0011-adopt-cookie-based-next-intl-with-firebase-sync.md)
 - [`docs/adr/0012-adopt-playwright-for-e2e-testing.md`](./docs/adr/0012-adopt-playwright-for-e2e-testing.md)
+- [`docs/adr/0013-adopt-native-firebase-firestore-with-persistent-local-cache.md`](./docs/adr/0013-adopt-native-firebase-firestore-with-persistent-local-cache.md)

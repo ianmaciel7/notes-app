@@ -1,4 +1,4 @@
-import { getApp, getApps, initializeApp } from "firebase/app";
+import { type FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
 import { type Auth, connectAuthEmulator, getAuth } from "firebase/auth";
 
 const firebaseConfig = {
@@ -15,7 +15,7 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:1234567890:web:abcdef",
 };
 
-export const app =
+export const app: FirebaseApp =
   getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 
 export const auth: Auth = getAuth(app);
@@ -28,18 +28,26 @@ const shouldUseEmulator =
   process.env.NODE_ENV === "development" ||
   process.env.NODE_ENV === "test";
 
-let emulatorConnected = false;
+// Global tracker to survive Next.js Fast Refresh / HMR
+const globalForAuth = globalThis as unknown as {
+  __FIREBASE_AUTH_EMULATOR_CONNECTED__?: boolean;
+};
 
 export function connectToAuthEmulator(host = EMULATOR_HOST): void {
-  if (emulatorConnected) return;
+  if (globalForAuth.__FIREBASE_AUTH_EMULATOR_CONNECTED__) return;
 
-  // Firebase auth emulator URL
   const emulatorUrl = host.startsWith("http") ? host : `http://${host}`;
   try {
     connectAuthEmulator(auth, emulatorUrl, { disableWarnings: true });
-    emulatorConnected = true;
-  } catch (_err) {
-    // Ignore already connected or invalid state in tests
+    globalForAuth.__FIREBASE_AUTH_EMULATOR_CONNECTED__ = true;
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    if (
+      !message.includes("already connected") &&
+      process.env.NODE_ENV === "development"
+    ) {
+      console.warn("[Firebase Auth] Emulator connection notice:", message);
+    }
   }
 }
 
