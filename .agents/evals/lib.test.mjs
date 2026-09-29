@@ -63,7 +63,6 @@ test("trace metrics expose run telemetry", () => {
   assert.equal(m.totalTokens, 14);
 });
 
-
 test("compareReports blocks same-provider correctness regressions", () => {
   const baseline = {
     suite: "regression",

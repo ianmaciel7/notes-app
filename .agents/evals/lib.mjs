@@ -160,13 +160,61 @@ export async function gradeScenario({
   return { pass: checks.every((c) => c.pass), changedFiles: changed, checks };
 }
 
-
 function averageMetric(results, key) {
   const values = (results ?? [])
     .map((result) => result?.metrics?.[key])
     .filter((value) => typeof value === "number" && Number.isFinite(value));
   if (values.length === 0) return null;
   return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+function compareScenario(mode, baselineById, current) {
+  const previous = baselineById.get(current.id);
+  if (!previous) {
+    return {
+      id: current.id,
+      status: "new",
+      baselinePassRate: null,
+      candidatePassRate: current.passRate,
+      passRateDelta: null,
+      averageTotalTokensBaseline: null,
+      averageTotalTokensCandidate: averageMetric(
+        current.results,
+        "totalTokens",
+      ),
+    };
+  }
+
+  const baselineTokens = averageMetric(previous.results, "totalTokens");
+  const candidateTokens = averageMetric(current.results, "totalTokens");
+  const reasons = [];
+
+  if (mode === "regression") {
+    if (current.passRate < previous.passRate) {
+      reasons.push(`passRate ${previous.passRate} -> ${current.passRate}`);
+    }
+    if (previous.passAtK && !current.passAtK) {
+      reasons.push("passAtK regressed");
+    }
+    if (previous.passAll && !current.passAll) {
+      reasons.push("passAll regressed");
+    }
+  }
+
+  return {
+    id: current.id,
+    status: reasons.length > 0 ? "regression" : "ok",
+    baselinePassRate: previous.passRate,
+    candidatePassRate: current.passRate,
+    passRateDelta: current.passRate - previous.passRate,
+    averageTotalTokensBaseline: baselineTokens,
+    averageTotalTokensCandidate: candidateTokens,
+    totalTokensDelta:
+      baselineTokens === null || candidateTokens === null
+        ? null
+        : candidateTokens - baselineTokens,
+    reasons,
+  };
 }
 
 export function compareReports(baseline, candidate) {
@@ -181,57 +229,9 @@ export function compareReports(baseline, candidate) {
   const baselineById = new Map(
     (baseline?.scenarios ?? []).map((scenario) => [scenario.id, scenario]),
   );
-
-  const scenarios = (candidate?.scenarios ?? []).map((current) => {
-    const previous = baselineById.get(current.id);
-    if (!previous) {
-      return {
-        id: current.id,
-        status: "new",
-        baselinePassRate: null,
-        candidatePassRate: current.passRate,
-        passRateDelta: null,
-        averageTotalTokensBaseline: null,
-        averageTotalTokensCandidate: averageMetric(
-          current.results,
-          "totalTokens",
-        ),
-      };
-    }
-
-    const baselineTokens = averageMetric(previous.results, "totalTokens");
-    const candidateTokens = averageMetric(current.results, "totalTokens");
-    const reasons = [];
-    if (mode === "regression") {
-      if (current.passRate < previous.passRate) {
-        reasons.push(
-          `passRate ${previous.passRate} -> ${current.passRate}`,
-        );
-      }
-      if (previous.passAtK && !current.passAtK) {
-        reasons.push("passAtK regressed");
-      }
-      if (previous.passAll && !current.passAll) {
-        reasons.push("passAll regressed");
-      }
-    }
-
-    return {
-      id: current.id,
-      status: reasons.length > 0 ? "regression" : "ok",
-      baselinePassRate: previous.passRate,
-      candidatePassRate: current.passRate,
-      passRateDelta: current.passRate - previous.passRate,
-      averageTotalTokensBaseline: baselineTokens,
-      averageTotalTokensCandidate: candidateTokens,
-      totalTokensDelta:
-        baselineTokens === null || candidateTokens === null
-          ? null
-          : candidateTokens - baselineTokens,
-      reasons,
-    };
-  });
-
+  const scenarios = (candidate?.scenarios ?? []).map((current) =>
+    compareScenario(mode, baselineById, current),
+  );
   const regressions = scenarios.filter(
     (scenario) => scenario.status === "regression",
   );

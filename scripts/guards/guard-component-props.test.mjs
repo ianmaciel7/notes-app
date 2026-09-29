@@ -18,9 +18,13 @@ function parseTsx(code, filename = "dummy.tsx") {
 }
 
 test("guard-component-props passes on current clean codebase", () => {
-  const output = execFileSync("node", ["scripts/guards/guard-component-props.mjs"], {
-    encoding: "utf8",
-  });
+  const output = execFileSync(
+    "node",
+    ["scripts/guards/guard-component-props.mjs"],
+    {
+      encoding: "utf8",
+    },
+  );
   assert.match(
     output,
     /all component props in src\/components\/notes-app\/\*\.tsx adhere to standard inheritance/,
