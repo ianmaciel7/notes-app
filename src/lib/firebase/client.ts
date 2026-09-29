@@ -40,14 +40,8 @@ export function connectToAuthEmulator(host = EMULATOR_HOST): void {
   try {
     connectAuthEmulator(auth, emulatorUrl, { disableWarnings: true });
     globalForAuth.__FIREBASE_AUTH_EMULATOR_CONNECTED__ = true;
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
-    if (
-      !message.includes("already connected") &&
-      process.env.NODE_ENV === "development"
-    ) {
-      console.warn("[Firebase Auth] Emulator connection notice:", message);
-    }
+  } catch {
+    // Emulator connection is idempotent across Fast Refresh / test workers
   }
 }
 

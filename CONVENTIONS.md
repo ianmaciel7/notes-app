@@ -23,7 +23,7 @@ contributor workflow to `CONTRIBUTING.md`.
 - React components and types use `PascalCase`.
 - Functions and variables use `camelCase`; hooks start with `use`.
 - Shared UI files use named exports. Next.js route/layout entrypoints may use the
-  framework-required default exports.
+  framework-required default exports, but the underlying component declaration must be a named function.
 - Derive props from the underlying primitive or native element where practical
   instead of duplicating them manually (enforced by `check:props`).
 - **Component File Role Suffixes (`src/components/notes-app/`)**: Application UI components
@@ -78,6 +78,24 @@ contributor workflow to `CONTRIBUTING.md`.
 - Keep client props minimal and serializable across server/client boundaries.
 - Avoid request waterfalls: start independent work together and use Suspense where
   independent regions can stream.
+
+### Fast Refresh Invariants
+- **Named Component Exports**: All React component functions must have explicit identifiers (e.g. `export function LoginForm() {}` or `export default function LoginPage() {}`). Anonymous default function expressions (`export default () => ...`) break Fast Refresh boundary detection.
+- **Module Isolation**: Isolate non-component constants, pure domain helpers, and data transformers into `src/lib/` and reusable hooks into `src/hooks/`. Exporting mixed non-React constants or mutable singletons alongside components causes Next.js Fast Refresh to fall back to a destructive full page reload.
+
+### Server Actions & Form Mutations
+- **`'use server'` Boundary**: All Server Actions must declare `'use server'` at the file or function level.
+- **Typed Result Signature**: Server Actions must return a typed `Result<T, E>` pattern (e.g., `{ success: true, data: T } | { success: false, error: string, fields?: Record<string, string> }`) rather than throwing unhandled errors across the RPC boundary.
+- **Zod Validation**: Validate all inbound action parameters and form data against strict Zod schemas before executing business logic.
+- **React 19 Action Integration**: Bind server actions using `useActionState` and progressive `<Form action={...}>` (or Base UI form primitives) to ensure resilient pending states, optimistic updates, and fallback handling.
+
+### Error Handling & Navigation
+- **Error Boundaries**: Next.js App Router `error.tsx` components must always declare `'use client'`.
+- **Navigation Primitives**: Trigger standard error UI via framework functions: `notFound()` for 404, `unauthorized()` for 401 unauthenticated requests, and `forbidden()` for 403 authorization failures.
+- **No Direct `window.location`**: Direct imperative mutation of `window.location` is forbidden; use Next.js `useRouter()` (`push`, `replace`), `redirect()`, or `<Link>` components to maintain client-side routing state.
+
+### Asynchronous Lifecycle & Background Work
+- **`after()` for Post-Response Tasks**: Use Next.js `after()` (or `unstable_after`) to schedule asynchronous work (logging, analytics, cache warming) that should execute after the HTTP response has finished streaming, preventing background tasks from blocking user TTFB.
 
 ### Hook Placement & Usage
 - **Co-located Component Hooks (inside component file):** Keep custom hooks co-located

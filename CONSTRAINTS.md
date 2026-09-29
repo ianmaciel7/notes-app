@@ -13,6 +13,7 @@ not be weakened merely to make a change pass.
 - No skipped or deleted tests, and no removed assertions, merely to obtain a pass.
 - No secrets in source.
 - No new exception without a documented owner, reason, and expiry.
+- **Browser Baseline**: Supported browsers are Chrome 111+, Edge 111+, Firefox 111+, Safari 16.4+. No custom polyfills for `fetch`, `URL`, or `Object.assign` (handled automatically by Next.js); custom polyfills must load through client instrumentation or runtime feature checks.
 
 ## Enforced with numbers
 

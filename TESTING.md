@@ -7,9 +7,9 @@ This file owns **how behavior is verified**. Blocking thresholds belong to
 
 The repository follows a multi-track testing strategy with a clear division of testing responsibilities:
 
-- **Unit Tests & Scoped Coverage (Vitest >=80%)**: Enforced on business logic, data transformers, custom hooks, and state management (`src/lib/**/*.ts`, `src/hooks/**/*.ts`).
+- **Unit Tests & Scoped Coverage (Vitest >=80%)**: Enforced on business logic, data transformers, custom hooks, and state management (`src/lib/**/*.ts`, `src/hooks/**/*.ts`). Synchronous Client Components and utility functions are tested in Vitest with `vi.mock('next/navigation')` for `useRouter`/`usePathname`. Next.js invariant: `async` Server Components are not supported in Vitest unit suites and must be tested via E2E.
 - **Component Workbench & Visual Verification (Ladle)**: Declarative UI primitives under `src/components/ui/` are developed, previewed, and tested for accessibility and themes via isolated Ladle stories (`*.stories.tsx`).
-- **End-to-End Testing (Playwright)**: Full browser user journeys, Next.js App Router navigation, and Firebase Auth local emulator interactions verified under `e2e/`.
+- **End-to-End Testing (Playwright)**: Full browser user journeys, Next.js App Router async Server Components, route transitions, Server Actions, and Firebase Auth local emulator interactions verified under `e2e/`.
 - **Quality Floors & Automated Guards**: Enforced via `scripts/guards/floor-guard.mjs` and `scripts/hooks/hooks.test.mjs` (merge-base non-regression, path protection, and Biome auto-formatting hooks).
 - **Audits & Mutation Verification**: Lighthouse CI for production-browser accessibility/performance auditing; StrykerJS mutation testing for focused production logic.
 
@@ -88,9 +88,10 @@ The repository employs a multi-layered testing strategy for Firebase Authenticat
 
 - Test observable behavior rather than implementation details.
 - Keep unit tests deterministic and isolated.
+- Mock `next/navigation` (`useRouter`, `useSearchParams`, `usePathname`) using Vitest spies when verifying client navigation behavior.
 - Add integration tests when multiple application boundaries must be verified
   together rather than forcing that behavior into unit mocks.
-- Add E2E coverage under `e2e/` with Playwright to verify full browser user flows and emulator interactions.
+- Add E2E coverage under `e2e/` with Playwright to verify full browser user flows, async Server Components, Server Action mutations, and emulator interactions.
 - Avoid over-mocking; there is currently no product network/database layer to mock.
 
 ## 7. Automation Status

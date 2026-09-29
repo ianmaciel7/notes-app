@@ -47,15 +47,15 @@ flowchart TD
 
 | Intent | Primary Canonical Route | Fallback / Complementary |
 | :--- | :--- | :--- |
-| **Locate file path by name** | `rtk rg --files` | `search_files` (Filesystem MCP) |
-| **Search exact text or string pattern** | `rtk rg "<pattern>"` | `search_for_pattern` (Serena MCP) |
+| **Locate file path by name** | `search_files` (Filesystem MCP) / `find_file` (Serena) | `rtk rg --files` |
+| **Search exact text or string pattern** | `search_for_pattern` (Serena MCP) | `rtk rg "<pattern>"` |
 | **Inspect symbols, callers, and definitions** | `find_symbol` / `find_referencing_symbols` (Serena) | `get_symbols_overview` |
 | **Analyze module relationships & call chains** | `query_graph` / `shortest_path` (Graphify MCP) | `graphify-out/GRAPH_REPORT.md` |
-| **Outline file structure before reading** | `ast-grep outline` | `get_symbols_overview` |
-| **Search structural code/AST patterns** | `ast-grep scan` / `ast-grep run` | `rtk rg` |
+| **Outline file structure before reading** | `get_symbols_overview` (Serena) / `ast-grep outline` | `view_file` |
+| **Search structural code/AST patterns** | `ast-grep scan` / `ast-grep run` | Serena MCP |
 | **Third-party library & API docs** | Context7 (`ctx7 library` → `ctx7 docs`) | `search_web` (only if not on ctx7) |
-| **Analyze commit history & diffs** | `git_log` / `git_diff` (Git MCP) | `rtk git log` |
-| **Full repository context dump** | Repomix (`repomix.config.json`) | — |
+| **Analyze commit history & diffs** | `git_log` / `git_diff` / `git_status` (Git MCP) | `rtk git log` |
+| **Full repository context dump** | Repomix (`repomix.config.json` / `repomix`) | — |
 
 ---
 

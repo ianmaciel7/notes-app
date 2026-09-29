@@ -4,6 +4,7 @@
 This memory record provides agents and tools with the complete reference of all memory and persistence forms in the `notes-app` repository, across AI engineering tools, MCPs, and the product domain.
 
 ## 1. AI Agents, MCPs, and Tools Memory
+- **Language Invariant**: ALL Serena memories (`.serena/memories/*.md`), documentation, specs, and execution plans MUST ALWAYS be written in English.
 - **Serena Memory (`mcp-server-serena`)**:
   - Location: `.serena/memories/` (persisted Markdown documents).
   - Tools: `write_memory`, `read_memory`, `list_memories`, `edit_memory`, `delete_memory`.

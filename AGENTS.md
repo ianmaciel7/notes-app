@@ -60,7 +60,7 @@ token savings.
 | Need | Route |
 | --- | --- |
 | **Any shell command** | **`rtk <command>`** — see `RTK.md`; direct execution is the fallback only under conditions documented there |
-| File discovery / exact text | `rg --files`, then `rg` |
+| File discovery / exact text | **Serena MCP** (`search_for_pattern`, `find_file`), Filesystem MCP, then `rtk rg` |
 | Cross-file architecture / dependencies | **Graphify first** when `graphify-out/` exists; see `.agents/skills/graphify/skill.md` |
 | Broad portable repository snapshot | **Repomix** with `repomix.config.json`; do not manually concatenate files |
 | Unfamiliar source outline | `ast-grep outline` — structural map before reading full source |

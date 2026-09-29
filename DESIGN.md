@@ -135,7 +135,7 @@ Roles are:
 Dark/light pairing is a project naming convention; the runtime pairing itself is
 implemented by the CSS variable blocks in `src/app/globals.css`.
 
-## Typography
+## Typography & Fonts
 
 - `{typography.heading}`: headings and emphasized structural labels.
 - `{typography.body}`: default application copy.
@@ -144,6 +144,10 @@ implemented by the CSS variable blocks in `src/app/globals.css`.
 Heading/body currently share Inter Variable with different weight intent; mono uses
 Geist Mono. There is no product-specific type scale beyond configured Tailwind
 utilities.
+
+### Font Loading Invariants
+- Typography must be loaded via `@fontsource-variable` or `next/font` with zero Cumulative Layout Shift (CLS).
+- Font definitions must specify pre-calculated fallback font metrics and `display: swap` to prevent text reflow during font hydration.
 
 ## Layout
 
@@ -183,6 +187,17 @@ forms/input, data display/feedback, and conversational extensions.
 implementation. `CONVENTIONS.md` owns component API/anatomy rules.
 `TESTING.md` owns Ladle and visual-verification policy.
 
+## Accessibility & Route Announcements
+
+- **Next.js Route Announcer Invariant:** Next.js App Router announces client-side route transitions to screen readers using an accessibility precedence order: `document.title` -> first semantic `<h1>` element -> URL pathname. Every page must define descriptive metadata (`title`) and render exactly one semantic, accessible `<h1>` element.
+- **WCAG 2.2 AA / AAA Compliance:** All UI token combinations must guarantee WCAG 2.2 AA contrast ratios ($\ge 4.5:1$ for standard text, $\ge 3:1$ for large text and UI components) and aim for AAA on core reader surfaces.
+- **Reduced Motion:** All CSS animations and UI transitions must respect the user's OS preference using `@media (prefers-reduced-motion: reduce)` or Tailwind `motion-reduce:*` variants.
+
+## Asset & Image Guidelines
+
+- **Next.js `<Image />` Usage:** Always render image assets with Next.js `next/image` to enforce layout stability and automated modern format conversion (AVIF/WebP).
+- **Required Properties:** All image instances must provide explicit `width` and `height` dimensions (or `fill`), responsive `sizes` attributes for variable layouts, and `priority` on Largest Contentful Paint (LCP) above-the-fold candidates.
+
 ## Do's and Don'ts
 
 **Do**
@@ -191,7 +206,8 @@ implementation. `CONVENTIONS.md` owns component API/anatomy rules.
 - preserve light/dark behavior through shared CSS variables;
 - choose surface depth and radius from the nearest established role;
 - reuse existing primitives and visual states before introducing a new idiom;
-- keep keyboard/focus interaction states visible.
+- keep keyboard/focus interaction states visible;
+- enforce WCAG 2.2 contrast and `prefers-reduced-motion` compliance.
 
 **Don't**
 
@@ -199,4 +215,5 @@ implementation. `CONVENTIONS.md` owns component API/anatomy rules.
 - hardcode component-specific colors when a semantic token owns the role;
 - invent a spacing, breakpoint, radius, or elevation system for one component;
 - use color alone to communicate selected, error, disabled, or loading state;
+- omit descriptive titles or `<h1>` heading elements on page routes;
 - put testing commands or React implementation patterns in this document.

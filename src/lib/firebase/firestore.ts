@@ -9,32 +9,22 @@ import {
 } from "firebase/firestore";
 import { app } from "./client";
 
-let firestoreInstance: Firestore;
-
-// Initialize Firestore with native Firebase offline persistence (IndexedDB cache) only in browser environments
-if (typeof window !== "undefined") {
-  try {
-    firestoreInstance = initializeFirestore(app, {
-      localCache: persistentLocalCache({
-        tabManager: persistentMultipleTabManager(),
-      }),
-    });
-  } catch (_e) {
-    // Fallback if already initialized (HMR) or if IndexedDB is restricted (private browsing)
+export function getOrCreateFirestore(targetApp = app): Firestore {
+  if (typeof window !== "undefined") {
     try {
-      firestoreInstance = getFirestore(app);
-    } catch {
-      firestoreInstance = initializeFirestore(app, {
-        localCache: memoryLocalCache(),
+      return initializeFirestore(targetApp, {
+        localCache: persistentLocalCache({
+          tabManager: persistentMultipleTabManager(),
+        }),
       });
+    } catch {
+      return getFirestore(targetApp);
     }
   }
-} else {
-  // SSR / Server Component environment
-  firestoreInstance = getFirestore(app);
+  return getFirestore(targetApp);
 }
 
-export const db: Firestore = firestoreInstance;
+export const db: Firestore = getOrCreateFirestore();
 
 const FIRESTORE_EMULATOR_HOST =
   process.env.NEXT_PUBLIC_FIREBASE_FIRESTORE_EMULATOR_HOST || "127.0.0.1";
@@ -60,15 +50,8 @@ export function connectToFirestoreEmulator(
   try {
     connectFirestoreEmulator(db, host, port);
     globalForFirestore.__FIREBASE_FIRESTORE_EMULATOR_CONNECTED__ = true;
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
-    if (
-      !message.includes("already been started") &&
-      !message.includes("already connected") &&
-      process.env.NODE_ENV === "development"
-    ) {
-      console.warn("[Firestore] Emulator connection notice:", message);
-    }
+  } catch {
+    // Emulator connection is idempotent across Fast Refresh / test workers
   }
 }
 

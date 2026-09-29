@@ -30,10 +30,12 @@ product persistence backend or server-side authorization layer.
 
 Before persistent user data or server-submitted product mutations are introduced:
 
-- validate data at trust boundaries, not only in the UI;
+- **Data Access Layer (DAL)**: isolate database queries and private server operations behind a DAL guarded by the `server-only` package to prevent server-only code and secrets from leaking into client bundles;
+- validate data at trust boundaries using Zod/schemas, not only in the UI;
 - encode/render untrusted content safely;
 - use parameterized/ORM-safe persistence APIs;
 - enforce Account and Space ownership on every server-side read and mutation;
+- **Cache Isolation**: Ensure user-specific private data caches use `'use cache: private'` or dynamic request contexts to prevent cross-session cache poisoning;
 - update the threat model here in the same change.
 
 ## 5. Authentication & Authorization
@@ -46,7 +48,8 @@ Before protected persistent data is introduced, define and test:
 
 - server-side identity/session verification;
 - Account and Space ownership checks for reads and mutations;
-- cookie/token storage, expiry, refresh, and revocation behavior;
+- cookie/token storage, expiry, refresh, and revocation behavior via Next.js `cookies()` with `HttpOnly`, `Secure`, and `SameSite=Lax/Strict` attributes;
+- **Content Security Policy (CSP)**: strict CSP with dynamic cryptographic nonces generated per-request via Next.js proxy/middleware handlers (`crypto.randomUUID()`), enforcing `'strict-dynamic'` and eliminating inline scripts;
 - authorization failure behavior;
 - production provider configuration and emulator/production separation.
 

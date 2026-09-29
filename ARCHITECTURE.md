@@ -13,7 +13,7 @@ flowchart TD
 
 The current runtime boundary is the client web application and local emulator environment.
 
-## 2. Module Boundaries
+## 2. Module Boundaries & Routing Topology
 
 - `src/app/`: routing, root layout, application entry surfaces, and global styles.
 - `src/components/`: reusable application-level components and providers.
@@ -41,13 +41,43 @@ Next.js App Router relies on nested folder hierarchies to define routes and rese
 | --- | --- | --- |
 | `page.tsx` | Route Leaf UI | Defines the publicly accessible UI for a route segment. |
 | `layout.tsx` | Shared Layout | Wraps child pages and segments; preserves state across route transitions without re-mounting. |
+| `template.tsx` | Re-mounted Layout | Similar to layout, but instantiates a fresh component instance and resets state on navigation. |
 | `loading.tsx` | Suspense Loading | Instant streaming loading state; automatically wraps child pages in React `Suspense`. |
 | `error.tsx` | Segment Error Boundary | Catches runtime errors in child segments; must be a Client Component (`'use client'`). |
 | `global-error.tsx` | Root Error Boundary | Catches unhandled errors in the root layout; replaces root `<html>` and `<body>` on fatal crashes. |
 | `not-found.tsx` | 404 UI Boundary | Rendered when `notFound()` is invoked or a route segment is not matched. |
-| `route.ts` | Server Route Handler | Dedicated server HTTP endpoint (`GET`, `POST`, etc.); cannot coexist with `page.tsx` at the same path. |
-| `template.tsx` | Re-mounted Layout | Similar to layout, but instantiates a fresh component instance and resets state on navigation. |
+| `unauthorized.tsx` | 401 UI Boundary | Rendered when `unauthorized()` is invoked for unauthenticated access. |
+| `forbidden.tsx` | 403 UI Boundary | Rendered when `forbidden()` is invoked for unauthorized access to a resource. |
 | `default.tsx` | Parallel Route Fallback | Unmatched slot fallback for Parallel Routes (`@slot`) during hard reloads. |
+| `route.ts` | Server Route Handler | Dedicated server HTTP endpoint (`GET`, `POST`, etc.); cannot coexist with `page.tsx` at the same path. |
+| `@slot` | Parallel Routes | Renders independent pages simultaneously within the same layout for split views or dashboards. |
+| `(.)` / `(..)` / `(...)` | Intercepting Routes | Masks URL routing to display route content inside the current layout context (e.g. modals). |
+
+### 2.2 Server vs Client Component Boundaries & Composition
+
+- **React Server Components (RSC):** The default component model. Server Components run on the server, fetch data near the database, keep large dependencies out of client bundles, and emit streaming UI payloads.
+- **Client Components (`'use client'`):** Explicit leaf boundaries that execute in the browser to handle interactivity, event listeners (`onClick`, `onChange`), React hooks (`useState`, `useEffect`), and browser APIs.
+- **Composition Rule:** Never import Server Components into Client Components. Instead, pass Server Components as `children` or parallel route `@slots` to compose server-rendered trees inside client layout wrappers without converting the server subtrees to client bundles.
+
+### 2.3 Cache Components & Rendering Execution Model
+
+- **`'use cache'` Directive:** Placed at the file or function level to cache rendered components or expensive async computations across requests.
+- **Cache Controls:**
+  - `cacheLife()`: Sets profile-based or duration-based cache freshness, stale-while-revalidate, and expire thresholds.
+  - `cacheTag()`: Associates semantic cache tags with cached data or components.
+  - `revalidateTag()`: Invalidates tagged cache entries on-demand after mutations.
+- **Partial Prerendering (PPR):** Combines ultra-fast static shell prerendering with dynamic streaming holes in a single unified HTTP response, eliminating latency for dynamic user-specific regions while preserving static delivery benefits.
+
+### 2.4 Deployment Build Outputs
+
+Next.js builds classify build artifacts into distinct deployment targets:
+
+| Build Output Type | Meaning & Delivery Strategy |
+| --- | --- |
+| `APP_PAGE` | Dynamically rendered App Router page generated on-demand at request time. |
+| `APP_ROUTE` | Dynamic server Route Handler (`route.ts`) executing HTTP endpoints. |
+| `PRERENDER` | Statically prerendered HTML and RSC payload generated during build or cached via PPR. |
+| `STATIC_FILE` | Immutable static assets (JavaScript, CSS, fonts, public media) served directly from edge/CDN storage. |
 
 ## 3. Technology Decisions
 
