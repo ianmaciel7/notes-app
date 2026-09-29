@@ -1,6 +1,6 @@
 ---
 name: eval-harness
-description: Run and compare multi-agent evaluations across Codex and Antigravity. Compares eval results, tracks metrics, and surfaces regressions.
+description: Run, compare, and inspect deterministic multi-agent evaluation reports for Codex and Antigravity.
 metadata:
   category: AI Tooling
   triggers: ["eval", "multi-agent", "regression detection"]
@@ -8,57 +8,45 @@ metadata:
 
 ## Overview
 
-Your notes-app evaluates Codex and Antigravity against key architectural tasks using custom evals in `.agents/evals/`. This skill orchestrates comparative eval runs and captures baseline metrics.
+Use this skill for behavioral regression evaluation of coding agents. The executable source of truth is `.agents/evals/`; normal product tests remain separate.
 
-## Available Evals
-
-Run evals with:
+## Run evaluations
 
 ```bash
-pnpm eval:codex        # Run Codex evals
-pnpm eval:antigravity  # Run Antigravity evals
-pnpm run test:harness  # Run eval infrastructure tests
+rtk pnpm eval:codex
+rtk pnpm eval:antigravity
 ```
 
-## Workflow
-
-### Run Targeted Evals
-
-Evaluate specific code modules or patterns:
+Target one configured scenario instead of inventing file-pattern flags:
 
 ```bash
-# Run evals on Auth components only
-pnpm eval:codex -- --pattern "src/components/Auth*"
-
-# Compare both providers on same pattern
-pnpm eval:codex && pnpm eval:antigravity
+rtk pnpm eval:codex -- --scenario repository-safety --trials 1
+rtk pnpm eval:antigravity -- --scenario quality-gates --trials 1
 ```
 
-### Capture Baseline Metrics
+Valid scenario IDs are defined in `.agents/evals/scenarios.json`.
 
-Before making architectural changes (auth refactor, component restructure), establish a baseline:
+## Compare reports
 
-1. Run evals on current state: `pnpm eval:codex && pnpm eval:antigravity`
-2. Save results to `.agents/evals/baselines/[date].json`
-3. Make your changes
-4. Re-run evals and compare against baseline
+Reports are written under `.agents/evals/artifacts/`. Compare two concrete reports with:
 
-### Detect Regressions
+```bash
+rtk pnpm eval:compare -- --baseline <baseline.json> --candidate <candidate.json>
+```
 
-After changes, flag unexpected performance drops:
+Same-provider comparisons fail when correctness consistency regresses. Cross-provider comparisons are informational so the harness does not rank one agent as a regression against another. Token usage is reported as a measured signal, not a blocking floor.
 
-- **Correctness regression**: Eval passes drop vs. baseline
-- **Token efficiency regression**: Same task uses more tokens
-- **Guard compliance regression**: Dependency-cruiser or RSC boundary violations introduced
+## Verification
 
-## Related Docs
+```bash
+rtk pnpm run test:harness
+```
 
-- `.agents/evals/` — Eval test cases and runner
-- `.agents/evals/lib.test.mjs` — Eval harness tests
-- `check:floor` script in `package.json` — Quality floor validation
+The deterministic evaluator tests must pass before changing scenarios, grading behavior, or comparison rules.
 
-## Next Steps
+## Related files
 
-- **Set up automated eval runs** in CI using GitHub Actions workflow
-- **Create baseline snapshots** before major refactors
-- **Compare tool performance** on architecture-heavy tasks (dependency updates, guard enforcement)
+- `.agents/evals/run.mjs` — provider runner and report writer.
+- `.agents/evals/compare.mjs` — deterministic report comparison.
+- `.agents/evals/lib.mjs` — grading, snapshots, metrics, and comparison logic.
+- `.agents/evals/scenarios.json` — regression scenarios.

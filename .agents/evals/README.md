@@ -13,17 +13,28 @@ Use deterministic graders first. Add a model-based grader only when semantics ca
 1. repository safety;
 2. tooling truthfulness;
 3. documentation fidelity;
-4. quality-gate compliance.
+4. quality-gate compliance;
+5. RTK command compliance.
 
 Capability experiments belong in a separate suite rather than weakening regression criteria.
 
 ## Run
 
 ```bash
-pnpm eval:codex
-pnpm eval:antigravity
+rtk pnpm eval:codex
+rtk pnpm eval:antigravity
 ```
 
 Narrow a run with `--scenario <id> --trials <n>`.
 
-Codex uses `codex exec --json --full-auto` in the disposable fixture. Antigravity uses the official Python SDK via `uv run --with google-antigravity==0.1.18`, with workspace-scoped file access and the SDK command sandbox requested. Generated reports live under `artifacts/` and are gitignored.
+Generated reports live under `.agents/evals/artifacts/` and are gitignored.
+
+## Compare
+
+Use the deterministic comparison command for two report files:
+
+```bash
+rtk pnpm eval:compare -- --baseline <baseline.json> --candidate <candidate.json>
+```
+
+For reports from the same provider, a lower pass rate, loss of `passAtK`, or loss of `passAll` exits non-zero as a regression. Cross-provider comparisons are informational and never treat one provider as a regression against another. Token deltas are reported but are not a blocking threshold until a stable baseline is established.

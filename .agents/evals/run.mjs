@@ -23,6 +23,10 @@ const config = JSON.parse(
   await readFile(path.join(here, "scenarios.json"), "utf8"),
 );
 const trials = Number(arg("--trials", String(config.defaultTrials ?? 3)));
+if (!Number.isInteger(trials) || trials < 1) {
+  console.error("--trials must be a positive integer");
+  process.exit(2);
+}
 const scenarioId = arg("--scenario");
 const selected = scenarioId
   ? config.scenarios.filter((s) => s.id === scenarioId)

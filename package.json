@@ -46,7 +46,8 @@
     "verify:docs": "node scripts/verify/verify-docs.mjs",
     "test:guards": "node --test scripts/guards/floor-guard.test.mjs scripts/hooks/hooks.test.mjs scripts/verify/verify-docs.test.mjs scripts/guards/guard-rsc-boundaries.test.mjs scripts/guards/guard-component-props.test.mjs",
     "check:naming": "node scripts/guards/guard-component-naming.mjs",
-    ".agents:sync": "node scripts/tooling/run-agents-cli.mjs sync"
+    ".agents:sync": "node scripts/tooling/run-agents-cli.mjs sync",
+    "eval:compare": "node .agents/evals/compare.mjs"
   },
   "lint-staged": {
     "*.{cjs,css,json,jsonc,js,mjs,ts,tsx}": "biome check --write"
