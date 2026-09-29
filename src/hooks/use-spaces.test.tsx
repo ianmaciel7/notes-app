@@ -150,4 +150,77 @@ describe("useSpaces", () => {
       }),
     );
   });
+
+  it("handles onSnapshot error callback", () => {
+    const mockUser = { uid: "user-abc" } as unknown as User;
+    let errorCallback: ((err: unknown) => void) | null = null;
+    mockOnSnapshot.mockImplementation((_query, _onNext, onError) => {
+      errorCallback = onError;
+      return vi.fn();
+    });
+
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <AuthContext
+        value={{
+          user: mockUser,
+          isLoading: false,
+          signOutUser: async () => {},
+        }}
+      >
+        {children}
+      </AuthContext>
+    );
+
+    const { result } = renderHook(() => useSpaces(), { wrapper });
+
+    act(() => {
+      if (errorCallback) {
+        errorCallback(new Error("Permission denied"));
+      }
+    });
+
+    expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeTruthy();
+  });
+
+  it("throws when createSpace is called without authenticated user", async () => {
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <AuthContext
+        value={{
+          user: null,
+          isLoading: false,
+          signOutUser: async () => {},
+        }}
+      >
+        {children}
+      </AuthContext>
+    );
+
+    const { result } = renderHook(() => useSpaces(), { wrapper });
+
+    await expect(
+      result.current.createSpace({ name: "Test Space" }),
+    ).rejects.toThrow("Must be authenticated to create a space");
+  });
+
+  it("throws when createSpace is called with invalid data", async () => {
+    const mockUser = { uid: "user-abc" } as unknown as User;
+    mockOnSnapshot.mockReturnValue(vi.fn());
+
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <AuthContext
+        value={{
+          user: mockUser,
+          isLoading: false,
+          signOutUser: async () => {},
+        }}
+      >
+        {children}
+      </AuthContext>
+    );
+
+    const { result } = renderHook(() => useSpaces(), { wrapper });
+
+    await expect(result.current.createSpace({ name: "" })).rejects.toThrow();
+  });
 });
