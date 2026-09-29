@@ -1,13 +1,23 @@
 # Product Specifications
 
-This directory is the detailed product-specification layer behind the concise
-`INTENT.md` entry point.
+This directory contains product proposals behind the concise `INTENT.md` entry
+point. The current implementation scope is intentionally smaller and is owned by
+`INTENT.md`, `ARCHITECTURE.md`, and `CONTEXT.md`.
 
 Use progressive disclosure: resolve a task from `INTENT.md` and `CONTEXT.md`
 first, then read only the relevant section below. Section numbers are intentionally
 stable so existing IDs and historical references remain valid.
 
 | Stable section | Canonical owner | Purpose |
+| --- | --- | --- |
+| Current scope | `INTENT.md` | implemented Firebase foundation and current non-goals |
+| Current vocabulary | `CONTEXT.md` | implemented Firebase entities and terms |
+| Future proposal | `knowledge-learning-workspace.md` | deferred knowledge-workspace concepts and requirements |
+
+The former stable section map remains valid for historical references within the
+preserved proposal:
+
+| Former section | Canonical owner | Purpose |
 | --- | --- | --- |
 | §1–§3 | `INTENT.md` | outcome, problem, users, goals, non-goals |
 | §4 | `CONTEXT.md` | ubiquitous product vocabulary |
@@ -16,4 +26,6 @@ stable so existing IDs and historical references remain valid.
 | §9–§13 | `knowledge-learning-workspace.md` | phases, constraints, decisions, risks, decision log |
 | Appendices | `knowledge-learning-workspace.md` | references, flows, standards |
 
-Do not duplicate a requirement across these files. Link to its canonical ID instead.
+The future proposal is not an implementation contract. Do not use its entities or
+requirements to describe the current application until they are implemented and
+promoted into the current-scope documents.

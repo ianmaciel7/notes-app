@@ -39,4 +39,4 @@ We adopt `@playwright/test` as the standard end-to-end browser testing framework
 
 - [`ARCHITECTURE.md`](../../ARCHITECTURE.md) - Section 3 (Technology Decisions) & Section 6 (Architectural Decision Records)
 - [`TESTING.md`](../../TESTING.md) - Section 2 (Toolchain) & Section 3 (Commands)
-- [ADR 0009](./0009-adopt-firebase-auth-with-local-emulator.md) - Adopt Firebase Authentication with Local Emulator
+- Firebase Auth prerequisite: see [ADR 0009](./0009-adopt-firebase-auth-with-local-emulator.md).

@@ -29,6 +29,6 @@ We adopted the modular FirebaseUI v7 (`@firebase-oss/ui-react` and `@firebase-os
 
 ## Related References and Control Documents
 
-- [`ARCHITECTURE.md`](../../ARCHITECTURE.md) - Section 3 (Technology Decisions) & Section 4 (Runtime State & Data Flow)
-- [ADR 0008](./0008-adopt-firebase-ui-components.md) - Adopt Firebase Open Source Auth UI Components
-- [ADR 0009](./0009-adopt-firebase-auth-with-local-emulator.md) - Adopt Firebase Authentication with Local Emulator
+- Architecture decision context: [`ARCHITECTURE.md`](../../ARCHITECTURE.md), Sections 3–4.
+- Vendor component boundary: see [ADR 0008](./0008-adopt-firebase-ui-components.md).
+- Authentication foundation: see [ADR 0009](./0009-adopt-firebase-auth-with-local-emulator.md).

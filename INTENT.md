@@ -1,9 +1,39 @@
-# Intent: Notes App — Personal Knowledge & Learning Workspace
+# Intent: Notes App
+
+## Firebase foundation
+
+**Author:** Ian Maciel
+**Status:** Complete
+**Last Updated:** 2026-09-25
+**Version:** 1.0
+
+### Implemented scope
+
+The repository currently implements the Firebase foundation described in
+[`ARCHITECTURE.md`](./ARCHITECTURE.md): Firebase App, Firebase Authentication,
+Firebase `User`, local Auth/Firestore emulators, and the Firestore client with
+persistent local cache.
+
+Current scope and non-goals are summarized in
+[`docs/product-specs/index.md`](./docs/product-specs/index.md). The current
+Firebase vocabulary is maintained in [`CONTEXT.md`](./CONTEXT.md).
+
+No knowledge-workspace entity described in Registro B should be treated as an
+implemented Firestore entity yet.
+
+---
+
+## Knowledge and learning product
 
 **Author:** Ian Maciel  
 **Status:** Draft  
 **Last Updated:** 2026-09-25  
 **Version:** 1.0
+
+The following original product-intent content is preserved in full as a draft for
+future work. It describes the desired knowledge and learning workspace, not the
+current Firebase foundation. Nothing in this section is an implemented requirement
+until it is promoted out of draft status.
 
 This document is the concise product-intent entry point. It owns the problem,
 desired outcome, affected users, goals, non-goals, and success criteria.

@@ -11,7 +11,8 @@ flowchart TD
   App --> Firestore[(Firebase Firestore / Persistent Local Cache)]
 ```
 
-The current runtime boundary is the client web application and local emulator environment.
+The current runtime boundary is the client web application and local emulator
+environment. The repository does not yet implement a notes-domain Firestore schema.
 
 ## 2. Module Boundaries & Routing Topology
 
@@ -20,7 +21,8 @@ The current runtime boundary is the client web application and local emulator en
 - `src/components/ui/`: generic shadcn/Base UI primitives; no notes-domain behavior. Must only import `@/lib/utils` (or `cn`) from `src/lib/`.
 - `src/hooks/`: reusable, cross-cutting React hooks (device sensors, browser APIs, shared auth state). Must not depend on application routes (`src/app/`). Component-specific hooks coupled to compound context providers (e.g. `useSidebar`, `useToastManager`) remain co-located within their component files.
 - `src/lib/`: shared utilities that do not depend on UI components.
-- `src/lib/dal/` (or DAL): Data Access Layer isolating data operations, queries, mutations, and authorization. Server DAL modules (`server-only`) must never leak into client components.
+- Firebase integration is currently concentrated in `src/lib/firebase/`; a
+  product-specific Data Access Layer is not implemented yet.
 
 Current dependency direction:
 
@@ -28,7 +30,19 @@ Current dependency direction:
 - UI primitives may compose other UI primitives and shared utilities (`@/lib/utils`);
 - atomic UI primitives must not depend on composite UI components;
 - shared utilities and DAL modules must not depend on UI or application layers;
-- client UI components and hooks must not import server-side DAL modules.
+- client UI components and hooks must not import server-side data modules when a
+  product-specific DAL is introduced.
+
+### 2.5 Current Firebase data boundary
+
+- `src/lib/firebase/client.ts` owns Firebase App and Auth initialization.
+- `src/components/notes-app/auth-provider.tsx` owns the React authentication state
+  exposed to client components.
+- `src/lib/firebase/firestore.ts` owns the shared Firestore `db`, emulator
+  connection, and browser persistence configuration.
+- Firestore rules currently protect user-scoped paths under `/users/{userId}` and
+  expose `integration_test_collection` for emulator integration tests.
+- No notes-domain collection or document schema is currently part of the system.
 
 Dependency-cruiser is the executable source of truth for machine-enforced dependency
 rules. This document owns the architectural intent behind those rules.

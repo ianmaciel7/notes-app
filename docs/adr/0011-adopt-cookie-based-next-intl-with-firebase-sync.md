@@ -41,6 +41,6 @@ We adopt `next-intl` using a cookie-driven request configuration without URL pat
 
 ## Related References and Control Documents
 
-- [`ARCHITECTURE.md`](../../ARCHITECTURE.md) - Section 3 (Technology Decisions) & Section 4 (Runtime State & Data Flow)
-- [ADR 0008](./0008-adopt-firebase-ui-components.md) - Adopt Firebase Open Source Auth UI Components
-- [ADR 0010](./0010-adopt-firebase-ui-v7-and-auth-resilience.md) - Adopt FirebaseUI v7 Canonical Architecture and Resilient Auth Fallback
+- Runtime integration context: [`ARCHITECTURE.md`](../../ARCHITECTURE.md), Sections 3–4.
+- Auth UI vendor boundary: see [ADR 0008](./0008-adopt-firebase-ui-components.md).
+- FirebaseUI resilience dependency: see [ADR 0010](./0010-adopt-firebase-ui-v7-and-auth-resilience.md).

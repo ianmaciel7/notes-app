@@ -1,8 +1,9 @@
 # Notes App
 
-Pre-MVP foundation for a future notes product. The repository currently provides the
-application shell, shared UI primitives, and design-system groundwork; product scope
-is still being defined in [`INTENT.md`](./INTENT.md).
+Current foundation for the Notes App. The repository currently provides the
+Next.js application shell, shared UI primitives, Firebase Authentication, local
+Firebase emulators, and the initial Firestore integration with browser persistence.
+The current scope is defined in [`INTENT.md`](./INTENT.md).
 
 ## Getting Started
 
@@ -19,7 +20,7 @@ Open http://localhost:3000.
 
 ## Development
 
-The product surface is still a scaffold. Shared UI can be explored with Ladle:
+The notes product domain is not implemented yet. Shared UI can be explored with Ladle:
 
 ```bash
 rtk pnpm ladle

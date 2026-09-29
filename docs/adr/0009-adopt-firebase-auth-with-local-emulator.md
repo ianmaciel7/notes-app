@@ -35,4 +35,4 @@ In accordance with [ADR 0008](./0008-adopt-firebase-ui-components.md), `src/comp
 
 - [`ARCHITECTURE.md`](../../ARCHITECTURE.md) - Section 3 (Technology Decisions) & Section 4 (Runtime State & Data Flow)
 - [ADR 0008](./0008-adopt-firebase-ui-components.md) - Adopt Firebase Open Source Auth UI Components
-- [ADR 0010](./0010-adopt-firebase-ui-v7-and-auth-resilience.md) - Adopt FirebaseUI v7 Canonical Architecture and Resilient Auth Fallback
+- FirebaseUI resilience follow-up: see [ADR 0010](./0010-adopt-firebase-ui-v7-and-auth-resilience.md).

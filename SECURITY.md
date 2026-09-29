@@ -25,10 +25,11 @@ support guarantees.
 
 ## 4. Input & Data Boundaries
 
-The application currently has client-side Firebase Authentication but no canonical
-product persistence backend or server-side authorization layer.
+The application currently has client-side Firebase Authentication and a Firestore
+integration. Firestore rules protect the currently supported user-scoped path, but
+there is no notes-domain schema or server-side authorization layer yet.
 
-Before persistent user data or server-submitted product mutations are introduced:
+Before notes-domain data or server-submitted product mutations are introduced:
 
 - **Data Access Layer (DAL)**: isolate database queries and private server operations behind a DAL guarded by the `server-only` package to prevent server-only code and secrets from leaking into client bundles;
 - validate data at trust boundaries using Zod/schemas, not only in the UI;
@@ -43,6 +44,9 @@ Before persistent user data or server-submitted product mutations are introduced
 Firebase Authentication is implemented through the Web SDK, `AuthProvider`, and the
 local Auth Emulator for development/testing. Client authentication state identifies a
 Firebase `User`; it is **not** sufficient authorization for future server-side data.
+The current Firestore rules enforce that an authenticated user's `uid` matches the
+`{userId}` segment under `/users/{userId}`. The integration-test collection is
+intentionally emulator-only and open for hermetic tests.
 
 Before protected persistent data is introduced, define and test:
 

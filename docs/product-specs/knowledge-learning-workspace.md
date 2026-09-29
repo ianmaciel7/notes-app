@@ -1,11 +1,16 @@
-# Knowledge & Learning Workspace — Detailed Product Specification
+# Knowledge & Learning Workspace — Future Product Proposal
 
-**Status:** Draft  
+**Status:** Deferred; not implemented
 **Parent intent:** [`INTENT.md`](../../INTENT.md)  
 **Vocabulary:** [`CONTEXT.md`](../../CONTEXT.md)
 
 This document contains the detail intentionally excluded from the concise intent
 entry point. Read only the sections needed for the current task.
+
+> This is a future product proposal. It does not describe the current Firebase
+> configuration or an implemented Firestore schema. The current scope is defined
+> by [`INTENT.md`](../../INTENT.md), [`ARCHITECTURE.md`](../../ARCHITECTURE.md),
+> and [`CONTEXT.md`](../../CONTEXT.md).
 
 ## 5. Conceptual Model
 
@@ -170,7 +175,7 @@ Format: *Given / When / Then*. Every criterion **MUST** be verifiable via automa
 
 ### R-SRS — Retention
 - **Given** a bidirectional Question, **when** creating it, **then** two sibling Cards are generated and do not appear in the same study session by default.
-- **Given** any Object, **when** typing `/questão` in content, **then** a Question is created, embedded inline, and linked to the source Object.
+- **Given** any Object, **when** typing `/quest&atilde;o` in content, **then** a Question is created, embedded inline, and linked to the source Object.
 - **Given** selected text in a Highlight, Note, or Source, **when** choosing "create flashcard", **then** a Question is instantiated with the excerpt as origin.
 - **Given** the Question list, **when** creating a standalone Question, **then** it exists without an origin reference.
 - **Given** a cloze deletion within a Note Block, **when** marking it as flashcard, **then** the Question maintains a `derivedFrom` relation to the Block.
@@ -324,7 +329,7 @@ Status: all **Decided**. Questions not addressed via direct user interviews were
 | Q-33 | Default Scheduler and granularity? | FSRS via open-source library; one default per Space with per-Query overrides. | Decided | — |
 | Q-34 | Does Source Snapshot store full third-party content? | Yes for personal use, never redistributable (`INV-8`); user can delete snapshot while retaining Highlights. | Decided | — |
 | Q-35 | Highlight Resurfacing in MVP? | No; phase 3, with retention. | Decided | — |
-| Q-36 | How do Questions enter the app? | Manually (standalone, from excerpt, or `/questão`), bulk file import, and agents via MCP. No web scraping; provenance mandatory (`INV-13`). | Decided | — |
+| Q-36 | How do Questions enter the app? | Manually (standalone, from excerpt, or `/quest&atilde;o`), bulk file import, and agents via MCP. No web scraping; provenance mandatory (`INV-13`). | Decided | — |
 | Q-37 | How to move content across Spaces? | Native "Move" operation with Dependents; cross-space Relations stripped with warning. | Decided | — |
 | Q-38 | What constitutes an Object Dependent? | Matching Capacities: only entities living inside the Object; deletions move to Trash (30 days). | Decided | — |
 | Q-39 | Is Highlight a standalone Object or part of Source? | Standalone Object, Dependent on Source, overlaid visually, double-click opens Object. | Decided (D-2) | — |
@@ -334,7 +339,7 @@ Status: all **Decided**. Questions not addressed via direct user interviews were
 | Q-43 | Do Concepts support hierarchy? | Yes, optional: a Concept may have parents; parents aggregate descendant content. | Decided | — |
 | Q-44 | Can a Concept have multiple parents? | Yes, poly-hierarchy following SKOS model: broader/narrower, related, synonyms. | Decided (D-4) | — |
 | Q-45 | What is a Note? | Matching Capacities' Page: built-in free-form writing type, no custom properties; convertible to custom type. | Decided | — |
-| Q-46 | How to instantiate Questions? | Standalone, from selected text, or via `/questão` in any Object; linked to origin. | Decided | — |
+| Q-46 | How to instantiate Questions? | Standalone, from selected text, or via `/quest&atilde;o` in any Object; linked to origin. | Decided | — |
 | Q-47 | Question formats? | Q&A, cloze (fill-in-the-blank, like Readwise Mastery), multiple choice (like ExamTopics). | Decided | — |
 | Q-48 | Multiple choice as Flashcard or Question? | Unified into single type: Question. | Decided (D-5) | — |
 | Q-49 | Which formats in each mode? | Configurable per Mock Exam. Default: Review includes all formats; Mock Exam includes multiple choice only. Open formats are self-assessed. | Decided | — |
@@ -498,13 +503,13 @@ Earlier drafts specified two distinct types: **Flashcard** (spaced repetition me
 A **single unified type: Question**.
 - Formats: Q&A, cloze (fill-in-the-blank), multiple choice.
 - Modes: Spaced repetition (Review) and Exam simulation (Mock Exam); the same Question can participate in both.
-- Creation: Standalone, from selected text, or via `/questão` inside any Object.
+- Creation: Standalone, from selected text, or via `/quest&atilde;o` inside any Object.
 - Preserves origin links (provenance).
 
 **Alternatives Considered**  
 - **Separate Flashcard and Question:** Duplicates content when the same knowledge is used for recall and mock exams.
 - **Multiple choice restricted to Question:** Avoids duplication, but fragments active recall into two separate paradigms.
-- **Candidate names considered:** Flashcard, Card, Item (SuperMemo/psychometrics term), Question, Recall. User selected "Questão" (UI) / "Question" (Code).
+- **Candidate names considered:** Flashcard, Card, Item (SuperMemo/psychometrics term), Question, Recall. User selected "Quest&atilde;o" (UI) / "Question" (Code).
 
 **Consequences**  
 - Review and Mock Exam log **Attempts** in a single consolidated history; missing a Question in a Mock Exam triggers earlier scheduling in Review.
