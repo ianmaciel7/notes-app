@@ -15,6 +15,7 @@ The primary orchestrator delegates tasks according to this matrix:
 | **`security-reviewer`** | Auth, secrets scanning & threat modeling | Read + Write + Tools | [`security-reviewer.md`](./security-reviewer.md) |
 | **`doc-maintainer`** | Control docs & documentation synchronization | Read + Write + Tools | [`doc-maintainer.md`](./doc-maintainer.md) |
 | **`a11y-reviewer`** | UI accessibility audits (WCAG 2.1 AA, keyboard, contrast) | Read-only + Tools | [`a11y-reviewer.md`](./a11y-reviewer.md) |
+| **`firebase-specialist`** | Firebase Auth, Emulators, Seeds, Rules & Client Lifecycle | Read + Write + Subagents + Tools | [`firebase-specialist.md`](./firebase-specialist.md) |
 
 ## Specification Standard
 

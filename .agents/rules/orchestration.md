@@ -62,6 +62,7 @@ flowchart TD
 | **`security-reviewer`** | Auth, Firestore rules, tenancy isolation | Modifying authentication, session verification, or Firestore security rules |
 | **`doc-maintainer`** | Living docs sync (`AGENTS.md`, `ARCHITECTURE.md`) | Synchronizing specifications and architecture docs with implementation changes |
 | **`a11y-reviewer`** | WCAG 2.1 AA, keyboard focus, ARIA landmarks | Auditing UI components and interactive pages for accessibility compliance |
+| **`firebase-specialist`** | Firebase Web SDK, Emulators, Seeds, Rules & Auth Lifecycle | Implementing or modifying Firebase Authentication, local emulators, seeds, rules, or client sync |
 
 ---
 
