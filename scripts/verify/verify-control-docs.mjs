@@ -17,7 +17,7 @@ const verifiers = [
 ];
 
 const base = new URL(
-  "../.agents/skills/context-manager/scripts/",
+  "../../.agents/skills/context-manager/scripts/",
   import.meta.url,
 );
 const failures = [];

@@ -10,7 +10,7 @@ import {
   summarize,
 } from "./verify-docs-lib.mjs";
 
-const root = path.resolve(fileURLToPath(import.meta.url), "../..");
+const root = fileURLToPath(new URL("../../", import.meta.url));
 const args = new Set(process.argv.slice(2));
 const asJson = args.has("--json");
 const strict = args.has("--strict");
@@ -64,10 +64,20 @@ function skillDirs() {
     .map((d) => d.name);
 }
 
+function listScriptFiles(current = path.join(root, "scripts"), prefix = "") {
+  return readdirSync(current, { withFileTypes: true }).flatMap((entry) => {
+    const relative = prefix ? `${prefix}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      return listScriptFiles(path.join(current, entry.name), relative);
+    }
+    return entry.isFile() ? [relative] : [];
+  });
+}
+
 function controlDocsFinding() {
   const result = spawnSync(
     process.execPath,
-    [path.join(root, "scripts/verify-control-docs.mjs")],
+    [path.join(root, "scripts/verify/verify-control-docs.mjs")],
     { cwd: root, encoding: "utf8" },
   );
   if (result.status === 0) return [];
@@ -80,7 +90,7 @@ function controlDocsFinding() {
     {
       severity: "error",
       rule: "control-docs",
-      file: "scripts/verify-control-docs.mjs",
+      file: "scripts/verify/verify-control-docs.mjs",
       line: 1,
       message: detail || "control-doc verifiers failed",
     },
@@ -103,7 +113,7 @@ const ctx = {
   packageScripts: new Set(Object.keys(readJson("package.json").scripts ?? {})),
   allSkills,
   projectSkills: allSkills.filter((name) => !remote.has(name)),
-  scriptFiles: readdirSync(path.join(root, "scripts")),
+  scriptFiles: listScriptFiles(),
 };
 
 const findings = [

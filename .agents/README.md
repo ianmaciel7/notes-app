@@ -1,42 +1,37 @@
 # .agents
 
-Project-local standard for AGENTS.md + MCP + SKILLS.
+Project-local source of truth for AGENTS.md, MCP configuration, skills, and editor hooks.
 
 ## Quick workflow
-- `agents status` to inspect enabled integrations and MCP state.
-- `agents mcp add <url-or-name>` to add one server for all selected tools.
-- `agents mcp test --runtime` to validate connectivity.
-- `agents sync` to materialize generated configuration.
-- `agents sync --check` for CI-safe drift detection.
 
-## Source files (commit these)
-- `agents.json`: selected integrations + MCP servers + workspace behavior
-- `skills/*/SKILL.md`: project skills
+- `agents status` inspects enabled integrations and MCP state.
+- `agents mcp add <url-or-name>` adds one server to the shared source.
+- `agents mcp test --runtime` validates configured servers.
+- `agents sync` materializes tool-specific configuration.
+- `rtk pnpm run check:agents` performs the repository's CI-safe sync verification.
+
+## Source files
+
+Commit these project-owned sources:
+
+- `agents.json`: integrations, MCP servers, and workspace behavior.
+- `hooks.json`: hook routing.
+- `skills/*/SKILL.md`: project and installed skills.
+- `../AGENTS.md`: repository instruction entry point.
+
+Machine-local secrets and overrides belong in `local.json`, which is gitignored.
 
 ## Editor hooks
-Hook wiring lives in `.claude/settings.json` (Claude Code) and `hooks.json` (other tools' edit-tool names); the scripts live in `scripts/` and are tested by `rtk pnpm test:guards`.
-- `scripts/hook-biome-on-edit.mjs`: PostToolUse; runs Biome on the edited file and reports unfixable findings.
-- `scripts/hook-guard-paths.mjs`: PreToolUse; denies edits to generated outputs and asks before edits to lockfiles, `skills-lock.json`, and `.env*`.
-- `scripts/hooks-lib.mjs`: shared path and payload logic, covered by `scripts/hooks.test.mjs`.
 
-## Root instruction file
-- `../AGENTS.md`: canonical instruction document
+Hook wiring lives in `hooks.json`; the implementation lives with repository scripts:
 
-## Local/private files (do not commit)
-- `local.json`: machine-specific MCP overrides and secrets
+- `scripts/hooks/hook-biome-on-edit.mjs`: PostToolUse formatting/check adapter.
+- `scripts/hooks/hook-guard-paths.mjs`: PreToolUse generated/controlled-path guard.
+- `scripts/hooks/hooks-lib.mjs`: shared payload and path logic.
+- `scripts/hooks/hooks.test.mjs`: deterministic hook tests.
+
+Thin files under `.agents/scripts/` only bridge integrations that expect scripts inside `.agents/`.
 
 ## Generated files
-- `generated/*`: renderer outputs used by `agents sync`
-- `mcp_config.json`: Antigravity CLI workspace MCP config
-- `generated/vscode.settings.state.json`: managed VS Code hide state
 
-## Common materialized outputs
-- `.codex/config.toml`
-- `.gemini/settings.json`
-- `.vscode/mcp.json`
-- `.vscode/settings.json`
-- `.cursor/mcp.json`
-- `.agents/mcp_config.json`
-- `opencode.json`
-- `.windsurf/skills/`
-- `~/.codeium/windsurf/mcp_config.json` (global)
+`agents sync` materializes tool-specific files such as `.agents/generated/*`, `.codex/config.toml`, `.mcp.json`, and `CLAUDE.md`. In `source-only` mode these are local generated outputs and are not canonical repository sources.

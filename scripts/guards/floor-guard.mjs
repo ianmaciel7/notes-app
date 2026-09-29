@@ -58,7 +58,7 @@ const codeFile = /\.(cjs|cts|js|jsx|mjs|mts|ts|tsx)$/i;
 const projectCodeFile = (file) =>
   codeFile.test(file) &&
   !file.startsWith(".agents/") &&
-  file !== "scripts/floor-guard.mjs";
+  file !== "scripts/guards/floor-guard.mjs";
 const suppressions =
   /@ts-ignore|@ts-nocheck|eslint-disable|biome-ignore|#\s*noqa|#\s*type:\s*ignore|istanbul ignore|nosemgrep|gitleaks:allow|Stryker disable/;
 const stubs =

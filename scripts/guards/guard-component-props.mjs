@@ -4,7 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
-const root = path.resolve(fileURLToPath(import.meta.url), "../..");
+const root = fileURLToPath(new URL("../../", import.meta.url));
 const componentsDir = path.join(root, "src/components/notes-app");
 
 /**

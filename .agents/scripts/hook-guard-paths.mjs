@@ -1,1 +1,1 @@
-import "../../scripts/hook-guard-paths.mjs";
+import "../../scripts/hooks/hook-guard-paths.mjs";

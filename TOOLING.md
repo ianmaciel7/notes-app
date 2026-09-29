@@ -71,20 +71,20 @@ The following table lists the command-line and developer tooling configured for 
 
 ---
 
-## 3. Automated Guard & Verification Scripts
+## 3. Repository Script Architecture
 
-This project maintains automated non-regression and architectural guard scripts located in `scripts/`:
+The stable interface is the command surface in `package.json`; implementation files are grouped by responsibility under `scripts/`:
 
-| Guard Script | Command | Purpose & Guarded Contract |
+| Directory | Responsibility | Entry points |
 | :--- | :--- | :--- |
-| `floor-guard.mjs` | `rtk pnpm run check:floor` | Non-regression quality floor: blocks empty catch blocks, TODO stubs in production, secret leakage, or suppression additions. |
-| `guard-rsc-boundaries.mjs` | `rtk pnpm run check:rsc` | Enforces React Server Component boundaries, preventing illegal client hook imports in server components. |
-| `guard-component-props.mjs` | `rtk pnpm run check:props` | Validates component props interfaces against boolean proliferation and composition standards. |
-| `verify-control-docs.mjs` | `rtk pnpm run check:docs` | Verifies repository control docs against version claims, cited scripts, and ownership rules. |
-| `verify-docs.mjs` | `rtk pnpm run verify:docs` | Deep repository-wide markdown verification: validates internal anchors, pnpm scripts, path portability, and English-only rules. |
-| `verify-health.mjs` | `rtk pnpm run verify:health` | Single-command consolidated health check running quality, test, context, and token savings verification. |
+| `scripts/guards/` | Deterministic policy and architecture checks that fail on contract violations. | `floor-guard.mjs`, `guard-component-naming.mjs`, `guard-component-props.mjs`, `guard-rsc-boundaries.mjs` |
+| `scripts/hooks/` | Agent/editor hook adapters and shared hook parsing/path logic. | `hook-biome-on-edit.mjs`, `hook-guard-paths.mjs` |
+| `scripts/verify/` | Repository-wide verification and health orchestration. | `verify-ai-tooling.mjs`, `verify-control-docs.mjs`, `verify-docs.mjs`, `verify-health.mjs` |
+| `scripts/tooling/` | Small adapters around external development CLIs. | `run-agents-cli.mjs` |
 
----
+Tests and helper modules stay beside the entry point they validate. Scripts must remain deterministic, non-interactive in CI, repository-relative, and free of product-domain behavior. Add a new public command to `package.json` instead of asking contributors to memorize internal script paths.
+
+The agent hook bridge under `.agents/scripts/` remains intentionally tiny and delegates to `scripts/hooks/`.
 
 ## 4. Model Context Protocol (MCP) Specialized Servers
 

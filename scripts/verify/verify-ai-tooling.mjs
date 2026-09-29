@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = path.resolve(fileURLToPath(import.meta.url), "../..");
+const root = fileURLToPath(new URL("../../", import.meta.url));
 
 const checks = [];
 

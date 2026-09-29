@@ -16,7 +16,7 @@ import { readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = path.resolve(fileURLToPath(import.meta.url), "../..");
+const root = fileURLToPath(new URL("../../", import.meta.url));
 const componentsDir = path.join(root, "src/components/notes-app");
 
 // ---------------------------------------------------------------------------

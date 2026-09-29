@@ -1,1 +1,1 @@
-import "../../scripts/hook-biome-on-edit.mjs";
+import "../../scripts/hooks/hook-biome-on-edit.mjs";

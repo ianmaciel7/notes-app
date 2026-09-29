@@ -18,7 +18,7 @@ function parseTsx(code, filename = "dummy.tsx") {
 }
 
 test("guard-component-props passes on current clean codebase", () => {
-  const output = execFileSync("node", ["scripts/guard-component-props.mjs"], {
+  const output = execFileSync("node", ["scripts/guards/guard-component-props.mjs"], {
     encoding: "utf8",
   });
   assert.match(

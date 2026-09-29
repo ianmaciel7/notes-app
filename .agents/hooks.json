@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ../scripts/hook-biome-on-edit.mjs"
+            "command": "node ../scripts/hooks/hook-biome-on-edit.mjs"
           }
         ]
       }
@@ -19,7 +19,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ../scripts/hook-guard-paths.mjs"
+            "command": "node ../scripts/hooks/hook-guard-paths.mjs"
           }
         ]
       }

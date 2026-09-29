@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = path.resolve(fileURLToPath(import.meta.url), "../..");
+const root = fileURLToPath(new URL("../../", import.meta.url));
 
 console.log(
   "=== Verifying Full Project Health & Quality (Context & Harness) ===\n",
