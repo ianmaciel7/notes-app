@@ -1,3 +1,11 @@
 {
+  "installed": [
+    {
+      "name": "claude-code-setup",
+      "version": "latest",
+      "enabled": true,
+      "description": "Claude Code setup and configuration plugin for Notes App project"
+    }
+  ],
   "exclude": ["google-workspace"]
 }
