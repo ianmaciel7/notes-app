@@ -25,22 +25,27 @@ describe("LanguageSwitcher", () => {
     vi.clearAllMocks();
   });
 
-  it("renders language select dropdown with supported options", () => {
+  it("renders language select dropdown with current language", () => {
     renderWithIntl(<LanguageSwitcher />);
 
-    const select = screen.getByTestId("language-select") as HTMLSelectElement;
-    expect(select).toBeDefined();
-    expect(select.value).toBe("en");
+    const selectTrigger = screen.getByTestId("language-select");
+    expect(selectTrigger).toBeDefined();
     expect(screen.getByText("English")).toBeDefined();
-    expect(screen.getByText("Português (Brasil)")).toBeDefined();
-    expect(screen.getByText("Español")).toBeDefined();
   });
 
-  it("triggers router refresh on language selection", () => {
+  it("opens options and triggers router refresh on language selection", () => {
     renderWithIntl(<LanguageSwitcher />);
 
-    const select = screen.getByTestId("language-select");
-    fireEvent.change(select, { target: { value: "pt-BR" } });
+    const selectTrigger = screen.getByTestId("language-select");
+    fireEvent.click(selectTrigger);
+
+    const ptOption = screen.getByRole("option", { name: "Português (Brasil)" });
+    expect(ptOption).toBeDefined();
+    expect(screen.getByRole("option", { name: "Español" })).toBeDefined();
+
+    fireEvent.pointerDown(ptOption);
+    fireEvent.pointerUp(ptOption);
+    fireEvent.click(ptOption);
 
     expect(mockRefresh).toHaveBeenCalled();
   });

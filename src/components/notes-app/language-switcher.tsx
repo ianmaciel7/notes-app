@@ -3,6 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { type ComponentProps, useTransition } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { auth } from "@/lib/firebase/client";
 import {
   SUPPORTED_LOCALES,
@@ -22,10 +29,10 @@ export function LanguageSwitcher({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const handleLocaleChange = (newLocale: SupportedLocale) => {
-    if (newLocale === currentLocale) return;
+  const handleLocaleChange = (newLocale: string | null) => {
+    if (!newLocale || newLocale === currentLocale) return;
 
-    syncFirebaseLocale(auth, newLocale);
+    syncFirebaseLocale(auth, newLocale as SupportedLocale);
 
     startTransition(() => {
       router.refresh();
@@ -54,20 +61,29 @@ export function LanguageSwitcher({
       )}
       {...props}
     >
-      <select
-        data-testid="language-select"
-        aria-label={t("label")}
+      <Select
         value={currentLocale}
+        onValueChange={handleLocaleChange}
         disabled={isPending}
-        onChange={(e) => handleLocaleChange(e.target.value as SupportedLocale)}
-        className="h-8 rounded border border-input bg-background px-2 py-1 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:opacity-50"
       >
-        {SUPPORTED_LOCALES.map((loc) => (
-          <option key={loc} value={loc}>
-            {getLocaleLabel(loc)}
-          </option>
-        ))}
-      </select>
+        <SelectTrigger
+          data-testid="language-select"
+          aria-label={t("label")}
+          size="sm"
+          className="h-8 text-xs"
+        >
+          <SelectValue>
+            {getLocaleLabel(currentLocale as SupportedLocale)}
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent align="end">
+          {SUPPORTED_LOCALES.map((loc) => (
+            <SelectItem key={loc} value={loc} className="text-xs">
+              {getLocaleLabel(loc)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }
