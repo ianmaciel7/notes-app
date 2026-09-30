@@ -1,5 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { RequireAuth } from "@/components/notes-app/require-auth";
 import { SpaceSwitcher } from "@/components/notes-app/space-switcher";
 import { UserMenu } from "@/components/notes-app/user-menu";
 import { Button } from "@/components/ui/button";
@@ -14,8 +15,11 @@ export interface SpacePageProps {
 export default async function SpacePage({ params }: SpacePageProps) {
   const { spaceId } = await params;
 
+  const nextPath = `/${spaceId}`;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-between min-h-screen bg-zinc-50 font-sans dark:bg-black">
+    <RequireAuth redirectTo={`/login?next=${encodeURIComponent(nextPath)}`}>
+      <div className="flex flex-col flex-1 items-center justify-between min-h-screen bg-zinc-50 font-sans dark:bg-black">
       <header className="flex w-full max-w-3xl items-center justify-between p-6">
         <div className="flex items-center gap-3">
           <Button
@@ -46,9 +50,10 @@ export default async function SpacePage({ params }: SpacePageProps) {
         <SpaceSwitcher currentSpaceId={spaceId} />
       </main>
 
-      <footer className="p-6 text-center text-xs text-zinc-500">
-        Notes App • Firebase Auth • Space Scope
-      </footer>
-    </div>
+        <footer className="p-6 text-center text-xs text-zinc-500">
+          Notes App • Firebase Auth • Space Scope
+        </footer>
+      </div>
+    </RequireAuth>
   );
 }

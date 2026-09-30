@@ -84,7 +84,9 @@ export function SpaceSwitcher({
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
-  const activeSpace = spaces.find((s) => s.id === currentSpaceId) ?? spaces[0];
+  const activeSpace = currentSpaceId
+    ? spaces.find((space) => space.id === currentSpaceId)
+    : spaces[0];
 
   if (!user) {
     return null;
@@ -152,6 +154,33 @@ export function SpaceSwitcher({
         {...props}
       >
         <span className="animate-pulse">Loading spaces...</span>
+      </div>
+    );
+  }
+
+  if (currentSpaceId && !activeSpace) {
+    return (
+      <div
+        data-testid="space-switcher-not-found"
+        className={cn(
+          "flex flex-col items-center justify-center w-full max-w-sm mx-auto gap-3",
+          className,
+        )}
+        {...props}
+      >
+        <Alert role="alert">
+          <AlertCircle className="size-4" />
+          <AlertTitle>{t("spaceNotFoundTitle")}</AlertTitle>
+          <AlertDescription>{t("spaceNotFoundDescription")}</AlertDescription>
+        </Alert>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => router.replace("/")}
+          data-testid="space-switcher-back-btn"
+        >
+          {t("backToSpaces")}
+        </Button>
       </div>
     );
   }

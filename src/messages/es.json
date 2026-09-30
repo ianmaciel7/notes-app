@@ -43,6 +43,9 @@
     "creating": "Creando...",
     "selectIconAria": "Seleccionar ícono {icon}",
     "nameRequired": "El nombre del espacio es obligatorio",
-    "failedToCreate": "Error al crear el espacio"
+    "failedToCreate": "Error al crear el espacio",
+    "spaceNotFoundTitle": "Espacio no encontrado",
+    "spaceNotFoundDescription": "Este espacio no existe o ya no está accesible.",
+    "backToSpaces": "Volver a los espacios"
   }
 }

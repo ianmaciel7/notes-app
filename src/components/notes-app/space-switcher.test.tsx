@@ -14,9 +14,11 @@ function renderWithIntl(ui: React.ReactNode) {
 }
 
 const mockPush = vi.fn();
+const mockReplace = vi.fn();
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
+    replace: mockReplace,
   }),
 }));
 
@@ -179,4 +181,37 @@ describe("SpaceSwitcher", () => {
     fireEvent.click(enterBtn);
     expect(mockPush).toHaveBeenCalledWith("/space-1");
   });
+  it("does not fall back to another space when currentSpaceId is invalid", () => {
+    const spaces: Space[] = [
+      {
+        id: "space-1",
+        ownerId: "uid-1",
+        name: "Personal",
+        description: "",
+        icon: "folder",
+        stateVersion: 1,
+        schemaVersion: 1,
+        createdAt: null,
+        updatedAt: null,
+      },
+    ];
+
+    mockUseSpaces.mockReturnValue({
+      spaces,
+      loading: false,
+      error: null,
+      isOffline: false,
+      retry: vi.fn(),
+      createSpace: vi.fn(),
+    });
+
+    renderWithIntl(<SpaceSwitcher currentSpaceId="missing-space" />);
+
+    expect(screen.getByTestId("space-switcher-not-found")).toBeDefined();
+    expect(screen.queryByTestId("space-switcher-trigger")).toBeNull();
+
+    fireEvent.click(screen.getByTestId("space-switcher-back-btn"));
+    expect(mockReplace).toHaveBeenCalledWith("/");
+  });
+
 });
