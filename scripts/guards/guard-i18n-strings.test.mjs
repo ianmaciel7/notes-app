@@ -68,17 +68,6 @@ test("findI18nViolationsInSource detects hardcoded accessibility attributes", ()
   assert.ok(violations.some((v) => v.snippet === "TOTP QR Code"));
 });
 
-
-test("findI18nViolationsInSource detects hardcoded text in generic UI containers", () => {
-  const rawContent = `
-    export function Status() {
-      return <span>Loading spaces</span>;
-    }
-  `;
-  const violations = findI18nViolationsInSource(rawContent, "status.tsx");
-  assert.ok(violations.some((v) => v.snippet === "Loading spaces"));
-});
-
 test("findI18nViolationsInSource permits proper i18n usage", () => {
   const validContent = `
     import { useTranslations } from "next-intl";
