@@ -153,7 +153,7 @@ export function SpaceSwitcher({
         )}
         {...props}
       >
-        <span className="animate-pulse">Loading spaces...</span>
+        <span className="animate-pulse">{t("loading")}</span>
       </div>
     );
   }
@@ -310,7 +310,7 @@ export function SpaceSwitcher({
       {isOffline && (
         <output
           aria-live="polite"
-          className="text-[11px] text-amber-600 dark:text-amber-400"
+          className="text-[11px] text-muted-foreground"
           data-testid="offline-status-indicator"
         >
           {t("operatingOffline")}

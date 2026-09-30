@@ -2,7 +2,8 @@
   "app": {
     "title": "Notes App",
     "subtitle": "Espaço de conhecimento pessoal e aprendizado",
-    "footer": "Notes App • Firebase Auth"
+    "footer": "Notes App • Firebase Auth",
+    "backToHome": "Voltar para o início"
   },
   "auth": {
     "guestGreeting": "Notes App",
@@ -13,7 +14,10 @@
     "anonymous": "Convidado",
     "signIn": "Entrar",
     "signOut": "Sair",
-    "orContinueWith": "Ou continue com"
+    "orContinueWith": "Ou continue com",
+    "continueAsGuest": "Continuar como convidado",
+    "backToHome": "Voltar para o início",
+    "totpQrCodeAlt": "Código QR do TOTP"
   },
   "language": {
     "label": "Idioma",
@@ -46,6 +50,9 @@
     "failedToCreate": "Falha ao criar espaço",
     "spaceNotFoundTitle": "Espaço não encontrado",
     "spaceNotFoundDescription": "Este espaço não existe ou não está mais acessível.",
-    "backToSpaces": "Voltar para os espaços"
+    "backToSpaces": "Voltar para os espaços",
+    "loading": "Carregando espaços...",
+    "activeSpaceLabel": "Espaço ativo",
+    "spaceTitle": "Espaço: {id}"
   }
 }

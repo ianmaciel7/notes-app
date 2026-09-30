@@ -2,7 +2,8 @@
   "app": {
     "title": "Notes App",
     "subtitle": "Personal knowledge & learning workspace",
-    "footer": "Notes App • Firebase Auth"
+    "footer": "Notes App • Firebase Auth",
+    "backToHome": "Back to Home"
   },
   "auth": {
     "guestGreeting": "Notes App",
@@ -13,7 +14,10 @@
     "anonymous": "Guest",
     "signIn": "Sign in",
     "signOut": "Sign out",
-    "orContinueWith": "Or continue with"
+    "orContinueWith": "Or continue with",
+    "continueAsGuest": "Continue as Guest",
+    "backToHome": "Back to Home",
+    "totpQrCodeAlt": "TOTP QR code"
   },
   "language": {
     "label": "Language",
@@ -46,6 +50,9 @@
     "failedToCreate": "Failed to create space",
     "spaceNotFoundTitle": "Space not found",
     "spaceNotFoundDescription": "This space does not exist or is no longer accessible.",
-    "backToSpaces": "Back to Spaces"
+    "backToSpaces": "Back to Spaces",
+    "loading": "Loading spaces...",
+    "activeSpaceLabel": "Active Space",
+    "spaceTitle": "Space: {id}"
   }
 }

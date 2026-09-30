@@ -2,6 +2,30 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import SpacePage from "./page";
 
+vi.mock("next-intl/server", () => ({
+  getTranslations: async (namespace: string) => {
+    const messages: Record<string, Record<string, string>> = {
+      app: {
+        title: "Notes App",
+        footer: "Notes App • Firebase Auth",
+        backToHome: "Back to Home",
+      },
+      spaces: {
+        activeSpaceLabel: "Active Space",
+        spaceTitle: "Space: {id}",
+      },
+    };
+
+    return (key: string, values?: Record<string, string>) => {
+      let message = messages[namespace]?.[key] ?? key;
+      for (const [name, value] of Object.entries(values ?? {})) {
+        message = message.replace(`{${name}}`, value);
+      }
+      return message;
+    };
+  },
+}));
+
 vi.mock("@/components/notes-app/require-auth", () => ({
   RequireAuth: ({
     children,
@@ -37,7 +61,7 @@ describe("SpacePage", () => {
     const pageComponent = await SpacePage({
       params: Promise.resolve({ spaceId: "test-space-456" }),
       searchParams: Promise.resolve({}),
-    });
+    } as Parameters<typeof SpacePage>[0]);
 
     render(pageComponent);
 

@@ -1,12 +1,17 @@
+import { getTranslations } from "next-intl/server";
 import { AuthGreetingHeader } from "@/components/notes-app/auth-greeting-header";
 import { SpaceSwitcher } from "@/components/notes-app/space-switcher";
 import { UserMenu } from "@/components/notes-app/user-menu";
 
-export default function Home() {
+export default async function Home() {
+  const t = await getTranslations("app");
+
   return (
     <div className="flex flex-col flex-1 items-center justify-between min-h-screen bg-zinc-50 font-sans dark:bg-black">
       <header className="flex w-full max-w-3xl items-center justify-between p-6">
-        <span className="font-semibold text-lg text-foreground">Notes App</span>
+        <span className="font-semibold text-lg text-foreground">
+          {t("title")}
+        </span>
         <UserMenu />
       </header>
 
@@ -16,7 +21,7 @@ export default function Home() {
       </main>
 
       <footer className="p-6 text-center text-xs text-zinc-500">
-        Notes App • Firebase Auth
+        {t("footer")}
       </footer>
     </div>
   );

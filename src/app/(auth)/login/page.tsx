@@ -7,8 +7,10 @@ import {
   signInWithPopup,
   signInWithRedirect,
 } from "firebase/auth";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Suspense, useEffect, useState } from "react";
 import { GoogleSignInButton } from "@/components/notes-app/google-sign-in-button";
 import { SignInAuthScreen } from "@/components/notes-app/login-card";
@@ -20,6 +22,7 @@ import { getSafeNextUrl } from "@/lib/navigation/safe-next-url";
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations("auth");
   const nextUrl = getSafeNextUrl(searchParams.get("next"));
   const [mode, setMode] = useState<"signIn" | "signUp">("signIn");
 
@@ -92,7 +95,7 @@ function LoginContent() {
               className="w-full text-muted-foreground hover:text-foreground"
               onClick={handleAnonymousLogin}
             >
-              Continuar como Convidado
+              {t("continueAsGuest")}
             </Button>
           </SignInAuthScreen>
         ) : (
@@ -108,7 +111,7 @@ function LoginContent() {
               className="w-full text-muted-foreground hover:text-foreground"
               onClick={handleAnonymousLogin}
             >
-              Continuar como Convidado
+              {t("continueAsGuest")}
             </Button>
           </SignUpAuthScreen>
         )}
@@ -118,9 +121,10 @@ function LoginContent() {
       <div className="mt-8 text-center text-xs text-muted-foreground">
         <Link
           href="/"
-          className="hover:text-foreground underline-offset-4 hover:underline transition-colors"
+          className="inline-flex items-center gap-1 hover:text-foreground underline-offset-4 hover:underline transition-colors"
         >
-          ← Voltar para o início
+          <ArrowLeft className="size-3.5" aria-hidden="true" />
+          {t("backToHome")}
         </Link>
       </div>
     </div>
