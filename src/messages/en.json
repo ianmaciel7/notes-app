@@ -64,5 +64,10 @@
     "description": "An unexpected error occurred while communicating with application services.",
     "retry": "Try again",
     "backToHome": "Back to Home"
+  },
+  "connection": {
+    "title": "Connection problem",
+    "description": "Cannot reach the server. You are working offline and changes will sync when the connection returns.",
+    "retry": "Retry"
   }
 }

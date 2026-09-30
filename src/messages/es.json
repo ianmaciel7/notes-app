@@ -64,5 +64,10 @@
     "description": "Ocurrió un error inesperado al comunicarse con los servicios de la aplicación.",
     "retry": "Intentar de nuevo",
     "backToHome": "Volver al inicio"
+  },
+  "connection": {
+    "title": "Problema de conexión",
+    "description": "No se puede contactar al servidor. Estás trabajando sin conexión y los cambios se sincronizarán cuando vuelva la conexión.",
+    "retry": "Reintentar"
   }
 }

@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import "./globals.css";
 import { AuthProvider } from "@/components/notes-app/auth-provider";
+import { BackendStatusToaster } from "@/components/notes-app/backend-status-toaster";
 import { ThemeProvider } from "@/components/notes-app/theme-provider";
 import { cn } from "@/lib/utils";
 
@@ -51,6 +52,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <AuthProvider>{children}</AuthProvider>
+            <BackendStatusToaster />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

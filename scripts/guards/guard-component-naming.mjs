@@ -70,6 +70,7 @@ const SHADCN_SUFFIXES = new Set([
   "resizable",
   "sonner",
   "toast",
+  "toaster",
   "carousel",
 ]);
 

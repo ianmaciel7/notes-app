@@ -6,11 +6,25 @@ type FirebaseLogParams = Parameters<
   NonNullable<Parameters<typeof onLog>[0]>
 >[0];
 
+export const BACKEND_UNREACHABLE_EVENT = "app:backend-unreachable";
+
+const UNREACHABLE_PATTERNS = [
+  "Could not reach Cloud Firestore backend",
+  "auth/network-request-failed",
+];
+
 export function handleFirebaseLog({
   level,
   message,
   type,
 }: FirebaseLogParams): void {
+  if (
+    typeof window !== "undefined" &&
+    UNREACHABLE_PATTERNS.some((pattern) => message.includes(pattern))
+  ) {
+    window.dispatchEvent(new Event(BACKEND_UNREACHABLE_EVENT));
+  }
+
   captureError(new Error(message), {
     source: "firebase-sdk",
     // Offline/backend-unreachable logs are recoverable: the SDK keeps working

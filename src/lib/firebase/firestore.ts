@@ -6,7 +6,10 @@ import {
   persistentLocalCache,
   persistentMultipleTabManager,
 } from "firebase/firestore";
+import { installFirebaseLogCapture } from "@/lib/error-capture/firebase-logs";
 import { app } from "./client";
+
+installFirebaseLogCapture();
 
 export function getOrCreateFirestore(targetApp = app): Firestore {
   if (typeof window !== "undefined") {

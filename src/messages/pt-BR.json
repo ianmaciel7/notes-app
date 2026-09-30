@@ -64,5 +64,10 @@
     "description": "Ocorreu um erro inesperado ao se comunicar com os serviços da aplicação.",
     "retry": "Tentar novamente",
     "backToHome": "Voltar para o início"
+  },
+  "connection": {
+    "title": "Problema de conexão",
+    "description": "Não foi possível alcançar o servidor. Você está trabalhando offline e as alterações serão sincronizadas quando a conexão voltar.",
+    "retry": "Tentar novamente"
   }
 }
