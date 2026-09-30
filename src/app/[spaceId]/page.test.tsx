@@ -3,30 +3,6 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import SpacePage from "./page";
 
 vi.mock("next-intl/server", () => ({
-  getTranslations: async (namespace: string) => {
-    const messages: Record<string, Record<string, string>> = {
-      app: {
-        title: "Notes App",
-        footer: "Notes App • Firebase Auth",
-        backToHome: "Back to Home",
-      },
-      spaces: {
-        activeSpaceLabel: "Active Space",
-        spaceTitle: "Space: {id}",
-      },
-    };
-
-    return (key: string, values?: Record<string, string>) => {
-      let message = messages[namespace]?.[key] ?? key;
-      for (const [name, value] of Object.entries(values ?? {})) {
-        message = message.replace(`{${name}}`, value);
-      }
-      return message;
-    };
-  },
-}));
-
-vi.mock("next-intl/server", () => ({
   getTranslations: vi.fn(async (namespace: string) => {
     const translations: Record<string, Record<string, string>> = {
       app: {

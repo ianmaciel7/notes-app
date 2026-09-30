@@ -6,14 +6,9 @@ import { SpaceSwitcher } from "@/components/notes-app/space-switcher";
 import { UserMenu } from "@/components/notes-app/user-menu";
 import { Button } from "@/components/ui/button";
 
-export interface SpacePageProps {
-  params: Promise<{
-    spaceId: string;
-  }>;
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
-
-export default async function SpacePage({ params }: SpacePageProps) {
+export default async function SpacePage({
+  params,
+}: PageProps<"/[spaceId]">) {
   const { spaceId } = await params;
   const [appT, spacesT] = await Promise.all([
     getTranslations("app"),
