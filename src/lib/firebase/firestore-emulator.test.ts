@@ -9,7 +9,12 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { signInAnonymously, signOut } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInAnonymously,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 import { describe, expect, it } from "vitest";
 import { auth, connectToAuthEmulator } from "./client";
 import { connectToFirestoreEmulator, db } from "./firestore";
@@ -36,7 +41,13 @@ describe("Firebase Firestore Emulator Integration", () => {
       await signOut(auth);
     }
 
-    const ownerCredential = await signInAnonymously(auth);
+    const ownerEmail = `firestore-owner-${Date.now()}@notesapp.dev`;
+    const ownerPassword = "emulatorPassword123";
+    const ownerCredential = await createUserWithEmailAndPassword(
+      auth,
+      ownerEmail,
+      ownerPassword,
+    );
     const ownerUid = ownerCredential.user.uid;
     const testId = `integration-doc-${Date.now()}`;
     const testDocRef = doc(
@@ -90,15 +101,18 @@ describe("Firebase Firestore Emulator Integration", () => {
     const colSnap = await getDocs(colRef);
     expect(colSnap.docs.some((item) => item.id === testId)).toBe(true);
 
-    await deleteDoc(testDocRef);
-    expect((await getDoc(testDocRef)).exists()).toBe(false);
-
     await signOut(auth);
     await signInAnonymously(auth);
 
     await expect(getDocFromServer(testDocRef)).rejects.toMatchObject({
       code: "permission-denied",
     });
+
+    await signOut(auth);
+    await signInWithEmailAndPassword(auth, ownerEmail, ownerPassword);
+
+    await deleteDoc(testDocRef);
+    expect((await getDoc(testDocRef)).exists()).toBe(false);
 
     await signOut(auth);
   });

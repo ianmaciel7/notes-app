@@ -35,6 +35,7 @@ rtk pnpm test
 rtk pnpm test:watch
 rtk pnpm test:coverage
 rtk pnpm test:e2e
+rtk pnpm test:firebase
 rtk pnpm test:firebase-emulator
 rtk pnpm test:mutation
 rtk pnpm ladle

@@ -50,7 +50,9 @@
     "test:guards": "node --test scripts/guards/floor-guard.test.mjs scripts/hooks/hooks.test.mjs scripts/verify/verify-docs.test.mjs scripts/guards/guard-rsc-boundaries.test.mjs scripts/guards/guard-component-props.test.mjs scripts/guards/guard-no-emojis.test.mjs scripts/guards/guard-i18n-strings.test.mjs",
     "check:naming": "node scripts/guards/guard-component-naming.mjs",
     ".agents:sync": "node scripts/tooling/run-agents-cli.mjs sync",
-    "eval:compare": "node .agents/evals/compare.mjs"
+    "eval:compare": "node .agents/evals/compare.mjs",
+    "test:firebase:integration": "vitest run src/lib/firebase/auth-emulator.test.ts src/lib/firebase/firestore-emulator.test.ts",
+    "test:firebase": "pnpm dlx firebase-tools@15.26.0 emulators:exec --only auth,firestore \"pnpm test:firebase:integration\""
   },
   "lint-staged": {
     "*.{cjs,css,json,jsonc,js,mjs,ts,tsx}": "biome check --write"
