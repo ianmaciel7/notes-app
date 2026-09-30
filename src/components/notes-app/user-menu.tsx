@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { LanguageSwitcher } from "@/components/notes-app/language-switcher";
+import { LanguageSelect } from "@/components/notes-app/language-select";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
@@ -27,7 +27,7 @@ export function UserMenu({ className, ...props }: UserMenuProps) {
   if (!user) {
     return (
       <div className={cn("flex items-center gap-3", className)} {...props}>
-        <LanguageSwitcher />
+        <LanguageSelect />
         <Button
           render={
             <Link href="/login" data-testid="login-link">
@@ -56,7 +56,7 @@ export function UserMenu({ className, ...props }: UserMenuProps) {
       )}
       {...props}
     >
-      <LanguageSwitcher />
+      <LanguageSelect />
       <span
         data-testid="user-identifier"
         className="truncate font-medium max-w-[180px]"

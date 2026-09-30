@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import messages from "@/messages/en.json";
-import { LanguageSwitcher } from "./language-switcher";
+import { LanguageSelect } from "./language-select";
 
 const mockRefresh = vi.fn();
 vi.mock("next/navigation", () => ({
@@ -19,14 +19,14 @@ function renderWithIntl(ui: React.ReactNode, locale = "en") {
   );
 }
 
-describe("LanguageSwitcher", () => {
+describe("LanguageSelect", () => {
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
   });
 
   it("renders language select dropdown with current language", () => {
-    renderWithIntl(<LanguageSwitcher />);
+    renderWithIntl(<LanguageSelect />);
 
     const selectTrigger = screen.getByTestId("language-select");
     expect(selectTrigger).toBeDefined();
@@ -34,7 +34,7 @@ describe("LanguageSwitcher", () => {
   });
 
   it("opens options and triggers router refresh on language selection", () => {
-    renderWithIntl(<LanguageSwitcher />);
+    renderWithIntl(<LanguageSelect />);
 
     const selectTrigger = screen.getByTestId("language-select");
     fireEvent.click(selectTrigger);

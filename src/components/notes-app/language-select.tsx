@@ -18,12 +18,9 @@ import {
 } from "@/lib/i18n/locale-sync";
 import { cn } from "@/lib/utils";
 
-export interface LanguageSwitcherProps extends ComponentProps<"div"> {}
+export interface LanguageSelectProps extends ComponentProps<"div"> {}
 
-export function LanguageSwitcher({
-  className,
-  ...props
-}: LanguageSwitcherProps) {
+export function LanguageSelect({ className, ...props }: LanguageSelectProps) {
   const currentLocale = useLocale();
   const t = useTranslations("language");
   const router = useRouter();
@@ -54,7 +51,7 @@ export function LanguageSwitcher({
 
   return (
     <div
-      data-testid="language-switcher"
+      data-testid="language-select-container"
       className={cn(
         "flex items-center gap-1 text-xs text-muted-foreground",
         className,
