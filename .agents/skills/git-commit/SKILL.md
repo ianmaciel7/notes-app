@@ -51,6 +51,15 @@ BREAKING CHANGE: `extends` key behavior changed
 
 ## Workflow
 
+### 0. Clarify Session Commit Scope
+
+Before staging or committing, determine whether multiple sessions or concurrent workstreams are active:
+
+- **Multiple open sessions / active tasks**: ALWAYS prompt the user (via `ask_question` or direct inquiry) before staging:
+  - Option A: *Commit only changes from the current session*
+  - Option B: *Commit changes across all open sessions*
+- **Single active session**: If only one session exists and no other concurrent sessions/tasks are open, proceed directly to stage and commit all relevant changes.
+
 ### 1. Analyze Diff
 
 ```bash

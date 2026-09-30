@@ -62,6 +62,8 @@ git log --oneline
 x1y2z3a Add task feature, fix sidebar, update deps, refactor utils
 ```
 
+- **Session commit scope**: When an agent commits within an active session, follow the multi-session scope protocol in `.agents/skills/git-commit/SKILL.md` (ask user if multiple sessions/workstreams exist; commit directly if single session).
+
 ### 3. Descriptive Messages
 
 Commit messages explain the *why*, not just the *what*:

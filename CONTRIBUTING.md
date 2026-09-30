@@ -43,6 +43,13 @@ Common types: `feat`, `fix`, `docs`, `refactor`, `perf`, `test`,
 Keep commits focused and do not bypass hooks with `--no-verify` merely to obtain a
 commit.
 
+### Agent Session Commit Scope
+
+When an agent is asked to commit changes within an active session:
+- **Multiple active sessions**: The agent must always ask the user whether to commit only the changes made in that current session or all changes across all open sessions.
+- **Single active session**: If only one session exists, the agent may commit all uncommitted changes directly.
+- Canonical execution procedure is defined in `.agents/skills/git-commit/SKILL.md`.
+
 ## 4. Pre-PR Checklist
 
 Before opening a PR:
