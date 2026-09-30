@@ -213,5 +213,4 @@ describe("SpaceSwitcher", () => {
     fireEvent.click(screen.getByTestId("space-switcher-back-btn"));
     expect(mockReplace).toHaveBeenCalledWith("/");
   });
-
 });

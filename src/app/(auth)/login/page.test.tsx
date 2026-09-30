@@ -222,5 +222,4 @@ describe("LoginPage", () => {
       expect(mockReplace).toHaveBeenCalledWith("/");
     });
   });
-
 });
