@@ -14,6 +14,8 @@ import {
 } from "@firebase-oss/ui-react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { TotpMultiFactorGenerator, type TotpSecret } from "firebase/auth";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -117,6 +119,7 @@ export function MultiFactorEnrollmentVerifyTotpForm({
   ...props
 }: MultiFactorEnrollmentVerifyTotpFormProps) {
   const ui = useUI();
+  const t = useTranslations("auth");
   const schema = useMultiFactorTotpAuthVerifyFormSchema();
 
   const form = useForm<{ verificationCode: string }>({
@@ -151,7 +154,14 @@ export function MultiFactorEnrollmentVerifyTotpForm({
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-y-4 items-center justify-center">
-        <img src={qrCodeDataUrl} alt="TOTP QR Code" className="mx-auto" />
+        <Image
+          src={qrCodeDataUrl}
+          alt={t("totpQrCodeAlt")}
+          width={192}
+          height={192}
+          unoptimized
+          className="mx-auto"
+        />
         <code className="text-xs text-muted-foreground text-center">
           {secret.secretKey.toString()}
         </code>

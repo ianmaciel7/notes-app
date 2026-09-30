@@ -3,7 +3,6 @@ import {
   type Firestore,
   getFirestore,
   initializeFirestore,
-  memoryLocalCache,
   persistentLocalCache,
   persistentMultipleTabManager,
 } from "firebase/firestore";

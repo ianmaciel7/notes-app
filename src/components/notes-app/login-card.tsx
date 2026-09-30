@@ -49,7 +49,7 @@ export function LoginCard({
       <Card className="border border-border/80 shadow-xl shadow-black/5 dark:shadow-none bg-card">
         <CardHeader className="space-y-1.5 pb-4">
           <CardTitle className="text-xl font-semibold tracking-tight">
-            {titleText}
+            <h1>{titleText}</h1>
           </CardTitle>
           <CardDescription className="text-sm text-muted-foreground">
             {subtitleText}
