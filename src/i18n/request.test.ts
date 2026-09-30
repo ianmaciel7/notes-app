@@ -16,9 +16,17 @@ type RequestConfigFunction = () => Promise<{
   messages: Record<string, Record<string, string>>;
 }>;
 
+interface CookieStoreStub {
+  get: (name: string) => { value: string } | undefined;
+}
+
+const mockedCookies = vi.mocked(
+  cookies as unknown as () => Promise<CookieStoreStub>,
+);
+
 describe("next-intl request config", () => {
   it("resolves default locale 'en' when no cookie is set", async () => {
-    vi.mocked(cookies as unknown as () => Promise<any>).mockResolvedValue({
+    mockedCookies.mockResolvedValue({
       get: vi.fn().mockReturnValue(undefined),
     });
 
@@ -30,7 +38,7 @@ describe("next-intl request config", () => {
   });
 
   it("resolves valid cookie locale 'pt-BR'", async () => {
-    vi.mocked(cookies as unknown as () => Promise<any>).mockResolvedValue({
+    mockedCookies.mockResolvedValue({
       get: vi.fn().mockReturnValue({ value: "pt-BR" }),
     });
 
@@ -43,7 +51,7 @@ describe("next-intl request config", () => {
   });
 
   it("falls back to default locale 'en' when invalid cookie is set", async () => {
-    vi.mocked(cookies as unknown as () => Promise<any>).mockResolvedValue({
+    mockedCookies.mockResolvedValue({
       get: vi.fn().mockReturnValue({ value: "invalid-locale" }),
     });
 
