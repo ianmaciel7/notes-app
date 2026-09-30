@@ -62,6 +62,7 @@ flowchart TD
 ## 3. Best Practices & Token Economy
 
 - **Do Not Dump Whole Large Files**: Run `ast-grep outline` or `get_symbols_overview` first before reading entire multi-hundred line source files.
+- **Prohibit Repetitive View_File Loops**: Never perform multiple sequential `view_file` calls over the same lines of code. Use Serena MCP for targeted symbol lookup or Filesystem MCP `read_text_file` when the entire file is needed.
 - **Graphify First for Architecture**: Query `graphify-out/` before manually tracing imports across multiple directories.
 - **Context7 Over Web Search for Libraries**: Always query official docs via `ctx7` before performing generic web searches.
 - **Relative Paths Only**: Keep all documentation references relative to the repository root.

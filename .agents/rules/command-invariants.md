@@ -5,6 +5,7 @@ These rules govern how agents execute commands and utilize repository-configured
 ## 1. Native MCP and Specialized Tool Preference
 - **Mandatory Tool Priority**: Always prefer specialized MCP tools over generic shell commands whenever an MCP is available:
   - **Serena MCP** (`search_for_pattern`, `find_symbol`, `find_referencing_symbols`, `get_symbols_overview`, `replace_content`): Primary tool for code analysis, symbol queries, exact text/regex search, and semantic edits.
+  - **Filesystem MCP & Serena vs. view_file**: ALWAYS prioritize Serena MCP (`get_symbols_overview`, `find_symbol`) or Filesystem MCP (`read_text_file`) instead of issuing repetitive, fragmented `view_file` slicing loops to prevent token waste and read loop traps.
   - **Graphify MCP** (`query_graph`, `shortest_path`, `get_neighbors`): Primary tool for architecture and dependency analysis when `graphify-out/` exists.
   - **Git MCP** (`git_status`, `git_diff`, `git_log`, `git_commit`): Primary tool for repository version control status and history.
   - **Context7 CLI** (`ctx7 library` → `ctx7 docs`): Primary tool for official library/SDK documentation.
