@@ -91,5 +91,8 @@ test("guard-i18n-strings script passes on current repository codebase", () => {
     ["scripts/guards/guard-i18n-strings.mjs"],
     { encoding: "utf8" },
   );
-  assert.match(output, /Zero hardcoded i18n violations found in application UI/);
+  assert.match(
+    output,
+    /Zero hardcoded i18n violations found in application UI/,
+  );
 });

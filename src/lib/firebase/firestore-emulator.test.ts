@@ -1,4 +1,10 @@
 import {
+  createUserWithEmailAndPassword,
+  signInAnonymously,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import {
   collection,
   deleteDoc,
   doc,
@@ -9,12 +15,6 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import {
-  createUserWithEmailAndPassword,
-  signInAnonymously,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
 import { describe, expect, it } from "vitest";
 import { auth, connectToAuthEmulator } from "./client";
 import { connectToFirestoreEmulator, db } from "./firestore";

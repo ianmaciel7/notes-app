@@ -107,7 +107,10 @@ export function findI18nViolationsInSource(sourceText, filePath) {
       if (!ts.isJsxAttribute(attribute)) continue;
       const attributeName = attribute.name.getText(sf);
       if (!TRANSLATED_ATTRIBUTES.has(attributeName)) continue;
-      if (!attribute.initializer || !ts.isStringLiteral(attribute.initializer)) {
+      if (
+        !attribute.initializer ||
+        !ts.isStringLiteral(attribute.initializer)
+      ) {
         continue;
       }
 

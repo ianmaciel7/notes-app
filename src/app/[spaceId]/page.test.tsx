@@ -18,8 +18,7 @@ vi.mock("next-intl/server", () => ({
     return (key: string, values?: Record<string, string>) => {
       const template = translations[namespace]?.[key] ?? key;
       return Object.entries(values ?? {}).reduce(
-        (value, [name, replacement]) =>
-          value.replace(`{${name}}`, replacement),
+        (value, [name, replacement]) => value.replace(`{${name}}`, replacement),
         template,
       );
     };
