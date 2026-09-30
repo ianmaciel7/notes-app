@@ -26,6 +26,30 @@ vi.mock("next-intl/server", () => ({
   },
 }));
 
+vi.mock("next-intl/server", () => ({
+  getTranslations: vi.fn(async (namespace: string) => {
+    const translations: Record<string, Record<string, string>> = {
+      app: {
+        title: "Notes App",
+        footer: "Notes App • Firebase Auth",
+      },
+      spaces: {
+        backToHome: "Back to Home",
+        activeSpace: "Active Space",
+        spaceHeading: "Space: {id}",
+      },
+    };
+    return (key: string, values?: Record<string, string>) => {
+      const template = translations[namespace]?.[key] ?? key;
+      return Object.entries(values ?? {}).reduce(
+        (value, [name, replacement]) =>
+          value.replace(`{${name}}`, replacement),
+        template,
+      );
+    };
+  }),
+}));
+
 vi.mock("@/components/notes-app/require-auth", () => ({
   RequireAuth: ({
     children,

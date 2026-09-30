@@ -17,7 +17,7 @@
     "orContinueWith": "O continuar con",
     "continueAsGuest": "Continuar como invitado",
     "backToHome": "Volver al inicio",
-    "totpQrCodeAlt": "Código QR de TOTP"
+    "totpQrCodeAlt": "Código QR del autenticador TOTP"
   },
   "language": {
     "label": "Idioma",
@@ -53,6 +53,10 @@
     "backToSpaces": "Volver a los espacios",
     "loading": "Cargando espacios...",
     "activeSpaceLabel": "Espacio activo",
-    "spaceTitle": "Espacio: {id}"
+    "spaceTitle": "Espacio: {id}",
+    "loadingSpaces": "Cargando espacios...",
+    "backToHome": "Volver al inicio",
+    "activeSpace": "Espacio activo",
+    "spaceHeading": "Espacio: {id}"
   }
 }

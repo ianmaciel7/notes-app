@@ -16,8 +16,8 @@
     "signOut": "Sign out",
     "orContinueWith": "Or continue with",
     "continueAsGuest": "Continue as Guest",
-    "backToHome": "Back to Home",
-    "totpQrCodeAlt": "TOTP QR code"
+    "backToHome": "Back to home",
+    "totpQrCodeAlt": "TOTP authenticator QR code"
   },
   "language": {
     "label": "Language",
@@ -53,6 +53,10 @@
     "backToSpaces": "Back to Spaces",
     "loading": "Loading spaces...",
     "activeSpaceLabel": "Active Space",
-    "spaceTitle": "Space: {id}"
+    "spaceTitle": "Space: {id}",
+    "loadingSpaces": "Loading spaces...",
+    "backToHome": "Back to Home",
+    "activeSpace": "Active Space",
+    "spaceHeading": "Space: {id}"
   }
 }

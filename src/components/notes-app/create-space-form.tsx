@@ -67,8 +67,8 @@ export function CreateSpaceForm({
       );
       setName("");
       setSelectedIcon("folder");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t("failedToCreate"));
+    } catch {
+      setError(t("failedToCreate"));
     }
   };
 

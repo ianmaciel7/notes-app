@@ -68,6 +68,17 @@ test("findI18nViolationsInSource detects hardcoded accessibility attributes", ()
   assert.ok(violations.some((v) => v.snippet === "TOTP QR Code"));
 });
 
+
+test("findI18nViolationsInSource detects hardcoded text in generic UI containers", () => {
+  const rawContent = `
+    export function Status() {
+      return <span>Loading spaces</span>;
+    }
+  `;
+  const violations = findI18nViolationsInSource(rawContent, "status.tsx");
+  assert.ok(violations.some((v) => v.snippet === "Loading spaces"));
+});
+
 test("findI18nViolationsInSource permits proper i18n usage", () => {
   const validContent = `
     import { useTranslations } from "next-intl";
@@ -91,5 +102,5 @@ test("guard-i18n-strings script passes on current repository codebase", () => {
     ["scripts/guards/guard-i18n-strings.mjs"],
     { encoding: "utf8" },
   );
-  assert.match(output, /Zero hardcoded i18n violations found/);
+  assert.match(output, /Zero hardcoded i18n violations found in application UI/);
 });

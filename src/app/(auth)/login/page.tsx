@@ -11,6 +11,7 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Suspense, useEffect, useState } from "react";
 import { GoogleSignInButton } from "@/components/notes-app/google-sign-in-button";
 import { SignInAuthScreen } from "@/components/notes-app/login-card";
@@ -24,6 +25,7 @@ function LoginContent() {
   const searchParams = useSearchParams();
   const t = useTranslations("auth");
   const nextUrl = getSafeNextUrl(searchParams.get("next"));
+  const t = useTranslations("auth");
   const [mode, setMode] = useState<"signIn" | "signUp">("signIn");
 
   useEffect(() => {

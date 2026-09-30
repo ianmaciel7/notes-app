@@ -6,11 +6,16 @@ import { SpaceSwitcher } from "@/components/notes-app/space-switcher";
 import { UserMenu } from "@/components/notes-app/user-menu";
 import { Button } from "@/components/ui/button";
 
-export default async function SpacePage({
-  params,
-}: PageProps<"/[spaceId]">) {
-  const [{ spaceId }, appT, spacesT] = await Promise.all([
-    params,
+export interface SpacePageProps {
+  params: Promise<{
+    spaceId: string;
+  }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
+export default async function SpacePage({ params }: SpacePageProps) {
+  const { spaceId } = await params;
+  const [appT, spacesT] = await Promise.all([
     getTranslations("app"),
     getTranslations("spaces"),
   ]);
@@ -28,7 +33,7 @@ export default async function SpacePage({
               render={<Link href="/" />}
             >
               <ArrowLeft className="size-4" />
-              <span className="sr-only">{appT("backToHome")}</span>
+              <span className="sr-only">{spacesT("backToHome")}</span>
             </Button>
             <span className="font-semibold text-lg text-foreground">
               {appT("title")}
@@ -40,10 +45,10 @@ export default async function SpacePage({
         <main className="flex flex-col items-center justify-center text-center p-8 space-y-6 max-w-md w-full">
           <div className="flex flex-col items-center gap-2">
             <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
-              {spacesT("activeSpaceLabel")}
+              {spacesT("activeSpace")}
             </p>
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              {spacesT("spaceTitle", { id: spaceId })}
+              {spacesT("spaceHeading", { id: spaceId })}
             </h1>
           </div>
           <SpaceSwitcher currentSpaceId={spaceId} />
