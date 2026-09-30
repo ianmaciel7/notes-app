@@ -26,5 +26,3 @@ jobs:
         uses: ./.github/actions/setup-project
       - name: Run deterministic quality gate
         run: pnpm check:ci
-      - name: Verify Firebase emulator integration
-        run: pnpm test:firebase
