@@ -9,6 +9,7 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { ArrowLeft } from "lucide-react";
 import type { ComponentProps } from "react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -57,7 +58,7 @@ export function ForgotPasswordForm({
   if (emailSent) {
     return (
       <div className="text-center space-y-4">
-        <div className="text-green-600 dark:text-green-400">
+        <div className="text-foreground">
           {getTranslation(ui, "messages", "checkEmailForReset")}
         </div>
       </div>
@@ -108,8 +109,9 @@ export function ForgotPasswordForm({
             size="sm"
             onClick={onBackToSignInClick}
           >
+            <ArrowLeft className="size-3.5" aria-hidden="true" />
             <span className="text-xs">
-              &larr; {getTranslation(ui, "labels", "backToSignIn")}
+              {getTranslation(ui, "labels", "backToSignIn")}
             </span>
           </Button>
         ) : null}
