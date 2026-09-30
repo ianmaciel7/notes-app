@@ -58,5 +58,11 @@
     "backToHome": "Volver al inicio",
     "activeSpace": "Espacio activo",
     "spaceHeading": "Espacio: {id}"
+  },
+  "error": {
+    "title": "Algo salió mal",
+    "description": "Ocurrió un error inesperado al comunicarse con los servicios de la aplicación.",
+    "retry": "Intentar de nuevo",
+    "backToHome": "Volver al inicio"
   }
 }

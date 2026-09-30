@@ -58,5 +58,11 @@
     "backToHome": "Back to Home",
     "activeSpace": "Active Space",
     "spaceHeading": "Space: {id}"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred while communicating with application services.",
+    "retry": "Try again",
+    "backToHome": "Back to Home"
   }
 }

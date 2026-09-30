@@ -42,6 +42,11 @@ Current dependency direction:
   exposed to client components.
 - `src/lib/firebase/firestore.ts` owns the shared Firestore `db`, emulator
   connection, and browser persistence configuration.
+- `src/lib/error-capture/capture.ts` owns the single `captureError` funnel (normalize,
+  dedupe, log). Channels feeding it: `src/instrumentation-client.ts` (window `error` and
+  `unhandledrejection`), `src/instrumentation.ts` (server `onRequestError`),
+  `src/app/error.tsx`, and `src/app/global-error.tsx`. Adopt an external reporting
+  service by changing only `captureError`.
 - Firestore rules enforce authenticated owner isolation for user data. Space documents
   additionally validate shape, immutable identity fields, schema version, and monotonic
   `stateVersion` updates.
