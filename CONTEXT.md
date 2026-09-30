@@ -6,10 +6,10 @@ documentation, commits, prompts, and review.
 This file owns ubiquitous language. Product requirements and decisions belong to the
 detailed product specification; architecture belongs to `ARCHITECTURE.md`.
 
-> **Current implementation boundary:** Firebase terms currently implemented are
-> documented in `ARCHITECTURE.md` and the Firebase source files. The product terms
-> below are preserved as the future knowledge-workspace vocabulary and must not be
-> interpreted as implemented Firestore entities yet.
+> **Current implementation boundary:** `User` and `Space` are implemented today.
+> The remaining product terms below are preserved as future knowledge-workspace
+> vocabulary and must not be interpreted as implemented Firestore entities until
+> promoted by the current-scope documents.
 
 ## Engineering Vocabulary
 
@@ -48,7 +48,7 @@ Person who uses the app, authenticated via Firebase Authentication (`uid`). Each
 **Avoid in this product context:** Account (in code), profile, workspace, team
 
 **Space** · `Space`:  
-A completely isolated knowledge context within an Account. Each Space has its own Types, Concepts, Collections, and Views. Objects from one Space never link to Objects in another.  
+A user-owned, isolated knowledge context. The current implementation persists Space documents under `/users/{uid}/spaces/{spaceId}`, supports creation/listing/switching, and prevents cross-user reads/writes. Future Types, Concepts, Collections, Views, and Objects remain scoped to exactly one Space.  
 **Avoid in this product context:** Vault, Workspace, folder, project
 
 **Mover** · `move`:  

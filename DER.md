@@ -1,6 +1,11 @@
 # Entity-Relationship Documentation (DER / ERD)
 
-This document owns the canonical **Entity-Relationship Model (Diagrama Entidade-Relacionamento)** for `notes-app`, defining the Firestore database hierarchy, entity attributes, primary/foreign keys, cardinality constraints, and indexing topologies.
+This document owns the target **Entity-Relationship Model (Diagrama Entidade-Relacionamento)** for `notes-app`, defining the intended Firestore hierarchy, entity attributes, primary/foreign keys, cardinality constraints, and indexing topologies.
+
+> **Current implemented subset:** `USER → SPACE` only. Space documents live at
+> `/users/{uid}/spaces/{spaceId}` with owner isolation and schema/state-version
+> validation in `firestore.rules`. Every other entity in the diagrams below remains
+> a target model until promoted by `INTENT.md` and `ARCHITECTURE.md`.
 
 - Canonical domain vocabulary: [`CONTEXT.md`](./CONTEXT.md)
 - Bounded context boundaries: [`CONTEXT-MAP.md`](./CONTEXT-MAP.md)
@@ -9,7 +14,7 @@ This document owns the canonical **Entity-Relationship Model (Diagrama Entidade-
 
 ---
 
-## 1. Global Entity-Relationship Diagram
+## 1. Target Entity-Relationship Diagram
 
 ```mermaid
 erDiagram

@@ -1,8 +1,9 @@
 # Notes App
 
-Current foundation for the Notes App. The repository currently provides the
-Next.js application shell, shared UI primitives, Firebase Authentication, local
-Firebase emulators, and the initial Firestore integration with browser persistence.
+Current foundation for the Notes App. The repository provides the Next.js
+application shell, shared UI primitives, Firebase Authentication, local Firebase
+emulators, Firestore browser persistence, and the initial user-owned Space slice
+(create, list, switch, and protected Space routing).
 The current scope is defined in [`INTENT.md`](./INTENT.md).
 
 ## Getting Started
@@ -20,7 +21,8 @@ Open http://localhost:3000.
 
 ## Development
 
-The notes product domain is not implemented yet. Shared UI can be explored with Ladle:
+The broader notes/object domain is not implemented yet; `Space` is the first
+product-domain entity currently available. Shared UI can be explored with Ladle:
 
 ```bash
 rtk pnpm ladle

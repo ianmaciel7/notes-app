@@ -4,7 +4,7 @@
 
 **Author:** Ian Maciel
 **Status:** Complete
-**Last Updated:** 2026-09-25
+**Last Updated:** 2026-09-29
 **Version:** 1.0
 
 ### Implemented scope
@@ -12,14 +12,17 @@
 The repository currently implements the Firebase foundation described in
 [`ARCHITECTURE.md`](./ARCHITECTURE.md): Firebase App, Firebase Authentication,
 Firebase `User`, local Auth/Firestore emulators, and the Firestore client with
-persistent local cache.
+persistent local cache. It also implements the first product-domain vertical slice:
+user-owned `Space` documents, creation/listening/switching UI, protected
+`/[spaceId]` routing, and owner-isolated Firestore rules.
 
 Current scope and non-goals are summarized in
-[`docs/product-specs/index.md`](./docs/product-specs/index.md). The current
-Firebase vocabulary is maintained in [`CONTEXT.md`](./CONTEXT.md).
+[`docs/product-specs/index.md`](./docs/product-specs/index.md). Current vocabulary
+is maintained in [`CONTEXT.md`](./CONTEXT.md).
 
-No knowledge-workspace entity described in Registro B should be treated as an
-implemented Firestore entity yet.
+`User` and `Space` are the only knowledge-workspace entities currently promoted
+into the implementation. Objects, ObjectTypes, Relations, study entities, AI
+entities, and the rest of the future proposal remain unimplemented.
 
 ---
 

@@ -2,6 +2,8 @@
 
 Canonical map of bounded contexts for `notes-app`, defining module boundaries, ubiquitous vocabularies, and system-wide relationships.
 
+**Implementation status:** only the `User` + `Space` slice of Identity & Tenancy is implemented. The remaining bounded-context content is the target domain model and must not be treated as current runtime behavior.
+
 The detailed ubiquitous vocabulary is canonically defined in [`CONTEXT.md`](./CONTEXT.md). Architectural boundaries defer to [`ARCHITECTURE.md`](./ARCHITECTURE.md).
 
 ---

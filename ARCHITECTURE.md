@@ -12,7 +12,8 @@ flowchart TD
 ```
 
 The current runtime boundary is the client web application and local emulator
-environment. The repository does not yet implement a notes-domain Firestore schema.
+environment. The implemented product-domain schema is intentionally narrow: user-owned
+`Space` documents only. The broader Objects/Relations/Study schema remains deferred.
 
 ## 2. Module Boundaries & Routing Topology
 
@@ -21,8 +22,9 @@ environment. The repository does not yet implement a notes-domain Firestore sche
 - `src/components/ui/`: generic shadcn/Base UI primitives; no notes-domain behavior. Must only import `@/lib/utils` (or `cn`) from `src/lib/`.
 - `src/hooks/`: reusable, cross-cutting React hooks (device sensors, browser APIs, shared auth state). Must not depend on application routes (`src/app/`). Component-specific hooks coupled to compound context providers (e.g. `useSidebar`, `useToastManager`) remain co-located within their component files.
 - `src/lib/`: shared utilities that do not depend on UI components.
-- Firebase integration is currently concentrated in `src/lib/firebase/`; a
-  product-specific Data Access Layer is not implemented yet.
+- Firebase integration is concentrated in `src/lib/firebase/`; the first product
+  data slice uses `src/hooks/use-spaces.ts`, `src/types/space.ts`, and
+  `src/lib/validators/space.ts`. A server-side product DAL is not implemented yet.
 
 Current dependency direction:
 
@@ -40,9 +42,14 @@ Current dependency direction:
   exposed to client components.
 - `src/lib/firebase/firestore.ts` owns the shared Firestore `db`, emulator
   connection, and browser persistence configuration.
-- Firestore rules currently protect user-scoped paths under `/users/{userId}` and
-  expose `integration_test_collection` for emulator integration tests.
-- No notes-domain collection or document schema is currently part of the system.
+- Firestore rules enforce authenticated owner isolation for user data. Space documents
+  additionally validate shape, immutable identity fields, schema version, and monotonic
+  `stateVersion` updates.
+- The current product collection is `/users/{uid}/spaces/{spaceId}`. Emulator
+  integration fixtures live only below authenticated user-scoped Space paths; there is
+  no publicly writable test collection in deployable rules.
+- Objects, Relations, Cards, Attempts, Views, Inbox items, and other future domain
+  collections are not implemented yet.
 
 Dependency-cruiser is the executable source of truth for machine-enforced dependency
 rules. This document owns the architectural intent behind those rules.

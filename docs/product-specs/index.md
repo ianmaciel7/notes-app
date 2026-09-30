@@ -10,8 +10,8 @@ stable so existing IDs and historical references remain valid.
 
 | Stable section | Canonical owner | Purpose |
 | --- | --- | --- |
-| Current scope | `INTENT.md` | implemented Firebase foundation and current non-goals |
-| Current vocabulary | `CONTEXT.md` | implemented Firebase entities and terms |
+| Current scope | `INTENT.md` | implemented Firebase foundation, initial Space slice, and current non-goals |
+| Current vocabulary | `CONTEXT.md` | implemented User/Space terms plus clearly marked future vocabulary |
 | Future proposal | `knowledge-learning-workspace.md` | deferred knowledge-workspace concepts and requirements |
 
 The former stable section map remains valid for historical references within the
@@ -26,6 +26,6 @@ preserved proposal:
 | §9–§13 | `knowledge-learning-workspace.md` | phases, constraints, decisions, risks, decision log |
 | Appendices | `knowledge-learning-workspace.md` | references, flows, standards |
 
-The future proposal is not an implementation contract. Do not use its entities or
-requirements to describe the current application until they are implemented and
-promoted into the current-scope documents.
+The future proposal is not an implementation contract. `Space` has been partially
+promoted into the current implementation; all other proposal entities and requirements
+remain future-only until they are explicitly promoted into the current-scope documents.
