@@ -26,10 +26,11 @@ support guarantees.
 ## 4. Input & Data Boundaries
 
 The application currently has client-side Firebase Authentication and a Firestore
-integration. Firestore rules protect the currently supported user-scoped path, but
-there is no notes-domain schema or server-side authorization layer yet.
+integration. The implemented product schema is currently limited to user-owned
+`Space` documents protected by Firestore rules; there is no server-side
+authorization layer yet.
 
-Before notes-domain data or server-submitted product mutations are introduced:
+Before additional domain data or server-submitted product mutations are introduced:
 
 - **Data Access Layer (DAL)**: isolate database queries and private server operations behind a DAL guarded by the `server-only` package to prevent server-only code and secrets from leaking into client bundles;
 - validate data at trust boundaries using Zod/schemas, not only in the UI;
