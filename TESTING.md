@@ -35,6 +35,7 @@ rtk pnpm test
 rtk pnpm test:watch
 rtk pnpm test:coverage
 rtk pnpm test:e2e
+rtk pnpm test:firebase-emulator
 rtk pnpm test:mutation
 rtk pnpm ladle
 rtk pnpm ladle:build
@@ -73,7 +74,8 @@ The repository employs a multi-layered testing strategy for Firebase Authenticat
   - `useRequireAuth` hook (`src/hooks/use-require-auth.test.tsx`) verifies route protection behavior, triggering navigation redirects for unauthenticated sessions while allowing access to authenticated users.
 
 - **Local Emulator Integration**:
-  - Integration suite (`src/lib/firebase/auth-emulator.test.ts`) exercises real Firebase Auth SDK methods against a running Firebase Auth emulator daemon on `127.0.0.1:9099`.
+  - Integration suites (`src/lib/firebase/auth-emulator.test.ts` and `src/lib/firebase/firestore-emulator.test.ts`) exercise real Firebase SDK behavior against the Auth (`127.0.0.1:9099`) and Firestore (`127.0.0.1:8080`) emulators.
+- `pnpm run test:firebase-emulator` owns deterministic emulator lifecycle through a pinned `firebase-tools` version and is part of `check:ci`; ordinary unit runs may remain emulator-independent.
   - Verifies anonymous authentication (`signInAnonymously`), user account creation (`createUserWithEmailAndPassword`), credential authentication (`signInWithEmailAndPassword`), and session cleanup (`signOut`).
   - Includes a pre-check ping to gracefully skip execution when the emulator daemon is unreachable in isolated unit environments.
 
@@ -96,6 +98,6 @@ The repository employs a multi-layered testing strategy for Firebase Authenticat
 
 ## 7. Automation Status
 
-`.github/workflows/quality.yml` runs the deterministic repository gate (`pnpm check:ci`) on pull requests and the main development branches. It includes types, Biome CI lint/format verification, architecture, the diff floor, unit tests, duplication, repository-wide documentation verification, evaluator/guard tests, coverage, agent-config materialization/drift verification, and a production build.
+`.github/workflows/quality.yml` runs the deterministic repository gate (`pnpm check:ci`) on pull requests and the main development branches. It includes types, Biome CI lint/format verification, architecture, the diff floor, unit tests, duplication, repository-wide documentation verification, evaluator/guard tests, Firebase Auth/Firestore emulator integration tests, coverage, agent-config materialization/drift verification, and a production build.
 
 Ladle visual review, Lighthouse, mutation testing, and live model behavioral trials remain risk/cadence-based rather than every-PR gates. Agent-behavior evaluations live under `.agents/evals/`; they use multiple independent trials and score traces plus workspace outcomes rather than final prose alone.
