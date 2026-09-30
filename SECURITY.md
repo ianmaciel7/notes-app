@@ -45,8 +45,10 @@ Firebase Authentication is implemented through the Web SDK, `AuthProvider`, and 
 local Auth Emulator for development/testing. Client authentication state identifies a
 Firebase `User`; it is **not** sufficient authorization for future server-side data.
 The current Firestore rules enforce that an authenticated user's `uid` matches the
-`{userId}` segment under `/users/{userId}`. The integration-test collection is
-intentionally emulator-only and open for hermetic tests.
+`{userId}` segment under `/users/{userId}`. Space documents also validate ownership,
+schema shape, immutable identity fields, and monotonic `stateVersion` updates. Emulator
+integration tests use authenticated user-scoped paths; no production-deployable test
+collection is publicly readable or writable.
 
 Before protected persistent data is introduced, define and test:
 
@@ -55,6 +57,7 @@ Before protected persistent data is introduced, define and test:
 - cookie/token storage, expiry, refresh, and revocation behavior via Next.js `cookies()` with `HttpOnly`, `Secure`, and `SameSite=Lax/Strict` attributes;
 - **Content Security Policy (CSP)**: strict CSP with dynamic cryptographic nonces generated per-request via Next.js proxy/middleware handlers (`crypto.randomUUID()`), enforcing `'strict-dynamic'` and eliminating inline scripts;
 - authorization failure behavior;
+- validate any user-controlled post-login navigation target before passing it to Next.js router APIs;
 - production provider configuration and emulator/production separation.
 
 Do not infer authorization from client UI state or framework defaults.

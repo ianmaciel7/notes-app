@@ -206,4 +206,21 @@ describe("LoginPage", () => {
       expect(mockReplace).toHaveBeenCalledWith("/dashboard");
     });
   });
+  it("rejects unsafe next URLs and falls back to the home route", async () => {
+    mockSearchParamsGet.mockImplementation((key: string) =>
+      key === "next" ? "javascript:alert(document.domain)" : null,
+    );
+    vi.mocked(signInAnonymously).mockResolvedValueOnce({
+      user: { uid: "anon-user-unsafe-next" },
+    } as unknown as UserCredential);
+
+    renderLoginPage();
+
+    fireEvent.click(screen.getByTestId("anonymous-sign-in-btn"));
+
+    await waitFor(() => {
+      expect(mockReplace).toHaveBeenCalledWith("/");
+    });
+  });
+
 });

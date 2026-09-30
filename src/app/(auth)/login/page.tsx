@@ -15,11 +15,12 @@ import { SignInAuthScreen } from "@/components/notes-app/login-card";
 import { SignUpAuthScreen } from "@/components/notes-app/sign-up-card";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/firebase/client";
+import { getSafeNextUrl } from "@/lib/navigation/safe-next-url";
 
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const nextUrl = searchParams.get("next") || "/";
+  const nextUrl = getSafeNextUrl(searchParams.get("next"));
   const [mode, setMode] = useState<"signIn" | "signUp">("signIn");
 
   useEffect(() => {
