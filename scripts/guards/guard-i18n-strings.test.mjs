@@ -48,6 +48,26 @@ test("findI18nViolationsInSource detects raw hardcoded text inside interactive e
   );
 });
 
+test("findI18nViolationsInSource detects hardcoded text in generic JSX containers", () => {
+  const badContent = `
+    export function Status() {
+      return <span>Loading spaces</span>;
+    }
+  `;
+  const violations = findI18nViolationsInSource(badContent, "status.tsx");
+  assert.ok(violations.some((v) => v.snippet === "Loading spaces"));
+});
+
+test("findI18nViolationsInSource detects hardcoded accessibility attributes", () => {
+  const badContent = `
+    export function QrCode() {
+      return <img src="/qr.png" alt="TOTP QR Code" />;
+    }
+  `;
+  const violations = findI18nViolationsInSource(badContent, "qr-code.tsx");
+  assert.ok(violations.some((v) => v.snippet === "TOTP QR Code"));
+});
+
 test("findI18nViolationsInSource permits proper i18n usage", () => {
   const validContent = `
     import { useTranslations } from "next-intl";

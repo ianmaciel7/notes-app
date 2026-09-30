@@ -17,7 +17,10 @@ import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
-const componentsDir = path.join(root, "src/components/notes-app");
+const scanRoots = [
+  path.join(root, "src/app"),
+  path.join(root, "src/components/notes-app"),
+];
 
 // Known user-facing action/status phrases that must never be hardcoded
 export const FORBIDDEN_PHRASES = [
@@ -30,20 +33,11 @@ export const FORBIDDEN_PHRASES = [
   /reload\s+page/i,
 ];
 
-// Elements where raw user-facing text is strictly required to come from translations
-const TRANSLATED_CONTAINER_ELEMENTS = new Set([
-  "Button",
-  "button",
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "h6",
-  "FieldLabel",
-  "FieldError",
-  "AlertDescription",
-  "AlertTitle",
+const TRANSLATED_ATTRIBUTES = new Set([
+  "alt",
+  "aria-label",
+  "placeholder",
+  "title",
 ]);
 
 /**
@@ -89,7 +83,6 @@ export function findI18nViolationsInSource(sourceText, filePath) {
 
   function inspectJsxText(element) {
     const tagName = element.openingElement.tagName.getText(sf);
-    if (!TRANSLATED_CONTAINER_ELEMENTS.has(tagName)) return;
 
     for (const child of element.children) {
       if (!ts.isJsxText(child)) continue;
@@ -107,11 +100,38 @@ export function findI18nViolationsInSource(sourceText, filePath) {
     }
   }
 
+  function inspectJsxAttributes(openingElement) {
+    const tagName = openingElement.tagName.getText(sf);
+
+    for (const attribute of openingElement.attributes.properties) {
+      if (!ts.isJsxAttribute(attribute)) continue;
+      const attributeName = attribute.name.getText(sf);
+      if (!TRANSLATED_ATTRIBUTES.has(attributeName)) continue;
+      if (!attribute.initializer || !ts.isStringLiteral(attribute.initializer)) {
+        continue;
+      }
+
+      const value = attribute.initializer.text;
+      if (!isSignificantNaturalText(value)) continue;
+
+      const { line } = sf.getLineAndCharacterOfPosition(attribute.getStart(sf));
+      violations.push({
+        file: filePath,
+        line: line + 1,
+        snippet: value,
+        reason: `Hardcoded user-facing ${attributeName} on <${tagName}>. Must use an i18n translation.`,
+      });
+    }
+  }
+
   function visit(node) {
     if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
       checkStringForForbiddenPhrases(node.text, node);
     } else if (ts.isJsxElement(node)) {
       inspectJsxText(node);
+      inspectJsxAttributes(node.openingElement);
+    } else if (ts.isJsxSelfClosingElement(node)) {
+      inspectJsxAttributes(node);
     }
 
     ts.forEachChild(node, visit);
@@ -143,10 +163,12 @@ export function scanDirectoryForI18nViolations(dir, baseDir = dir) {
 }
 
 export function runGuard() {
-  const violations = scanDirectoryForI18nViolations(componentsDir, root);
+  const violations = scanRoots.flatMap((scanRoot) =>
+    scanDirectoryForI18nViolations(scanRoot, root),
+  );
   if (violations.length === 0) {
     console.log(
-      "[guard-i18n-strings] ✓ Zero hardcoded i18n violations found in UI components.",
+      "[guard-i18n-strings] ✓ Zero hardcoded i18n violations found in application UI.",
     );
     return true;
   }
