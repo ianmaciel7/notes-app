@@ -188,8 +188,8 @@ forms/input, data display/feedback, and conversational extensions.
 The active Space route uses the shared, always-visible sidebar shell as its
 primary navigation surface. The header contains the current Space switcher,
 search, and the primary create action. The content area contains one `Spaces`
-group with real Space records. The footer contains authenticated-user actions
-for Profile, Settings, and sign out.
+group with real Space records. The footer contains the authenticated user's
+identity, a dedicated sign-out action, and separate settings and theme controls.
 
 Sidebar rows use the same compact leading icon axis, a single-line truncated
 label, and a visible active state that does not depend on color alone. Menus are
