@@ -114,8 +114,12 @@
         "enabled": true,
         "targets": ["codex", "antigravity", "claude"],
         "description": "Code knowledge graph, architecture analysis, and call-path tracing",
-        "command": "graphify",
-        "args": ["serve", "--project", "${PROJECT_ROOT}"]
+        "command": "python",
+        "args": [
+          "-m",
+          "graphify.serve",
+          "${PROJECT_ROOT}/graphify-out/graph.json"
+        ]
       },
       "shoogle": {
         "transport": "http",
