@@ -53,7 +53,7 @@ describe("SpaceSidebar", () => {
     cleanup();
   });
 
-  it("returns null when user is not authenticated", () => {
+  it("redirects unauthenticated users from the home route to login", () => {
     mockUseAuth.mockReturnValue({
       user: null,
       isLoading: false,
@@ -61,6 +61,50 @@ describe("SpaceSidebar", () => {
 
     const { container } = renderWithIntl(<SpaceSidebar />);
     expect(container.firstChild).toBeNull();
+    expect(mockReplace).toHaveBeenCalledWith("/login");
+  });
+
+  it("redirects the home route to the first available space", () => {
+    const spaces: Space[] = [
+      {
+        id: "space-1",
+        ownerId: "uid-1",
+        name: "Personal",
+        description: "",
+        icon: "folder",
+        stateVersion: 1,
+        schemaVersion: 1,
+        createdAt: null,
+        updatedAt: null,
+      },
+    ];
+
+    mockUseSpaces.mockReturnValue({
+      spaces,
+      loading: false,
+      error: null,
+      isOffline: false,
+      retry: vi.fn(),
+      createSpace: vi.fn(),
+    });
+
+    renderWithIntl(<SpaceSidebar />);
+
+    expect(mockReplace).toHaveBeenCalledWith("/space-1");
+  });
+
+  it("does not redirect while authentication is loading", () => {
+    mockUseAuth.mockReturnValue({
+      user: null,
+      isLoading: true,
+    });
+
+    renderWithIntl(<SpaceSidebar />);
+
+    expect(mockReplace).not.toHaveBeenCalled();
+    expect(screen.getByRole("status").getAttribute("aria-label")).toBe(
+      "Loading spaces...",
+    );
   });
 
   it("renders accessible error alert with retry button when error occurs", () => {
@@ -143,6 +187,7 @@ describe("SpaceSidebar", () => {
 
     renderWithIntl(<SpaceSidebar />);
     expect(screen.getByTestId("space-switcher-empty")).toBeDefined();
+    expect(screen.getByTestId("space-switcher-create-trigger")).toBeDefined();
     expect(screen.getByText("No Spaces Found")).toBeDefined();
     expect(screen.getByTestId("empty-create-space-btn")).toBeDefined();
   });
@@ -208,7 +253,8 @@ describe("SpaceSidebar", () => {
     renderWithIntl(<SpaceSidebar currentSpaceId="missing-space" />);
 
     expect(screen.getByTestId("space-switcher-not-found")).toBeDefined();
-    expect(screen.queryByTestId("space-switcher-trigger")).toBeNull();
+    expect(screen.getByTestId("space-switcher")).toBeDefined();
+    expect(screen.getByTestId("space-switcher-trigger")).toBeDefined();
 
     fireEvent.click(screen.getByTestId("space-switcher-back-btn"));
     expect(mockReplace).toHaveBeenCalledWith("/");

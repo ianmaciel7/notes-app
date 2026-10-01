@@ -20,7 +20,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
-import { type ComponentProps, type ReactNode, useState } from "react";
+import {
+  type ComponentProps,
+  type ReactNode,
+  useEffect,
+  useState,
+} from "react";
 import { CreateSpaceForm } from "@/components/notes-app/create-space-form";
 import { LanguageSelect } from "@/components/notes-app/language-select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -66,16 +71,53 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/use-auth";
 import { useSpaces } from "@/hooks/use-spaces";
 import { cn } from "@/lib/utils";
 import type { AllowedSpaceIcon } from "@/lib/validators/space";
+import type { Space } from "@/types/space";
 
 export interface SpaceSidebarProps extends ComponentProps<"div"> {
   currentSpaceId?: string;
   children?: ReactNode;
   onSelectSpace?: (spaceId: string) => void;
+}
+
+export function useSpaceSidebar({
+  currentSpaceId,
+}: Pick<SpaceSidebarProps, "currentSpaceId">) {
+  const router = useRouter();
+  const { user, isLoading: authLoading, signOutUser } = useAuth();
+  const { spaces, loading, error, isOffline, retry, createSpace } = useSpaces();
+  const firstSpaceId = spaces[0]?.id;
+
+  useEffect(() => {
+    if (authLoading || currentSpaceId) return;
+
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
+
+    if (!loading && !error && firstSpaceId) {
+      router.replace(`/${firstSpaceId}`);
+    }
+  }, [authLoading, currentSpaceId, error, firstSpaceId, loading, router, user]);
+
+  return {
+    authLoading,
+    createSpace,
+    error,
+    isOffline,
+    loading,
+    retry,
+    router,
+    signOutUser,
+    spaces,
+    user,
+  };
 }
 
 const ICON_MAP: Record<AllowedSpaceIcon, typeof Folder> = {
@@ -193,29 +235,158 @@ function SpaceSidebarStatus({
     return (
       <div
         data-testid="space-switcher-not-found"
-        className={cn(
-          "mx-auto flex w-full max-w-sm flex-col items-center justify-center gap-3",
-          className,
-        )}
+        className={cn("flex flex-1 items-center justify-center p-8", className)}
         {...props}
       >
-        <Alert role="alert">
-          <AlertCircle className="size-4" />
-          <AlertTitle>{t("spaceNotFoundTitle")}</AlertTitle>
-          <AlertDescription>{t("spaceNotFoundDescription")}</AlertDescription>
-        </Alert>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onBack}
-          data-testid="space-switcher-back-btn"
-        >
-          {t("backToSpaces")}
-        </Button>
+        <Empty className="max-w-sm border border-dashed p-6">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <AlertCircle className="size-4" />
+            </EmptyMedia>
+            <EmptyTitle>{t("spaceNotFoundTitle")}</EmptyTitle>
+            <EmptyDescription>{t("spaceNotFoundDescription")}</EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onBack}
+              data-testid="space-switcher-back-btn"
+            >
+              {t("backToSpaces")}
+            </Button>
+          </EmptyContent>
+        </Empty>
       </div>
     );
   }
   return null;
+}
+
+function SpaceSidebarEmpty({
+  onCreate,
+  t,
+}: {
+  onCreate: () => void;
+  t: (key: string) => string;
+}) {
+  return (
+    <div
+      data-testid="space-switcher-empty"
+      className="flex flex-1 items-center justify-center p-8"
+    >
+      <Empty className="max-w-sm border border-dashed p-6">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Folder className="size-4" />
+          </EmptyMedia>
+          <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
+          <EmptyDescription>{t("emptyDescription")}</EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button
+            size="sm"
+            onClick={onCreate}
+            data-testid="empty-create-space-btn"
+          >
+            <Plus className="mr-1.5 size-4" />
+            {t("createFirstSpace")}
+          </Button>
+        </EmptyContent>
+      </Empty>
+    </div>
+  );
+}
+
+function SpaceSidebarMain({
+  children,
+  notFound,
+  onCreate,
+  showEmptyState,
+  status,
+  t,
+}: {
+  children?: ReactNode;
+  notFound: boolean;
+  onCreate: () => void;
+  showEmptyState: boolean;
+  status: ReactNode;
+  t: (key: string) => string;
+}) {
+  if (notFound) return status;
+  if (showEmptyState) {
+    return <SpaceSidebarEmpty onCreate={onCreate} t={t} />;
+  }
+  return children;
+}
+
+function SpaceSwitcherMenu({
+  activeSpace,
+  onCreate,
+  onSelect,
+  spaces,
+  t,
+  visibleSpaces,
+}: {
+  activeSpace?: Space;
+  onCreate: () => void;
+  onSelect: (spaceId: string) => void;
+  spaces: Space[];
+  t: (key: string) => string;
+  visibleSpaces: Space[];
+}) {
+  return (
+    <SidebarMenu aria-label={t("workspace")}>
+      <SidebarMenuItem>
+        {spaces.length > 0 ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <SidebarMenuButton
+                  data-testid="space-switcher-trigger"
+                  aria-label={t("switchSpace")}
+                  className="h-8"
+                >
+                  <SpaceIcon iconKey={activeSpace?.icon} />
+                  <span className="min-w-0 truncate text-[13px]">
+                    {activeSpace?.name ?? t("selectSpace")}
+                  </span>
+                  <ChevronsUpDown className="ml-auto size-4 shrink-0 text-muted-foreground" />
+                </SidebarMenuButton>
+              }
+            />
+            <DropdownMenuContent align="start" className="w-56">
+              {visibleSpaces.map((space) => (
+                <DropdownMenuItem
+                  key={space.id}
+                  onClick={() => onSelect(space.id)}
+                  data-testid={`space-item-${space.id}`}
+                >
+                  <SpaceIcon iconKey={space.icon} />
+                  <span className="min-w-0 flex-1 truncate">{space.name}</span>
+                  {space.id === activeSpace?.id && <Check className="size-4" />}
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={onCreate}>
+                <Plus className="size-4" />
+                {t("createSpace")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <SidebarMenuButton
+            data-testid="space-switcher-create-trigger"
+            onClick={onCreate}
+            className="h-8"
+          >
+            <Plus />
+            <span>{t("createFirstSpace")}</span>
+          </SidebarMenuButton>
+        )}
+      </SidebarMenuItem>
+    </SidebarMenu>
+  );
 }
 
 export function SpaceSidebar({
@@ -228,10 +399,19 @@ export function SpaceSidebar({
   const t = useTranslations("spaces");
   const authT = useTranslations("auth");
   const settingsT = useTranslations("settings");
-  const router = useRouter();
   const { resolvedTheme, setTheme } = useTheme();
-  const { user, signOutUser } = useAuth();
-  const { spaces, loading, error, isOffline, retry, createSpace } = useSpaces();
+  const {
+    authLoading,
+    createSpace,
+    error,
+    isOffline,
+    loading,
+    retry,
+    router,
+    signOutUser,
+    spaces,
+    user,
+  } = useSpaceSidebar({ currentSpaceId });
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
@@ -247,6 +427,8 @@ export function SpaceSidebar({
       .toLocaleLowerCase()
       .includes(searchQuery.trim().toLocaleLowerCase()),
   );
+  const notFound = Boolean(currentSpaceId && !activeSpace);
+  const showEmptyState = spaces.length === 0;
 
   const status = (
     <SpaceSidebarStatus
@@ -262,7 +444,15 @@ export function SpaceSidebar({
     />
   );
 
-  if (!user || error || loading || (currentSpaceId && !activeSpace)) {
+  if (authLoading) {
+    return (
+      <div className="flex min-h-svh w-full items-center justify-center">
+        <Spinner className="size-8" aria-label={t("loading")} />
+      </div>
+    );
+  }
+
+  if (!user || error || loading) {
     return status;
   }
 
@@ -291,45 +481,6 @@ export function SpaceSidebar({
     }
   };
 
-  if (spaces.length === 0) {
-    return (
-      <div
-        data-testid="space-switcher-empty"
-        className={cn(
-          "mx-auto flex w-full max-w-sm flex-col items-center justify-center",
-          className,
-        )}
-        {...props}
-      >
-        <Empty className="border border-dashed p-6">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Folder className="size-4" />
-            </EmptyMedia>
-            <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
-            <EmptyDescription>{t("emptyDescription")}</EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button
-              size="sm"
-              onClick={() => setCreateDialogOpen(true)}
-              data-testid="empty-create-space-btn"
-            >
-              <Plus className="mr-1.5 size-4" />
-              {t("createFirstSpace")}
-            </Button>
-          </EmptyContent>
-        </Empty>
-        <CreateSpaceDialog
-          open={createDialogOpen}
-          onOpenChange={setCreateDialogOpen}
-          onSubmit={handleCreateSpace}
-          isLoading={isCreating}
-        />
-      </div>
-    );
-  }
-
   const userIdentifier =
     user.displayName ||
     user.email ||
@@ -343,49 +494,14 @@ export function SpaceSidebar({
       <SidebarProvider>
         <Sidebar variant="inset" collapsible="none">
           <SidebarHeader>
-            <SidebarMenu aria-label={t("workspace")}>
-              <SidebarMenuItem>
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    render={
-                      <SidebarMenuButton
-                        data-testid="space-switcher-trigger"
-                        aria-label={t("switchSpace")}
-                        className="h-8"
-                      >
-                        <SpaceIcon iconKey={activeSpace?.icon} />
-                        <span className="min-w-0 truncate text-[13px]">
-                          {activeSpace?.name}
-                        </span>
-                        <ChevronsUpDown className="ml-auto size-4 shrink-0 text-muted-foreground" />
-                      </SidebarMenuButton>
-                    }
-                  />
-                  <DropdownMenuContent align="start" className="w-56">
-                    {visibleSpaces.map((space) => (
-                      <DropdownMenuItem
-                        key={space.id}
-                        onClick={() => handleSelect(space.id)}
-                        data-testid={`space-item-${space.id}`}
-                      >
-                        <SpaceIcon iconKey={space.icon} />
-                        <span className="min-w-0 flex-1 truncate">
-                          {space.name}
-                        </span>
-                        {space.id === activeSpace?.id && (
-                          <Check className="size-4" />
-                        )}
-                      </DropdownMenuItem>
-                    ))}
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => setCreateDialogOpen(true)}>
-                      <Plus className="size-4" />
-                      {t("createSpace")}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </SidebarMenuItem>
-            </SidebarMenu>
+            <SpaceSwitcherMenu
+              activeSpace={activeSpace}
+              onCreate={() => setCreateDialogOpen(true)}
+              onSelect={handleSelect}
+              spaces={spaces}
+              t={t}
+              visibleSpaces={visibleSpaces}
+            />
             <div className="flex flex-col">
               <div className="group/search relative">
                 <Search
@@ -524,7 +640,17 @@ export function SpaceSidebar({
             </div>
           </SidebarFooter>
         </Sidebar>
-        <SidebarInset>{children}</SidebarInset>
+        <SidebarInset>
+          <SpaceSidebarMain
+            notFound={notFound}
+            onCreate={() => setCreateDialogOpen(true)}
+            showEmptyState={showEmptyState}
+            status={status}
+            t={t}
+          >
+            {children}
+          </SpaceSidebarMain>
+        </SidebarInset>
       </SidebarProvider>
       <CreateSpaceDialog
         open={createDialogOpen}
