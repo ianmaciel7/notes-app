@@ -65,7 +65,7 @@ module.exports = {
         pathNot: "^src/(app/api|lib/(auth|sync|storage|documents|ai))",
       },
       to: {
-        path: "firebase-admin",
+        path: "node_modules/firebase-admin",
       },
     },
     {
@@ -106,8 +106,7 @@ module.exports = {
         "Emojis are strictly prohibited across the project (DESIGN.md / CONVENTIONS.md). Do not import emoji packages or libraries.",
       from: { path: "^src" },
       to: {
-        path: "(emoji|unicode-emoji|emoji-mart|emoji-regex)",
-        pathNot: "(^src/lib/validators/emoji|@/lib/validators/emoji)",
+        path: "node_modules/(emoji-mart|emoji-regex|unicode-emoji|[^/]*emoji[^/]*)/",
       },
     },
     {
@@ -128,7 +127,7 @@ module.exports = {
         "This project standardizes on shadcn base-nova (@base-ui/react). Direct imports of @radix-ui are forbidden in src/.",
       from: { path: "^src" },
       to: {
-        path: "@radix-ui",
+        path: "node_modules/@radix-ui/",
       },
     },
     {
@@ -141,7 +140,7 @@ module.exports = {
         pathNot: "^src/components/ui/(sonner|toast)\\.tsx$",
       },
       to: {
-        path: "sonner",
+        path: "node_modules/sonner/",
       },
     },
     {
@@ -151,7 +150,7 @@ module.exports = {
         "shadcn icons must use the canonical icon library (lucide-react). Other icon packages like @tabler/icons, @hugeicons, or @heroicons are forbidden.",
       from: { path: "^src" },
       to: {
-        path: "(@tabler/icons|@hugeicons|@heroicons|react-icons)",
+        path: "node_modules/(@tabler/icons|@hugeicons|@heroicons|react-icons)",
       },
     },
     {
@@ -198,12 +197,13 @@ module.exports = {
         path: "^src/(app|components/notes-app)",
       },
       to: {
-        path: "^(@base-ui/react|@floating-ui)",
+        path: "node_modules/(@base-ui/react|@floating-ui)",
       },
     },
   ],
   options: {
-    includeOnly: ["^src"],
+    // node_modules stays in the graph as unfollowed leaves so the package-ban
+    // rules above can match them; do not restore an includeOnly: ["^src"].
     doNotFollow: { path: ["node_modules"] },
     tsConfig: { fileName: "tsconfig.json" },
   },

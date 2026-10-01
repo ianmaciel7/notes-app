@@ -3,25 +3,27 @@
   "vcs": {
     "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": true
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
   },
   "files": {
     "ignoreUnknown": true,
     "includes": [
       "**",
-      "!node_modules",
-      "!.next",
-      "!dist",
-      "!build",
-      "!.stryker-tmp",
-      "!coverage",
+      "!!**/node_modules",
+      "!!**/.next",
+      "!!**/dist",
+      "!!**/build",
+      "!!**/.stryker-tmp",
+      "!!**/coverage",
       "!!src/components/firebase"
     ]
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "indentWidth": 2
+    "indentWidth": 2,
+    "lineEnding": "lf"
   },
   "css": {
     "parser": {
@@ -53,11 +55,7 @@
   },
   "overrides": [
     {
-      "includes": [
-        "src/components/ui/**",
-        "src/components/firebase/**",
-        ".agents/skills/**"
-      ],
+      "includes": ["src/components/ui/**", ".agents/skills/**"],
       "linter": {
         "enabled": false
       }
