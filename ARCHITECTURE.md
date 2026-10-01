@@ -189,3 +189,5 @@ architectural choices rather than duplicating version pins.
 - [`docs/adr/0011-adopt-cookie-based-next-intl-with-firebase-sync.md`](./docs/adr/0011-adopt-cookie-based-next-intl-with-firebase-sync.md)
 - [`docs/adr/0012-adopt-playwright-for-e2e-testing.md`](./docs/adr/0012-adopt-playwright-for-e2e-testing.md)
 - [`docs/adr/0013-adopt-native-firebase-firestore-with-persistent-local-cache.md`](./docs/adr/0013-adopt-native-firebase-firestore-with-persistent-local-cache.md)
+- [`docs/adr/0014-certification-exam-and-study-simulator-domain-model.md`](./docs/adr/0014-certification-exam-and-study-simulator-domain-model.md)
+- [`docs/adr/0015-adopt-sidebar-space-navigation.md`](./docs/adr/0015-adopt-sidebar-space-navigation.md)

@@ -16,7 +16,7 @@ Provide a simple, centered Space Switcher component for authenticated users at `
   - Validation utility in `src/lib/validators/space.ts`.
   - `useSpaces` client hook in `src/hooks/use-spaces.ts` querying Firestore `/users/{uid}/spaces`.
   - `CreateSpaceForm` in `src/components/notes-app/create-space-form.tsx`.
-  - `SpaceSwitcher` in `src/components/notes-app/space-switcher.tsx` with centered inline trigger and empty state support.
+  - `SpaceSwitcher` (since replaced by `src/components/notes-app/space-sidebar.tsx`) with centered inline trigger and empty state support.
   - Integration on landing page `src/app/page.tsx`.
   - Minimal space route at `src/app/[spaceId]/page.tsx`.
   - Unit/Component tests across all layers without emojis.

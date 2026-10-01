@@ -18,7 +18,7 @@ Implement clean URL cookie-based `next-intl` internationalization without route 
   - Implement Firebase Auth locale synchronization utilities (`src/lib/i18n/locale-sync.ts`).
   - Update `AuthProvider` (`src/components/notes-app/auth-provider.tsx`) to manage Firebase `auth.useDeviceLanguage()` vs `auth.languageCode`.
   - Update `RootLayout` (`src/app/layout.tsx`) to wrap with `NextIntlClientProvider` and set `<html lang={locale}>`.
-  - Create `LanguageSwitcher` component (`src/components/notes-app/language-switcher.tsx`) for language selection across `en`, `pt-BR`, and `es`.
+  - Create `LanguageSwitcher` component (since replaced by `src/components/notes-app/language-select.tsx`) for language selection across `en`, `pt-BR`, and `es`.
   - Author unit and integration tests for i18n request config, locale sync, auth provider, and UI components.
 - Out:
   - Locale URL prefixing (`/pt-BR/...`, `/es/...`), keeping clean un-prefixed URLs.
