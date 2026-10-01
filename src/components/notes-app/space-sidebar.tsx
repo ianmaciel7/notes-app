@@ -237,17 +237,17 @@ function SpaceSidebarStatus({
   }
   if (loading) {
     return (
-      <output
+      <div
         data-testid="space-switcher-loading"
         className={cn(
           "flex items-center justify-center p-4 text-xs text-muted-foreground",
           className,
         )}
         {...props}
-        aria-label={t("loading")}
       >
+        <span className="sr-only">{t("loading")}</span>
         <Skeleton className="h-4 w-24" />
-      </output>
+      </div>
     );
   }
   if (notFound) {

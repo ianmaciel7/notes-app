@@ -271,7 +271,7 @@ describe("SpaceSidebar", () => {
     expect(screen.getByText("ianmaciel76@gmail.com")).toBeDefined();
     expect(screen.getByRole("menuitem", { name: "Sign out" })).toBeDefined();
     expect(screen.queryByText("Profile")).toBeNull();
-    expect(screen.queryByText("Settings")).toBeNull();
+    expect(screen.queryByRole("menuitem", { name: "Settings" })).toBeNull();
   });
 
   it("does not fall back to another space when currentSpaceId is invalid", () => {
