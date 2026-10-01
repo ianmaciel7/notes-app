@@ -1,5 +1,7 @@
 import {
   connectFirestoreEmulator,
+  disableNetwork,
+  enableNetwork,
   type Firestore,
   getFirestore,
   initializeFirestore,
@@ -27,6 +29,16 @@ export function getOrCreateFirestore(targetApp = app): Firestore {
 }
 
 export const db: Firestore = getOrCreateFirestore();
+
+/**
+ * Forces the Firestore SDK to close and re-open its backend connection.
+ * Use when the backend becomes unreachable and you want to trigger an
+ * immediate reconnect attempt rather than waiting for the SDK's backoff.
+ */
+export async function reconnectFirestore(): Promise<void> {
+  await disableNetwork(db);
+  await enableNetwork(db);
+}
 
 const FIRESTORE_EMULATOR_HOST =
   process.env.NEXT_PUBLIC_FIREBASE_FIRESTORE_EMULATOR_HOST || "127.0.0.1";

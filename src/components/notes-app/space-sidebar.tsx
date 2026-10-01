@@ -9,8 +9,10 @@ import {
   ChevronsUpDown,
   Code,
   Folder,
+  Moon,
   Plus,
   RefreshCw,
+  Search,
   Settings,
   User,
 } from "lucide-react";
@@ -54,6 +56,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupAction,
+  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarInput,
@@ -348,7 +351,7 @@ export function SpaceSidebar({
                       <SidebarMenuButton
                         data-testid="space-switcher-trigger"
                         aria-label={t("switchSpace")}
-                        className="h-9"
+                        className="h-8"
                       >
                         <SpaceIcon iconKey={activeSpace?.icon} />
                         <span className="min-w-0 truncate text-[13px]">
@@ -383,18 +386,34 @@ export function SpaceSidebar({
                 </DropdownMenu>
               </SidebarMenuItem>
             </SidebarMenu>
-            <div className="flex flex-col gap-1">
-              <SidebarInput
-                placeholder={t("searchPlaceholder")}
-                aria-label={t("searchPlaceholder")}
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-              />
+            <div className="flex flex-col">
+              <div className="group/search relative">
+                <Search
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+                />
+                <SidebarInput
+                  placeholder={t("searchPlaceholder")}
+                  aria-label={t("searchPlaceholder")}
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  className="h-8 pl-8 pr-10"
+                />
+                <kbd className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 font-sans text-[11px] text-muted-foreground opacity-0 transition-opacity duration-80 group-hover/search:opacity-100 group-focus-within/search:opacity-100">
+                  K
+                </kbd>
+              </div>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton onClick={() => setCreateDialogOpen(true)}>
+                  <SidebarMenuButton
+                    onClick={() => setCreateDialogOpen(true)}
+                    className="group/menu-item"
+                  >
                     <Plus />
                     <span>{t("newSpace")}</span>
+                    <kbd className="ml-auto font-sans text-[11px] text-muted-foreground opacity-0 transition-opacity duration-80 group-hover/menu-item:opacity-100 group-focus-within/menu-item:opacity-100">
+                      O
+                    </kbd>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>
@@ -409,69 +428,100 @@ export function SpaceSidebar({
               >
                 <Plus />
               </SidebarGroupAction>
-              <SidebarMenu>
-                {visibleSpaces.map((space) => (
-                  <SidebarMenuItem key={space.id}>
-                    <SidebarMenuButton
-                      isActive={space.id === activeSpace?.id}
-                      onClick={() => handleSelect(space.id)}
-                    >
-                      <SpaceIcon iconKey={space.icon} />
-                      <span>{space.name}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-              {visibleSpaces.length === 0 && (
-                <p className="px-2 py-3 text-xs text-muted-foreground">
-                  {t("noSearchResults")}
-                </p>
-              )}
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {visibleSpaces.map((space) => (
+                    <SidebarMenuItem key={space.id}>
+                      <SidebarMenuButton
+                        isActive={space.id === activeSpace?.id}
+                        onClick={() => handleSelect(space.id)}
+                      >
+                        <SpaceIcon iconKey={space.icon} />
+                        <span>{space.name}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+                {visibleSpaces.length === 0 && (
+                  <p className="px-2 py-3 text-xs text-muted-foreground">
+                    {t("noSearchResults")}
+                  </p>
+                )}
+              </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>
           <SidebarFooter>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    render={
-                      <SidebarMenuButton aria-label={t("openUserMenu")}>
-                        <UserAvatar
-                          displayName={userIdentifier}
-                          photoUrl={user.photoURL}
-                        />
-                        <span className="min-w-0 truncate">
-                          {userIdentifier}
-                        </span>
-                        <ChevronsUpDown className="ml-auto size-4 shrink-0 text-muted-foreground" />
-                      </SidebarMenuButton>
-                    }
-                  />
-                  <DropdownMenuContent
-                    side="top"
-                    align="start"
-                    className="w-56"
-                  >
-                    <DropdownMenuItem
-                      onClick={() => setProfileDialogOpen(true)}
+            <div className="flex items-center gap-1 pr-1.5">
+              <SidebarMenu
+                aria-label={t("openUserMenu")}
+                className="min-w-0 flex-1"
+              >
+                <SidebarMenuItem>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      render={
+                        <SidebarMenuButton aria-label={t("openUserMenu")}>
+                          <UserAvatar
+                            displayName={userIdentifier}
+                            photoUrl={user.photoURL}
+                          />
+                          <span className="min-w-0 truncate">
+                            {userIdentifier}
+                          </span>
+                          <span className="ml-auto -mr-0.5 flex size-6 shrink-0 items-center justify-center">
+                            <ChevronsUpDown className="size-4 text-muted-foreground" />
+                          </span>
+                        </SidebarMenuButton>
+                      }
+                    />
+                    <DropdownMenuContent
+                      side="top"
+                      align="start"
+                      className="w-56"
                     >
-                      <User className="size-4" />
-                      {settingsT("profile")}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => setSettingsDialogOpen(true)}
-                    >
-                      <Settings className="size-4" />
-                      {settingsT("settings")}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => signOutUser()}>
-                      {authT("signOut")}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </SidebarMenuItem>
-            </SidebarMenu>
+                      <DropdownMenuItem
+                        onClick={() => setProfileDialogOpen(true)}
+                      >
+                        <User className="size-4" />
+                        {settingsT("profile")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setSettingsDialogOpen(true)}
+                      >
+                        <Settings className="size-4" />
+                        {settingsT("settings")}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => signOutUser()}>
+                        {authT("signOut")}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </SidebarMenuItem>
+              </SidebarMenu>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-6 shrink-0"
+                aria-label={settingsT("settings")}
+                title={settingsT("settings")}
+                onClick={() => setSettingsDialogOpen(true)}
+              >
+                <Settings />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-6 shrink-0"
+                aria-label={settingsT("darkMode")}
+                title={settingsT("darkMode")}
+                onClick={() =>
+                  setTheme(resolvedTheme === "dark" ? "light" : "dark")
+                }
+              >
+                <Moon />
+              </Button>
+            </div>
           </SidebarFooter>
         </Sidebar>
         <SidebarInset>{children}</SidebarInset>

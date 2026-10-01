@@ -4,8 +4,15 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import "./globals.css";
 import { AuthProvider } from "@/components/notes-app/auth-provider";
-import { BackendStatusToaster } from "@/components/notes-app/backend-status-toaster";
+import {
+  ConnectionAlert,
+  ConnectionAlertAction,
+  ConnectionAlertDescription,
+  ConnectionAlertIcon,
+  ConnectionAlertTitle,
+} from "@/components/notes-app/connection-alert";
 import { ThemeProvider } from "@/components/notes-app/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({
@@ -52,7 +59,13 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <AuthProvider>{children}</AuthProvider>
-            <BackendStatusToaster />
+            <ConnectionAlert>
+              <ConnectionAlertIcon />
+              <ConnectionAlertTitle />
+              <ConnectionAlertDescription />
+              <ConnectionAlertAction />
+            </ConnectionAlert>
+            <Toaster />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

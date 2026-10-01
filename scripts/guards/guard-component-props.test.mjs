@@ -3,6 +3,8 @@ import { execFileSync } from "node:child_process";
 import test from "node:test";
 import ts from "typescript";
 import {
+  checkAlertProps,
+  checkConnectionAlertContract,
   checkLoginCardProps,
   checkPrimaryExportMatchesFilename,
   checkPropsInFile,
@@ -75,6 +77,72 @@ test("checkPropsInFile allows canonical library props", () => {
   `;
   const violations = checkPropsInFile("dummy.tsx", sample);
   assert.equal(violations.length, 0);
+});
+
+test("checkAlertProps requires the canonical alert props interface", () => {
+  const missing = checkAlertProps(
+    parseTsx("export function ConnectionAlert() { return null; }"),
+    "connection-alert.tsx",
+  );
+  assert.ok(missing !== null);
+  assert.equal(missing.propName, "ConnectionAlertProps");
+  assert.match(missing.message, /must export 'ConnectionAlertProps'/);
+
+  const notExported = checkAlertProps(
+    parseTsx(
+      'import type { ComponentProps } from "react"; interface ConnectionAlertProps extends ComponentProps<"div"> {}',
+    ),
+    "connection-alert.tsx",
+  );
+  assert.ok(notExported !== null);
+
+  const valid = checkAlertProps(
+    parseTsx(
+      'import type * as React from "react"; interface ConnectionAlertProps extends React.ComponentProps<"div"> {}; function ConnectionAlert() { return null; }; export { ConnectionAlert, type ConnectionAlertProps };',
+    ),
+    "connection-alert.tsx",
+  );
+  assert.equal(valid, null);
+});
+
+test("checkConnectionAlertContract enforces compound children", () => {
+  const missingChildren = `
+    interface ConnectionAlertProps extends React.ComponentProps<"div"> {}
+    function ConnectionAlert() { return <div />; }
+    function ConnectionAlertAction() { return <div />; }
+    function ConnectionAlertDescription() { return <div />; }
+    function ConnectionAlertIcon() { return <div />; }
+    function ConnectionAlertTitle() { return <div />; }
+    export { ConnectionAlert, ConnectionAlertAction, ConnectionAlertDescription, ConnectionAlertIcon, ConnectionAlertTitle, type ConnectionAlertProps };
+  `;
+  const missingChildrenViolation = checkConnectionAlertContract(
+    parseTsx(missingChildren, "connection-alert.tsx"),
+    "connection-alert.tsx",
+    missingChildren,
+  );
+  assert.ok(missingChildrenViolation !== null);
+  assert.match(missingChildrenViolation.message, /must require children/);
+
+  const fallback = `
+    interface ConnectionAlertProps extends React.ComponentProps<"div"> { children: React.ReactNode }
+    function ConnectionAlert({ children }: ConnectionAlertProps) { return <div>{children ?? <span />}</div>; }
+    function ConnectionAlertAction() { return <div />; }
+    function ConnectionAlertDescription() { return <div />; }
+    function ConnectionAlertIcon() { return <div />; }
+    function ConnectionAlertTitle() { return <div />; }
+    const cn = () => "";
+    export { ConnectionAlert, ConnectionAlertAction, ConnectionAlertDescription, ConnectionAlertIcon, ConnectionAlertTitle, type ConnectionAlertProps };
+  `;
+  const fallbackViolation = checkConnectionAlertContract(
+    parseTsx(fallback, "connection-alert.tsx"),
+    "connection-alert.tsx",
+    fallback,
+  );
+  assert.ok(fallbackViolation !== null);
+  assert.match(
+    fallbackViolation.message,
+    /must not substitute default children/,
+  );
 });
 
 test("checkPropsInFile detects missing card component export in -card.tsx", () => {

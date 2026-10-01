@@ -63,6 +63,16 @@ contributor workflow to `CONTRIBUTING.md`.
   their anatomy.
 - Use semantic HTML and accessible names. Loading, selected, disabled, and error
   states must not rely on color alone.
+- Application wrappers around shared shadcn primitives follow the primitive
+  forwarding pattern: export a canonical `${ComponentName}Props` interface,
+  destructure `className` and the remaining props, merge wrapper layout with
+  `cn()`, spread the remaining props onto the root primitive, and apply the
+  wrapper's required semantic attributes after the spread. Alert wrappers in
+  `src/components/notes-app/*-alert.tsx` must use this pattern and keep named
+  component/interface exports. Compound alert wrappers must require
+  `children`, render the caller-provided composition, and never substitute a
+  default child tree. `guard-component-props.mjs` enforces the canonical alert
+  interface.
 
 ## 5. React & Next.js
 

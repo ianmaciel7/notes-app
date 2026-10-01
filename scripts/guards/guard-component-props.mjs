@@ -279,6 +279,121 @@ export function checkLoginCardProps(sf, filePath) {
   return null;
 }
 
+/**
+ * Every application alert wrapper must expose the canonical props interface
+ * derived from its filename, even when it currently adds no custom props.
+ */
+export function checkAlertProps(sf, filePath) {
+  const baseName = path.basename(filePath);
+  if (!baseName.endsWith("-alert.tsx")) {
+    return null;
+  }
+
+  const expectedName = `${toPascalCase(baseName.replace(/\.tsx$/, ""))}Props`;
+  const exportedNames = collectExportedNames(sf);
+  let hasCanonicalInterface = false;
+
+  ts.forEachChild(sf, (node) => {
+    if (
+      ts.isInterfaceDeclaration(node) &&
+      node.name.text === expectedName &&
+      exportedNames.has(expectedName)
+    ) {
+      hasCanonicalInterface = true;
+    }
+  });
+
+  if (hasCanonicalInterface) {
+    return null;
+  }
+
+  return {
+    file: path.relative(root, filePath),
+    propName: expectedName,
+    message: `${baseName} must export '${expectedName}' as its canonical props interface.`,
+  };
+}
+
+/**
+ * Enforces the compound-Alert contract for ConnectionAlert. The component is
+ * intentionally explicit: callers provide the children, while the wrapper
+ * forwards native props and owns only connection state.
+ */
+export function checkConnectionAlertContract(sf, filePath, content) {
+  if (path.basename(filePath) !== "connection-alert.tsx") {
+    return null;
+  }
+
+  const exportedNames = collectExportedNames(sf);
+  const requiredExports = [
+    "ConnectionAlert",
+    "ConnectionAlertAction",
+    "ConnectionAlertDescription",
+    "ConnectionAlertIcon",
+    "ConnectionAlertTitle",
+    "ConnectionAlertProps",
+  ];
+  const missingExports = requiredExports.filter(
+    (name) => !exportedNames.has(name),
+  );
+
+  if (missingExports.length > 0) {
+    return {
+      file: path.relative(root, filePath),
+      propName: "ConnectionAlert",
+      message: `connection-alert.tsx must export the compound Alert parts: ${missingExports.join(", ")}.`,
+    };
+  }
+
+  let childrenIsRequired = false;
+  ts.forEachChild(sf, (node) => {
+    if (
+      ts.isInterfaceDeclaration(node) &&
+      node.name.text === "ConnectionAlertProps"
+    ) {
+      childrenIsRequired = node.members.some(
+        (member) =>
+          ts.isPropertySignature(member) &&
+          member.name.getText(sf) === "children" &&
+          !member.questionToken,
+      );
+    }
+  });
+
+  if (!childrenIsRequired) {
+    return {
+      file: path.relative(root, filePath),
+      propName: "ConnectionAlertProps",
+      message:
+        "ConnectionAlertProps must require children; compound alerts must not provide a default child tree.",
+    };
+  }
+
+  if (/\bchildren\s*(\?\?|\|\|)/.test(content)) {
+    return {
+      file: path.relative(root, filePath),
+      propName: "ConnectionAlert",
+      message:
+        "ConnectionAlert must render caller-provided children directly and must not substitute default children.",
+    };
+  }
+
+  if (
+    !content.includes("className") ||
+    !content.includes("...props") ||
+    !content.includes("cn(")
+  ) {
+    return {
+      file: path.relative(root, filePath),
+      propName: "ConnectionAlert",
+      message:
+        "ConnectionAlert must forward className and remaining props through cn() following the shared Alert pattern.",
+    };
+  }
+
+  return null;
+}
+
 export function checkPropsInFile(filePath, content) {
   const sf = ts.createSourceFile(
     filePath,
@@ -301,6 +416,16 @@ export function checkPropsInFile(filePath, content) {
 
   const loginCardPropsViolation = checkLoginCardProps(sf, filePath);
   if (loginCardPropsViolation) violations.push(loginCardPropsViolation);
+
+  const alertPropsViolation = checkAlertProps(sf, filePath);
+  if (alertPropsViolation) violations.push(alertPropsViolation);
+
+  const connectionAlertViolation = checkConnectionAlertContract(
+    sf,
+    filePath,
+    content,
+  );
+  if (connectionAlertViolation) violations.push(connectionAlertViolation);
 
   ts.forEachChild(sf, (node) => {
     if (ts.isInterfaceDeclaration(node) && node.name.text.endsWith("Props")) {
