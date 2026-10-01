@@ -3,7 +3,7 @@ import type { User } from "firebase/auth";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import messages from "@/messages/en.json";
-import { AuthGreeting, AuthGreetingHeader } from "./auth-greeting-header";
+import { AuthGreetingHeader } from "./auth-greeting-header";
 
 vi.mock("@/hooks/use-auth", () => ({
   useAuth: vi.fn(),
@@ -88,6 +88,6 @@ describe("AuthGreetingHeader", () => {
     const element = screen.getByTestId("auth-greeting-container");
     expect(element.getAttribute("aria-label")).toBe("auth-greeting");
     expect(element.classList.contains("custom-greeting-class")).toBe(true);
-    expect(element.classList.contains("space-y-2")).toBe(true);
+    expect(element.classList.contains("flex")).toBe(true);
   });
 });

@@ -17,11 +17,16 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { Policies } from "@/components/notes-app/auth-policies-card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-export interface EmailLinkAuthFormProps
+export interface EmailLinkFormProps
   extends Omit<ComponentProps<"form">, "onSubmit">,
     FirebaseEmailLinkAuthFormProps {}
 
@@ -30,7 +35,7 @@ export function EmailLinkForm({
   onSignIn,
   className,
   ...props
-}: EmailLinkAuthFormProps) {
+}: EmailLinkFormProps) {
   const ui = useUI();
   const schema = useEmailLinkAuthFormSchema();
   const action = useEmailLinkAuthFormAction();
@@ -76,28 +81,30 @@ export function EmailLinkForm({
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
-        className={cn("flex flex-col gap-y-4", className)}
+        className={cn("flex flex-col gap-4", className)}
       >
-        <Controller
-          control={form.control}
-          name="email"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">
-                {getTranslation(ui, "labels", "emailAddress")}
-              </FieldLabel>
-              <Input
-                {...field}
-                id="email"
-                type="email"
-                aria-invalid={!!fieldState.error}
-              />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
-          )}
-        />
+        <FieldGroup>
+          <Controller
+            control={form.control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="email">
+                  {getTranslation(ui, "labels", "emailAddress")}
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="email"
+                  type="email"
+                  aria-invalid={!!fieldState.error}
+                />
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+        </FieldGroup>
         <Policies />
         <Button type="submit" disabled={ui.state !== "idle"}>
           {getTranslation(ui, "labels", "sendSignInLink")}
@@ -112,5 +119,5 @@ export function EmailLinkForm({
 
 export {
   EmailLinkForm as EmailLinkAuthForm,
-  type EmailLinkAuthFormProps as EmailLinkFormProps,
+  type EmailLinkFormProps as EmailLinkAuthFormProps,
 };

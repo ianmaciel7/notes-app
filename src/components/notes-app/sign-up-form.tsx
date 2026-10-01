@@ -13,7 +13,12 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { ComponentProps } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Policies } from "./auth-policies-card";
@@ -64,20 +69,42 @@ export function SignUpForm({
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
-        className={cn("flex flex-col gap-y-4", className)}
+        className={cn("flex flex-col gap-4", className)}
       >
-        {requireDisplayName ? (
+        <FieldGroup>
+          {requireDisplayName ? (
+            <Controller
+              control={form.control}
+              name="displayName"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={!!fieldState.error}>
+                  <FieldLabel htmlFor="displayName">
+                    {getTranslation(ui, "labels", "displayName")}
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id="displayName"
+                    aria-invalid={!!fieldState.error}
+                  />
+                  {fieldState.error && (
+                    <FieldError>{fieldState.error.message}</FieldError>
+                  )}
+                </Field>
+              )}
+            />
+          ) : null}
           <Controller
             control={form.control}
-            name="displayName"
+            name="email"
             render={({ field, fieldState }) => (
               <Field data-invalid={!!fieldState.error}>
-                <FieldLabel htmlFor="displayName">
-                  {getTranslation(ui, "labels", "displayName")}
+                <FieldLabel htmlFor="email">
+                  {getTranslation(ui, "labels", "emailAddress")}
                 </FieldLabel>
                 <Input
                   {...field}
-                  id="displayName"
+                  id="email"
+                  type="email"
                   aria-invalid={!!fieldState.error}
                 />
                 {fieldState.error && (
@@ -86,53 +113,29 @@ export function SignUpForm({
               </Field>
             )}
           />
-        ) : null}
-        <Controller
-          control={form.control}
-          name="email"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">
-                {getTranslation(ui, "labels", "emailAddress")}
-              </FieldLabel>
-              <Input
-                {...field}
-                id="email"
-                type="email"
-                aria-invalid={!!fieldState.error}
-              />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="password"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="password">
-                {getTranslation(ui, "labels", "password")}
-              </FieldLabel>
-              <Input
-                {...field}
-                id="password"
-                type="password"
-                aria-invalid={!!fieldState.error}
-              />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
-          )}
-        />
+          <Controller
+            control={form.control}
+            name="password"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="password">
+                  {getTranslation(ui, "labels", "password")}
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="password"
+                  type="password"
+                  aria-invalid={!!fieldState.error}
+                />
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+        </FieldGroup>
         <Policies />
-        <Button
-          type="submit"
-          disabled={ui.state !== "idle"}
-          className="w-full h-10 font-medium text-sm shadow-xs"
-        >
+        <Button type="submit" disabled={ui.state !== "idle"} className="w-full">
           {getTranslation(ui, "labels", "createAccount")}
         </Button>
         {form.formState.errors.root && (
@@ -146,10 +149,8 @@ export function SignUpForm({
             size="sm"
             onClick={onSignInClick}
           >
-            <span className="text-xs">
-              {getTranslation(ui, "prompts", "haveAccount")}{" "}
-              {getTranslation(ui, "labels", "signIn")}
-            </span>
+            {getTranslation(ui, "prompts", "haveAccount")}{" "}
+            {getTranslation(ui, "labels", "signIn")}
           </Button>
         ) : null}
       </form>

@@ -16,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FieldSeparator } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { LoginForm } from "./login-form";
 
@@ -46,16 +47,14 @@ export function LoginCard({
       className={cn("w-full max-w-sm mx-auto", className)}
       {...props}
     >
-      <Card className="border border-border/80 shadow-xl shadow-black/5 dark:shadow-none bg-card">
-        <CardHeader className="space-y-1.5 pb-4">
-          <CardTitle className="text-xl font-semibold tracking-tight">
+      <Card>
+        <CardHeader>
+          <CardTitle>
             <h1>{titleText}</h1>
           </CardTitle>
-          <CardDescription className="text-sm text-muted-foreground">
-            {subtitleText}
-          </CardDescription>
+          <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="flex flex-col gap-4">
           <LoginForm
             onSignIn={(credential: UserCredential) =>
               onSignIn?.(credential.user)
@@ -64,18 +63,11 @@ export function LoginCard({
             onSignUpClick={onSignUpClick}
           />
           {children ? (
-            <div className="space-y-4 pt-1">
-              <div className="relative flex items-center justify-center">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-border" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">
-                    {t("orContinueWith")}
-                  </span>
-                </div>
-              </div>
-              <div className="space-y-2.5">{children}</div>
+            <div className="flex flex-col gap-4 pt-1">
+              <FieldSeparator className="uppercase [&>span]:bg-card">
+                {t("orContinueWith")}
+              </FieldSeparator>
+              <div className="flex flex-col gap-2.5">{children}</div>
             </div>
           ) : null}
         </CardContent>

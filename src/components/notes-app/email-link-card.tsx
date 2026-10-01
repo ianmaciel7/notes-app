@@ -21,7 +21,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-export interface EmailLinkAuthScreenProps
+export interface EmailLinkCardProps
   extends FirebaseEmailLinkAuthScreenProps,
     Omit<ComponentProps<"div">, "children"> {}
 
@@ -32,7 +32,7 @@ export function EmailLinkCard({
   className,
   ref,
   ...props
-}: EmailLinkAuthScreenProps) {
+}: EmailLinkCardProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "signIn");
@@ -61,7 +61,7 @@ export function EmailLinkCard({
           {children ? (
             <>
               <Separator className="my-4" />
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 {children}
                 <RedirectError />
               </div>
@@ -73,7 +73,6 @@ export function EmailLinkCard({
   );
 }
 
-export {
-  EmailLinkCard as EmailLinkAuthScreen,
-  type EmailLinkAuthScreenProps as EmailLinkCardProps,
-};
+export { EmailLinkCard as EmailLinkAuthScreen };
+
+export type EmailLinkAuthScreenProps = EmailLinkCardProps;

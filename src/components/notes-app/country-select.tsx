@@ -7,11 +7,12 @@ import {
   useCountries,
   useDefaultCountry,
 } from "@firebase-oss/ui-react";
-import { type Ref, useCallback, useImperativeHandle, useState } from "react";
+import { type Ref, useImperativeHandle, useState } from "react";
 
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -28,43 +29,43 @@ export function CountrySelect({ ref }: CountrySelectProps) {
   const defaultCountry = useDefaultCountry();
   const [selected, setSelected] = useState<CountryData>(defaultCountry);
 
-  const setCountry = useCallback(
-    (code: CountryCode) => {
-      const foundCountry = countries.find((country) => country.code === code);
-      if (foundCountry) {
-        setSelected(foundCountry);
-      }
-    },
-    [countries],
-  );
-
   useImperativeHandle(
     ref,
     () => ({
       getCountry: () => selected,
-      setCountry,
+      setCountry: (code: CountryCode) => {
+        const foundCountry = countries.find((country) => country.code === code);
+        if (foundCountry) setSelected(foundCountry);
+      },
     }),
-    [selected, setCountry],
+    [countries, selected],
   );
 
   return (
     <Select
       value={selected.code}
       onValueChange={(code) => {
-        if (code) setCountry(code as CountryCode);
+        if (code) {
+          const foundCountry = countries.find(
+            (country) => country.code === code,
+          );
+          if (foundCountry) setSelected(foundCountry);
+        }
       }}
     >
-      <SelectTrigger className="w-[120px]">
+      <SelectTrigger className="w-30">
         <SelectValue>
-          {selected.emoji} {selected.dialCode}
+          {selected.code} {selected.dialCode}
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {countries.map((country) => (
-          <SelectItem key={country.code} value={country.code}>
-            {country.dialCode} ({country.name})
-          </SelectItem>
-        ))}
+        <SelectGroup>
+          {countries.map((country) => (
+            <SelectItem key={country.code} value={country.code}>
+              {country.dialCode} ({country.name})
+            </SelectItem>
+          ))}
+        </SelectGroup>
       </SelectContent>
     </Select>
   );

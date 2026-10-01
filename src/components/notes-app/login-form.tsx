@@ -12,7 +12,12 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { ComponentProps } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Policies } from "./auth-policies-card";
@@ -62,69 +67,69 @@ export function LoginForm({
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
-        className={cn("flex flex-col gap-y-4", className)}
+        className={cn("flex flex-col gap-4", className)}
       >
-        <Controller
-          control={form.control}
-          name="email"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">
-                {getTranslation(ui, "labels", "emailAddress")}
-              </FieldLabel>
-              <Input
-                {...field}
-                id="email"
-                type="email"
-                aria-invalid={!!fieldState.error}
-              />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="password"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <div className="flex items-center justify-between">
-                <FieldLabel htmlFor="password">
-                  <span className="grow">
+        <FieldGroup>
+          <Controller
+            control={form.control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="email">
+                  {getTranslation(ui, "labels", "emailAddress")}
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="email"
+                  type="email"
+                  aria-invalid={!!fieldState.error}
+                />
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="password"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={!!fieldState.error}>
+                <div className="flex items-center justify-between gap-2">
+                  <FieldLabel htmlFor="password">
                     {getTranslation(ui, "labels", "password")}
-                  </span>
+                  </FieldLabel>
                   {onForgotPasswordClick ? (
                     <Button
                       type="button"
                       variant="link"
-                      className="p-0 h-auto font-normal text-xs text-muted-foreground hover:text-primary"
+                      size="xs"
                       onClick={onForgotPasswordClick}
                     >
                       {getTranslation(ui, "labels", "forgotPassword")}
                     </Button>
                   ) : null}
-                </FieldLabel>
-              </div>
-              <Input
-                {...field}
-                id="password"
-                type="password"
-                aria-invalid={!!fieldState.error}
-              />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
-          )}
-        />
+                </div>
+                <Input
+                  {...field}
+                  id="password"
+                  type="password"
+                  aria-invalid={!!fieldState.error}
+                />
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+        </FieldGroup>
         {form.formState.errors.root && (
           <FieldError>{form.formState.errors.root.message}</FieldError>
         )}
         <Button
           type="submit"
           disabled={form.formState.isSubmitting}
-          className="w-full h-10 font-medium text-sm shadow-xs"
+          className="w-full"
         >
           {getTranslation(ui, "labels", "signIn")}
         </Button>
@@ -136,13 +141,10 @@ export function LoginForm({
               type="button"
               variant="link"
               size="sm"
-              className="text-xs text-muted-foreground hover:text-primary"
               onClick={onSignUpClick}
             >
               {getTranslation(ui, "prompts", "noAccount")}{" "}
-              <span className="font-semibold text-primary ml-1">
-                {getTranslation(ui, "labels", "signUp")}
-              </span>
+              {getTranslation(ui, "labels", "signUp")}
             </Button>
           </div>
         ) : null}

@@ -12,7 +12,12 @@ import type { ComponentProps } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import {
   InputOTP,
   InputOTPGroup,
@@ -20,7 +25,7 @@ import {
 } from "@/components/ui/input-otp";
 import { cn } from "@/lib/utils";
 
-export type TotpMultiFactorAssertionFormProps = ComponentProps<"div"> & {
+export type TotpMfaAssertionFormProps = ComponentProps<"div"> & {
   hint: MultiFactorInfo;
   onSuccess?: (credential: UserCredential) => void;
 };
@@ -30,7 +35,7 @@ export function TotpMfaAssertionForm({
   onSuccess,
   className,
   ...props
-}: TotpMultiFactorAssertionFormProps) {
+}: TotpMfaAssertionFormProps) {
   const ui = useUI();
   const schema = useMultiFactorTotpAuthVerifyFormSchema();
   const action = useTotpMultiFactorAssertionFormAction();
@@ -64,41 +69,43 @@ export function TotpMfaAssertionForm({
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-y-4"
         >
-          <Controller
-            control={form.control}
-            name="verificationCode"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={!!fieldState.error}>
-                <FieldLabel htmlFor="verificationCode">
-                  {getTranslation(ui, "labels", "verificationCode")}
-                </FieldLabel>
-                <InputOTP
-                  id="verificationCode"
-                  maxLength={6}
-                  {...field}
-                  aria-invalid={!!fieldState.error}
-                >
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
-                {fieldState.error && (
-                  <FieldError>{fieldState.error.message}</FieldError>
-                )}
-              </Field>
+          <FieldGroup>
+            <Controller
+              control={form.control}
+              name="verificationCode"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={!!fieldState.error}>
+                  <FieldLabel htmlFor="verificationCode">
+                    {getTranslation(ui, "labels", "verificationCode")}
+                  </FieldLabel>
+                  <InputOTP
+                    id="verificationCode"
+                    maxLength={6}
+                    {...field}
+                    aria-invalid={!!fieldState.error}
+                  >
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
+                  {fieldState.error && (
+                    <FieldError>{fieldState.error.message}</FieldError>
+                  )}
+                </Field>
+              )}
+            />
+            <Button type="submit" disabled={ui.state !== "idle"}>
+              {getTranslation(ui, "labels", "verifyCode")}
+            </Button>
+            {form.formState.errors.root && (
+              <FieldError>{form.formState.errors.root.message}</FieldError>
             )}
-          />
-          <Button type="submit" disabled={ui.state !== "idle"}>
-            {getTranslation(ui, "labels", "verifyCode")}
-          </Button>
-          {form.formState.errors.root && (
-            <FieldError>{form.formState.errors.root.message}</FieldError>
-          )}
+          </FieldGroup>
         </form>
       </FormProvider>
     </div>
@@ -107,5 +114,5 @@ export function TotpMfaAssertionForm({
 
 export {
   TotpMfaAssertionForm as TotpMultiFactorAssertionForm,
-  type TotpMultiFactorAssertionFormProps as TotpMfaAssertionFormProps,
+  type TotpMfaAssertionFormProps as TotpMultiFactorAssertionFormProps,
 };

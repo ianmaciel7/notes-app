@@ -14,13 +14,19 @@ import type { ComponentProps } from "react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Policies } from "./auth-policies-card";
 
-export interface ForgotPasswordAuthFormProps
+export interface ForgotPasswordFormProps
   extends Omit<ComponentProps<"form">, "onSubmit">,
     FirebaseForgotPasswordAuthFormProps {}
 
@@ -29,7 +35,7 @@ export function ForgotPasswordForm({
   onBackToSignInClick,
   className,
   ...props
-}: ForgotPasswordAuthFormProps) {
+}: ForgotPasswordFormProps) {
   const ui = useUI();
   const schema = useForgotPasswordAuthFormSchema();
   const action = useForgotPasswordAuthFormAction();
@@ -57,11 +63,11 @@ export function ForgotPasswordForm({
 
   if (emailSent) {
     return (
-      <div className="text-center space-y-4">
-        <div className="text-foreground">
+      <Alert>
+        <AlertDescription>
           {getTranslation(ui, "messages", "checkEmailForReset")}
-        </div>
-      </div>
+        </AlertDescription>
+      </Alert>
     );
   }
 
@@ -73,28 +79,30 @@ export function ForgotPasswordForm({
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
-        className={cn("flex flex-col gap-y-4", className)}
+        className={cn("flex flex-col gap-4", className)}
       >
-        <Controller
-          control={form.control}
-          name="email"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">
-                {getTranslation(ui, "labels", "emailAddress")}
-              </FieldLabel>
-              <Input
-                {...field}
-                id="email"
-                type="email"
-                aria-invalid={!!fieldState.error}
-              />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
-          )}
-        />
+        <FieldGroup>
+          <Controller
+            control={form.control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="email">
+                  {getTranslation(ui, "labels", "emailAddress")}
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="email"
+                  type="email"
+                  aria-invalid={!!fieldState.error}
+                />
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+        </FieldGroup>
         <Policies />
         <Button type="submit" disabled={ui.state !== "idle"}>
           {getTranslation(ui, "labels", "resetPassword")}
@@ -109,10 +117,8 @@ export function ForgotPasswordForm({
             size="sm"
             onClick={onBackToSignInClick}
           >
-            <ArrowLeft className="size-3.5" aria-hidden="true" />
-            <span className="text-xs">
-              {getTranslation(ui, "labels", "backToSignIn")}
-            </span>
+            <ArrowLeft data-icon="inline-start" aria-hidden="true" />
+            {getTranslation(ui, "labels", "backToSignIn")}
           </Button>
         ) : null}
       </form>
@@ -122,5 +128,5 @@ export function ForgotPasswordForm({
 
 export {
   ForgotPasswordForm as ForgotPasswordAuthForm,
-  type ForgotPasswordAuthFormProps as ForgotPasswordFormProps,
+  type ForgotPasswordFormProps as ForgotPasswordAuthFormProps,
 };

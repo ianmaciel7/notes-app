@@ -43,3 +43,5 @@ export function MfaEnrollmentCard({
     </div>
   );
 }
+
+export type MultiFactorAuthEnrollmentFormProps = MfaEnrollmentCardProps;

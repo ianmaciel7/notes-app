@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { LanguageSelect } from "@/components/notes-app/language-select";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
@@ -16,9 +17,9 @@ export function UserMenu({ className, ...props }: UserMenuProps) {
 
   if (isLoading) {
     return (
-      <div
+      <Skeleton
         data-testid="user-menu-loading"
-        className={cn("h-8 w-24 animate-pulse rounded bg-muted", className)}
+        className={cn("h-8 w-24", className)}
         {...props}
       />
     );

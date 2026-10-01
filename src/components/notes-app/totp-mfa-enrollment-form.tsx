@@ -21,7 +21,13 @@ import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   InputOTP,
@@ -71,32 +77,34 @@ function TotpMultiFactorSecretGenerationForm({
         className={cn("flex flex-col gap-y-4", className)}
         {...props}
       >
-        <Controller
-          control={form.control}
-          name="displayName"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="displayName">
-                {getTranslation(ui, "labels", "displayName")}
-              </FieldLabel>
-              <Input
-                {...field}
-                id="displayName"
-                type="text"
-                aria-invalid={!!fieldState.error}
-              />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
+        <FieldGroup>
+          <Controller
+            control={form.control}
+            name="displayName"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="displayName">
+                  {getTranslation(ui, "labels", "displayName")}
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="displayName"
+                  type="text"
+                  aria-invalid={!!fieldState.error}
+                />
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+          <Button type="submit" disabled={ui.state !== "idle"}>
+            {getTranslation(ui, "labels", "generateQrCode")}
+          </Button>
+          {form.formState.errors.root && (
+            <FieldError>{form.formState.errors.root.message}</FieldError>
           )}
-        />
-        <Button type="submit" disabled={ui.state !== "idle"}>
-          {getTranslation(ui, "labels", "generateQrCode")}
-        </Button>
-        {form.formState.errors.root && (
-          <FieldError>{form.formState.errors.root.message}</FieldError>
-        )}
+        </FieldGroup>
       </form>
     </FormProvider>
   );
@@ -152,71 +160,75 @@ export function MultiFactorEnrollmentVerifyTotpForm({
   const qrCodeDataUrl = generateTotpQrCode(ui, secret, displayName);
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col gap-y-4 items-center justify-center">
-        <Image
-          src={qrCodeDataUrl}
-          alt={t("totpQrCodeAlt")}
-          width={192}
-          height={192}
-          unoptimized
-          className="mx-auto"
-        />
-        <code className="text-xs text-muted-foreground text-center">
-          {secret.secretKey.toString()}
-        </code>
-        <p className="text-xs text-muted-foreground text-center">
-          {getTranslation(ui, "prompts", "mfaTotpQrCodePrompt")}
-        </p>
-      </div>
+    <div className="flex flex-col gap-4">
+      <FieldGroup>
+        <Field className="items-center justify-center">
+          <Image
+            src={qrCodeDataUrl}
+            alt={t("totpQrCodeAlt")}
+            width={192}
+            height={192}
+            unoptimized
+            className="mx-auto"
+          />
+          <code className="text-xs text-muted-foreground text-center">
+            {secret.secretKey.toString()}
+          </code>
+          <FieldDescription className="text-center">
+            {getTranslation(ui, "prompts", "mfaTotpQrCodePrompt")}
+          </FieldDescription>
+        </Field>
+      </FieldGroup>
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className={cn("flex flex-col gap-y-4", className)}
           {...props}
         >
-          <Controller
-            control={form.control}
-            name="verificationCode"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={!!fieldState.error}>
-                <FieldLabel htmlFor="verificationCode">
-                  {getTranslation(ui, "labels", "verificationCode")}
-                </FieldLabel>
-                <InputOTP
-                  id="verificationCode"
-                  maxLength={6}
-                  {...field}
-                  aria-invalid={!!fieldState.error}
-                >
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
-                {fieldState.error && (
-                  <FieldError>{fieldState.error.message}</FieldError>
-                )}
-              </Field>
+          <FieldGroup>
+            <Controller
+              control={form.control}
+              name="verificationCode"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={!!fieldState.error}>
+                  <FieldLabel htmlFor="verificationCode">
+                    {getTranslation(ui, "labels", "verificationCode")}
+                  </FieldLabel>
+                  <InputOTP
+                    id="verificationCode"
+                    maxLength={6}
+                    {...field}
+                    aria-invalid={!!fieldState.error}
+                  >
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
+                  {fieldState.error && (
+                    <FieldError>{fieldState.error.message}</FieldError>
+                  )}
+                </Field>
+              )}
+            />
+            <Button type="submit" disabled={ui.state !== "idle"}>
+              {getTranslation(ui, "labels", "verifyCode")}
+            </Button>
+            {form.formState.errors.root && (
+              <FieldError>{form.formState.errors.root.message}</FieldError>
             )}
-          />
-          <Button type="submit" disabled={ui.state !== "idle"}>
-            {getTranslation(ui, "labels", "verifyCode")}
-          </Button>
-          {form.formState.errors.root && (
-            <FieldError>{form.formState.errors.root.message}</FieldError>
-          )}
+          </FieldGroup>
         </form>
       </FormProvider>
     </div>
   );
 }
 
-export type TotpMultiFactorEnrollmentFormProps = ComponentProps<"div"> & {
+export type TotpMfaEnrollmentFormProps = ComponentProps<"div"> & {
   onSuccess?: () => void;
 };
 
@@ -224,7 +236,7 @@ export function TotpMfaEnrollmentForm({
   onSuccess,
   className,
   ...props
-}: TotpMultiFactorEnrollmentFormProps) {
+}: TotpMfaEnrollmentFormProps) {
   const ui = useUI();
 
   const [enrollment, setEnrollment] = useState<{
@@ -260,5 +272,5 @@ export function TotpMfaEnrollmentForm({
 
 export {
   TotpMfaEnrollmentForm as TotpMultiFactorEnrollmentForm,
-  type TotpMultiFactorEnrollmentFormProps as TotpMfaEnrollmentFormProps,
+  type TotpMfaEnrollmentFormProps as TotpMultiFactorEnrollmentFormProps,
 };

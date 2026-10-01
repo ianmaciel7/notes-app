@@ -2,9 +2,10 @@ import { getTranslation } from "@firebase-oss/ui-core";
 import { PolicyContext, type PolicyURL, useUI } from "@firebase-oss/ui-react";
 import type { ComponentProps, ReactNode } from "react";
 import { use } from "react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export interface PoliciesProps extends ComponentProps<"div"> {}
+export interface AuthPoliciesCardProps extends ComponentProps<"div"> {}
 
 function PolicyLink({
   onNavigate,
@@ -19,29 +20,35 @@ function PolicyLink({
 }) {
   if (onNavigate) {
     return (
-      <button
+      <Button
+        variant="link"
         type="button"
         className={className}
         onClick={() => onNavigate(url)}
       >
         {children}
-      </button>
+      </Button>
     );
   }
 
   return (
-    <a
-      href={String(url)}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Button
+      variant="link"
+      nativeButton={false}
+      render={
+        <a href={String(url)} target="_blank" rel="noopener noreferrer">
+          {children}
+        </a>
+      }
       className={className}
-    >
-      {children}
-    </a>
+    />
   );
 }
 
-export function AuthPoliciesCard({ className, ...props }: PoliciesProps) {
+export function AuthPoliciesCard({
+  className,
+  ...props
+}: AuthPoliciesCardProps) {
   const ui = useUI();
   const policies = use(PolicyContext);
 
@@ -53,19 +60,26 @@ export function AuthPoliciesCard({ className, ...props }: PoliciesProps) {
   const termsAndPrivacyText = getTranslation(ui, "messages", "termsAndPrivacy");
   const parts = termsAndPrivacyText.split(/(\{tos\}|\{privacy\})/);
 
-  const linkClassName = cn("hover:underline font-semibold");
+  const linkClassName = cn("h-auto px-0 font-semibold");
+  const partCounts = new Map<string, number>();
+  const keyedParts = parts.map((part) => {
+    const type =
+      part === "{tos}" ? "tos" : part === "{privacy}" ? "privacy" : "text";
+    const occurrence = (partCounts.get(type) ?? 0) + 1;
+    partCounts.set(type, occurrence);
+    return { key: `${type}-${occurrence}`, part };
+  });
 
   return (
     <div
-      className={cn("text-text-muted text-center text-xs", className)}
+      className={cn("text-muted-foreground text-center text-xs", className)}
       {...props}
     >
-      {parts.map((part: string, index: number) => {
+      {keyedParts.map(({ key, part }) => {
         if (part === "{tos}") {
           return (
             <PolicyLink
-              // biome-ignore lint/suspicious/noArrayIndexKey: parts come from a fixed, non-reorderable string split
-              key={index}
+              key={key}
               onNavigate={onNavigate}
               url={termsOfServiceUrl}
               className={linkClassName}
@@ -78,8 +92,7 @@ export function AuthPoliciesCard({ className, ...props }: PoliciesProps) {
         if (part === "{privacy}") {
           return (
             <PolicyLink
-              // biome-ignore lint/suspicious/noArrayIndexKey: parts come from a fixed, non-reorderable string split
-              key={index}
+              key={key}
               onNavigate={onNavigate}
               url={privacyPolicyUrl}
               className={linkClassName}
@@ -89,16 +102,12 @@ export function AuthPoliciesCard({ className, ...props }: PoliciesProps) {
           );
         }
 
-        return (
-          // biome-ignore lint/suspicious/noArrayIndexKey: parts come from a fixed, non-reorderable string split
-          <span key={index}>{part}</span>
-        );
+        return <span key={key}>{part}</span>;
       })}
     </div>
   );
 }
 
-export {
-  AuthPoliciesCard as Policies,
-  type PoliciesProps as AuthPoliciesCardProps,
-};
+export { AuthPoliciesCard as Policies };
+
+export type PoliciesProps = AuthPoliciesCardProps;

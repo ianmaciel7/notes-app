@@ -16,14 +16,14 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-export interface MultiFactorAuthAssertionScreenProps
+export interface MfaAssertionCardProps
   extends FirebaseMultiFactorAuthAssertionScreenProps,
     Omit<ComponentProps<"div">, "children"> {}
 
 export function MfaAssertionCard({
   className,
   ...props
-}: MultiFactorAuthAssertionScreenProps) {
+}: MfaAssertionCardProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "multiFactorAssertion");
@@ -44,7 +44,6 @@ export function MfaAssertionCard({
   );
 }
 
-export {
-  MfaAssertionCard as MultiFactorAuthAssertionScreen,
-  type MultiFactorAuthAssertionScreenProps as MfaAssertionCardProps,
-};
+export { MfaAssertionCard as MultiFactorAuthAssertionScreen };
+
+export type MultiFactorAuthAssertionScreenProps = MfaAssertionCardProps;

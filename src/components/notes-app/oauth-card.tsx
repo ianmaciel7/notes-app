@@ -42,12 +42,14 @@ export function OAuthCard({
     <div className={cn("max-w-sm mx-auto", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>{titleText}</CardTitle>
+          <CardTitle>
+            <h1>{titleText}</h1>
+          </CardTitle>
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-2">{children}</div>
-          <div className="mt-4 space-y-4">
+          <div className="flex flex-col gap-2">{children}</div>
+          <div className="mt-4 flex flex-col gap-4">
             <RedirectError />
             <Policies />
           </div>

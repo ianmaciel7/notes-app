@@ -30,9 +30,15 @@ import {
   Field,
   FieldDescription,
   FieldError,
+  FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import {
   InputOTP,
   InputOTPGroup,
@@ -73,15 +79,24 @@ function MultiFactorEnrollmentPhoneNumberForm({
     phoneNumber: string;
   }) => {
     try {
+      const countrySelectorInstance = countrySelector.current;
+      const currentUser = ui.auth.currentUser;
+      const verifier = recaptchaVerifier;
+      if (!countrySelectorInstance || !currentUser || !verifier) {
+        form.setError("root", {
+          message: getTranslation(ui, "errors", "unknownError"),
+        });
+        return;
+      }
       const formatted = formatPhoneNumber(
         values.phoneNumber,
-        countrySelector.current!.getCountry(),
+        countrySelectorInstance.getCountry(),
       );
-      const mfaUser = multiFactor(ui.auth.currentUser!);
+      const mfaUser = multiFactor(currentUser);
       const confirmationResult = await verifyPhoneNumber(
         ui,
         formatted,
-        recaptchaVerifier!,
+        verifier,
         mfaUser,
       );
       onSubmitProp(confirmationResult, values.displayName);
@@ -102,57 +117,63 @@ function MultiFactorEnrollmentPhoneNumberForm({
         className={cn("flex flex-col gap-y-4", className)}
         {...props}
       >
-        <Controller
-          control={form.control}
-          name="displayName"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="displayName">
-                {getTranslation(ui, "labels", "displayName")}
-              </FieldLabel>
-              <Input
-                {...field}
-                id="displayName"
-                type="text"
-                aria-invalid={!!fieldState.error}
-              />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="phoneNumber"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="phoneNumber">
-                {getTranslation(ui, "labels", "phoneNumber")}
-              </FieldLabel>
-              <div className="flex items-center gap-2">
-                <CountrySelect ref={countrySelector} />
+        <FieldGroup>
+          <Controller
+            control={form.control}
+            name="displayName"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="displayName">
+                  {getTranslation(ui, "labels", "displayName")}
+                </FieldLabel>
                 <Input
                   {...field}
-                  id="phoneNumber"
-                  type="tel"
-                  className="flex-grow"
+                  id="displayName"
+                  type="text"
                   aria-invalid={!!fieldState.error}
                 />
-              </div>
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="phoneNumber"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="phoneNumber">
+                  {getTranslation(ui, "labels", "phoneNumber")}
+                </FieldLabel>
+                <InputGroup>
+                  <InputGroupAddon>
+                    <CountrySelect ref={countrySelector} />
+                  </InputGroupAddon>
+                  <InputGroupInput
+                    {...field}
+                    id="phoneNumber"
+                    type="tel"
+                    aria-invalid={!!fieldState.error}
+                  />
+                </InputGroup>
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+          <div
+            className="fui-recaptcha-container"
+            ref={recaptchaContainerRef}
+          />
+          <Button type="submit" disabled={ui.state !== "idle"}>
+            {getTranslation(ui, "labels", "sendCode")}
+          </Button>
+          {form.formState.errors.root && (
+            <FieldError>{form.formState.errors.root.message}</FieldError>
           )}
-        />
-        <div className="fui-recaptcha-container" ref={recaptchaContainerRef} />
-        <Button type="submit" disabled={ui.state !== "idle"}>
-          {getTranslation(ui, "labels", "sendCode")}
-        </Button>
-        {form.formState.errors.root && (
-          <FieldError>{form.formState.errors.root.message}</FieldError>
-        )}
+        </FieldGroup>
       </form>
     </FormProvider>
   );
@@ -209,53 +230,55 @@ export function MultiFactorEnrollmentVerifyPhoneNumberForm({
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn("space-y-4", className)}
+        className={cn("flex flex-col gap-4", className)}
         {...props}
       >
-        <Controller
-          control={form.control}
-          name="verificationCode"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="verificationCode">
-                {getTranslation(ui, "labels", "verificationCode")}
-              </FieldLabel>
-              <FieldDescription>
-                {getTranslation(ui, "prompts", "smsVerificationPrompt")}
-              </FieldDescription>
-              <InputOTP
-                id="verificationCode"
-                maxLength={6}
-                {...field}
-                aria-invalid={!!fieldState.error}
-              >
-                <InputOTPGroup>
-                  <InputOTPSlot index={0} />
-                  <InputOTPSlot index={1} />
-                  <InputOTPSlot index={2} />
-                  <InputOTPSlot index={3} />
-                  <InputOTPSlot index={4} />
-                  <InputOTPSlot index={5} />
-                </InputOTPGroup>
-              </InputOTP>
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
+        <FieldGroup>
+          <Controller
+            control={form.control}
+            name="verificationCode"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="verificationCode">
+                  {getTranslation(ui, "labels", "verificationCode")}
+                </FieldLabel>
+                <FieldDescription>
+                  {getTranslation(ui, "prompts", "smsVerificationPrompt")}
+                </FieldDescription>
+                <InputOTP
+                  id="verificationCode"
+                  maxLength={6}
+                  {...field}
+                  aria-invalid={!!fieldState.error}
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+          <Button type="submit" disabled={ui.state !== "idle"}>
+            {getTranslation(ui, "labels", "verifyCode")}
+          </Button>
+          {form.formState.errors.root && (
+            <FieldError>{form.formState.errors.root.message}</FieldError>
           )}
-        />
-        <Button type="submit" disabled={ui.state !== "idle"}>
-          {getTranslation(ui, "labels", "verifyCode")}
-        </Button>
-        {form.formState.errors.root && (
-          <FieldError>{form.formState.errors.root.message}</FieldError>
-        )}
+        </FieldGroup>
       </form>
     </FormProvider>
   );
 }
 
-export type SmsMultiFactorEnrollmentFormProps = React.ComponentProps<"div"> & {
+export type SmsMfaEnrollmentFormProps = React.ComponentProps<"div"> & {
   onSuccess?: () => void;
 };
 
@@ -263,7 +286,7 @@ export function SmsMfaEnrollmentForm({
   onSuccess,
   className,
   ...props
-}: SmsMultiFactorEnrollmentFormProps) {
+}: SmsMfaEnrollmentFormProps) {
   const ui = useUI();
 
   const [verification, setVerification] = useState<{
@@ -299,5 +322,5 @@ export function SmsMfaEnrollmentForm({
 
 export {
   SmsMfaEnrollmentForm as SmsMultiFactorEnrollmentForm,
-  type SmsMultiFactorEnrollmentFormProps as SmsMfaEnrollmentFormProps,
+  type SmsMfaEnrollmentFormProps as SmsMultiFactorEnrollmentFormProps,
 };

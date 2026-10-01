@@ -17,7 +17,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-export interface PhoneAuthScreenProps
+export interface PhoneAuthCardProps
   extends PropsWithChildren<Omit<ComponentProps<"div">, "children">> {
   onSignIn?: (user: User) => void;
 }
@@ -27,7 +27,7 @@ export function PhoneAuthCard({
   onSignIn,
   className,
   ...props
-}: PhoneAuthScreenProps) {
+}: PhoneAuthCardProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "signIn");
@@ -51,7 +51,7 @@ export function PhoneAuthCard({
           {children ? (
             <>
               <Separator className="my-4" />
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 {children}
                 <RedirectError />
               </div>
@@ -63,7 +63,6 @@ export function PhoneAuthCard({
   );
 }
 
-export {
-  PhoneAuthCard as PhoneAuthScreen,
-  type PhoneAuthScreenProps as PhoneAuthCardProps,
-};
+export { PhoneAuthCard as PhoneAuthScreen };
+
+export type PhoneAuthScreenProps = PhoneAuthCardProps;

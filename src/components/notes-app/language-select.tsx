@@ -6,6 +6,7 @@ import { type ComponentProps, useTransition } from "react";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -67,18 +68,19 @@ export function LanguageSelect({ className, ...props }: LanguageSelectProps) {
           data-testid="language-select"
           aria-label={t("label")}
           size="sm"
-          className="h-8 text-xs"
         >
           <SelectValue>
             {getLocaleLabel(currentLocale as SupportedLocale)}
           </SelectValue>
         </SelectTrigger>
         <SelectContent align="end">
-          {SUPPORTED_LOCALES.map((loc) => (
-            <SelectItem key={loc} value={loc} className="text-xs">
-              {getLocaleLabel(loc)}
-            </SelectItem>
-          ))}
+          <SelectGroup>
+            {SUPPORTED_LOCALES.map((loc) => (
+              <SelectItem key={loc} value={loc}>
+                {getLocaleLabel(loc)}
+              </SelectItem>
+            ))}
+          </SelectGroup>
         </SelectContent>
       </Select>
     </div>

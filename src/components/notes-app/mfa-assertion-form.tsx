@@ -14,9 +14,10 @@ import { useState } from "react";
 import { SmsMfaAssertionForm } from "@/components/notes-app/sms-mfa-assertion-form";
 import { TotpMfaAssertionForm } from "@/components/notes-app/totp-mfa-assertion-form";
 import { Button } from "@/components/ui/button";
+import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-export type MultiFactorAuthAssertionFormProps = ComponentProps<"div"> & {
+export type MfaAssertionFormProps = ComponentProps<"div"> & {
   onSuccess?: (credential: UserCredential) => void;
 };
 
@@ -24,7 +25,7 @@ export function MfaAssertionForm({
   onSuccess,
   className,
   ...props
-}: MultiFactorAuthAssertionFormProps) {
+}: MfaAssertionFormProps) {
   const ui = useUI();
   const resolver = ui.multiFactorResolver;
   const mfaAssertionFactorPrompt = getTranslation(
@@ -72,9 +73,11 @@ export function MfaAssertionForm({
 
   return (
     <div className={cn("flex flex-col gap-2", className)} {...props}>
-      <p className="text-sm text-muted-foreground">
-        {mfaAssertionFactorPrompt}
-      </p>
+      <FieldGroup>
+        <Field>
+          <FieldDescription>{mfaAssertionFactorPrompt}</FieldDescription>
+        </Field>
+      </FieldGroup>
       {resolver.hints.map((hint) => {
         if (hint.factorId === TotpMultiFactorGenerator.FACTOR_ID) {
           return (
@@ -108,5 +111,5 @@ function SmsButton(props: ComponentProps<typeof Button>) {
 
 export {
   MfaAssertionForm as MultiFactorAuthAssertionForm,
-  type MultiFactorAuthAssertionFormProps as MfaAssertionFormProps,
+  type MfaAssertionFormProps as MultiFactorAuthAssertionFormProps,
 };

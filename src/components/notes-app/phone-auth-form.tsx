@@ -8,7 +8,7 @@ import {
   type PhoneAuthVerifyFormSchema,
 } from "@firebase-oss/ui-core";
 import {
-  type PhoneAuthFormProps,
+  type PhoneAuthFormProps as FirebasePhoneAuthFormProps,
   usePhoneAuthNumberFormSchema,
   usePhoneAuthVerifyFormSchema,
   usePhoneNumberFormAction,
@@ -31,9 +31,14 @@ import {
   Field,
   FieldDescription,
   FieldError,
+  FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import {
   InputOTP,
   InputOTPGroup,
@@ -89,44 +94,46 @@ function VerifyPhoneNumberForm({
         }}
         className={cn("flex flex-col gap-4", className)}
       >
-        <Controller
-          control={form.control}
-          name="verificationCode"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="verificationCode">
-                {getTranslation(ui, "labels", "verificationCode")}
-              </FieldLabel>
-              <FieldDescription>
-                {getTranslation(ui, "prompts", "smsVerificationPrompt")}
-              </FieldDescription>
-              <InputOTP
-                id="verificationCode"
-                maxLength={6}
-                {...field}
-                aria-invalid={!!fieldState.error}
-              >
-                <InputOTPGroup>
-                  <InputOTPSlot index={0} />
-                  <InputOTPSlot index={1} />
-                  <InputOTPSlot index={2} />
-                  <InputOTPSlot index={3} />
-                  <InputOTPSlot index={4} />
-                  <InputOTPSlot index={5} />
-                </InputOTPGroup>
-              </InputOTP>
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
+        <FieldGroup>
+          <Controller
+            control={form.control}
+            name="verificationCode"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="verificationCode">
+                  {getTranslation(ui, "labels", "verificationCode")}
+                </FieldLabel>
+                <FieldDescription>
+                  {getTranslation(ui, "prompts", "smsVerificationPrompt")}
+                </FieldDescription>
+                <InputOTP
+                  id="verificationCode"
+                  maxLength={6}
+                  {...field}
+                  aria-invalid={!!fieldState.error}
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+          <Button type="submit" disabled={ui.state !== "idle"}>
+            {getTranslation(ui, "labels", "verifyCode")}
+          </Button>
+          {form.formState.errors.root && (
+            <FieldError>{form.formState.errors.root.message}</FieldError>
           )}
-        />
-        <Button type="submit" disabled={ui.state !== "idle"}>
-          {getTranslation(ui, "labels", "verifyCode")}
-        </Button>
-        {form.formState.errors.root && (
-          <FieldError>{form.formState.errors.root.message}</FieldError>
-        )}
+        </FieldGroup>
       </form>
     </FormProvider>
   );
@@ -159,13 +166,21 @@ function PhoneNumberForm({
 
   async function onSubmit(values: PhoneAuthNumberFormSchema) {
     try {
+      const countrySelectorInstance = countrySelector.current;
+      const verifier = recaptchaVerifier;
+      if (!countrySelectorInstance || !verifier) {
+        form.setError("root", {
+          message: getTranslation(ui, "errors", "unknownError"),
+        });
+        return;
+      }
       const formatted = formatPhoneNumber(
         values.phoneNumber,
-        countrySelector.current!.getCountry(),
+        countrySelectorInstance.getCountry(),
       );
       const verificationId = await action({
         phoneNumber: formatted,
-        recaptchaVerifier: recaptchaVerifier!,
+        recaptchaVerifier: verifier,
       });
       onVerificationSuccess(verificationId);
     } catch (error) {
@@ -185,43 +200,47 @@ function PhoneNumberForm({
         }}
         className={cn("flex flex-col gap-4", className)}
       >
-        <Controller
-          control={form.control}
-          name="phoneNumber"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="phoneNumber">
-                {getTranslation(ui, "labels", "phoneNumber")}
-              </FieldLabel>
-              <div className="flex items-center gap-2">
-                <CountrySelect ref={countrySelector} />
-                <Input
-                  {...field}
-                  id="phoneNumber"
-                  type="tel"
-                  aria-invalid={!!fieldState.error}
-                />
-              </div>
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
+        <FieldGroup>
+          <Controller
+            control={form.control}
+            name="phoneNumber"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="phoneNumber">
+                  {getTranslation(ui, "labels", "phoneNumber")}
+                </FieldLabel>
+                <InputGroup>
+                  <InputGroupAddon>
+                    <CountrySelect ref={countrySelector} />
+                  </InputGroupAddon>
+                  <InputGroupInput
+                    {...field}
+                    id="phoneNumber"
+                    type="tel"
+                    aria-invalid={!!fieldState.error}
+                  />
+                </InputGroup>
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+          <div ref={recaptchaContainerRef} />
+          <Policies />
+          <Button type="submit" disabled={ui.state !== "idle"}>
+            {getTranslation(ui, "labels", "sendCode")}
+          </Button>
+          {form.formState.errors.root && (
+            <FieldError>{form.formState.errors.root.message}</FieldError>
           )}
-        />
-        <div ref={recaptchaContainerRef} />
-        <Policies />
-        <Button type="submit" disabled={ui.state !== "idle"}>
-          {getTranslation(ui, "labels", "sendCode")}
-        </Button>
-        {form.formState.errors.root && (
-          <FieldError>{form.formState.errors.root.message}</FieldError>
-        )}
+        </FieldGroup>
       </form>
     </FormProvider>
   );
 }
 
-export type { PhoneAuthFormProps };
+export interface PhoneAuthFormProps extends FirebasePhoneAuthFormProps {}
 
 export function PhoneAuthForm(props: PhoneAuthFormProps) {
   const [verificationId, setVerificationId] = useState<string | null>(null);

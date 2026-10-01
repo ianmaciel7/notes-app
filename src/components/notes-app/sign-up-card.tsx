@@ -8,7 +8,7 @@ import {
 } from "@firebase-oss/ui-react";
 import type { User, UserCredential } from "firebase/auth";
 import { useTranslations } from "next-intl";
-import { type ComponentProps, useCallback, useRef } from "react";
+import { type ComponentProps, useRef } from "react";
 import {
   Card,
   CardContent,
@@ -16,10 +16,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FieldSeparator } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { SignUpForm } from "./sign-up-form";
 
-export interface SignUpAuthScreenProps
+export interface SignUpCardProps
   extends FirebaseSignUpAuthScreenProps,
     Omit<ComponentProps<"div">, "children"> {}
 
@@ -30,7 +31,7 @@ export function SignUpCard({
   className,
   ref,
   ...props
-}: SignUpAuthScreenProps) {
+}: SignUpCardProps) {
   const ui = useUI();
   const t = useTranslations("auth");
   const handledUserIdRef = useRef<string | null>(null);
@@ -38,17 +39,14 @@ export function SignUpCard({
   const titleText = getTranslation(ui, "labels", "signUp");
   const subtitleText = getTranslation(ui, "prompts", "enterDetailsToCreate");
 
-  const handleSignUp = useCallback(
-    (user: User) => {
-      if (handledUserIdRef.current === user.uid) {
-        return;
-      }
+  const handleSignUp = (user: User) => {
+    if (handledUserIdRef.current === user.uid) {
+      return;
+    }
 
-      handledUserIdRef.current = user.uid;
-      onSignUp?.(user);
-    },
-    [onSignUp],
-  );
+    handledUserIdRef.current = user.uid;
+    onSignUp?.(user);
+  };
 
   useOnUserAuthenticated(children ? handleSignUp : undefined);
 
@@ -58,16 +56,14 @@ export function SignUpCard({
       className={cn("w-full max-w-sm mx-auto", className)}
       {...props}
     >
-      <Card className="border border-border/80 shadow-xl shadow-black/5 dark:shadow-none bg-card">
-        <CardHeader className="space-y-1.5 pb-4">
-          <CardTitle className="text-xl font-semibold tracking-tight">
+      <Card>
+        <CardHeader>
+          <CardTitle>
             <h1>{titleText}</h1>
           </CardTitle>
-          <CardDescription className="text-sm text-muted-foreground">
-            {subtitleText}
-          </CardDescription>
+          <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="flex flex-col gap-4">
           <SignUpForm
             onSignInClick={onSignInClick}
             onSignUp={(credential: UserCredential) => {
@@ -75,18 +71,11 @@ export function SignUpCard({
             }}
           />
           {children ? (
-            <div className="space-y-4 pt-1">
-              <div className="relative flex items-center justify-center">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-border" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">
-                    {t("orContinueWith")}
-                  </span>
-                </div>
-              </div>
-              <div className="space-y-2.5">{children}</div>
+            <div className="flex flex-col gap-4 pt-1">
+              <FieldSeparator className="uppercase [&>span]:bg-card">
+                {t("orContinueWith")}
+              </FieldSeparator>
+              <div className="flex flex-col gap-2.5">{children}</div>
             </div>
           ) : null}
         </CardContent>
@@ -97,5 +86,5 @@ export function SignUpCard({
 
 export {
   SignUpCard as SignUpAuthScreen,
-  type SignUpAuthScreenProps as SignUpCardProps,
+  type SignUpCardProps as SignUpAuthScreenProps,
 };

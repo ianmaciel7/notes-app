@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-export interface ForgotPasswordAuthScreenProps
+export interface ForgotPasswordCardProps
   extends FirebaseForgotPasswordAuthScreenProps,
     Omit<ComponentProps<"div">, "children"> {}
 
@@ -25,7 +25,7 @@ export function ForgotPasswordCard({
   onBackToSignInClick,
   className,
   ref,
-}: ForgotPasswordAuthScreenProps) {
+}: ForgotPasswordCardProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "resetPassword");
@@ -49,7 +49,6 @@ export function ForgotPasswordCard({
   );
 }
 
-export {
-  ForgotPasswordCard as ForgotPasswordAuthScreen,
-  type ForgotPasswordAuthScreenProps as ForgotPasswordCardProps,
-};
+export { ForgotPasswordCard as ForgotPasswordAuthScreen };
+
+export type ForgotPasswordAuthScreenProps = ForgotPasswordCardProps;

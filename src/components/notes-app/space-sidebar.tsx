@@ -15,7 +15,6 @@ import {
   Search,
   Settings,
 } from "lucide-react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
@@ -28,7 +27,8 @@ import {
 import { CreateSpaceForm } from "@/components/notes-app/create-space-form";
 import { LanguageSelect } from "@/components/notes-app/language-select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -55,7 +55,14 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Label } from "@/components/ui/label";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Kbd } from "@/components/ui/kbd";
 import {
   Sidebar,
   SidebarContent,
@@ -72,6 +79,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/use-auth";
@@ -135,7 +143,7 @@ const SIDEBAR_MENU_POPUP =
 
 function SpaceIcon({
   iconKey,
-  className = "size-4",
+  className,
 }: {
   iconKey?: string;
   className?: string;
@@ -154,20 +162,16 @@ function UserAvatar({
 }) {
   if (photoUrl) {
     return (
-      <Image
-        src={photoUrl}
-        alt=""
-        width={20}
-        height={20}
-        unoptimized
-        className="size-5 shrink-0 rounded-full object-cover outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10"
-      />
+      <Avatar size="sm">
+        <AvatarImage src={photoUrl} alt="" />
+        <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
+      </Avatar>
     );
   }
   return (
-    <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-foreground text-[10px] text-background">
-      {displayName.charAt(0).toUpperCase()}
-    </span>
+    <Avatar size="sm">
+      <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
+    </Avatar>
   );
 }
 
@@ -203,7 +207,7 @@ function SpaceSidebarStatus({
         {...props}
       >
         <Alert variant="destructive" role="alert" aria-live="assertive">
-          <AlertCircle className="size-4" />
+          <AlertCircle data-icon="inline-start" />
           <AlertTitle>{t("connectionError")}</AlertTitle>
           <AlertDescription>
             {t(isOffline ? "offlineDescription" : "databaseErrorDescription")}
@@ -215,7 +219,7 @@ function SpaceSidebarStatus({
           onClick={onRetry}
           data-testid="space-switcher-retry-btn"
         >
-          <RefreshCw className="mr-1.5 size-3.5" />
+          <RefreshCw data-icon="inline-start" />
           {t("retryConnection")}
         </Button>
       </div>
@@ -231,7 +235,9 @@ function SpaceSidebarStatus({
         )}
         {...props}
       >
-        <span className="animate-pulse">{t("loading")}</span>
+        <Skeleton className="h-4 w-24" aria-label={t("loading")}>
+          <span className="sr-only">{t("loading")}</span>
+        </Skeleton>
       </div>
     );
   }
@@ -245,7 +251,7 @@ function SpaceSidebarStatus({
         <Empty className="max-w-sm border border-dashed p-6">
           <EmptyHeader>
             <EmptyMedia variant="icon">
-              <AlertCircle className="size-4" />
+              <AlertCircle />
             </EmptyMedia>
             <EmptyTitle>{t("spaceNotFoundTitle")}</EmptyTitle>
             <EmptyDescription>{t("spaceNotFoundDescription")}</EmptyDescription>
@@ -282,7 +288,7 @@ function SpaceSidebarEmpty({
       <Empty className="max-w-sm border border-dashed p-6">
         <EmptyHeader>
           <EmptyMedia variant="icon">
-            <Folder className="size-4" />
+            <Folder />
           </EmptyMedia>
           <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
           <EmptyDescription>{t("emptyDescription")}</EmptyDescription>
@@ -293,7 +299,7 @@ function SpaceSidebarEmpty({
             onClick={onCreate}
             data-testid="empty-create-space-btn"
           >
-            <Plus className="mr-1.5 size-4" />
+            <Plus data-icon="inline-start" />
             {t("createFirstSpace")}
           </Button>
         </EmptyContent>
@@ -352,10 +358,10 @@ function SpaceSwitcherMenu({
                   className="h-8"
                 >
                   <SpaceIcon iconKey={activeSpace?.icon} />
-                  <span className="min-w-0 truncate text-[13px]">
+                  <span className="min-w-0 truncate text-sm">
                     {activeSpace?.name ?? t("selectSpace")}
                   </span>
-                  <ChevronsUpDown className="ml-auto size-4 shrink-0 text-muted-foreground" />
+                  <ChevronsUpDown className="ml-auto shrink-0 text-muted-foreground" />
                 </SidebarMenuButton>
               }
             />
@@ -372,12 +378,12 @@ function SpaceSwitcherMenu({
                 >
                   <SpaceIcon iconKey={space.icon} />
                   <span className="min-w-0 flex-1 truncate">{space.name}</span>
-                  {space.id === activeSpace?.id && <Check className="size-4" />}
+                  {space.id === activeSpace?.id && <Check />}
                 </DropdownMenuItem>
               ))}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={onCreate}>
-                <Plus className="size-4" />
+                <Plus />
                 {t("createSpace")}
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -508,9 +514,9 @@ export function SpaceSidebar({
                   onChange={(event) => setSearchQuery(event.target.value)}
                   className="h-8 pl-8 pr-10"
                 />
-                <kbd className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 font-sans text-[11px] text-muted-foreground opacity-0 transition-opacity duration-80 group-hover/search:opacity-100 group-focus-within/search:opacity-100">
+                <Kbd className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-80 group-hover/search:opacity-100 group-focus-within/search:opacity-100">
                   K
-                </kbd>
+                </Kbd>
               </div>
               <SidebarMenu>
                 <SidebarMenuItem>
@@ -520,9 +526,9 @@ export function SpaceSidebar({
                   >
                     <Plus />
                     <span>{t("newSpace")}</span>
-                    <kbd className="ml-auto font-sans text-[11px] text-muted-foreground opacity-0 transition-opacity duration-80 group-hover/menu-item:opacity-100 group-focus-within/menu-item:opacity-100">
+                    <Kbd className="ml-auto opacity-0 transition-opacity duration-80 group-hover/menu-item:opacity-100 group-focus-within/menu-item:opacity-100">
                       O
-                    </kbd>
+                    </Kbd>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>
@@ -578,7 +584,7 @@ export function SpaceSidebar({
                             {userIdentifier}
                           </span>
                           <span className="ml-auto -mr-0.5 flex size-6 shrink-0 items-center justify-center">
-                            <ChevronsUpDown className="size-4 text-muted-foreground" />
+                            <ChevronsUpDown className="text-muted-foreground" />
                           </span>
                         </SidebarMenuButton>
                       }
@@ -594,7 +600,7 @@ export function SpaceSidebar({
                           <Avatar size="sm">
                             <AvatarFallback>{userInitial}</AvatarFallback>
                           </Avatar>
-                          <div className="min-w-0 flex-1 space-y-0.5">
+                          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                             <span className="block truncate text-sm font-medium text-foreground">
                               {userName}
                             </span>
@@ -613,7 +619,7 @@ export function SpaceSidebar({
                         className="mt-2 w-full justify-center"
                         onClick={() => signOutUser()}
                       >
-                        <LogOut className="size-4" />
+                        <LogOut data-icon="inline-start" />
                         {authT("signOut")}
                       </Button>
                     </DropdownMenuContent>
@@ -622,8 +628,8 @@ export function SpaceSidebar({
               </SidebarMenu>
               <Button
                 variant="ghost"
-                size="icon"
-                className="size-6 shrink-0"
+                size="icon-xs"
+                className="shrink-0"
                 aria-label={settingsT("settings")}
                 title={settingsT("settings")}
                 onClick={() => setSettingsDialogOpen(true)}
@@ -632,8 +638,8 @@ export function SpaceSidebar({
               </Button>
               <Button
                 variant="ghost"
-                size="icon"
-                className="size-6 shrink-0"
+                size="icon-xs"
+                className="shrink-0"
                 aria-label={settingsT("darkMode")}
                 title={settingsT("darkMode")}
                 onClick={() =>
@@ -671,25 +677,29 @@ export function SpaceSidebar({
               {settingsT("settingsDescription")}
             </DialogDescription>
           </DialogHeader>
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <Label htmlFor="theme-switch">{settingsT("darkMode")}</Label>
-              <p className="text-xs text-muted-foreground">
-                {settingsT("darkModeDescription")}
-              </p>
-            </div>
-            <Switch
-              id="theme-switch"
-              checked={resolvedTheme === "dark"}
-              onCheckedChange={(checked) =>
-                setTheme(checked ? "dark" : "light")
-              }
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label>{settingsT("language")}</Label>
-            <LanguageSelect />
-          </div>
+          <FieldGroup>
+            <Field orientation="horizontal">
+              <FieldContent>
+                <FieldLabel htmlFor="theme-switch">
+                  {settingsT("darkMode")}
+                </FieldLabel>
+                <FieldDescription>
+                  {settingsT("darkModeDescription")}
+                </FieldDescription>
+              </FieldContent>
+              <Switch
+                id="theme-switch"
+                checked={resolvedTheme === "dark"}
+                onCheckedChange={(checked) =>
+                  setTheme(checked ? "dark" : "light")
+                }
+              />
+            </Field>
+            <Field>
+              <FieldLabel>{settingsT("language")}</FieldLabel>
+              <LanguageSelect />
+            </Field>
+          </FieldGroup>
           <DialogFooter>
             <Button onClick={() => setSettingsDialogOpen(false)}>
               {t("done")}
@@ -698,13 +708,13 @@ export function SpaceSidebar({
         </DialogContent>
       </Dialog>
       {isOffline && (
-        <output
+        <Badge
           aria-live="polite"
-          className="fixed bottom-4 right-4 text-[11px] text-muted-foreground"
+          className="fixed bottom-4 right-4"
           data-testid="offline-status-indicator"
         >
           {t("operatingOffline")}
-        </output>
+        </Badge>
       )}
     </div>
   );

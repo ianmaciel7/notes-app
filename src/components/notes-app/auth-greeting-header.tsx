@@ -19,11 +19,11 @@ export function AuthGreetingHeader({
     (user?.email ? user.email.split("@")[0] : t("defaultUser"));
 
   return (
-    <div className={cn("space-y-2", className)} {...props}>
+    <div className={cn("flex flex-col gap-2", className)} {...props}>
       <h1 className="text-2xl font-bold tracking-tight text-foreground">
         {user ? t("userGreeting", { name: userName }) : t("guestGreeting")}
       </h1>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">
+      <p className="text-sm text-muted-foreground">
         {user ? t("userDescription") : t("guestDescription")}
       </p>
     </div>

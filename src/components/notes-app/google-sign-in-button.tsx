@@ -33,8 +33,8 @@ export function GoogleSignInButton({
       )}
       {...props}
     >
-      <GoogleLogo className="h-4.5 w-4.5 shrink-0" />
-      <span className="text-sm">{label}</span>
+      <GoogleLogo data-icon="inline-start" />
+      {label}
     </Button>
   );
 }

@@ -17,6 +17,7 @@ import {
   Field,
   FieldDescription,
   FieldError,
+  FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
 import {
@@ -53,9 +54,14 @@ function SmsMultiFactorAssertionPhoneForm({
   const onSubmit = async () => {
     try {
       setError(null);
+      const verifier = recaptchaVerifier;
+      if (!verifier) {
+        setError(getTranslation(ui, "errors", "unknownError"));
+        return;
+      }
       const verificationId = await action({
         hint,
-        recaptchaVerifier: recaptchaVerifier!,
+        recaptchaVerifier: verifier,
       });
       onSubmitProp(verificationId);
     } catch (error) {
@@ -66,7 +72,7 @@ function SmsMultiFactorAssertionPhoneForm({
   };
 
   return (
-    <div className={cn("space-y-4", className)} {...props}>
+    <div className={cn("flex flex-col gap-4", className)} {...props}>
       <Field>
         <FieldLabel>{getTranslation(ui, "labels", "phoneNumber")}</FieldLabel>
         <FieldDescription>
@@ -79,7 +85,7 @@ function SmsMultiFactorAssertionPhoneForm({
       <Button onClick={onSubmit} disabled={ui.state !== "idle"}>
         {getTranslation(ui, "labels", "sendCode")}
       </Button>
-      {error && <div className="text-sm text-red-600">{error}</div>}
+      {error && <FieldError>{error}</FieldError>}
     </div>
   );
 }
@@ -135,50 +141,52 @@ function SmsMultiFactorAssertionVerifyForm({
         className={cn("flex flex-col gap-y-4", className)}
         {...props}
       >
-        <Controller
-          control={form.control}
-          name="verificationCode"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="verificationCode">
-                {getTranslation(ui, "labels", "verificationCode")}
-              </FieldLabel>
-              <FieldDescription>
-                {getTranslation(ui, "prompts", "smsVerificationPrompt")}
-              </FieldDescription>
-              <InputOTP
-                id="verificationCode"
-                maxLength={6}
-                {...field}
-                aria-invalid={!!fieldState.error}
-              >
-                <InputOTPGroup>
-                  <InputOTPSlot index={0} />
-                  <InputOTPSlot index={1} />
-                  <InputOTPSlot index={2} />
-                  <InputOTPSlot index={3} />
-                  <InputOTPSlot index={4} />
-                  <InputOTPSlot index={5} />
-                </InputOTPGroup>
-              </InputOTP>
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
+        <FieldGroup>
+          <Controller
+            control={form.control}
+            name="verificationCode"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="verificationCode">
+                  {getTranslation(ui, "labels", "verificationCode")}
+                </FieldLabel>
+                <FieldDescription>
+                  {getTranslation(ui, "prompts", "smsVerificationPrompt")}
+                </FieldDescription>
+                <InputOTP
+                  id="verificationCode"
+                  maxLength={6}
+                  {...field}
+                  aria-invalid={!!fieldState.error}
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+          <Button type="submit" disabled={ui.state !== "idle"}>
+            {getTranslation(ui, "labels", "verifyCode")}
+          </Button>
+          {form.formState.errors.root && (
+            <FieldError>{form.formState.errors.root.message}</FieldError>
           )}
-        />
-        <Button type="submit" disabled={ui.state !== "idle"}>
-          {getTranslation(ui, "labels", "verifyCode")}
-        </Button>
-        {form.formState.errors.root && (
-          <FieldError>{form.formState.errors.root.message}</FieldError>
-        )}
+        </FieldGroup>
       </form>
     </FormProvider>
   );
 }
 
-export type SmsMultiFactorAssertionFormProps = React.ComponentProps<"div"> & {
+export type SmsMfaAssertionFormProps = React.ComponentProps<"div"> & {
   hint: MultiFactorInfo;
   onSuccess?: (credential: UserCredential) => void;
 };
@@ -188,7 +196,7 @@ export function SmsMfaAssertionForm({
   onSuccess,
   className,
   ...props
-}: SmsMultiFactorAssertionFormProps) {
+}: SmsMfaAssertionFormProps) {
   const [verification, setVerification] = useState<{
     verificationId: string;
   } | null>(null);
@@ -214,5 +222,5 @@ export function SmsMfaAssertionForm({
 
 export {
   SmsMfaAssertionForm as SmsMultiFactorAssertionForm,
-  type SmsMultiFactorAssertionFormProps as SmsMfaAssertionFormProps,
+  type SmsMfaAssertionFormProps as SmsMultiFactorAssertionFormProps,
 };
