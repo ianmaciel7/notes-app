@@ -386,19 +386,25 @@ function SpaceSwitcherMenu({
               className={SIDEBAR_MENU_POPUP}
             >
               <DropdownMenuGroup>
-                {visibleSpaces.map((space) => (
-                  <DropdownMenuItem
-                    key={space.id}
-                    onClick={() => onSelect(space.id)}
-                    data-testid={`space-item-${space.id}`}
-                  >
-                    <SpaceIcon iconKey={space.icon} />
-                    <span className="min-w-0 flex-1 truncate">
-                      {space.name}
-                    </span>
-                    {space.id === activeSpace?.id && <Check />}
+                {visibleSpaces.length > 0 ? (
+                  visibleSpaces.map((space) => (
+                    <DropdownMenuItem
+                      key={space.id}
+                      onClick={() => onSelect(space.id)}
+                      data-testid={`space-item-${space.id}`}
+                    >
+                      <SpaceIcon iconKey={space.icon} />
+                      <span className="min-w-0 flex-1 truncate">
+                        {space.name}
+                      </span>
+                      {space.id === activeSpace?.id && <Check />}
+                    </DropdownMenuItem>
+                  ))
+                ) : (
+                  <DropdownMenuItem disabled>
+                    {t("noSearchResults")}
                   </DropdownMenuItem>
-                ))}
+                )}
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
@@ -534,6 +540,11 @@ function SpaceSidebar({
                 <Kbd>K</Kbd>
               </InputGroupAddon>
             </InputGroup>
+            {searchQuery.trim() && visibleSpaces.length === 0 && (
+              <p className="px-2 py-2 text-sm text-muted-foreground">
+                {t("noSearchResults")}
+              </p>
+            )}
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton
