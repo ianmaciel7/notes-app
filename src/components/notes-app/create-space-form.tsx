@@ -42,9 +42,8 @@ function CreateSpaceForm({
   ...props
 }: CreateSpaceFormProps) {
   const t = useTranslations("spaces");
-  const [name, setName] = useState("");
-  const [selectedIcon, setSelectedIcon] = useState<AllowedSpaceIcon>("folder");
-  const [error, setError] = useState<string | null>(null);
+  const { name, setName, selectedIcon, setSelectedIcon, error, setError } =
+    useCreateSpaceFormState();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -164,4 +163,12 @@ function CreateSpaceForm({
   );
 }
 
-export { CreateSpaceForm, type CreateSpaceFormProps };
+function useCreateSpaceFormState() {
+  const [name, setName] = useState("");
+  const [selectedIcon, setSelectedIcon] = useState<AllowedSpaceIcon>("folder");
+  const [error, setError] = useState<string | null>(null);
+
+  return { name, setName, selectedIcon, setSelectedIcon, error, setError };
+}
+
+export { CreateSpaceForm, type CreateSpaceFormProps, useCreateSpaceFormState };

@@ -253,6 +253,14 @@ changing an installed primitive.
   `useAuth`), encapsulate reusable browser APIs (media queries, listeners, sensors), or require
   isolated unit testing. Hooks in `src/hooks/` must never depend on application routes (`src/app/`).
 
+- **Stateful Component Extraction:** When a component in `src/components/notes-app/`
+  combines multiple state/effect primitives, asynchronous submission/retry logic, or
+  authentication/data subscriptions with presentation, extract that behavior into a
+  top-level `useX` hook. Keep it co-located when only that component family uses it;
+  move it to `src/hooks/` only when independent components or routes share it. The
+  component should remain focused on composition and presentation. `check:hooks`
+  validates this rule for changed component files.
+
 ### Internationalization (i18n) & Localized Strings
 - **No Hardcoded User-Facing Text**: Hardcoding user-facing strings (such as button labels like "Retry Connection", "Sign in", headings, error messages, or placeholders) directly in JSX or UI components is strictly forbidden.
 - **Mandatory i18n Translation Keys**: Always use the internationalization framework (`next-intl`, e.g. `useTranslations`) or Firebase UI translation mechanisms (`getTranslation(ui, ...)`). All user-facing strings must be defined across message catalogs (`src/messages/{locale}.json`).

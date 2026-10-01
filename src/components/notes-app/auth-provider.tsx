@@ -28,6 +28,22 @@ function AuthProvider({
   initialUser = null,
   ...props
 }: AuthProviderProps) {
+  const { user, isLoading } = useAuthProviderState(initialUser);
+
+  async function signOutUser() {
+    await signOut(auth);
+  }
+
+  return (
+    <FirebaseUIProvider ui={ui} {...props}>
+      <AuthContext value={{ user, isLoading, signOutUser }}>
+        {children}
+      </AuthContext>
+    </FirebaseUIProvider>
+  );
+}
+
+function useAuthProviderState(initialUser: User | null) {
   const [user, setUser] = useState<User | null>(initialUser);
   const [isLoading, setIsLoading] = useState(!initialUser);
 
@@ -60,17 +76,7 @@ function AuthProvider({
     return () => unsubscribe();
   }, []);
 
-  async function signOutUser() {
-    await signOut(auth);
-  }
-
-  return (
-    <FirebaseUIProvider ui={ui} {...props}>
-      <AuthContext value={{ user, isLoading, signOutUser }}>
-        {children}
-      </AuthContext>
-    </FirebaseUIProvider>
-  );
+  return { user, isLoading };
 }
 
-export { AuthProvider, type AuthProviderProps };
+export { AuthProvider, type AuthProviderProps, useAuthProviderState };

@@ -28,7 +28,7 @@
     "check:security": "pnpm audit --audit-level high",
     "check:osv": "osv-scanner scan source --config osv-scanner.toml --recursive .",
     "check:agents": "pnpm run .agents:sync && node scripts/tooling/run-agents-cli.mjs sync --check",
-    "check:fast": "pnpm run check:types && pnpm run check:lint && pnpm run check:rsc && pnpm run check:naming && pnpm run check:conventions && pnpm run check:props && pnpm run check:emojis && pnpm run check:i18n && pnpm run deps:check && pnpm run check:floor && pnpm run test && pnpm run check:duplication",
+    "check:fast": "pnpm run check:types && pnpm run check:lint && pnpm run check:rsc && pnpm run check:naming && pnpm run check:conventions && pnpm run check:hooks && pnpm run check:props && pnpm run check:emojis && pnpm run check:i18n && pnpm run deps:check && pnpm run check:floor && pnpm run test && pnpm run check:duplication",
     "knip": "knip",
     "lighthouse": "pnpm build && lhci autorun",
     "format": "biome format --write",
@@ -50,6 +50,7 @@
     "test:guards": "node --test scripts/guards/floor-guard.test.mjs scripts/hooks/hooks.test.mjs scripts/verify/verify-docs.test.mjs scripts/guards/guard-rsc-boundaries.test.mjs scripts/guards/guard-component-props.test.mjs scripts/guards/guard-no-emojis.test.mjs scripts/guards/guard-i18n-strings.test.mjs scripts/guards/guard-conventions.test.mjs scripts/verify/verify-conventions-index.test.mjs",
     "check:naming": "node scripts/guards/guard-component-naming.mjs",
     "check:conventions": "node scripts/guards/guard-conventions.mjs && node scripts/verify/verify-conventions-index.mjs",
+    "check:hooks": "node scripts/guards/guard-hook-extraction.mjs",
     ".agents:sync": "node scripts/tooling/run-agents-cli.mjs sync",
     "eval:compare": "node .agents/evals/compare.mjs"
   },

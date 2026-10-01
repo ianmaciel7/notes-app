@@ -84,31 +84,9 @@ function ConnectionAlert({
   className,
   ...props
 }: ConnectionAlertProps) {
-  const [visible, setVisible] = useState(false);
-  const [reconnecting, setReconnecting] = useState(false);
-
-  useEffect(() => {
-    const onUnreachable = () => setVisible(true);
-    const onOnline = () => setVisible(false);
-
-    window.addEventListener(BACKEND_UNREACHABLE_EVENT, onUnreachable);
-    window.addEventListener("online", onOnline);
-    return () => {
-      window.removeEventListener(BACKEND_UNREACHABLE_EVENT, onUnreachable);
-      window.removeEventListener("online", onOnline);
-    };
-  }, []);
+  const { visible, reconnecting, handleReconnect } = useConnectionAlertState();
 
   if (!visible) return null;
-
-  const handleReconnect = async () => {
-    setReconnecting(true);
-    try {
-      await reconnectFirestore();
-    } finally {
-      setReconnecting(false);
-    }
-  };
 
   return (
     <ConnectionAlertContext.Provider
@@ -127,12 +105,40 @@ function ConnectionAlert({
   );
 }
 
+function useConnectionAlertState() {
+  const [visible, setVisible] = useState(false);
+  const [reconnecting, setReconnecting] = useState(false);
+
+  useEffect(() => {
+    const onUnreachable = () => setVisible(true);
+    const onOnline = () => setVisible(false);
+    window.addEventListener(BACKEND_UNREACHABLE_EVENT, onUnreachable);
+    window.addEventListener("online", onOnline);
+    return () => {
+      window.removeEventListener(BACKEND_UNREACHABLE_EVENT, onUnreachable);
+      window.removeEventListener("online", onOnline);
+    };
+  }, []);
+
+  async function handleReconnect() {
+    setReconnecting(true);
+    try {
+      await reconnectFirestore();
+    } finally {
+      setReconnecting(false);
+    }
+  }
+
+  return { visible, reconnecting, handleReconnect, setVisible };
+}
+
 export {
   ConnectionAlert,
   ConnectionAlertAction,
   ConnectionAlertDescription,
   ConnectionAlertIcon,
   ConnectionAlertTitle,
+  useConnectionAlertState,
   type ConnectionAlertActionProps,
   type ConnectionAlertDescriptionProps,
   type ConnectionAlertIconProps,
