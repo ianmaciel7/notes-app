@@ -109,8 +109,8 @@ skill behavior from its name alone.
 | Library API docs; unfamiliar SDK; version migration | `context7-cli` |
 | AST structural search; pattern matching across files | `ast-grep` |
 | Structural map of a file or directory before editing | `ast-grep-outline` |
-| Control doc create / audit / sync (`README`, `AGENTS`, `DESIGN`, etc.) | `context-manager` |
-| Verify all markdown docs are consistent: links, paths, routing, `docs/` | `verify-docs` |
+| Control doc create / audit / sync | `context-manager` |
+| Verify markdown docs: links, paths, routing | `verify-docs` |
 | React composition patterns; compound components; render props | `vercel-composition-patterns` |
 | React / Next.js performance; bundle; data fetching | `vercel-react-best-practices` |
 | RTK setup / troubleshoot; `RTK.md` integration | `rtk-cli` |
@@ -122,18 +122,19 @@ skill behavior from its name alone.
 | Code review since a branch/commit | `code-review` |
 | Broad repository snapshot; repomix packing; `repomix.config.json` | `repomix` |
 | Unit and component testing; Vitest test runner; mocking; coverage | `vitest` |
-| Git workflow, atomic commits, branching, release tagging | `git-workflow-and-versioning` |
-| Conventional commit messages, diff analysis, intelligent staging | `git-commit` |
+| Git workflow, branching, release tagging | `git-workflow-and-versioning` |
+| Conventional commit messages and staging | `git-commit` |
 | Persist rule, decision, term, or procedure before creating a skill | `save-info` |
-| Scout prior art or contracts from historical worktrees (`.worktrees/old-*`) | `find-worktrees` |
-| Guide through engineering skill workflows (idea to ship, triage, diagnosing) | `ask-matt` |
+| Scout prior art in historical worktrees (`.worktrees/old-*`) | `find-worktrees` |
+| Guide through engineering skill workflows | `ask-matt` |
 | Scaffold repo configuration for engineering skills | `setup-matt-pocock-skills` |
-| Manage multi-agent config and MCP servers via `agents` CLI | `agents-dev-cli` |
+| Manage multi-agent config via `agents` CLI | `agents-dev-cli` |
 | Gather official docs into a concise implementation checklist | `docs-research` |
 | Scaffold a shadcn/Base UI component with story, test, and checks | `new-component` |
-| Create, organize, and maintain agent skills under `.agents/skills` | `skill-guide` |
-| Agent behavioral eval runs, report comparison, regression detection | `eval-harness` |
+| Create and maintain agent skills | `skill-guide` |
+| Agent eval runs and report comparison | `eval-harness` |
 | Firebase Auth emulator, seeds, and auth test environment | `firebase-setup` |
+| Firestore rules or schema change; `firestore.rules` | `firestore-rules-change` |
 | Health check for quality, tests, context, and token savings | `verify-health` |
 
 Treat project-owned skills and `skills-lock.json` as controlled configuration.
