@@ -81,9 +81,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
@@ -509,10 +506,10 @@ function SpaceSidebar({
   return (
     <SidebarProvider
       data-testid="space-switcher"
-      className={className}
+      className={cn("min-h-svh", className)}
       {...props}
     >
-      <Sidebar variant="inset" collapsible="none">
+      <Sidebar variant="inset" collapsible="none" className="h-svh">
         <SidebarHeader>
           <SpaceSwitcherMenu
             activeSpace={activeSpace}
@@ -553,39 +550,11 @@ function SpaceSidebar({
             </SidebarMenu>
           </SidebarGroup>
         </SidebarHeader>
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>{t("spacesLabel")}</SidebarGroupLabel>
-            <SidebarGroupAction
-              onClick={() => setCreateDialogOpen(true)}
-              aria-label={t("createSpace")}
-            >
-              <Plus />
-            </SidebarGroupAction>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {visibleSpaces.map((space) => (
-                  <SidebarMenuItem key={space.id}>
-                    <SidebarMenuButton
-                      isActive={space.id === activeSpace?.id}
-                      onClick={() => handleSelect(space.id)}
-                    >
-                      <SpaceIcon iconKey={space.icon} />
-                      <span>{space.name}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-              {visibleSpaces.length === 0 && (
-                <Empty className="items-start gap-0 px-2 py-3">
-                  <EmptyDescription className="text-xs text-muted-foreground">
-                    {t("noSearchResults")}
-                  </EmptyDescription>
-                </Empty>
-              )}
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
+        {/*
+         * TODO(object-types): Add the object types list here once the
+         * Firestore `objectTypes` collection and its management flow exist.
+         */}
+        <SidebarContent />
         <SidebarFooter>
           <SidebarMenu aria-label={t("openUserMenu")}>
             <SidebarMenuItem>

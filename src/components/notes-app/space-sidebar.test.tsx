@@ -190,6 +190,39 @@ describe("SpaceSidebar", () => {
     expect(screen.getByTestId("space-switcher-create-trigger")).toBeDefined();
     expect(screen.getByText("No Spaces Found")).toBeDefined();
     expect(screen.getByTestId("empty-create-space-btn")).toBeDefined();
+    expect(screen.queryByText("No matching spaces")).toBeNull();
+  });
+
+  it("shows no-search-results only after filtering existing spaces", () => {
+    const spaces: Space[] = [
+      {
+        id: "space-1",
+        ownerId: "uid-1",
+        name: "Personal",
+        description: "",
+        icon: "folder",
+        stateVersion: 1,
+        schemaVersion: 1,
+        createdAt: null,
+        updatedAt: null,
+      },
+    ];
+
+    mockUseSpaces.mockReturnValue({
+      spaces,
+      loading: false,
+      error: null,
+      isOffline: false,
+      retry: vi.fn(),
+      createSpace: vi.fn(),
+    });
+
+    renderWithIntl(<SpaceSidebar currentSpaceId="space-1" />);
+    fireEvent.change(screen.getByRole("textbox", { name: "Search" }), {
+      target: { value: "missing" },
+    });
+
+    expect(screen.getByText("No matching spaces")).toBeDefined();
   });
 
   it("renders inline switcher trigger and enter button when spaces exist", () => {
