@@ -1,6 +1,6 @@
 # Constraints
 
-Last reviewed: 2026-09-28
+Last reviewed: 2026-09-30
 
 This file is the non-regression quality contract. Checks may be tightened, but must
 not be weakened merely to make a change pass.
@@ -12,6 +12,7 @@ not be weakened merely to make a change pass.
 - No unimplemented stubs, empty catches, or TODO placeholders in production source.
 - No skipped or deleted tests, and no removed assertions, merely to obtain a pass.
 - No secrets in source.
+- In remote-agent mode, visual evidence presented as verification MUST come from the real application running from the target branch/commit. Synthetic recreations, generated images, hand-drawn replicas, or static mockups MUST NOT be presented as screenshots or proof that the UI ran successfully. See `.agents/rules/visual-evidence.md`.
 - No new exception without a documented owner, reason, and expiry.
 - **Browser Baseline**: Supported browsers are Chrome 111+, Edge 111+, Firefox 111+, Safari 16.4+. No custom polyfills for `fetch`, `URL`, or `Object.assign` (handled automatically by Next.js); custom polyfills must load through client instrumentation or runtime feature checks.
 

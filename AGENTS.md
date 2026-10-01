@@ -48,6 +48,7 @@ Read only the owner relevant to the task:
 | Search, discovery, and navigation hierarchy | `.agents/rules/search-and-discovery.md` |
 | Lead Orchestrator & subagent execution | `.agents/rules/orchestration.md` |
 | Emoji prohibition & icon standards | `.agents/rules/no-emojis.md` |
+| Remote-mode screenshots and UI evidence | `.agents/rules/visual-evidence.md` |
 
 The complete ownership/boundary map is canonical in
 `.agents/skills/context-manager/SKILL.md`.
