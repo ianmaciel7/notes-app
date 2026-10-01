@@ -15,6 +15,25 @@ The repository follows a multi-track testing strategy with a clear division of t
 
 Agent behavioral evaluations are configured separately under `.agents/evals/`.
 
+### Rendering and Async Verification
+
+- Test a `<Suspense>` fallback as observable behavior: the fallback appears while
+  the deferred region is pending, then the region resolves without losing the
+  surrounding shell. Do not assert React's internal scheduling details.
+- When a route adds a segment loading boundary, verify the initial load and client
+  navigation with Playwright. Confirm that the loading UI is scoped to the route
+  segment and that the segment error boundary remains the failure path rather than
+  a loading substitute.
+- When a component introduces `useTransition`, `useActionState`, or optimistic
+  updates, test the pending, success, interruption, and failure states. Keep the
+  input responsive while the non-urgent region updates.
+- Verify parallel async work through the rendered outcome and, where timing is a
+  requirement, a deterministic test double that records start order. Avoid flaky
+  sleep-based assertions for streaming.
+- Vitest remains appropriate for synchronous Client Components and hooks; use
+  Playwright for async Server Components, route streaming, Server Actions, and
+  browser-level navigation behavior.
+
 ## 2. Toolchain
 
 - **Vitest**: unit test runner and scoped V8 coverage reporter.

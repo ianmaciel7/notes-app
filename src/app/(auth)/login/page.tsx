@@ -14,6 +14,7 @@ import { useTranslations } from "next-intl";
 import { Suspense, useEffect, useState } from "react";
 import { GoogleSignInButton } from "@/components/notes-app/google-sign-in-button";
 import { SignInAuthScreen } from "@/components/notes-app/login-card";
+import { RequireGuest } from "@/components/notes-app/require-guest";
 import { SignUpAuthScreen } from "@/components/notes-app/sign-up-card";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/firebase/client";
@@ -73,61 +74,63 @@ function LoginContent() {
   }
 
   return (
-    <div className="relative min-h-[90vh] flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden">
-      {/* Background decoration: subtle ambient light gradients */}
-      <div className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none">
-        <div className="w-[500px] h-[500px] bg-primary/[0.03] dark:bg-primary/[0.05] rounded-full blur-3xl transform -translate-y-12" />
-        <div className="w-[300px] h-[300px] bg-primary/[0.02] dark:bg-primary/[0.04] rounded-full blur-2xl transform translate-x-32 translate-y-24" />
-      </div>
+    <RequireGuest redirectTo={nextUrl}>
+      <div className="relative min-h-[90vh] flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden">
+        {/* Background decoration: subtle ambient light gradients */}
+        <div className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none">
+          <div className="w-[500px] h-[500px] bg-primary/[0.03] dark:bg-primary/[0.05] rounded-full blur-3xl transform -translate-y-12" />
+          <div className="w-[300px] h-[300px] bg-primary/[0.02] dark:bg-primary/[0.04] rounded-full blur-2xl transform translate-x-32 translate-y-24" />
+        </div>
 
-      {/* Main Authentication Card */}
-      <div className="w-full max-w-sm">
-        {mode === "signIn" ? (
-          <SignInAuthScreen
-            onSignIn={() => router.replace(nextUrl)}
-            onSignUpClick={() => setMode("signUp")}
-          >
-            <GoogleSignInButton onClick={handleGoogleLogin} />
-            <Button
-              data-testid="anonymous-sign-in-btn"
-              type="button"
-              variant="ghost"
-              className="w-full text-muted-foreground hover:text-foreground"
-              onClick={handleAnonymousLogin}
+        {/* Main Authentication Card */}
+        <div className="w-full max-w-sm">
+          {mode === "signIn" ? (
+            <SignInAuthScreen
+              onSignIn={() => router.replace(nextUrl)}
+              onSignUpClick={() => setMode("signUp")}
             >
-              {t("continueAsGuest")}
-            </Button>
-          </SignInAuthScreen>
-        ) : (
-          <SignUpAuthScreen
-            onSignUp={() => router.replace(nextUrl)}
-            onSignInClick={() => setMode("signIn")}
-          >
-            <GoogleSignInButton onClick={handleGoogleLogin} />
-            <Button
-              data-testid="anonymous-sign-up-btn"
-              type="button"
-              variant="ghost"
-              className="w-full text-muted-foreground hover:text-foreground"
-              onClick={handleAnonymousLogin}
+              <GoogleSignInButton onClick={handleGoogleLogin} />
+              <Button
+                data-testid="anonymous-sign-in-btn"
+                type="button"
+                variant="ghost"
+                className="w-full text-muted-foreground hover:text-foreground"
+                onClick={handleAnonymousLogin}
+              >
+                {t("continueAsGuest")}
+              </Button>
+            </SignInAuthScreen>
+          ) : (
+            <SignUpAuthScreen
+              onSignUp={() => router.replace(nextUrl)}
+              onSignInClick={() => setMode("signIn")}
             >
-              {t("continueAsGuest")}
-            </Button>
-          </SignUpAuthScreen>
-        )}
-      </div>
+              <GoogleSignInButton onClick={handleGoogleLogin} />
+              <Button
+                data-testid="anonymous-sign-up-btn"
+                type="button"
+                variant="ghost"
+                className="w-full text-muted-foreground hover:text-foreground"
+                onClick={handleAnonymousLogin}
+              >
+                {t("continueAsGuest")}
+              </Button>
+            </SignUpAuthScreen>
+          )}
+        </div>
 
-      {/* Footer subtle help link */}
-      <div className="mt-8 text-center text-xs text-muted-foreground">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1 hover:text-foreground underline-offset-4 hover:underline transition-colors"
-        >
-          <ArrowLeft className="size-3.5" aria-hidden="true" />
-          {t("backToHome")}
-        </Link>
+        {/* Footer subtle help link */}
+        <div className="mt-8 text-center text-xs text-muted-foreground">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 hover:text-foreground underline-offset-4 hover:underline transition-colors"
+          >
+            <ArrowLeft className="size-3.5" aria-hidden="true" />
+            {t("backToHome")}
+          </Link>
+        </div>
       </div>
-    </div>
+    </RequireGuest>
   );
 }
 

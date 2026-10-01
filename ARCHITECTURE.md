@@ -105,6 +105,36 @@ Next.js builds classify build artifacts into distinct deployment targets:
 | `PRERENDER` | Statically prerendered HTML and RSC payload generated during build or cached via PPR. |
 | `STATIC_FILE` | Immutable static assets (JavaScript, CSS, fonts, public media) served directly from edge/CDN storage. |
 
+### 2.6 Rendering, Async Boundaries & Current Adoption
+
+The rendering contract is progressive: render the stable route shell first, then
+stream independent dynamic regions behind the smallest useful loading boundary.
+The implementation rules live in `CONVENTIONS.md`; this section records the
+architectural boundary and the current state.
+
+- `loading.tsx` is the route-segment boundary for navigations and initial loads.
+  Add it to a route when the segment has meaningful asynchronous work or needs an
+  instant, prefetched loading UI.
+- `<Suspense>` is the component-level boundary. Use it around a dynamic or async
+  region rather than blocking an entire page on data that does not affect the
+  surrounding shell. Fallbacks must preserve the region's approximate geometry
+  to avoid avoidable layout shift.
+- Independent Server Component work starts in parallel and resolves with
+  `Promise.all()` when there is no dependency between operations. A parent must not
+  await data that only one child consumes.
+- Client-only Firebase Auth and Firestore observers remain behind explicit
+  `"use client"` boundaries. Their loading/error states are local to the owning
+  hook/component and are not represented as Server Component fetches.
+- Current adoption: `src/app/(auth)/login/page.tsx` has a Suspense boundary because
+  `useSearchParams()` requires a client-side boundary. The Space route already
+  starts locale work in parallel, while `useSpaces()` uses a Firestore realtime
+  subscription with its own loading and error UI. No route-level `loading.tsx` is
+  present yet; new async route segments should add one when the UX benefits from
+  streaming.
+- `error.tsx`, `global-error.tsx`, and future `not-found.tsx`/`unauthorized.tsx`
+  boundaries remain separate from loading boundaries: loading handles pending
+  work, while error boundaries handle failures and expose retry/navigation actions.
+
 ## 3. Technology Decisions
 
 Exact dependency versions are owned by `package.json`; this document records

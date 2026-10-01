@@ -50,6 +50,10 @@ vi.mock("firebase/auth", async (importOriginal) => {
   return {
     ...actual,
     getRedirectResult: vi.fn(),
+    onAuthStateChanged: vi.fn((_auth, callback) => {
+      callback(null);
+      return vi.fn();
+    }),
     signInWithPopup: vi.fn(),
     signInWithRedirect: vi.fn(),
     signInAnonymously: vi.fn(),

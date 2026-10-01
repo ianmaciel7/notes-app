@@ -74,6 +74,34 @@ contributor workflow to `CONTRIBUTING.md`.
   default child tree. `guard-component-props.mjs` enforces the canonical alert
   interface.
 
+### Forms: `Field` vs `Form`
+
+- **Use `Field` + `FieldGroup` for new forms in this repository.** The installed
+  Base UI/shadcn setup exposes `Field`, `FieldLabel`, `FieldDescription`,
+  `FieldError`, and related primitives. Use them for field layout, accessible
+  labels, descriptions, validation state, and consistent spacing. Pair them with
+  `useForm`, `Controller`, or `FormProvider` from `react-hook-form` when the form
+  needs controlled values or schema validation.
+- **Use the classic shadcn `Form` components only for compatibility.** The
+  `Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormDescription`,
+  and `FormMessage` API is appropriate when maintaining an existing form that
+  already uses that composition or when integrating a dependency/example that
+  specifically requires it. Do not introduce it for a new form alongside the
+  repository's `Field` API, and do not mix both APIs inside one form.
+- **Use native `<form>` with a Server Action for server mutations.** When the
+  mutation is implemented as a Next.js Server Action, prefer progressive
+  `<Form action={...}>`/native form submission with `useActionState` and
+  `useFormStatus`; use `Field` for the visual and validation anatomy. React Hook
+  Form is optional in this case and should be added only when client-side field
+  orchestration materially improves the experience.
+- **Use a plain native `<form>` for simple client submissions.** A form with a
+  small number of uncontrolled inputs and one submit handler does not need either
+  shadcn's classic `Form` wrapper or React Hook Form.
+- **Keep responsibilities separate:** `Field`/`Form*` components provide UI and
+  accessibility structure; React Hook Form provides client-side form state; Zod
+  or another schema owns validation; Server Actions own server mutations. Do not
+  treat a visual form wrapper as a validation or authorization boundary.
+
 ## 5. React & Next.js
 
 - Add `"use client"` only at the smallest boundary that requires client behavior (enforced by `check:rsc`).
@@ -89,6 +117,43 @@ contributor workflow to `CONTRIBUTING.md`.
 - Keep client props minimal and serializable across server/client boundaries.
 - Avoid request waterfalls: start independent work together and use Suspense where
   independent regions can stream.
+
+### Rendering, Async Work & Streaming
+
+- Treat `page.tsx`, `layout.tsx`, and other route files as Server Components by
+  default. Add `"use client"` only to the smallest interactive leaf and compose
+  server-rendered content through `children` or explicit props.
+- Use `loading.tsx` for route-segment loading states and `<Suspense>` for a more
+  granular loading boundary inside a page. Keep the shell (navigation, headers,
+  and stable layout) outside the boundary so independent content can stream as it
+  becomes ready.
+- Start independent async work before the first `await` and resolve it together
+  with `Promise.all()`. Do not create sequential fetch chains when operations do
+  not depend on one another.
+- In the installed React version, a promise passed to a Client Component may be read with `use()`;
+  the consumer must be inside an intentional `<Suspense>` boundary and the
+  promise must be stable for the intended request/render lifetime.
+- Prefer server-side data access close to the Server Component that renders it.
+  Keep Firebase browser subscriptions in client hooks because this application
+  uses Firestore's browser persistence and realtime observers; do not invent a
+  server data layer until the architecture adopts one.
+- Use `useTransition`/`startTransition` for non-urgent client updates such as
+  filtering, navigation-adjacent state, or changing a locale. Use the transition's
+  `isPending` state instead of a second manual loading flag for that interaction.
+- Use React 19 form actions (`useActionState`, `useFormStatus`, and progressive
+  `<Form action={...}>`) for Server Action mutations when a mutation is introduced.
+  Add `useOptimistic` only when the optimistic state and rollback behavior are
+  explicit and tested.
+- Derive values during render. Move interaction-specific work into event handlers;
+  use effects only for synchronization with external systems (subscriptions,
+  browser APIs, or imperative widgets), with cleanup and primitive dependencies.
+- Use `next/dynamic` for heavy, optional, or client-only features that are not
+  required for the initial route. Prefer direct imports for normal UI primitives
+  so the bundle remains statically analyzable.
+- Use `after()` for non-critical post-response work such as analytics, logging, or
+  cache warming. It must never be used to hide work required to render the response.
+- Add `memo`, `useMemo`, or `useCallback` only after measurement or when a stable
+  identity is a demonstrated API requirement; React Compiler is enabled here.
 
 ### Fast Refresh Invariants
 - **Named Component Exports**: All React component functions must have explicit identifiers (e.g. `export function LoginForm() {}` or `export default function LoginPage() {}`). Anonymous default function expressions (`export default () => ...`) break Fast Refresh boundary detection.
@@ -117,6 +182,13 @@ contributor workflow to `CONTRIBUTING.md`.
   context provider (e.g., `useSidebar` in `sidebar.tsx`, `useToastManager` in `toast.tsx`)
   or manage private compound state. Declare them as top-level exported functions; never define
   hooks inside a component render body.
+- **Extract stateful application behavior:** When an application component combines
+  authentication, data subscriptions, navigation effects, or multi-step local state,
+  extract that behavior into a top-level co-located hook (for example,
+  `useSpaceSidebar` in `space-sidebar.tsx`) and keep the component focused on
+  composition and presentation. Keep the hook co-located when only that component
+  consumes it; move it to `src/hooks/` only when multiple independent components or
+  routes share the behavior.
 - **Shared Standalone Hooks (`src/hooks/`):** Place hooks in `src/hooks/` only when they
   are generic, shared across multiple independent components or routes (e.g., `useIsMobile`,
   `useAuth`), encapsulate reusable browser APIs (media queries, listeners, sensors), or require
@@ -141,6 +213,10 @@ contributor workflow to `CONTRIBUTING.md`.
 
 ## 7. Performance-Sensitive Code
 
+- Prefer route-level `loading.tsx` and targeted `<Suspense>` boundaries over a
+  page-wide spinner when content can be rendered independently.
+- Eliminate waterfalls with early promise creation, `Promise.all()`, and component
+  composition. Do not make a parent await data that only a child needs.
 - Prefer direct module imports over broad barrel imports when it materially reduces
   client bundle work.
 - Dynamically load heavy client-only features that are not needed initially.
