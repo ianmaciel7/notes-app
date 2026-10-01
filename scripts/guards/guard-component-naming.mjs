@@ -97,6 +97,7 @@ const NEXTJS_RESERVED = new Set([
 // ---------------------------------------------------------------------------
 const ALLOWED_BASENAMES = new Set([
   "require-auth", // HOC / route guard pattern
+  "require-guest", // HOC / route guard pattern
   "auth-provider", // React context provider
   "theme-provider", // React context provider
 ]);
