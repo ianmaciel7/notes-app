@@ -24,18 +24,7 @@ type LanguageSelectProps = ComponentProps<"div">;
 function LanguageSelect({ className, ...props }: LanguageSelectProps) {
   const currentLocale = useLocale();
   const t = useTranslations("language");
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
-  const handleLocaleChange = (newLocale: string | null) => {
-    if (!newLocale || newLocale === currentLocale) return;
-
-    syncFirebaseLocale(auth, newLocale as SupportedLocale);
-
-    startTransition(() => {
-      router.refresh();
-    });
-  };
+  const { isPending, handleLocaleChange } = useLanguageSelect(currentLocale);
 
   const getLocaleLabel = (loc: SupportedLocale) => {
     switch (loc) {
@@ -89,4 +78,17 @@ function LanguageSelect({ className, ...props }: LanguageSelectProps) {
   );
 }
 
-export { LanguageSelect, type LanguageSelectProps };
+function useLanguageSelect(currentLocale: string) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  function handleLocaleChange(newLocale: string | null) {
+    if (!newLocale || newLocale === currentLocale) return;
+    syncFirebaseLocale(auth, newLocale as SupportedLocale);
+    startTransition(() => router.refresh());
+  }
+
+  return { isPending, handleLocaleChange };
+}
+
+export { LanguageSelect, type LanguageSelectProps, useLanguageSelect };

@@ -15,24 +15,9 @@ function git(args) {
   }
 }
 
-const files = [
-  ...new Set([
-    ...git([
-      "diff",
-      "--name-only",
-      "HEAD",
-      "--",
-      "src/components/notes-app",
-    ]).split(/\r?\n/),
-    ...git([
-      "ls-files",
-      "--others",
-      "--exclude-standard",
-      "--",
-      "src/components/notes-app",
-    ]).split(/\r?\n/),
-  ]),
-].filter((file) => file.endsWith(".tsx") && !file.endsWith(".test.tsx"));
+const files = git(["ls-files", "src/components/notes-app"])
+  .split(/\r?\n/)
+  .filter((file) => file.endsWith(".tsx") && !file.endsWith(".test.tsx"));
 
 function isComplex(content) {
   const state = (content.match(/\buse(?:State|Reducer|Transition)\s*\(/g) ?? [])
@@ -40,12 +25,10 @@ function isComplex(content) {
   const effects = (
     content.match(/\buse(?:Effect|LayoutEffect|ImperativeHandle)\s*\(/g) ?? []
   ).length;
-  const asyncWork = (
-    content.match(
-      /async function (?:handle|on|submit|retry)|async \([^)]*\)\s*=>/g,
-    ) ?? []
-  ).length;
-  return state + effects >= 2 || (state >= 1 && asyncWork >= 1);
+  const transitionNavigation =
+    /useTransition\s*\(/.test(content) &&
+    /useRouter\s*\(|router\.(?:push|replace|refresh)/.test(content);
+  return state + effects >= 2 || transitionNavigation;
 }
 
 function hasHook(content) {
@@ -66,7 +49,7 @@ const violations = files.filter((relative) => {
 
 if (violations.length) {
   console.error(
-    "[guard-hook-extraction] Complex changed components need a top-level useX hook:",
+    "[guard-hook-extraction] Complex components need a top-level useX hook:",
   );
   for (const file of violations) console.error(`  - ${file}`);
   console.error(
