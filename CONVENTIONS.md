@@ -34,6 +34,7 @@ contributor workflow to `CONTRIBUTING.md`.
   - `-header` / `*Header` for heading and greeting presentation blocks (e.g. `auth-greeting-header.tsx` -> `AuthGreetingHeader`)
   - `-alert` / `*Alert` for notification and error banners (e.g. `redirect-error-alert.tsx` -> `RedirectErrorAlert`)
   - `-button` / `*Button`, `-select` / `*Select`, `-menu` / `*Menu`, `-switcher` / `*Switcher` for interactive UI controls
+  - `-sidebar` / `*Sidebar` for navigation shells (e.g. `space-sidebar.tsx` -> `SpaceSidebar`)
   - `-provider` / `*Provider` for React context providers
 - **Canonical Props Naming (`${ComponentName}Props`)**: Component prop interfaces/types must be declared canonically using the component's canonical PascalCase name (e.g. `login-card.tsx` must declare and use `export interface LoginCardProps`, never `SignInAuthScreenProps` as the primary interface). Legacy or library names may only be re-exported as backwards-compatible aliases (e.g. `export type { LoginCardProps as SignInAuthScreenProps }`). Enforced by `check:props`.
 
@@ -73,6 +74,62 @@ contributor workflow to `CONTRIBUTING.md`.
   `children`, render the caller-provided composition, and never substitute a
   default child tree. `guard-component-props.mjs` enforces the canonical alert
   interface.
+
+### Primitive Anatomy (`src/components/ui/`)
+
+Registry-installed shadcn primitives share one anatomy. New or edited primitives
+must match it. Compare against upstream with `shadcn add <name> --diff` before
+changing an installed primitive.
+
+- **File shape:** optional `"use client"`, imports, constants and `cva`
+  definitions, one plain `function` per part, then one trailing
+  `export { ... }` block. Named exports only, no `export default`. The `cva`
+  (`buttonVariants`) and any co-located hook (`useSidebar`) go in the same block.
+- **Part shape:** `function Part({ className, ...props }: Primitive.Props)`
+  renders the primitive with `data-slot="family-part"` (kebab-case, family
+  prefix), `className={cn("base", className)}`, and `{...props}` last. Parts that
+  only forward props omit `className`. Props the part fixes (`role`, `render`,
+  `variant`) go before the spread.
+- **Prop types:** derive from the primitive (`DialogPrimitive.Popup.Props`),
+  `React.ComponentProps<"div">`, or `React.ComponentProps<typeof Other>`. Extra
+  props are inline intersections (`& { size?: "sm" | "default" }`). Use a named
+  `type` only for context or shared props. Primitives declare no `interface`
+  (the `${ComponentName}Props` interface rule applies to application
+  components).
+- **Variants:** `cva` with `variants` and `defaultVariants`; the default is
+  repeated in the destructuring (`variant = "default"`); call
+  `cva({ variant, size })` inside `cn(..., className)`. Expose the active variant
+  as `data-variant` / `data-size` / `data-orientation` / `data-align` so child
+  parts can react.
+- **Polymorphic parts:** `useRender` with `defaultTagName`,
+  `props: mergeProps<"tag">({ className: cn(...) }, props)`, `render`, and
+  `state: { slot: "family-part", variant }`. The slot comes from `state.slot`,
+  not a hand-written `data-slot`.
+- **Overlay content:** `Portal` > `Positioner` > `Popup`, typed with
+  `Pick<Primitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset">`
+  and explicit defaults. Dialog, Sheet, and AlertDialog use `Portal` + `Overlay` +
+  `Popup`. Close buttons are `render={<Button ... />}` plus an `sr-only` label.
+  Stacking lives inside the primitive, never at the call site: the `Positioner`
+  carries `className="isolate z-50"`.
+- **Cross-part styling:** the root declares `group/<family>` (or `peer/<family>`)
+  and children use `group-data-[...]/<family>`, `has-data-[slot=...]`,
+  `*:data-[slot=...]`, or `in-data-[slot=...]`. Do not style children through
+  extra props.
+- **Icons:** the root sizes child icons with
+  `[&_svg:not([class*='size-'])]:size-4`, so icons inside a primitive carry no
+  `size-*`. Button icons use `data-icon="inline-start|inline-end"`. Icon-only
+  controls include a `<span className="sr-only">` label.
+- **State classes:** focus
+  `focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50`,
+  invalid `aria-invalid:border-destructive aria-invalid:ring-3
+  aria-invalid:ring-destructive/20`, disabled
+  `disabled:pointer-events-none disabled:opacity-50` (`data-disabled:` on Base UI
+  parts). Popup surface is `bg-popover text-popover-foreground ring-1
+  ring-foreground/10`; open/close motion is
+  `data-open:animate-in ... data-closed:animate-out ...`.
+- **Context:** `createContext<T | null>(null)` plus an exported `useX()` that
+  throws `"useX must be used within a <X />"`.
+- **CSS variables:** pass through `style` with an `as React.CSSProperties` cast.
 
 ### Forms: `Field` vs `Form`
 

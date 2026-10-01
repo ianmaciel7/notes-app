@@ -157,12 +157,14 @@ module.exports = {
       name: "shadcn-isolated-primitives-cannot-import-composite-ui",
       severity: "error",
       comment:
-        "Foundation atomic UI primitives (button, input, badge, separator, label, skeleton, spinner) must not depend on complex composite UI components.",
+        "Foundation atomic UI primitives (button, input, badge, separator, label, skeleton, spinner) may only import other foundation atomics. Every other module in src/components/ui is composite, so newly added composites are covered without editing this list.",
       from: {
         path: "^src/components/ui/(button|input|badge|separator|label|skeleton|spinner)\\.tsx$",
       },
       to: {
-        path: "^src/components/ui/(dialog|sheet|drawer|sidebar|alert-dialog|menubar|dropdown-menu|context-menu|combobox|command|table|pagination|carousel|chart|questionnaire|message-scroller)",
+        path: "^src/components/ui/",
+        pathNot:
+          "^src/components/ui/(button|input|badge|separator|label|skeleton|spinner)\\.tsx$",
       },
     },
     {
@@ -192,12 +194,12 @@ module.exports = {
       name: "shadcn-first-prefer-ui-layer",
       severity: "error",
       comment:
-        "shadcn-first: Application and domain components must consume UI primitives from '@/components/ui/*' rather than directly importing raw external headless UI engines (e.g. @base-ui/react or @floating-ui) outside the UI adapter layer.",
+        "shadcn-first: Application and domain components must consume UI primitives from '@/components/ui/*' rather than directly importing the headless engines wrapped by that layer (@base-ui/react, @floating-ui, @shadcn/react, cmdk, embla-carousel-react). Libraries whose documented usage needs their own helpers or types in app code (recharts, react-day-picker, input-otp, react-resizable-panels) are intentionally not listed.",
       from: {
         path: "^src/(app|components/notes-app)",
       },
       to: {
-        path: "node_modules/(@base-ui/react|@floating-ui)",
+        path: "node_modules/(@base-ui/react|@floating-ui|@shadcn/react|cmdk|embla-carousel-react)/",
       },
     },
   ],
