@@ -6,21 +6,14 @@ import {
   type FirebaseUIProviderProps,
 } from "@firebase-oss/ui-react";
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { AuthContext } from "@/lib/auth-context";
 import { app, auth } from "@/lib/firebase/client";
 import {
   getClientCookieLocale,
   initGuestFirebaseLocale,
   syncFirebaseLocale,
 } from "@/lib/i18n/locale-sync";
-
-export interface AuthContextValue {
-  user: User | null;
-  isLoading: boolean;
-  signOutUser: () => Promise<void>;
-}
-
-export const AuthContext = createContext<AuthContextValue | null>(null);
 
 const defaultUi = initializeUI({ app });
 

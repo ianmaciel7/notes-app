@@ -2,7 +2,7 @@ import { act, renderHook } from "@testing-library/react";
 import type { User } from "firebase/auth";
 import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AuthContext } from "@/components/notes-app/auth-provider";
+import { AuthContext } from "@/lib/auth-context";
 import { useSpaces } from "./use-spaces";
 
 const mockOnSnapshot = vi.fn();

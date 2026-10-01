@@ -1,10 +1,7 @@
 "use client";
 
 import { use } from "react";
-import {
-  AuthContext,
-  type AuthContextValue,
-} from "@/components/notes-app/auth-provider";
+import { AuthContext, type AuthContextValue } from "@/lib/auth-context";
 
 export function useAuth(): AuthContextValue {
   const context = use(AuthContext);

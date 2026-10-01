@@ -10,9 +10,10 @@ import { onAuthStateChanged, signOut, type User } from "firebase/auth";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { useAuth } from "@/hooks/use-auth";
+import { AuthContext } from "@/lib/auth-context";
 import { auth } from "@/lib/firebase/client";
 import messages from "@/messages/en.json";
-import { AuthContext, AuthProvider } from "./auth-provider";
+import { AuthProvider } from "./auth-provider";
 import { RequireAuth } from "./require-auth";
 import { UserMenu } from "./user-menu";
 

@@ -2,7 +2,7 @@ import { renderHook } from "@testing-library/react";
 import type { User } from "firebase/auth";
 import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { AuthContext } from "@/components/notes-app/auth-provider";
+import { AuthContext } from "@/lib/auth-context";
 import { useRequireAuth } from "./use-require-auth";
 
 const replaceMock = vi.fn();
