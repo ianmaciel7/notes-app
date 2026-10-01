@@ -1,6 +1,5 @@
 "use client";
 
-import { updateProfile } from "firebase/auth";
 import {
   AlertCircle,
   Book,
@@ -9,12 +8,12 @@ import {
   ChevronsUpDown,
   Code,
   Folder,
+  LogOut,
   Moon,
   Plus,
   RefreshCw,
   Search,
   Settings,
-  User,
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -29,6 +28,7 @@ import {
 import { CreateSpaceForm } from "@/components/notes-app/create-space-form";
 import { LanguageSelect } from "@/components/notes-app/language-select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -41,7 +41,9 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -53,7 +55,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Sidebar,
@@ -413,11 +414,8 @@ export function SpaceSidebar({
     user,
   } = useSpaceSidebar({ currentSpaceId });
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
-  const [displayName, setDisplayName] = useState(user?.displayName ?? "");
   const [isCreating, setIsCreating] = useState(false);
-  const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const activeSpace = currentSpaceId
     ? spaces.find((space) => space.id === currentSpaceId)
@@ -468,23 +466,11 @@ export function SpaceSidebar({
       setIsCreating(false);
     }
   };
-  const handleSaveProfile = async () => {
-    const nextDisplayName = displayName.trim();
-    if (!nextDisplayName) return;
-    setIsSavingProfile(true);
-    try {
-      await updateProfile(user, { displayName: nextDisplayName });
-      setProfileDialogOpen(false);
-      router.refresh();
-    } finally {
-      setIsSavingProfile(false);
-    }
-  };
-
-  const userIdentifier =
+  const userName =
     user.displayName ||
-    user.email ||
     (user.isAnonymous ? authT("anonymous") : authT("defaultUser"));
+  const userIdentifier = user.displayName || user.email || userName;
+  const userInitial = userName.trim().charAt(0).toUpperCase() || "U";
   return (
     <div
       data-testid="space-switcher"
@@ -593,24 +579,35 @@ export function SpaceSidebar({
                     <DropdownMenuContent
                       side="top"
                       align="start"
-                      className="w-56"
+                      className="w-64 p-2"
                     >
-                      <DropdownMenuItem
-                        onClick={() => setProfileDialogOpen(true)}
+                      <DropdownMenuGroup>
+                        <DropdownMenuLabel className="flex items-center gap-3 px-2 py-2">
+                          <Avatar size="sm">
+                            <AvatarFallback>{userInitial}</AvatarFallback>
+                          </Avatar>
+                          <div className="min-w-0 flex-1 space-y-0.5">
+                            <span className="block truncate text-sm font-medium text-foreground">
+                              {userName}
+                            </span>
+                            {user.email && (
+                              <span className="block truncate text-xs font-normal text-muted-foreground">
+                                {user.email}
+                              </span>
+                            )}
+                          </div>
+                        </DropdownMenuLabel>
+                      </DropdownMenuGroup>
+                      <DropdownMenuSeparator className="mx-0" />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-2 w-full justify-center"
+                        onClick={() => signOutUser()}
                       >
-                        <User className="size-4" />
-                        {settingsT("profile")}
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => setSettingsDialogOpen(true)}
-                      >
-                        <Settings className="size-4" />
-                        {settingsT("settings")}
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => signOutUser()}>
+                        <LogOut className="size-4" />
                         {authT("signOut")}
-                      </DropdownMenuItem>
+                      </Button>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </SidebarMenuItem>
@@ -658,38 +655,6 @@ export function SpaceSidebar({
         onSubmit={handleCreateSpace}
         isLoading={isCreating}
       />
-      <Dialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{settingsT("profile")}</DialogTitle>
-            <DialogDescription>
-              {settingsT("profileDescription")}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-2">
-            <Label htmlFor="display-name">{settingsT("displayName")}</Label>
-            <Input
-              id="display-name"
-              value={displayName}
-              onChange={(event) => setDisplayName(event.target.value)}
-            />
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setProfileDialogOpen(false)}
-            >
-              {t("cancel")}
-            </Button>
-            <Button
-              onClick={handleSaveProfile}
-              disabled={isSavingProfile || !displayName.trim()}
-            >
-              {isSavingProfile ? settingsT("saving") : settingsT("save")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
       <Dialog open={settingsDialogOpen} onOpenChange={setSettingsDialogOpen}>
         <DialogContent>
           <DialogHeader>

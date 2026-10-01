@@ -226,6 +226,54 @@ describe("SpaceSidebar", () => {
     fireEvent.click(screen.getByTestId("space-item-space-1"));
     expect(mockPush).toHaveBeenCalledWith("/space-1");
   });
+
+  it("shows account details and only sign out in the user menu", () => {
+    mockUseAuth.mockReturnValue({
+      user: {
+        uid: "test-user-id",
+        displayName: "Ian Maciel Carvalho",
+        email: "ianmaciel76@gmail.com",
+        isAnonymous: false,
+      },
+      isLoading: false,
+    });
+
+    const spaces: Space[] = [
+      {
+        id: "space-1",
+        ownerId: "test-user-id",
+        name: "Personal",
+        description: "",
+        icon: "folder",
+        stateVersion: 1,
+        schemaVersion: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    mockUseSpaces.mockReturnValue({
+      spaces,
+      loading: false,
+      error: null,
+      isOffline: false,
+      retry: vi.fn(),
+      createSpace: vi.fn(),
+    });
+
+    renderWithIntl(<SpaceSidebar currentSpaceId="space-1" />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Open user menu" }));
+
+    expect(screen.getAllByText("Ian Maciel Carvalho").length).toBeGreaterThan(
+      1,
+    );
+    expect(screen.getByText("ianmaciel76@gmail.com")).toBeDefined();
+    expect(screen.getByRole("button", { name: "Sign out" })).toBeDefined();
+    expect(screen.queryByText("Profile")).toBeNull();
+    expect(screen.queryByText("Settings")).toBeNull();
+  });
+
   it("does not fall back to another space when currentSpaceId is invalid", () => {
     const spaces: Space[] = [
       {
