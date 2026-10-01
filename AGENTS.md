@@ -81,7 +81,7 @@ token savings.
 
 ### Command execution invariant
 
-Detailed command, search, and tool invariants are canonical in `.agents/rules/command-invariants.md` and `.agents/rules/search-and-discovery.md`.
+Detailed command, search, and tool invariants are canonical in `.agents/rules/command-invariants.md`, `.agents/rules/search-and-discovery.md`, and `.agents/rules/documentation-sync.md`.
 
 - **RTK**: Mandatory for all shell commands; exceptions and fallback conditions are documented in `RTK.md`.
 - **Graphify**: `graphify-out/` MUST be queried before manually tracing cross-file architecture or call graphs (see `.agents/skills/graphify/skill.md`).
