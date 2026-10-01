@@ -57,7 +57,26 @@
     "loadingSpaces": "Cargando espacios...",
     "backToHome": "Volver al inicio",
     "activeSpace": "Espacio activo",
-    "spaceHeading": "Espacio: {id}"
+    "spaceHeading": "Espacio: {id}",
+    "workspace": "Espacio de trabajo",
+    "switchSpace": "Cambiar de espacio",
+    "searchPlaceholder": "Buscar",
+    "newSpace": "Nuevo",
+    "noSearchResults": "No hay espacios coincidentes",
+    "openUserMenu": "Abrir menú de usuario",
+    "done": "Listo"
+  },
+  "settings": {
+    "profile": "Perfil",
+    "profileDescription": "Actualiza el nombre que se muestra en tu espacio de trabajo.",
+    "displayName": "Nombre visible",
+    "settings": "Configuración",
+    "settingsDescription": "Administra tus preferencias de idioma y apariencia.",
+    "darkMode": "Modo oscuro",
+    "darkModeDescription": "Usa la apariencia oscura para el espacio de trabajo.",
+    "language": "Idioma",
+    "save": "Guardar",
+    "saving": "Guardando..."
   },
   "error": {
     "title": "Algo salió mal",
@@ -68,6 +87,7 @@
   "connection": {
     "title": "Problema de conexión",
     "description": "No se puede contactar al servidor. Estás trabajando sin conexión y los cambios se sincronizarán cuando vuelva la conexión.",
-    "retry": "Reintentar"
+    "retry": "Reintentar",
+    "retrying": "Reconectando..."
   }
 }

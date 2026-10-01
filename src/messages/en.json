@@ -57,7 +57,26 @@
     "loadingSpaces": "Loading spaces...",
     "backToHome": "Back to Home",
     "activeSpace": "Active Space",
-    "spaceHeading": "Space: {id}"
+    "spaceHeading": "Space: {id}",
+    "workspace": "Workspace",
+    "switchSpace": "Switch space",
+    "searchPlaceholder": "Search",
+    "newSpace": "New",
+    "noSearchResults": "No matching spaces",
+    "openUserMenu": "Open user menu",
+    "done": "Done"
+  },
+  "settings": {
+    "profile": "Profile",
+    "profileDescription": "Update the name shown in your workspace.",
+    "displayName": "Display name",
+    "settings": "Settings",
+    "settingsDescription": "Manage your language and appearance preferences.",
+    "darkMode": "Dark mode",
+    "darkModeDescription": "Use the dark appearance for the workspace.",
+    "language": "Language",
+    "save": "Save",
+    "saving": "Saving..."
   },
   "error": {
     "title": "Something went wrong",
@@ -68,6 +87,7 @@
   "connection": {
     "title": "Connection problem",
     "description": "Cannot reach the server. You are working offline and changes will sync when the connection returns.",
-    "retry": "Retry"
+    "retry": "Retry",
+    "retrying": "Retrying..."
   }
 }

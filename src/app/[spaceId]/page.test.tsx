@@ -39,16 +39,19 @@ vi.mock("@/components/notes-app/require-auth", () => ({
   ),
 }));
 
-vi.mock("@/components/notes-app/space-switcher", () => ({
-  SpaceSwitcher: ({ currentSpaceId }: { currentSpaceId?: string }) => (
+vi.mock("@/components/notes-app/space-sidebar", () => ({
+  SpaceSidebar: ({
+    currentSpaceId,
+    children,
+  }: {
+    currentSpaceId?: string;
+    children?: React.ReactNode;
+  }) => (
     <div data-testid="mock-space-switcher">
-      SpaceSwitcher for {currentSpaceId}
+      SpaceSidebar for {currentSpaceId}
+      {children}
     </div>
   ),
-}));
-
-vi.mock("@/components/notes-app/user-menu", () => ({
-  UserMenu: () => <div data-testid="mock-user-menu">UserMenu</div>,
 }));
 
 describe("SpacePage", () => {
@@ -66,8 +69,7 @@ describe("SpacePage", () => {
 
     expect(screen.getByText("Space: test-space-456")).toBeDefined();
     expect(screen.getByTestId("mock-space-switcher")).toBeDefined();
-    expect(screen.getByText("SpaceSwitcher for test-space-456")).toBeDefined();
-    expect(screen.getByTestId("mock-user-menu")).toBeDefined();
+    expect(screen.getByText("SpaceSidebar for test-space-456")).toBeDefined();
     expect(
       screen.getByTestId("mock-require-auth").getAttribute("data-redirect-to"),
     ).toBe("/login?next=%2Ftest-space-456");

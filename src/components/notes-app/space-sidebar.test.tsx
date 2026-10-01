@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import messages from "@/messages/en.json";
 import type { Space } from "@/types/space";
-import { SpaceSwitcher } from "./space-switcher";
+import { SpaceSidebar } from "./space-sidebar";
 
 function renderWithIntl(ui: React.ReactNode) {
   return render(
@@ -32,7 +32,7 @@ vi.mock("@/hooks/use-auth", () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-describe("SpaceSwitcher", () => {
+describe("SpaceSidebar", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockUseAuth.mockReturnValue({
@@ -59,7 +59,7 @@ describe("SpaceSwitcher", () => {
       isLoading: false,
     });
 
-    const { container } = renderWithIntl(<SpaceSwitcher />);
+    const { container } = renderWithIntl(<SpaceSidebar />);
     expect(container.firstChild).toBeNull();
   });
 
@@ -74,7 +74,7 @@ describe("SpaceSwitcher", () => {
       createSpace: vi.fn(),
     });
 
-    renderWithIntl(<SpaceSwitcher />);
+    renderWithIntl(<SpaceSidebar />);
 
     expect(screen.getByTestId("space-switcher-error")).toBeDefined();
     expect(screen.getByRole("alert")).toBeDefined();
@@ -110,7 +110,7 @@ describe("SpaceSwitcher", () => {
       createSpace: vi.fn(),
     });
 
-    renderWithIntl(<SpaceSwitcher currentSpaceId="space-1" />);
+    renderWithIntl(<SpaceSidebar currentSpaceId="space-1" />);
 
     expect(screen.getByTestId("offline-status-indicator")).toBeDefined();
     expect(screen.getByText("Operating in offline mode")).toBeDefined();
@@ -126,7 +126,7 @@ describe("SpaceSwitcher", () => {
       createSpace: vi.fn(),
     });
 
-    renderWithIntl(<SpaceSwitcher />);
+    renderWithIntl(<SpaceSidebar />);
     expect(screen.getByTestId("space-switcher-loading")).toBeDefined();
     expect(screen.getByText("Loading spaces...")).toBeDefined();
   });
@@ -141,7 +141,7 @@ describe("SpaceSwitcher", () => {
       createSpace: vi.fn(),
     });
 
-    renderWithIntl(<SpaceSwitcher />);
+    renderWithIntl(<SpaceSidebar />);
     expect(screen.getByTestId("space-switcher-empty")).toBeDefined();
     expect(screen.getByText("No Spaces Found")).toBeDefined();
     expect(screen.getByTestId("empty-create-space-btn")).toBeDefined();
@@ -171,14 +171,14 @@ describe("SpaceSwitcher", () => {
       createSpace: vi.fn(),
     });
 
-    renderWithIntl(<SpaceSwitcher currentSpaceId="space-1" />);
+    renderWithIntl(<SpaceSidebar currentSpaceId="space-1" />);
 
     expect(screen.getByTestId("space-switcher")).toBeDefined();
     expect(screen.getByTestId("space-switcher-trigger")).toBeDefined();
-    expect(screen.getByText("Personal")).toBeDefined();
+    expect(screen.getAllByText("Personal").length).toBeGreaterThan(0);
 
-    const enterBtn = screen.getByTestId("enter-space-btn");
-    fireEvent.click(enterBtn);
+    fireEvent.click(screen.getByTestId("space-switcher-trigger"));
+    fireEvent.click(screen.getByTestId("space-item-space-1"));
     expect(mockPush).toHaveBeenCalledWith("/space-1");
   });
   it("does not fall back to another space when currentSpaceId is invalid", () => {
@@ -205,7 +205,7 @@ describe("SpaceSwitcher", () => {
       createSpace: vi.fn(),
     });
 
-    renderWithIntl(<SpaceSwitcher currentSpaceId="missing-space" />);
+    renderWithIntl(<SpaceSidebar currentSpaceId="missing-space" />);
 
     expect(screen.getByTestId("space-switcher-not-found")).toBeDefined();
     expect(screen.queryByTestId("space-switcher-trigger")).toBeNull();

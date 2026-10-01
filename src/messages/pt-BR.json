@@ -57,7 +57,26 @@
     "loadingSpaces": "Carregando espaços...",
     "backToHome": "Voltar para o início",
     "activeSpace": "Espaço ativo",
-    "spaceHeading": "Espaço: {id}"
+    "spaceHeading": "Espaço: {id}",
+    "workspace": "Espaço de trabalho",
+    "switchSpace": "Trocar espaço",
+    "searchPlaceholder": "Pesquisar",
+    "newSpace": "Novo",
+    "noSearchResults": "Nenhum espaço correspondente",
+    "openUserMenu": "Abrir menu do usuário",
+    "done": "Concluído"
+  },
+  "settings": {
+    "profile": "Perfil",
+    "profileDescription": "Atualize o nome exibido no seu espaço de trabalho.",
+    "displayName": "Nome de exibição",
+    "settings": "Configurações",
+    "settingsDescription": "Gerencie suas preferências de idioma e aparência.",
+    "darkMode": "Modo escuro",
+    "darkModeDescription": "Use a aparência escura no espaço de trabalho.",
+    "language": "Idioma",
+    "save": "Salvar",
+    "saving": "Salvando..."
   },
   "error": {
     "title": "Algo deu errado",
@@ -68,6 +87,7 @@
   "connection": {
     "title": "Problema de conexão",
     "description": "Não foi possível alcançar o servidor. Você está trabalhando offline e as alterações serão sincronizadas quando a conexão voltar.",
-    "retry": "Tentar novamente"
+    "retry": "Tentar novamente",
+    "retrying": "Reconectando..."
   }
 }

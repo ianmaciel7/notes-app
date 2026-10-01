@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { AuthGreetingHeader } from "@/components/notes-app/auth-greeting-header";
-import { SpaceSwitcher } from "@/components/notes-app/space-switcher";
+import { SpaceSidebar } from "@/components/notes-app/space-sidebar";
 import { UserMenu } from "@/components/notes-app/user-menu";
 
 export default async function Home() {
@@ -17,7 +17,7 @@ export default async function Home() {
 
       <main className="flex flex-col items-center justify-center text-center p-8 space-y-6 max-w-md w-full">
         <AuthGreetingHeader />
-        <SpaceSwitcher />
+        <SpaceSidebar />
       </main>
 
       <footer className="p-6 text-center text-xs text-zinc-500">
