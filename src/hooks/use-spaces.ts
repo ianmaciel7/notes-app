@@ -113,12 +113,13 @@ export function useSpaces(): UseSpacesResult {
 
     const validation = validateCreateSpaceInput(input);
     if (!validation.success || !validation.data) {
-      const errorMsg =
+      const errorCode =
         validation.fieldErrors?.name ||
+        validation.fieldErrors?.description ||
         validation.fieldErrors?.icon ||
         validation.error ||
-        "Invalid space data";
-      throw new Error(errorMsg);
+        "invalidInput";
+      throw new Error(errorCode);
     }
 
     const spaceId = crypto.randomUUID();

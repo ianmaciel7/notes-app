@@ -16,6 +16,8 @@
     "signOut": "Sair",
     "orContinueWith": "Ou continue com",
     "continueAsGuest": "Continuar como convidado",
+    "googleSignInFailed": "Falha ao entrar com o Google. Tente novamente.",
+    "guestSignInFailed": "Não foi possível iniciar uma sessão de convidado. Tente novamente.",
     "backToHome": "Voltar para o início",
     "totpQrCodeAlt": "Código QR do autenticador TOTP"
   },
@@ -46,7 +48,14 @@
     "cancel": "Cancelar",
     "creating": "Criando...",
     "selectIconAria": "Selecionar ícone {icon}",
-    "nameRequired": "O nome do espaço é obrigatório",
+    "validation": {
+      "invalidInput": "Dados do espaço inválidos",
+      "validationFailed": "Revise os detalhes do espaço",
+      "nameRequired": "O nome do espaço é obrigatório",
+      "nameTooLong": "O nome do espaço não pode ultrapassar 50 caracteres",
+      "descriptionTooLong": "A descrição não pode ultrapassar 200 caracteres",
+      "invalidIcon": "Escolha um ícone válido"
+    },
     "failedToCreate": "Falha ao criar espaço",
     "spaceNotFoundTitle": "Espaço não encontrado",
     "spaceNotFoundDescription": "Este espaço não existe ou não está mais acessível.",

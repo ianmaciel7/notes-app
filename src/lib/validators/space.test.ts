@@ -19,7 +19,26 @@ describe("validateCreateSpaceInput", () => {
     });
 
     expect(result.success).toBe(false);
-    expect(result.fieldErrors?.name).toBe("Space name is required");
+    expect(result.fieldErrors?.name).toBe("nameRequired");
+  });
+
+  it("returns stable error codes for length violations", () => {
+    const result = validateCreateSpaceInput({
+      name: "a".repeat(51),
+      description: "b".repeat(201),
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.error).toBe("validationFailed");
+    expect(result.fieldErrors?.name).toBe("nameTooLong");
+    expect(result.fieldErrors?.description).toBe("descriptionTooLong");
+  });
+
+  it("rejects non-object payloads", () => {
+    const result = validateCreateSpaceInput(null);
+
+    expect(result.success).toBe(false);
+    expect(result.error).toBe("invalidInput");
   });
 
   it("fails when icon is invalid", () => {
@@ -29,6 +48,6 @@ describe("validateCreateSpaceInput", () => {
     });
 
     expect(result.success).toBe(false);
-    expect(result.fieldErrors?.icon).toBeDefined();
+    expect(result.fieldErrors?.icon).toBe("invalidIcon");
   });
 });

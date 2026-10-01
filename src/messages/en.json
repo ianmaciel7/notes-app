@@ -16,6 +16,8 @@
     "signOut": "Sign out",
     "orContinueWith": "Or continue with",
     "continueAsGuest": "Continue as Guest",
+    "googleSignInFailed": "Google sign-in failed. Please try again.",
+    "guestSignInFailed": "Could not start a guest session. Please try again.",
     "backToHome": "Back to home",
     "totpQrCodeAlt": "TOTP authenticator QR code"
   },
@@ -46,7 +48,14 @@
     "cancel": "Cancel",
     "creating": "Creating...",
     "selectIconAria": "Select {icon} icon",
-    "nameRequired": "Space name is required",
+    "validation": {
+      "invalidInput": "Invalid space data",
+      "validationFailed": "Please review the space details",
+      "nameRequired": "Space name is required",
+      "nameTooLong": "Space name must not exceed 50 characters",
+      "descriptionTooLong": "Description must not exceed 200 characters",
+      "invalidIcon": "Please choose a valid icon"
+    },
     "failedToCreate": "Failed to create space",
     "spaceNotFoundTitle": "Space not found",
     "spaceNotFoundDescription": "This space does not exist or is no longer accessible.",

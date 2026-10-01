@@ -55,7 +55,13 @@ export function CreateSpaceForm({
     });
 
     if (!validation.success || !validation.data) {
-      setError(validation.fieldErrors?.name || t("nameRequired"));
+      const code =
+        validation.fieldErrors?.name ||
+        validation.fieldErrors?.description ||
+        validation.fieldErrors?.icon ||
+        validation.error ||
+        "nameRequired";
+      setError(t(`validation.${code}`));
       return;
     }
 

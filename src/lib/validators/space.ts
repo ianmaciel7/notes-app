@@ -1,10 +1,24 @@
 import type { CreateSpaceInput } from "@/types/space";
 
+/**
+ * Stable validation error codes. Callers translate them through the
+ * `spaces.validation.*` message keys; this module never holds user-facing copy.
+ */
+export type SpaceValidationErrorCode =
+  | "invalidInput"
+  | "validationFailed"
+  | "nameRequired"
+  | "nameTooLong"
+  | "descriptionTooLong"
+  | "invalidIcon";
+
+export type SpaceValidationField = "name" | "description" | "icon";
+
 export interface ValidationResult<T> {
   success: boolean;
   data?: T;
-  error?: string;
-  fieldErrors?: Record<string, string>;
+  error?: SpaceValidationErrorCode;
+  fieldErrors?: Partial<Record<SpaceValidationField, SpaceValidationErrorCode>>;
 }
 
 export const ALLOWED_SPACE_ICONS = [
@@ -24,7 +38,7 @@ export function validateCreateSpaceInput(
   if (!input || typeof input !== "object") {
     return {
       success: false,
-      error: "Invalid input payload",
+      error: "invalidInput",
     };
   }
 
@@ -34,26 +48,26 @@ export function validateCreateSpaceInput(
     typeof raw.description === "string" ? raw.description.trim() : "";
   const icon = typeof raw.icon === "string" ? raw.icon.trim() : "folder";
 
-  const fieldErrors: Record<string, string> = {};
+  const fieldErrors: NonNullable<ValidationResult<unknown>["fieldErrors"]> = {};
 
   if (!name) {
-    fieldErrors.name = "Space name is required";
+    fieldErrors.name = "nameRequired";
   } else if (name.length > 50) {
-    fieldErrors.name = "Space name must not exceed 50 characters";
+    fieldErrors.name = "nameTooLong";
   }
 
   if (description.length > 200) {
-    fieldErrors.description = "Description must not exceed 200 characters";
+    fieldErrors.description = "descriptionTooLong";
   }
 
   if (icon && !ALLOWED_SPACE_ICONS.includes(icon as AllowedSpaceIcon)) {
-    fieldErrors.icon = `Icon must be one of: ${ALLOWED_SPACE_ICONS.join(", ")}`;
+    fieldErrors.icon = "invalidIcon";
   }
 
   if (Object.keys(fieldErrors).length > 0) {
     return {
       success: false,
-      error: "Validation failed",
+      error: "validationFailed",
       fieldErrors,
     };
   }
