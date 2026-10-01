@@ -39,7 +39,7 @@ _Avoid_: Story Mockup, Preview Fixture
 The headings below preserve the vocabulary from former INTENT §4 so historical
 references remain understandable while vocabulary has one canonical owner.
 
-Single source of truth for project vocabulary. Format: **UI display name (PT-BR)** · `code_name (EN)`. The UI is in Portuguese (PT-BR); code, database, and API use the English name. Use these terms in code, schema, API, and UI; do not create synonyms. When a new term is approved, add it here.
+Single source of truth for project vocabulary. Format: **UI display name (PT-BR)** · `code_name (EN)`. The UI is localized (`en`, `pt-BR`, `es`; see Locale) and the display names below are the PT-BR ones; code, database, and API use the English name. Use these terms in code, schema, API, and UI; do not create synonyms. When a new term is approved, add it here.
 
 ### User and Spaces
 

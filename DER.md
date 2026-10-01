@@ -367,7 +367,7 @@ Enables fast calculation of retention rates and lapse counts per question:
 ## 5. Architectural Integrity & Security Rules
 
 1. **Client Read/Write Policy**:
-   - Clients interact with Firestore through the Web SDK v11 configured with `persistentLocalCache` and multi-tab synchronization ([ADR 0013](./docs/adr/0013-adopt-native-firebase-firestore-with-persistent-local-cache.md)).
+   - Clients interact with Firestore through the Firebase Web SDK (version owned by `package.json`) configured with `persistentLocalCache` and multi-tab synchronization ([ADR 0013](./docs/adr/0013-adopt-native-firebase-firestore-with-persistent-local-cache.md)).
    - `firestore.rules` enforces that users can only read and write documents where `/users/{uid}/...` matches their authenticated `request.auth.uid`.
    - Current `firestore.rules` grants the owner read and delete over `/users/{uid}/**`. Creates and updates are validated per collection: `spaces` (shape and `stateVersion`), and under a space `objects`, `relations`, `cards` and `attempts` (required fields, types, enums, `spaceId`, `schemaVersion == 4`, and a parent space that exists). `stateVersion` increments are enforced for `objects` and `cards`, and `attempts` have no update rule (`INV-11`). Collections without a documented schema (`objectTypes`, `templates`, `views`, `inbox`) are not writable until their rules are added. Rules do not yet check the Object extension fields (Concept, Question, Source, Highlight), the `content` AST depth, or that an Attempt's `cardId`/`questionId` reference existing documents.
 2. **Concurrency & Atomicity Invariants**:

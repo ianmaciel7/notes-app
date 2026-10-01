@@ -69,7 +69,7 @@ Serves as the structural and semantic memory of the codebase.
 - **Work-Memory Overlay**:
   - Located in `graphify-out/memory/`, powered by `.agents/skills/graphify/reflect.py`.
   - Enables agents to tag trajectory results with feedback (`--outcome useful|dead_end|corrected`) so subsequent agent sessions learn optimal navigation paths.
-  - Consolidates recurring takeaways into `LESSONS.md`.
+  - Consolidates recurring takeaways into `graphify-out/reflections/LESSONS.md`.
 
 ### C. Transient Context vs. Disk Persistence (Subagent Development)
 As specified in `.agents/skills/subagent-driven-development/SKILL.md`:

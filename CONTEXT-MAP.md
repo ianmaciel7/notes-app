@@ -12,8 +12,8 @@ The detailed ubiquitous vocabulary is canonically defined in [`CONTEXT.md`](./CO
 
 ### 1. [Identity & Tenancy](./CONTEXT.md#user-and-spaces)
 - **Boundary**: Identity & Access Subsystem
-- **Domain Role**: Manages user authentication via Firebase Auth (`uid`), session validation (`requireActionUser`), tenant isolation across completely isolated Spaces (`SpaceId`), and user locale preferences (`NEXT_LOCALE`).
-- **Core Entities**: `User`, `Space`, `Locale`, `SessionCookie`.
+- **Domain Role**: Manages user authentication via Firebase Auth (`uid`), planned server-side session validation (`requireActionUser`, not implemented), tenant isolation across completely isolated Spaces (`SpaceId`), and user locale preferences (`NEXT_LOCALE`).
+- **Core Entities**: `User`, `Space`, `Locale`; `SessionCookie` is planned and not implemented.
 - **Invariants**:
   - No data is shared across Users.
   - Objects from one Space never link directly to Objects in another Space (Hard Space Isolation, `INV-1`).

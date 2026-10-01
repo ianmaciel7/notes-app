@@ -1,6 +1,6 @@
 # Constraints
 
-Last reviewed: 2026-09-28
+Last reviewed: 2026-10-01
 
 This file is the non-regression quality contract. Checks may be tightened, but must
 not be weakened merely to make a change pass.
@@ -24,6 +24,8 @@ not be weakened merely to make a change pass.
 | Architecture | Zero dependency-cruiser violations | `pnpm run deps:check` | task end |
 | RSC Boundaries | Zero server component boundary findings | `pnpm run check:rsc` | task end |
 | Component Props | Zero invalid component prop interface findings | `pnpm run check:props` | task end |
+| Component Naming | Zero application component files without an allowed role suffix | `pnpm run check:naming` | task end |
+| Emojis | Zero emoji literals anywhere under `src/` | `pnpm run check:emojis` | task end |
 | i18n Strings | Zero hardcoded user-facing strings or forbidden copy in UI components | `pnpm run check:i18n` | task end |
 | Duplication | At most 10% by configured jscpd threshold | `pnpm run check:duplication` | task end |
 | Dependency audit | No high/critical package-manager advisories | `pnpm run check:security` | dependency/security review |

@@ -67,7 +67,7 @@ Do not infer authorization from client UI state or framework defaults.
 
 - `rtk pnpm check:security` runs the package-manager audit and blocks high/critical advisories according to `CONSTRAINTS.md`.
 - `rtk pnpm check:osv` scans manifests/lockfiles with OSV-Scanner using `osv-scanner.toml`.
-- Gitleaks scans repository history using `gitleaks.toml` in `.github/workflows/security.yml` and as a pre-commit hook.
+- Gitleaks scans repository history using `gitleaks.toml` in `.github/workflows/security.yml`; there is no local pre-commit secret scan.
 - Zizmor audits GitHub Actions in `.github/workflows/security.yml`.
 - OSV-Scanner blocks newly introduced vulnerabilities on PRs and runs scheduled/full scans to expose the existing baseline.
 - `.github/workflows/codeql.yml` runs CodeQL static analysis for `main`, `dev`, and `stag` PR/push targets plus its schedule.
