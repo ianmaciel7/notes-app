@@ -130,6 +130,9 @@ const ICON_MAP: Record<AllowedSpaceIcon, typeof Folder> = {
   compass: Folder,
 };
 
+const SIDEBAR_MENU_POPUP =
+  "min-w-[240px] -ml-1 w-[calc(var(--anchor-width)_+_10px)] [&_[role=menuitem]]:gap-2 [&_[role=menuitem]]:pl-2 [&_[role=menuitem]]:pr-1.5";
+
 function SpaceIcon({
   iconKey,
   className = "size-4",
@@ -356,7 +359,11 @@ function SpaceSwitcherMenu({
                 </SidebarMenuButton>
               }
             />
-            <DropdownMenuContent align="start" className="w-56">
+            <DropdownMenuContent
+              align="start"
+              sideOffset={4}
+              className={SIDEBAR_MENU_POPUP}
+            >
               {visibleSpaces.map((space) => (
                 <DropdownMenuItem
                   key={space.id}
@@ -579,7 +586,8 @@ export function SpaceSidebar({
                     <DropdownMenuContent
                       side="top"
                       align="start"
-                      className="w-64 p-2"
+                      sideOffset={6}
+                      className={`${SIDEBAR_MENU_POPUP} p-2`}
                     >
                       <DropdownMenuGroup>
                         <DropdownMenuLabel className="flex items-center gap-3 px-2 py-2">
