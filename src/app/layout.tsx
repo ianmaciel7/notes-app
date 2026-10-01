@@ -12,7 +12,7 @@ import {
   ConnectionAlertTitle,
 } from "@/components/notes-app/connection-alert";
 import { ThemeProvider } from "@/components/notes-app/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({
