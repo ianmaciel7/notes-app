@@ -7,6 +7,7 @@ import {
   useCountries,
   useDefaultCountry,
 } from "@firebase-oss/ui-react";
+import { useTranslations } from "next-intl";
 import { type Ref, useImperativeHandle, useState } from "react";
 
 import {
@@ -25,6 +26,7 @@ export interface CountrySelectProps extends Omit<CountrySelectorProps, "ref"> {
 }
 
 export function CountrySelect({ ref }: CountrySelectProps) {
+  const t = useTranslations("auth");
   const countries = useCountries();
   const defaultCountry = useDefaultCountry();
   const [selected, setSelected] = useState<CountryData>(defaultCountry);
@@ -43,6 +45,10 @@ export function CountrySelect({ ref }: CountrySelectProps) {
 
   return (
     <Select
+      items={countries.map((country) => ({
+        label: `${country.dialCode} (${country.name})`,
+        value: country.code,
+      }))}
       value={selected.code}
       onValueChange={(code) => {
         if (code) {
@@ -53,7 +59,7 @@ export function CountrySelect({ ref }: CountrySelectProps) {
         }
       }}
     >
-      <SelectTrigger className="w-30">
+      <SelectTrigger className="w-30" aria-label={t("countrySelector")}>
         <SelectValue>
           {selected.code} {selected.dialCode}
         </SelectValue>

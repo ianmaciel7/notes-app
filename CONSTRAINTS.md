@@ -20,7 +20,8 @@ not be weakened merely to make a change pass.
 | Dimension | Rule | Checked by | Runs at |
 | --- | --- | --- | --- |
 | Types | Zero type errors | `pnpm run check:types` | task end |
-| Lint | Zero Biome CI errors across project-owned application, script, eval, and configuration targets | `pnpm run check:lint` | task end |
+| Lint | Zero Biome CI errors and warnings across project-owned application, script, eval, and configuration targets | `pnpm run check:lint` | task end |
+| Conventions | Zero mechanical `CONVENTIONS.md` rule violations and a consistent Enforcement Index | `pnpm run check:conventions` | task end |
 | Architecture | Zero dependency-cruiser violations | `pnpm run deps:check` | task end |
 | RSC Boundaries | Zero server component boundary findings | `pnpm run check:rsc` | task end |
 | Component Props | Zero invalid component prop interface findings | `pnpm run check:props` | task end |
@@ -50,4 +51,6 @@ Behavioral agent success rates are measured by live eval runs but are not yet a 
 
 ## Exceptions
 
-None.
+| Exception | Scope | Owner | Reason | Added | Expires |
+| --- | --- | --- | --- | --- | --- |
+| Biome `suspicious/noDocumentCookie` off | `src/lib/i18n/locale-sync.ts` and its test | Repository owner | The locale cookie is written on the client so next-intl can read it on the server, and the Cookie Store API is outside the supported browser baseline. | 2026-10-01 | 2027-04-01 |

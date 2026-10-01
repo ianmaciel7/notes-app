@@ -2,9 +2,9 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import {
+  baselineRegressions,
   deletedTestFiles,
   parsePatch,
-  qualityRegressions,
 } from "./floor-guard-lib.mjs";
 
 const baseFlag = process.argv.indexOf("--base");
@@ -15,6 +15,17 @@ function git(args) {
     return execFileSync("git", args, { encoding: "utf8" });
   } catch (error) {
     return error.stdout?.toString() ?? null;
+  }
+}
+
+function gitShow(ref, path) {
+  try {
+    return execFileSync("git", ["show", `${ref}:${path}`], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+  } catch {
+    return null;
   }
 }
 
@@ -98,10 +109,12 @@ for (const path of [
   "lighthouserc.cjs",
   ".dependency-cruiser.cjs",
 ]) {
-  const baseline = git(["show", `${mergeBase}:${path}`]);
   const current = existsSync(path) ? readFileSync(path, "utf8") : null;
-  if (baseline === null || current === null) continue;
-  for (const detail of qualityRegressions(path, baseline, current)) {
+  if (current === null) continue;
+  for (const detail of baselineRegressions(path, current, gitShow, [
+    mergeBase,
+    "HEAD",
+  ])) {
     flag("quality-floor-lowered", { file: path, text: detail });
   }
 }

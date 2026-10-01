@@ -52,7 +52,7 @@ export function UserMenu({ className, ...props }: UserMenuProps) {
     <div
       data-testid="user-menu"
       className={cn(
-        "flex items-center gap-x-3 text-sm text-foreground",
+        "flex items-center gap-3 text-sm text-foreground",
         className,
       )}
       {...props}
@@ -60,7 +60,7 @@ export function UserMenu({ className, ...props }: UserMenuProps) {
       <LanguageSelect />
       <span
         data-testid="user-identifier"
-        className="truncate font-medium max-w-[180px]"
+        className="max-w-45 truncate font-medium"
       >
         {userIdentifier}
       </span>

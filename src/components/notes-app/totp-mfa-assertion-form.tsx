@@ -10,7 +10,7 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { MultiFactorInfo, UserCredential } from "firebase/auth";
 import type { ComponentProps } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -23,6 +23,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 export type TotpMfaAssertionFormProps = ComponentProps<"div"> & {
@@ -67,7 +68,7 @@ export function TotpMfaAssertionForm({
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-y-4"
+          className="flex flex-col gap-4"
         >
           <FieldGroup>
             <Controller
@@ -100,10 +101,15 @@ export function TotpMfaAssertionForm({
               )}
             />
             <Button type="submit" disabled={ui.state !== "idle"}>
+              {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
               {getTranslation(ui, "labels", "verifyCode")}
             </Button>
             {form.formState.errors.root && (
-              <FieldError>{form.formState.errors.root.message}</FieldError>
+              <Alert variant="destructive">
+                <AlertDescription>
+                  {form.formState.errors.root.message}
+                </AlertDescription>
+              </Alert>
             )}
           </FieldGroup>
         </form>

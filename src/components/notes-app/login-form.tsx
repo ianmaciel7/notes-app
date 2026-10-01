@@ -11,6 +11,7 @@ import {
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { ComponentProps } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -19,6 +20,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { Policies } from "./auth-policies-card";
 
@@ -67,7 +69,7 @@ export function LoginForm({
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
-        className={cn("flex flex-col gap-4", className)}
+        className={cn(className)}
       >
         <FieldGroup>
           <Controller
@@ -122,32 +124,41 @@ export function LoginForm({
               </Field>
             )}
           />
-        </FieldGroup>
-        {form.formState.errors.root && (
-          <FieldError>{form.formState.errors.root.message}</FieldError>
-        )}
-        <Button
-          type="submit"
-          disabled={form.formState.isSubmitting}
-          className="w-full"
-        >
-          {getTranslation(ui, "labels", "signIn")}
-        </Button>
-        <Policies />
-        {onSignUpClick ? (
-          <div className="text-center">
+          {form.formState.errors.root && (
+            <Alert variant="destructive">
+              <AlertDescription>
+                {form.formState.errors.root.message}
+              </AlertDescription>
+            </Alert>
+          )}
+          <Field>
             <Button
-              data-testid="auth-mode-toggle"
-              type="button"
-              variant="link"
-              size="sm"
-              onClick={onSignUpClick}
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="w-full"
             >
-              {getTranslation(ui, "prompts", "noAccount")}{" "}
-              {getTranslation(ui, "labels", "signUp")}
+              {form.formState.isSubmitting && (
+                <Spinner data-icon="inline-start" />
+              )}
+              {getTranslation(ui, "labels", "signIn")}
             </Button>
-          </div>
-        ) : null}
+          </Field>
+          <Policies />
+          {onSignUpClick ? (
+            <Field>
+              <Button
+                data-testid="auth-mode-toggle"
+                type="button"
+                variant="link"
+                size="sm"
+                onClick={onSignUpClick}
+              >
+                {getTranslation(ui, "prompts", "noAccount")}{" "}
+                {getTranslation(ui, "labels", "signUp")}
+              </Button>
+            </Field>
+          ) : null}
+        </FieldGroup>
       </form>
     </FormProvider>
   );

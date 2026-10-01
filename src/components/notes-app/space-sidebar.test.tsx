@@ -269,7 +269,7 @@ describe("SpaceSidebar", () => {
       1,
     );
     expect(screen.getByText("ianmaciel76@gmail.com")).toBeDefined();
-    expect(screen.getByRole("button", { name: "Sign out" })).toBeDefined();
+    expect(screen.getByRole("menuitem", { name: "Sign out" })).toBeDefined();
     expect(screen.queryByText("Profile")).toBeNull();
     expect(screen.queryByText("Settings")).toBeNull();
   });

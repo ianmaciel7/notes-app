@@ -1,14 +1,44 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+// Some tools (Biome) emit colour codes regardless of NO_COLOR.
+import { stripVTControlCharacters as stripAnsi } from "node:util";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 
-console.log(
-  "=== Verifying Full Project Health & Quality (Context & Harness) ===\n",
-);
+const flags = new Set(process.argv.slice(2));
+const asJson = flags.has("--json");
+const failFast = flags.has("--fail-fast");
+const STEP_TIMEOUT_MS = 15 * 60 * 1000;
+
+const log = (...parts) => {
+  if (!asJson) console.log(...parts);
+};
+
+log("=== Verifying Full Project Health & Quality (Context & Harness) ===\n");
 
 const results = [];
+
+function finish() {
+  const total = results.length;
+  const failed = results.filter((r) => !r.pass);
+  const passed = total - failed.length;
+
+  if (asJson) {
+    console.log(JSON.stringify({ total, passed, results }, null, 2));
+  } else {
+    log("\n==================================================================");
+    log("Summary:");
+    log(`Passed: ${passed}/${total}`);
+    if (failed.length > 0) {
+      console.error("\nFailures detected:");
+      for (const f of failed) console.error(`- ${f.name}:\n${f.error}`);
+    } else {
+      log("All Quality, Context & Harness checks PASSED successfully!");
+    }
+  }
+  process.exit(failed.length > 0 ? 1 : 0);
+}
 
 function runStep(
   name,
@@ -20,29 +50,41 @@ function runStep(
   const proc = spawnSync(cmd, args, {
     cwd: root,
     encoding: "utf8",
-    shell: true,
+    // Windows resolves pnpm/rtk through .cmd shims, which need a shell.
+    shell: process.platform === "win32",
+    timeout: STEP_TIMEOUT_MS,
+    // Plain output keeps failure tails readable in logs and --json reports.
+    env: { ...process.env, NO_COLOR: "1", FORCE_COLOR: "0" },
   });
-  const duration = ((Date.now() - start) / 1000).toFixed(2);
-  let metric = `${duration}s`;
+  const seconds = Number(((Date.now() - start) / 1000).toFixed(2));
+  let metric = `${seconds}s`;
   if (parseGain && proc.stdout) {
     const savedMatch = proc.stdout.match(/Tokens saved:\s+([^\n]+)/);
     if (savedMatch) {
-      metric = `${savedMatch[1].trim()} (${duration}s)`;
+      metric = `${savedMatch[1].trim()} (${seconds}s)`;
     }
   }
 
+  const pass = proc.status === 0;
   results.push({
     name,
-    pass: proc.status === 0,
+    pass,
+    seconds,
     metric,
-    error:
-      proc.status !== 0
-        ? (proc.stderr || proc.stdout || "").trim().slice(0, 150)
-        : null,
+    // The cause of a failure is at the end of the output, so keep the tail.
+    error: pass
+      ? null
+      : stripAnsi(
+          proc.error?.message ?? (proc.stderr || proc.stdout || "").trim(),
+        )
+          .split("\n")
+          .slice(-15)
+          .join("\n"),
   });
 
-  const icon = proc.status === 0 ? "✓" : allowFail ? "⚠" : "✗";
-  console.log(`${icon} [${name.padEnd(26)}] ${metric}`);
+  const icon = pass ? "✓" : allowFail ? "⚠" : "✗";
+  log(`${icon} [${name.padEnd(26)}] ${metric}`);
+  if (!pass && failFast) finish();
 }
 
 // 1. Static Quality & Types
@@ -66,23 +108,4 @@ runStep("Harness Eval Framework", "pnpm", ["run", "test:harness"]);
 runStep("AI Tooling & RTK Protocol", "pnpm", ["run", "test:ai-tooling"]);
 runStep("RTK Token Savings (Gain)", "rtk", ["gain"], { parseGain: true });
 
-console.log(
-  "\n==================================================================",
-);
-console.log("Summary:");
-const total = results.length;
-const passed = results.filter((r) => r.pass).length;
-const failed = results.filter((r) => !r.pass);
-
-console.log(`Passed: ${passed}/${total}`);
-
-if (failed.length > 0) {
-  console.error("\nFailures detected:");
-  for (const f of failed) {
-    console.error(`- ${f.name}: ${f.error}`);
-  }
-  process.exit(1);
-} else {
-  console.log("All Quality, Context & Harness checks PASSED successfully!");
-  process.exit(0);
-}
+finish();

@@ -119,6 +119,21 @@ function checkDepCruiserRegressions(baseline, current) {
   return findings;
 }
 
+// A floor file added on this branch has no merge-base version, so it is also
+// compared against HEAD; otherwise a floor lowered before the first commit of
+// that file would pass unnoticed. Missing baselines are skipped, not errors.
+export function baselineRegressions(path, current, readBaseline, refs) {
+  const findings = new Set();
+  for (const ref of new Set(refs)) {
+    const baseline = readBaseline(ref, path);
+    if (baseline === null) continue;
+    for (const detail of qualityRegressions(path, baseline, current)) {
+      findings.add(detail);
+    }
+  }
+  return [...findings];
+}
+
 export function qualityRegressions(path, baseline, current) {
   if (path === "vitest.config.ts") {
     return checkVitestRegressions(baseline, current);

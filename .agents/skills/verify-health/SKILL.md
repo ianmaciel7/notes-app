@@ -29,6 +29,9 @@ Or execute directly with node:
 rtk node scripts/verify-health.mjs
 ```
 
+Flags: `--fail-fast` stops at the first failing check; `--json` prints a machine-readable report
+(per-step pass, seconds, and the tail of the error). Each step has a 15-minute timeout.
+
 ## What it validates (13 Checks in 1 Pass):
 
 1. **Static Quality & Types**:

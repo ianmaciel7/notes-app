@@ -22,7 +22,7 @@ export default function ErrorBoundary({
   }, [error]);
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-center min-h-screen bg-zinc-50 font-sans p-6 dark:bg-black">
+    <div className="flex flex-col flex-1 items-center justify-center min-h-screen bg-background font-sans p-6">
       <main className="flex flex-col items-center justify-center text-center space-y-6 max-w-md w-full">
         <Alert variant="destructive" role="alert" aria-live="assertive">
           <AlertCircle className="size-4" />

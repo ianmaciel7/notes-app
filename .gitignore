@@ -83,6 +83,9 @@ RTK.md.bak
 .firebase/logs/*
 .firebase/logs/vsce-debug.log
 
+# Local harness telemetry (hook block/ask events).
+/.agents/logs/
+
 # Graphify installs machine-specific hooks per clone.
 /.husky/post-commit
 /.husky/post-checkout

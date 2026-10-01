@@ -15,9 +15,9 @@ describe("Firebase client", () => {
   it("handles idempotent emulator connection without throwing", () => {
     expect(() => connectToAuthEmulator()).not.toThrow();
     const globalForAuth = globalThis as unknown as {
-      __FIREBASE_AUTH_EMULATOR_CONNECTED__?: boolean;
+      FIREBASE_AUTH_EMULATOR_CONNECTED?: boolean;
     };
-    globalForAuth.__FIREBASE_AUTH_EMULATOR_CONNECTED__ = false;
+    globalForAuth.FIREBASE_AUTH_EMULATOR_CONNECTED = false;
     expect(() => connectToAuthEmulator("http://127.0.0.1:9099")).not.toThrow();
   });
 });

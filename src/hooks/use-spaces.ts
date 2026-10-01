@@ -9,7 +9,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "@/lib/firebase/firestore";
 import { validateCreateSpaceInput } from "@/lib/validators/space";
@@ -38,11 +38,11 @@ export function useSpaces(): UseSpacesResult {
     return typeof navigator !== "undefined" && !navigator.onLine;
   });
 
-  const retry = useCallback(() => {
+  const retry = () => {
     setError(null);
     setLoading(true);
     setRetryKey((prev) => prev + 1);
-  }, []);
+  };
 
   // W3C Network Information / HTML5 Online Status handling
   useEffect(() => {
@@ -50,7 +50,9 @@ export function useSpaces(): UseSpacesResult {
 
     const handleOnline = () => {
       setIsOffline(false);
-      retry();
+      setError(null);
+      setLoading(true);
+      setRetryKey((prev) => prev + 1);
     };
 
     const handleOffline = () => {
@@ -64,7 +66,7 @@ export function useSpaces(): UseSpacesResult {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
-  }, [retry]);
+  }, []);
 
   useEffect(() => {
     // Reference retryKey to re-subscribe on manual retry

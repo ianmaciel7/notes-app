@@ -10,7 +10,7 @@ The repository follows a multi-track testing strategy with a clear division of t
 - **Unit Tests & Scoped Coverage (Vitest >=80%)**: Enforced on business logic, data transformers, custom hooks, and state management (`src/lib/**/*.ts`, `src/hooks/**/*.ts`). Synchronous Client Components and utility functions are tested in Vitest with `vi.mock('next/navigation')` for `useRouter`/`usePathname`. Next.js invariant: `async` Server Components are not supported in Vitest unit suites and must be tested via E2E.
 - **Component Workbench & Visual Verification (Ladle)**: Declarative UI primitives under `src/components/ui/` are developed, previewed, and tested for accessibility and themes via isolated Ladle stories (`*.stories.tsx`).
 - **End-to-End Testing (Playwright)**: Full browser user journeys, Next.js App Router async Server Components, route transitions, Server Actions, and Firebase Auth local emulator interactions verified under `e2e/`.
-- **Quality Floors & Automated Guards**: Enforced via `scripts/guards/floor-guard.mjs` and `scripts/hooks/hooks.test.mjs` (merge-base non-regression, path protection, and Biome auto-formatting hooks).
+- **Quality Floors & Automated Guards**: Enforced via `scripts/guards/floor-guard.mjs` and `scripts/hooks/hooks.test.mjs` (merge-base non-regression, path protection, native-subagent delegation guard, and Biome auto-formatting hooks).
 - **Audits & Mutation Verification**: Lighthouse CI for production-browser accessibility/performance auditing; StrykerJS mutation testing for focused production logic.
 
 Agent behavioral evaluations are configured separately under `.agents/evals/`.
@@ -41,7 +41,7 @@ Agent behavioral evaluations are configured separately under `.agents/evals/`.
 - **Playwright**: end-to-end (E2E) browser testing framework with Next.js webServer lifecycle management ([ADR 0012](./docs/adr/0012-adopt-playwright-for-e2e-testing.md)).
 - **StrykerJS**: mutation testing.
 - **Lighthouse CI**: production-browser audit.
-- **Automated Guards**: custom floor, React Server Component boundary, component-prop, component-naming, i18n-string, no-emoji, and hook regression guards (`scripts/guards/floor-guard.mjs`, `scripts/guards/guard-rsc-boundaries.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/guards/guard-component-naming.mjs`, `scripts/guards/guard-i18n-strings.mjs`, `scripts/guards/guard-no-emojis.mjs`, `scripts/hooks/hooks.test.mjs`).
+- **Automated Guards**: custom floor, React Server Component boundary, component-prop, component-naming, conventions, i18n-string, no-emoji, and hook regression guards (`scripts/guards/floor-guard.mjs`, `scripts/guards/guard-rsc-boundaries.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/guards/guard-component-naming.mjs`, `scripts/guards/guard-conventions.mjs`, `scripts/verify/verify-conventions-index.mjs`, `scripts/guards/guard-i18n-strings.mjs`, `scripts/guards/guard-no-emojis.mjs`, `scripts/hooks/hooks.test.mjs`).
 - **Documentation verifier**: `scripts/verify/verify-docs.mjs` runs the control-doc verifiers plus repository-wide markdown checks (links and anchors, referenced paths and `pnpm` commands, path portability, English-only text, `AGENTS.md` size and skill routing, skill frontmatter, and the `docs/` tree rules for ADRs, execution plans, and product specs). Its logic is covered by `scripts/verify/verify-docs.test.mjs`.
 - **Harness eval runner**: provider-neutral Node runner with Codex and Antigravity adapters.
 

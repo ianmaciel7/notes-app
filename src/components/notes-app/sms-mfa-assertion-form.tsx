@@ -12,6 +12,7 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { MultiFactorInfo, UserCredential } from "firebase/auth";
 import { useRef, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -19,12 +20,14 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldTitle,
 } from "@/components/ui/field";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 type PhoneMultiFactorInfo = MultiFactorInfo & {
@@ -72,20 +75,27 @@ function SmsMultiFactorAssertionPhoneForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-4", className)} {...props}>
-      <Field>
-        <FieldLabel>{getTranslation(ui, "labels", "phoneNumber")}</FieldLabel>
-        <FieldDescription>
-          {getTranslation(ui, "messages", "mfaSmsAssertionPrompt", {
-            phoneNumber: (hint as PhoneMultiFactorInfo).phoneNumber || "",
-          })}
-        </FieldDescription>
-      </Field>
-      <div className="fui-recaptcha-container" ref={recaptchaContainerRef} />
-      <Button onClick={onSubmit} disabled={ui.state !== "idle"}>
-        {getTranslation(ui, "labels", "sendCode")}
-      </Button>
-      {error && <FieldError>{error}</FieldError>}
+    <div className={cn(className)} {...props}>
+      <FieldGroup className="gap-4">
+        <Field>
+          <FieldTitle>{getTranslation(ui, "labels", "phoneNumber")}</FieldTitle>
+          <FieldDescription>
+            {getTranslation(ui, "messages", "mfaSmsAssertionPrompt", {
+              phoneNumber: (hint as PhoneMultiFactorInfo).phoneNumber || "",
+            })}
+          </FieldDescription>
+        </Field>
+        <div className="fui-recaptcha-container" ref={recaptchaContainerRef} />
+        <Button onClick={onSubmit} disabled={ui.state !== "idle"}>
+          {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
+          {getTranslation(ui, "labels", "sendCode")}
+        </Button>
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+      </FieldGroup>
     </div>
   );
 }
@@ -138,7 +148,7 @@ function SmsMultiFactorAssertionVerifyForm({
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn("flex flex-col gap-y-4", className)}
+        className={cn("flex flex-col gap-4", className)}
         {...props}
       >
         <FieldGroup>
@@ -175,10 +185,15 @@ function SmsMultiFactorAssertionVerifyForm({
             )}
           />
           <Button type="submit" disabled={ui.state !== "idle"}>
+            {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
             {getTranslation(ui, "labels", "verifyCode")}
           </Button>
           {form.formState.errors.root && (
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <Alert variant="destructive">
+              <AlertDescription>
+                {form.formState.errors.root.message}
+              </AlertDescription>
+            </Alert>
           )}
         </FieldGroup>
       </form>

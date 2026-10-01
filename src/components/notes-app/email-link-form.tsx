@@ -24,6 +24,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 export interface EmailLinkFormProps
@@ -81,7 +82,7 @@ export function EmailLinkForm({
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
-        className={cn("flex flex-col gap-4", className)}
+        className={cn(className)}
       >
         <FieldGroup>
           <Controller
@@ -104,14 +105,21 @@ export function EmailLinkForm({
               </Field>
             )}
           />
+          <Policies />
+          <Field>
+            <Button type="submit" disabled={ui.state !== "idle"}>
+              {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
+              {getTranslation(ui, "labels", "sendSignInLink")}
+            </Button>
+          </Field>
+          {form.formState.errors.root && (
+            <Alert variant="destructive">
+              <AlertDescription>
+                {form.formState.errors.root.message}
+              </AlertDescription>
+            </Alert>
+          )}
         </FieldGroup>
-        <Policies />
-        <Button type="submit" disabled={ui.state !== "idle"}>
-          {getTranslation(ui, "labels", "sendSignInLink")}
-        </Button>
-        {form.formState.errors.root && (
-          <FieldError>{form.formState.errors.root.message}</FieldError>
-        )}
       </form>
     </FormProvider>
   );

@@ -295,3 +295,55 @@ Do not:
   Lucide icons or semantic identifier strings instead);
 - treat compilation as UI verification — visual/test requirements live in
   `TESTING.md`.
+
+## 9. Enforcement Index
+
+Every rule above has exactly one enforcer: a `package.json` script that runs in
+`check:fast`, or `review-only` when no tool can decide it. `check:conventions`
+runs `scripts/guards/guard-conventions.mjs` (application rules over `src/`;
+`src/components/ui/` is checked only against the `ui-primitive-*` anatomy rules
+and `src/components/firebase/` is skipped as an unmodified vendor drop) and
+`scripts/verify/verify-conventions-index.mjs`, which fails when a row names a
+missing or ungated script or when a guard rule is absent from this table. Add a
+row here in the same change that adds or changes a rule; prefer promoting a
+`review-only` rule to a checker over leaving it prose-only.
+
+| Rule | Enforcer |
+| --- | --- |
+| `no-any-or-ts-suppress` | `check:lint` |
+| `strict-types` | `check:types` |
+| `import-order` | `check:lint` |
+| `module-boundaries` | `deps:check` |
+| `kebab-case-filename` | `check:conventions` |
+| `no-default-export` | `check:conventions` |
+| `component-role-suffix` | `check:naming` |
+| `canonical-props-name` | `check:props` |
+| `identifier-casing` | `check:lint` |
+| `reuse-primitives` | review-only |
+| `no-render-props-api` | `check:conventions` |
+| `composition-over-boolean-props` | review-only |
+| `ui-primitive-no-default-export` | `check:conventions` |
+| `ui-primitive-trailing-export-block` | `check:conventions` |
+| `ui-primitive-no-interface` | `check:conventions` |
+| `ui-primitive-part-shape` | review-only |
+| `no-domain-in-ui` | `deps:check` |
+| `no-classic-form-api` | `check:conventions` |
+| `use-client-smallest-boundary` | `check:rsc` |
+| `error-boundary-use-client` | `check:conventions` |
+| `no-forward-ref` | `check:conventions` |
+| `no-use-context` | `check:conventions` |
+| `no-preemptive-memo` | `check:conventions` |
+| `no-window-location` | `check:conventions` |
+| `no-component-in-render` | `check:lint` |
+| `named-default-export` | `check:conventions` |
+| `fast-refresh-module-isolation` | review-only |
+| `server-action-use-server` | `check:conventions` |
+| `server-action-validates-input` | `check:conventions` |
+| `server-action-result-type` | review-only |
+| `i18n-no-hardcoded-text` | `check:i18n` |
+| `no-hardcoded-color` | `check:conventions` |
+| `no-important` | `check:conventions` |
+| `use-cn-for-class-merge` | `check:conventions` |
+| `prefer-standard-scale` | review-only |
+| `no-emojis` | `check:emojis` |
+| `performance-patterns` | review-only |

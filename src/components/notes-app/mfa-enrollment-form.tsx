@@ -9,6 +9,7 @@ import { useState } from "react";
 import { SmsMultiFactorEnrollmentForm } from "@/components/notes-app/sms-mfa-enrollment-form";
 import { TotpMultiFactorEnrollmentForm } from "@/components/notes-app/totp-mfa-enrollment-form";
 import { Button } from "@/components/ui/button";
+import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 type Hint = (typeof FactorId)[keyof typeof FactorId];
@@ -62,7 +63,7 @@ export function MfaEnrollmentForm({
   }
 
   return (
-    <div className={cn("flex flex-col gap-2", className)} {...props}>
+    <FieldGroup className={cn("gap-2", className)} {...props}>
       {hints.map((hint) => {
         if (hint === FactorId.TOTP) {
           return <TotpButton key={hint} onClick={() => setHint(hint)} />;
@@ -74,7 +75,7 @@ export function MfaEnrollmentForm({
 
         return null;
       })}
-    </div>
+    </FieldGroup>
   );
 }
 

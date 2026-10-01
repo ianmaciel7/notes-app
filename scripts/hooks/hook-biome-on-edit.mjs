@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 import { spawnSync } from "node:child_process";
 import {
   detectAgentType,
@@ -15,36 +15,49 @@ const root = findRepoRoot();
 const filePath = parseHookFilePath(raw);
 const relative = filePath && repoRelativePath(root, filePath);
 
-if (!relative || !isBiomeChecked(relative)) {
+function finish(code) {
   if (agentType === "antigravity") process.stdout.write(JSON.stringify({}));
-  process.exit(0);
+  process.exit(code);
 }
 
-const result = spawnSync(
-  "rtk",
-  [
-    "pnpm",
-    "exec",
-    "biome",
-    "check",
-    "--write",
-    "--no-errors-on-unmatched",
-    relative,
-  ],
-  { cwd: root, encoding: "utf8", shell: process.platform === "win32" },
-);
+if (!relative || !isBiomeChecked(relative)) finish(0);
 
-if (result.error || result.status === 0) {
-  if (agentType === "antigravity") process.stdout.write(JSON.stringify({}));
-  process.exit(0);
+const run = (command, args) =>
+  spawnSync(command, args, {
+    cwd: root,
+    encoding: "utf8",
+    shell: process.platform === "win32",
+  });
+
+const problems = [];
+
+const biome = run("rtk", [
+  "pnpm",
+  "exec",
+  "biome",
+  "check",
+  "--write",
+  "--no-errors-on-unmatched",
+  relative,
+]);
+if (!biome.error && biome.status !== 0) {
+  problems.push(
+    `Biome found issues in ${relative} that could not be auto-fixed:\n${biome.stdout ?? ""}${biome.stderr ?? ""}`,
+  );
 }
 
-if (agentType === "antigravity") {
-  process.stdout.write(JSON.stringify({}));
-  process.exit(0);
+// Run after Biome so the guard sees the formatted file. Exit status 1 is a
+// rule violation; anything else is a guard crash and must not block the edit.
+const conventions = run("node", [
+  "scripts/guards/guard-conventions.mjs",
+  relative,
+]);
+if (conventions.status === 1) {
+  problems.push(conventions.stderr ?? "");
 }
 
-process.stderr.write(
-  `Biome found issues in ${relative} that could not be auto-fixed:\n${result.stdout ?? ""}${result.stderr ?? ""}`,
-);
+// Antigravity cannot block on hook output, so it always exits cleanly.
+if (problems.length === 0 || agentType === "antigravity") finish(0);
+
+process.stderr.write(problems.join("\n"));
 process.exit(2);

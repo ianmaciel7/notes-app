@@ -6,6 +6,7 @@
     "backToHome": "Back to Home"
   },
   "auth": {
+    "countrySelector": "Select country",
     "guestGreeting": "Notes App",
     "guestDescription": "Sign in to access your notes.",
     "userGreeting": "Hello, {name}!",
@@ -16,10 +17,12 @@
     "signOut": "Sign out",
     "orContinueWith": "Or continue with",
     "continueAsGuest": "Continue as Guest",
+    "signInWithGoogle": "Sign in with Google",
     "googleSignInFailed": "Google sign-in failed. Please try again.",
     "guestSignInFailed": "Could not start a guest session. Please try again.",
     "backToHome": "Back to home",
-    "totpQrCodeAlt": "TOTP authenticator QR code"
+    "totpQrCodeAlt": "TOTP authenticator QR code",
+    "totpSecret": "TOTP secret key"
   },
   "language": {
     "label": "Language",

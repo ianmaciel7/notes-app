@@ -72,12 +72,10 @@ export function MfaAssertionForm({
   }
 
   return (
-    <div className={cn("flex flex-col gap-2", className)} {...props}>
-      <FieldGroup>
-        <Field>
-          <FieldDescription>{mfaAssertionFactorPrompt}</FieldDescription>
-        </Field>
-      </FieldGroup>
+    <FieldGroup className={cn("gap-2", className)} {...props}>
+      <Field>
+        <FieldDescription>{mfaAssertionFactorPrompt}</FieldDescription>
+      </Field>
       {resolver.hints.map((hint) => {
         if (hint.factorId === TotpMultiFactorGenerator.FACTOR_ID) {
           return (
@@ -93,20 +91,28 @@ export function MfaAssertionForm({
 
         return null;
       })}
-    </div>
+    </FieldGroup>
   );
 }
 
 function TotpButton(props: ComponentProps<typeof Button>) {
   const ui = useUI();
   const labelText = getTranslation(ui, "labels", "mfaTotpVerification");
-  return <Button {...props}>{labelText}</Button>;
+  return (
+    <Button {...props} variant="outline">
+      {labelText}
+    </Button>
+  );
 }
 
 function SmsButton(props: ComponentProps<typeof Button>) {
   const ui = useUI();
   const labelText = getTranslation(ui, "labels", "mfaSmsVerification");
-  return <Button {...props}>{labelText}</Button>;
+  return (
+    <Button {...props} variant="outline">
+      {labelText}
+    </Button>
+  );
 }
 
 export {

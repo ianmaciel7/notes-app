@@ -16,7 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { FieldSeparator } from "@/components/ui/field";
+import { FieldGroup, FieldSeparator } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { LoginForm } from "./login-form";
 
@@ -42,37 +42,33 @@ export function LoginCard({
   useOnUserAuthenticated(onSignIn);
 
   return (
-    <div
+    <Card
       ref={ref}
       className={cn("w-full max-w-sm mx-auto", className)}
       {...props}
     >
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <h1>{titleText}</h1>
-          </CardTitle>
-          <CardDescription>{subtitleText}</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <LoginForm
-            onSignIn={(credential: UserCredential) =>
-              onSignIn?.(credential.user)
-            }
-            onForgotPasswordClick={onForgotPasswordClick}
-            onSignUpClick={onSignUpClick}
-          />
-          {children ? (
-            <div className="flex flex-col gap-4 pt-1">
-              <FieldSeparator className="uppercase [&>span]:bg-card">
-                {t("orContinueWith")}
-              </FieldSeparator>
-              <div className="flex flex-col gap-2.5">{children}</div>
-            </div>
-          ) : null}
-        </CardContent>
-      </Card>
-    </div>
+      <CardHeader>
+        <CardTitle>
+          <h1>{titleText}</h1>
+        </CardTitle>
+        <CardDescription>{subtitleText}</CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-4">
+        <LoginForm
+          onSignIn={(credential: UserCredential) => onSignIn?.(credential.user)}
+          onForgotPasswordClick={onForgotPasswordClick}
+          onSignUpClick={onSignUpClick}
+        />
+        {children ? (
+          <FieldGroup className="pt-1">
+            <FieldSeparator className="uppercase [&>span]:bg-card">
+              {t("orContinueWith")}
+            </FieldSeparator>
+            <FieldGroup className="gap-2.5">{children}</FieldGroup>
+          </FieldGroup>
+        ) : null}
+      </CardContent>
+    </Card>
   );
 }
 

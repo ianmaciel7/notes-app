@@ -3,7 +3,9 @@ import {
   classifyPath,
   detectAgentType,
   findRepoRoot,
+  logHookEvent,
   parseHookFilePath,
+  preToolUseDecision,
   readStdin,
   repoRelativePath,
 } from "./hooks-lib.mjs";
@@ -15,32 +17,16 @@ const root = findRepoRoot();
 const relative = filePath && repoRelativePath(root, filePath);
 const verdict = relative && classifyPath(relative);
 
-if (verdict?.action === "deny") {
-  if (agentType === "antigravity") {
-    process.stdout.write(
-      JSON.stringify({ decision: "deny", reason: verdict.reason }),
-    );
-    process.exit(0);
-  }
-  process.stderr.write(`${verdict.reason}\n`);
-  process.exit(2);
-}
-
-if (verdict?.action === "ask") {
-  if (agentType === "antigravity") {
-    process.stdout.write(
-      JSON.stringify({ decision: "ask", reason: verdict.reason }),
-    );
-    process.exit(0);
-  }
+if (verdict) {
+  logHookEvent(root, {
+    hook: "guard-paths",
+    action: verdict.action,
+    path: relative,
+  });
   process.stdout.write(
-    JSON.stringify({
-      hookSpecificOutput: {
-        hookEventName: "PreToolUse",
-        permissionDecision: "ask",
-        permissionDecisionReason: verdict.reason,
-      },
-    }),
+    agentType === "antigravity"
+      ? JSON.stringify({ decision: verdict.action, reason: verdict.reason })
+      : preToolUseDecision(verdict.action, verdict.reason),
   );
   process.exit(0);
 }

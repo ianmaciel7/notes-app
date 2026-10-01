@@ -33,16 +33,16 @@ const shouldUseEmulator =
 
 // Global tracker to survive Next.js Fast Refresh / HMR
 const globalForAuth = globalThis as unknown as {
-  __FIREBASE_AUTH_EMULATOR_CONNECTED__?: boolean;
+  FIREBASE_AUTH_EMULATOR_CONNECTED?: boolean;
 };
 
 export function connectToAuthEmulator(host = EMULATOR_HOST): void {
-  if (globalForAuth.__FIREBASE_AUTH_EMULATOR_CONNECTED__) return;
+  if (globalForAuth.FIREBASE_AUTH_EMULATOR_CONNECTED) return;
 
   const emulatorUrl = host.startsWith("http") ? host : `http://${host}`;
   try {
     connectAuthEmulator(auth, emulatorUrl, { disableWarnings: true });
-    globalForAuth.__FIREBASE_AUTH_EMULATOR_CONNECTED__ = true;
+    globalForAuth.FIREBASE_AUTH_EMULATOR_CONNECTED = true;
   } catch {
     // Emulator connection is idempotent across Fast Refresh / test workers
   }

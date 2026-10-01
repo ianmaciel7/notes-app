@@ -62,6 +62,18 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item";
 import { Kbd } from "@/components/ui/kbd";
 import {
   Sidebar,
@@ -72,7 +84,6 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarInput,
   SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
@@ -138,8 +149,7 @@ const ICON_MAP: Record<AllowedSpaceIcon, typeof Folder> = {
   compass: Folder,
 };
 
-const SIDEBAR_MENU_POPUP =
-  "min-w-[240px] -ml-1 w-[calc(var(--anchor-width)_+_10px)] [&_[role=menuitem]]:gap-2 [&_[role=menuitem]]:pl-2 [&_[role=menuitem]]:pr-1.5";
+const SIDEBAR_MENU_POPUP = "min-w-60";
 
 function SpaceIcon({
   iconKey,
@@ -227,18 +237,17 @@ function SpaceSidebarStatus({
   }
   if (loading) {
     return (
-      <div
+      <output
         data-testid="space-switcher-loading"
         className={cn(
           "flex items-center justify-center p-4 text-xs text-muted-foreground",
           className,
         )}
         {...props}
+        aria-label={t("loading")}
       >
-        <Skeleton className="h-4 w-24" aria-label={t("loading")}>
-          <span className="sr-only">{t("loading")}</span>
-        </Skeleton>
-      </div>
+        <Skeleton className="h-4 w-24" />
+      </output>
     );
   }
   if (notFound) {
@@ -355,13 +364,12 @@ function SpaceSwitcherMenu({
                 <SidebarMenuButton
                   data-testid="space-switcher-trigger"
                   aria-label={t("switchSpace")}
-                  className="h-8"
                 >
                   <SpaceIcon iconKey={activeSpace?.icon} />
                   <span className="min-w-0 truncate text-sm">
                     {activeSpace?.name ?? t("selectSpace")}
                   </span>
-                  <ChevronsUpDown className="ml-auto shrink-0 text-muted-foreground" />
+                  <ChevronsUpDown className="ml-auto" />
                 </SidebarMenuButton>
               }
             />
@@ -370,29 +378,34 @@ function SpaceSwitcherMenu({
               sideOffset={4}
               className={SIDEBAR_MENU_POPUP}
             >
-              {visibleSpaces.map((space) => (
-                <DropdownMenuItem
-                  key={space.id}
-                  onClick={() => onSelect(space.id)}
-                  data-testid={`space-item-${space.id}`}
-                >
-                  <SpaceIcon iconKey={space.icon} />
-                  <span className="min-w-0 flex-1 truncate">{space.name}</span>
-                  {space.id === activeSpace?.id && <Check />}
-                </DropdownMenuItem>
-              ))}
+              <DropdownMenuGroup>
+                {visibleSpaces.map((space) => (
+                  <DropdownMenuItem
+                    key={space.id}
+                    onClick={() => onSelect(space.id)}
+                    data-testid={`space-item-${space.id}`}
+                  >
+                    <SpaceIcon iconKey={space.icon} />
+                    <span className="min-w-0 flex-1 truncate">
+                      {space.name}
+                    </span>
+                    {space.id === activeSpace?.id && <Check />}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={onCreate}>
-                <Plus />
-                {t("createSpace")}
-              </DropdownMenuItem>
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={onCreate}>
+                  <Plus />
+                  {t("createSpace")}
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
           <SidebarMenuButton
             data-testid="space-switcher-create-trigger"
             onClick={onCreate}
-            className="h-8"
           >
             <Plus />
             <span>{t("createFirstSpace")}</span>
@@ -483,186 +496,166 @@ export function SpaceSidebar({
     user.displayName ||
     (user.isAnonymous ? authT("anonymous") : authT("defaultUser"));
   const userIdentifier = user.displayName || user.email || userName;
-  const userInitial = userName.trim().charAt(0).toUpperCase() || "U";
   return (
-    <div
+    <SidebarProvider
       data-testid="space-switcher"
-      className={cn("flex min-h-svh w-full", className)}
+      className={className}
       {...props}
     >
-      <SidebarProvider>
-        <Sidebar variant="inset" collapsible="none">
-          <SidebarHeader>
-            <SpaceSwitcherMenu
-              activeSpace={activeSpace}
-              onCreate={() => setCreateDialogOpen(true)}
-              onSelect={handleSelect}
-              spaces={spaces}
-              t={t}
-              visibleSpaces={visibleSpaces}
-            />
-            <div className="flex flex-col">
-              <div className="group/search relative">
-                <Search
-                  aria-hidden="true"
-                  className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-                />
-                <SidebarInput
-                  placeholder={t("searchPlaceholder")}
-                  aria-label={t("searchPlaceholder")}
-                  value={searchQuery}
-                  onChange={(event) => setSearchQuery(event.target.value)}
-                  className="h-8 pl-8 pr-10"
-                />
-                <Kbd className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-80 group-hover/search:opacity-100 group-focus-within/search:opacity-100">
-                  K
-                </Kbd>
-              </div>
+      <Sidebar variant="inset" collapsible="none">
+        <SidebarHeader>
+          <SpaceSwitcherMenu
+            activeSpace={activeSpace}
+            onCreate={() => setCreateDialogOpen(true)}
+            onSelect={handleSelect}
+            spaces={spaces}
+            t={t}
+            visibleSpaces={visibleSpaces}
+          />
+          <SidebarGroup>
+            <InputGroup>
+              <InputGroupAddon align="inline-start">
+                <Search aria-hidden="true" />
+              </InputGroupAddon>
+              <InputGroupInput
+                placeholder={t("searchPlaceholder")}
+                aria-label={t("searchPlaceholder")}
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+              />
+              <InputGroupAddon align="inline-end">
+                <Kbd>K</Kbd>
+              </InputGroupAddon>
+            </InputGroup>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  onClick={() => setCreateDialogOpen(true)}
+                  className="group/menu-item"
+                >
+                  <Plus />
+                  <span>{t("newSpace")}</span>
+                  <Kbd className="ml-auto opacity-0 transition-opacity duration-80 group-hover/menu-item:opacity-100 group-focus-within/menu-item:opacity-100">
+                    O
+                  </Kbd>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>{t("spacesLabel")}</SidebarGroupLabel>
+            <SidebarGroupAction
+              onClick={() => setCreateDialogOpen(true)}
+              aria-label={t("createSpace")}
+            >
+              <Plus />
+            </SidebarGroupAction>
+            <SidebarGroupContent>
               <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    onClick={() => setCreateDialogOpen(true)}
-                    className="group/menu-item"
-                  >
-                    <Plus />
-                    <span>{t("newSpace")}</span>
-                    <Kbd className="ml-auto opacity-0 transition-opacity duration-80 group-hover/menu-item:opacity-100 group-focus-within/menu-item:opacity-100">
-                      O
-                    </Kbd>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                {visibleSpaces.map((space) => (
+                  <SidebarMenuItem key={space.id}>
+                    <SidebarMenuButton
+                      isActive={space.id === activeSpace?.id}
+                      onClick={() => handleSelect(space.id)}
+                    >
+                      <SpaceIcon iconKey={space.icon} />
+                      <span>{space.name}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
               </SidebarMenu>
-            </div>
-          </SidebarHeader>
-          <SidebarContent>
-            <SidebarGroup>
-              <SidebarGroupLabel>{t("spacesLabel")}</SidebarGroupLabel>
-              <SidebarGroupAction
-                onClick={() => setCreateDialogOpen(true)}
-                aria-label={t("createSpace")}
-              >
-                <Plus />
-              </SidebarGroupAction>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {visibleSpaces.map((space) => (
-                    <SidebarMenuItem key={space.id}>
-                      <SidebarMenuButton
-                        isActive={space.id === activeSpace?.id}
-                        onClick={() => handleSelect(space.id)}
-                      >
-                        <SpaceIcon iconKey={space.icon} />
-                        <span>{space.name}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-                {visibleSpaces.length === 0 && (
-                  <p className="px-2 py-3 text-xs text-muted-foreground">
+              {visibleSpaces.length === 0 && (
+                <Empty className="items-start gap-0 px-2 py-3">
+                  <EmptyDescription className="text-xs text-muted-foreground">
                     {t("noSearchResults")}
-                  </p>
-                )}
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </SidebarContent>
-          <SidebarFooter>
-            <div className="flex items-center gap-1 pr-1.5">
-              <SidebarMenu
-                aria-label={t("openUserMenu")}
-                className="min-w-0 flex-1"
-              >
-                <SidebarMenuItem>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger
-                      render={
-                        <SidebarMenuButton aria-label={t("openUserMenu")}>
+                  </EmptyDescription>
+                </Empty>
+              )}
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu aria-label={t("openUserMenu")}>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={
+                    <SidebarMenuButton aria-label={t("openUserMenu")}>
+                      <UserAvatar
+                        displayName={userIdentifier}
+                        photoUrl={user.photoURL}
+                      />
+                      <span className="min-w-0 truncate">{userIdentifier}</span>
+                      <ChevronsUpDown className="ml-auto" />
+                    </SidebarMenuButton>
+                  }
+                />
+                <DropdownMenuContent
+                  side="top"
+                  align="start"
+                  sideOffset={6}
+                  className={cn(SIDEBAR_MENU_POPUP, "p-2")}
+                >
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel className="p-0">
+                      <Item size="xs">
+                        <ItemMedia>
                           <UserAvatar
                             displayName={userIdentifier}
                             photoUrl={user.photoURL}
                           />
-                          <span className="min-w-0 truncate">
-                            {userIdentifier}
-                          </span>
-                          <span className="ml-auto -mr-0.5 flex size-6 shrink-0 items-center justify-center">
-                            <ChevronsUpDown className="text-muted-foreground" />
-                          </span>
-                        </SidebarMenuButton>
-                      }
-                    />
-                    <DropdownMenuContent
-                      side="top"
-                      align="start"
-                      sideOffset={6}
-                      className={`${SIDEBAR_MENU_POPUP} p-2`}
-                    >
-                      <DropdownMenuGroup>
-                        <DropdownMenuLabel className="flex items-center gap-3 px-2 py-2">
-                          <Avatar size="sm">
-                            <AvatarFallback>{userInitial}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                            <span className="block truncate text-sm font-medium text-foreground">
-                              {userName}
-                            </span>
-                            {user.email && (
-                              <span className="block truncate text-xs font-normal text-muted-foreground">
-                                {user.email}
-                              </span>
-                            )}
-                          </div>
-                        </DropdownMenuLabel>
-                      </DropdownMenuGroup>
-                      <DropdownMenuSeparator className="mx-0" />
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="mt-2 w-full justify-center"
-                        onClick={() => signOutUser()}
-                      >
-                        <LogOut data-icon="inline-start" />
-                        {authT("signOut")}
-                      </Button>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </SidebarMenuItem>
-              </SidebarMenu>
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                className="shrink-0"
-                aria-label={settingsT("settings")}
-                title={settingsT("settings")}
-                onClick={() => setSettingsDialogOpen(true)}
-              >
+                        </ItemMedia>
+                        <ItemContent>
+                          <ItemTitle>{userName}</ItemTitle>
+                          {user.email && (
+                            <ItemDescription>{user.email}</ItemDescription>
+                          )}
+                        </ItemContent>
+                      </Item>
+                    </DropdownMenuLabel>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator className="mx-0" />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onClick={() => signOutUser()}>
+                      <LogOut />
+                      {authT("signOut")}
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton onClick={() => setSettingsDialogOpen(true)}>
                 <Settings />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                className="shrink-0"
-                aria-label={settingsT("darkMode")}
-                title={settingsT("darkMode")}
+                <span>{settingsT("settings")}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
                 onClick={() =>
                   setTheme(resolvedTheme === "dark" ? "light" : "dark")
                 }
               >
                 <Moon />
-              </Button>
-            </div>
-          </SidebarFooter>
-        </Sidebar>
-        <SidebarInset>
-          <SpaceSidebarMain
-            notFound={notFound}
-            onCreate={() => setCreateDialogOpen(true)}
-            showEmptyState={showEmptyState}
-            status={status}
-            t={t}
-          >
-            {children}
-          </SpaceSidebarMain>
-        </SidebarInset>
-      </SidebarProvider>
+                <span>{settingsT("darkMode")}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
+      <SidebarInset>
+        <SpaceSidebarMain
+          notFound={notFound}
+          onCreate={() => setCreateDialogOpen(true)}
+          showEmptyState={showEmptyState}
+          status={status}
+          t={t}
+        >
+          {children}
+        </SpaceSidebarMain>
+      </SidebarInset>
       <CreateSpaceDialog
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
@@ -716,7 +709,7 @@ export function SpaceSidebar({
           {t("operatingOffline")}
         </Badge>
       )}
-    </div>
+    </SidebarProvider>
   );
 }
 

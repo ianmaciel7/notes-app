@@ -27,6 +27,7 @@ Hook wiring lives in `hooks.json`; the implementation lives with repository scri
 
 - `scripts/hooks/hook-biome-on-edit.mjs`: PostToolUse formatting/check adapter.
 - `scripts/hooks/hook-guard-paths.mjs`: PreToolUse generated/controlled-path guard.
+- `scripts/hooks/hook-guard-bash.mjs`: PreToolUse guard against git commands that skip the gates (Claude Code only).
 - `scripts/hooks/hooks-lib.mjs`: shared payload and path logic.
 - `scripts/hooks/hooks.test.mjs`: deterministic hook tests.
 

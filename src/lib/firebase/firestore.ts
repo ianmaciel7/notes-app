@@ -53,17 +53,17 @@ const shouldUseEmulator =
 
 // Global tracker to survive Next.js Fast Refresh / HMR
 const globalForFirestore = globalThis as unknown as {
-  __FIREBASE_FIRESTORE_EMULATOR_CONNECTED__?: boolean;
+  FIREBASE_FIRESTORE_EMULATOR_CONNECTED?: boolean;
 };
 
 export function connectToFirestoreEmulator(
   host = FIRESTORE_EMULATOR_HOST,
   port = FIRESTORE_EMULATOR_PORT,
 ): void {
-  if (globalForFirestore.__FIREBASE_FIRESTORE_EMULATOR_CONNECTED__) return;
+  if (globalForFirestore.FIREBASE_FIRESTORE_EMULATOR_CONNECTED) return;
   try {
     connectFirestoreEmulator(db, host, port);
-    globalForFirestore.__FIREBASE_FIRESTORE_EMULATOR_CONNECTED__ = true;
+    globalForFirestore.FIREBASE_FIRESTORE_EMULATOR_CONNECTED = true;
   } catch {
     // Emulator connection is idempotent across Fast Refresh / test workers
   }

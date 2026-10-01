@@ -15,19 +15,17 @@ describe("Firestore Native Client", () => {
   it("connects to emulator idempotently without throwing", () => {
     expect(() => connectToFirestoreEmulator()).not.toThrow();
     const globalForFirestore = globalThis as unknown as {
-      __FIREBASE_FIRESTORE_EMULATOR_CONNECTED__?: boolean;
+      FIREBASE_FIRESTORE_EMULATOR_CONNECTED?: boolean;
     };
-    globalForFirestore.__FIREBASE_FIRESTORE_EMULATOR_CONNECTED__ = false;
+    globalForFirestore.FIREBASE_FIRESTORE_EMULATOR_CONNECTED = false;
     expect(() => connectToFirestoreEmulator("localhost", 8080)).not.toThrow();
   });
 
   it("preserves emulator connection state on globalThis", () => {
     const globalForFirestore = globalThis as unknown as {
-      __FIREBASE_FIRESTORE_EMULATOR_CONNECTED__?: boolean;
+      FIREBASE_FIRESTORE_EMULATOR_CONNECTED?: boolean;
     };
-    expect(globalForFirestore.__FIREBASE_FIRESTORE_EMULATOR_CONNECTED__).toBe(
-      true,
-    );
+    expect(globalForFirestore.FIREBASE_FIRESTORE_EMULATOR_CONNECTED).toBe(true);
   });
 
   it("returns firestore instance via getOrCreateFirestore", () => {

@@ -26,6 +26,7 @@ import {
   CountrySelect,
   type CountrySelectorRef,
 } from "@/components/notes-app/country-select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -44,6 +45,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 export interface VerifyPhoneNumberFormProps
@@ -128,10 +130,15 @@ function VerifyPhoneNumberForm({
             )}
           />
           <Button type="submit" disabled={ui.state !== "idle"}>
+            {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
             {getTranslation(ui, "labels", "verifyCode")}
           </Button>
           {form.formState.errors.root && (
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <Alert variant="destructive">
+              <AlertDescription>
+                {form.formState.errors.root.message}
+              </AlertDescription>
+            </Alert>
           )}
         </FieldGroup>
       </form>
@@ -229,10 +236,15 @@ function PhoneNumberForm({
           <div ref={recaptchaContainerRef} />
           <Policies />
           <Button type="submit" disabled={ui.state !== "idle"}>
+            {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
             {getTranslation(ui, "labels", "sendCode")}
           </Button>
           {form.formState.errors.root && (
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <Alert variant="destructive">
+              <AlertDescription>
+                {form.formState.errors.root.message}
+              </AlertDescription>
+            </Alert>
           )}
         </FieldGroup>
       </form>

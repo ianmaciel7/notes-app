@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 export interface OAuthCardProps
@@ -39,22 +40,20 @@ export function OAuthCard({
   }
 
   return (
-    <div className={cn("max-w-sm mx-auto", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <h1>{titleText}</h1>
-          </CardTitle>
-          <CardDescription>{subtitleText}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-2">{children}</div>
-          <div className="mt-4 flex flex-col gap-4">
-            <RedirectError />
-            <Policies />
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+    <Card className={cn("w-full max-w-sm mx-auto", className)} {...props}>
+      <CardHeader>
+        <CardTitle>
+          <h1>{titleText}</h1>
+        </CardTitle>
+        <CardDescription>{subtitleText}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <FieldGroup className="gap-2">{children}</FieldGroup>
+        <FieldGroup className="mt-4">
+          <RedirectError />
+          <Policies />
+        </FieldGroup>
+      </CardContent>
+    </Card>
   );
 }

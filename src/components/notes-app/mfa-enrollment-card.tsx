@@ -30,17 +30,15 @@ export function MfaEnrollmentCard({
   const subtitleText = getTranslation(ui, "prompts", "mfaEnrollmentPrompt");
 
   return (
-    <div className={cn("max-w-sm mx-auto", className)}>
-      <Card>
-        <CardHeader>
-          <CardTitle>{titleText}</CardTitle>
-          <CardDescription>{subtitleText}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <MfaEnrollmentForm {...props} />
-        </CardContent>
-      </Card>
-    </div>
+    <Card className={cn("w-full max-w-sm mx-auto", className)}>
+      <CardHeader>
+        <CardTitle>{titleText}</CardTitle>
+        <CardDescription>{subtitleText}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <MfaEnrollmentForm {...props} />
+      </CardContent>
+    </Card>
   );
 }
 

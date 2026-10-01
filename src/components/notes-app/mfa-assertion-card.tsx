@@ -30,17 +30,15 @@ export function MfaAssertionCard({
   const subtitleText = getTranslation(ui, "prompts", "mfaAssertionPrompt");
 
   return (
-    <div className={cn("max-w-sm mx-auto", className)}>
-      <Card>
-        <CardHeader>
-          <CardTitle>{titleText}</CardTitle>
-          <CardDescription>{subtitleText}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <MfaAssertionForm {...props} />
-        </CardContent>
-      </Card>
-    </div>
+    <Card className={cn("w-full max-w-sm mx-auto", className)}>
+      <CardHeader>
+        <CardTitle>{titleText}</CardTitle>
+        <CardDescription>{subtitleText}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <MfaAssertionForm {...props} />
+      </CardContent>
+    </Card>
   );
 }
 

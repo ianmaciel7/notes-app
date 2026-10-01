@@ -3,6 +3,7 @@ import { PolicyContext, type PolicyURL, useUI } from "@firebase-oss/ui-react";
 import type { ComponentProps, ReactNode } from "react";
 import { use } from "react";
 import { Button } from "@/components/ui/button";
+import { FieldDescription } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 export interface AuthPoliciesCardProps extends ComponentProps<"div"> {}
@@ -10,20 +11,18 @@ export interface AuthPoliciesCardProps extends ComponentProps<"div"> {}
 function PolicyLink({
   onNavigate,
   url,
-  className,
   children,
 }: {
   onNavigate?: (url: PolicyURL) => void;
   url: PolicyURL;
-  className: string;
   children: ReactNode;
 }) {
   if (onNavigate) {
     return (
       <Button
         variant="link"
+        size="sm"
         type="button"
-        className={className}
         onClick={() => onNavigate(url)}
       >
         {children}
@@ -34,13 +33,13 @@ function PolicyLink({
   return (
     <Button
       variant="link"
+      size="sm"
       nativeButton={false}
       render={
         <a href={String(url)} target="_blank" rel="noopener noreferrer">
           {children}
         </a>
       }
-      className={className}
     />
   );
 }
@@ -60,7 +59,6 @@ export function AuthPoliciesCard({
   const termsAndPrivacyText = getTranslation(ui, "messages", "termsAndPrivacy");
   const parts = termsAndPrivacyText.split(/(\{tos\}|\{privacy\})/);
 
-  const linkClassName = cn("h-auto px-0 font-semibold");
   const partCounts = new Map<string, number>();
   const keyedParts = parts.map((part) => {
     const type =
@@ -71,7 +69,7 @@ export function AuthPoliciesCard({
   });
 
   return (
-    <div
+    <FieldDescription
       className={cn("text-muted-foreground text-center text-xs", className)}
       {...props}
     >
@@ -82,7 +80,6 @@ export function AuthPoliciesCard({
               key={key}
               onNavigate={onNavigate}
               url={termsOfServiceUrl}
-              className={linkClassName}
             >
               {getTranslation(ui, "labels", "termsOfService")}
             </PolicyLink>
@@ -95,7 +92,6 @@ export function AuthPoliciesCard({
               key={key}
               onNavigate={onNavigate}
               url={privacyPolicyUrl}
-              className={linkClassName}
             >
               {getTranslation(ui, "labels", "privacyPolicy")}
             </PolicyLink>
@@ -104,7 +100,7 @@ export function AuthPoliciesCard({
 
         return <span key={key}>{part}</span>;
       })}
-    </div>
+    </FieldDescription>
   );
 }
 

@@ -19,7 +19,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -29,11 +29,13 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { InputGroup, InputGroupInput } from "@/components/ui/input-group";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 export type TotpMultiFactorSecretGenerationFormProps = Omit<
@@ -74,7 +76,7 @@ function TotpMultiFactorSecretGenerationForm({
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn("flex flex-col gap-y-4", className)}
+        className={cn("flex flex-col gap-4", className)}
         {...props}
       >
         <FieldGroup>
@@ -99,10 +101,15 @@ function TotpMultiFactorSecretGenerationForm({
             )}
           />
           <Button type="submit" disabled={ui.state !== "idle"}>
+            {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
             {getTranslation(ui, "labels", "generateQrCode")}
           </Button>
           {form.formState.errors.root && (
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <Alert variant="destructive">
+              <AlertDescription>
+                {form.formState.errors.root.message}
+              </AlertDescription>
+            </Alert>
           )}
         </FieldGroup>
       </form>
@@ -160,29 +167,31 @@ export function MultiFactorEnrollmentVerifyTotpForm({
   const qrCodeDataUrl = generateTotpQrCode(ui, secret, displayName);
 
   return (
-    <div className="flex flex-col gap-4">
-      <FieldGroup>
-        <Field className="items-center justify-center">
-          <Image
-            src={qrCodeDataUrl}
-            alt={t("totpQrCodeAlt")}
-            width={192}
-            height={192}
-            unoptimized
-            className="mx-auto"
+    <FieldGroup className="gap-4">
+      <Field className="items-center justify-center">
+        <Image
+          src={qrCodeDataUrl}
+          alt={t("totpQrCodeAlt")}
+          width={192}
+          height={192}
+          unoptimized
+          className="mx-auto"
+        />
+        <InputGroup>
+          <InputGroupInput
+            readOnly
+            value={secret.secretKey.toString()}
+            aria-label={t("totpSecret")}
           />
-          <code className="text-xs text-muted-foreground text-center">
-            {secret.secretKey.toString()}
-          </code>
-          <FieldDescription className="text-center">
-            {getTranslation(ui, "prompts", "mfaTotpQrCodePrompt")}
-          </FieldDescription>
-        </Field>
-      </FieldGroup>
+        </InputGroup>
+        <FieldDescription className="text-center">
+          {getTranslation(ui, "prompts", "mfaTotpQrCodePrompt")}
+        </FieldDescription>
+      </Field>
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className={cn("flex flex-col gap-y-4", className)}
+          className={cn("flex flex-col gap-4", className)}
           {...props}
         >
           <FieldGroup>
@@ -216,15 +225,20 @@ export function MultiFactorEnrollmentVerifyTotpForm({
               )}
             />
             <Button type="submit" disabled={ui.state !== "idle"}>
+              {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
               {getTranslation(ui, "labels", "verifyCode")}
             </Button>
             {form.formState.errors.root && (
-              <FieldError>{form.formState.errors.root.message}</FieldError>
+              <Alert variant="destructive">
+                <AlertDescription>
+                  {form.formState.errors.root.message}
+                </AlertDescription>
+              </Alert>
             )}
           </FieldGroup>
         </form>
       </FormProvider>
-    </div>
+    </FieldGroup>
   );
 }
 

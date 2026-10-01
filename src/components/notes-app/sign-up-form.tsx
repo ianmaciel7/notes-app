@@ -12,6 +12,7 @@ import {
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { ComponentProps } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -20,6 +21,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { Policies } from "./auth-policies-card";
 
@@ -69,7 +71,7 @@ export function SignUpForm({
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
-        className={cn("flex flex-col gap-4", className)}
+        className={cn(className)}
       >
         <FieldGroup>
           {requireDisplayName ? (
@@ -133,26 +135,39 @@ export function SignUpForm({
               </Field>
             )}
           />
+          <Policies />
+          <Field>
+            <Button
+              type="submit"
+              disabled={ui.state !== "idle"}
+              className="w-full"
+            >
+              {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
+              {getTranslation(ui, "labels", "createAccount")}
+            </Button>
+          </Field>
+          {form.formState.errors.root && (
+            <Alert variant="destructive">
+              <AlertDescription>
+                {form.formState.errors.root.message}
+              </AlertDescription>
+            </Alert>
+          )}
+          {onSignInClick ? (
+            <Field>
+              <Button
+                data-testid="auth-mode-toggle"
+                type="button"
+                variant="link"
+                size="sm"
+                onClick={onSignInClick}
+              >
+                {getTranslation(ui, "prompts", "haveAccount")}{" "}
+                {getTranslation(ui, "labels", "signIn")}
+              </Button>
+            </Field>
+          ) : null}
         </FieldGroup>
-        <Policies />
-        <Button type="submit" disabled={ui.state !== "idle"} className="w-full">
-          {getTranslation(ui, "labels", "createAccount")}
-        </Button>
-        {form.formState.errors.root && (
-          <FieldError>{form.formState.errors.root.message}</FieldError>
-        )}
-        {onSignInClick ? (
-          <Button
-            data-testid="auth-mode-toggle"
-            type="button"
-            variant="link"
-            size="sm"
-            onClick={onSignInClick}
-          >
-            {getTranslation(ui, "prompts", "haveAccount")}{" "}
-            {getTranslation(ui, "labels", "signIn")}
-          </Button>
-        ) : null}
       </form>
     </FormProvider>
   );

@@ -60,6 +60,10 @@ export function LanguageSelect({ className, ...props }: LanguageSelectProps) {
       {...props}
     >
       <Select
+        items={SUPPORTED_LOCALES.map((loc) => ({
+          value: loc,
+          label: getLocaleLabel(loc),
+        }))}
         value={currentLocale}
         onValueChange={handleLocaleChange}
         disabled={isPending}
@@ -69,9 +73,7 @@ export function LanguageSelect({ className, ...props }: LanguageSelectProps) {
           aria-label={t("label")}
           size="sm"
         >
-          <SelectValue>
-            {getLocaleLabel(currentLocale as SupportedLocale)}
-          </SelectValue>
+          <SelectValue />
         </SelectTrigger>
         <SelectContent align="end">
           <SelectGroup>

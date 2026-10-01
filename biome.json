@@ -39,6 +39,27 @@
           "level": "error",
           "options": { "maxAllowedComplexity": 15 }
         }
+      },
+      "correctness": {
+        "noNestedComponentDefinitions": "error"
+      },
+      "style": {
+        "useNamingConvention": {
+          "level": "error",
+          "options": {
+            "strictCase": false,
+            "conventions": [
+              {
+                "selector": { "kind": "objectLiteralProperty" },
+                "formats": ["camelCase", "PascalCase", "CONSTANT_CASE"]
+              },
+              {
+                "selector": { "kind": "typeProperty" },
+                "formats": ["camelCase", "PascalCase", "CONSTANT_CASE"]
+              }
+            ]
+          }
+        }
       }
     },
     "domains": {
@@ -54,6 +75,25 @@
     }
   },
   "overrides": [
+    {
+      "includes": [
+        "src/lib/i18n/locale-sync.ts",
+        "src/lib/i18n/locale-sync.test.ts"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": { "noDocumentCookie": "off" }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.test.*", "**/*.spec.*"],
+      "linter": {
+        "rules": {
+          "style": { "useNamingConvention": "off" }
+        }
+      }
+    },
     {
       "includes": ["src/components/ui/**", ".agents/skills/**"],
       "linter": {

@@ -1,6 +1,7 @@
 "use client";
 
 import type { PropsWithChildren, ReactNode } from "react";
+import { Empty, EmptyMedia } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { useRequireAuth } from "@/hooks/use-require-auth";
 
@@ -19,12 +20,11 @@ export function RequireAuth({
   if (isLoading) {
     return (
       fallback ?? (
-        <div
-          data-testid="auth-loading"
-          className="flex h-full min-h-[50vh] w-full items-center justify-center p-8"
-        >
-          <Spinner className="size-8" />
-        </div>
+        <Empty data-testid="auth-loading" className="h-full min-h-[50vh] p-8">
+          <EmptyMedia>
+            <Spinner className="size-8" />
+          </EmptyMedia>
+        </Empty>
       )
     );
   }

@@ -77,6 +77,135 @@ export function repoRelativePath(root, filePath) {
   return relative.split(path.sep).join("/");
 }
 
+const ALLOWED_SUBAGENT = "codex:codex-rescue";
+
+export function classifyDelegation(raw) {
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+  const input = data?.tool_input;
+  if (!input || typeof input !== "object") return null;
+  // An omitted subagent_type falls back to the native general-purpose agent.
+  const type =
+    typeof input.subagent_type === "string" && input.subagent_type !== ""
+      ? input.subagent_type
+      : "general-purpose";
+  if (type === ALLOWED_SUBAGENT) return null;
+  return {
+    action: "deny",
+    reason: `Native Agent subagent "${type}" is blocked in this project. Delegate through the Codex plugin: use the ${ALLOWED_SUBAGENT} agent or the /codex:* commands. Do exploration and reads inline (Read, Grep, Serena, graphify).`,
+  };
+}
+
+// Flags that skip the quality gates the harness relies on (AGENTS.md: never
+// bypass hooks/checks merely to obtain a pass).
+const HOOKED_SUBCOMMANDS = new Set([
+  "commit",
+  "push",
+  "merge",
+  "rebase",
+  "cherry-pick",
+  "am",
+]);
+
+// git global options that take their value as the next token.
+const GLOBAL_OPTIONS_WITH_VALUE = new Set([
+  "-C",
+  "-c",
+  "--git-dir",
+  "--work-tree",
+  "--namespace",
+  "--exec-path",
+  "--super-prefix",
+  "--config-env",
+]);
+
+// Splits "git [global options] <subcommand> <args>" into subcommand and args.
+function parseGitInvocation(segment) {
+  const tokens = segment.split(/\s+/);
+  let i = tokens[0] === "rtk" ? 2 : 1;
+  while (i < tokens.length && tokens[i].startsWith("-")) {
+    i += GLOBAL_OPTIONS_WITH_VALUE.has(tokens[i]) ? 2 : 1;
+  }
+  return { sub: tokens[i], args: tokens.slice(i + 1) };
+}
+
+const BASH_BYPASS_RULES = [
+  {
+    test: ({ sub, args }) =>
+      HOOKED_SUBCOMMANDS.has(sub) &&
+      args.some((a) => a === "--no-verify" || a === "-n"),
+    reason: "skips git hooks (--no-verify)",
+  },
+  {
+    test: ({ args }) => args.includes("--no-gpg-sign"),
+    reason: "bypasses commit signing (--no-gpg-sign)",
+  },
+  {
+    test: ({ sub, args }) =>
+      sub === "push" &&
+      args.some((a) => a === "--force" || a === "-f") &&
+      !args.some((a) => a.startsWith("--force-with-lease")),
+    reason: "force-pushes without --force-with-lease",
+  },
+];
+
+export function classifyBashCommand(raw) {
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+  const command = data?.tool_input?.command;
+  if (typeof command !== "string") return null;
+  // Judge only segments that start with git, so quoted text or heredoc bodies
+  // that merely mention a flag are not mistaken for a command.
+  const withoutHeredocs = command.replace(
+    /<<-?\s*(['"]?)(\w+)\1[^\n]*\n[\s\S]*?\n\s*\2(?=\n|$)/g,
+    "",
+  );
+  const segments = withoutHeredocs
+    .split(/&&|\|\||[;|\n]/)
+    .map((segment) => segment.trim())
+    .filter((segment) => /^(rtk\s+)?git\s/.test(segment))
+    .map(parseGitInvocation);
+  const rule = BASH_BYPASS_RULES.find((r) => segments.some((s) => r.test(s)));
+  if (!rule) return null;
+  return {
+    action: "deny",
+    reason: `Command ${rule.reason}. Fix the failing check instead, or ask the user to run it explicitly.`,
+  };
+}
+
+// PreToolUse decision in the shape Claude Code documents: exit 0 plus JSON.
+export function preToolUseDecision(action, reason) {
+  return JSON.stringify({
+    hookSpecificOutput: {
+      hookEventName: "PreToolUse",
+      permissionDecision: action,
+      permissionDecisionReason: reason,
+    },
+  });
+}
+
+// Local JSONL telemetry so harness rules can be judged by how often they fire.
+export function logHookEvent(root, event) {
+  try {
+    const dir = path.join(root, ".agents", "logs");
+    fs.mkdirSync(dir, { recursive: true });
+    fs.appendFileSync(
+      path.join(dir, "hook-events.jsonl"),
+      `${JSON.stringify({ ts: new Date().toISOString(), ...event })}\n`,
+    );
+  } catch {
+    // Telemetry must never break an edit.
+  }
+}
+
 export function isBiomeChecked(relative) {
   return BIOME_EXTENSIONS.has(path.posix.extname(relative));
 }

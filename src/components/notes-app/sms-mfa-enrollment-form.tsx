@@ -25,6 +25,7 @@ import {
   CountrySelect,
   type CountrySelectorRef,
 } from "@/components/notes-app/country-select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -44,7 +45,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 export type MultiFactorEnrollmentPhoneNumberFormProps = Omit<
@@ -114,7 +115,7 @@ function MultiFactorEnrollmentPhoneNumberForm({
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
-        className={cn("flex flex-col gap-y-4", className)}
+        className={cn("flex flex-col gap-4", className)}
         {...props}
       >
         <FieldGroup>
@@ -168,10 +169,15 @@ function MultiFactorEnrollmentPhoneNumberForm({
             ref={recaptchaContainerRef}
           />
           <Button type="submit" disabled={ui.state !== "idle"}>
+            {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
             {getTranslation(ui, "labels", "sendCode")}
           </Button>
           {form.formState.errors.root && (
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <Alert variant="destructive">
+              <AlertDescription>
+                {form.formState.errors.root.message}
+              </AlertDescription>
+            </Alert>
           )}
         </FieldGroup>
       </form>
@@ -267,10 +273,15 @@ export function MultiFactorEnrollmentVerifyPhoneNumberForm({
             )}
           />
           <Button type="submit" disabled={ui.state !== "idle"}>
+            {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
             {getTranslation(ui, "labels", "verifyCode")}
           </Button>
           {form.formState.errors.root && (
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <Alert variant="destructive">
+              <AlertDescription>
+                {form.formState.errors.root.message}
+              </AlertDescription>
+            </Alert>
           )}
         </FieldGroup>
       </form>

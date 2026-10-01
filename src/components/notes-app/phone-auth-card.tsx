@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FieldGroup } from "@/components/ui/field";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
@@ -40,26 +41,24 @@ export function PhoneAuthCard({
   }
 
   return (
-    <div className={cn("max-w-sm mx-auto", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle>{titleText}</CardTitle>
-          <CardDescription>{subtitleText}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <PhoneAuthForm />
-          {children ? (
-            <>
-              <Separator className="my-4" />
-              <div className="flex flex-col gap-2">
-                {children}
-                <RedirectError />
-              </div>
-            </>
-          ) : null}
-        </CardContent>
-      </Card>
-    </div>
+    <Card className={cn("w-full max-w-sm mx-auto", className)} {...props}>
+      <CardHeader>
+        <CardTitle>{titleText}</CardTitle>
+        <CardDescription>{subtitleText}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <PhoneAuthForm />
+        {children ? (
+          <>
+            <Separator className="my-4" />
+            <FieldGroup className="gap-2">
+              {children}
+              <RedirectError />
+            </FieldGroup>
+          </>
+        ) : null}
+      </CardContent>
+    </Card>
   );
 }
 

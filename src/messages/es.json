@@ -6,6 +6,7 @@
     "backToHome": "Volver al inicio"
   },
   "auth": {
+    "countrySelector": "Seleccionar país",
     "guestGreeting": "Notes App",
     "guestDescription": "Inicia sesión para acceder a tus notas.",
     "userGreeting": "¡Hola, {name}!",
@@ -16,10 +17,12 @@
     "signOut": "Cerrar sesión",
     "orContinueWith": "O continuar con",
     "continueAsGuest": "Continuar como invitado",
+    "signInWithGoogle": "Iniciar sesión con Google",
     "googleSignInFailed": "No se pudo iniciar sesión con Google. Inténtalo de nuevo.",
     "guestSignInFailed": "No se pudo iniciar una sesión de invitado. Inténtalo de nuevo.",
     "backToHome": "Volver al inicio",
-    "totpQrCodeAlt": "Código QR del autenticador TOTP"
+    "totpQrCodeAlt": "Código QR del autenticador TOTP",
+    "totpSecret": "Clave secreta TOTP"
   },
   "language": {
     "label": "Idioma",

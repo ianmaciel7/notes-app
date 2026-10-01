@@ -32,20 +32,18 @@ export function ForgotPasswordCard({
   const subtitleText = getTranslation(ui, "prompts", "enterEmailToReset");
 
   return (
-    <div ref={ref} className={cn("max-w-sm mx-auto", className)}>
-      <Card>
-        <CardHeader>
-          <CardTitle>{titleText}</CardTitle>
-          <CardDescription>{subtitleText}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ForgotPasswordForm
-            onPasswordSent={onPasswordSent}
-            onBackToSignInClick={onBackToSignInClick}
-          />
-        </CardContent>
-      </Card>
-    </div>
+    <Card ref={ref} className={cn("w-full max-w-sm mx-auto", className)}>
+      <CardHeader>
+        <CardTitle>{titleText}</CardTitle>
+        <CardDescription>{subtitleText}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ForgotPasswordForm
+          onPasswordSent={onPasswordSent}
+          onBackToSignInClick={onBackToSignInClick}
+        />
+      </CardContent>
+    </Card>
   );
 }
 
