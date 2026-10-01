@@ -19,9 +19,9 @@ import {
 } from "@/lib/i18n/locale-sync";
 import { cn } from "@/lib/utils";
 
-export interface LanguageSelectProps extends ComponentProps<"div"> {}
+type LanguageSelectProps = ComponentProps<"div">;
 
-export function LanguageSelect({ className, ...props }: LanguageSelectProps) {
+function LanguageSelect({ className, ...props }: LanguageSelectProps) {
   const currentLocale = useLocale();
   const t = useTranslations("language");
   const router = useRouter();
@@ -88,3 +88,5 @@ export function LanguageSelect({ className, ...props }: LanguageSelectProps) {
     </div>
   );
 }
+
+export { LanguageSelect, type LanguageSelectProps };

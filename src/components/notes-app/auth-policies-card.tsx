@@ -1,22 +1,19 @@
 import { getTranslation } from "@firebase-oss/ui-core";
 import { PolicyContext, type PolicyURL, useUI } from "@firebase-oss/ui-react";
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps, PropsWithChildren } from "react";
 import { use } from "react";
 import { Button } from "@/components/ui/button";
 import { FieldDescription } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-export interface AuthPoliciesCardProps extends ComponentProps<"div"> {}
+type AuthPoliciesCardProps = ComponentProps<"div">;
 
-function PolicyLink({
-  onNavigate,
-  url,
-  children,
-}: {
+type PolicyLinkProps = PropsWithChildren<{
   onNavigate?: (url: PolicyURL) => void;
   url: PolicyURL;
-  children: ReactNode;
-}) {
+}>;
+
+function PolicyLink({ onNavigate, url, children }: PolicyLinkProps) {
   if (onNavigate) {
     return (
       <Button
@@ -44,10 +41,7 @@ function PolicyLink({
   );
 }
 
-export function AuthPoliciesCard({
-  className,
-  ...props
-}: AuthPoliciesCardProps) {
+function AuthPoliciesCard({ className, ...props }: AuthPoliciesCardProps) {
   const ui = useUI();
   const policies = use(PolicyContext);
 
@@ -104,6 +98,11 @@ export function AuthPoliciesCard({
   );
 }
 
-export { AuthPoliciesCard as Policies };
+type PoliciesProps = AuthPoliciesCardProps;
 
-export type PoliciesProps = AuthPoliciesCardProps;
+export {
+  AuthPoliciesCard,
+  AuthPoliciesCard as Policies,
+  type AuthPoliciesCardProps,
+  type PoliciesProps,
+};

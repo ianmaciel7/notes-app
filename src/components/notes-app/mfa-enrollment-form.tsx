@@ -14,14 +14,14 @@ import { cn } from "@/lib/utils";
 
 type Hint = (typeof FactorId)[keyof typeof FactorId];
 
-export type MfaEnrollmentFormProps = ComponentProps<"div"> & {
+type MfaEnrollmentFormProps = ComponentProps<"div"> & {
   onEnrollment?: () => void;
   hints?: Hint[];
 };
 
 const DEFAULT_HINTS = [FactorId.TOTP, FactorId.PHONE] as const;
 
-export function MfaEnrollmentForm({
+function MfaEnrollmentForm({
   onEnrollment,
   hints: hintsProp,
   className,
@@ -98,3 +98,5 @@ function SmsButton(props: ComponentProps<typeof Button>) {
     </Button>
   );
 }
+
+export { MfaEnrollmentForm, type MfaEnrollmentFormProps };

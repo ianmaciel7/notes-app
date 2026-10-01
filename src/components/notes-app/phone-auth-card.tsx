@@ -18,12 +18,13 @@ import { FieldGroup } from "@/components/ui/field";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-export interface PhoneAuthCardProps
-  extends PropsWithChildren<Omit<ComponentProps<"div">, "children">> {
+type PhoneAuthCardProps = PropsWithChildren<
+  Omit<ComponentProps<"div">, "children">
+> & {
   onSignIn?: (user: User) => void;
-}
+};
 
-export function PhoneAuthCard({
+function PhoneAuthCard({
   children,
   onSignIn,
   className,
@@ -62,6 +63,11 @@ export function PhoneAuthCard({
   );
 }
 
-export { PhoneAuthCard as PhoneAuthScreen };
+type PhoneAuthScreenProps = PhoneAuthCardProps;
 
-export type PhoneAuthScreenProps = PhoneAuthCardProps;
+export {
+  PhoneAuthCard,
+  PhoneAuthCard as PhoneAuthScreen,
+  type PhoneAuthCardProps,
+  type PhoneAuthScreenProps,
+};

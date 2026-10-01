@@ -26,12 +26,12 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
-export type TotpMfaAssertionFormProps = ComponentProps<"div"> & {
+type TotpMfaAssertionFormProps = ComponentProps<"div"> & {
   hint: MultiFactorInfo;
   onSuccess?: (credential: UserCredential) => void;
 };
 
-export function TotpMfaAssertionForm({
+function TotpMfaAssertionForm({
   hint,
   onSuccess,
   className,
@@ -119,6 +119,8 @@ export function TotpMfaAssertionForm({
 }
 
 export {
+  TotpMfaAssertionForm,
   TotpMfaAssertionForm as TotpMultiFactorAssertionForm,
+  type TotpMfaAssertionFormProps,
   type TotpMfaAssertionFormProps as TotpMultiFactorAssertionFormProps,
 };

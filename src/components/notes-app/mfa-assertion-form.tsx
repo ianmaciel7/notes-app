@@ -17,11 +17,11 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-export type MfaAssertionFormProps = ComponentProps<"div"> & {
+type MfaAssertionFormProps = ComponentProps<"div"> & {
   onSuccess?: (credential: UserCredential) => void;
 };
 
-export function MfaAssertionForm({
+function MfaAssertionForm({
   onSuccess,
   className,
   ...props
@@ -116,6 +116,8 @@ function SmsButton(props: ComponentProps<typeof Button>) {
 }
 
 export {
+  MfaAssertionForm,
   MfaAssertionForm as MultiFactorAuthAssertionForm,
+  type MfaAssertionFormProps,
   type MfaAssertionFormProps as MultiFactorAuthAssertionFormProps,
 };

@@ -16,26 +16,24 @@ import { BACKEND_UNREACHABLE_EVENT } from "@/lib/error-capture/firebase-logs";
 import { reconnectFirestore } from "@/lib/firebase/firestore";
 import { cn } from "@/lib/utils";
 
-interface ConnectionAlertProps extends React.ComponentProps<"div"> {
+type ConnectionAlertProps = React.ComponentProps<"div"> & {
   children: React.ReactNode;
-}
+};
 
-interface ConnectionAlertIconProps
-  extends React.ComponentProps<typeof WifiOffIcon> {}
+type ConnectionAlertIconProps = React.ComponentProps<typeof WifiOffIcon>;
 
-interface ConnectionAlertTitleProps
-  extends React.ComponentProps<typeof AlertTitle> {}
+type ConnectionAlertTitleProps = React.ComponentProps<typeof AlertTitle>;
 
-interface ConnectionAlertDescriptionProps
-  extends React.ComponentProps<typeof AlertDescription> {}
+type ConnectionAlertDescriptionProps = React.ComponentProps<
+  typeof AlertDescription
+>;
 
-interface ConnectionAlertActionProps
-  extends React.ComponentProps<typeof AlertAction> {}
+type ConnectionAlertActionProps = React.ComponentProps<typeof AlertAction>;
 
-interface ConnectionAlertContextValue {
+type ConnectionAlertContextValue = {
   onReconnect: () => Promise<void>;
   reconnecting: boolean;
-}
+};
 
 const ConnectionAlertContext =
   createContext<ConnectionAlertContextValue | null>(null);

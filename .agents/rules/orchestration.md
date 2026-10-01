@@ -22,6 +22,17 @@ Delegation is a means, not a goal. The orchestrator executes directly, with no s
 
 Prefer the simplest topology that reliably solves the task. Do not fan out several agents for a short, localized change.
 
+### 1.2 Cross-Harness Codex Preference
+
+When the repository is being operated through Claude Code, Gemini, Antigravity,
+or another non-Codex harness and Codex subagent invocation is available, prefer
+delegating implementation, investigation, and independent review work to a
+Codex subagent. This keeps the repository's primary orchestration and quality
+workflow aligned across harnesses. The direct-execution exemptions above still
+apply, and the harness may proceed locally when Codex dispatch is unavailable,
+would add disproportionate overhead, or the task requires the harness's whole
+conversation context.
+
 ---
 
 ## 2. Orchestration Execution Lifecycle

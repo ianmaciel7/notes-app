@@ -263,7 +263,7 @@ export function checkLoginCardProps(sf, filePath) {
       file: path.relative(root, filePath),
       propName: "SignInAuthScreenProps",
       message:
-        "login-card.tsx must declare 'LoginCardProps' as its canonical props interface, not 'SignInAuthScreenProps'. Re-export SignInAuthScreenProps as an alias if needed.",
+        "login-card.tsx must declare 'LoginCardProps' as its canonical props type, not 'SignInAuthScreenProps'. Re-export SignInAuthScreenProps as an alias if needed.",
     };
   }
 
@@ -272,7 +272,7 @@ export function checkLoginCardProps(sf, filePath) {
       file: path.relative(root, filePath),
       propName: "LoginCardProps",
       message:
-        "login-card.tsx must declare 'LoginCardProps' as its canonical props interface.",
+        "login-card.tsx must declare 'LoginCardProps' as its canonical props type.",
     };
   }
 
@@ -280,8 +280,11 @@ export function checkLoginCardProps(sf, filePath) {
 }
 
 /**
- * Every application alert wrapper must expose the canonical props interface
+ * Every application alert wrapper must expose the canonical props type
  * derived from its filename, even when it currently adds no custom props.
+ * The type is declared with `type` (the `interface` keyword is banned in
+ * application components by `component-no-interface`) and published through
+ * the file's trailing export block.
  */
 export function checkAlertProps(sf, filePath) {
   const baseName = path.basename(filePath);
@@ -291,26 +294,26 @@ export function checkAlertProps(sf, filePath) {
 
   const expectedName = `${toPascalCase(baseName.replace(/\.tsx$/, ""))}Props`;
   const exportedNames = collectExportedNames(sf);
-  let hasCanonicalInterface = false;
+  let hasCanonicalProps = false;
 
   ts.forEachChild(sf, (node) => {
     if (
-      ts.isInterfaceDeclaration(node) &&
+      (ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node)) &&
       node.name.text === expectedName &&
       exportedNames.has(expectedName)
     ) {
-      hasCanonicalInterface = true;
+      hasCanonicalProps = true;
     }
   });
 
-  if (hasCanonicalInterface) {
+  if (hasCanonicalProps) {
     return null;
   }
 
   return {
     file: path.relative(root, filePath),
     propName: expectedName,
-    message: `${baseName} must export '${expectedName}' as its canonical props interface.`,
+    message: `${baseName} must export '${expectedName}' as its canonical props type.`,
   };
 }
 
@@ -345,17 +348,33 @@ export function checkConnectionAlertContract(sf, filePath, content) {
     };
   }
 
+  const requiresChildren = (members) =>
+    members.some(
+      (member) =>
+        ts.isPropertySignature(member) &&
+        member.name.getText(sf) === "children" &&
+        !member.questionToken,
+    );
+  const typeLiterals = (typeNode) =>
+    ts.isIntersectionTypeNode(typeNode)
+      ? typeNode.types.filter(ts.isTypeLiteralNode)
+      : ts.isTypeLiteralNode(typeNode)
+        ? [typeNode]
+        : [];
+
   let childrenIsRequired = false;
   ts.forEachChild(sf, (node) => {
     if (
       ts.isInterfaceDeclaration(node) &&
       node.name.text === "ConnectionAlertProps"
     ) {
-      childrenIsRequired = node.members.some(
-        (member) =>
-          ts.isPropertySignature(member) &&
-          member.name.getText(sf) === "children" &&
-          !member.questionToken,
+      childrenIsRequired = requiresChildren(node.members);
+    } else if (
+      ts.isTypeAliasDeclaration(node) &&
+      node.name.text === "ConnectionAlertProps"
+    ) {
+      childrenIsRequired = typeLiterals(node.type).some((literal) =>
+        requiresChildren(literal.members),
       );
     }
   });
@@ -394,6 +413,107 @@ export function checkConnectionAlertContract(sf, filePath, content) {
   return null;
 }
 
+function getComponentFunction(node) {
+  if (ts.isFunctionDeclaration(node) && node.name) {
+    return { name: node.name.text, fn: node };
+  }
+
+  if (!ts.isVariableStatement(node)) return null;
+
+  for (const decl of node.declarationList.declarations) {
+    const init = decl.initializer;
+    if (
+      ts.isIdentifier(decl.name) &&
+      init &&
+      (ts.isArrowFunction(init) || ts.isFunctionExpression(init))
+    ) {
+      return { name: decl.name.text, fn: init };
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Component props must be named (`${ComponentName}Props`) so the other checks
+ * in this guard can see them. An anonymous object type literal on the first
+ * parameter of a component (`function Foo({ a }: { a?: string })`) bypasses
+ * every `*Props` check and loses native element inheritance.
+ */
+export function checkInlinePropsTypes(sf, filePath) {
+  const violations = [];
+
+  ts.forEachChild(sf, (node) => {
+    const component = getComponentFunction(node);
+    if (!component || !/^[A-Z]/.test(component.name)) return;
+
+    const typeNode = component.fn.parameters[0]?.type;
+    if (typeNode && ts.isTypeLiteralNode(typeNode)) {
+      violations.push({
+        file: path.relative(root, filePath),
+        propName: component.name,
+        message: `${component.name} declares its props as an inline object type literal. Declare 'type ${component.name}Props = ComponentProps<...> & { ... }' and use it instead.`,
+      });
+    }
+  });
+
+  return violations;
+}
+
+/**
+ * Overlay components (dialog, sheet, drawer) own their own open state and a
+ * distinct concern, so they must live in a file named after them. Declaring one
+ * inside another component's file couples unrelated concerns, hides it from the
+ * file naming guard and makes it impossible to test or preview in isolation.
+ *
+ * Cards and forms are deliberately excluded: multi-step flows (phone auth, MFA)
+ * legitimately keep their step forms next to the flow that owns them.
+ *
+ * A declaration is allowed when its name starts with the PascalCase of the
+ * filename (case-insensitive), so compound parts stay put.
+ *
+ * Example violation:
+ *   File: space-sidebar.tsx
+ *   Declares: function CreateSpaceDialog(...)  <- move to create-space-dialog.tsx
+ */
+const STANDALONE_SURFACE_SUFFIXES = ["Dialog", "Sheet", "Drawer"];
+
+export function checkStandaloneSurfaceComponents(sf, filePath) {
+  const baseName = path.basename(filePath);
+  if (!baseName.endsWith(".tsx") || baseName.endsWith(".test.tsx")) {
+    return [];
+  }
+
+  const ownerName = toPascalCase(baseName.replace(/\.tsx$/, ""));
+  const violations = [];
+
+  ts.forEachChild(sf, (node) => {
+    const component = getComponentFunction(node);
+    if (!component || !/^[A-Z]/.test(component.name)) return;
+
+    const suffix = STANDALONE_SURFACE_SUFFIXES.find((s) =>
+      component.name.endsWith(s),
+    );
+    if (
+      !suffix ||
+      component.name.toLowerCase().startsWith(ownerName.toLowerCase())
+    ) {
+      return;
+    }
+
+    const targetFile = `${component.name
+      .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+      .toLowerCase()}.tsx`;
+    violations.push({
+      file: path.relative(root, filePath),
+      propName: component.name,
+      message: `${component.name} is a standalone ${suffix.toLowerCase()} declared inside '${baseName}'. Move it to its own file '${targetFile}'.`,
+    });
+  });
+
+  return violations;
+}
+
 export function checkPropsInFile(filePath, content) {
   const sf = ts.createSourceFile(
     filePath,
@@ -426,6 +546,9 @@ export function checkPropsInFile(filePath, content) {
     content,
   );
   if (connectionAlertViolation) violations.push(connectionAlertViolation);
+
+  violations.push(...checkInlinePropsTypes(sf, filePath));
+  violations.push(...checkStandaloneSurfaceComponents(sf, filePath));
 
   ts.forEachChild(sf, (node) => {
     if (ts.isInterfaceDeclaration(node) && node.name.text.endsWith("Props")) {

@@ -17,12 +17,12 @@ import {
 
 const defaultUi = initializeUI({ app });
 
-export interface AuthProviderProps extends Omit<FirebaseUIProviderProps, "ui"> {
+type AuthProviderProps = Omit<FirebaseUIProviderProps, "ui"> & {
   ui?: FirebaseUIProviderProps["ui"];
   initialUser?: User | null;
-}
+};
 
-export function AuthProvider({
+function AuthProvider({
   children,
   ui = defaultUi,
   initialUser = null,
@@ -72,3 +72,5 @@ export function AuthProvider({
     </FirebaseUIProvider>
   );
 }
+
+export { AuthProvider, type AuthProviderProps };

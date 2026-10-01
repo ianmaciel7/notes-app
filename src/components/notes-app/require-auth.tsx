@@ -5,12 +5,12 @@ import { Empty, EmptyMedia } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { useRequireAuth } from "@/hooks/use-require-auth";
 
-export interface RequireAuthProps extends PropsWithChildren {
+type RequireAuthProps = PropsWithChildren<{
   fallback?: ReactNode;
   redirectTo?: string;
-}
+}>;
 
-export function RequireAuth({
+function RequireAuth({
   children,
   fallback,
   redirectTo = "/login",
@@ -35,3 +35,5 @@ export function RequireAuth({
 
   return <>{children}</>;
 }
+
+export { RequireAuth, type RequireAuthProps };

@@ -48,11 +48,10 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
-export interface VerifyPhoneNumberFormProps
-  extends Omit<ComponentProps<"form">, "onSubmit"> {
+type VerifyPhoneNumberFormProps = Omit<ComponentProps<"form">, "onSubmit"> & {
   verificationId: string;
   onSuccess: (credential: UserCredential) => void;
-}
+};
 
 function VerifyPhoneNumberForm({
   verificationId,
@@ -146,10 +145,9 @@ function VerifyPhoneNumberForm({
   );
 }
 
-export interface PhoneNumberFormProps
-  extends Omit<ComponentProps<"form">, "onSubmit"> {
+type PhoneNumberFormProps = Omit<ComponentProps<"form">, "onSubmit"> & {
   onSubmit: (verificationId: string) => void;
-}
+};
 
 function PhoneNumberForm({
   onSubmit: onVerificationSuccess,
@@ -252,9 +250,9 @@ function PhoneNumberForm({
   );
 }
 
-export interface PhoneAuthFormProps extends FirebasePhoneAuthFormProps {}
+type PhoneAuthFormProps = FirebasePhoneAuthFormProps;
 
-export function PhoneAuthForm(props: PhoneAuthFormProps) {
+function PhoneAuthForm(props: PhoneAuthFormProps) {
   const [verificationId, setVerificationId] = useState<string | null>(null);
 
   if (!verificationId) {
@@ -270,3 +268,10 @@ export function PhoneAuthForm(props: PhoneAuthFormProps) {
     />
   );
 }
+
+export {
+  PhoneAuthForm,
+  type PhoneAuthFormProps,
+  type PhoneNumberFormProps,
+  type VerifyPhoneNumberFormProps,
+};

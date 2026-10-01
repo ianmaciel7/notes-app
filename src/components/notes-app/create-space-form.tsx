@@ -19,12 +19,11 @@ import {
   validateCreateSpaceInput,
 } from "@/lib/validators/space";
 
-export interface CreateSpaceFormProps
-  extends Omit<ComponentProps<"form">, "onSubmit"> {
+type CreateSpaceFormProps = Omit<ComponentProps<"form">, "onSubmit"> & {
   onSubmitSpace: (name: string, icon: string) => Promise<void>;
   onCancel?: () => void;
   isLoading?: boolean;
-}
+};
 
 const ICON_COMPONENTS: Record<AllowedSpaceIcon, typeof Folder> = {
   folder: Folder,
@@ -35,7 +34,7 @@ const ICON_COMPONENTS: Record<AllowedSpaceIcon, typeof Folder> = {
   compass: Folder,
 };
 
-export function CreateSpaceForm({
+function CreateSpaceForm({
   onSubmitSpace,
   onCancel,
   isLoading = false,
@@ -164,3 +163,5 @@ export function CreateSpaceForm({
     </form>
   );
 }
+
+export { CreateSpaceForm, type CreateSpaceFormProps };

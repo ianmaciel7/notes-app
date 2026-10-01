@@ -20,11 +20,12 @@ import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import {
   type ComponentProps,
+  type PropsWithChildren,
   type ReactNode,
   useEffect,
   useState,
 } from "react";
-import { CreateSpaceForm } from "@/components/notes-app/create-space-form";
+import { CreateSpaceDialog } from "@/components/notes-app/create-space-dialog";
 import { LanguageSelect } from "@/components/notes-app/language-select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -99,13 +100,13 @@ import { cn } from "@/lib/utils";
 import type { AllowedSpaceIcon } from "@/lib/validators/space";
 import type { Space } from "@/types/space";
 
-export interface SpaceSidebarProps extends ComponentProps<"div"> {
+type SpaceSidebarProps = ComponentProps<"div"> & {
   currentSpaceId?: string;
   children?: ReactNode;
   onSelectSpace?: (spaceId: string) => void;
-}
+};
 
-export function useSpaceSidebar({
+function useSpaceSidebar({
   currentSpaceId,
 }: Pick<SpaceSidebarProps, "currentSpaceId">) {
   const router = useRouter();
@@ -151,39 +152,46 @@ const ICON_MAP: Record<AllowedSpaceIcon, typeof Folder> = {
 
 const SIDEBAR_MENU_POPUP = "min-w-60";
 
-function SpaceIcon({
-  iconKey,
-  className,
-}: {
+type SpaceIconProps = ComponentProps<"svg"> & {
   iconKey?: string;
-  className?: string;
-}) {
+};
+
+function SpaceIcon({ iconKey, ...props }: SpaceIconProps) {
   const IconComp =
     Object.entries(ICON_MAP).find(([key]) => key === iconKey)?.[1] ?? Folder;
-  return <IconComp className={className} />;
+  return <IconComp {...props} />;
 }
 
-function UserAvatar({
-  displayName,
-  photoUrl,
-}: {
+type UserAvatarProps = ComponentProps<typeof Avatar> & {
   displayName: string;
   photoUrl: string | null;
-}) {
+};
+
+function UserAvatar({ displayName, photoUrl, ...props }: UserAvatarProps) {
   if (photoUrl) {
     return (
-      <Avatar size="sm">
+      <Avatar {...props} size="sm">
         <AvatarImage src={photoUrl} alt="" />
         <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
       </Avatar>
     );
   }
   return (
-    <Avatar size="sm">
+    <Avatar {...props} size="sm">
       <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
     </Avatar>
   );
 }
+
+type SpaceSidebarStatusProps = ComponentProps<"div"> & {
+  error: Error | null;
+  isOffline: boolean;
+  loading: boolean;
+  notFound: boolean;
+  onBack: () => void;
+  onRetry: () => void;
+  t: (key: string) => string;
+};
 
 function SpaceSidebarStatus({
   error,
@@ -193,19 +201,9 @@ function SpaceSidebarStatus({
   onBack,
   onRetry,
   className,
-  props,
   t,
-}: {
-  error: Error | null;
-  isOffline: boolean;
-  loading: boolean;
-  notFound: boolean;
-  onBack: () => void;
-  onRetry: () => void;
-  className?: string;
-  props: ComponentProps<"div">;
-  t: (key: string) => string;
-}): ReactNode {
+  ...props
+}: SpaceSidebarStatusProps): ReactNode {
   if (error) {
     return (
       <div
@@ -245,7 +243,7 @@ function SpaceSidebarStatus({
         )}
         {...props}
       >
-        <span className="sr-only">{t("loading")}</span>
+        <output className="sr-only">{t("loading")}</output>
         <Skeleton className="h-4 w-24" />
       </div>
     );
@@ -282,17 +280,22 @@ function SpaceSidebarStatus({
   return null;
 }
 
+type SpaceSidebarEmptyProps = ComponentProps<"div"> & {
+  onCreate: () => void;
+  t: (key: string) => string;
+};
+
 function SpaceSidebarEmpty({
   onCreate,
   t,
-}: {
-  onCreate: () => void;
-  t: (key: string) => string;
-}) {
+  className,
+  ...props
+}: SpaceSidebarEmptyProps) {
   return (
     <div
       data-testid="space-switcher-empty"
-      className="flex flex-1 items-center justify-center p-8"
+      className={cn("flex flex-1 items-center justify-center p-8", className)}
+      {...props}
     >
       <Empty className="max-w-sm border border-dashed p-6">
         <EmptyHeader>
@@ -317,6 +320,14 @@ function SpaceSidebarEmpty({
   );
 }
 
+type SpaceSidebarMainProps = PropsWithChildren & {
+  notFound: boolean;
+  onCreate: () => void;
+  showEmptyState: boolean;
+  status: ReactNode;
+  t: (key: string) => string;
+};
+
 function SpaceSidebarMain({
   children,
   notFound,
@@ -324,20 +335,25 @@ function SpaceSidebarMain({
   showEmptyState,
   status,
   t,
-}: {
-  children?: ReactNode;
-  notFound: boolean;
-  onCreate: () => void;
-  showEmptyState: boolean;
-  status: ReactNode;
-  t: (key: string) => string;
-}) {
+}: SpaceSidebarMainProps) {
   if (notFound) return status;
   if (showEmptyState) {
     return <SpaceSidebarEmpty onCreate={onCreate} t={t} />;
   }
   return children;
 }
+
+type SpaceSwitcherMenuProps = Omit<
+  ComponentProps<typeof SidebarMenu>,
+  "onSelect"
+> & {
+  activeSpace?: Space;
+  onCreate: () => void;
+  onSelect: (spaceId: string) => void;
+  spaces: Space[];
+  t: (key: string) => string;
+  visibleSpaces: Space[];
+};
 
 function SpaceSwitcherMenu({
   activeSpace,
@@ -346,16 +362,10 @@ function SpaceSwitcherMenu({
   spaces,
   t,
   visibleSpaces,
-}: {
-  activeSpace?: Space;
-  onCreate: () => void;
-  onSelect: (spaceId: string) => void;
-  spaces: Space[];
-  t: (key: string) => string;
-  visibleSpaces: Space[];
-}) {
+  ...props
+}: SpaceSwitcherMenuProps) {
   return (
-    <SidebarMenu aria-label={t("workspace")}>
+    <SidebarMenu aria-label={t("workspace")} {...props}>
       <SidebarMenuItem>
         {spaces.length > 0 ? (
           <DropdownMenu>
@@ -416,7 +426,7 @@ function SpaceSwitcherMenu({
   );
 }
 
-export function SpaceSidebar({
+function SpaceSidebar({
   currentSpaceId,
   children,
   onSelectSpace,
@@ -463,8 +473,8 @@ export function SpaceSidebar({
       onBack={() => router.replace("/")}
       onRetry={retry}
       className={className}
-      props={props}
       t={t}
+      {...props}
     />
   );
 
@@ -713,31 +723,4 @@ export function SpaceSidebar({
   );
 }
 
-function CreateSpaceDialog({
-  open,
-  onOpenChange,
-  onSubmit,
-  isLoading,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSubmit: (name: string, icon: string) => Promise<void>;
-  isLoading: boolean;
-}) {
-  const t = useTranslations("spaces");
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent data-testid="create-space-dialog">
-        <DialogHeader>
-          <DialogTitle>{t("dialogTitle")}</DialogTitle>
-          <DialogDescription>{t("dialogDescription")}</DialogDescription>
-        </DialogHeader>
-        <CreateSpaceForm
-          onSubmitSpace={onSubmit}
-          onCancel={() => onOpenChange(false)}
-          isLoading={isLoading}
-        />
-      </DialogContent>
-    </Dialog>
-  );
-}
+export { SpaceSidebar, type SpaceSidebarProps, useSpaceSidebar };

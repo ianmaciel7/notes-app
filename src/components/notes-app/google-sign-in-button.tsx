@@ -7,12 +7,14 @@ import type { ComponentProps } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export interface GoogleSignInButtonProps
-  extends Omit<ComponentProps<typeof Button>, "children"> {
+type GoogleSignInButtonProps = Omit<
+  ComponentProps<typeof Button>,
+  "children"
+> & {
   label?: string;
-}
+};
 
-export function GoogleSignInButton({
+function GoogleSignInButton({
   label: customLabel,
   className,
   ...props
@@ -38,3 +40,5 @@ export function GoogleSignInButton({
     </Button>
   );
 }
+
+export { GoogleSignInButton, type GoogleSignInButtonProps };

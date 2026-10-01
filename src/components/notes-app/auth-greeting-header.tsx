@@ -5,12 +5,9 @@ import type { ComponentProps } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
-export interface AuthGreetingHeaderProps extends ComponentProps<"div"> {}
+type AuthGreetingHeaderProps = ComponentProps<"div">;
 
-export function AuthGreetingHeader({
-  className,
-  ...props
-}: AuthGreetingHeaderProps) {
+function AuthGreetingHeader({ className, ...props }: AuthGreetingHeaderProps) {
   const { user } = useAuth();
   const t = useTranslations("auth");
 
@@ -31,5 +28,9 @@ export function AuthGreetingHeader({
 }
 
 // Backwards-compatible aliases
-export { AuthGreetingHeader as AuthGreeting };
-export type { AuthGreetingHeaderProps as AuthGreetingProps };
+export {
+  AuthGreetingHeader as AuthGreeting,
+  AuthGreetingHeader,
+  type AuthGreetingHeaderProps,
+  type AuthGreetingHeaderProps as AuthGreetingProps,
+};

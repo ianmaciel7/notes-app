@@ -5,9 +5,11 @@ import ts from "typescript";
 import {
   checkAlertProps,
   checkConnectionAlertContract,
+  checkInlinePropsTypes,
   checkLoginCardProps,
   checkPrimaryExportMatchesFilename,
   checkPropsInFile,
+  checkStandaloneSurfaceComponents,
 } from "./guard-component-props.mjs";
 
 function parseTsx(code, filename = "dummy.tsx") {
@@ -79,7 +81,26 @@ test("checkPropsInFile allows canonical library props", () => {
   assert.equal(violations.length, 0);
 });
 
-test("checkAlertProps requires the canonical alert props interface", () => {
+test("checkAlertProps accepts a canonical props type alias", () => {
+  const typeAlias = checkAlertProps(
+    parseTsx(
+      'import type * as React from "react"; type ConnectionAlertProps = React.ComponentProps<"div">; function ConnectionAlert() { return null; }; export { ConnectionAlert, type ConnectionAlertProps };',
+    ),
+    "connection-alert.tsx",
+  );
+  assert.equal(typeAlias, null);
+
+  const notExported = checkAlertProps(
+    parseTsx(
+      'import type * as React from "react"; type ConnectionAlertProps = React.ComponentProps<"div">; function ConnectionAlert() { return null; }; export { ConnectionAlert };',
+    ),
+    "connection-alert.tsx",
+  );
+  assert.ok(notExported !== null);
+  assert.match(notExported.message, /canonical props type/);
+});
+
+test("checkAlertProps requires the canonical alert props type", () => {
   const missing = checkAlertProps(
     parseTsx("export function ConnectionAlert() { return null; }"),
     "connection-alert.tsx",
@@ -260,7 +281,7 @@ test("checkLoginCardProps fails when SignInAuthScreenProps is declared instead o
   assert.equal(result.propName, "SignInAuthScreenProps");
   assert.match(
     result.message,
-    /must declare 'LoginCardProps' as its canonical props interface/,
+    /must declare 'LoginCardProps' as its canonical props type/,
   );
 });
 
@@ -282,4 +303,111 @@ test("checkLoginCardProps ignores other files", () => {
   const sf = parseTsx(sample, "other-component.tsx");
   const result = checkLoginCardProps(sf, "other-component.tsx");
   assert.equal(result, null);
+});
+
+test("checkInlinePropsTypes flags an inline object type on a function component", () => {
+  const sample = `
+    function SpaceIcon({ iconKey, className }: { iconKey?: string; className?: string }) {
+      return null;
+    }
+  `;
+  const violations = checkInlinePropsTypes(parseTsx(sample), "dummy.tsx");
+  assert.equal(violations.length, 1);
+  assert.equal(violations[0].propName, "SpaceIcon");
+  assert.match(violations[0].message, /inline object type literal/);
+  assert.match(violations[0].message, /Declare 'type SpaceIconProps = /);
+  assert.doesNotMatch(violations[0].message, /interface/);
+});
+
+test("checkInlinePropsTypes flags an inline object type on an arrow component", () => {
+  const sample = `
+    export const UserBadge = ({ name }: { name: string }) => null;
+  `;
+  const violations = checkInlinePropsTypes(parseTsx(sample), "dummy.tsx");
+  assert.equal(violations.length, 1);
+  assert.equal(violations[0].propName, "UserBadge");
+});
+
+test("checkInlinePropsTypes allows named props and non-component helpers", () => {
+  const sample = `
+    interface SpaceIconProps extends ComponentProps<"svg"> { iconKey?: string }
+    function SpaceIcon({ iconKey }: SpaceIconProps) { return null; }
+    function formatName({ first }: { first: string }) { return first; }
+  `;
+  assert.deepEqual(checkInlinePropsTypes(parseTsx(sample), "dummy.tsx"), []);
+});
+
+test("checkPropsInFile reports inline props types", () => {
+  const sample = `function Foo({ a }: { a: string }) { return null; }`;
+  const violations = checkPropsInFile("dummy.tsx", sample);
+  assert.equal(violations.length, 1);
+  assert.equal(violations[0].propName, "Foo");
+});
+
+// ─── checkStandaloneSurfaceComponents ──────────────────────────────────────
+
+test("checkStandaloneSurfaceComponents flags a dialog declared in another component file", () => {
+  const sample = `
+    function CreateSpaceDialog() { return null; }
+    export function SpaceSidebar() { return <CreateSpaceDialog />; }
+  `;
+  const violations = checkStandaloneSurfaceComponents(
+    parseTsx(sample, "space-sidebar.tsx"),
+    "space-sidebar.tsx",
+  );
+  assert.equal(violations.length, 1);
+  assert.equal(violations[0].propName, "CreateSpaceDialog");
+  assert.match(violations[0].message, /standalone dialog/);
+  assert.match(violations[0].message, /create-space-dialog\.tsx/);
+});
+
+test("checkStandaloneSurfaceComponents flags arrow-function surfaces", () => {
+  const sample = `const RenameSpaceSheet = () => null;`;
+  const violations = checkStandaloneSurfaceComponents(
+    parseTsx(sample, "space-sidebar.tsx"),
+    "space-sidebar.tsx",
+  );
+  assert.equal(violations.length, 1);
+  assert.equal(violations[0].propName, "RenameSpaceSheet");
+});
+
+test("checkStandaloneSurfaceComponents allows the file's own component and compound parts", () => {
+  const sample = `
+    function CreateSpaceDialog() { return null; }
+    function CreateSpaceDialogForm() { return null; }
+  `;
+  assert.deepEqual(
+    checkStandaloneSurfaceComponents(
+      parseTsx(sample, "create-space-dialog.tsx"),
+      "create-space-dialog.tsx",
+    ),
+    [],
+  );
+});
+
+test("checkStandaloneSurfaceComponents ignores non-surface components and tests", () => {
+  const sample = `
+    function SpaceSwitcherMenu() { return null; }
+    function CreateSpaceDialog() { return null; }
+  `;
+  assert.deepEqual(
+    checkStandaloneSurfaceComponents(
+      parseTsx(sample, "space-sidebar.tsx"),
+      "space-sidebar.tsx",
+    ).map((v) => v.propName),
+    ["CreateSpaceDialog"],
+  );
+  assert.deepEqual(
+    checkStandaloneSurfaceComponents(
+      parseTsx(sample, "space-sidebar.test.tsx"),
+      "space-sidebar.test.tsx",
+    ),
+    [],
+  );
+});
+
+test("checkPropsInFile reports standalone surface components via integration", () => {
+  const sample = `function CreateSpaceDialog() { return null; }`;
+  const violations = checkPropsInFile("space-sidebar.tsx", sample);
+  assert.ok(violations.some((v) => v.propName === "CreateSpaceDialog"));
 });

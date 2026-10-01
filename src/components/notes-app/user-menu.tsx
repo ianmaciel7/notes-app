@@ -9,9 +9,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
-export interface UserMenuProps extends ComponentProps<"div"> {}
+type UserMenuProps = ComponentProps<"div">;
 
-export function UserMenu({ className, ...props }: UserMenuProps) {
+function UserMenu({ className, ...props }: UserMenuProps) {
   const { user, isLoading, signOutUser } = useAuth();
   const t = useTranslations("auth");
 
@@ -75,3 +75,5 @@ export function UserMenu({ className, ...props }: UserMenuProps) {
     </div>
   );
 }
+
+export { UserMenu, type UserMenuProps };

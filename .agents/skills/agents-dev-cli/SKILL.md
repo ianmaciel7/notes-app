@@ -17,6 +17,12 @@ Use the `agents` CLI from `@agents-dev/cli` to keep one project-level source of 
 - `AGENTS.md` remains the human-readable instruction file; this CLI manages machine-readable MCP, skill, and integration configuration.
 - Check the repository's `syncMode` before deciding whether generated files belong in version control.
 
+The CLI is required for changes to shared agent configuration and for
+source-to-generated synchronization, but it is not required for ordinary code,
+documentation, or bug-fix tasks. Keep integrations scoped to the harnesses the
+project actually uses; for example, `agents.json` may enable only `codex` and
+`claude`, while each MCP server's `targets` list controls its per-harness reach.
+
 ## Workflow
 
 1. Check availability and current syntax with `agents --help` and the relevant subcommand's `--help`.

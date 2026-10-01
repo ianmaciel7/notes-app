@@ -27,11 +27,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { Policies } from "./auth-policies-card";
 
-export interface ForgotPasswordFormProps
-  extends Omit<ComponentProps<"form">, "onSubmit">,
-    FirebaseForgotPasswordAuthFormProps {}
+type ForgotPasswordFormProps = Omit<ComponentProps<"form">, "onSubmit"> &
+  FirebaseForgotPasswordAuthFormProps;
 
-export function ForgotPasswordForm({
+function ForgotPasswordForm({
   onPasswordSent,
   onBackToSignInClick,
   className,
@@ -137,6 +136,8 @@ export function ForgotPasswordForm({
 }
 
 export {
+  ForgotPasswordForm,
+  type ForgotPasswordFormProps,
   ForgotPasswordForm as ForgotPasswordAuthForm,
   type ForgotPasswordFormProps as ForgotPasswordAuthFormProps,
 };

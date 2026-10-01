@@ -5,12 +5,12 @@ import { Empty, EmptyMedia } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { useRequireGuest } from "@/hooks/use-require-guest";
 
-export interface RequireGuestProps extends PropsWithChildren {
+type RequireGuestProps = PropsWithChildren<{
   fallback?: ReactNode;
   redirectTo?: string;
-}
+}>;
 
-export function RequireGuest({
+function RequireGuest({
   children,
   fallback,
   redirectTo = "/",
@@ -35,3 +35,5 @@ export function RequireGuest({
 
   return <>{children}</>;
 }
+
+export { RequireGuest, type RequireGuestProps };

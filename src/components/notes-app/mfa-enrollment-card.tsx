@@ -16,14 +16,10 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-export interface MfaEnrollmentCardProps
-  extends FirebaseMultiFactorAuthEnrollmentFormProps,
-    Omit<ComponentProps<"div">, "children"> {}
+type MfaEnrollmentCardProps = FirebaseMultiFactorAuthEnrollmentFormProps &
+  Omit<ComponentProps<"div">, "children">;
 
-export function MfaEnrollmentCard({
-  className,
-  ...props
-}: MfaEnrollmentCardProps) {
+function MfaEnrollmentCard({ className, ...props }: MfaEnrollmentCardProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "multiFactorEnrollment");
@@ -42,4 +38,10 @@ export function MfaEnrollmentCard({
   );
 }
 
-export type MultiFactorAuthEnrollmentFormProps = MfaEnrollmentCardProps;
+type MultiFactorAuthEnrollmentFormProps = MfaEnrollmentCardProps;
+
+export {
+  MfaEnrollmentCard,
+  type MfaEnrollmentCardProps,
+  type MultiFactorAuthEnrollmentFormProps,
+};

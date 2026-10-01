@@ -17,12 +17,13 @@ import {
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-export interface OAuthCardProps
-  extends PropsWithChildren<Omit<ComponentProps<"div">, "children">> {
+type OAuthCardProps = PropsWithChildren<
+  Omit<ComponentProps<"div">, "children">
+> & {
   onSignIn?: (user: User) => void;
-}
+};
 
-export function OAuthCard({
+function OAuthCard({
   children,
   onSignIn,
   className,
@@ -57,3 +58,5 @@ export function OAuthCard({
     </Card>
   );
 }
+
+export { OAuthCard, type OAuthCardProps };

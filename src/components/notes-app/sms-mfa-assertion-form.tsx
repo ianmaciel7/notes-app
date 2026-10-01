@@ -34,7 +34,7 @@ type PhoneMultiFactorInfo = MultiFactorInfo & {
   phoneNumber?: string;
 };
 
-export type SmsMultiFactorAssertionPhoneFormProps = Omit<
+type SmsMultiFactorAssertionPhoneFormProps = Omit<
   React.ComponentProps<"div">,
   "onSubmit"
 > & {
@@ -100,7 +100,7 @@ function SmsMultiFactorAssertionPhoneForm({
   );
 }
 
-export type SmsMultiFactorAssertionVerifyFormProps = Omit<
+type SmsMultiFactorAssertionVerifyFormProps = Omit<
   React.ComponentProps<"form">,
   "onSubmit"
 > & {
@@ -201,12 +201,12 @@ function SmsMultiFactorAssertionVerifyForm({
   );
 }
 
-export type SmsMfaAssertionFormProps = React.ComponentProps<"div"> & {
+type SmsMfaAssertionFormProps = React.ComponentProps<"div"> & {
   hint: MultiFactorInfo;
   onSuccess?: (credential: UserCredential) => void;
 };
 
-export function SmsMfaAssertionForm({
+function SmsMfaAssertionForm({
   hint,
   onSuccess,
   className,
@@ -236,6 +236,10 @@ export function SmsMfaAssertionForm({
 }
 
 export {
+  SmsMfaAssertionForm,
   SmsMfaAssertionForm as SmsMultiFactorAssertionForm,
+  type SmsMultiFactorAssertionPhoneFormProps,
+  type SmsMultiFactorAssertionVerifyFormProps,
+  type SmsMfaAssertionFormProps,
   type SmsMfaAssertionFormProps as SmsMultiFactorAssertionFormProps,
 };

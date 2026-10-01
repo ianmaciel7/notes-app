@@ -38,7 +38,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
-export type TotpMultiFactorSecretGenerationFormProps = Omit<
+type TotpMultiFactorSecretGenerationFormProps = Omit<
   ComponentProps<"form">,
   "onSubmit"
 > & {
@@ -117,7 +117,7 @@ function TotpMultiFactorSecretGenerationForm({
   );
 }
 
-export type MultiFactorEnrollmentVerifyTotpFormProps = Omit<
+type MultiFactorEnrollmentVerifyTotpFormProps = Omit<
   ComponentProps<"form">,
   "onSubmit"
 > & {
@@ -126,7 +126,7 @@ export type MultiFactorEnrollmentVerifyTotpFormProps = Omit<
   onSuccess: () => void;
 };
 
-export function MultiFactorEnrollmentVerifyTotpForm({
+function MultiFactorEnrollmentVerifyTotpForm({
   secret,
   displayName,
   onSuccess,
@@ -242,11 +242,11 @@ export function MultiFactorEnrollmentVerifyTotpForm({
   );
 }
 
-export type TotpMfaEnrollmentFormProps = ComponentProps<"div"> & {
+type TotpMfaEnrollmentFormProps = ComponentProps<"div"> & {
   onSuccess?: () => void;
 };
 
-export function TotpMfaEnrollmentForm({
+function TotpMfaEnrollmentForm({
   onSuccess,
   className,
   ...props
@@ -285,6 +285,11 @@ export function TotpMfaEnrollmentForm({
 }
 
 export {
+  MultiFactorEnrollmentVerifyTotpForm,
+  TotpMfaEnrollmentForm,
   TotpMfaEnrollmentForm as TotpMultiFactorEnrollmentForm,
+  type TotpMultiFactorSecretGenerationFormProps,
+  type MultiFactorEnrollmentVerifyTotpFormProps,
+  type TotpMfaEnrollmentFormProps,
   type TotpMfaEnrollmentFormProps as TotpMultiFactorEnrollmentFormProps,
 };

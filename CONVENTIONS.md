@@ -36,7 +36,9 @@ contributor workflow to `CONTRIBUTING.md`.
   - `-button` / `*Button`, `-select` / `*Select`, `-menu` / `*Menu`, `-switcher` / `*Switcher` for interactive UI controls
   - `-sidebar` / `*Sidebar` for navigation shells (e.g. `space-sidebar.tsx` -> `SpaceSidebar`)
   - `-provider` / `*Provider` for React context providers
-- **Canonical Props Naming (`${ComponentName}Props`)**: Component prop interfaces/types must be declared canonically using the component's canonical PascalCase name (e.g. `login-card.tsx` must declare and use `export interface LoginCardProps`, never `SignInAuthScreenProps` as the primary interface). Legacy or library names may only be re-exported as backwards-compatible aliases (e.g. `export type { LoginCardProps as SignInAuthScreenProps }`). Enforced by `check:props`.
+- **Canonical Props Naming (`${ComponentName}Props`)**: Component prop types must be declared canonically using the component's canonical PascalCase name (e.g. `login-card.tsx` declares and uses `type LoginCardProps = ...`, never `SignInAuthScreenProps` as the primary type). Declare them with `type`, never `interface`, exactly as `src/components/ui/` does. Legacy or library names may only be re-exported as backwards-compatible aliases inside the file's trailing export block (e.g. `type LoginCardProps as SignInAuthScreenProps`). Enforced by `check:props` and `component-no-interface`.
+- **Export shape (`src/components/notes-app/`)**: Application components follow the same file anatomy as `src/components/ui/`. Declare components and hooks as plain `function` declarations without `export`, and publish every value and type through one trailing `export { ... }` block (types with an inline `type` modifier, aliases as `X as Alias`). Do not write `export function`, `export const`, or `export interface`. Enforced by `component-trailing-export-block`.
+- **Standalone overlays**: A dialog, sheet, or drawer owns its own open state and concern, so it lives in its own file named after it (e.g. `CreateSpaceDialog` in `create-space-dialog.tsx`), never inside another component's file such as `space-sidebar.tsx`. Cards and forms are exempt because multi-step flows keep their step forms next to the flow. Enforced by `check:props` (`checkStandaloneSurfaceComponents`).
 
 ## 3. Component Composition
 
@@ -65,15 +67,15 @@ contributor workflow to `CONTRIBUTING.md`.
 - Use semantic HTML and accessible names. Loading, selected, disabled, and error
   states must not rely on color alone.
 - Application wrappers around shared shadcn primitives follow the primitive
-  forwarding pattern: export a canonical `${ComponentName}Props` interface,
+  forwarding pattern: declare a canonical `${ComponentName}Props` type,
   destructure `className` and the remaining props, merge wrapper layout with
   `cn()`, spread the remaining props onto the root primitive, and apply the
   wrapper's required semantic attributes after the spread. Alert wrappers in
-  `src/components/notes-app/*-alert.tsx` must use this pattern and keep named
-  component/interface exports. Compound alert wrappers must require
-  `children`, render the caller-provided composition, and never substitute a
-  default child tree. `guard-component-props.mjs` enforces the canonical alert
-  interface.
+  `src/components/notes-app/*-alert.tsx` must use this pattern and keep their
+  named component/type exports in the trailing export block. Compound alert
+  wrappers must require `children`, render the caller-provided composition, and
+  never substitute a default child tree. `guard-component-props.mjs` enforces
+  the canonical alert props type.
 
 ### Primitive Anatomy (`src/components/ui/`)
 
@@ -93,9 +95,9 @@ changing an installed primitive.
 - **Prop types:** derive from the primitive (`DialogPrimitive.Popup.Props`),
   `React.ComponentProps<"div">`, or `React.ComponentProps<typeof Other>`. Extra
   props are inline intersections (`& { size?: "sm" | "default" }`). Use a named
-  `type` only for context or shared props. Primitives declare no `interface`
-  (the `${ComponentName}Props` interface rule applies to application
-  components).
+  `type` only for context or shared props. Primitives declare no `interface`,
+  and application components under `src/components/notes-app/` follow the same
+  file shape and the same no-`interface` rule (see section 2).
 - **Variants:** `cva` with `variants` and `defaultVariants`; the default is
   repeated in the destructuring (`variant = "default"`); call
   `cva({ variant, size })` inside `cn(..., className)`. Expose the active variant
@@ -213,7 +215,7 @@ changing an installed primitive.
   identity is a demonstrated API requirement; React Compiler is enabled here.
 
 ### Fast Refresh Invariants
-- **Named Component Exports**: All React component functions must have explicit identifiers (e.g. `export function LoginForm() {}` or `export default function LoginPage() {}`). Anonymous default function expressions (`export default () => ...`) break Fast Refresh boundary detection.
+- **Named Component Exports**: All React component functions must have explicit identifiers (e.g. `function LoginForm() {}` published through the file's trailing `export { LoginForm }`, or `export default function LoginPage() {}` for a Next.js route entrypoint). Anonymous default function expressions (`export default () => ...`) break Fast Refresh boundary detection.
 - **Module Isolation**: Isolate non-component constants, pure domain helpers, and data transformers into `src/lib/` and reusable hooks into `src/hooks/`. Exporting mixed non-React constants or mutable singletons alongside components causes Next.js Fast Refresh to fall back to a destructive full page reload.
 
 ### Server Actions & Form Mutations

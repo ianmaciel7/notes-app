@@ -27,11 +27,10 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
-export interface EmailLinkFormProps
-  extends Omit<ComponentProps<"form">, "onSubmit">,
-    FirebaseEmailLinkAuthFormProps {}
+type EmailLinkFormProps = Omit<ComponentProps<"form">, "onSubmit"> &
+  FirebaseEmailLinkAuthFormProps;
 
-export function EmailLinkForm({
+function EmailLinkForm({
   onEmailSent,
   onSignIn,
   className,
@@ -126,6 +125,8 @@ export function EmailLinkForm({
 }
 
 export {
+  EmailLinkForm,
+  type EmailLinkFormProps,
   EmailLinkForm as EmailLinkAuthForm,
   type EmailLinkFormProps as EmailLinkAuthFormProps,
 };

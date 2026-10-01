@@ -20,11 +20,10 @@ import { FieldGroup, FieldSeparator } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { LoginForm } from "./login-form";
 
-export interface LoginCardProps
-  extends FirebaseSignInAuthScreenProps,
-    Omit<ComponentProps<"div">, "children"> {}
+type LoginCardProps = FirebaseSignInAuthScreenProps &
+  Omit<ComponentProps<"div">, "children">;
 
-export function LoginCard({
+function LoginCard({
   children,
   onSignIn,
   onForgotPasswordClick,
@@ -73,6 +72,8 @@ export function LoginCard({
 }
 
 export {
+  LoginCard,
   LoginCard as SignInAuthScreen,
+  type LoginCardProps,
   type LoginCardProps as SignInAuthScreenProps,
 };

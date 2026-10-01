@@ -20,11 +20,10 @@ import { FieldGroup, FieldSeparator } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { SignUpForm } from "./sign-up-form";
 
-export interface SignUpCardProps
-  extends FirebaseSignUpAuthScreenProps,
-    Omit<ComponentProps<"div">, "children"> {}
+type SignUpCardProps = FirebaseSignUpAuthScreenProps &
+  Omit<ComponentProps<"div">, "children">;
 
-export function SignUpCard({
+function SignUpCard({
   children,
   onSignUp,
   onSignInClick,
@@ -83,6 +82,8 @@ export function SignUpCard({
 }
 
 export {
+  SignUpCard,
   SignUpCard as SignUpAuthScreen,
+  type SignUpCardProps,
   type SignUpCardProps as SignUpAuthScreenProps,
 };

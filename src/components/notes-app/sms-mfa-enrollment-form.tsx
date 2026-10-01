@@ -48,7 +48,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
-export type MultiFactorEnrollmentPhoneNumberFormProps = Omit<
+type MultiFactorEnrollmentPhoneNumberFormProps = Omit<
   React.ComponentProps<"form">,
   "onSubmit"
 > & {
@@ -185,7 +185,7 @@ function MultiFactorEnrollmentPhoneNumberForm({
   );
 }
 
-export type MultiFactorEnrollmentVerifyPhoneNumberFormProps = Omit<
+type MultiFactorEnrollmentVerifyPhoneNumberFormProps = Omit<
   React.ComponentProps<"form">,
   "onSubmit"
 > & {
@@ -194,7 +194,7 @@ export type MultiFactorEnrollmentVerifyPhoneNumberFormProps = Omit<
   onSuccess: () => void;
 };
 
-export function MultiFactorEnrollmentVerifyPhoneNumberForm({
+function MultiFactorEnrollmentVerifyPhoneNumberForm({
   verificationId,
   displayName,
   onSuccess,
@@ -289,11 +289,11 @@ export function MultiFactorEnrollmentVerifyPhoneNumberForm({
   );
 }
 
-export type SmsMfaEnrollmentFormProps = React.ComponentProps<"div"> & {
+type SmsMfaEnrollmentFormProps = React.ComponentProps<"div"> & {
   onSuccess?: () => void;
 };
 
-export function SmsMfaEnrollmentForm({
+function SmsMfaEnrollmentForm({
   onSuccess,
   className,
   ...props
@@ -332,6 +332,11 @@ export function SmsMfaEnrollmentForm({
 }
 
 export {
+  MultiFactorEnrollmentVerifyPhoneNumberForm,
+  SmsMfaEnrollmentForm,
   SmsMfaEnrollmentForm as SmsMultiFactorEnrollmentForm,
+  type MultiFactorEnrollmentPhoneNumberFormProps,
+  type MultiFactorEnrollmentVerifyPhoneNumberFormProps,
+  type SmsMfaEnrollmentFormProps,
   type SmsMfaEnrollmentFormProps as SmsMultiFactorEnrollmentFormProps,
 };

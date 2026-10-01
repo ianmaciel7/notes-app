@@ -24,11 +24,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { Policies } from "./auth-policies-card";
 
-export interface LoginFormProps
-  extends Omit<ComponentProps<"form">, "onSubmit">,
-    FirebaseSignInAuthFormProps {}
+type LoginFormProps = Omit<ComponentProps<"form">, "onSubmit"> &
+  FirebaseSignInAuthFormProps;
 
-export function LoginForm({
+function LoginForm({
   onSignIn,
   onForgotPasswordClick,
   onSignUpClick,
@@ -165,6 +164,8 @@ export function LoginForm({
 }
 
 export {
+  LoginForm,
+  type LoginFormProps,
   LoginForm as SignInAuthForm,
   type LoginFormProps as SignInAuthFormProps,
 };

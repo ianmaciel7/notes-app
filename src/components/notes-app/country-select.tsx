@@ -19,13 +19,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export type { CountrySelectorRef };
-
-export interface CountrySelectProps extends Omit<CountrySelectorProps, "ref"> {
+type CountrySelectProps = Omit<CountrySelectorProps, "ref"> & {
   ref?: Ref<CountrySelectorRef>;
-}
+};
 
-export function CountrySelect({ ref }: CountrySelectProps) {
+function CountrySelect({ ref }: CountrySelectProps) {
   const t = useTranslations("auth");
   const countries = useCountries();
   const defaultCountry = useDefaultCountry();
@@ -76,3 +74,5 @@ export function CountrySelect({ ref }: CountrySelectProps) {
     </Select>
   );
 }
+
+export { CountrySelect, type CountrySelectProps, type CountrySelectorRef };

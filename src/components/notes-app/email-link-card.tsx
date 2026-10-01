@@ -22,11 +22,10 @@ import { FieldGroup } from "@/components/ui/field";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-export interface EmailLinkCardProps
-  extends FirebaseEmailLinkAuthScreenProps,
-    Omit<ComponentProps<"div">, "children"> {}
+type EmailLinkCardProps = FirebaseEmailLinkAuthScreenProps &
+  Omit<ComponentProps<"div">, "children">;
 
-export function EmailLinkCard({
+function EmailLinkCard({
   children,
   onSignIn,
   onEmailSent,
@@ -74,6 +73,11 @@ export function EmailLinkCard({
   );
 }
 
-export { EmailLinkCard as EmailLinkAuthScreen };
+type EmailLinkAuthScreenProps = EmailLinkCardProps;
 
-export type EmailLinkAuthScreenProps = EmailLinkCardProps;
+export {
+  EmailLinkCard,
+  EmailLinkCard as EmailLinkAuthScreen,
+  type EmailLinkCardProps,
+  type EmailLinkAuthScreenProps,
+};
