@@ -62,7 +62,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/use-auth";
@@ -339,7 +338,7 @@ export function SpaceSidebar({
       {...props}
     >
       <SidebarProvider>
-        <Sidebar variant="inset">
+        <Sidebar variant="inset" collapsible="none">
           <SidebarHeader>
             <SidebarMenu aria-label={t("workspace")}>
               <SidebarMenuItem>
@@ -475,12 +474,7 @@ export function SpaceSidebar({
             </SidebarMenu>
           </SidebarFooter>
         </Sidebar>
-        <SidebarInset>
-          <header className="flex h-12 shrink-0 items-center gap-2 px-1.5">
-            <SidebarTrigger />
-          </header>
-          {children}
-        </SidebarInset>
+        <SidebarInset>{children}</SidebarInset>
       </SidebarProvider>
       <CreateSpaceDialog
         open={createDialogOpen}

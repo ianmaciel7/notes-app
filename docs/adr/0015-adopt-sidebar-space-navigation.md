@@ -19,7 +19,8 @@ sidebar shell:
 
 1. `SpaceSidebar` owns the interactive sidebar shell while the route page keeps
    its server-rendered content as children.
-2. The sidebar lists the authenticated user's real Spaces from Firestore and
+2. The sidebar remains visible and non-collapsible on the Space route. It lists
+   the authenticated user's real Spaces from Firestore and
    navigates with App Router client navigation.
 3. Space creation, loading, error, offline, empty, and missing-Space states remain
    part of the existing switcher flow.
