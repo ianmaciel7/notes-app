@@ -7,7 +7,7 @@ import {
   signInWithPopup,
   signInWithRedirect,
 } from "firebase/auth";
-import { ArrowLeft } from "lucide-react";
+import { AlertCircle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -16,9 +16,37 @@ import { GoogleSignInButton } from "@/components/notes-app/google-sign-in-button
 import { SignInAuthScreen } from "@/components/notes-app/login-card";
 import { RequireGuest } from "@/components/notes-app/require-guest";
 import { SignUpAuthScreen } from "@/components/notes-app/sign-up-card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { captureError } from "@/lib/error-capture/capture";
 import { auth } from "@/lib/firebase/client";
 import { getSafeNextUrl } from "@/lib/navigation/safe-next-url";
+
+// Popup failures that a full-page redirect can recover from.
+const REDIRECT_FALLBACK_CODES = new Set([
+  "auth/popup-blocked",
+  "auth/popup-closed-by-user",
+  "auth/operation-not-supported-in-this-environment",
+]);
+
+// Raised by the browser runtime (not Firebase) with no error code, so the
+// message is the only stable signal available.
+const NO_MATCHING_FRAME_MESSAGE = "No matching frame";
+
+function getErrorCode(err: unknown): string | undefined {
+  if (typeof err === "object" && err !== null && "code" in err) {
+    return String((err as { code: unknown }).code);
+  }
+  return undefined;
+}
+
+function shouldFallBackToRedirect(err: unknown): boolean {
+  const code = getErrorCode(err);
+  if (code !== undefined && REDIRECT_FALLBACK_CODES.has(code)) return true;
+  return (
+    err instanceof Error && err.message.includes(NO_MATCHING_FRAME_MESSAGE)
+  );
+}
 
 function LoginContent() {
   const router = useRouter();
@@ -26,6 +54,7 @@ function LoginContent() {
   const t = useTranslations("auth");
   const nextUrl = getSafeNextUrl(searchParams.get("next"));
   const [mode, setMode] = useState<"signIn" | "signUp">("signIn");
+  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
     // Process redirect result if returning from signInWithRedirect
@@ -35,15 +64,17 @@ function LoginContent() {
           router.replace(nextUrl);
         }
       })
-      .catch(() => {
-        // Redirection errors are handled by FirebaseUI
+      .catch((err: unknown) => {
+        captureError(err, { source: "firebase-sdk", severity: "warn" });
+        setAuthError(t("googleSignInFailed"));
       });
-  }, [router, nextUrl]);
+  }, [router, nextUrl, t]);
 
   async function handleGoogleLogin() {
     const provider = new GoogleAuthProvider();
     provider.addScope("profile");
     provider.addScope("email");
+    setAuthError(null);
 
     try {
       const userCredential = await signInWithPopup(auth, provider);
@@ -51,25 +82,36 @@ function LoginContent() {
         router.replace(nextUrl);
       }
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      if (
-        msg.includes("No matching frame") ||
-        msg.includes("popup-blocked") ||
-        msg.includes("popup-closed-by-user")
-      ) {
-        await signInWithRedirect(auth, provider);
+      if (getErrorCode(err) === "auth/cancelled-popup-request") return;
+
+      if (shouldFallBackToRedirect(err)) {
+        try {
+          await signInWithRedirect(auth, provider);
+          return;
+        } catch (redirectErr: unknown) {
+          captureError(redirectErr, {
+            source: "firebase-sdk",
+            severity: "warn",
+          });
+        }
+      } else {
+        captureError(err, { source: "firebase-sdk", severity: "warn" });
       }
+      setAuthError(t("googleSignInFailed"));
     }
   }
 
   async function handleAnonymousLogin() {
+    setAuthError(null);
+
     try {
       const userCredential = await signInAnonymously(auth);
       if (userCredential.user) {
         router.replace(nextUrl);
       }
-    } catch (_err: unknown) {
-      // Ignored or handled by error UI
+    } catch (err: unknown) {
+      captureError(err, { source: "firebase-sdk", severity: "warn" });
+      setAuthError(t("guestSignInFailed"));
     }
   }
 
@@ -83,7 +125,13 @@ function LoginContent() {
         </div>
 
         {/* Main Authentication Card */}
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-sm space-y-4">
+          {authError ? (
+            <Alert variant="destructive" data-testid="auth-error">
+              <AlertCircle className="size-4" />
+              <AlertDescription>{authError}</AlertDescription>
+            </Alert>
+          ) : null}
           {mode === "signIn" ? (
             <SignInAuthScreen
               onSignIn={() => router.replace(nextUrl)}

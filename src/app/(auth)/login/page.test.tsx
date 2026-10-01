@@ -5,6 +5,7 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
+import { FirebaseError } from "firebase/app";
 import {
   getRedirectResult,
   signInAnonymously,
@@ -139,7 +140,7 @@ describe("LoginPage", () => {
 
   it("falls back to signInWithRedirect when Google popup encounters popup-blocked error", async () => {
     vi.mocked(signInWithPopup).mockRejectedValueOnce(
-      new Error("popup-blocked: popup was blocked by browser"),
+      new FirebaseError("auth/popup-blocked", "popup was blocked by browser"),
     );
     vi.mocked(signInWithRedirect).mockImplementationOnce(
       () => Promise.resolve() as never,
@@ -157,6 +158,96 @@ describe("LoginPage", () => {
         expect.any(MockGoogleAuthProvider),
       );
     });
+    expect(screen.queryByTestId("auth-error")).toBeNull();
+  });
+
+  it("does not depend on error message text to choose the redirect fallback", async () => {
+    vi.mocked(signInWithPopup).mockRejectedValueOnce(
+      new FirebaseError("auth/popup-blocked", "mensagem localizada"),
+    );
+    vi.mocked(signInWithRedirect).mockImplementationOnce(
+      () => Promise.resolve() as never,
+    );
+
+    renderLoginPage();
+
+    fireEvent.click(screen.getByTestId("google-sign-in-btn"));
+
+    await waitFor(() => {
+      expect(signInWithRedirect).toHaveBeenCalled();
+    });
+  });
+
+  it("shows an error when Google sign-in fails for a non-fallback reason", async () => {
+    vi.mocked(signInWithPopup).mockRejectedValueOnce(
+      new FirebaseError("auth/network-request-failed", "network down"),
+    );
+
+    renderLoginPage();
+
+    fireEvent.click(screen.getByTestId("google-sign-in-btn"));
+
+    const alert = await screen.findByTestId("auth-error");
+    expect(alert.textContent).toContain(messages.auth.googleSignInFailed);
+    expect(signInWithRedirect).not.toHaveBeenCalled();
+    expect(mockReplace).not.toHaveBeenCalled();
+  });
+
+  it("shows an error when the redirect fallback itself fails", async () => {
+    vi.mocked(signInWithPopup).mockRejectedValueOnce(
+      new FirebaseError("auth/popup-blocked", "blocked"),
+    );
+    vi.mocked(signInWithRedirect).mockRejectedValueOnce(
+      new FirebaseError("auth/internal-error", "redirect failed"),
+    );
+
+    renderLoginPage();
+
+    fireEvent.click(screen.getByTestId("google-sign-in-btn"));
+
+    const alert = await screen.findByTestId("auth-error");
+    expect(alert.textContent).toContain(messages.auth.googleSignInFailed);
+  });
+
+  it("stays silent when a newer popup request cancels the previous one", async () => {
+    vi.mocked(signInWithPopup).mockRejectedValueOnce(
+      new FirebaseError("auth/cancelled-popup-request", "cancelled"),
+    );
+
+    renderLoginPage();
+
+    fireEvent.click(screen.getByTestId("google-sign-in-btn"));
+
+    await waitFor(() => {
+      expect(signInWithPopup).toHaveBeenCalled();
+    });
+    expect(screen.queryByTestId("auth-error")).toBeNull();
+    expect(signInWithRedirect).not.toHaveBeenCalled();
+  });
+
+  it("shows an error when the redirect result rejects", async () => {
+    vi.mocked(getRedirectResult).mockRejectedValueOnce(
+      new FirebaseError("auth/account-exists-with-different-credential", "x"),
+    );
+
+    renderLoginPage();
+
+    const alert = await screen.findByTestId("auth-error");
+    expect(alert.textContent).toContain(messages.auth.googleSignInFailed);
+  });
+
+  it("shows an error when anonymous sign-in fails", async () => {
+    vi.mocked(signInAnonymously).mockRejectedValueOnce(
+      new FirebaseError("auth/admin-restricted-operation", "disabled"),
+    );
+
+    renderLoginPage();
+
+    fireEvent.click(screen.getByTestId("anonymous-sign-in-btn"));
+
+    const alert = await screen.findByTestId("auth-error");
+    expect(alert.textContent).toContain(messages.auth.guestSignInFailed);
+    expect(mockReplace).not.toHaveBeenCalled();
   });
 
   it("falls back to signInWithRedirect when Google popup encounters 'No matching frame' error", async () => {

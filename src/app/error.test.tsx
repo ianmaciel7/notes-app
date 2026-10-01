@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import ErrorBoundary from "./error";
 
 vi.mock("next-intl", () => ({
@@ -16,7 +16,11 @@ vi.mock("next-intl", () => ({
 }));
 
 describe("Root Error Boundary (src/app/error.tsx)", () => {
-  it("renders error message and handles retry callback", () => {
+  afterEach(() => {
+    cleanup();
+  });
+
+  it("renders a generic message without leaking the raw error and handles retry", () => {
     const reset = vi.fn();
     const testError = new Error("Firebase connection timeout");
 
@@ -24,7 +28,12 @@ describe("Root Error Boundary (src/app/error.tsx)", () => {
 
     expect(screen.getByRole("alert")).toBeDefined();
     expect(screen.getByText("Something went wrong")).toBeDefined();
-    expect(screen.getByText("Firebase connection timeout")).toBeDefined();
+    expect(screen.queryByText("Firebase connection timeout")).toBeNull();
+    expect(
+      screen.getByText(
+        "An unexpected error occurred while communicating with application services.",
+      ),
+    ).toBeDefined();
 
     const retryBtn = screen.getByTestId("error-boundary-retry-btn");
     fireEvent.click(retryBtn);

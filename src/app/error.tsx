@@ -27,9 +27,7 @@ export default function ErrorBoundary({
         <Alert variant="destructive" role="alert" aria-live="assertive">
           <AlertCircle className="size-4" />
           <AlertTitle>{t("title")}</AlertTitle>
-          <AlertDescription>
-            {error.message || t("description")}
-          </AlertDescription>
+          <AlertDescription>{t("description")}</AlertDescription>
         </Alert>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
