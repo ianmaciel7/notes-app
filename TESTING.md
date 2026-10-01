@@ -88,7 +88,7 @@ numeric thresholds are owned by `CONSTRAINTS.md` and `CONTRIBUTING.md`.
 The repository employs a multi-layered testing strategy for Firebase Authentication:
 
 - **State Observer Lifecycle & Context Hooks**:
-  - `AuthProvider` and `AuthContext` (`src/components/notes-app/auth-provider.test.tsx`) verify subscriber initialization, authentication state propagation, and child component rendering under authenticated and unauthenticated states.
+  - `AuthProvider` (`src/components/notes-app/auth-provider.test.tsx`, context defined in `src/lib/auth-context.ts`) verify subscriber initialization, authentication state propagation, and child component rendering under authenticated and unauthenticated states.
   - `useAuth` hook (`src/hooks/use-auth.test.ts`) verifies context boundary enforcement (throwing errors when invoked outside `AuthProvider`).
   - `useRequireAuth` hook (`src/hooks/use-require-auth.test.tsx`) verifies route protection behavior, triggering navigation redirects for unauthenticated sessions while allowing access to authenticated users.
 
@@ -101,9 +101,11 @@ The repository employs a multi-layered testing strategy for Firebase Authenticat
 - **Component-Level Login Workflows**:
   - Login page component suite (`src/app/(auth)/login/page.test.tsx`) tests authentication interaction patterns and mode toggling (`signIn` vs `signUp`).
   - Verifies primary popup sign-in flows using `signInWithPopup`.
-  - Verifies resilient fallback to `signInWithRedirect` when popup or iframe communication fails (e.g., `popup-blocked`, `No matching frame`, or `popup-closed-by-user`).
+  - Verifies resilient fallback to `signInWithRedirect` selected by Firebase error code (`auth/popup-blocked`, `auth/popup-closed-by-user`, `auth/operation-not-supported-in-this-environment`), with the `No matching frame` message as the only message-based signal.
+  - Verifies failures are surfaced: a translated error alert is shown (and the error is captured, not shown raw) when popup sign-in, the redirect fallback, `getRedirectResult`, or anonymous sign-in fails; `auth/cancelled-popup-request` stays silent.
   - Verifies guest access via `signInAnonymously`.
-  - Verifies post-redirect credential processing via `getRedirectResult` and post-login routing according to the `next` query parameter.
+  - Verifies post-redirect credential processing via `getRedirectResult` and post-login routing according to the `next` query parameter, including rejection of unsafe `next` URLs.
+  - The root error boundary suite (`src/app/error.test.tsx`) verifies the generic message does not leak the raw error.
 
 ## 6. Test Design
 

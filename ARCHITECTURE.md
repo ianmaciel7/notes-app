@@ -24,7 +24,9 @@ environment. The implemented product-domain schema is intentionally narrow: user
 - `src/lib/`: shared utilities that do not depend on UI components.
 - Firebase integration is concentrated in `src/lib/firebase/`; the first product
   data slice uses `src/hooks/use-spaces.ts`, `src/types/space.ts`, and
-  `src/lib/validators/space.ts`. A server-side product DAL is not implemented yet.
+  `src/lib/validators/space.ts`. Validators return stable error codes only; UI
+  components translate them through `src/messages/*.json` (`spaces.validation.*`).
+  A server-side product DAL is not implemented yet.
 
 Current dependency direction:
 
@@ -38,8 +40,9 @@ Current dependency direction:
 ### 2.5 Current Firebase data boundary
 
 - `src/lib/firebase/client.ts` owns Firebase App and Auth initialization.
-- `src/components/notes-app/auth-provider.tsx` owns the React authentication state
-  exposed to client components.
+- `src/lib/auth-context.ts` owns the `AuthContext` object and its value type, and
+  `src/hooks/use-auth.ts` is the consumer entry point. `src/components/notes-app/auth-provider.tsx`
+  owns the React authentication state published through that context.
 - `src/lib/firebase/firestore.ts` owns the shared Firestore `db`, emulator
   connection, and browser persistence configuration.
 - `src/lib/error-capture/capture.ts` owns the single `captureError` funnel (normalize,
@@ -151,7 +154,7 @@ architectural choices rather than duplicating version pins.
 | Unused-code analysis | Knip | Detect unused files, exports, and dependencies |
 | Component workbench | Ladle | Isolated component development |
 | Render optimization | React Compiler | Compiler-assisted React optimization |
-| Authentication UI | Firebase Auth UI | Accessible auth screens integrated with `@firebase-oss/ui-react` ([ADR 0008](./docs/adr/0008-adopt-firebase-ui-components.md), [ADR 0010](./docs/adr/0010-adopt-firebase-ui-v7-and-auth-resilience.md)) |
+| Authentication UI | Firebase Auth UI logic with shadcn primitives | Auth screens in `src/components/notes-app/` compose `@firebase-oss/ui-react` behavior with shadcn `Field`/`Card`/`Alert` primitives; `src/components/firebase/` stays an untouched vendor drop ([ADR 0008](./docs/adr/0008-adopt-firebase-ui-components.md), [ADR 0010](./docs/adr/0010-adopt-firebase-ui-v7-and-auth-resilience.md)) |
 | Authentication provider | Firebase Auth + Emulator | User identity with local auth emulator support ([ADR 0009](./docs/adr/0009-adopt-firebase-auth-with-local-emulator.md)) |
 | Internationalization | next-intl | Cookie-driven App Router internationalization with Firebase locale sync ([ADR 0011](./docs/adr/0011-adopt-cookie-based-next-intl-with-firebase-sync.md)) |
 | End-to-end testing | Playwright | Cross-browser E2E testing with Next.js webServer integration and local emulator support ([ADR 0012](./docs/adr/0012-adopt-playwright-for-e2e-testing.md)) |
