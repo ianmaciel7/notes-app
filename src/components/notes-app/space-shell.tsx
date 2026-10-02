@@ -1,6 +1,5 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import type { ComponentProps, ReactNode } from "react";
 import { useState } from "react";
 import {
@@ -17,6 +16,7 @@ import {
   SettingsDialogHeader,
 } from "@/components/notes-app/settings-dialog";
 import { SidebarUserMenu } from "@/components/notes-app/sidebar-user-menu";
+import { SpaceLoading } from "@/components/notes-app/space-loading";
 import { SpaceSwitcherMenu } from "@/components/notes-app/space-switcher";
 import { SpacesList } from "@/components/notes-app/spaces-list";
 import {
@@ -24,7 +24,6 @@ import {
   SpacesLoadingStatus,
   SpacesNotFoundStatus,
 } from "@/components/notes-app/spaces-status";
-import { Empty, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
 import {
   Sidebar,
   SidebarFooter,
@@ -32,7 +31,6 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar";
-import { Spinner } from "@/components/ui/spinner";
 import { useSpaceSidebar } from "@/hooks/use-space-sidebar";
 import { cn } from "@/lib/utils";
 
@@ -52,7 +50,6 @@ function SpaceShell({
   onSelectSpace,
   ...props
 }: SpaceShellProps) {
-  const t = useTranslations("spaces");
   const {
     authLoading,
     createSpace,
@@ -90,17 +87,7 @@ function SpaceShell({
   ) : null;
 
   if (authLoading) {
-    return (
-      <Empty
-        className="flex min-h-svh w-full items-center justify-center"
-        data-testid="space-shell-loading"
-      >
-        <EmptyMedia variant="icon">
-          <Spinner className="size-8" aria-label={t("loading")} />
-        </EmptyMedia>
-        <EmptyDescription className="sr-only">{t("loading")}</EmptyDescription>
-      </Empty>
-    );
+    return <SpaceLoading />;
   }
 
   if (!user || error || loading) return status;

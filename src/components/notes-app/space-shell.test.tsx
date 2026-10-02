@@ -102,6 +102,7 @@ describe("SpaceShell", () => {
     renderWithIntl(<SpaceShell />);
 
     expect(mockReplace).not.toHaveBeenCalled();
+    expect(screen.getByTestId("space-loading")).toBeDefined();
     expect(screen.getByRole("status").getAttribute("aria-label")).toBe(
       "Loading spaces...",
     );
