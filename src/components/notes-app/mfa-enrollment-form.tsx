@@ -6,31 +6,31 @@ import { FactorId } from "firebase/auth";
 import type { ComponentProps } from "react";
 import { useState } from "react";
 
-import { SmsMfaEnrollmentFieldGroup } from "@/components/notes-app/sms-mfa-enrollment-field-group";
-import { TotpMfaEnrollmentFieldGroup } from "@/components/notes-app/totp-mfa-enrollment-field-group";
+import { SmsMfaEnrollmentForm } from "@/components/notes-app/sms-mfa-enrollment-form";
+import { TotpMfaEnrollmentForm } from "@/components/notes-app/totp-mfa-enrollment-form";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 type Hint = (typeof FactorId)[keyof typeof FactorId];
 
-type MfaEnrollmentFieldGroupProps = ComponentProps<typeof FieldGroup> & {
+type MfaEnrollmentFormProps = ComponentProps<typeof FieldGroup> & {
   onEnrollment?: () => void;
   hints?: Hint[];
 };
 
 const DEFAULT_HINTS = [FactorId.TOTP, FactorId.PHONE] as const;
 
-function MfaEnrollmentFieldGroup({
+function MfaEnrollmentForm({
   onEnrollment,
   hints: hintsProp,
   className,
   ...props
-}: MfaEnrollmentFieldGroupProps) {
+}: MfaEnrollmentFormProps) {
   const hints = hintsProp ?? DEFAULT_HINTS;
 
   if (hints.length === 0) {
-    throw new Error("MfaEnrollmentFieldGroup must have at least one hint");
+    throw new Error("MfaEnrollmentForm must have at least one hint");
   }
 
   // If only a single hint is provided, select it by default to improve UX.
@@ -41,7 +41,7 @@ function MfaEnrollmentFieldGroup({
   if (hint) {
     if (hint === FactorId.TOTP) {
       return (
-        <TotpMfaEnrollmentFieldGroup
+        <TotpMfaEnrollmentForm
           onSuccess={onEnrollment}
           {...props}
           className={className}
@@ -51,7 +51,7 @@ function MfaEnrollmentFieldGroup({
 
     if (hint === FactorId.PHONE) {
       return (
-        <SmsMfaEnrollmentFieldGroup
+        <SmsMfaEnrollmentForm
           onSuccess={onEnrollment}
           {...props}
           className={className}
@@ -64,7 +64,7 @@ function MfaEnrollmentFieldGroup({
 
   return (
     <FieldGroup
-      data-slot="mfa-enrollment-field-group"
+      data-slot="mfa-enrollment-form"
       {...props}
       className={cn("gap-2", className)}
     >
@@ -103,4 +103,4 @@ function SmsButton(props: ComponentProps<typeof Button>) {
   );
 }
 
-export { MfaEnrollmentFieldGroup, type MfaEnrollmentFieldGroupProps };
+export { MfaEnrollmentForm, type MfaEnrollmentFormProps };
