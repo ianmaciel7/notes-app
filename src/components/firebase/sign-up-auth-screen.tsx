@@ -2,7 +2,7 @@
 
 import { getTranslation } from "@firebase-oss/ui-core";
 import { useUI, type SignUpAuthScreenProps, useOnUserAuthenticated } from "@firebase-oss/ui-react";
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -19,17 +19,14 @@ export function SignUpAuthScreen({ children, onSignUp, ...props }: SignUpAuthScr
   const titleText = getTranslation(ui, "labels", "signUp");
   const subtitleText = getTranslation(ui, "prompts", "enterDetailsToCreate");
 
-  const handleSignUp = useCallback(
-    (user: User) => {
-      if (handledUserIdRef.current === user.uid) {
-        return;
-      }
+  function handleSignUp(user: User) {
+    if (handledUserIdRef.current === user.uid) {
+      return;
+    }
 
-      handledUserIdRef.current = user.uid;
-      onSignUp?.(user);
-    },
-    [onSignUp]
-  );
+    handledUserIdRef.current = user.uid;
+    onSignUp?.(user);
+  }
 
   // Mirror the React package behavior: the built-in form reports success from the
   // resolved credential, while auth-state remains the fallback for child actions and MFA.

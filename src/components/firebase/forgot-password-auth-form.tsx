@@ -47,7 +47,9 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
   if (emailSent) {
     return (
       <div className="text-center space-y-4">
-        <div className="text-green-600 dark:text-green-400">{getTranslation(ui, "messages", "checkEmailForReset")}</div>
+        <div className="text-foreground">
+          {getTranslation(ui, "messages", "checkEmailForReset")}
+        </div>
       </div>
     );
   }

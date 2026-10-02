@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-type CountrySelectorComponentProps = CountrySelectorProps & {
+type CountrySelectorComponentProps = Omit<CountrySelectorProps, "ref"> & {
   ref?: Ref<CountrySelectorRef>;
 };
 

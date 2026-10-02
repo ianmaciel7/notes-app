@@ -4,8 +4,8 @@ import { use, type ReactNode } from "react";
 
 type PolicyActionProps = {
   children: ReactNode;
-  href: string;
-  onNavigate?: (url: string) => void;
+  href: string | URL;
+  onNavigate?: (url: string | URL) => void;
 };
 
 function PolicyAction({ children, href, onNavigate }: PolicyActionProps) {
@@ -24,7 +24,12 @@ function PolicyAction({ children, href, onNavigate }: PolicyActionProps) {
   }
 
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+    <a
+      href={href.toString()}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={className}
+    >
       {children}
     </a>
   );
