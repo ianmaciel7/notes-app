@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SettingsDialog } from "@/components/notes-app/settings-dialog";
@@ -30,11 +30,22 @@ describe("SettingsDialog", () => {
     expect(screen.queryByTestId("settings-dialog")).toBeNull();
   });
 
-  it("renders the settings surface while open", () => {
+  it("renders its settings surface while open", () => {
     renderDialog();
 
     expect(screen.getByTestId("settings-dialog")).toBeDefined();
+    expect(screen.getByRole("heading", { name: "Settings" })).toBeDefined();
+    expect(
+      screen.getByText("Manage your language and appearance preferences."),
+    ).toBeDefined();
     expect(screen.getByTestId("settings-form")).toBeDefined();
-    expect(screen.getByRole("dialog")).toBeDefined();
+  });
+
+  it("closes through the Base UI render-composed action", () => {
+    const onOpenChange = renderDialog();
+
+    fireEvent.click(screen.getByRole("button", { name: "Done" }));
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 });
