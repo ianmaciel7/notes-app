@@ -16,17 +16,17 @@ import { VerificationCodeInput } from "@/components/notes-app/verification-code-
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-type TotpMfaAssertionFieldGroupProps = ComponentProps<typeof FieldGroup> & {
+type TotpMfaAssertionFormProps = ComponentProps<typeof FieldGroup> & {
   hint: MultiFactorInfo;
   onSuccess?: (credential: UserCredential) => void;
 };
 
-function TotpMfaAssertionFieldGroup({
+function TotpMfaAssertionForm({
   hint,
   onSuccess,
   className,
   ...props
-}: TotpMfaAssertionFieldGroupProps) {
+}: TotpMfaAssertionFormProps) {
   const ui = useUI();
   const schema = useMultiFactorTotpAuthVerifyFormSchema();
   const action = useTotpMultiFactorAssertionFormAction();
@@ -55,7 +55,7 @@ function TotpMfaAssertionFieldGroup({
 
   return (
     <FieldGroup
-      data-slot="totp-mfa-assertion-field-group"
+      data-slot="totp-mfa-assertion-form"
       {...props}
       className={cn(className)}
     >
@@ -80,6 +80,6 @@ function TotpMfaAssertionFieldGroup({
 }
 
 export {
-  TotpMfaAssertionFieldGroup,
-  type TotpMfaAssertionFieldGroupProps,
+  TotpMfaAssertionForm,
+  type TotpMfaAssertionFormProps,
 };

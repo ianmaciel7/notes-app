@@ -35,7 +35,7 @@ type PhoneMultiFactorInfo = MultiFactorInfo & {
   phoneNumber?: string;
 };
 
-type SmsMultiFactorAssertionPhoneFieldGroupProps = Omit<
+type SmsMultiFactorAssertionPhoneFormProps = Omit<
   ComponentProps<typeof FieldGroup>,
   "onSubmit"
 > & {
@@ -43,12 +43,12 @@ type SmsMultiFactorAssertionPhoneFieldGroupProps = Omit<
   onSubmit: (verificationId: string) => void;
 };
 
-function SmsMultiFactorAssertionPhoneFieldGroup({
+function SmsMultiFactorAssertionPhoneForm({
   hint,
   onSubmit: onSubmitProp,
   className,
   ...props
-}: SmsMultiFactorAssertionPhoneFieldGroupProps) {
+}: SmsMultiFactorAssertionPhoneFormProps) {
   const ui = useUI();
   const recaptchaContainerRef = useRef<HTMLDivElement>(null);
   const recaptchaVerifier = useRecaptchaVerifier(recaptchaContainerRef);
@@ -77,7 +77,7 @@ function SmsMultiFactorAssertionPhoneFieldGroup({
 
   return (
     <FieldGroup
-      data-slot="sms-multi-factor-assertion-phone-field-group"
+      data-slot="sms-multi-factor-assertion-phone-form"
       {...props}
       className={cn(className)}
     >
@@ -207,29 +207,29 @@ function SmsMultiFactorAssertionVerifyForm({
   );
 }
 
-type SmsMfaAssertionFieldGroupProps = ComponentProps<typeof FieldGroup> & {
+type SmsMfaAssertionFormProps = ComponentProps<typeof FieldGroup> & {
   hint: MultiFactorInfo;
   onSuccess?: (credential: UserCredential) => void;
 };
 
-function SmsMfaAssertionFieldGroup({
+function SmsMfaAssertionForm({
   hint,
   onSuccess,
   className,
   ...props
-}: SmsMfaAssertionFieldGroupProps) {
+}: SmsMfaAssertionFormProps) {
   const [verification, setVerification] = useState<{
     verificationId: string;
   } | null>(null);
 
   return (
     <FieldGroup
-      data-slot="sms-mfa-assertion-field-group"
+      data-slot="sms-mfa-assertion-form"
       {...props}
       className={cn(className)}
     >
       {!verification ? (
-        <SmsMultiFactorAssertionPhoneFieldGroup
+        <SmsMultiFactorAssertionPhoneForm
           hint={hint}
           onSubmit={(verificationId) => setVerification({ verificationId })}
         />
@@ -246,8 +246,8 @@ function SmsMfaAssertionFieldGroup({
 }
 
 export {
-  SmsMfaAssertionFieldGroup,
-  type SmsMultiFactorAssertionPhoneFieldGroupProps,
+  SmsMfaAssertionForm,
+  type SmsMultiFactorAssertionPhoneFormProps,
   type SmsMultiFactorAssertionVerifyFormProps,
-  type SmsMfaAssertionFieldGroupProps,
+  type SmsMfaAssertionFormProps,
 };

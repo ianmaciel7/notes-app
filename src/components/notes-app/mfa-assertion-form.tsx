@@ -11,21 +11,21 @@ import {
 import type { ComponentProps } from "react";
 import { useState } from "react";
 
-import { SmsMfaAssertionFieldGroup } from "@/components/notes-app/sms-mfa-assertion-field-group";
-import { TotpMfaAssertionFieldGroup } from "@/components/notes-app/totp-mfa-assertion-field-group";
+import { SmsMfaAssertionForm } from "@/components/notes-app/sms-mfa-assertion-form";
+import { TotpMfaAssertionForm } from "@/components/notes-app/totp-mfa-assertion-form";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-type MfaAssertionFieldGroupProps = ComponentProps<typeof FieldGroup> & {
+type MfaAssertionFormProps = ComponentProps<typeof FieldGroup> & {
   onSuccess?: (credential: UserCredential) => void;
 };
 
-function MfaAssertionFieldGroup({
+function MfaAssertionForm({
   onSuccess,
   className,
   ...props
-}: MfaAssertionFieldGroupProps) {
+}: MfaAssertionFormProps) {
   const ui = useUI();
   const resolver = ui.multiFactorResolver;
   const mfaAssertionFactorPrompt = getTranslation(
@@ -38,7 +38,7 @@ function MfaAssertionFieldGroup({
 
   if (!resolver) {
     throw new Error(
-      "MfaAssertionFieldGroup requires a multi-factor resolver",
+      "MfaAssertionForm requires a multi-factor resolver",
     );
   }
 
@@ -50,7 +50,7 @@ function MfaAssertionFieldGroup({
   if (hint) {
     if (hint.factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
       return (
-        <SmsMfaAssertionFieldGroup
+        <SmsMfaAssertionForm
           hint={hint}
           onSuccess={onSuccess}
           {...props}
@@ -61,7 +61,7 @@ function MfaAssertionFieldGroup({
 
     if (hint.factorId === TotpMultiFactorGenerator.FACTOR_ID) {
       return (
-        <TotpMfaAssertionFieldGroup
+        <TotpMfaAssertionForm
           hint={hint}
           onSuccess={onSuccess}
           {...props}
@@ -73,7 +73,7 @@ function MfaAssertionFieldGroup({
 
   return (
     <FieldGroup
-      data-slot="mfa-assertion-field-group"
+      data-slot="mfa-assertion-form"
       {...props}
       className={cn("gap-2", className)}
     >
@@ -119,4 +119,4 @@ function SmsButton(props: ComponentProps<typeof Button>) {
   );
 }
 
-export { MfaAssertionFieldGroup, type MfaAssertionFieldGroupProps };
+export { MfaAssertionForm, type MfaAssertionFormProps };
