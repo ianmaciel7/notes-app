@@ -19,7 +19,7 @@ const COMPOSITION_RULES = [
     required: ["CardHeader", "CardContent"],
     except: ["auth-card.tsx"],
   },
-  { suffix: "-form.tsx", required: ["FieldGroup"] },
+  { suffix: "-form.tsx", required: ["form"] },
   { suffix: "-field-group.tsx", required: ["FieldGroup"] },
   { suffix: "-alert.tsx", required: ["Alert"] },
   { suffix: "-dialog.tsx", required: ["DialogContent"] },

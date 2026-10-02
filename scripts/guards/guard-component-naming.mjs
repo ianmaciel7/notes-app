@@ -40,6 +40,7 @@ const SHADCN_SUFFIXES = new Set([
   "item",
   "header",
   "footer",
+  "group",
   "sidebar",
   "shell",
   "drawer",
@@ -175,7 +176,7 @@ if (violations.length === 0) {
   console.error(`
 Each component file in src/components/notes-app/ must end with a recognised
 shadcn-style suffix (e.g. -card, -form, -button, -select, -alert, -menu,
--provider, -switcher, -header, etc.) or be listed in ALLOWED_BASENAMES in
+-provider, -switcher, -field-group, -header, etc.) or be listed in ALLOWED_BASENAMES in
 scripts/guard-component-naming.mjs.
 
 Next.js reserved filenames (page.tsx, layout.tsx, …) are exempt.

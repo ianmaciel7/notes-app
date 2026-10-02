@@ -66,6 +66,13 @@ test("enforces card anatomy", () => {
 });
 
 test("enforces field-group anatomy", () => {
+  const valid = checkFile(
+    "settings-field-group.tsx",
+    `import { FieldGroup } from "@/components/ui/field"; function SettingsFieldGroup() { return <FieldGroup data-slot="settings-field-group"><span /></FieldGroup>; }`,
+  );
+
+  assert.deepEqual(valid, []);
+
   const violations = checkFile(
     "settings-field-group.tsx",
     `import { Field } from "@/components/ui/field"; function SettingsFieldGroup() { return <Field data-slot="settings-field-group" />; }`,
@@ -75,18 +82,23 @@ test("enforces field-group anatomy", () => {
     violations.some((item) => item.rule === "notes-app-composition-anatomy"),
   );
 });
-
 test("enforces form anatomy", () => {
+  const valid = checkFile(
+    "example-form.tsx",
+    `import { Button } from "@/components/ui/button"; function ExampleForm() { return <form data-slot="example-form"><Button /></form>; }`,
+  );
+
+  assert.deepEqual(valid, []);
+
   const violations = checkFile(
     "example-form.tsx",
-    `import { Button } from "@/components/ui/button"; export function ExampleForm() { return <form><Button /></form>; }`,
+    `import { FieldGroup } from "@/components/ui/field"; function ExampleForm() { return <FieldGroup data-slot="example-form"><span /></FieldGroup>; }`,
   );
 
   assert.ok(
     violations.some((item) => item.rule === "notes-app-composition-anatomy"),
   );
 });
-
 test("enforces explicit status composition", () => {
   const violations = checkFile(
     "spaces-status.tsx",
