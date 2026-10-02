@@ -1,18 +1,9 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import type { ComponentProps, ReactNode } from "react";
 import { useState } from "react";
-import {
-  CreateSpaceDialog,
-  CreateSpaceDialogContent,
-} from "@/components/notes-app/create-space-dialog";
-import { CreateSpaceForm } from "@/components/notes-app/create-space-form";
-import {
-  SettingsDialog,
-  SettingsDialogContent,
-} from "@/components/notes-app/settings-dialog";
-import { SettingsFieldGroup } from "@/components/notes-app/settings-field-group";
+import { CreateSpaceDialog } from "@/components/notes-app/create-space-dialog";
+import { SettingsDialog } from "@/components/notes-app/settings-dialog";
 import { SidebarUserMenu } from "@/components/notes-app/sidebar-user-menu";
 import { SpaceLoading } from "@/components/notes-app/space-loading";
 import { SpaceSwitcher } from "@/components/notes-app/space-switcher";
@@ -22,13 +13,6 @@ import {
   SpacesLoadingStatus,
   SpacesNotFoundStatus,
 } from "@/components/notes-app/spaces-status";
-import { Button } from "@/components/ui/button";
-import {
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   Sidebar,
   SidebarFooter,
@@ -55,8 +39,6 @@ function SpaceShell({
   onSelectSpace,
   ...props
 }: SpaceShellProps) {
-  const spacesT = useTranslations("spaces");
-  const settingsT = useTranslations("settings");
   const {
     authLoading,
     createSpace,
@@ -153,41 +135,13 @@ function SpaceShell({
       <CreateSpaceDialog
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
-      >
-        <CreateSpaceDialogContent>
-          <DialogHeader>
-            <DialogTitle>{spacesT("dialogTitle")}</DialogTitle>
-            <DialogDescription>
-              {spacesT("dialogDescription")}
-            </DialogDescription>
-          </DialogHeader>
-          <CreateSpaceForm
-            onSubmitSpace={handleCreate}
-            isLoading={isCreating}
-            onCancel={() => setCreateDialogOpen(false)}
-          />
-        </CreateSpaceDialogContent>
-      </CreateSpaceDialog>
-
+        onSubmitSpace={handleCreate}
+        isLoading={isCreating}
+      />
       <SettingsDialog
         open={settingsDialogOpen}
         onOpenChange={setSettingsDialogOpen}
-      >
-        <SettingsDialogContent>
-          <DialogHeader>
-            <DialogTitle>{settingsT("settings")}</DialogTitle>
-            <DialogDescription>
-              {settingsT("settingsDescription")}
-            </DialogDescription>
-          </DialogHeader>
-          <SettingsFieldGroup />
-          <DialogFooter>
-            <Button onClick={() => setSettingsDialogOpen(false)}>
-              {spacesT("done")}
-            </Button>
-          </DialogFooter>
-        </SettingsDialogContent>
-      </SettingsDialog>
+      />
     </>
   );
 }

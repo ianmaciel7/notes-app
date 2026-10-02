@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { SettingsFieldGroup } from "@/components/notes-app/settings-field-group";
+import { SettingsForm } from "@/components/notes-app/settings-form";
 import messages from "@/messages/en.json";
 
 const mockSetTheme = vi.fn();
@@ -18,15 +18,15 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({ refresh: vi.fn() }),
 }));
 
-function renderFieldGroup() {
+function renderForm() {
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <SettingsFieldGroup />
+      <SettingsForm />
     </NextIntlClientProvider>,
   );
 }
 
-describe("SettingsFieldGroup", () => {
+describe("SettingsForm", () => {
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
@@ -34,14 +34,14 @@ describe("SettingsFieldGroup", () => {
   });
 
   it("renders theme and language controls", () => {
-    renderFieldGroup();
+    renderForm();
 
     expect(screen.getByRole("switch")).toBeDefined();
     expect(screen.getByTestId("language-select")).toBeDefined();
   });
 
   it("switches to dark theme", () => {
-    renderFieldGroup();
+    renderForm();
 
     fireEvent.click(screen.getByRole("switch"));
 
@@ -50,7 +50,7 @@ describe("SettingsFieldGroup", () => {
 
   it("switches back to light theme", () => {
     mockResolvedTheme = "dark";
-    renderFieldGroup();
+    renderForm();
 
     fireEvent.click(screen.getByRole("switch"));
 

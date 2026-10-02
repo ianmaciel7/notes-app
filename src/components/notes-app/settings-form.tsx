@@ -13,23 +13,23 @@ import {
 } from "@/components/ui/field";
 import { Switch } from "@/components/ui/switch";
 
-type SettingsFieldGroupProps = ComponentProps<typeof FieldGroup>;
+type SettingsFormProps = ComponentProps<typeof FieldGroup>;
 
-function SettingsFieldGroup({ ...props }: SettingsFieldGroupProps) {
+function SettingsForm({ ...props }: SettingsFormProps) {
   const t = useTranslations("settings");
   const { resolvedTheme, setTheme } = useTheme();
 
   return (
-    <FieldGroup {...props} data-slot="settings-field-group">
+    <FieldGroup {...props} data-slot="settings-form">
       <Field orientation="horizontal">
         <FieldContent>
-          <FieldLabel htmlFor="settings-field-group-theme-switch">
+          <FieldLabel htmlFor="settings-form-theme-switch">
             {t("darkMode")}
           </FieldLabel>
           <FieldDescription>{t("darkModeDescription")}</FieldDescription>
         </FieldContent>
         <Switch
-          id="settings-field-group-theme-switch"
+          id="settings-form-theme-switch"
           checked={resolvedTheme === "dark"}
           onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
         />
@@ -42,4 +42,4 @@ function SettingsFieldGroup({ ...props }: SettingsFieldGroupProps) {
   );
 }
 
-export { SettingsFieldGroup, type SettingsFieldGroupProps };
+export { SettingsForm, type SettingsFormProps };

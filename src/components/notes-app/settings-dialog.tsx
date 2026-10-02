@@ -1,52 +1,54 @@
 "use client";
 
-import type { ComponentProps, ReactNode } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useTranslations } from "next-intl";
+import type { ComponentProps } from "react";
+import { SettingsForm } from "@/components/notes-app/settings-form";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
-type SettingsDialogProps = ComponentProps<typeof Dialog> & {
+type SettingsDialogProps = Omit<
+  ComponentProps<typeof Dialog>,
+  "children" | "open" | "onOpenChange"
+> & {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  children: ReactNode;
 };
-
-type SettingsDialogContentProps = ComponentProps<typeof DialogContent>;
 
 function SettingsDialog({
   open,
   onOpenChange,
-  children,
   ...props
 }: SettingsDialogProps) {
+  const t = useTranslations("settings");
+  const spacesT = useTranslations("spaces");
+
   return (
-    <Dialog
-      {...props}
-      data-slot="settings-dialog"
-      open={open}
-      onOpenChange={onOpenChange}
-    >
-      {children}
+    <Dialog {...props} open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        data-slot="settings-dialog"
+        data-testid="settings-dialog"
+      >
+        <DialogHeader>
+          <DialogTitle>{t("settings")}</DialogTitle>
+          <DialogDescription>{t("settingsDescription")}</DialogDescription>
+        </DialogHeader>
+        <SettingsForm />
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" />}>
+            {spacesT("done")}
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 }
 
-function SettingsDialogContent({
-  children,
-  ...props
-}: SettingsDialogContentProps) {
-  return (
-    <DialogContent
-      {...props}
-      data-slot="settings-dialog-content"
-      data-testid="settings-dialog"
-    >
-      {children}
-    </DialogContent>
-  );
-}
-
-export {
-  SettingsDialog,
-  SettingsDialogContent,
-  type SettingsDialogContentProps,
-  type SettingsDialogProps,
-};
+export { SettingsDialog, type SettingsDialogProps };

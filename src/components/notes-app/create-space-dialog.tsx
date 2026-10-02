@@ -1,52 +1,53 @@
 "use client";
 
-import type { ComponentProps, ReactNode } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useTranslations } from "next-intl";
+import type { ComponentProps } from "react";
+import { CreateSpaceForm } from "@/components/notes-app/create-space-form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
-type CreateSpaceDialogProps = ComponentProps<typeof Dialog> & {
+type CreateSpaceDialogProps = Omit<
+  ComponentProps<typeof Dialog>,
+  "children" | "open" | "onOpenChange"
+> & {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  children: ReactNode;
+  onSubmitSpace: (name: string, icon: string) => Promise<void>;
+  isLoading?: boolean;
 };
-
-type CreateSpaceDialogContentProps = ComponentProps<typeof DialogContent>;
 
 function CreateSpaceDialog({
   open,
   onOpenChange,
-  children,
+  onSubmitSpace,
+  isLoading = false,
   ...props
 }: CreateSpaceDialogProps) {
+  const t = useTranslations("spaces");
+
   return (
-    <Dialog
-      {...props}
-      data-slot="create-space-dialog"
-      open={open}
-      onOpenChange={onOpenChange}
-    >
-      {children}
+    <Dialog {...props} open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        data-slot="create-space-dialog"
+        data-testid="create-space-dialog"
+      >
+        <DialogHeader>
+          <DialogTitle>{t("dialogTitle")}</DialogTitle>
+          <DialogDescription>{t("dialogDescription")}</DialogDescription>
+        </DialogHeader>
+        <CreateSpaceForm
+          onSubmitSpace={onSubmitSpace}
+          isLoading={isLoading}
+          onCancel={() => onOpenChange(false)}
+        />
+      </DialogContent>
     </Dialog>
   );
 }
 
-function CreateSpaceDialogContent({
-  children,
-  ...props
-}: CreateSpaceDialogContentProps) {
-  return (
-    <DialogContent
-      {...props}
-      data-slot="create-space-dialog-content"
-      data-testid="create-space-dialog"
-    >
-      {children}
-    </DialogContent>
-  );
-}
-
-export {
-  CreateSpaceDialog,
-  CreateSpaceDialogContent,
-  type CreateSpaceDialogContentProps,
-  type CreateSpaceDialogProps,
-};
+export { CreateSpaceDialog, type CreateSpaceDialogProps };
