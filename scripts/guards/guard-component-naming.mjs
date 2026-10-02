@@ -28,13 +28,10 @@ const SHADCN_COMPOUND_SUFFIXES = new Set([
   "field-group",
   "button-group",
   "input-group",
+  "toggle-group",
 ]);
 
 const SHADCN_SUFFIXES = new Set([
-  "field-group",
-  "button-group",
-  "input-group",
-  "toggle-group",
   "card",
   "form",
   "button",
@@ -129,29 +126,6 @@ function getBasename(filename) {
 }
 
 function hasRecognizedSuffix(basename) {
-  return [...SHADCN_SUFFIXES].some(
-    (suffix) => basename === suffix || basename.endsWith(`-${suffix}`),
-  );
-}
-
-function isCompliant(filename) {
-  // Only check .tsx files
-  if (!filename.endsWith(".tsx")) return true;
-  // Ignore test files
-  if (filename.endsWith(".test.tsx") || filename.endsWith(".spec.tsx"))
-    return true;
-  // Ignore stories
-  if (filename.endsWith(".stories.tsx")) return true;
-
-  const basename = getBasename(filename);
-
-  // Explicitly allowed basenames
-  if (ALLOWED_BASENAMES.has(basename)) return true;
-
-  // Next.js reserved
-  if (NEXTJS_RESERVED.has(basename)) return true;
-
-  // shadcn compound suffix (FieldGroup, ButtonGroup, InputGroup, ...)
   if (
     [...SHADCN_COMPOUND_SUFFIXES].some(
       (suffix) => basename === suffix || basename.endsWith(`-${suffix}`),
@@ -160,11 +134,26 @@ function isCompliant(filename) {
     return true;
   }
 
-  // shadcn single-token suffix
-  const suffix = getSuffix(basename);
-  if (SHADCN_SUFFIXES.has(suffix)) return true;
+  const separatorIndex = basename.lastIndexOf("-");
+  const suffix =
+    separatorIndex === -1 ? basename : basename.slice(separatorIndex + 1);
 
-  return false;
+  return SHADCN_SUFFIXES.has(suffix);
+}
+
+function isCompliant(filename) {
+  if (!filename.endsWith(".tsx")) return true;
+  if (filename.endsWith(".test.tsx") || filename.endsWith(".spec.tsx")) {
+    return true;
+  }
+  if (filename.endsWith(".stories.tsx")) return true;
+
+  const basename = getBasename(filename);
+
+  if (ALLOWED_BASENAMES.has(basename)) return true;
+  if (NEXTJS_RESERVED.has(basename)) return true;
+
+  return hasRecognizedSuffix(basename);
 }
 
 // ---------------------------------------------------------------------------
