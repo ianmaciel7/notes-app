@@ -156,10 +156,9 @@ internal script paths. Numeric thresholds and what blocks a change are owned by
 
 ### Agent and editor hooks
 
-Wiring lives in [.agents/hooks.json](./.agents/hooks.json) and
-[.claude/settings.json](./.claude/settings.json). Both call the same adapters, except the
-delegation guard, which is wired only in `.claude/settings.json` because only Claude Code has the
-`Agent` tool:
+Canonical hook wiring lives in [.agents/hooks.json](./.agents/hooks.json). Tool-specific
+Claude settings are materialized locally by the agents CLI and are not committed. Claude-only
+delegation hooks still use the same repository adapters:
 
 | Event | Adapter | Purpose |
 | :--- | :--- | :--- |
@@ -169,8 +168,8 @@ delegation guard, which is wired only in `.claude/settings.json` because only Cl
 | `PreToolUse` on `Bash` (Claude Code only; the script itself selects `git` and `rtk git` segments, so `rtk git ...` and chained commands are covered) | `scripts/hooks/hook-guard-bash.mjs` | Deny git commands that skip the gates: `--no-verify`, `--no-gpg-sign`, and `--force` without `--force-with-lease` |
 
 PreToolUse adapters answer with exit 0 and the documented `hookSpecificOutput.permissionDecision`
-JSON, and every hook sets a `timeout` so a hang cannot stall the agent. Each deny or ask is appended
-to `.agents/logs/hook-events.jsonl` (gitignored) so a rule can be judged by how often it fires.
+JSON, and every hook sets a `timeout` so a hang cannot stall the agent. Deny/ask events are appended
+to a gitignored JSONL hook log under the agent logs directory so rule frequency can be reviewed locally.
 
 ### GitHub Actions
 
