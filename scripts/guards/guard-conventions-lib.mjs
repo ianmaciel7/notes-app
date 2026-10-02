@@ -1,10 +1,9 @@
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-// `src/components/firebase/` is an unmodified Firebase UI registry drop.
-// `src/components/ui/` is registry-installed and only the `uiOnly` rules below
-// (the primitive anatomy) apply to it; every other rule skips it.
-const EXCLUDED_PREFIXES = ["src/components/firebase/"];
+// `src/components/ui/` is registry-installed and intentionally excluded from
+// project-wide convention enforcement. All other project source is in scope.
+const EXCLUDED_PREFIXES = ["src/components/ui/"];
 const UI_PREFIX = "src/components/ui/";
 const SOURCE_EXTENSIONS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs"]);
 const STYLE_EXTENSIONS = new Set([...SOURCE_EXTENSIONS, ".css"]);

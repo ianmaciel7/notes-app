@@ -42,6 +42,10 @@ export function scanDirectoryForEmojis(dir, baseDir = dir) {
     const fullPath = path.join(dir, entry);
     const stat = statSync(fullPath);
     if (stat.isDirectory()) {
+      const relDir = path.relative(baseDir, fullPath).replaceAll("\\", "/");
+      if (relDir === "components/ui" || relDir.startsWith("components/ui/")) {
+        continue;
+      }
       violations = violations.concat(scanDirectoryForEmojis(fullPath, baseDir));
     } else if (/\.(ts|tsx|js|mjs|jsx|css)$/.test(entry)) {
       const relPath = path.relative(baseDir, fullPath).replaceAll("\\", "/");
@@ -58,7 +62,7 @@ export function runGuard() {
   const violations = scanDirectoryForEmojis(srcDir);
   if (violations.length === 0) {
     console.log(
-      "[guard-no-emojis] ✓ Zero emojis found in src/. All code, UI, and icons comply with the no-emojis policy.",
+      "[guard-no-emojis] ✓ Zero emojis found in project source outside src/components/ui/.",
     );
     return true;
   }

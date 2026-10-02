@@ -1,5 +1,10 @@
 {
-  "format": ["typescript", "tsx", "javascript", "json"],
+  "format": [
+    "typescript",
+    "tsx",
+    "javascript",
+    "json"
+  ],
   "ignore": [
     "**/node_modules/**",
     "**/.next/**",
@@ -7,10 +12,12 @@
     "**/*.stories.tsx",
     "**/*.test.ts",
     "**/*.test.tsx",
-    "**/src/components/firebase/**"
+    "**/src/components/ui/**"
   ],
   "minTokens": 50,
   "minLines": 5,
-  "reporters": ["console"],
+  "reporters": [
+    "console"
+  ],
   "threshold": 10
 }

@@ -19,6 +19,7 @@ import ts from "typescript";
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const scanRoots = [
   path.join(root, "src/app"),
+  path.join(root, "src/components/firebase"),
   path.join(root, "src/components/notes-app"),
 ];
 

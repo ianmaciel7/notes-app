@@ -6,8 +6,9 @@ contributor workflow to `CONTRIBUTING.md`.
 
 ## 1. Tool-Owned Conventions
 
-- **Biome** (`biome.json`) is the formatter and linter. Do not introduce
-  ESLint/Prettier as parallel sources of truth.
+- **Biome** (`biome.json`) is the formatter and linter for project-owned code.
+  `src/components/ui/` is excluded from the project-wide gate because it is
+  registry-managed. Do not introduce ESLint/Prettier as parallel sources of truth.
 - **TypeScript** remains strict. Do not use `any`, `@ts-ignore`, or unsafe casts
   as shortcuts around type design.
 - **Biome organizeImports** owns import ordering; do not maintain a competing manual
@@ -327,9 +328,9 @@ row here in the same change that adds or changes a rule; prefer promoting a
 | `reuse-primitives` | review-only |
 | `no-render-props-api` | `check:conventions` |
 | `composition-over-boolean-props` | review-only |
-| `ui-primitive-no-default-export` | `check:conventions` |
-| `ui-primitive-trailing-export-block` | `check:conventions` |
-| `ui-primitive-no-interface` | `check:conventions` |
+| `ui-primitive-no-default-export` | review-only |
+| `ui-primitive-trailing-export-block` | review-only |
+| `ui-primitive-no-interface` | review-only |
 | `ui-primitive-part-shape` | review-only |
 | `no-domain-in-ui` | `deps:check` |
 | `no-classic-form-api` | `check:conventions` |
