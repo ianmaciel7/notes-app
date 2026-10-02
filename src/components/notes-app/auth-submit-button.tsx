@@ -11,7 +11,7 @@ type AuthSubmitButtonProps = Omit<ComponentProps<typeof Button>, "children"> & {
 
 function AuthSubmitButton({ busy, children, ...props }: AuthSubmitButtonProps) {
   return (
-    <Button disabled={busy || props.disabled} {...props}>
+    <Button {...props} disabled={busy || props.disabled}>
       {busy ? <Spinner data-icon="inline-start" /> : null}
       {children}
     </Button>

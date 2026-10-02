@@ -32,8 +32,8 @@ function GoogleSignInButton({
       type="button"
       variant="outline"
       size="lg"
-      className={cn("w-full", className)}
       {...props}
+      className={cn("w-full", className)}
     >
       <GoogleLogo data-icon="inline-start" />
       {label}

@@ -32,7 +32,7 @@ function SettingsDialog({ open, onOpenChange, ...props }: SettingsDialogProps) {
   const settingsT = useTranslations("settings");
   const { resolvedTheme, setTheme } = useTheme();
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} {...props}>
+    <Dialog {...props} open={open} onOpenChange={onOpenChange}>
       <DialogContent data-testid="settings-dialog">
         <DialogHeader>
           <DialogTitle>{settingsT("settings")}</DialogTitle>

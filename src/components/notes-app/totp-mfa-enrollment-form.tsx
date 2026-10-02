@@ -65,8 +65,8 @@ function TotpMultiFactorSecretGenerationForm({
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn("flex flex-col gap-4", className)}
         {...props}
+        className={cn("flex flex-col gap-4", className)}
       >
         <FieldGroup>
           <AuthFormInput
@@ -158,8 +158,8 @@ function MultiFactorEnrollmentVerifyTotpForm({
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className={cn("flex flex-col gap-4", className)}
           {...props}
+          className={cn("flex flex-col gap-4", className)}
         >
           <FieldGroup>
             <VerificationCodeInput
@@ -199,7 +199,7 @@ function TotpMfaEnrollmentForm({
   }
 
   return (
-    <div className={cn(className)} {...props}>
+    <div {...props} className={cn(className)}>
       {!enrollment ? (
         <TotpMultiFactorSecretGenerationForm
           onSubmit={(secret, displayName) =>

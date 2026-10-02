@@ -22,7 +22,7 @@ import type { ComponentProps } from "react";
 import { useRef, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { AuthFormErrorAlert } from "@/components/notes-app/auth-form-error-alert";
-import { Policies } from "@/components/notes-app/auth-policies-card";
+import { Policies } from "@/components/notes-app/auth-policies-description";
 import { AuthSubmitButton } from "@/components/notes-app/auth-submit-button";
 import {
   CountrySelect,

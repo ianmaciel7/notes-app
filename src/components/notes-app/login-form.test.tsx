@@ -23,7 +23,7 @@ vi.mock("@firebase-oss/ui-core", () => ({
     `${group}.${key}`,
 }));
 
-vi.mock("./auth-policies-card", () => ({
+vi.mock("./auth-policies-description", () => ({
   Policies: () => null,
 }));
 

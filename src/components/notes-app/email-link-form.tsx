@@ -15,7 +15,7 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { AuthFormInput } from "@/components/notes-app/auth-form-input";
-import { Policies } from "@/components/notes-app/auth-policies-card";
+import { Policies } from "@/components/notes-app/auth-policies-description";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup } from "@/components/ui/field";

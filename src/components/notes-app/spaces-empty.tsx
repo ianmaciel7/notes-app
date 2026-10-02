@@ -23,8 +23,8 @@ function SpacesEmpty({ onCreate, className, ...props }: SpacesEmptyProps) {
   return (
     <Empty
       data-testid="spaces-empty"
-      className={cn("flex flex-1 items-center justify-center p-8", className)}
       {...props}
+      className={cn("flex flex-1 items-center justify-center p-8", className)}
     >
       <Empty className="max-w-sm border border-dashed p-6">
         <EmptyHeader>

@@ -91,11 +91,11 @@ function ConnectionAlert({
       value={{ onReconnect: handleReconnect, reconnecting }}
     >
       <Alert
+        {...props}
         variant="destructive"
         aria-live="assertive"
         aria-atomic="true"
         className={cn("fixed inset-x-4 top-3 sm:inset-x-6", className)}
-        {...props}
       >
         {children}
       </Alert>

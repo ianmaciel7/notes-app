@@ -43,8 +43,8 @@ function MfaEnrollmentForm({
       return (
         <TotpMultiFactorEnrollmentForm
           onSuccess={onEnrollment}
-          className={className}
           {...props}
+          className={className}
         />
       );
     }
@@ -53,8 +53,8 @@ function MfaEnrollmentForm({
       return (
         <SmsMultiFactorEnrollmentForm
           onSuccess={onEnrollment}
-          className={className}
           {...props}
+          className={className}
         />
       );
     }
@@ -63,7 +63,7 @@ function MfaEnrollmentForm({
   }
 
   return (
-    <FieldGroup className={cn("gap-2", className)} {...props}>
+    <FieldGroup {...props} className={cn("gap-2", className)}>
       {hints.map((hint) => {
         if (hint === FactorId.TOTP) {
           return <TotpButton key={hint} onClick={() => setHint(hint)} />;

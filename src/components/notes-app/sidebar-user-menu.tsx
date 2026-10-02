@@ -75,9 +75,9 @@ function SidebarUserMenu({
 
   return (
     <SidebarMenu
+      {...props}
       className={cn("items-center gap-1 pr-1.5", className)}
       aria-label={t("openUserMenu")}
-      {...props}
     >
       <SidebarMenuItem>
         <DropdownMenu>

@@ -10,7 +10,7 @@ type AuthCardProps = ComponentProps<typeof Card>;
 
 function AuthCard({ className, ...props }: AuthCardProps) {
   return (
-    <Card className={cn("mx-auto w-full max-w-sm", className)} {...props} />
+    <Card {...props} className={cn("mx-auto w-full max-w-sm", className)} />
   );
 }
 
@@ -24,7 +24,7 @@ function AuthCardProviders({
   const t = useTranslations("auth");
 
   return (
-    <FieldGroup className={cn("pt-1", className)} {...props}>
+    <FieldGroup {...props} className={cn("pt-1", className)}>
       <FieldSeparator className="uppercase [&>span]:bg-card">
         {t("orContinueWith")}
       </FieldSeparator>

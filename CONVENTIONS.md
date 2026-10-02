@@ -35,6 +35,7 @@ contributor workflow to `CONTRIBUTING.md`.
   - `-header` / `*Header` for heading and greeting presentation blocks (e.g. `auth-greeting-header.tsx` -> `AuthGreetingHeader`)
   - `-alert` / `*Alert` for notification and error banners (e.g. `redirect-error-alert.tsx` -> `RedirectErrorAlert`)
   - `-button` / `*Button`, `-select` / `*Select`, `-menu` / `*Menu`, `-switcher` / `*Switcher` for interactive UI controls
+  - `-description` / `*Description` for descriptive field or policy text surfaces
   - `-sidebar` / `*Sidebar` for navigation shells (e.g. `space-sidebar.tsx` -> `SpaceSidebar`)
   - `-provider` / `*Provider` for React context providers
   - `-dialog` / `*Dialog`, `-status` / `*Status`, `-empty` / `*Empty` for standalone overlays and state surfaces split out of a larger component (e.g. `settings-dialog.tsx` -> `SettingsDialog`, `spaces-status.tsx` -> `SpacesStatus`)
@@ -310,6 +311,23 @@ Do not:
   `TESTING.md`.
 
 ## 9. Enforcement Index
+
+### Notes-app UI composition contract
+
+Every visual component in `src/components/notes-app/` follows one composition
+pattern:
+
+- compose at least one primitive from `src/components/ui/`;
+- never use raw interactive HTML controls (`button`, `input`, `select`,
+  `textarea`, or `label`);
+- spread caller props before required layout classes and semantic attributes;
+- keep `auth-provider.tsx`, `spaces-list.tsx`, and `theme-provider.tsx` as the
+  only explicit exceptions because they are infrastructure or conditional
+  orchestration files without their own visual surface.
+
+This contract is enforced by `scripts/guards/guard-notes-app-pattern.mjs`, exposed
+through `check:ui-pattern`, and covered by
+`scripts/guards/guard-notes-app-pattern.test.mjs`.
 
 Every rule above has exactly one enforcer: a `package.json` script that runs in
 `check:fast`, or `review-only` when no tool can decide it. `check:conventions`

@@ -76,7 +76,7 @@ function SmsMultiFactorAssertionPhoneForm({
   };
 
   return (
-    <FieldGroup className={cn(className)} {...props}>
+    <FieldGroup {...props} className={cn(className)}>
       <FieldGroup className="gap-4">
         <Field>
           <FieldTitle>{getTranslation(ui, "labels", "phoneNumber")}</FieldTitle>
@@ -149,8 +149,8 @@ function SmsMultiFactorAssertionVerifyForm({
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn("flex flex-col gap-4", className)}
         {...props}
+        className={cn("flex flex-col gap-4", className)}
       >
         <FieldGroup>
           <Controller
@@ -218,7 +218,7 @@ function SmsMfaAssertionForm({
   } | null>(null);
 
   return (
-    <FieldGroup className={cn(className)} {...props}>
+    <FieldGroup {...props} className={cn(className)}>
       {!verification ? (
         <SmsMultiFactorAssertionPhoneForm
           hint={hint}

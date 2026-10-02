@@ -2,6 +2,7 @@
 
 import type { ComponentProps } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { cn } from "@/lib/utils";
 
 type AuthFormErrorAlertProps = Omit<
   ComponentProps<typeof Alert>,
@@ -10,11 +11,15 @@ type AuthFormErrorAlertProps = Omit<
   message?: string;
 };
 
-function AuthFormErrorAlert({ message, ...props }: AuthFormErrorAlertProps) {
+function AuthFormErrorAlert({
+  message,
+  className,
+  ...props
+}: AuthFormErrorAlertProps) {
   if (!message) return null;
 
   return (
-    <Alert variant="destructive" {...props}>
+    <Alert {...props} variant="destructive" className={cn(className)}>
       <AlertDescription>{message}</AlertDescription>
     </Alert>
   );

@@ -43,11 +43,11 @@ function LanguageSelect({ className, ...props }: LanguageSelectProps) {
   return (
     <ButtonGroup
       data-testid="language-select-container"
+      {...props}
       className={cn(
         "flex items-center gap-1 text-xs text-muted-foreground",
         className,
       )}
-      {...props}
     >
       <Select
         items={SUPPORTED_LOCALES.map((loc) => ({

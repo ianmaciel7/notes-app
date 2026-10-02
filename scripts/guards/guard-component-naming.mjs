@@ -74,6 +74,7 @@ const SHADCN_SUFFIXES = new Set([
   "carousel",
   "status",
   "empty",
+  "description",
 ]);
 
 // ---------------------------------------------------------------------------

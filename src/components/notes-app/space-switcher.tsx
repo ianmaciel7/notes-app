@@ -41,7 +41,7 @@ function SpaceSwitcherMenu({
 }: SpaceSwitcherMenuProps) {
   const t = useTranslations("spaces");
   return (
-    <SidebarMenu aria-label={t("workspace")} {...props}>
+    <SidebarMenu {...props} aria-label={t("workspace")}>
       <SidebarMenuItem>
         {spaces.length > 0 ? (
           <DropdownMenu>

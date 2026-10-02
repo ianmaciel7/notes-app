@@ -20,8 +20,8 @@ function UserMenu({ className, ...props }: UserMenuProps) {
     return (
       <Skeleton
         data-testid="user-menu-loading"
-        className={cn("h-8 w-24", className)}
         {...props}
+        className={cn("h-8 w-24", className)}
       />
     );
   }
@@ -29,8 +29,8 @@ function UserMenu({ className, ...props }: UserMenuProps) {
   if (!user) {
     return (
       <ButtonGroup
-        className={cn("flex items-center gap-3", className)}
         {...props}
+        className={cn("flex items-center gap-3", className)}
       >
         <LanguageSelect />
         <Button
@@ -55,11 +55,11 @@ function UserMenu({ className, ...props }: UserMenuProps) {
   return (
     <ButtonGroup
       data-testid="user-menu"
+      {...props}
       className={cn(
         "flex items-center gap-3 text-sm text-foreground",
         className,
       )}
-      {...props}
     >
       <LanguageSelect />
       <span

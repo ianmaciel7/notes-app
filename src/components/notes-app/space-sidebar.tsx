@@ -95,8 +95,8 @@ function SpaceSidebar({
   return (
     <SidebarProvider
       data-testid="space-sidebar"
-      className={cn("min-h-svh", className)}
       {...props}
+      className={cn("min-h-svh", className)}
     >
       <Sidebar variant="inset" collapsible="none" className="h-svh">
         <SidebarHeader>

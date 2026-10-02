@@ -5,7 +5,7 @@ import { useOnUserAuthenticated, useUI } from "@firebase-oss/ui-react";
 import type { User } from "firebase/auth";
 import type { ComponentProps, PropsWithChildren } from "react";
 import { AuthCard, AuthCardProviders } from "@/components/notes-app/auth-card";
-import { Policies } from "@/components/notes-app/auth-policies-card";
+import { Policies } from "@/components/notes-app/auth-policies-description";
 import { MultiFactorAuthAssertionScreen } from "@/components/notes-app/mfa-assertion-card";
 import { RedirectError } from "@/components/notes-app/redirect-error-alert";
 import {

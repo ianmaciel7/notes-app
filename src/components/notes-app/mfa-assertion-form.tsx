@@ -53,8 +53,8 @@ function MfaAssertionForm({
         <SmsMfaAssertionForm
           hint={hint}
           onSuccess={onSuccess}
-          className={className}
           {...props}
+          className={className}
         />
       );
     }
@@ -64,15 +64,15 @@ function MfaAssertionForm({
         <TotpMfaAssertionForm
           hint={hint}
           onSuccess={onSuccess}
-          className={className}
           {...props}
+          className={className}
         />
       );
     }
   }
 
   return (
-    <FieldGroup className={cn("gap-2", className)} {...props}>
+    <FieldGroup {...props} className={cn("gap-2", className)}>
       <Field>
         <FieldDescription>{mfaAssertionFactorPrompt}</FieldDescription>
       </Field>

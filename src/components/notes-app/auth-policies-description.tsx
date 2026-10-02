@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { FieldDescription } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-type AuthPoliciesCardProps = ComponentProps<"div">;
+type AuthPoliciesDescriptionProps = ComponentProps<"div">;
 
 type PolicyLinkProps = PropsWithChildren<{
   onNavigate?: (url: PolicyURL) => void;
@@ -45,7 +45,10 @@ function PolicyLink({ onNavigate, url, children }: PolicyLinkProps) {
   );
 }
 
-function AuthPoliciesCard({ className, ...props }: AuthPoliciesCardProps) {
+function AuthPoliciesDescription({
+  className,
+  ...props
+}: AuthPoliciesDescriptionProps) {
   const ui = useUI();
   const policies = use(PolicyContext);
 
@@ -68,8 +71,8 @@ function AuthPoliciesCard({ className, ...props }: AuthPoliciesCardProps) {
 
   return (
     <FieldDescription
-      className={cn("text-muted-foreground text-center text-xs", className)}
       {...props}
+      className={cn("text-muted-foreground text-center text-xs", className)}
     >
       {keyedParts.map(({ key, part }) => {
         if (part === "{tos}") {
@@ -102,11 +105,8 @@ function AuthPoliciesCard({ className, ...props }: AuthPoliciesCardProps) {
   );
 }
 
-type PoliciesProps = AuthPoliciesCardProps;
-
 export {
-  AuthPoliciesCard,
-  AuthPoliciesCard as Policies,
-  type AuthPoliciesCardProps,
-  type PoliciesProps,
+  AuthPoliciesDescription,
+  AuthPoliciesDescription as Policies,
+  type AuthPoliciesDescriptionProps,
 };

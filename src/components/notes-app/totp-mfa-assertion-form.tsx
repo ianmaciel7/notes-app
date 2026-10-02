@@ -54,7 +54,7 @@ function TotpMfaAssertionForm({
   };
 
   return (
-    <div className={cn(className)} {...props}>
+    <div {...props} className={cn(className)}>
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

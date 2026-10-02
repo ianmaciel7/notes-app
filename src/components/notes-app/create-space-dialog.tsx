@@ -27,7 +27,7 @@ function CreateSpaceDialog({
 }: CreateSpaceDialogProps) {
   const t = useTranslations("spaces");
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} {...props}>
+    <Dialog {...props} open={open} onOpenChange={onOpenChange}>
       <DialogContent data-testid="create-space-dialog">
         <DialogHeader>
           <DialogTitle>{t("dialogTitle")}</DialogTitle>

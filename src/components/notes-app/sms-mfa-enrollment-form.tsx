@@ -116,8 +116,8 @@ function MultiFactorEnrollmentPhoneNumberForm({
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
-        className={cn("flex flex-col gap-4", className)}
         {...props}
+        className={cn("flex flex-col gap-4", className)}
       >
         <FieldGroup>
           <AuthFormInput
@@ -222,8 +222,8 @@ function MultiFactorEnrollmentVerifyPhoneNumberForm({
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn("flex flex-col gap-4", className)}
         {...props}
+        className={cn("flex flex-col gap-4", className)}
       >
         <FieldGroup>
           <Controller
@@ -298,7 +298,7 @@ function SmsMfaEnrollmentForm({
   }
 
   return (
-    <FieldGroup className={cn(className)} {...props}>
+    <FieldGroup {...props} className={cn(className)}>
       {!verification ? (
         <MultiFactorEnrollmentPhoneNumberForm
           onSubmit={(verificationId, displayName) =>

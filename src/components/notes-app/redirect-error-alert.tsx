@@ -15,7 +15,7 @@ function RedirectErrorAlert({ className, ...props }: RedirectErrorAlertProps) {
   }
 
   return (
-    <Alert className={cn(className)} variant="destructive" {...props}>
+    <Alert {...props} variant="destructive" className={cn(className)}>
       <AlertDescription>{error}</AlertDescription>
     </Alert>
   );

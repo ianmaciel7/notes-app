@@ -34,7 +34,7 @@ function VerificationCodeInput({
       control={control}
       name="verificationCode"
       render={({ field, fieldState }) => (
-        <Field data-invalid={!!fieldState.error} {...props}>
+        <Field {...props} data-invalid={!!fieldState.error}>
           <FieldLabel htmlFor="verificationCode">{label}</FieldLabel>
           {description ? (
             <FieldDescription>{description}</FieldDescription>

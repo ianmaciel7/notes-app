@@ -46,11 +46,11 @@ function SpacesStatus({
     return (
       <Alert
         data-testid="spaces-status-error"
+        {...props}
         variant="destructive"
         role="alert"
         aria-live="assertive"
         className={cn("mx-auto w-full max-w-sm", className)}
-        {...props}
       >
         <AlertCircle />
         <AlertTitle>{t("connectionError")}</AlertTitle>
@@ -75,11 +75,11 @@ function SpacesStatus({
     return (
       <Empty
         data-testid="spaces-status-loading"
+        {...props}
         className={cn(
           "flex items-center justify-center p-4 text-xs text-muted-foreground",
           className,
         )}
-        {...props}
       >
         <EmptyMedia variant="icon">
           <Spinner />
@@ -93,8 +93,8 @@ function SpacesStatus({
     return (
       <Empty
         data-testid="spaces-status-not-found"
-        className={cn("flex flex-1 items-center justify-center p-8", className)}
         {...props}
+        className={cn("flex flex-1 items-center justify-center p-8", className)}
       >
         <Empty className="max-w-sm border border-dashed p-6">
           <EmptyHeader>

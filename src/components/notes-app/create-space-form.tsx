@@ -72,8 +72,8 @@ function CreateSpaceForm({
     <form
       data-testid="create-space-form"
       onSubmit={handleSubmit}
-      className={cn("flex flex-col gap-4", className)}
       {...props}
+      className={cn("flex flex-col gap-4", className)}
     >
       <FieldGroup>
         <Field data-invalid={Boolean(error) || undefined}>
