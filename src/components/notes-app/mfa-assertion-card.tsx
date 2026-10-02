@@ -7,7 +7,7 @@ import {
 } from "@firebase-oss/ui-react";
 import type { ComponentProps } from "react";
 import { AuthCard } from "@/components/notes-app/auth-card";
-import { MfaAssertionFieldGroup } from "@/components/notes-app/mfa-assertion-field-group";
+import { MfaAssertionForm } from "@/components/notes-app/mfa-assertion-form";
 import {
   CardContent,
   CardDescription,
@@ -33,7 +33,7 @@ function MfaAssertionCard({ ...props }: MfaAssertionCardProps) {
         <CardDescription>{subtitleText}</CardDescription>
       </CardHeader>
       <CardContent>
-        <MfaAssertionFieldGroup {...props} />
+        <MfaAssertionForm {...props} />
       </CardContent>
     </AuthCard>
   );
