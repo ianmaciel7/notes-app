@@ -187,7 +187,7 @@ describe("SpaceSidebar", () => {
 
     renderWithIntl(<SpaceSidebar />);
     expect(screen.getByTestId("spaces-empty")).toBeDefined();
-    expect(screen.getByTestId("space-sidebar-create-trigger")).toBeDefined();
+    expect(screen.getByTestId("space-switcher-create-trigger")).toBeDefined();
     expect(screen.getByText("No Spaces Found")).toBeDefined();
     expect(screen.getByTestId("spaces-empty-create-btn")).toBeDefined();
     expect(screen.queryByText("No matching spaces")).toBeNull();
@@ -218,9 +218,9 @@ describe("SpaceSidebar", () => {
     });
 
     renderWithIntl(<SpaceSidebar currentSpaceId="space-1" />);
-    fireEvent.click(screen.getByTestId("space-sidebar-trigger"));
+    fireEvent.click(screen.getByTestId("space-switcher-trigger"));
 
-    expect(screen.getByTestId("space-sidebar-item-space-1")).toBeDefined();
+    expect(screen.getByTestId("space-switcher-item-space-1")).toBeDefined();
     expect(screen.queryByText("No matching spaces")).toBeNull();
   });
 
@@ -251,11 +251,11 @@ describe("SpaceSidebar", () => {
     renderWithIntl(<SpaceSidebar currentSpaceId="space-1" />);
 
     expect(screen.getByTestId("space-sidebar")).toBeDefined();
-    expect(screen.getByTestId("space-sidebar-trigger")).toBeDefined();
+    expect(screen.getByTestId("space-switcher-trigger")).toBeDefined();
     expect(screen.getAllByText("Personal").length).toBeGreaterThan(0);
 
-    fireEvent.click(screen.getByTestId("space-sidebar-trigger"));
-    fireEvent.click(screen.getByTestId("space-sidebar-item-space-1"));
+    fireEvent.click(screen.getByTestId("space-switcher-trigger"));
+    fireEvent.click(screen.getByTestId("space-switcher-item-space-1"));
     expect(mockPush).toHaveBeenCalledWith("/space-1");
   });
 
@@ -334,7 +334,7 @@ describe("SpaceSidebar", () => {
 
     expect(screen.getByTestId("spaces-status-not-found")).toBeDefined();
     expect(screen.getByTestId("space-sidebar")).toBeDefined();
-    expect(screen.getByTestId("space-sidebar-trigger")).toBeDefined();
+    expect(screen.getByTestId("space-switcher-trigger")).toBeDefined();
 
     fireEvent.click(screen.getByTestId("spaces-status-back-btn"));
     expect(mockReplace).toHaveBeenCalledWith("/");

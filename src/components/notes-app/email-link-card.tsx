@@ -47,6 +47,7 @@ function EmailLinkCard({
   return (
     <Card
       ref={ref}
+      data-slot="email-link-card"
       className={cn("w-full max-w-sm mx-auto", className)}
       {...props}
     >

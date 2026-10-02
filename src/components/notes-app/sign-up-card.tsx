@@ -52,6 +52,7 @@ function SignUpCard({
   return (
     <Card
       ref={ref}
+      data-slot="sign-up-card"
       className={cn("w-full max-w-sm mx-auto", className)}
       {...props}
     >

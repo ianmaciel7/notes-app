@@ -42,7 +42,11 @@ function PhoneAuthCard({
   }
 
   return (
-    <Card className={cn("w-full max-w-sm mx-auto", className)} {...props}>
+    <Card
+      data-slot="phone-auth-card"
+      className={cn("w-full max-w-sm mx-auto", className)}
+      {...props}
+    >
       <CardHeader>
         <CardTitle>{titleText}</CardTitle>
         <CardDescription>{subtitleText}</CardDescription>

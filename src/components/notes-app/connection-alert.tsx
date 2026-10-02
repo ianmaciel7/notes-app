@@ -2,7 +2,7 @@
 
 import { WifiOffIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import type * as React from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { createContext, use, useEffect, useState } from "react";
 import {
   Alert,
@@ -16,19 +16,17 @@ import { BACKEND_UNREACHABLE_EVENT } from "@/lib/error-capture/firebase-logs";
 import { reconnectFirestore } from "@/lib/firebase/firestore";
 import { cn } from "@/lib/utils";
 
-type ConnectionAlertProps = React.ComponentProps<"div"> & {
-  children: React.ReactNode;
+type ConnectionAlertProps = ComponentProps<"div"> & {
+  children: ReactNode;
 };
 
-type ConnectionAlertIconProps = React.ComponentProps<typeof WifiOffIcon>;
+type ConnectionAlertIconProps = ComponentProps<typeof WifiOffIcon>;
 
-type ConnectionAlertTitleProps = React.ComponentProps<typeof AlertTitle>;
+type ConnectionAlertTitleProps = ComponentProps<typeof AlertTitle>;
 
-type ConnectionAlertDescriptionProps = React.ComponentProps<
-  typeof AlertDescription
->;
+type ConnectionAlertDescriptionProps = ComponentProps<typeof AlertDescription>;
 
-type ConnectionAlertActionProps = React.ComponentProps<typeof AlertAction>;
+type ConnectionAlertActionProps = ComponentProps<typeof AlertAction>;
 
 type ConnectionAlertContextValue = {
   onReconnect: () => Promise<void>;
@@ -39,7 +37,7 @@ const ConnectionAlertContext =
   createContext<ConnectionAlertContextValue | null>(null);
 
 function ConnectionAlertIcon({ ...props }: ConnectionAlertIconProps) {
-  return <WifiOffIcon {...props} aria-hidden="true" />;
+  return <WifiOffIcon aria-hidden="true" {...props} />;
 }
 
 function ConnectionAlertTitle({ ...props }: ConnectionAlertTitleProps) {
@@ -93,11 +91,12 @@ function ConnectionAlert({
       value={{ onReconnect: handleReconnect, reconnecting }}
     >
       <Alert
-        {...props}
-        className={cn("fixed inset-x-4 top-3 sm:inset-x-6", className)}
+        data-slot="connection-alert"
         variant="destructive"
         aria-live="assertive"
         aria-atomic="true"
+        className={cn("fixed inset-x-4 top-3 sm:inset-x-6", className)}
+        {...props}
       >
         {children}
       </Alert>
@@ -138,7 +137,6 @@ export {
   ConnectionAlertDescription,
   ConnectionAlertIcon,
   ConnectionAlertTitle,
-  useConnectionAlertState,
   type ConnectionAlertActionProps,
   type ConnectionAlertDescriptionProps,
   type ConnectionAlertIconProps,

@@ -1,8 +1,7 @@
 "use client";
 
-import { Book, Briefcase, Code, Folder } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { type ComponentProps, type FormEvent, useState } from "react";
+import type { ComponentProps, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -13,6 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useCreateSpaceFormState } from "@/hooks/use-create-space-form-state";
+import { SPACE_ICON_MAP } from "@/lib/space-icons";
 import { cn } from "@/lib/utils";
 import {
   type AllowedSpaceIcon,
@@ -23,15 +24,6 @@ type CreateSpaceFormProps = Omit<ComponentProps<"form">, "onSubmit"> & {
   onSubmitSpace: (name: string, icon: string) => Promise<void>;
   onCancel?: () => void;
   isLoading?: boolean;
-};
-
-const ICON_COMPONENTS: Record<AllowedSpaceIcon, typeof Folder> = {
-  folder: Folder,
-  book: Book,
-  briefcase: Briefcase,
-  code: Code,
-  archive: Folder,
-  compass: Folder,
 };
 
 function CreateSpaceForm({
@@ -124,7 +116,7 @@ function CreateSpaceForm({
           >
             {(["folder", "book", "briefcase", "code"] as const).map(
               (iconKey) => {
-                const IconComp = ICON_COMPONENTS[iconKey];
+                const IconComp = SPACE_ICON_MAP[iconKey];
                 return (
                   <ToggleGroupItem
                     key={iconKey}
@@ -167,12 +159,4 @@ function CreateSpaceForm({
   );
 }
 
-function useCreateSpaceFormState() {
-  const [name, setName] = useState("");
-  const [selectedIcon, setSelectedIcon] = useState<AllowedSpaceIcon>("folder");
-  const [error, setError] = useState<string | null>(null);
-
-  return { name, setName, selectedIcon, setSelectedIcon, error, setError };
-}
-
-export { CreateSpaceForm, type CreateSpaceFormProps, useCreateSpaceFormState };
+export { CreateSpaceForm, type CreateSpaceFormProps };

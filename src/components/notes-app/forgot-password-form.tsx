@@ -63,7 +63,7 @@ function ForgotPasswordForm({
 
   if (emailSent) {
     return (
-      <Alert>
+      <Alert data-slot="forgot-password-form">
         <AlertDescription>
           {getTranslation(ui, "messages", "checkEmailForReset")}
         </AlertDescription>
@@ -74,12 +74,13 @@ function ForgotPasswordForm({
   return (
     <FormProvider {...form}>
       <form
-        {...props}
+        data-slot="forgot-password-form"
+        className={cn(className)}
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
-        className={cn(className)}
+        {...props}
       >
         <FieldGroup>
           <Controller

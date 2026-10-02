@@ -3,6 +3,7 @@
 import { useRedirectError } from "@firebase-oss/ui-react";
 import type { ComponentProps } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { cn } from "@/lib/utils";
 
 type RedirectErrorAlertProps = ComponentProps<"div">;
 
@@ -14,7 +15,12 @@ function RedirectErrorAlert({ className, ...props }: RedirectErrorAlertProps) {
   }
 
   return (
-    <Alert {...props} className={className} variant="destructive">
+    <Alert
+      data-slot="redirect-error-alert"
+      className={cn(className)}
+      variant="destructive"
+      {...props}
+    >
       <AlertDescription>{error}</AlertDescription>
     </Alert>
   );

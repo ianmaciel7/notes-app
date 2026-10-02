@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertCircle, RefreshCw } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { ComponentProps, ReactNode } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,6 @@ type SpacesStatusProps = ComponentProps<"div"> & {
   notFound: boolean;
   onBack: () => void;
   onRetry: () => void;
-  t: (key: string) => string;
 };
 
 function SpacesStatus({
@@ -33,9 +33,9 @@ function SpacesStatus({
   onBack,
   onRetry,
   className,
-  t,
   ...props
 }: SpacesStatusProps): ReactNode {
+  const t = useTranslations("spaces");
   if (error) {
     return (
       <div

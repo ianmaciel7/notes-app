@@ -63,12 +63,13 @@ function LoginForm({
   return (
     <FormProvider {...form}>
       <form
-        {...props}
+        data-slot="login-form"
+        className={cn(className)}
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
-        className={cn(className)}
+        {...props}
       >
         <FieldGroup>
           <Controller

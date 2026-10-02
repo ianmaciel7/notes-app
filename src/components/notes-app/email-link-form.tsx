@@ -65,7 +65,7 @@ function EmailLinkForm({
 
   if (emailSent) {
     return (
-      <Alert>
+      <Alert data-slot="email-link-form">
         <AlertDescription>
           {getTranslation(ui, "messages", "signInLinkSent")}
         </AlertDescription>
@@ -76,12 +76,13 @@ function EmailLinkForm({
   return (
     <FormProvider {...form}>
       <form
-        {...props}
+        data-slot="email-link-form"
+        className={cn(className)}
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
-        className={cn(className)}
+        {...props}
       >
         <FieldGroup>
           <Controller

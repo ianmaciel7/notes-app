@@ -26,7 +26,11 @@ function MfaAssertionCard({ className, ...props }: MfaAssertionCardProps) {
   const subtitleText = getTranslation(ui, "prompts", "mfaAssertionPrompt");
 
   return (
-    <Card className={cn("w-full max-w-sm mx-auto", className)}>
+    <Card
+      data-slot="mfa-assertion-card"
+      className={cn("w-full max-w-sm mx-auto", className)}
+      {...props}
+    >
       <CardHeader>
         <CardTitle>{titleText}</CardTitle>
         <CardDescription>{subtitleText}</CardDescription>

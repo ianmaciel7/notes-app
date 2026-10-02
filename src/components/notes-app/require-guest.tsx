@@ -21,8 +21,9 @@ function RequireGuest({
     return (
       fallback ?? (
         <Empty
+          data-slot="require-guest"
           data-testid="require-guest-loading"
-          className="h-full min-h-[50vh] p-8"
+          className="h-full min-h-64 p-8"
         >
           <EmptyMedia>
             <Spinner className="size-8" />

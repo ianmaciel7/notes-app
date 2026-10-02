@@ -43,6 +43,7 @@ function LoginCard({
   return (
     <Card
       ref={ref}
+      data-slot="login-card"
       className={cn("w-full max-w-sm mx-auto", className)}
       {...props}
     >

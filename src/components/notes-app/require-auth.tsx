@@ -21,8 +21,9 @@ function RequireAuth({
     return (
       fallback ?? (
         <Empty
+          data-slot="require-auth"
           data-testid="require-auth-loading"
-          className="h-full min-h-[50vh] p-8"
+          className="h-full min-h-64 p-8"
         >
           <EmptyMedia>
             <Spinner className="size-8" />

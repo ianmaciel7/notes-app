@@ -26,7 +26,11 @@ function MfaEnrollmentCard({ className, ...props }: MfaEnrollmentCardProps) {
   const subtitleText = getTranslation(ui, "prompts", "mfaEnrollmentPrompt");
 
   return (
-    <Card className={cn("w-full max-w-sm mx-auto", className)}>
+    <Card
+      data-slot="mfa-enrollment-card"
+      className={cn("w-full max-w-sm mx-auto", className)}
+      {...props}
+    >
       <CardHeader>
         <CardTitle>{titleText}</CardTitle>
         <CardDescription>{subtitleText}</CardDescription>

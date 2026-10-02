@@ -64,6 +64,7 @@ function AuthPoliciesCard({ className, ...props }: AuthPoliciesCardProps) {
 
   return (
     <FieldDescription
+      data-slot="auth-policies-card"
       className={cn("text-muted-foreground text-center text-xs", className)}
       {...props}
     >

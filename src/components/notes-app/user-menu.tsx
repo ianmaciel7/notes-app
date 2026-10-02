@@ -18,6 +18,7 @@ function UserMenu({ className, ...props }: UserMenuProps) {
   if (isLoading) {
     return (
       <Skeleton
+        data-slot="user-menu"
         data-testid="user-menu-loading"
         className={cn("h-8 w-24", className)}
         {...props}
@@ -27,7 +28,11 @@ function UserMenu({ className, ...props }: UserMenuProps) {
 
   if (!user) {
     return (
-      <div className={cn("flex items-center gap-3", className)} {...props}>
+      <div
+        data-slot="user-menu"
+        className={cn("flex items-center gap-3", className)}
+        {...props}
+      >
         <LanguageSelect />
         <Button
           render={
@@ -50,6 +55,7 @@ function UserMenu({ className, ...props }: UserMenuProps) {
 
   return (
     <div
+      data-slot="user-menu"
       data-testid="user-menu"
       className={cn(
         "flex items-center gap-3 text-sm text-foreground",

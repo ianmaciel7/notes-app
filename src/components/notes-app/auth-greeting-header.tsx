@@ -16,7 +16,11 @@ function AuthGreetingHeader({ className, ...props }: AuthGreetingHeaderProps) {
     (user?.email ? user.email.split("@")[0] : t("defaultUser"));
 
   return (
-    <div className={cn("flex flex-col gap-2", className)} {...props}>
+    <div
+      data-slot="auth-greeting-header"
+      className={cn("flex flex-col gap-2", className)}
+      {...props}
+    >
       <h1 className="text-2xl font-bold tracking-tight text-foreground">
         {user ? t("userGreeting", { name: userName }) : t("guestGreeting")}
       </h1>

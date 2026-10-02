@@ -41,7 +41,11 @@ function OAuthCard({
   }
 
   return (
-    <Card className={cn("w-full max-w-sm mx-auto", className)} {...props}>
+    <Card
+      data-slot="oauth-card"
+      className={cn("w-full max-w-sm mx-auto", className)}
+      {...props}
+    >
       <CardHeader>
         <CardTitle>
           <h1>{titleText}</h1>

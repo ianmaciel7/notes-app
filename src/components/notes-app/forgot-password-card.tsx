@@ -24,6 +24,7 @@ function ForgotPasswordCard({
   onBackToSignInClick,
   className,
   ref,
+  ...props
 }: ForgotPasswordCardProps) {
   const ui = useUI();
 
@@ -31,7 +32,12 @@ function ForgotPasswordCard({
   const subtitleText = getTranslation(ui, "prompts", "enterEmailToReset");
 
   return (
-    <Card ref={ref} className={cn("w-full max-w-sm mx-auto", className)}>
+    <Card
+      ref={ref}
+      data-slot="forgot-password-card"
+      className={cn("w-full max-w-sm mx-auto", className)}
+      {...props}
+    >
       <CardHeader>
         <CardTitle>{titleText}</CardTitle>
         <CardDescription>{subtitleText}</CardDescription>

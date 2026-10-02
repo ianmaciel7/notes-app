@@ -1,228 +1,31 @@
 "use client";
 
-import {
-  Book,
-  Briefcase,
-  Check,
-  ChevronsUpDown,
-  Code,
-  Folder,
-  Plus,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import {
-  type ComponentProps,
-  type PropsWithChildren,
-  type ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import { type ComponentProps, type ReactNode, useState } from "react";
 import { CreateSpaceDialog } from "@/components/notes-app/create-space-dialog";
 import { SettingsDialog } from "@/components/notes-app/settings-dialog";
 import { SidebarUserMenu } from "@/components/notes-app/sidebar-user-menu";
-import { SpacesEmpty } from "@/components/notes-app/spaces-empty";
+import { SpaceSwitcherMenu } from "@/components/notes-app/space-switcher";
+import { SpacesList } from "@/components/notes-app/spaces-list";
 import { SpacesStatus } from "@/components/notes-app/spaces-status";
 import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
 import { Spinner } from "@/components/ui/spinner";
-import { useAuth } from "@/hooks/use-auth";
-import { useSpaces } from "@/hooks/use-spaces";
+import { useSpaceSidebar } from "@/hooks/use-space-sidebar";
 import { cn } from "@/lib/utils";
-import type { AllowedSpaceIcon } from "@/lib/validators/space";
-import type { Space } from "@/types/space";
 
 type SpaceSidebarProps = ComponentProps<"div"> & {
   currentSpaceId?: string;
   children?: ReactNode;
   onSelectSpace?: (spaceId: string) => void;
 };
-
-function useSpaceSidebar({
-  currentSpaceId,
-}: Pick<SpaceSidebarProps, "currentSpaceId">) {
-  const router = useRouter();
-  const { user, isLoading: authLoading, signOutUser } = useAuth();
-  const { spaces, loading, error, isOffline, retry, createSpace } = useSpaces();
-  const firstSpaceId = spaces[0]?.id;
-
-  useEffect(() => {
-    if (authLoading || currentSpaceId) return;
-
-    if (!user) {
-      router.replace("/login");
-      return;
-    }
-
-    if (!loading && !error && firstSpaceId) {
-      router.replace(`/${firstSpaceId}`);
-    }
-  }, [authLoading, currentSpaceId, error, firstSpaceId, loading, router, user]);
-
-  return {
-    authLoading,
-    createSpace,
-    error,
-    isOffline,
-    loading,
-    retry,
-    router,
-    signOutUser,
-    spaces,
-    user,
-  };
-}
-
-const ICON_MAP: Record<AllowedSpaceIcon, typeof Folder> = {
-  folder: Folder,
-  book: Book,
-  briefcase: Briefcase,
-  code: Code,
-  archive: Folder,
-  compass: Folder,
-};
-
-const SIDEBAR_MENU_POPUP = "min-w-60";
-
-type SpaceIconProps = ComponentProps<"svg"> & {
-  iconKey?: string;
-};
-
-function SpaceIcon({ iconKey, ...props }: SpaceIconProps) {
-  const IconComp =
-    Object.entries(ICON_MAP).find(([key]) => key === iconKey)?.[1] ?? Folder;
-  return <IconComp {...props} />;
-}
-
-type SpaceSidebarMainProps = PropsWithChildren & {
-  notFound: boolean;
-  onCreate: () => void;
-  showEmptyState: boolean;
-  status: ReactNode;
-  t: (key: string) => string;
-};
-
-function SpaceSidebarMain({
-  children,
-  notFound,
-  onCreate,
-  showEmptyState,
-  status,
-  t,
-}: SpaceSidebarMainProps) {
-  if (notFound) return status;
-  if (showEmptyState) {
-    return <SpacesEmpty onCreate={onCreate} t={t} />;
-  }
-  return children;
-}
-
-type SpaceSwitcherMenuProps = Omit<
-  ComponentProps<typeof SidebarMenu>,
-  "onSelect"
-> & {
-  activeSpace?: Space;
-  onCreate: () => void;
-  onSelect: (spaceId: string) => void;
-  spaces: Space[];
-  t: (key: string) => string;
-  visibleSpaces: Space[];
-};
-
-function SpaceSwitcherMenu({
-  activeSpace,
-  onCreate,
-  onSelect,
-  spaces,
-  t,
-  visibleSpaces,
-  ...props
-}: SpaceSwitcherMenuProps) {
-  return (
-    <SidebarMenu aria-label={t("workspace")} {...props}>
-      <SidebarMenuItem>
-        {spaces.length > 0 ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <SidebarMenuButton
-                  data-testid="space-sidebar-trigger"
-                  aria-label={t("switchSpace")}
-                >
-                  <SpaceIcon iconKey={activeSpace?.icon} />
-                  <span className="min-w-0 truncate text-sm">
-                    {activeSpace?.name ?? t("selectSpace")}
-                  </span>
-                  <ChevronsUpDown className="ml-auto" />
-                </SidebarMenuButton>
-              }
-            />
-            <DropdownMenuContent
-              align="start"
-              sideOffset={4}
-              className={SIDEBAR_MENU_POPUP}
-            >
-              <DropdownMenuGroup>
-                {visibleSpaces.length > 0 ? (
-                  visibleSpaces.map((space) => (
-                    <DropdownMenuItem
-                      key={space.id}
-                      onClick={() => onSelect(space.id)}
-                      data-testid={`space-sidebar-item-${space.id}`}
-                    >
-                      <SpaceIcon iconKey={space.icon} />
-                      <span className="min-w-0 flex-1 truncate">
-                        {space.name}
-                      </span>
-                      {space.id === activeSpace?.id && <Check />}
-                    </DropdownMenuItem>
-                  ))
-                ) : (
-                  <DropdownMenuItem disabled>
-                    {t("noSearchResults")}
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem onClick={onCreate}>
-                  <Plus />
-                  {t("createSpace")}
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ) : (
-          <SidebarMenuButton
-            data-testid="space-sidebar-create-trigger"
-            onClick={onCreate}
-          >
-            <Plus />
-            <span>{t("createFirstSpace")}</span>
-          </SidebarMenuButton>
-        )}
-      </SidebarMenuItem>
-    </SidebarMenu>
-  );
-}
 
 function SpaceSidebar({
   currentSpaceId,
@@ -250,44 +53,37 @@ function SpaceSidebar({
   const activeSpace = currentSpaceId
     ? spaces.find((space) => space.id === currentSpaceId)
     : spaces[0];
-  const visibleSpaces = spaces;
   const notFound = Boolean(currentSpaceId && !activeSpace);
-  const showEmptyState = spaces.length === 0;
-
   const status = (
     <SpacesStatus
       error={error}
       isOffline={isOffline}
       loading={loading}
-      notFound={Boolean(currentSpaceId && !activeSpace)}
+      notFound={notFound}
       onBack={() => router.replace("/")}
       onRetry={retry}
       className={className}
-      t={t}
       {...props}
     />
   );
-
-  if (authLoading) {
+  if (authLoading)
     return (
-      <div className="flex min-h-svh w-full items-center justify-center">
+      <div
+        className="flex min-h-svh w-full items-center justify-center"
+        data-slot="space-sidebar"
+      >
         <Spinner className="size-8" aria-label={t("loading")} />
       </div>
     );
-  }
-
-  if (!user || error || loading) {
-    return status;
-  }
-
+  if (!user || error || loading) return status;
   const handleSelect = (spaceId: string) =>
     onSelectSpace ? onSelectSpace(spaceId) : router.push(`/${spaceId}`);
   const handleCreateSpace = async (name: string, icon: string) => {
     setIsCreating(true);
     try {
-      const newSpaceId = await createSpace({ name, icon });
+      const id = await createSpace({ name, icon });
       setCreateDialogOpen(false);
-      handleSelect(newSpaceId);
+      handleSelect(id);
     } finally {
       setIsCreating(false);
     }
@@ -295,6 +91,7 @@ function SpaceSidebar({
   return (
     <SidebarProvider
       data-testid="space-sidebar"
+      data-slot="space-sidebar"
       className={cn("min-h-svh", className)}
       {...props}
     >
@@ -305,14 +102,9 @@ function SpaceSidebar({
             onCreate={() => setCreateDialogOpen(true)}
             onSelect={handleSelect}
             spaces={spaces}
-            t={t}
-            visibleSpaces={visibleSpaces}
+            visibleSpaces={spaces}
           />
         </SidebarHeader>
-        {/*
-         * TODO(object-types): Add the object types list here once the
-         * Firestore `objectTypes` collection and its management flow exist.
-         */}
         <SidebarContent />
         <SidebarFooter>
           <SidebarUserMenu
@@ -323,15 +115,14 @@ function SpaceSidebar({
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <SpaceSidebarMain
+        <SpacesList
           notFound={notFound}
           onCreate={() => setCreateDialogOpen(true)}
-          showEmptyState={showEmptyState}
+          showEmptyState={spaces.length === 0}
           status={status}
-          t={t}
         >
           {children}
-        </SpaceSidebarMain>
+        </SpacesList>
       </SidebarInset>
       <CreateSpaceDialog
         open={createDialogOpen}
@@ -346,7 +137,7 @@ function SpaceSidebar({
       {isOffline && (
         <Badge
           aria-live="polite"
-          className="fixed bottom-4 right-4"
+          className="fixed right-4 bottom-4"
           data-testid="space-sidebar-offline-indicator"
         >
           {t("operatingOffline")}
@@ -356,4 +147,4 @@ function SpaceSidebar({
   );
 }
 
-export { SpaceSidebar, type SpaceSidebarProps, useSpaceSidebar };
+export { SpaceSidebar, type SpaceSidebarProps };

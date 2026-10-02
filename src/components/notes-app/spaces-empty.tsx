@@ -1,6 +1,7 @@
 "use client";
 
 import { Folder, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,10 +16,10 @@ import { cn } from "@/lib/utils";
 
 type SpacesEmptyProps = ComponentProps<"div"> & {
   onCreate: () => void;
-  t: (key: string) => string;
 };
 
-function SpacesEmpty({ onCreate, t, className, ...props }: SpacesEmptyProps) {
+function SpacesEmpty({ onCreate, className, ...props }: SpacesEmptyProps) {
+  const t = useTranslations("spaces");
   return (
     <div
       data-testid="spaces-empty"
