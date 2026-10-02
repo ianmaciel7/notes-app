@@ -12,7 +12,6 @@ import {
   Moon,
   Plus,
   RefreshCw,
-  Search,
   Settings,
   UserRound,
 } from "lucide-react";
@@ -65,23 +64,16 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
-import {
   Item,
   ItemContent,
   ItemDescription,
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
-import { Kbd } from "@/components/ui/kbd";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
@@ -456,15 +448,10 @@ function SpaceSidebar({
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const activeSpace = currentSpaceId
     ? spaces.find((space) => space.id === currentSpaceId)
     : spaces[0];
-  const visibleSpaces = spaces.filter((space) =>
-    space.name
-      .toLocaleLowerCase()
-      .includes(searchQuery.trim().toLocaleLowerCase()),
-  );
+  const visibleSpaces = spaces;
   const notFound = Boolean(currentSpaceId && !activeSpace);
   const showEmptyState = spaces.length === 0;
 
@@ -526,41 +513,6 @@ function SpaceSidebar({
             t={t}
             visibleSpaces={visibleSpaces}
           />
-          <SidebarGroup>
-            <InputGroup>
-              <InputGroupAddon align="inline-start">
-                <Search aria-hidden="true" />
-              </InputGroupAddon>
-              <InputGroupInput
-                placeholder={t("searchPlaceholder")}
-                aria-label={t("searchPlaceholder")}
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-              />
-              <InputGroupAddon align="inline-end">
-                <Kbd>K</Kbd>
-              </InputGroupAddon>
-            </InputGroup>
-            {searchQuery.trim() && visibleSpaces.length === 0 && (
-              <p className="px-2 py-2 text-sm text-muted-foreground">
-                {t("noSearchResults")}
-              </p>
-            )}
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  onClick={() => setCreateDialogOpen(true)}
-                  className="group/menu-item"
-                >
-                  <Plus />
-                  <span>{t("newSpace")}</span>
-                  <Kbd className="ml-auto opacity-0 transition-opacity duration-80 group-hover/menu-item:opacity-100 group-focus-within/menu-item:opacity-100">
-                    O
-                  </Kbd>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroup>
         </SidebarHeader>
         {/*
          * TODO(object-types): Add the object types list here once the

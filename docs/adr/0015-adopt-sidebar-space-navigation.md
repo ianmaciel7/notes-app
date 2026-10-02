@@ -24,9 +24,9 @@ sidebar shell:
    navigates with App Router client navigation.
 3. Space creation, loading, error, offline, empty, and missing-Space states remain
    part of the existing switcher flow.
-4. The footer exposes Firebase Auth profile-name updates and sign out, while
-   language and theme settings use the existing locale-sync and `next-themes`
-   integrations.
+4. The footer exposes the authenticated user's identity and sign out through a
+   compact horizontal control row. Separate settings and theme controls use the
+   existing locale-sync and `next-themes` integrations.
 5. Visual anatomy belongs to `DESIGN.md`; this ADR records only the durable
    navigation boundary and its integration responsibilities.
 
