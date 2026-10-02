@@ -320,11 +320,17 @@ function checkSpaceShellContract(filePath, fileName, content) {
   ];
 }
 
+const PASCAL_SEGMENTS = new Map([["oauth", "OAuth"]]);
+
 function toPascalCase(fileName) {
   return fileName
     .replace(/\.tsx$/, "")
     .split("-")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .map(
+      (part) =>
+        PASCAL_SEGMENTS.get(part) ??
+        `${part.charAt(0).toUpperCase()}${part.slice(1)}`,
+    )
     .join("");
 }
 
