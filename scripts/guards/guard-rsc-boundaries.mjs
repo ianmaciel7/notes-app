@@ -26,9 +26,7 @@ if (violations.length > 0) {
     `\x1b[31mrsc-boundaries-guard: ${violations.length} violation(s) found:\x1b[0m`,
   );
   for (const violation of violations) {
-    console.error(
-      `  \x1b[33m${violation.file}\x1b[0m: ${violation.message}`,
-    );
+    console.error(`  \x1b[33m${violation.file}\x1b[0m: ${violation.message}`);
   }
   process.exit(1);
 }
