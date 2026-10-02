@@ -27,7 +27,11 @@ function SettingsDialog({ open, onOpenChange, ...props }: SettingsDialogProps) {
   const spacesT = useTranslations("spaces");
 
   return (
-    <Dialog {...props} open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      {...props}
+      open={open}
+      onOpenChange={(nextOpen) => onOpenChange(nextOpen)}
+    >
       <DialogContent data-slot="settings-dialog" data-testid="settings-dialog">
         <DialogHeader>
           <DialogTitle>{t("settings")}</DialogTitle>
