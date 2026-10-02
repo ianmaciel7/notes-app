@@ -56,10 +56,6 @@ function patternRule(id, message, regex, options = {}) {
   };
 }
 
-// Overlay content (`DialogContent`, ...) is a self-contained surface with its
-// own state and copy, so it lives in a dedicated `*-dialog|sheet|drawer.tsx`.
-const OVERLAY_CONTENT = /<(?:Dialog|Sheet|AlertDialog|Drawer)Content\b/;
-const OVERLAY_FILE = /-(?:dialog|sheet|drawer)\.tsx$/;
 const COMPONENT_FILE = /^src\/components\/notes-app\/[^/]+\.tsx$/;
 const MAX_COMPONENT_LINES = 400;
 
@@ -168,17 +164,6 @@ export const CONVENTION_RULES = [
         .map(({ line }) => ({ line })),
   },
   {
-    id: "overlay-content-own-file",
-    message:
-      "Overlay content (`DialogContent`, `SheetContent`, ...) belongs in its own `*-dialog.tsx`/`*-sheet.tsx`/`*-drawer.tsx`; the parent only owns `open`.",
-    extensions: TSX_ONLY,
-    includeTests: false,
-    uiOnly: false,
-    allowed: [],
-    appliesTo: (relPath) => !OVERLAY_FILE.test(relPath),
-    check: ({ code }) => lineHits(OVERLAY_CONTENT, code),
-  },
-  {
     id: "name-matches-surface",
     message:
       "The file name places this component inside a surface it does not use. Name it after what it renders (e.g. `spaces-empty`, not `space-sidebar-empty`) or compose the surface primitive.",
@@ -237,8 +222,14 @@ export const CONVENTION_RULES = [
   },
   patternRule(
     "no-render-props-api",
-    "Prefer `children`, variants and compound components over `renderX` props.",
+    "Use Base UI's standard `render` prop for element composition; do not invent `renderX` APIs.",
     /\brender[A-Z]\w*\??\s*:/,
+    { extensions: TSX_ONLY },
+  ),
+  patternRule(
+    "no-as-child",
+    "Base UI composes custom elements with the `render` prop; do not introduce Radix-style `asChild`.",
+    /\basChild\b/,
     { extensions: TSX_ONLY },
   ),
   patternRule(

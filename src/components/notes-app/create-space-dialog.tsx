@@ -1,50 +1,31 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import type { ComponentProps } from "react";
-import { CreateSpaceForm } from "@/components/notes-app/create-space-form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import type { ComponentProps, ReactNode } from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 type CreateSpaceDialogProps = Omit<
-  ComponentProps<typeof Dialog>,
-  "children" | "open" | "onOpenChange"
+  ComponentProps<typeof DialogContent>,
+  "children"
 > & {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmitSpace: (name: string, icon: string) => Promise<void>;
-  isLoading?: boolean;
+  children: ReactNode;
 };
 
 function CreateSpaceDialog({
   open,
   onOpenChange,
-  onSubmitSpace,
-  isLoading = false,
+  children,
   ...props
 }: CreateSpaceDialogProps) {
-  const t = useTranslations("spaces");
-
   return (
-    <Dialog {...props} open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
+        {...props}
         data-slot="create-space-dialog"
         data-testid="create-space-dialog"
       >
-        <DialogHeader>
-          <DialogTitle>{t("dialogTitle")}</DialogTitle>
-          <DialogDescription>{t("dialogDescription")}</DialogDescription>
-        </DialogHeader>
-        <CreateSpaceForm
-          onSubmitSpace={onSubmitSpace}
-          isLoading={isLoading}
-          onCancel={() => onOpenChange(false)}
-        />
+        {children}
       </DialogContent>
     </Dialog>
   );

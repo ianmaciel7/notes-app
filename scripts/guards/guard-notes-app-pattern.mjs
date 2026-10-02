@@ -13,49 +13,17 @@ const NON_VISUAL_FILES = new Set([
   "theme-provider.tsx",
 ]);
 
-const COMPOSITION_RULES = [
-  {
-    suffix: "-card.tsx",
-    required: ["CardHeader", "CardContent"],
-    except: ["auth-card.tsx"],
-  },
-  { suffix: "-form.tsx", required: ["form"] },
-  { suffix: "-field-group.tsx", required: ["FieldGroup"] },
-  { suffix: "-alert.tsx", required: ["Alert"] },
-  { suffix: "-dialog.tsx", required: ["DialogContent"] },
-  {
-    suffix: "-select.tsx",
-    required: ["Select", "SelectTrigger", "SelectContent"],
-  },
-  { suffix: "-empty.tsx", required: ["Empty", "EmptyHeader"] },
-  {
-    suffix: "-sidebar.tsx",
-    required: ["Sidebar", "SidebarHeader", "SidebarFooter"],
-  },
-  { suffix: "-status.tsx", required: ["Empty"] },
-  { suffix: "-button.tsx", required: ["Button"] },
-  { suffix: "-header.tsx", required: ["Item"] },
-  { suffix: "-description.tsx", required: ["FieldDescription"] },
-];
-
-const LEAF_WRAPPER_SUFFIXES = new Set(["-button.tsx", "-input.tsx"]);
-
-const STATUS_COMPOSITION_PARTS = [
-  "SpacesErrorStatus",
-  "SpacesLoadingStatus",
-  "SpacesNotFoundStatus",
-];
-
-const DIALOG_COMPOSITION_PARTS = ["children", "content"];
-
-const DIALOG_FORBIDDEN_IMPORTS = [
-  {
-    pattern: /from\s+["']@\/components\/notes-app\//,
-    label: "notes-app domain components",
-  },
-  { pattern: /from\s+["']@\/hooks\//, label: "application hooks" },
-  { pattern: /from\s+["']next-intl["']/, label: "translations" },
-  { pattern: /from\s+["']next-themes["']/, label: "theme state" },
+const SURFACE_RULES = [
+  { suffix: "-card.tsx", pattern: /<(?:Card|AuthCard)\b/ },
+  { suffix: "-form.tsx", pattern: /<form\b/ },
+  { suffix: "-field-group.tsx", pattern: /<FieldGroup\b/ },
+  { suffix: "-alert.tsx", pattern: /<Alert\b/ },
+  { suffix: "-dialog.tsx", pattern: /<Dialog\b/ },
+  { suffix: "-select.tsx", pattern: /<Select\b/ },
+  { suffix: "-empty.tsx", pattern: /<Empty\b/ },
+  { suffix: "-sidebar.tsx", pattern: /<Sidebar\b/ },
+  { suffix: "-button.tsx", pattern: /<Button\b/ },
+  { suffix: "-description.tsx", pattern: /<FieldDescription\b/ },
 ];
 
 const COMPONENT_ROLE_SUFFIXES = new Set([
@@ -81,6 +49,7 @@ const COMPONENT_ROLE_SUFFIXES = new Set([
   "Drawer",
   "Dropdown",
   "Empty",
+  "FieldGroup",
   "Footer",
   "Form",
   "Group",
@@ -128,201 +97,11 @@ const COMPONENT_ROLE_SUFFIXES = new Set([
 
 const COMPONENT_NAME_EXEMPTIONS = new Set(["RequireAuth", "RequireGuest"]);
 const CANONICAL_COMPONENT_EXEMPT_FILES = new Set(["spaces-status.tsx"]);
-
-const COMPONENT_ANATOMY_RULES = new Map([
-  [
-    "space-switcher.tsx",
-    ["SidebarGroup", "SidebarGroupContent", "InputGroup", "Empty"],
-  ],
-  [
-    "sidebar-user-menu.tsx",
-    ["SidebarMenu", "SidebarMenuItem", "DropdownMenuGroup", "ButtonGroup"],
-  ],
-  [
-    "space-shell.tsx",
-    [
-      "SidebarProvider",
-      "Sidebar",
-      "SidebarHeader",
-      "SidebarFooter",
-      "SidebarInset",
-      "CreateSpaceDialog",
-      "SettingsDialog",
-    ],
-  ],
-]);
+const PASCAL_SEGMENTS = new Map([["oauth", "OAuth"]]);
 
 function violation(file, rule, message) {
   return { file: path.relative(root, file), rule, message };
 }
-
-function checkStatusComposition(filePath, fileName, content) {
-  if (fileName !== "spaces-status.tsx") return [];
-
-  const missing = STATUS_COMPOSITION_PARTS.filter(
-    (part) => !new RegExp(`function\\s+${part}\\b`).test(content),
-  );
-  if (missing.length === 0) return [];
-
-  return [
-    violation(
-      filePath,
-      "notes-app-status-composition",
-      `spaces-status.tsx must expose explicit status parts: ${missing.join(", ")}.`,
-    ),
-  ];
-}
-
-function checkDialogComposition(filePath, fileName, content) {
-  if (!fileName.endsWith("-dialog.tsx")) return [];
-
-  const violations = [];
-  const missing = DIALOG_COMPOSITION_PARTS.filter((part) =>
-    part === "children"
-      ? !/\bchildren\b/.test(content)
-      : !new RegExp(`function\\s+${toPascalCase(fileName)}Content\\b`).test(
-          content,
-        ),
-  );
-
-  if (missing.length > 0) {
-    violations.push(
-      violation(
-        filePath,
-        "notes-app-dialog-composition",
-        `${fileName} must expose caller-provided composition through ${missing.join(", ")}.`,
-      ),
-    );
-  }
-
-  const forbidden = DIALOG_FORBIDDEN_IMPORTS.filter(({ pattern }) =>
-    pattern.test(content),
-  ).map(({ label }) => label);
-
-  if (forbidden.length > 0) {
-    violations.push(
-      violation(
-        filePath,
-        "notes-app-dialog-single-responsibility",
-        `${fileName} owns only Dialog root/content behavior. Move ${forbidden.join(", ")} to the composition root and pass the rendered body through children.`,
-      ),
-    );
-  }
-
-  return violations;
-}
-
-function checkFamilyContext(filePath, fileName, content) {
-  const contextCount = [
-    ...content.matchAll(/\bcreateContext\s*(?:<[^;]+?>)?\s*\(/g),
-  ].length;
-
-  if (contextCount <= 1) return [];
-
-  return [
-    violation(
-      filePath,
-      "notes-app-single-family-context",
-      `${fileName} declares ${contextCount} contexts. A compound component family may own at most one local context.`,
-    ),
-  ];
-}
-
-function checkEmptyLayoutParts(filePath, fileName, content) {
-  const emptyParts = [
-    "SidebarContent",
-    "SidebarGroup",
-    "SidebarGroupContent",
-    "SidebarMenu",
-    "CardHeader",
-    "CardContent",
-    "CardFooter",
-    "FieldGroup",
-    "EmptyHeader",
-    "EmptyContent",
-  ];
-  const violations = [];
-
-  for (const part of emptyParts) {
-    const selfClosing = new RegExp(`<${part}(?:\\s[^>]*)?\\s*/>`).test(content);
-    const emptyPair = new RegExp(`<${part}(?:\\s[^>]*)?>\\s*</${part}>`).test(
-      content,
-    );
-    if (selfClosing || emptyPair) {
-      violations.push(
-        violation(
-          filePath,
-          "notes-app-empty-composition-part",
-          `${fileName} must not render empty ${part}; remove it or compose its required children.`,
-        ),
-      );
-    }
-  }
-
-  return violations;
-}
-
-function checkRawLayoutWrappers(filePath, fileName, content) {
-  if (fileName === "phone-auth-form.tsx" || fileName.startsWith("sms-mfa-")) {
-    return [];
-  }
-
-  if (/<div\s+\{\.\.\.props\}\s+className=/.test(content)) {
-    return [
-      violation(
-        filePath,
-        "notes-app-no-raw-layout-wrapper",
-        `${fileName} must compose a role-specific ui primitive instead of forwarding layout props through a raw div.`,
-      ),
-    ];
-  }
-
-  return [];
-}
-
-function checkComponentAnatomy(filePath, fileName, content) {
-  const required = COMPONENT_ANATOMY_RULES.get(fileName);
-  if (!required) return [];
-
-  const missing = required.filter(
-    (part) => !new RegExp(`<${part}(?:\\s|>)`).test(content),
-  );
-  if (missing.length === 0) return [];
-
-  return [
-    violation(
-      filePath,
-      "notes-app-component-anatomy",
-      `${fileName} must compose ${missing.join(", ")} so its internal surface anatomy stays explicit.`,
-    ),
-  ];
-}
-
-function checkSpaceShellContract(filePath, fileName, content) {
-  if (fileName !== "space-shell.tsx") return [];
-
-  const requirements = [
-    ["children", /children\??\s*:/],
-    ["SidebarProvider root", /<SidebarProvider\b/],
-    ["data-slot", /data-slot=["']space-shell["']/],
-    ["cn layout merge", /className=\{cn\(/],
-  ];
-  const missing = requirements
-    .filter(([, pattern]) => !pattern.test(content))
-    .map(([name]) => name);
-
-  if (missing.length === 0) return [];
-
-  return [
-    violation(
-      filePath,
-      "notes-app-space-shell-contract",
-      `space-shell.tsx must preserve the SidebarProvider wrapper contract; missing ${missing.join(", ")}.`,
-    ),
-  ];
-}
-
-const PASCAL_SEGMENTS = new Map([["oauth", "OAuth"]]);
 
 function toPascalCase(fileName) {
   return fileName
@@ -352,6 +131,61 @@ function hasComponentRoleSuffix(name) {
   return [...COMPONENT_ROLE_SUFFIXES].some((suffix) => name.endsWith(suffix));
 }
 
+function checkSurfaceRoot(filePath, fileName, content) {
+  const rule = SURFACE_RULES.find(({ suffix }) => fileName.endsWith(suffix));
+  if (!rule || rule.pattern.test(content)) return [];
+
+  return [
+    violation(
+      filePath,
+      "notes-app-surface-root",
+      `${fileName} must compose the primitive that matches its public surface role.`,
+    ),
+  ];
+}
+
+function checkSpaceShellContract(filePath, fileName, content) {
+  if (fileName !== "space-shell.tsx") return [];
+
+  const requirements = [
+    ["children", /children\??\s*:/],
+    ["SidebarProvider root", /<SidebarProvider\b/],
+    ["data-slot", /data-slot=["']space-shell["']/],
+    ["cn layout merge", /className=\{cn\(/],
+  ];
+  const missing = requirements
+    .filter(([, pattern]) => !pattern.test(content))
+    .map(([name]) => name);
+
+  if (missing.length === 0) return [];
+
+  return [
+    violation(
+      filePath,
+      "notes-app-space-shell-contract",
+      `space-shell.tsx must preserve the SidebarProvider wrapper contract; missing ${missing.join(", ")}.`,
+    ),
+  ];
+}
+
+function checkRawLayoutWrappers(filePath, fileName, content) {
+  if (fileName === "phone-auth-form.tsx" || fileName.startsWith("sms-mfa-")) {
+    return [];
+  }
+
+  if (/<div\s+\{\.\.\.props\}\s+className=/.test(content)) {
+    return [
+      violation(
+        filePath,
+        "notes-app-no-raw-layout-wrapper",
+        `${fileName} must compose a role-specific ui primitive instead of forwarding layout props through a raw div.`,
+      ),
+    ];
+  }
+
+  return [];
+}
+
 function checkComponentRoleNames(filePath, fileName, content) {
   const entries = getComponentFunctionEntries(content);
   const invalid = entries
@@ -367,7 +201,7 @@ function checkComponentRoleNames(filePath, fileName, content) {
       violation(
         filePath,
         "notes-app-component-role-suffix",
-        `${fileName} has component names without a recognized shadcn-style role suffix: ${invalid.join(", ")}.`,
+        `${fileName} has component names without a recognized UI role suffix: ${invalid.join(", ")}.`,
       ),
     );
   }
@@ -401,7 +235,7 @@ function checkComponentSlots(filePath, fileName, content) {
     violation(
       filePath,
       "notes-app-component-data-slot",
-      `${fileName} must give every visual component and subcomponent a data-slot; missing: ${missing.join(", ")}.`,
+      `${fileName} must give every visual component a data-slot; missing: ${missing.join(", ")}.`,
     ),
   ];
 }
@@ -434,36 +268,14 @@ function checkFile(filePath, content) {
         violation(
           filePath,
           "notes-app-no-raw-controls",
-          `Use the matching shadcn primitive instead of raw <${rawInteractiveElement[1]}> markup.`,
+          `Use the matching shadcn/Base UI primitive instead of raw <${rawInteractiveElement[1]}> markup.`,
         ),
       );
     }
   }
 
-  const compositionRule = COMPOSITION_RULES.find((rule) =>
-    fileName.endsWith(rule.suffix),
-  );
-  if (compositionRule && !compositionRule.except?.includes(fileName)) {
-    const missing = compositionRule.required.filter(
-      (part) => !content.includes(`<${part}`),
-    );
-    if (missing.length > 0) {
-      violations.push(
-        violation(
-          filePath,
-          "notes-app-composition-anatomy",
-          `${fileName} must compose ${missing.join(", ")} according to its component role.`,
-        ),
-      );
-    }
-  }
-
-  violations.push(...checkStatusComposition(filePath, fileName, content));
-  violations.push(...checkDialogComposition(filePath, fileName, content));
-  violations.push(...checkFamilyContext(filePath, fileName, content));
-  violations.push(...checkComponentAnatomy(filePath, fileName, content));
+  violations.push(...checkSurfaceRoot(filePath, fileName, content));
   violations.push(...checkSpaceShellContract(filePath, fileName, content));
-  violations.push(...checkEmptyLayoutParts(filePath, fileName, content));
   violations.push(...checkRawLayoutWrappers(filePath, fileName, content));
   violations.push(...checkComponentRoleNames(filePath, fileName, content));
   violations.push(...checkComponentSlots(filePath, fileName, content));
@@ -493,13 +305,8 @@ function checkFile(filePath, content) {
 }
 
 export {
-  COMPOSITION_RULES,
-  LEAF_WRAPPER_SUFFIXES,
   NON_VISUAL_FILES,
-  STATUS_COMPOSITION_PARTS,
-  DIALOG_COMPOSITION_PARTS,
-  DIALOG_FORBIDDEN_IMPORTS,
-  COMPONENT_ANATOMY_RULES,
+  SURFACE_RULES,
   COMPONENT_ROLE_SUFFIXES,
   COMPONENT_NAME_EXEMPTIONS,
   CANONICAL_COMPONENT_EXEMPT_FILES,
@@ -537,6 +344,6 @@ if (isMain) {
   }
 
   console.log(
-    "guard-notes-app-pattern: all visual notes-app components follow the shared UI composition contract.",
+    "guard-notes-app-pattern: notes-app components use simple domain surfaces over shared UI primitives.",
   );
 }

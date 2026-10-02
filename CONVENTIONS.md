@@ -323,51 +323,38 @@ Do not:
 
 ### Notes-app UI composition contract
 
-Every visual component in `src/components/notes-app/` follows one composition
-contract. The contract uses the same root/content/parts shape as the installed
-shadcn primitives:
+Application components in `src/components/notes-app/` are simple domain
+surfaces built on the shared shadcn/Base UI primitives:
 
-- compose at least one primitive from `src/components/ui/`;
-- compose every visual surface from its role-specific child parts; cards,
-  forms, alerts, dialogs, empty states, menus, sidebars, statuses, headers, and
-  descriptions must not collapse their anatomy into one ad-hoc element;
-- compound surfaces expose caller-provided `children` and named parts when the
-  caller controls the composition or when sibling parts share context. Every named
-  part carries its role suffix and a family-prefixed `data-slot`. The
-  canonical example is `ConnectionAlert`, whose root owns connection state and
-  whose title, description, icon, and action are separate parts;
-- dialog files have one responsibility: own the overlay primitive contract only.
-  A `*-dialog.tsx` may expose the Dialog root, a Content wrapper, and at most one
-  family-local context when compound parts genuinely need shared state. It must not
-  import translations, theme state, application hooks, forms, or other
-  `notes-app` domain components. Header/body/form/footer content is composed by
-  the caller and passed through `children`, matching shadcn's compound pattern;
-- each compound component family may declare at most one local context. Keep that
-  context in the family file and use it only to coordinate sibling parts; do not
-  introduce multiple contexts or a global context merely to wire a surface together;
-- state surfaces expose explicit state parts instead of combining unrelated
-  boolean flags. `SpacesStatus` uses `SpacesErrorStatus`,
-  `SpacesLoadingStatus`, and `SpacesNotFoundStatus`;
-- allow thin wrappers only for leaf controls such as buttons and inputs. A leaf
-  wrapper may add domain behavior, labels, loading, or Firebase integration,
-  but it must not recreate the primitive's visual anatomy or hide a composite
-  surface;
-- keep domain behavior in `notes-app` and visual anatomy in the composed
-  `src/components/ui/` primitives;
-- for shell-like surfaces, do not introduce a duplicate domain root such as
-  `SpaceSidebar` when the native `Sidebar` is already the visual root. Use a
-  `SpaceShell` only for orchestration around the native sidebar compound tree;
-  this keeps one sidebar anatomy and prevents navigation, dialogs, and route
-  state from accumulating in one component;
-- never use raw interactive HTML controls (`button`, `input`, `select`,
-  `textarea`, or `label`);
+- default to one public domain component per file; do not create a custom
+  compound API merely to mirror the compound parts already provided by
+  `src/components/ui/`;
+- compose the installed primitive directly and keep the file/component suffix
+  aligned with its primary surface (`*Dialog`, `*Card`, `*FieldGroup`,
+  `*Form`, and so on);
+- when a primitive or thin wrapper needs to render through a caller-provided
+  element, use Base UI's standard `render` prop rather than inventing
+  `renderX`, `asChild`, or another polymorphic API. Components passed to
+  `render` must forward the received props and ref;
+- keep `render` focused on element/behavior composition. Domain content still
+  flows through ordinary props and `children`;
+- dialogs are simple wrappers when a domain-specific name is useful: one
+  component may own `Dialog` + `DialogContent` and render caller-provided
+  `children`. Do not create parallel `XDialogContent` application parts when
+  `DialogContent` already exists in `src/components/ui/`;
+- keep context for real providers or primitives that genuinely need shared
+  family state. Do not add context merely to manufacture an application-level
+  compound component;
+- reuse interactive primitives from `src/components/ui/` instead of raw
+  `button`, `input`, `select`, `textarea`, or `label` controls;
+- keep domain behavior in `notes-app` and visual primitive anatomy in
+  `src/components/ui/`;
 - spread caller props before required layout classes and semantic attributes;
-- keep `auth-provider.tsx`, `spaces-list.tsx`, and `theme-provider.tsx` as the
-  only explicit exceptions because they are infrastructure or conditional
-  orchestration files without their own visual surface.
+- keep `auth-provider.tsx`, `spaces-list.tsx`, and `theme-provider.tsx` as
+  explicit non-visual orchestration/provider exceptions.
 
-This contract is enforced by `scripts/guards/guard-notes-app-pattern.mjs`, exposed
-through `check:ui-pattern`, and covered by
+This contract is enforced by `scripts/guards/guard-notes-app-pattern.mjs`,
+exposed through `check:ui-pattern`, and covered by
 `scripts/guards/guard-notes-app-pattern.test.mjs`.
 
 Every rule above has exactly one enforcer: a `package.json` script that runs in
@@ -394,8 +381,8 @@ row here in the same change that adds or changes a rule; prefer promoting a
 | `canonical-props-name` | `check:props` |
 | `identifier-casing` | `check:lint` |
 | `notes-app-composition-contract` | `check:ui-pattern` |
-| `dialog-single-responsibility` | `check:ui-pattern` |
-| `single-family-context` | `check:ui-pattern` |
+| `base-ui-render-composition` | review-only |
+| `no-as-child` | `check:conventions` |
 | `reuse-primitives` | review-only |
 | `no-render-props-api` | `check:conventions` |
 | `composition-over-boolean-props` | review-only |
@@ -423,7 +410,6 @@ row here in the same change that adds or changes a rule; prefer promoting a
 | `use-cn-for-class-merge` | `check:conventions` |
 | `prefer-standard-scale` | `check:conventions` |
 | `button-size-variant` | `check:conventions` |
-| `overlay-content-own-file` | `check:conventions` |
 | `max-component-lines` | `check:conventions` |
 | `name-matches-surface` | `check:conventions` |
 | `testid-starts-with-component` | `check:conventions` |

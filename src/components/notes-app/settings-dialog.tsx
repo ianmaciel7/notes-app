@@ -1,51 +1,31 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import type { ComponentProps } from "react";
-import { SettingsForm } from "@/components/notes-app/settings-form";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import type { ComponentProps, ReactNode } from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 type SettingsDialogProps = Omit<
-  ComponentProps<typeof Dialog>,
-  "children" | "open" | "onOpenChange"
+  ComponentProps<typeof DialogContent>,
+  "children"
 > & {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  children: ReactNode;
 };
 
 function SettingsDialog({
   open,
   onOpenChange,
+  children,
   ...props
 }: SettingsDialogProps) {
-  const t = useTranslations("settings");
-  const spacesT = useTranslations("spaces");
-
   return (
-    <Dialog {...props} open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
+        {...props}
         data-slot="settings-dialog"
         data-testid="settings-dialog"
       >
-        <DialogHeader>
-          <DialogTitle>{t("settings")}</DialogTitle>
-          <DialogDescription>{t("settingsDescription")}</DialogDescription>
-        </DialogHeader>
-        <SettingsForm />
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>
-            {spacesT("done")}
-          </DialogClose>
-        </DialogFooter>
+        {children}
       </DialogContent>
     </Dialog>
   );
