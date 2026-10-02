@@ -51,7 +51,7 @@ function UserAvatar({ displayName, photoUrl, ...props }: UserAvatarProps) {
   );
 }
 
-type SidebarUserMenuProps = ComponentProps<"div"> & {
+type SidebarUserMenuProps = ComponentProps<typeof SidebarMenu> & {
   user: User;
   onOpenSettings: () => void;
   onSignOut: () => void;
