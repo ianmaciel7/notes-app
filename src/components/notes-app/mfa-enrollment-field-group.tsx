@@ -6,8 +6,8 @@ import { FactorId } from "firebase/auth";
 import type { ComponentProps } from "react";
 import { useState } from "react";
 
-import { SmsMultiFactorEnrollmentForm } from "@/components/notes-app/sms-mfa-enrollment-form";
-import { TotpMultiFactorEnrollmentForm } from "@/components/notes-app/totp-mfa-enrollment-form";
+import { SmsMfaEnrollmentFieldGroup } from "@/components/notes-app/sms-mfa-enrollment-field-group";
+import { TotpMfaEnrollmentFieldGroup } from "@/components/notes-app/totp-mfa-enrollment-field-group";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";

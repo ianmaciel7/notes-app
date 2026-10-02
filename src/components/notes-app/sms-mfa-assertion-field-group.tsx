@@ -4,7 +4,7 @@ import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
 import {
   useMultiFactorPhoneAuthVerifyFormSchema,
   useRecaptchaVerifier,
-  useSmsMultiFactorAssertionPhoneFieldGroupAction,
+  useSmsMultiFactorAssertionPhoneFormAction,
   useSmsMultiFactorAssertionVerifyFormAction,
   useUI,
 } from "@firebase-oss/ui-react";
@@ -52,7 +52,7 @@ function SmsMultiFactorAssertionPhoneFieldGroup({
   const ui = useUI();
   const recaptchaContainerRef = useRef<HTMLDivElement>(null);
   const recaptchaVerifier = useRecaptchaVerifier(recaptchaContainerRef);
-  const action = useSmsMultiFactorAssertionPhoneFieldGroupAction();
+  const action = useSmsMultiFactorAssertionPhoneFormAction();
   const [error, setError] = useState<string | null>(null);
 
   const onSubmit = async () => {

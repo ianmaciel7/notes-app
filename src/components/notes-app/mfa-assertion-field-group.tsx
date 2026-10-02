@@ -11,8 +11,8 @@ import {
 import type { ComponentProps } from "react";
 import { useState } from "react";
 
-import { SmsMfaAssertionForm } from "@/components/notes-app/sms-mfa-assertion-form";
-import { TotpMfaAssertionForm } from "@/components/notes-app/totp-mfa-assertion-form";
+import { SmsMfaAssertionFieldGroup } from "@/components/notes-app/sms-mfa-assertion-field-group";
+import { TotpMfaAssertionFieldGroup } from "@/components/notes-app/totp-mfa-assertion-field-group";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
@@ -50,7 +50,7 @@ function MfaAssertionFieldGroup({
   if (hint) {
     if (hint.factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
       return (
-        <SmsMfaAssertionForm
+        <SmsMfaAssertionFieldGroup
           hint={hint}
           onSuccess={onSuccess}
           {...props}
@@ -61,7 +61,7 @@ function MfaAssertionFieldGroup({
 
     if (hint.factorId === TotpMultiFactorGenerator.FACTOR_ID) {
       return (
-        <TotpMfaAssertionForm
+        <TotpMfaAssertionFieldGroup
           hint={hint}
           onSuccess={onSuccess}
           {...props}
