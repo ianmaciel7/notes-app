@@ -56,6 +56,49 @@ function patternRule(id, message, regex, options = {}) {
   };
 }
 
+// Overlay content (`DialogContent`, ...) is a self-contained surface with its
+// own state and copy, so it lives in a dedicated `*-dialog|sheet|drawer.tsx`.
+const OVERLAY_CONTENT = /<(?:Dialog|Sheet|AlertDialog|Drawer)Content\b/;
+const OVERLAY_FILE = /-(?:dialog|sheet|drawer)\.tsx$/;
+const COMPONENT_FILE = /^src\/components\/notes-app\/[^/]+\.tsx$/;
+const MAX_COMPONENT_LINES = 400;
+
+// A name that places a component inside a surface (`space-sidebar-empty`,
+// `sidebar-user-menu`) must be backed by that surface's primitive. The last
+// segment is the component's own role and is exempt.
+const SURFACE_TOKENS = ["sidebar", "dialog", "sheet", "drawer", "popover"];
+
+// Arbitrary px/rem values where Tailwind's scale has an equivalent
+// (`text-[13px]` -> `text-sm`, `w-[500px]` -> `w-125`).
+const ARBITRARY_SCALE_VALUE =
+  /\b(?:text|gap|size|[hw]|p[xytblr]?|m[xytblr]?|space-[xy])-\[-?[\d.]+(?:px|rem)\]/;
+
+// Sized controls must use a `size` variant, never a `size-*`/`h-*` override.
+const SIZE_OVERRIDE = /(?:^|[\s"'`])(?:size|h)-\d/;
+const CLASS_NAME_ATTRIBUTE = /className=(?:"[^"]*"|\{[^}]*\})/;
+
+// Index of the `>` closing the JSX opening tag that starts at `from`. Braces
+// and quotes are tracked so `=>` inside an attribute expression is skipped.
+function tagEnd(code, from) {
+  const token = /"[^"]*"|'[^']*'|`[^`]*`|[{}>]/g;
+  token.lastIndex = from;
+  let depth = 0;
+  for (let hit = token.exec(code); hit; hit = token.exec(code)) {
+    if (hit[0] === "{") depth++;
+    else if (hit[0] === "}") depth--;
+    else if (hit[0] === ">" && depth === 0) return hit.index;
+  }
+  return code.length;
+}
+
+function openingTags(code, name) {
+  const start = new RegExp(`<${name}(?=[\\s/>])`, "g");
+  return [...code.matchAll(start)].map((match) => ({
+    text: code.slice(match.index, tagEnd(code, match.index) + 1),
+    line: code.slice(0, match.index).split("\n").length,
+  }));
+}
+
 function isKebabSegment(segment) {
   const route = segment.match(ROUTE_SEGMENT);
   if (!route) return KEBAB.test(segment);
@@ -100,6 +143,72 @@ export const CONVENTION_RULES = [
     /className=\{\s*`[^`]*\$\{|className=\{\s*["'][^"']*["']\s*\+/,
     { extensions: TSX_ONLY },
   ),
+  patternRule(
+    "prefer-standard-scale",
+    "Use the Tailwind scale instead of arbitrary px/rem values (`text-[13px]` -> `text-sm`, `w-[500px]` -> `w-125`).",
+    ARBITRARY_SCALE_VALUE,
+    { extensions: TSX_ONLY },
+  ),
+  {
+    id: "button-size-variant",
+    message:
+      "Pick a `Button` size variant (`icon-xs`, `icon-sm`, `sm`, ...) instead of overriding it with `size-*`/`h-*` in `className`.",
+    extensions: TSX_ONLY,
+    includeTests: false,
+    uiOnly: false,
+    allowed: [],
+    check: ({ code }) =>
+      openingTags(code, "Button")
+        .filter(({ text }) =>
+          SIZE_OVERRIDE.test(text.match(CLASS_NAME_ATTRIBUTE)?.[0] ?? ""),
+        )
+        .map(({ line }) => ({ line })),
+  },
+  {
+    id: "overlay-content-own-file",
+    message:
+      "Overlay content (`DialogContent`, `SheetContent`, ...) belongs in its own `*-dialog.tsx`/`*-sheet.tsx`/`*-drawer.tsx`; the parent only owns `open`.",
+    extensions: TSX_ONLY,
+    includeTests: false,
+    uiOnly: false,
+    allowed: [],
+    appliesTo: (relPath) => !OVERLAY_FILE.test(relPath),
+    check: ({ code }) => lineHits(OVERLAY_CONTENT, code),
+  },
+  {
+    id: "name-matches-surface",
+    message:
+      "The file name places this component inside a surface it does not use. Name it after what it renders (e.g. `spaces-empty`, not `space-sidebar-empty`) or compose the surface primitive.",
+    extensions: TSX_ONLY,
+    includeTests: false,
+    uiOnly: false,
+    allowed: [],
+    appliesTo: (relPath) => COMPONENT_FILE.test(relPath),
+    check({ relPath, code }) {
+      const stem = path.posix.basename(relPath, ".tsx");
+      return stem
+        .split("-")
+        .slice(0, -1)
+        .filter((token) => SURFACE_TOKENS.includes(token))
+        .filter((token) => !code.includes(`@/components/ui/${token}"`))
+        .map((token) => ({ line: 1, detail: `("${token}" in "${stem}")` }));
+    },
+  },
+  {
+    id: "max-component-lines",
+    message: `Application components stay under ${MAX_COMPONENT_LINES} lines; split unrelated responsibilities into their own component files.`,
+    extensions: TSX_ONLY,
+    includeTests: false,
+    uiOnly: false,
+    allowed: [],
+    appliesTo: (relPath) => COMPONENT_FILE.test(relPath),
+    check({ content }) {
+      const count = content.split("\n").length;
+      return count > MAX_COMPONENT_LINES
+        ? [{ line: 1, detail: `(${count} lines)` }]
+        : [];
+    },
+  },
   patternRule(
     "no-render-props-api",
     "Prefer `children`, variants and compound components over `renderX` props.",

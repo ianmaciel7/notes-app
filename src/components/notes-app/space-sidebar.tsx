@@ -1,23 +1,16 @@
 "use client";
 
 import {
-  AlertCircle,
   Book,
   Briefcase,
   Check,
   ChevronsUpDown,
   Code,
   Folder,
-  LogOut,
-  Moon,
   Plus,
-  RefreshCw,
-  Settings,
-  UserRound,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useTheme } from "next-themes";
 import {
   type ComponentProps,
   type PropsWithChildren,
@@ -26,50 +19,19 @@ import {
   useState,
 } from "react";
 import { CreateSpaceDialog } from "@/components/notes-app/create-space-dialog";
-import { LanguageSelect } from "@/components/notes-app/language-select";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SettingsDialog } from "@/components/notes-app/settings-dialog";
+import { SidebarUserMenu } from "@/components/notes-app/sidebar-user-menu";
+import { SpacesEmpty } from "@/components/notes-app/spaces-empty";
+import { SpacesStatus } from "@/components/notes-app/spaces-status";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item";
 import {
   Sidebar,
   SidebarContent,
@@ -81,9 +43,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
-import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/use-auth";
 import { useSpaces } from "@/hooks/use-spaces";
 import { cn } from "@/lib/utils";
@@ -152,164 +112,6 @@ function SpaceIcon({ iconKey, ...props }: SpaceIconProps) {
   return <IconComp {...props} />;
 }
 
-type UserAvatarProps = ComponentProps<typeof Avatar> & {
-  displayName: string;
-  photoUrl: string | null;
-};
-
-function UserAvatar({ displayName, photoUrl, ...props }: UserAvatarProps) {
-  if (photoUrl) {
-    return (
-      <Avatar {...props} size="sm">
-        <AvatarImage src={photoUrl} alt="" />
-        <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
-      </Avatar>
-    );
-  }
-  return (
-    <Avatar {...props} size="sm">
-      <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
-    </Avatar>
-  );
-}
-
-type SpaceSidebarStatusProps = ComponentProps<"div"> & {
-  error: Error | null;
-  isOffline: boolean;
-  loading: boolean;
-  notFound: boolean;
-  onBack: () => void;
-  onRetry: () => void;
-  t: (key: string) => string;
-};
-
-function SpaceSidebarStatus({
-  error,
-  isOffline,
-  loading,
-  notFound,
-  onBack,
-  onRetry,
-  className,
-  t,
-  ...props
-}: SpaceSidebarStatusProps): ReactNode {
-  if (error) {
-    return (
-      <div
-        data-testid="space-switcher-error"
-        className={cn(
-          "mx-auto flex w-full max-w-sm flex-col items-center justify-center gap-3",
-          className,
-        )}
-        {...props}
-      >
-        <Alert variant="destructive" role="alert" aria-live="assertive">
-          <AlertCircle data-icon="inline-start" />
-          <AlertTitle>{t("connectionError")}</AlertTitle>
-          <AlertDescription>
-            {t(isOffline ? "offlineDescription" : "databaseErrorDescription")}
-          </AlertDescription>
-        </Alert>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onRetry}
-          data-testid="space-switcher-retry-btn"
-        >
-          <RefreshCw data-icon="inline-start" />
-          {t("retryConnection")}
-        </Button>
-      </div>
-    );
-  }
-  if (loading) {
-    return (
-      <div
-        data-testid="space-switcher-loading"
-        className={cn(
-          "flex items-center justify-center p-4 text-xs text-muted-foreground",
-          className,
-        )}
-        {...props}
-      >
-        <output className="sr-only">{t("loading")}</output>
-        <Skeleton className="h-4 w-24" />
-      </div>
-    );
-  }
-  if (notFound) {
-    return (
-      <div
-        data-testid="space-switcher-not-found"
-        className={cn("flex flex-1 items-center justify-center p-8", className)}
-        {...props}
-      >
-        <Empty className="max-w-sm border border-dashed p-6">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <AlertCircle />
-            </EmptyMedia>
-            <EmptyTitle>{t("spaceNotFoundTitle")}</EmptyTitle>
-            <EmptyDescription>{t("spaceNotFoundDescription")}</EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onBack}
-              data-testid="space-switcher-back-btn"
-            >
-              {t("backToSpaces")}
-            </Button>
-          </EmptyContent>
-        </Empty>
-      </div>
-    );
-  }
-  return null;
-}
-
-type SpaceSidebarEmptyProps = ComponentProps<"div"> & {
-  onCreate: () => void;
-  t: (key: string) => string;
-};
-
-function SpaceSidebarEmpty({
-  onCreate,
-  t,
-  className,
-  ...props
-}: SpaceSidebarEmptyProps) {
-  return (
-    <div
-      data-testid="space-switcher-empty"
-      className={cn("flex flex-1 items-center justify-center p-8", className)}
-      {...props}
-    >
-      <Empty className="max-w-sm border border-dashed p-6">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <Folder />
-          </EmptyMedia>
-          <EmptyTitle>{t("emptyTitle")}</EmptyTitle>
-          <EmptyDescription>{t("emptyDescription")}</EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button
-            size="sm"
-            onClick={onCreate}
-            data-testid="empty-create-space-btn"
-          >
-            <Plus data-icon="inline-start" />
-            {t("createFirstSpace")}
-          </Button>
-        </EmptyContent>
-      </Empty>
-    </div>
-  );
-}
-
 type SpaceSidebarMainProps = PropsWithChildren & {
   notFound: boolean;
   onCreate: () => void;
@@ -328,7 +130,7 @@ function SpaceSidebarMain({
 }: SpaceSidebarMainProps) {
   if (notFound) return status;
   if (showEmptyState) {
-    return <SpaceSidebarEmpty onCreate={onCreate} t={t} />;
+    return <SpacesEmpty onCreate={onCreate} t={t} />;
   }
   return children;
 }
@@ -430,9 +232,6 @@ function SpaceSidebar({
   ...props
 }: SpaceSidebarProps) {
   const t = useTranslations("spaces");
-  const authT = useTranslations("auth");
-  const settingsT = useTranslations("settings");
-  const { resolvedTheme, setTheme } = useTheme();
   const {
     authLoading,
     createSpace,
@@ -456,7 +255,7 @@ function SpaceSidebar({
   const showEmptyState = spaces.length === 0;
 
   const status = (
-    <SpaceSidebarStatus
+    <SpacesStatus
       error={error}
       isOffline={isOffline}
       loading={loading}
@@ -493,10 +292,6 @@ function SpaceSidebar({
       setIsCreating(false);
     }
   };
-  const userName =
-    user.displayName ||
-    (user.isAnonymous ? authT("anonymous") : authT("defaultUser"));
-  const userIdentifier = user.displayName || user.email || userName;
   return (
     <SidebarProvider
       data-testid="space-switcher"
@@ -520,82 +315,11 @@ function SpaceSidebar({
          */}
         <SidebarContent />
         <SidebarFooter>
-          <div className="flex items-center gap-1 pr-1.5">
-            <SidebarMenu
-              aria-label={t("openUserMenu")}
-              className="min-w-0 flex-1"
-            >
-              <SidebarMenuItem>
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    render={
-                      <SidebarMenuButton aria-label={t("openUserMenu")}>
-                        <UserRound />
-                        <span className="min-w-0 truncate text-[13px] text-foreground">
-                          {userIdentifier}
-                        </span>
-                        <span className="ml-auto -mr-0.5 flex size-6 shrink-0 items-center justify-center">
-                          <ChevronsUpDown className="size-4 text-muted-foreground" />
-                        </span>
-                      </SidebarMenuButton>
-                    }
-                  />
-                  <DropdownMenuContent
-                    side="top"
-                    align="start"
-                    sideOffset={6}
-                    className={cn(SIDEBAR_MENU_POPUP, "p-2")}
-                  >
-                    <DropdownMenuGroup>
-                      <DropdownMenuLabel className="p-0">
-                        <Item size="xs">
-                          <ItemMedia>
-                            <UserAvatar
-                              displayName={userIdentifier}
-                              photoUrl={user.photoURL}
-                            />
-                          </ItemMedia>
-                          <ItemContent>
-                            <ItemTitle>{userName}</ItemTitle>
-                            {user.email && (
-                              <ItemDescription>{user.email}</ItemDescription>
-                            )}
-                          </ItemContent>
-                        </Item>
-                      </DropdownMenuLabel>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator className="mx-0" />
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem onClick={() => signOutUser()}>
-                        <LogOut />
-                        {authT("signOut")}
-                      </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </SidebarMenuItem>
-            </SidebarMenu>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-6 shrink-0"
-              onClick={() => setSettingsDialogOpen(true)}
-              aria-label={settingsT("settings")}
-            >
-              <Settings />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-6 shrink-0"
-              onClick={() =>
-                setTheme(resolvedTheme === "dark" ? "light" : "dark")
-              }
-              aria-label={settingsT("darkMode")}
-            >
-              <Moon />
-            </Button>
-          </div>
+          <SidebarUserMenu
+            user={user}
+            onOpenSettings={() => setSettingsDialogOpen(true)}
+            onSignOut={() => signOutUser()}
+          />
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
@@ -615,44 +339,10 @@ function SpaceSidebar({
         onSubmit={handleCreateSpace}
         isLoading={isCreating}
       />
-      <Dialog open={settingsDialogOpen} onOpenChange={setSettingsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{settingsT("settings")}</DialogTitle>
-            <DialogDescription>
-              {settingsT("settingsDescription")}
-            </DialogDescription>
-          </DialogHeader>
-          <FieldGroup>
-            <Field orientation="horizontal">
-              <FieldContent>
-                <FieldLabel htmlFor="theme-switch">
-                  {settingsT("darkMode")}
-                </FieldLabel>
-                <FieldDescription>
-                  {settingsT("darkModeDescription")}
-                </FieldDescription>
-              </FieldContent>
-              <Switch
-                id="theme-switch"
-                checked={resolvedTheme === "dark"}
-                onCheckedChange={(checked) =>
-                  setTheme(checked ? "dark" : "light")
-                }
-              />
-            </Field>
-            <Field>
-              <FieldLabel>{settingsT("language")}</FieldLabel>
-              <LanguageSelect />
-            </Field>
-          </FieldGroup>
-          <DialogFooter>
-            <Button onClick={() => setSettingsDialogOpen(false)}>
-              {t("done")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <SettingsDialog
+        open={settingsDialogOpen}
+        onOpenChange={setSettingsDialogOpen}
+      />
       {isOffline && (
         <Badge
           aria-live="polite"

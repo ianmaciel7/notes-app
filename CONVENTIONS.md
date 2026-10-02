@@ -37,9 +37,11 @@ contributor workflow to `CONTRIBUTING.md`.
   - `-button` / `*Button`, `-select` / `*Select`, `-menu` / `*Menu`, `-switcher` / `*Switcher` for interactive UI controls
   - `-sidebar` / `*Sidebar` for navigation shells (e.g. `space-sidebar.tsx` -> `SpaceSidebar`)
   - `-provider` / `*Provider` for React context providers
+  - `-dialog` / `*Dialog`, `-status` / `*Status`, `-empty` / `*Empty` for standalone overlays and state surfaces split out of a larger component (e.g. `settings-dialog.tsx` -> `SettingsDialog`, `spaces-status.tsx` -> `SpacesStatus`)
 - **Canonical Props Naming (`${ComponentName}Props`)**: Component prop types must be declared canonically using the component's canonical PascalCase name (e.g. `login-card.tsx` declares and uses `type LoginCardProps = ...`, never `SignInAuthScreenProps` as the primary type). Declare them with `type`, never `interface`, exactly as `src/components/ui/` does. Legacy or library names may only be re-exported as backwards-compatible aliases inside the file's trailing export block (e.g. `type LoginCardProps as SignInAuthScreenProps`). Enforced by `check:props` and `component-no-interface`.
 - **Export shape (`src/components/notes-app/`)**: Application components follow the same file anatomy as `src/components/ui/`. Declare components and hooks as plain `function` declarations without `export`, and publish every value and type through one trailing `export { ... }` block (types with an inline `type` modifier, aliases as `X as Alias`). Do not write `export function`, `export const`, or `export interface`. Enforced by `component-trailing-export-block`.
-- **Standalone overlays**: A dialog, sheet, or drawer owns its own open state and concern, so it lives in its own file named after it (e.g. `CreateSpaceDialog` in `create-space-dialog.tsx`), never inside another component's file such as `space-sidebar.tsx`. Cards and forms are exempt because multi-step flows keep their step forms next to the flow. Enforced by `check:props` (`checkStandaloneSurfaceComponents`).
+- **Name by what it renders, never by where the code came from.** When a component is extracted or moved, re-derive its name from what it renders and where it is rendered instead of keeping the old name or prefixing it with the name of the file it came from (`SpaceSidebarEmpty`, rendered in the main area and not in the sidebar, became `SpacesEmpty`). A surface word before the final role suffix (`sidebar`, `dialog`, `sheet`, `drawer`, `popover`) must be backed by that surface's primitive in the file; otherwise the name is wrong (`name-matches-surface`). Use the domain terms in `CONTEXT.md`: `Space` is one user-owned context, so a component about the collection or its absence is `Spaces*`, never `Space*`, which would read as an empty Space.
+- **Standalone overlays**: A dialog, sheet, or drawer owns its own open state and concern, so it lives in its own file named after it (e.g. `CreateSpaceDialog` in `create-space-dialog.tsx`), never inside another component's file such as `space-sidebar.tsx`. Cards and forms are exempt because multi-step flows keep their step forms next to the flow. Enforced by `check:props` (`checkStandaloneSurfaceComponents`) for named `*Dialog`/`*Sheet`/`*Drawer` components, and by `overlay-content-own-file` for inline overlay JSX: `DialogContent`, `SheetContent`, `AlertDialogContent`, and `DrawerContent` may only appear in a `*-dialog.tsx`, `*-sheet.tsx`, or `*-drawer.tsx` file, so the parent keeps only the `open` state.
 
 ## 3. Component Composition
 
@@ -48,6 +50,7 @@ contributor workflow to `CONTRIBUTING.md`.
 - Prefer `children`, explicit variants, and compound components over boolean-prop
   matrices or `renderX` APIs.
 - Keep generic primitives free of product/domain behavior.
+- **Keep application components focused.** Keep each `src/components/notes-app/` file focused on one concern; the hard limit is four hundred lines (`max-component-lines`). When a file accumulates a second concern (its own state, translations, or hooks that the rest of the file does not use), move that concern to its own `<name>-<role>.tsx` instead of growing the file. Fix visual tweaks by composing primitives, not by adding wrapper markup and class overrides.
 - Keep public APIs focused; avoid rename-only wrappers and unnecessary DOM nodes.
 - Preserve consumer props, events, refs, native behavior, controlled/uncontrolled
   behavior, ARIA, and primitive state attributes.
@@ -65,6 +68,7 @@ contributor workflow to `CONTRIBUTING.md`.
   focus management, and keyboard behavior.
 - Forms should compose the existing Field/InputGroup primitives rather than bypassing
   their anatomy.
+- **Read the primitive before styling it.** Open `src/components/ui/<primitive>.tsx` and use its `variant`/`size` axes (e.g. `Button` `icon-xs`, `icon-sm`, `sm`) before reaching for `className`. Overriding a size with `size-*`/`h-*` on `Button` is a violation (`button-size-variant`); add or reuse a variant instead.
 - Use semantic HTML and accessible names. Loading, selected, disabled, and error
   states must not rely on color alone.
 - Application wrappers around shared shadcn primitives follow the primitive
@@ -267,7 +271,9 @@ changing an installed primitive.
 - Use semantic design tokens instead of hardcoded colors or ad hoc dark-theme
   overrides; token semantics are owned by `DESIGN.md`.
 - Prefer existing `gap-*`, `size-*`, and truncation utilities over arbitrary
-  values when the standard scale fits.
+  values when the standard scale fits. Arbitrary px/rem values for text, spacing,
+  and sizing (`text-[13px]`, `w-[500px]`) are rejected by `prefer-standard-scale`;
+  use the scale (`text-sm`, `size-125`).
 - Avoid `!important` and consumer-level overlay stacking overrides.
 - Use configured Lucide components explicitly and give icon-only controls accessible
   names.
@@ -350,6 +356,10 @@ row here in the same change that adds or changes a rule; prefer promoting a
 | `no-hardcoded-color` | `check:conventions` |
 | `no-important` | `check:conventions` |
 | `use-cn-for-class-merge` | `check:conventions` |
-| `prefer-standard-scale` | review-only |
+| `prefer-standard-scale` | `check:conventions` |
+| `button-size-variant` | `check:conventions` |
+| `overlay-content-own-file` | `check:conventions` |
+| `max-component-lines` | `check:conventions` |
+| `name-matches-surface` | `check:conventions` |
 | `no-emojis` | `check:emojis` |
 | `performance-patterns` | review-only |

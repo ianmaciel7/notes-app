@@ -254,6 +254,82 @@ test("ui primitives follow the registry file shape", () => {
   );
 });
 
+test("flags arbitrary px/rem values that the Tailwind scale covers", () => {
+  const card = (className) =>
+    ruleIds(
+      "src/components/notes-app/x-card.tsx",
+      `<span className="${className}" />`,
+    );
+  assert.deepEqual(card("text-[13px] truncate"), ["prefer-standard-scale"]);
+  assert.deepEqual(card("w-[500px]"), ["prefer-standard-scale"]);
+  assert.deepEqual(card("text-sm w-125 min-h-[50vh]"), []);
+});
+
+test("Button must use a size variant instead of a size-*/h-* override", () => {
+  const card = (jsx) => ruleIds("src/components/notes-app/x-card.tsx", jsx);
+  assert.deepEqual(
+    card(
+      `<Button\n  size="icon"\n  onClick={() => run()}\n  className="size-6 shrink-0"\n/>`,
+    ),
+    ["button-size-variant"],
+  );
+  assert.deepEqual(
+    card(`<Button size="sm" className={cn("h-9", className)} />`),
+    ["button-size-variant"],
+  );
+  assert.deepEqual(
+    card(`<Button size="icon-xs" className="shrink-0 w-full" />`),
+    [],
+  );
+  assert.deepEqual(
+    card(`<Spinner className="size-8" /><Button>Go</Button>`),
+    [],
+  );
+});
+
+test("overlay content must live in a dedicated dialog/sheet/drawer file", () => {
+  const content = `<Dialog><DialogContent /></Dialog>`;
+  assert.deepEqual(ruleIds("src/components/notes-app/x-card.tsx", content), [
+    "overlay-content-own-file",
+  ]);
+  assert.deepEqual(
+    ruleIds("src/components/notes-app/settings-dialog.tsx", content),
+    [],
+  );
+  assert.deepEqual(
+    ruleIds(
+      "src/components/notes-app/x-sheet.tsx",
+      `<Sheet><SheetContent /></Sheet>`,
+    ),
+    [],
+  );
+});
+
+test("a surface name in the file name needs the matching primitive", () => {
+  const app = (name, content) =>
+    ruleIds(`src/components/notes-app/${name}.tsx`, content);
+  const sidebar = `import { SidebarMenu } from "@/components/ui/sidebar";`;
+  assert.deepEqual(app("space-sidebar-empty", "const a = 1;"), [
+    "name-matches-surface",
+  ]);
+  assert.deepEqual(app("spaces-empty", "const a = 1;"), []);
+  assert.deepEqual(app("sidebar-user-menu", sidebar), []);
+  assert.deepEqual(app("space-sidebar", "const a = 1;"), []);
+  assert.deepEqual(app("settings-dialog", "const a = 1;"), []);
+});
+
+test("application components stay under the line limit", () => {
+  const big = `${"const a = 1;\n".repeat(400)}`;
+  assert.deepEqual(ruleIds("src/components/notes-app/x-card.tsx", big), [
+    "max-component-lines",
+  ]);
+  assert.deepEqual(
+    ruleIds("src/components/notes-app/x-card.tsx", "const a = 1;\n"),
+    [],
+  );
+  assert.deepEqual(ruleIds("src/app/page.tsx", big), []);
+});
+
 test("guard-conventions passes on the current src/ directory", () => {
   const output = execFileSync(
     "node",

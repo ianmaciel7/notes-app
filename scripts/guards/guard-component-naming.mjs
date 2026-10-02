@@ -72,6 +72,8 @@ const SHADCN_SUFFIXES = new Set([
   "toast",
   "toaster",
   "carousel",
+  "status",
+  "empty",
 ]);
 
 // ---------------------------------------------------------------------------

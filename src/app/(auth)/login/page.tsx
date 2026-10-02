@@ -120,8 +120,8 @@ function LoginContent() {
       <div className="relative min-h-[90vh] flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden">
         {/* Background decoration: subtle ambient light gradients */}
         <div className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none">
-          <div className="w-[500px] h-[500px] bg-primary/[0.03] dark:bg-primary/[0.05] rounded-full blur-3xl transform -translate-y-12" />
-          <div className="w-[300px] h-[300px] bg-primary/[0.02] dark:bg-primary/[0.04] rounded-full blur-2xl transform translate-x-32 translate-y-24" />
+          <div className="size-125 bg-primary/[0.03] dark:bg-primary/[0.05] rounded-full blur-3xl transform -translate-y-12" />
+          <div className="size-75 bg-primary/[0.02] dark:bg-primary/[0.04] rounded-full blur-2xl transform translate-x-32 translate-y-24" />
         </div>
 
         {/* Main Authentication Card */}
