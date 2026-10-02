@@ -65,6 +65,17 @@ test("enforces card anatomy", () => {
   );
 });
 
+test("enforces field-group anatomy", () => {
+  const violations = checkFile(
+    "settings-field-group.tsx",
+    `import { Field } from "@/components/ui/field"; function SettingsFieldGroup() { return <Field data-slot="settings-field-group" />; }`,
+  );
+
+  assert.ok(
+    violations.some((item) => item.rule === "notes-app-composition-anatomy"),
+  );
+});
+
 test("enforces form anatomy", () => {
   const violations = checkFile(
     "example-form.tsx",
