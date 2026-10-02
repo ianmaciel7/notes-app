@@ -22,20 +22,13 @@ type SettingsDialogProps = Omit<
   onOpenChange: (open: boolean) => void;
 };
 
-function SettingsDialog({
-  open,
-  onOpenChange,
-  ...props
-}: SettingsDialogProps) {
+function SettingsDialog({ open, onOpenChange, ...props }: SettingsDialogProps) {
   const t = useTranslations("settings");
   const spacesT = useTranslations("spaces");
 
   return (
     <Dialog {...props} open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        data-slot="settings-dialog"
-        data-testid="settings-dialog"
-      >
+      <DialogContent data-slot="settings-dialog" data-testid="settings-dialog">
         <DialogHeader>
           <DialogTitle>{t("settings")}</DialogTitle>
           <DialogDescription>{t("settingsDescription")}</DialogDescription>

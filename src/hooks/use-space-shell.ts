@@ -66,8 +66,7 @@ function useSpaceShell({
     isOffline,
     loading,
     onCreateDialogOpenChange: (open: boolean) => setCreateDialogOpen(open),
-    onSettingsDialogOpenChange: (open: boolean) =>
-      setSettingsDialogOpen(open),
+    onSettingsDialogOpenChange: (open: boolean) => setSettingsDialogOpen(open),
     openCreateDialog: () => setCreateDialogOpen(true),
     openSettingsDialog: () => setSettingsDialogOpen(true),
     retry,

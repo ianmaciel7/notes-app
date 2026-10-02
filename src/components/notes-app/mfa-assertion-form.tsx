@@ -37,9 +37,7 @@ function MfaAssertionForm({
   useMultiFactorAssertionCleanup();
 
   if (!resolver) {
-    throw new Error(
-      "MfaAssertionForm requires a multi-factor resolver",
-    );
+    throw new Error("MfaAssertionForm requires a multi-factor resolver");
   }
 
   // If only a single hint is provided, select it by default to improve UX.

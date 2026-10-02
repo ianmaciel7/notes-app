@@ -16,7 +16,7 @@ test("accepts a simple visual component composed from ui", () => {
 test("rejects visual components without a ui primitive", () => {
   const violations = checkFile(
     "example-card.tsx",
-    "function ExampleCard() { return <div data-slot=\"example-card\" />; }",
+    'function ExampleCard() { return <div data-slot="example-card" />; }',
   );
 
   assert.ok(violations.some((item) => item.rule === "notes-app-requires-ui"));
@@ -41,9 +41,7 @@ test("keeps the file suffix aligned with the root surface", () => {
      function SettingsFieldGroup() { return <Field data-slot="settings-field-group" />; }`,
   );
 
-  assert.ok(
-    violations.some((item) => item.rule === "notes-app-surface-root"),
-  );
+  assert.ok(violations.some((item) => item.rule === "notes-app-surface-root"));
 });
 
 test("accepts a simple dialog wrapper without custom compound parts", () => {
@@ -77,10 +75,7 @@ test("rejects className before props spread", () => {
 
 test("allows explicitly non-visual infrastructure files", () => {
   assert.deepEqual(
-    checkFile(
-      "auth-provider.tsx",
-      "function AuthProvider() { return null; }",
-    ),
+    checkFile("auth-provider.tsx", "function AuthProvider() { return null; }"),
     [],
   );
 });

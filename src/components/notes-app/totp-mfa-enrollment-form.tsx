@@ -85,7 +85,9 @@ function TotpMultiFactorSecretGenerationForm({
   );
 }
 
-type MultiFactorEnrollmentVerifyTotpFormProps = ComponentProps<typeof FieldGroup> & {
+type MultiFactorEnrollmentVerifyTotpFormProps = ComponentProps<
+  typeof FieldGroup
+> & {
   secret: TotpSecret;
   displayName: string;
   onSuccess: () => void;

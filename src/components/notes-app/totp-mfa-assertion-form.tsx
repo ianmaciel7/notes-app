@@ -79,7 +79,4 @@ function TotpMfaAssertionForm({
   );
 }
 
-export {
-  TotpMfaAssertionForm,
-  type TotpMfaAssertionFormProps,
-};
+export { TotpMfaAssertionForm, type TotpMfaAssertionFormProps };
