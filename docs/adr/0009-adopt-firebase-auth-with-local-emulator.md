@@ -14,7 +14,7 @@ We adopted Firebase Authentication with the local Firebase Auth Emulator (`port:
 
 ### Component Customization Boundary
 
-In accordance with [ADR 0008](./0008-adopt-firebase-ui-components.md), `src/components/firebase/` remains an immutable vendor directory. All application-consumed authentication forms, screens, and policy handlers (`SignInAuthScreen`, `SignUpAuthScreen`, `SignInAuthForm`, `SignUpAuthForm`, `Policies`) are copied and maintained directly within `src/components/notes-app/`.
+In accordance with [ADR 0008](./0008-adopt-firebase-ui-components.md), the application consumes `@firebase-oss/ui-core` and `@firebase-oss/ui-react` directly. Application-owned authentication cards, forms, field groups, and policy surfaces live in `src/components/notes-app/`; the former local Firebase registry mirror has been removed.
 
 ### Positive Consequences
 
