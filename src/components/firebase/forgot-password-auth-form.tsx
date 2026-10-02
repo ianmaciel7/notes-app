@@ -10,6 +10,7 @@ import {
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
@@ -75,7 +76,10 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
         {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
         {props.onBackToSignInClick ? (
           <Button type="button" variant="link" size="sm" onClick={props.onBackToSignInClick}>
-            <span className="text-xs">&larr; {getTranslation(ui, "labels", "backToSignIn")}</span>
+            <span className="inline-flex items-center gap-1 text-xs">
+              <ArrowLeft aria-hidden="true" className="size-3" />
+              {getTranslation(ui, "labels", "backToSignIn")}
+            </span>
           </Button>
         ) : null}
       </form>
