@@ -318,6 +318,15 @@ Every visual component in `src/components/notes-app/` follows one composition
 pattern:
 
 - compose at least one primitive from `src/components/ui/`;
+- use compound composition for every visual surface: a card, form, alert,
+  dialog, empty state, menu, sidebar, status, header, or description must use
+  the role-specific child parts listed below; do not collapse a surface into a
+  single ad-hoc element;
+- allow thin wrappers only for leaf controls such as buttons and inputs. A leaf
+  wrapper may add domain behavior, labels, loading, or Firebase integration,
+  but it must not recreate the primitive's visual anatomy;
+- keep domain behavior in `notes-app` and visual anatomy in the composed
+  `src/components/ui/` primitives;
 - never use raw interactive HTML controls (`button`, `input`, `select`,
   `textarea`, or `label`);
 - spread caller props before required layout classes and semantic attributes;

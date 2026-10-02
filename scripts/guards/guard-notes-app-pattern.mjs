@@ -34,6 +34,8 @@ const COMPOSITION_RULES = [
   { suffix: "-description.tsx", required: ["FieldDescription"] },
 ];
 
+const LEAF_WRAPPER_SUFFIXES = new Set(["-button.tsx", "-input.tsx"]);
+
 function violation(file, rule, message) {
   return { file: path.relative(root, file), rule, message };
 }
@@ -114,7 +116,12 @@ function checkFile(filePath, content) {
   return violations;
 }
 
-export { NON_VISUAL_FILES, checkFile };
+export {
+  COMPOSITION_RULES,
+  LEAF_WRAPPER_SUFFIXES,
+  NON_VISUAL_FILES,
+  checkFile,
+};
 
 export function runGuard() {
   if (!existsSync(componentsDir)) return [];
