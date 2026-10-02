@@ -126,7 +126,7 @@ describe("LoginPage", () => {
 
     renderLoginPage();
 
-    const googleBtn = screen.getByTestId("google-sign-in-btn");
+    const googleBtn = screen.getByTestId("google-sign-in-button");
     fireEvent.click(googleBtn);
 
     await waitFor(() => {
@@ -148,7 +148,7 @@ describe("LoginPage", () => {
 
     renderLoginPage();
 
-    const googleBtn = screen.getByTestId("google-sign-in-btn");
+    const googleBtn = screen.getByTestId("google-sign-in-button");
     fireEvent.click(googleBtn);
 
     await waitFor(() => {
@@ -171,7 +171,7 @@ describe("LoginPage", () => {
 
     renderLoginPage();
 
-    fireEvent.click(screen.getByTestId("google-sign-in-btn"));
+    fireEvent.click(screen.getByTestId("google-sign-in-button"));
 
     await waitFor(() => {
       expect(signInWithRedirect).toHaveBeenCalled();
@@ -185,7 +185,7 @@ describe("LoginPage", () => {
 
     renderLoginPage();
 
-    fireEvent.click(screen.getByTestId("google-sign-in-btn"));
+    fireEvent.click(screen.getByTestId("google-sign-in-button"));
 
     const alert = await screen.findByTestId("auth-error");
     expect(alert.textContent).toContain(messages.auth.googleSignInFailed);
@@ -203,7 +203,7 @@ describe("LoginPage", () => {
 
     renderLoginPage();
 
-    fireEvent.click(screen.getByTestId("google-sign-in-btn"));
+    fireEvent.click(screen.getByTestId("google-sign-in-button"));
 
     const alert = await screen.findByTestId("auth-error");
     expect(alert.textContent).toContain(messages.auth.googleSignInFailed);
@@ -216,7 +216,7 @@ describe("LoginPage", () => {
 
     renderLoginPage();
 
-    fireEvent.click(screen.getByTestId("google-sign-in-btn"));
+    fireEvent.click(screen.getByTestId("google-sign-in-button"));
 
     await waitFor(() => {
       expect(signInWithPopup).toHaveBeenCalled();
@@ -260,7 +260,7 @@ describe("LoginPage", () => {
 
     renderLoginPage();
 
-    const googleBtn = screen.getByTestId("google-sign-in-btn");
+    const googleBtn = screen.getByTestId("google-sign-in-button");
     fireEvent.click(googleBtn);
 
     await waitFor(() => {

@@ -30,7 +30,7 @@ test.describe("Authentication Flow", () => {
   test("toggles between sign in and sign up screens", async ({ page }) => {
     await page.goto("/login");
 
-    const signUpToggle = page.getByTestId("auth-mode-toggle");
+    const signUpToggle = page.getByTestId("login-form-mode-toggle");
     await expect(signUpToggle).toBeVisible();
     await signUpToggle.click();
     const submitButton = page.locator('button[type="submit"]');
@@ -55,12 +55,12 @@ test.describe("Authentication Flow", () => {
     await expect(userMenu).toBeVisible();
 
     // Verify sign out button is present and click it
-    const signOutBtn = page.getByTestId("sign-out-btn");
+    const signOutBtn = page.getByTestId("user-menu-sign-out-btn");
     await expect(signOutBtn).toBeVisible();
     await signOutBtn.click();
 
     // Verify user is signed out and login link is back
-    const loginLink = page.getByTestId("login-link");
+    const loginLink = page.getByTestId("user-menu-login-link");
     await expect(loginLink).toBeVisible();
   });
 });

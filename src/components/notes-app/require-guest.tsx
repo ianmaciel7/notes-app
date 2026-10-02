@@ -20,7 +20,10 @@ function RequireGuest({
   if (isLoading) {
     return (
       fallback ?? (
-        <Empty data-testid="guest-loading" className="h-full min-h-[50vh] p-8">
+        <Empty
+          data-testid="require-guest-loading"
+          className="h-full min-h-[50vh] p-8"
+        >
           <EmptyMedia>
             <Spinner className="size-8" />
           </EmptyMedia>

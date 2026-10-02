@@ -28,7 +28,7 @@ function GoogleSignInButton({
 
   return (
     <Button
-      data-testid="google-sign-in-btn"
+      data-testid="google-sign-in-button"
       type="button"
       variant="outline"
       size="lg"

@@ -146,7 +146,7 @@ function LoginForm({
           {onSignUpClick ? (
             <Field>
               <Button
-                data-testid="auth-mode-toggle"
+                data-testid="login-form-mode-toggle"
                 type="button"
                 variant="link"
                 size="sm"

@@ -85,9 +85,11 @@ function CreateSpaceForm({
     >
       <FieldGroup>
         <Field data-invalid={Boolean(error) || undefined}>
-          <FieldLabel htmlFor="space-name-input">{t("spaceName")}</FieldLabel>
+          <FieldLabel htmlFor="create-space-form-name-input">
+            {t("spaceName")}
+          </FieldLabel>
           <Input
-            id="space-name-input"
+            id="create-space-form-name-input"
             placeholder={t("spaceNamePlaceholder")}
             value={name}
             onChange={(e) => {
@@ -95,12 +97,14 @@ function CreateSpaceForm({
               if (error) setError(null);
             }}
             autoFocus
-            data-testid="space-name-input"
+            data-testid="create-space-form-name-input"
             aria-invalid={Boolean(error) || undefined}
             disabled={isLoading}
           />
           {error && (
-            <FieldError data-testid="create-space-error">{error}</FieldError>
+            <FieldError data-testid="create-space-form-error">
+              {error}
+            </FieldError>
           )}
         </Field>
 
@@ -116,7 +120,7 @@ function CreateSpaceForm({
             disabled={isLoading}
             variant="outline"
             className="flex items-center gap-2 pt-1"
-            data-testid="space-icon-selector"
+            data-testid="create-space-form-icon-selector"
           >
             {(["folder", "book", "briefcase", "code"] as const).map(
               (iconKey) => {
@@ -127,7 +131,7 @@ function CreateSpaceForm({
                     value={iconKey}
                     size="sm"
                     aria-label={t("selectIconAria", { icon: iconKey })}
-                    data-testid={`icon-btn-${iconKey}`}
+                    data-testid={`create-space-form-icon-btn-${iconKey}`}
                   >
                     <IconComp />
                   </ToggleGroupItem>
@@ -145,7 +149,7 @@ function CreateSpaceForm({
             variant="outline"
             onClick={onCancel}
             disabled={isLoading}
-            data-testid="cancel-create-space"
+            data-testid="create-space-form-cancel"
           >
             {t("cancel")}
           </Button>
@@ -153,7 +157,7 @@ function CreateSpaceForm({
         <Button
           type="submit"
           disabled={isLoading || !name.trim()}
-          data-testid="submit-create-space"
+          data-testid="create-space-form-submit"
         >
           {isLoading && <Spinner data-icon="inline-start" />}
           {isLoading ? t("creating") : t("createSpace")}

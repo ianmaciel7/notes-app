@@ -39,7 +39,7 @@ function SpacesStatus({
   if (error) {
     return (
       <div
-        data-testid="space-switcher-error"
+        data-testid="spaces-status-error"
         className={cn(
           "mx-auto flex w-full max-w-sm flex-col items-center justify-center gap-3",
           className,
@@ -57,7 +57,7 @@ function SpacesStatus({
           variant="outline"
           size="sm"
           onClick={onRetry}
-          data-testid="space-switcher-retry-btn"
+          data-testid="spaces-status-retry-btn"
         >
           <RefreshCw data-icon="inline-start" />
           {t("retryConnection")}
@@ -68,7 +68,7 @@ function SpacesStatus({
   if (loading) {
     return (
       <div
-        data-testid="space-switcher-loading"
+        data-testid="spaces-status-loading"
         className={cn(
           "flex items-center justify-center p-4 text-xs text-muted-foreground",
           className,
@@ -83,7 +83,7 @@ function SpacesStatus({
   if (notFound) {
     return (
       <div
-        data-testid="space-switcher-not-found"
+        data-testid="spaces-status-not-found"
         className={cn("flex flex-1 items-center justify-center p-8", className)}
         {...props}
       >
@@ -100,7 +100,7 @@ function SpacesStatus({
               variant="outline"
               size="sm"
               onClick={onBack}
-              data-testid="space-switcher-back-btn"
+              data-testid="spaces-status-back-btn"
             >
               {t("backToSpaces")}
             </Button>

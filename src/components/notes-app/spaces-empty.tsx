@@ -21,7 +21,7 @@ type SpacesEmptyProps = ComponentProps<"div"> & {
 function SpacesEmpty({ onCreate, t, className, ...props }: SpacesEmptyProps) {
   return (
     <div
-      data-testid="space-switcher-empty"
+      data-testid="spaces-empty"
       className={cn("flex flex-1 items-center justify-center p-8", className)}
       {...props}
     >
@@ -37,7 +37,7 @@ function SpacesEmpty({ onCreate, t, className, ...props }: SpacesEmptyProps) {
           <Button
             size="sm"
             onClick={onCreate}
-            data-testid="empty-create-space-btn"
+            data-testid="spaces-empty-create-btn"
           >
             <Plus data-icon="inline-start" />
             {t("createFirstSpace")}

@@ -172,7 +172,7 @@ describe("AuthProvider and Auth components", () => {
       </AuthContext>,
     );
 
-    expect(screen.getByTestId("login-link")).toBeDefined();
+    expect(screen.getByTestId("user-menu-login-link")).toBeDefined();
     expect(screen.getByText("Sign in")).toBeDefined();
   });
 
@@ -198,7 +198,7 @@ describe("AuthProvider and Auth components", () => {
 
     expect(screen.getByTestId("user-menu")).toBeDefined();
     expect(screen.getByText("Tester One")).toBeDefined();
-    expect(screen.getByTestId("sign-out-btn")).toBeDefined();
+    expect(screen.getByTestId("user-menu-sign-out-btn")).toBeDefined();
   });
 
   it("RequireAuth renders fallback during loading", () => {

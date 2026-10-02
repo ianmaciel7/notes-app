@@ -20,7 +20,10 @@ function RequireAuth({
   if (isLoading) {
     return (
       fallback ?? (
-        <Empty data-testid="auth-loading" className="h-full min-h-[50vh] p-8">
+        <Empty
+          data-testid="require-auth-loading"
+          className="h-full min-h-[50vh] p-8"
+        >
           <EmptyMedia>
             <Spinner className="size-8" />
           </EmptyMedia>

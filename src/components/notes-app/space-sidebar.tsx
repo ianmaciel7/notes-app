@@ -164,7 +164,7 @@ function SpaceSwitcherMenu({
             <DropdownMenuTrigger
               render={
                 <SidebarMenuButton
-                  data-testid="space-switcher-trigger"
+                  data-testid="space-sidebar-trigger"
                   aria-label={t("switchSpace")}
                 >
                   <SpaceIcon iconKey={activeSpace?.icon} />
@@ -186,7 +186,7 @@ function SpaceSwitcherMenu({
                     <DropdownMenuItem
                       key={space.id}
                       onClick={() => onSelect(space.id)}
-                      data-testid={`space-item-${space.id}`}
+                      data-testid={`space-sidebar-item-${space.id}`}
                     >
                       <SpaceIcon iconKey={space.icon} />
                       <span className="min-w-0 flex-1 truncate">
@@ -212,7 +212,7 @@ function SpaceSwitcherMenu({
           </DropdownMenu>
         ) : (
           <SidebarMenuButton
-            data-testid="space-switcher-create-trigger"
+            data-testid="space-sidebar-create-trigger"
             onClick={onCreate}
           >
             <Plus />
@@ -294,7 +294,7 @@ function SpaceSidebar({
   };
   return (
     <SidebarProvider
-      data-testid="space-switcher"
+      data-testid="space-sidebar"
       className={cn("min-h-svh", className)}
       {...props}
     >
@@ -347,7 +347,7 @@ function SpaceSidebar({
         <Badge
           aria-live="polite"
           className="fixed bottom-4 right-4"
-          data-testid="offline-status-indicator"
+          data-testid="space-sidebar-offline-indicator"
         >
           {t("operatingOffline")}
         </Badge>

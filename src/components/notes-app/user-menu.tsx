@@ -31,7 +31,7 @@ function UserMenu({ className, ...props }: UserMenuProps) {
         <LanguageSelect />
         <Button
           render={
-            <Link href="/login" data-testid="login-link">
+            <Link href="/login" data-testid="user-menu-login-link">
               {t("signIn")}
             </Link>
           }
@@ -59,13 +59,13 @@ function UserMenu({ className, ...props }: UserMenuProps) {
     >
       <LanguageSelect />
       <span
-        data-testid="user-identifier"
+        data-testid="user-menu-identifier"
         className="max-w-45 truncate font-medium"
       >
         {userIdentifier}
       </span>
       <Button
-        data-testid="sign-out-btn"
+        data-testid="user-menu-sign-out-btn"
         size="sm"
         variant="ghost"
         onClick={() => signOutUser()}

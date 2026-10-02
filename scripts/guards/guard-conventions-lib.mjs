@@ -68,6 +68,9 @@ const MAX_COMPONENT_LINES = 400;
 // segment is the component's own role and is exempt.
 const SURFACE_TOKENS = ["sidebar", "dialog", "sheet", "drawer", "popover"];
 
+// `data-testid="id"` or the static start of `data-testid={`id-${x}`}`.
+const TESTID_ATTRIBUTE = /data-testid=(?:"([^"]*)"|\{`([^`$]*))/g;
+
 // Arbitrary px/rem values where Tailwind's scale has an equivalent
 // (`text-[13px]` -> `text-sm`, `w-[500px]` -> `w-125`).
 const ARBITRARY_SCALE_VALUE =
@@ -192,6 +195,29 @@ export const CONVENTION_RULES = [
         .filter((token) => SURFACE_TOKENS.includes(token))
         .filter((token) => !code.includes(`@/components/ui/${token}"`))
         .map((token) => ({ line: 1, detail: `("${token}" in "${stem}")` }));
+    },
+  },
+  {
+    id: "testid-starts-with-component",
+    message:
+      "`data-testid` must start with the component's file name (`spaces-empty.tsx` -> `spaces-empty`, `spaces-empty-create-btn`), so a renamed or extracted component cannot keep a stale id.",
+    extensions: TSX_ONLY,
+    includeTests: false,
+    uiOnly: false,
+    allowed: [],
+    appliesTo: (relPath) => COMPONENT_FILE.test(relPath),
+    check({ relPath, code }) {
+      const stem = path.posix.basename(relPath, ".tsx");
+      const hits = [];
+      for (const match of code.matchAll(TESTID_ATTRIBUTE)) {
+        const id = match[1] ?? match[2];
+        if (id === stem || id.startsWith(`${stem}-`)) continue;
+        hits.push({
+          line: code.slice(0, match.index).split("\n").length,
+          detail: `("${id}" in "${stem}")`,
+        });
+      }
+      return hits;
     },
   },
   {

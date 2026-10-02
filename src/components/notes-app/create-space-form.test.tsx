@@ -29,11 +29,11 @@ describe("CreateSpaceForm", () => {
 
     expect(screen.getByTestId("create-space-form")).toBeDefined();
     expect(screen.getByLabelText("Space Name")).toBeDefined();
-    expect(screen.getByTestId("space-icon-selector")).toBeDefined();
+    expect(screen.getByTestId("create-space-form-icon-selector")).toBeDefined();
 
-    const nameInput = screen.getByTestId("space-name-input");
-    const bookIconBtn = screen.getByTestId("icon-btn-book");
-    const submitBtn = screen.getByTestId("submit-create-space");
+    const nameInput = screen.getByTestId("create-space-form-name-input");
+    const bookIconBtn = screen.getByTestId("create-space-form-icon-btn-book");
+    const submitBtn = screen.getByTestId("create-space-form-submit");
 
     fireEvent.change(nameInput, { target: { value: "Engineering Notes" } });
     fireEvent.click(bookIconBtn);
@@ -50,7 +50,7 @@ describe("CreateSpaceForm", () => {
       <CreateSpaceForm onSubmitSpace={onSubmitSpace} onCancel={onCancel} />,
     );
 
-    const cancelBtn = screen.getByTestId("cancel-create-space");
+    const cancelBtn = screen.getByTestId("create-space-form-cancel");
     fireEvent.click(cancelBtn);
 
     expect(onCancel).toHaveBeenCalled();
@@ -61,8 +61,8 @@ describe("CreateSpaceForm", () => {
 
     renderWithIntl(<CreateSpaceForm onSubmitSpace={onSubmitSpace} />);
 
-    const nameInput = screen.getByTestId("space-name-input");
-    const submitBtn = screen.getByTestId("submit-create-space");
+    const nameInput = screen.getByTestId("create-space-form-name-input");
+    const submitBtn = screen.getByTestId("create-space-form-submit");
 
     fireEvent.change(nameInput, { target: { value: "   " } });
     fireEvent.click(submitBtn);

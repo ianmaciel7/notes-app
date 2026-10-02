@@ -47,7 +47,7 @@ vi.mock("@/components/notes-app/space-sidebar", () => ({
     currentSpaceId?: string;
     children?: React.ReactNode;
   }) => (
-    <div data-testid="mock-space-switcher">
+    <div data-testid="mock-space-sidebar">
       SpaceSidebar for {currentSpaceId}
       {children}
     </div>
@@ -59,7 +59,7 @@ describe("SpacePage", () => {
     cleanup();
   });
 
-  it("renders space page with active spaceId and space switcher", async () => {
+  it("renders space page with active spaceId and space sidebar", async () => {
     const pageComponent = await SpacePage({
       params: Promise.resolve({ spaceId: "test-space-456" }),
       searchParams: Promise.resolve({}),
@@ -68,7 +68,7 @@ describe("SpacePage", () => {
     render(pageComponent);
 
     expect(screen.getByText("Space: test-space-456")).toBeDefined();
-    expect(screen.getByTestId("mock-space-switcher")).toBeDefined();
+    expect(screen.getByTestId("mock-space-sidebar")).toBeDefined();
     expect(screen.getByText("SpaceSidebar for test-space-456")).toBeDefined();
     expect(
       screen.getByTestId("mock-require-auth").getAttribute("data-redirect-to"),

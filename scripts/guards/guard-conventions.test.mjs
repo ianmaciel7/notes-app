@@ -318,6 +318,40 @@ test("a surface name in the file name needs the matching primitive", () => {
   assert.deepEqual(app("settings-dialog", "const a = 1;"), []);
 });
 
+test("data-testid must start with the component file name", () => {
+  const app = (name, jsx) =>
+    ruleIds(`src/components/notes-app/${name}.tsx`, jsx);
+  assert.deepEqual(
+    app("spaces-empty", `<div data-testid="space-switcher-empty" />`),
+    ["testid-starts-with-component"],
+  );
+  assert.deepEqual(
+    app(
+      "space-sidebar",
+      ["<li data-testid={`space-item-", "$", "{id}`} />"].join(""),
+    ),
+    ["testid-starts-with-component"],
+  );
+  assert.deepEqual(
+    app("spaces-empty", `<div data-testid="spaces-empty" />`),
+    [],
+  );
+  assert.deepEqual(
+    app("spaces-empty", `<b data-testid="spaces-empty-create-btn" />`),
+    [],
+  );
+  assert.deepEqual(
+    app(
+      "space-sidebar",
+      ["<li data-testid={`space-sidebar-item-", "$", "{id}`} />"].join(""),
+    ),
+    [],
+  );
+  assert.deepEqual(app("spaces-empty", `<b data-testid="spaces-emptyish" />`), [
+    "testid-starts-with-component",
+  ]);
+});
+
 test("application components stay under the line limit", () => {
   const big = `${"const a = 1;\n".repeat(400)}`;
   assert.deepEqual(ruleIds("src/components/notes-app/x-card.tsx", big), [
