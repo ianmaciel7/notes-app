@@ -307,8 +307,8 @@ Do not:
 Every rule above has exactly one enforcer: a `package.json` script that runs in
 `check:fast`, or `review-only` when no tool can decide it. `check:conventions`
 runs `scripts/guards/guard-conventions.mjs` (application rules over `src/`;
-`src/components/ui/` is checked only against the `ui-primitive-*` anatomy rules
-and `src/components/firebase/` is skipped as an unmodified vendor drop) and
+`src/components/ui/` is excluded as registry-managed; all other project source
+is checked normally) and
 `scripts/verify/verify-conventions-index.mjs`, which fails when a row names a
 missing or ungated script or when a guard rule is absent from this table. Add a
 row here in the same change that adds or changes a rule; prefer promoting a

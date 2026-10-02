@@ -154,7 +154,7 @@ architectural choices rather than duplicating version pins.
 | Unused-code analysis | Knip | Detect unused files, exports, and dependencies |
 | Component workbench | Ladle | Isolated component development |
 | Render optimization | React Compiler | Compiler-assisted React optimization |
-| Authentication UI | Firebase Auth UI logic with shadcn primitives | Auth screens in `src/components/notes-app/` compose `@firebase-oss/ui-react` behavior with shadcn `Field`/`Card`/`Alert` primitives; `src/components/firebase/` stays an untouched vendor drop ([ADR 0008](./docs/adr/0008-adopt-firebase-ui-components.md), [ADR 0010](./docs/adr/0010-adopt-firebase-ui-v7-and-auth-resilience.md)) |
+| Authentication UI | Firebase Auth UI logic with shadcn primitives | Auth screens in `src/components/notes-app/` compose `@firebase-oss/ui-core` and `@firebase-oss/ui-react` directly with shadcn `Field`/`Card`/`Alert` primitives; no local vendor mirror is retained ([ADR 0008](./docs/adr/0008-adopt-firebase-ui-components.md), [ADR 0010](./docs/adr/0010-adopt-firebase-ui-v7-and-auth-resilience.md)) |
 | Authentication provider | Firebase Auth + Emulator | User identity with local auth emulator support ([ADR 0009](./docs/adr/0009-adopt-firebase-auth-with-local-emulator.md)) |
 | Internationalization | next-intl | Cookie-driven App Router internationalization with Firebase locale sync ([ADR 0011](./docs/adr/0011-adopt-cookie-based-next-intl-with-firebase-sync.md)) |
 | End-to-end testing | Playwright | Cross-browser E2E testing with Next.js webServer integration and local emulator support ([ADR 0012](./docs/adr/0012-adopt-playwright-for-e2e-testing.md)) |
