@@ -9,21 +9,11 @@ import {
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { MultiFactorInfo, UserCredential } from "firebase/auth";
 import type { ComponentProps } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
-import { Spinner } from "@/components/ui/spinner";
+import { FormProvider, useForm } from "react-hook-form";
+import { AuthFormErrorAlert } from "@/components/notes-app/auth-form-error-alert";
+import { AuthSubmitButton } from "@/components/notes-app/auth-submit-button";
+import { VerificationCodeInput } from "@/components/notes-app/verification-code-input";
+import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 type TotpMfaAssertionFormProps = ComponentProps<"div"> & {
@@ -71,46 +61,13 @@ function TotpMfaAssertionForm({
           className="flex flex-col gap-4"
         >
           <FieldGroup>
-            <Controller
-              control={form.control}
-              name="verificationCode"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={!!fieldState.error}>
-                  <FieldLabel htmlFor="verificationCode">
-                    {getTranslation(ui, "labels", "verificationCode")}
-                  </FieldLabel>
-                  <InputOTP
-                    id="verificationCode"
-                    maxLength={6}
-                    {...field}
-                    aria-invalid={!!fieldState.error}
-                  >
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                      <InputOTPSlot index={3} />
-                      <InputOTPSlot index={4} />
-                      <InputOTPSlot index={5} />
-                    </InputOTPGroup>
-                  </InputOTP>
-                  {fieldState.error && (
-                    <FieldError>{fieldState.error.message}</FieldError>
-                  )}
-                </Field>
-              )}
+            <VerificationCodeInput
+              label={getTranslation(ui, "labels", "verificationCode")}
             />
-            <Button type="submit" disabled={ui.state !== "idle"}>
-              {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
+            <AuthSubmitButton type="submit" busy={ui.state !== "idle"}>
               {getTranslation(ui, "labels", "verifyCode")}
-            </Button>
-            {form.formState.errors.root && (
-              <Alert variant="destructive">
-                <AlertDescription>
-                  {form.formState.errors.root.message}
-                </AlertDescription>
-              </Alert>
-            )}
+            </AuthSubmitButton>
+            <AuthFormErrorAlert message={form.formState.errors.root?.message} />
           </FieldGroup>
         </form>
       </FormProvider>

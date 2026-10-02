@@ -7,17 +7,14 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { User, UserCredential } from "firebase/auth";
-import { useTranslations } from "next-intl";
 import { type ComponentProps, useRef } from "react";
+import { AuthCard, AuthCardProviders } from "@/components/notes-app/auth-card";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { FieldGroup, FieldSeparator } from "@/components/ui/field";
-import { cn } from "@/lib/utils";
 import { SignUpForm } from "./sign-up-form";
 
 type SignUpCardProps = FirebaseSignUpAuthScreenProps &
@@ -27,12 +24,10 @@ function SignUpCard({
   children,
   onSignUp,
   onSignInClick,
-  className,
   ref,
   ...props
 }: SignUpCardProps) {
   const ui = useUI();
-  const t = useTranslations("auth");
   const handledUserIdRef = useRef<string | null>(null);
 
   const titleText = getTranslation(ui, "labels", "signUp");
@@ -50,12 +45,7 @@ function SignUpCard({
   useOnUserAuthenticated(children ? handleSignUp : undefined);
 
   return (
-    <Card
-      ref={ref}
-      data-slot="sign-up-card"
-      className={cn("w-full max-w-sm mx-auto", className)}
-      {...props}
-    >
+    <AuthCard ref={ref} {...props}>
       <CardHeader>
         <CardTitle>
           <h1>{titleText}</h1>
@@ -69,16 +59,9 @@ function SignUpCard({
             handleSignUp(credential.user);
           }}
         />
-        {children ? (
-          <FieldGroup className="pt-1">
-            <FieldSeparator className="uppercase [&>span]:bg-card">
-              {t("orContinueWith")}
-            </FieldSeparator>
-            <FieldGroup className="gap-2.5">{children}</FieldGroup>
-          </FieldGroup>
-        ) : null}
+        {children ? <AuthCardProviders>{children}</AuthCardProviders> : null}
       </CardContent>
-    </Card>
+    </AuthCard>
   );
 }
 

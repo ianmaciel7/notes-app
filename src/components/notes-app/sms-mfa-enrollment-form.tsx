@@ -19,8 +19,10 @@ import {
   PhoneAuthProvider,
   PhoneMultiFactorGenerator,
 } from "firebase/auth";
+import type { ComponentProps } from "react";
 import { useRef, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
+import { AuthFormInput } from "@/components/notes-app/auth-form-input";
 import {
   CountrySelect,
   type CountrySelectorRef,
@@ -34,7 +36,6 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
@@ -49,7 +50,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 type MultiFactorEnrollmentPhoneNumberFormProps = Omit<
-  React.ComponentProps<"form">,
+  ComponentProps<"form">,
   "onSubmit"
 > & {
   onSubmit: (verificationId: string, displayName?: string) => void;
@@ -119,25 +120,10 @@ function MultiFactorEnrollmentPhoneNumberForm({
         {...props}
       >
         <FieldGroup>
-          <Controller
-            control={form.control}
+          <AuthFormInput
             name="displayName"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={!!fieldState.error}>
-                <FieldLabel htmlFor="displayName">
-                  {getTranslation(ui, "labels", "displayName")}
-                </FieldLabel>
-                <Input
-                  {...field}
-                  id="displayName"
-                  type="text"
-                  aria-invalid={!!fieldState.error}
-                />
-                {fieldState.error && (
-                  <FieldError>{fieldState.error.message}</FieldError>
-                )}
-              </Field>
-            )}
+            label={getTranslation(ui, "labels", "displayName")}
+            type="text"
           />
           <Controller
             control={form.control}
@@ -186,7 +172,7 @@ function MultiFactorEnrollmentPhoneNumberForm({
 }
 
 type MultiFactorEnrollmentVerifyPhoneNumberFormProps = Omit<
-  React.ComponentProps<"form">,
+  ComponentProps<"form">,
   "onSubmit"
 > & {
   verificationId: string;
@@ -289,7 +275,7 @@ function MultiFactorEnrollmentVerifyPhoneNumberForm({
   );
 }
 
-type SmsMfaEnrollmentFormProps = React.ComponentProps<"div"> & {
+type SmsMfaEnrollmentFormProps = ComponentProps<"div"> & {
   onSuccess?: () => void;
 };
 
@@ -312,7 +298,7 @@ function SmsMfaEnrollmentForm({
   }
 
   return (
-    <div className={cn(className)} {...props}>
+    <FieldGroup className={cn(className)} {...props}>
       {!verification ? (
         <MultiFactorEnrollmentPhoneNumberForm
           onSubmit={(verificationId, displayName) =>
@@ -327,7 +313,7 @@ function SmsMfaEnrollmentForm({
           }}
         />
       )}
-    </div>
+    </FieldGroup>
   );
 }
 

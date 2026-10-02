@@ -10,6 +10,7 @@ import {
 } from "@firebase-oss/ui-react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { MultiFactorInfo, UserCredential } from "firebase/auth";
+import type { ComponentProps } from "react";
 import { useRef, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -35,7 +36,7 @@ type PhoneMultiFactorInfo = MultiFactorInfo & {
 };
 
 type SmsMultiFactorAssertionPhoneFormProps = Omit<
-  React.ComponentProps<"div">,
+  ComponentProps<"div">,
   "onSubmit"
 > & {
   hint: MultiFactorInfo;
@@ -75,7 +76,7 @@ function SmsMultiFactorAssertionPhoneForm({
   };
 
   return (
-    <div className={cn(className)} {...props}>
+    <FieldGroup className={cn(className)} {...props}>
       <FieldGroup className="gap-4">
         <Field>
           <FieldTitle>{getTranslation(ui, "labels", "phoneNumber")}</FieldTitle>
@@ -96,12 +97,12 @@ function SmsMultiFactorAssertionPhoneForm({
           </Alert>
         )}
       </FieldGroup>
-    </div>
+    </FieldGroup>
   );
 }
 
 type SmsMultiFactorAssertionVerifyFormProps = Omit<
-  React.ComponentProps<"form">,
+  ComponentProps<"form">,
   "onSubmit"
 > & {
   verificationId: string;
@@ -201,7 +202,7 @@ function SmsMultiFactorAssertionVerifyForm({
   );
 }
 
-type SmsMfaAssertionFormProps = React.ComponentProps<"div"> & {
+type SmsMfaAssertionFormProps = ComponentProps<"div"> & {
   hint: MultiFactorInfo;
   onSuccess?: (credential: UserCredential) => void;
 };
@@ -217,7 +218,7 @@ function SmsMfaAssertionForm({
   } | null>(null);
 
   return (
-    <div className={cn(className)} {...props}>
+    <FieldGroup className={cn(className)} {...props}>
       {!verification ? (
         <SmsMultiFactorAssertionPhoneForm
           hint={hint}
@@ -231,7 +232,7 @@ function SmsMfaAssertionForm({
           }}
         />
       )}
-    </div>
+    </FieldGroup>
   );
 }
 

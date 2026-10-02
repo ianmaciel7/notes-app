@@ -12,20 +12,15 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { ArrowLeft } from "lucide-react";
 import type { ComponentProps } from "react";
 import { useState } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 
+import { AuthFormInput } from "@/components/notes-app/auth-form-input";
+import { Policies } from "@/components/notes-app/auth-policies-card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Field, FieldGroup } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { Policies } from "./auth-policies-card";
 
 type ForgotPasswordFormProps = Omit<ComponentProps<"form">, "onSubmit"> &
   FirebaseForgotPasswordAuthFormProps;
@@ -63,7 +58,7 @@ function ForgotPasswordForm({
 
   if (emailSent) {
     return (
-      <Alert data-slot="forgot-password-form">
+      <Alert>
         <AlertDescription>
           {getTranslation(ui, "messages", "checkEmailForReset")}
         </AlertDescription>
@@ -74,34 +69,18 @@ function ForgotPasswordForm({
   return (
     <FormProvider {...form}>
       <form
-        data-slot="forgot-password-form"
-        className={cn(className)}
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
+        className={cn(className)}
         {...props}
       >
         <FieldGroup>
-          <Controller
-            control={form.control}
+          <AuthFormInput
             name="email"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={!!fieldState.error}>
-                <FieldLabel htmlFor="email">
-                  {getTranslation(ui, "labels", "emailAddress")}
-                </FieldLabel>
-                <Input
-                  {...field}
-                  id="email"
-                  type="email"
-                  aria-invalid={!!fieldState.error}
-                />
-                {fieldState.error && (
-                  <FieldError>{fieldState.error.message}</FieldError>
-                )}
-              </Field>
-            )}
+            type="email"
+            label={getTranslation(ui, "labels", "emailAddress")}
           />
           <Policies />
           <Field>

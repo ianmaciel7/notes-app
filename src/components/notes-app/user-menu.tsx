@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { LanguageSelect } from "@/components/notes-app/language-select";
 import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
@@ -18,7 +19,6 @@ function UserMenu({ className, ...props }: UserMenuProps) {
   if (isLoading) {
     return (
       <Skeleton
-        data-slot="user-menu"
         data-testid="user-menu-loading"
         className={cn("h-8 w-24", className)}
         {...props}
@@ -28,8 +28,7 @@ function UserMenu({ className, ...props }: UserMenuProps) {
 
   if (!user) {
     return (
-      <div
-        data-slot="user-menu"
+      <ButtonGroup
         className={cn("flex items-center gap-3", className)}
         {...props}
       >
@@ -44,7 +43,7 @@ function UserMenu({ className, ...props }: UserMenuProps) {
           size="sm"
           variant="outline"
         />
-      </div>
+      </ButtonGroup>
     );
   }
 
@@ -54,8 +53,7 @@ function UserMenu({ className, ...props }: UserMenuProps) {
     (user.isAnonymous ? t("anonymous") : t("defaultUser"));
 
   return (
-    <div
-      data-slot="user-menu"
+    <ButtonGroup
       data-testid="user-menu"
       className={cn(
         "flex items-center gap-3 text-sm text-foreground",
@@ -78,7 +76,7 @@ function UserMenu({ className, ...props }: UserMenuProps) {
       >
         {t("signOut")}
       </Button>
-    </div>
+    </ButtonGroup>
   );
 }
 

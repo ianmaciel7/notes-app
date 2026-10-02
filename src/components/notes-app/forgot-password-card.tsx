@@ -6,15 +6,14 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { ComponentProps } from "react";
+import { AuthCard } from "@/components/notes-app/auth-card";
 import { ForgotPasswordForm } from "@/components/notes-app/forgot-password-form";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
 type ForgotPasswordCardProps = FirebaseForgotPasswordAuthScreenProps &
   Omit<ComponentProps<"div">, "children">;
@@ -22,7 +21,6 @@ type ForgotPasswordCardProps = FirebaseForgotPasswordAuthScreenProps &
 function ForgotPasswordCard({
   onPasswordSent,
   onBackToSignInClick,
-  className,
   ref,
   ...props
 }: ForgotPasswordCardProps) {
@@ -32,14 +30,11 @@ function ForgotPasswordCard({
   const subtitleText = getTranslation(ui, "prompts", "enterEmailToReset");
 
   return (
-    <Card
-      ref={ref}
-      data-slot="forgot-password-card"
-      className={cn("w-full max-w-sm mx-auto", className)}
-      {...props}
-    >
+    <AuthCard ref={ref} {...props}>
       <CardHeader>
-        <CardTitle>{titleText}</CardTitle>
+        <CardTitle>
+          <h1>{titleText}</h1>
+        </CardTitle>
         <CardDescription>{subtitleText}</CardDescription>
       </CardHeader>
       <CardContent>
@@ -48,7 +43,7 @@ function ForgotPasswordCard({
           onBackToSignInClick={onBackToSignInClick}
         />
       </CardContent>
-    </Card>
+    </AuthCard>
   );
 }
 

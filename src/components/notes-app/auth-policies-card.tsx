@@ -1,7 +1,11 @@
 import { getTranslation } from "@firebase-oss/ui-core";
 import { PolicyContext, type PolicyURL, useUI } from "@firebase-oss/ui-react";
-import type { ComponentProps, PropsWithChildren } from "react";
-import { use } from "react";
+import {
+  type ComponentProps,
+  Fragment,
+  type PropsWithChildren,
+  use,
+} from "react";
 import { Button } from "@/components/ui/button";
 import { FieldDescription } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
@@ -64,7 +68,6 @@ function AuthPoliciesCard({ className, ...props }: AuthPoliciesCardProps) {
 
   return (
     <FieldDescription
-      data-slot="auth-policies-card"
       className={cn("text-muted-foreground text-center text-xs", className)}
       {...props}
     >
@@ -93,7 +96,7 @@ function AuthPoliciesCard({ className, ...props }: AuthPoliciesCardProps) {
           );
         }
 
-        return <span key={key}>{part}</span>;
+        return <Fragment key={key}>{part}</Fragment>;
       })}
     </FieldDescription>
   );

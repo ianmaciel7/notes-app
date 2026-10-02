@@ -3,7 +3,12 @@
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentProps, ReactNode } from "react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -14,6 +19,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 type SpacesStatusProps = ComponentProps<"div"> & {
@@ -38,36 +44,36 @@ function SpacesStatus({
   const t = useTranslations("spaces");
   if (error) {
     return (
-      <div
+      <Alert
         data-testid="spaces-status-error"
-        className={cn(
-          "mx-auto flex w-full max-w-sm flex-col items-center justify-center gap-3",
-          className,
-        )}
+        variant="destructive"
+        role="alert"
+        aria-live="assertive"
+        className={cn("mx-auto w-full max-w-sm", className)}
         {...props}
       >
-        <Alert variant="destructive" role="alert" aria-live="assertive">
-          <AlertCircle data-icon="inline-start" />
-          <AlertTitle>{t("connectionError")}</AlertTitle>
-          <AlertDescription>
-            {t(isOffline ? "offlineDescription" : "databaseErrorDescription")}
-          </AlertDescription>
-        </Alert>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onRetry}
-          data-testid="spaces-status-retry-btn"
-        >
-          <RefreshCw data-icon="inline-start" />
-          {t("retryConnection")}
-        </Button>
-      </div>
+        <AlertCircle />
+        <AlertTitle>{t("connectionError")}</AlertTitle>
+        <AlertDescription>
+          {t(isOffline ? "offlineDescription" : "databaseErrorDescription")}
+        </AlertDescription>
+        <AlertAction>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onRetry}
+            data-testid="spaces-status-retry-btn"
+          >
+            <RefreshCw data-icon="inline-start" />
+            {t("retryConnection")}
+          </Button>
+        </AlertAction>
+      </Alert>
     );
   }
   if (loading) {
     return (
-      <div
+      <Empty
         data-testid="spaces-status-loading"
         className={cn(
           "flex items-center justify-center p-4 text-xs text-muted-foreground",
@@ -75,14 +81,17 @@ function SpacesStatus({
         )}
         {...props}
       >
-        <output className="sr-only">{t("loading")}</output>
+        <EmptyMedia variant="icon">
+          <Spinner />
+        </EmptyMedia>
+        <EmptyDescription className="sr-only">{t("loading")}</EmptyDescription>
         <Skeleton className="h-4 w-24" />
-      </div>
+      </Empty>
     );
   }
   if (notFound) {
     return (
-      <div
+      <Empty
         data-testid="spaces-status-not-found"
         className={cn("flex flex-1 items-center justify-center p-8", className)}
         {...props}
@@ -106,7 +115,7 @@ function SpacesStatus({
             </Button>
           </EmptyContent>
         </Empty>
-      </div>
+      </Empty>
     );
   }
   return null;

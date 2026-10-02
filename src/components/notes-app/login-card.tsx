@@ -7,18 +7,15 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { UserCredential } from "firebase/auth";
-import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
+import { AuthCard, AuthCardProviders } from "@/components/notes-app/auth-card";
+import { LoginForm } from "@/components/notes-app/login-form";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { FieldGroup, FieldSeparator } from "@/components/ui/field";
-import { cn } from "@/lib/utils";
-import { LoginForm } from "./login-form";
 
 type LoginCardProps = FirebaseSignInAuthScreenProps &
   Omit<ComponentProps<"div">, "children">;
@@ -28,12 +25,9 @@ function LoginCard({
   onSignIn,
   onForgotPasswordClick,
   onSignUpClick,
-  className,
-  ref,
   ...props
 }: LoginCardProps) {
   const ui = useUI();
-  const t = useTranslations("auth");
 
   const titleText = getTranslation(ui, "labels", "signIn");
   const subtitleText = getTranslation(ui, "prompts", "signInToAccount");
@@ -41,12 +35,7 @@ function LoginCard({
   useOnUserAuthenticated(onSignIn);
 
   return (
-    <Card
-      ref={ref}
-      data-slot="login-card"
-      className={cn("w-full max-w-sm mx-auto", className)}
-      {...props}
-    >
+    <AuthCard {...props}>
       <CardHeader>
         <CardTitle>
           <h1>{titleText}</h1>
@@ -59,16 +48,9 @@ function LoginCard({
           onForgotPasswordClick={onForgotPasswordClick}
           onSignUpClick={onSignUpClick}
         />
-        {children ? (
-          <FieldGroup className="pt-1">
-            <FieldSeparator className="uppercase [&>span]:bg-card">
-              {t("orContinueWith")}
-            </FieldSeparator>
-            <FieldGroup className="gap-2.5">{children}</FieldGroup>
-          </FieldGroup>
-        ) : null}
+        {children ? <AuthCardProviders>{children}</AuthCardProviders> : null}
       </CardContent>
-    </Card>
+    </AuthCard>
   );
 }
 

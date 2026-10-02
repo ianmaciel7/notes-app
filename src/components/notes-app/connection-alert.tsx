@@ -91,7 +91,6 @@ function ConnectionAlert({
       value={{ onReconnect: handleReconnect, reconnecting }}
     >
       <Alert
-        data-slot="connection-alert"
         variant="destructive"
         aria-live="assertive"
         aria-atomic="true"

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { type ComponentProps, useTransition } from "react";
+import { ButtonGroup } from "@/components/ui/button-group";
 import {
   Select,
   SelectContent,
@@ -19,7 +20,7 @@ import {
 } from "@/lib/i18n/locale-sync";
 import { cn } from "@/lib/utils";
 
-type LanguageSelectProps = ComponentProps<"div">;
+type LanguageSelectProps = ComponentProps<typeof ButtonGroup>;
 
 function LanguageSelect({ className, ...props }: LanguageSelectProps) {
   const currentLocale = useLocale();
@@ -40,7 +41,7 @@ function LanguageSelect({ className, ...props }: LanguageSelectProps) {
   };
 
   return (
-    <div
+    <ButtonGroup
       data-testid="language-select-container"
       className={cn(
         "flex items-center gap-1 text-xs text-muted-foreground",
@@ -74,7 +75,7 @@ function LanguageSelect({ className, ...props }: LanguageSelectProps) {
           </SelectGroup>
         </SelectContent>
       </Select>
-    </div>
+    </ButtonGroup>
   );
 }
 

@@ -21,7 +21,7 @@ type SpacesEmptyProps = ComponentProps<"div"> & {
 function SpacesEmpty({ onCreate, className, ...props }: SpacesEmptyProps) {
   const t = useTranslations("spaces");
   return (
-    <div
+    <Empty
       data-testid="spaces-empty"
       className={cn("flex flex-1 items-center justify-center p-8", className)}
       {...props}
@@ -45,7 +45,7 @@ function SpacesEmpty({ onCreate, className, ...props }: SpacesEmptyProps) {
           </Button>
         </EmptyContent>
       </Empty>
-    </div>
+    </Empty>
   );
 }
 

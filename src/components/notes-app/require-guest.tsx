@@ -1,7 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { PropsWithChildren, ReactNode } from "react";
-import { Empty, EmptyMedia } from "@/components/ui/empty";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { useRequireGuest } from "@/hooks/use-require-guest";
 
@@ -15,19 +21,19 @@ function RequireGuest({
   fallback,
   redirectTo = "/",
 }: RequireGuestProps) {
+  const t = useTranslations("spaces");
   const { user, isLoading } = useRequireGuest(redirectTo);
 
   if (isLoading) {
     return (
       fallback ?? (
-        <Empty
-          data-slot="require-guest"
-          data-testid="require-guest-loading"
-          className="h-full min-h-64 p-8"
-        >
-          <EmptyMedia>
-            <Spinner className="size-8" />
-          </EmptyMedia>
+        <Empty data-testid="require-guest-loading">
+          <EmptyHeader>
+            <EmptyMedia>
+              <Spinner />
+            </EmptyMedia>
+            <EmptyTitle>{t("loading")}</EmptyTitle>
+          </EmptyHeader>
         </Empty>
       )
     );

@@ -8,19 +8,16 @@ import {
 } from "@firebase-oss/ui-react";
 import type { UserCredential } from "firebase/auth";
 import type { ComponentProps } from "react";
+import { AuthCard, AuthCardProviders } from "@/components/notes-app/auth-card";
 import { EmailLinkAuthForm } from "@/components/notes-app/email-link-form";
 import { MfaAssertionCard } from "@/components/notes-app/mfa-assertion-card";
 import { RedirectError } from "@/components/notes-app/redirect-error-alert";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { FieldGroup } from "@/components/ui/field";
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 
 type EmailLinkCardProps = FirebaseEmailLinkAuthScreenProps &
   Omit<ComponentProps<"div">, "children">;
@@ -29,7 +26,6 @@ function EmailLinkCard({
   children,
   onSignIn,
   onEmailSent,
-  className,
   ref,
   ...props
 }: EmailLinkCardProps) {
@@ -45,14 +41,11 @@ function EmailLinkCard({
   }
 
   return (
-    <Card
-      ref={ref}
-      data-slot="email-link-card"
-      className={cn("w-full max-w-sm mx-auto", className)}
-      {...props}
-    >
+    <AuthCard ref={ref} {...props}>
       <CardHeader>
-        <CardTitle>{titleText}</CardTitle>
+        <CardTitle>
+          <h1>{titleText}</h1>
+        </CardTitle>
         <CardDescription>{subtitleText}</CardDescription>
       </CardHeader>
       <CardContent>
@@ -61,16 +54,13 @@ function EmailLinkCard({
           onEmailSent={onEmailSent}
         />
         {children ? (
-          <>
-            <Separator className="my-4" />
-            <FieldGroup className="gap-2">
-              {children}
-              <RedirectError />
-            </FieldGroup>
-          </>
+          <AuthCardProviders>
+            {children}
+            <RedirectError />
+          </AuthCardProviders>
         ) : null}
       </CardContent>
-    </Card>
+    </AuthCard>
   );
 }
 

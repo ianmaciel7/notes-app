@@ -11,19 +11,14 @@ import {
 } from "@firebase-oss/ui-react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { ComponentProps } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
+import { AuthFormInput } from "@/components/notes-app/auth-form-input";
+import { Policies } from "@/components/notes-app/auth-policies-card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Field, FieldGroup } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { Policies } from "./auth-policies-card";
 
 type SignUpFormProps = Omit<ComponentProps<"form">, "onSubmit"> &
   FirebaseSignUpAuthFormProps;
@@ -65,75 +60,29 @@ function SignUpForm({
   return (
     <FormProvider {...form}>
       <form
-        data-slot="sign-up-form"
-        className={cn(className)}
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
+        className={cn(className)}
         {...props}
       >
         <FieldGroup>
           {requireDisplayName ? (
-            <Controller
-              control={form.control}
+            <AuthFormInput
               name="displayName"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={!!fieldState.error}>
-                  <FieldLabel htmlFor="displayName">
-                    {getTranslation(ui, "labels", "displayName")}
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="displayName"
-                    aria-invalid={!!fieldState.error}
-                  />
-                  {fieldState.error && (
-                    <FieldError>{fieldState.error.message}</FieldError>
-                  )}
-                </Field>
-              )}
+              label={getTranslation(ui, "labels", "displayName")}
             />
           ) : null}
-          <Controller
-            control={form.control}
+          <AuthFormInput
             name="email"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={!!fieldState.error}>
-                <FieldLabel htmlFor="email">
-                  {getTranslation(ui, "labels", "emailAddress")}
-                </FieldLabel>
-                <Input
-                  {...field}
-                  id="email"
-                  type="email"
-                  aria-invalid={!!fieldState.error}
-                />
-                {fieldState.error && (
-                  <FieldError>{fieldState.error.message}</FieldError>
-                )}
-              </Field>
-            )}
+            type="email"
+            label={getTranslation(ui, "labels", "emailAddress")}
           />
-          <Controller
-            control={form.control}
+          <AuthFormInput
             name="password"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={!!fieldState.error}>
-                <FieldLabel htmlFor="password">
-                  {getTranslation(ui, "labels", "password")}
-                </FieldLabel>
-                <Input
-                  {...field}
-                  id="password"
-                  type="password"
-                  aria-invalid={!!fieldState.error}
-                />
-                {fieldState.error && (
-                  <FieldError>{fieldState.error.message}</FieldError>
-                )}
-              </Field>
-            )}
+            type="password"
+            label={getTranslation(ui, "labels", "password")}
           />
           <Policies />
           <Field>

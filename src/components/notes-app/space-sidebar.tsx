@@ -9,6 +9,7 @@ import { SpaceSwitcherMenu } from "@/components/notes-app/space-switcher";
 import { SpacesList } from "@/components/notes-app/spaces-list";
 import { SpacesStatus } from "@/components/notes-app/spaces-status";
 import { Badge } from "@/components/ui/badge";
+import { Empty, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
 import {
   Sidebar,
   SidebarContent,
@@ -68,12 +69,15 @@ function SpaceSidebar({
   );
   if (authLoading)
     return (
-      <div
+      <Empty
         className="flex min-h-svh w-full items-center justify-center"
-        data-slot="space-sidebar"
+        data-testid="space-sidebar-loading"
       >
-        <Spinner className="size-8" aria-label={t("loading")} />
-      </div>
+        <EmptyMedia variant="icon">
+          <Spinner className="size-8" aria-label={t("loading")} />
+        </EmptyMedia>
+        <EmptyDescription className="sr-only">{t("loading")}</EmptyDescription>
+      </Empty>
     );
   if (!user || error || loading) return status;
   const handleSelect = (spaceId: string) =>
@@ -91,7 +95,6 @@ function SpaceSidebar({
   return (
     <SidebarProvider
       data-testid="space-sidebar"
-      data-slot="space-sidebar"
       className={cn("min-h-svh", className)}
       {...props}
     >

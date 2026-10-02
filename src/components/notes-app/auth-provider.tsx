@@ -79,4 +79,4 @@ function useAuthProviderState(initialUser: User | null) {
   return { user, isLoading };
 }
 
-export { AuthProvider, type AuthProviderProps, useAuthProviderState };
+export { AuthProvider, type AuthProviderProps };

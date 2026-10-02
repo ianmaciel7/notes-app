@@ -21,16 +21,16 @@ import type { UserCredential } from "firebase/auth";
 import type { ComponentProps } from "react";
 import { useRef, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
+import { AuthFormErrorAlert } from "@/components/notes-app/auth-form-error-alert";
 import { Policies } from "@/components/notes-app/auth-policies-card";
+import { AuthSubmitButton } from "@/components/notes-app/auth-submit-button";
 import {
   CountrySelect,
   type CountrySelectorRef,
 } from "@/components/notes-app/country-select";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { VerificationCodeInput } from "@/components/notes-app/verification-code-input";
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -40,12 +40,6 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
-import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 type VerifyPhoneNumberFormProps = Omit<ComponentProps<"form">, "onSubmit"> & {
@@ -88,57 +82,22 @@ function VerifyPhoneNumberForm({
   return (
     <FormProvider {...form}>
       <form
-        {...props}
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
         className={cn("flex flex-col gap-4", className)}
+        {...props}
       >
         <FieldGroup>
-          <Controller
-            control={form.control}
-            name="verificationCode"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={!!fieldState.error}>
-                <FieldLabel htmlFor="verificationCode">
-                  {getTranslation(ui, "labels", "verificationCode")}
-                </FieldLabel>
-                <FieldDescription>
-                  {getTranslation(ui, "prompts", "smsVerificationPrompt")}
-                </FieldDescription>
-                <InputOTP
-                  id="verificationCode"
-                  maxLength={6}
-                  {...field}
-                  aria-invalid={!!fieldState.error}
-                >
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
-                {fieldState.error && (
-                  <FieldError>{fieldState.error.message}</FieldError>
-                )}
-              </Field>
-            )}
+          <VerificationCodeInput
+            label={getTranslation(ui, "labels", "verificationCode")}
+            description={getTranslation(ui, "prompts", "smsVerificationPrompt")}
           />
-          <Button type="submit" disabled={ui.state !== "idle"}>
-            {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
+          <AuthSubmitButton type="submit" busy={ui.state !== "idle"}>
             {getTranslation(ui, "labels", "verifyCode")}
-          </Button>
-          {form.formState.errors.root && (
-            <Alert variant="destructive">
-              <AlertDescription>
-                {form.formState.errors.root.message}
-              </AlertDescription>
-            </Alert>
-          )}
+          </AuthSubmitButton>
+          <AuthFormErrorAlert message={form.formState.errors.root?.message} />
         </FieldGroup>
       </form>
     </FormProvider>
@@ -198,12 +157,12 @@ function PhoneNumberForm({
   return (
     <FormProvider {...form}>
       <form
-        {...props}
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
         }}
         className={cn("flex flex-col gap-4", className)}
+        {...props}
       >
         <FieldGroup>
           <Controller
@@ -233,17 +192,10 @@ function PhoneNumberForm({
           />
           <div ref={recaptchaContainerRef} />
           <Policies />
-          <Button type="submit" disabled={ui.state !== "idle"}>
-            {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
+          <AuthSubmitButton type="submit" busy={ui.state !== "idle"}>
             {getTranslation(ui, "labels", "sendCode")}
-          </Button>
-          {form.formState.errors.root && (
-            <Alert variant="destructive">
-              <AlertDescription>
-                {form.formState.errors.root.message}
-              </AlertDescription>
-            </Alert>
-          )}
+          </AuthSubmitButton>
+          <AuthFormErrorAlert message={form.formState.errors.root?.message} />
         </FieldGroup>
       </form>
     </FormProvider>

@@ -8,6 +8,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -40,11 +41,7 @@ function SpaceSwitcherMenu({
 }: SpaceSwitcherMenuProps) {
   const t = useTranslations("spaces");
   return (
-    <SidebarMenu
-      aria-label={t("workspace")}
-      data-slot="space-switcher"
-      {...props}
-    >
+    <SidebarMenu aria-label={t("workspace")} {...props}>
       <SidebarMenuItem>
         {spaces.length > 0 ? (
           <DropdownMenu>
@@ -68,6 +65,7 @@ function SpaceSwitcherMenu({
               className="min-w-60"
             >
               <DropdownMenuGroup>
+                <DropdownMenuLabel>{t("workspace")}</DropdownMenuLabel>
                 {visibleSpaces.length > 0 ? (
                   visibleSpaces.map((space) => (
                     <DropdownMenuItem

@@ -6,39 +6,36 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { ComponentProps } from "react";
+import { AuthCard } from "@/components/notes-app/auth-card";
 import { MfaEnrollmentForm } from "@/components/notes-app/mfa-enrollment-form";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
 type MfaEnrollmentCardProps = FirebaseMultiFactorAuthEnrollmentFormProps &
   Omit<ComponentProps<"div">, "children">;
 
-function MfaEnrollmentCard({ className, ...props }: MfaEnrollmentCardProps) {
+function MfaEnrollmentCard({ ...props }: MfaEnrollmentCardProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "multiFactorEnrollment");
   const subtitleText = getTranslation(ui, "prompts", "mfaEnrollmentPrompt");
 
   return (
-    <Card
-      data-slot="mfa-enrollment-card"
-      className={cn("w-full max-w-sm mx-auto", className)}
-      {...props}
-    >
+    <AuthCard {...props}>
       <CardHeader>
-        <CardTitle>{titleText}</CardTitle>
+        <CardTitle>
+          <h1>{titleText}</h1>
+        </CardTitle>
         <CardDescription>{subtitleText}</CardDescription>
       </CardHeader>
       <CardContent>
         <MfaEnrollmentForm {...props} />
       </CardContent>
-    </Card>
+    </AuthCard>
   );
 }
 

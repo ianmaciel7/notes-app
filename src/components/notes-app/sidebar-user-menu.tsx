@@ -13,6 +13,7 @@ import { useTheme } from "next-themes";
 import type { ComponentProps } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -73,71 +74,79 @@ function SidebarUserMenu({
   const userIdentifier = user.displayName || user.email || userName;
 
   return (
-    <div className={cn("flex items-center gap-1 pr-1.5", className)} {...props}>
-      <SidebarMenu aria-label={t("openUserMenu")} className="min-w-0 flex-1">
-        <SidebarMenuItem>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <SidebarMenuButton aria-label={t("openUserMenu")}>
-                  <UserRound />
-                  <span className="min-w-0 truncate">{userIdentifier}</span>
-                  <ChevronsUpDown className="ml-auto text-muted-foreground" />
-                </SidebarMenuButton>
-              }
-            />
-            <DropdownMenuContent
-              side="top"
-              align="start"
-              sideOffset={6}
-              className="min-w-60 p-2"
-            >
-              <DropdownMenuGroup>
-                <DropdownMenuLabel className="p-0">
-                  <Item size="xs">
-                    <ItemMedia>
-                      <UserAvatar
-                        displayName={userIdentifier}
-                        photoUrl={user.photoURL}
-                      />
-                    </ItemMedia>
-                    <ItemContent>
-                      <ItemTitle>{userName}</ItemTitle>
-                      {user.email && (
-                        <ItemDescription>{user.email}</ItemDescription>
-                      )}
-                    </ItemContent>
-                  </Item>
-                </DropdownMenuLabel>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator className="mx-0" />
-              <DropdownMenuGroup>
-                <DropdownMenuItem onClick={onSignOut}>
-                  <LogOut />
-                  {authT("signOut")}
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </SidebarMenuItem>
-      </SidebarMenu>
-      <Button
-        variant="ghost"
-        size="icon-xs"
-        onClick={onOpenSettings}
-        aria-label={settingsT("settings")}
-      >
-        <Settings />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon-xs"
-        onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-        aria-label={settingsT("darkMode")}
-      >
-        <Moon />
-      </Button>
-    </div>
+    <SidebarMenu
+      className={cn("items-center gap-1 pr-1.5", className)}
+      aria-label={t("openUserMenu")}
+      {...props}
+    >
+      <SidebarMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <SidebarMenuButton aria-label={t("openUserMenu")}>
+                <UserRound />
+                <span className="min-w-0 truncate">{userIdentifier}</span>
+                <ChevronsUpDown className="ml-auto text-muted-foreground" />
+              </SidebarMenuButton>
+            }
+          />
+          <DropdownMenuContent
+            side="top"
+            align="start"
+            sideOffset={6}
+            className="min-w-60 p-2"
+          >
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="p-0">
+                <Item size="xs">
+                  <ItemMedia>
+                    <UserAvatar
+                      displayName={userIdentifier}
+                      photoUrl={user.photoURL}
+                    />
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemTitle>{userName}</ItemTitle>
+                    {user.email && (
+                      <ItemDescription>{user.email}</ItemDescription>
+                    )}
+                  </ItemContent>
+                </Item>
+              </DropdownMenuLabel>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator className="mx-0" />
+            <DropdownMenuGroup>
+              <DropdownMenuItem onClick={onSignOut}>
+                <LogOut />
+                {authT("signOut")}
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarMenuItem>
+      <SidebarMenuItem>
+        <ButtonGroup>
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            onClick={onOpenSettings}
+            aria-label={settingsT("settings")}
+          >
+            <Settings />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            onClick={() =>
+              setTheme(resolvedTheme === "dark" ? "light" : "dark")
+            }
+            aria-label={settingsT("darkMode")}
+          >
+            <Moon />
+          </Button>
+        </ButtonGroup>
+      </SidebarMenuItem>
+    </SidebarMenu>
   );
 }
 

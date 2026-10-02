@@ -4,19 +4,16 @@ import { getTranslation } from "@firebase-oss/ui-core";
 import { useOnUserAuthenticated, useUI } from "@firebase-oss/ui-react";
 import type { User } from "firebase/auth";
 import type { ComponentProps, PropsWithChildren } from "react";
+import { AuthCard, AuthCardProviders } from "@/components/notes-app/auth-card";
 import { MfaAssertionCard } from "@/components/notes-app/mfa-assertion-card";
 import { PhoneAuthForm } from "@/components/notes-app/phone-auth-form";
 import { RedirectError } from "@/components/notes-app/redirect-error-alert";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { FieldGroup } from "@/components/ui/field";
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 
 type PhoneAuthCardProps = PropsWithChildren<
   Omit<ComponentProps<"div">, "children">
@@ -24,12 +21,7 @@ type PhoneAuthCardProps = PropsWithChildren<
   onSignIn?: (user: User) => void;
 };
 
-function PhoneAuthCard({
-  children,
-  onSignIn,
-  className,
-  ...props
-}: PhoneAuthCardProps) {
+function PhoneAuthCard({ children, onSignIn, ...props }: PhoneAuthCardProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "signIn");
@@ -42,28 +34,23 @@ function PhoneAuthCard({
   }
 
   return (
-    <Card
-      data-slot="phone-auth-card"
-      className={cn("w-full max-w-sm mx-auto", className)}
-      {...props}
-    >
+    <AuthCard {...props}>
       <CardHeader>
-        <CardTitle>{titleText}</CardTitle>
+        <CardTitle>
+          <h1>{titleText}</h1>
+        </CardTitle>
         <CardDescription>{subtitleText}</CardDescription>
       </CardHeader>
       <CardContent>
         <PhoneAuthForm />
         {children ? (
-          <>
-            <Separator className="my-4" />
-            <FieldGroup className="gap-2">
-              {children}
-              <RedirectError />
-            </FieldGroup>
-          </>
+          <AuthCardProviders>
+            {children}
+            <RedirectError />
+          </AuthCardProviders>
         ) : null}
       </CardContent>
-    </Card>
+    </AuthCard>
   );
 }
 

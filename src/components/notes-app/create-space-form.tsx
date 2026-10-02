@@ -134,7 +134,7 @@ function CreateSpaceForm({
         </Field>
       </FieldGroup>
 
-      <div className="flex justify-end gap-2 pt-2">
+      <Field orientation="horizontal" className="justify-end pt-2">
         {onCancel && (
           <Button
             type="button"
@@ -154,7 +154,7 @@ function CreateSpaceForm({
           {isLoading && <Spinner data-icon="inline-start" />}
           {isLoading ? t("creating") : t("createSpace")}
         </Button>
-      </div>
+      </Field>
     </form>
   );
 }

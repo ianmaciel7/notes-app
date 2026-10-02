@@ -2,6 +2,12 @@
 
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "@/components/ui/item";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
@@ -16,18 +22,18 @@ function AuthGreetingHeader({ className, ...props }: AuthGreetingHeaderProps) {
     (user?.email ? user.email.split("@")[0] : t("defaultUser"));
 
   return (
-    <div
-      data-slot="auth-greeting-header"
-      className={cn("flex flex-col gap-2", className)}
-      {...props}
-    >
-      <h1 className="text-2xl font-bold tracking-tight text-foreground">
-        {user ? t("userGreeting", { name: userName }) : t("guestGreeting")}
-      </h1>
-      <p className="text-sm text-muted-foreground">
-        {user ? t("userDescription") : t("guestDescription")}
-      </p>
-    </div>
+    <Item className={cn("flex flex-col gap-2", className)} {...props}>
+      <ItemContent>
+        <ItemTitle className="text-2xl font-bold tracking-tight text-foreground">
+          <h1>
+            {user ? t("userGreeting", { name: userName }) : t("guestGreeting")}
+          </h1>
+        </ItemTitle>
+        <ItemDescription className="text-sm text-muted-foreground">
+          {user ? t("userDescription") : t("guestDescription")}
+        </ItemDescription>
+      </ItemContent>
+    </Item>
   );
 }
 

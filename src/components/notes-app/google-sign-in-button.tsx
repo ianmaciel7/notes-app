@@ -32,7 +32,6 @@ function GoogleSignInButton({
       type="button"
       variant="outline"
       size="lg"
-      data-slot="google-sign-in-button"
       className={cn("w-full", className)}
       {...props}
     >
