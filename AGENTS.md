@@ -149,11 +149,12 @@ Before changing code:
 2. For Next.js work, follow the generated Next.js instructions at the top of this file.
 3. For third-party behavior, use the applicable documentation skill before relying on
    memory.
-4. **shadcn-first for UI**: Always prefer existing shadcn/ui components (`src/components/ui/`) before writing custom markup or ad-hoc wrappers. Compose existing primitives (`FieldGroup`, `Card`, `Button`, `Badge`, `Alert`, etc.) and search registries (`rtk pnpm dlx shadcn@latest search`) before building from scratch.
+4. **shadcn-first for UI**: Always prefer existing shadcn/ui components (`src/components/ui/`) before writing custom markup or ad-hoc wrappers. Application components stay simple and domain-named; they may compose any appropriate primitive internally without mirroring its filename. Use Base UI `render` for behavioral element composition instead of custom `renderX`/`asChild` APIs, and search registries (`rtk pnpm dlx shadcn@latest search`) before building from scratch.
 
 While changing code:
 
 - Follow existing patterns and the canonical owner for the affected context.
+- Dedicated component hooks own stateful behavior: if `Component` has `useComponent`, keep its component-owned state/effects/refs/transitions/navigation and derived handlers in that hook; keep the component focused on rendering and composition.
 - Prefer focused edits; do not edit generated outputs directly.
 - Keep affected canonical documentation aligned with the implementation.
 - When an execution plan is active, follow the lifecycle in `.agents/skills/implement/SKILL.md`.

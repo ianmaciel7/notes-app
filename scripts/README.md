@@ -2,7 +2,7 @@
 
 This directory contains deterministic repository automation. The canonical tool inventory and command surface live in [`TOOLING.md`](../TOOLING.md) and `package.json`.
 
-- `guards/`: blocking repository policy and architecture checks.
+- `guards/`: blocking repository policy and architecture checks. Project guards are the last resort for repository-specific invariants; prefer Biome, TypeScript, dependency-cruiser, Knip, and tests when a standard tool owns the concern.
 - `hooks/`: agent/editor hook adapters and hook-specific shared logic.
 - `verify/`: cross-cutting verification and health orchestration.
 - `tooling/`: adapters around external CLIs.

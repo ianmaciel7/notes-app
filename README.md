@@ -32,6 +32,20 @@ For contribution checks and pull-request expectations, use
 [`CONTRIBUTING.md`](./CONTRIBUTING.md). AI coding agents should start with
 [`AGENTS.md`](./AGENTS.md).
 
+### Local verification
+
+Biome is the repository's only formatter/linter for project-owned code.
+`src/components/ui/` is registry-managed and excluded from the project-wide
+style gate. Git hooks keep normal local feedback incremental:
+
+```bash
+rtk pnpm check:push
+rtk pnpm check:fast
+```
+
+Use `check:push` for the pre-push-sized gate and `check:fast` at task end or
+handoff. `check:ci` is the complete deterministic verification surface.
+
 ## Documentation
 
 - [`INTENT.md`](./INTENT.md) — product purpose, scope, non-goals, and open questions
