@@ -34,14 +34,15 @@ test("rejects raw interactive controls", () => {
   );
 });
 
-test("keeps the file suffix aligned with the root surface", () => {
-  const violations = checkFile(
-    "settings-field-group.tsx",
-    `import { Field } from "@/components/ui/field";
-     function SettingsFieldGroup() { return <Field data-slot="settings-field-group" />; }`,
-  );
+test("allows semantic form roles over FieldGroup composition", () => {
+  const source = `
+    import { FieldGroup } from "@/components/ui/field";
+    function SettingsForm() {
+      return <FieldGroup data-slot="settings-form"><span /></FieldGroup>;
+    }
+  `;
 
-  assert.ok(violations.some((item) => item.rule === "notes-app-surface-root"));
+  assert.deepEqual(checkFile("settings-form.tsx", source), []);
 });
 
 test("accepts a simple dialog wrapper without custom compound parts", () => {
@@ -165,6 +166,27 @@ test("dedicated component hooks own React state and effects", () => {
 
   assert.ok(
     violations.some(
+      (item) => item.rule === "notes-app-dedicated-hook-owns-state",
+    ),
+  );
+});
+
+test("allows stateful primitives inside the co-located dedicated hook", () => {
+  const source = `
+    import { useTransition } from "react";
+    import { Select } from "@/components/ui/select";
+    function LanguageSelect() {
+      const { isPending } = useLanguageSelect();
+      return <Select data-slot="language-select" disabled={isPending} />;
+    }
+    function useLanguageSelect() {
+      const [isPending] = useTransition();
+      return { isPending };
+    }
+  `;
+
+  assert.ok(
+    !checkFile("language-select.tsx", source).some(
       (item) => item.rule === "notes-app-dedicated-hook-owns-state",
     ),
   );
