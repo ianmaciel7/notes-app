@@ -7,14 +7,14 @@
 
 ## Objective
 
-Establish basic authentication using Firebase Auth and Firebase Local Emulator (`port: 9099`, UI on `port: 4000`), adhering directly to native Firebase nomenclature (`User`, `AuthProvider`, `useAuth`, `RequireAuth`), using application components in `src/components/notes-app/`, integrating with existing `@firebase-oss/ui-react` components in `src/components/firebase/`, complete with accessible UI primitives, seed data, Vitest integration tests, and Playwright E2E verification.
+Establish basic authentication using Firebase Auth and Firebase Local Emulator (`port: 9099`, UI on `port: 4000`), adhering directly to native Firebase nomenclature (`User`, `AuthProvider`, `useAuth`, `RequireAuth`), using application components in `src/components/notes-app/`, integrating directly with `@firebase-oss/ui-core` and `@firebase-oss/ui-react`, complete with accessible UI primitives, seed data, Vitest integration tests, and Playwright E2E verification.
 
 ## Scope
 
 ### In Scope
 - `firebase.json` emulator configuration for Auth (`9099`) and Emulator UI (`4000`).
 - Firebase client initialization in `src/lib/firebase/client.ts` with idempotent `connectAuthEmulator`.
-- Treat `src/components/firebase/` as an immutable vendor drop (0 modifications allowed).
+- Treat the former local Firebase registry mirror as an immutable vendor drop (0 modifications allowed).
 - Copy and adapt necessary auth forms and screens (`SignInAuthScreen`, `SignUpAuthScreen`, `SignInAuthForm`, `SignUpAuthForm`, `Policies`) into `src/components/notes-app/`.
 - React Context & State Management in `src/components/notes-app/` (`auth-provider.tsx`, `require-auth.tsx`, `user-menu.tsx`) and hooks in `src/hooks/use-auth.ts`, `src/hooks/use-require-auth.ts` using React 19 `use(AuthContext)`.
 - Dedicated Next.js App Router login surface: `src/app/(auth)/login/page.tsx` composing adapted screens from `src/components/notes-app/`.
@@ -42,7 +42,7 @@ Establish basic authentication using Firebase Auth and Firebase Local Emulator (
 
 - [x] Step 1: Configure `firebase.json` for Auth emulator (port 9099) and Emulator UI (port 4000), and add emulator npm scripts in `package.json`.
 - [x] Step 2: Implement Firebase client initialization in `src/lib/firebase/client.ts` with environment-aware emulator connection.
-- [x] Step 3: Enforce `src/components/firebase/` as immutable vendor drop; copy and adapt auth forms/screens to `src/components/notes-app/` with full type safety.
+- [x] Step 3: Enforce the former local Firebase registry mirror as immutable vendor drop; copy and adapt auth forms/screens to `src/components/notes-app/` with full type safety.
 - [x] Step 4: Implement Auth state provider in `src/components/notes-app/auth-provider.tsx`, hooks in `src/hooks/use-auth.ts` and `src/hooks/use-require-auth.ts`, and components (`require-auth.tsx`, `user-menu.tsx`) using native `User` types and React 19 `use()`.
 - [x] Step 5: Build accessible login and registration UI in `src/app/(auth)/login/page.tsx` integrating with adapted screens in `src/components/notes-app/`.
 - [x] Step 6: Create seed export/import structure in `.firebase/seeds/` with test accounts.
@@ -56,7 +56,7 @@ Establish basic authentication using Firebase Auth and Firebase Local Emulator (
 - 2026-09-28 — Initial design interview completed via grilling and domain modeling. Native Firebase `User` nomenclature adopted in `CONTEXT.md`. Path updated to `src/components/notes-app/`.
 - 2026-09-28 — `firebase.json` created and `package.json` scripts configured.
 - 2026-09-28 — `src/lib/firebase/client.ts` implemented with emulator support and tested.
-- 2026-09-28 — Preserved `src/components/firebase/` completely unmodified; copied and adapted required auth components into `src/components/notes-app/`.
+- 2026-09-28 — Preserved the former local Firebase registry mirror completely unmodified; copied and adapted required auth components into `src/components/notes-app/`.
 - 2026-09-28 — AuthProvider, useAuth, useRequireAuth, RequireAuth, UserMenu implemented and tested.
 - 2026-09-28 — Dedicated login page `src/app/(auth)/login/page.tsx` created.
 - 2026-09-28 — `.firebase/seeds/` account metadata and configs generated.
@@ -67,7 +67,7 @@ Establish basic authentication using Firebase Auth and Firebase Local Emulator (
 ## Decision Log
 
 - 2026-09-28 — Adopt native Firebase `User` nomenclature (`User`, `useAuth`, `AuthProvider`) across code and domain to preserve direct fidelity with Firebase SDK and documentation.
-- 2026-09-28 — Treat `src/components/firebase/` as an immutable vendor drop (0 modifications). If any component needs changes, copy and customize it inside `src/components/notes-app/`.
+- 2026-09-28 — Treat the former local Firebase registry mirror as an immutable vendor drop (0 modifications). If any component needs changes, copy and customize it inside `src/components/notes-app/`.
 - 2026-09-28 — Store application-level auth components and providers in `src/components/notes-app/` per project structure and user preference.
 - 2026-09-28 — Store custom hooks in `src/hooks/` per project structure and coverage rules.
 - 2026-09-28 — Colocate test files alongside source files (*.test.ts, *.test.tsx) without `__tests__` folders.
