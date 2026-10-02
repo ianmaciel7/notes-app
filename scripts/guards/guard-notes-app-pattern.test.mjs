@@ -256,6 +256,17 @@ test("requires the canonical component name to match the file", () => {
   );
 });
 
+test("preserves canonical acronyms in component names", () => {
+  const source = `
+    import { Card, CardContent, CardHeader } from "@/components/ui/card";
+    function OAuthCard() {
+      return <Card data-slot="oauth-card"><CardHeader /><CardContent /></Card>;
+    }
+  `;
+
+  assert.deepEqual(checkFile("oauth-card.tsx", source), []);
+});
+
 test("requires data-slot on every visual subcomponent", () => {
   const violations = checkFile(
     "example-dialog.tsx",
