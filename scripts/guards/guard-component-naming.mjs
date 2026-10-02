@@ -20,17 +20,9 @@ const root = fileURLToPath(new URL("../../", import.meta.url));
 const componentsDir = path.join(root, "src/components/notes-app");
 
 // ---------------------------------------------------------------------------
-// Allowed shadcn-style suffixes.
-// Compound primitive roles are checked before single-token suffixes so names
-// such as settings-field-group.tsx preserve the root primitive role exactly.
-// ---------------------------------------------------------------------------
-const SHADCN_COMPOUND_SUFFIXES = new Set([
-  "field-group",
-  "button-group",
-  "input-group",
-  "toggle-group",
-]);
-
+// Allowed application component role suffixes. The suffix describes the
+// component's public role; it does not have to mirror the exact primitive used
+// as its JSX root.
 const SHADCN_SUFFIXES = new Set([
   "card",
   "form",
@@ -125,20 +117,9 @@ function getBasename(filename) {
   return path.basename(filename, ".tsx");
 }
 
-function hasRecognizedSuffix(basename) {
-  if (
-    [...SHADCN_COMPOUND_SUFFIXES].some(
-      (suffix) => basename === suffix || basename.endsWith(`-${suffix}`),
-    )
-  ) {
-    return true;
-  }
-
+function getSuffix(basename) {
   const separatorIndex = basename.lastIndexOf("-");
-  const suffix =
-    separatorIndex === -1 ? basename : basename.slice(separatorIndex + 1);
-
-  return SHADCN_SUFFIXES.has(suffix);
+  return separatorIndex === -1 ? basename : basename.slice(separatorIndex + 1);
 }
 
 function isCompliant(filename) {
@@ -153,7 +134,7 @@ function isCompliant(filename) {
   if (ALLOWED_BASENAMES.has(basename)) return true;
   if (NEXTJS_RESERVED.has(basename)) return true;
 
-  return hasRecognizedSuffix(basename);
+  return SHADCN_SUFFIXES.has(getSuffix(basename));
 }
 
 // ---------------------------------------------------------------------------
@@ -187,7 +168,7 @@ if (violations.length === 0) {
   console.error(`
 Each component file in src/components/notes-app/ must end with a recognised
 shadcn-style suffix (e.g. -card, -form, -button, -select, -alert, -menu,
--provider, -switcher, -field-group, -header, etc.) or be listed in ALLOWED_BASENAMES in
+-provider, -switcher, -header, etc.) or be listed in ALLOWED_BASENAMES in
 scripts/guard-component-naming.mjs.
 
 Next.js reserved filenames (page.tsx, layout.tsx, …) are exempt.
