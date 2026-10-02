@@ -20,8 +20,16 @@ const root = fileURLToPath(new URL("../../", import.meta.url));
 const componentsDir = path.join(root, "src/components/notes-app");
 
 // ---------------------------------------------------------------------------
-// Allowed shadcn-style suffixes (the part after the last hyphen, before .tsx)
+// Allowed shadcn-style suffixes.
+// Compound primitive roles are checked before single-token suffixes so names
+// such as settings-field-group.tsx preserve the root primitive role exactly.
 // ---------------------------------------------------------------------------
+const SHADCN_COMPOUND_SUFFIXES = new Set([
+  "field-group",
+  "button-group",
+  "input-group",
+]);
+
 const SHADCN_SUFFIXES = new Set([
   "card",
   "form",
@@ -138,7 +146,16 @@ function isCompliant(filename) {
   // Next.js reserved
   if (NEXTJS_RESERVED.has(basename)) return true;
 
-  // shadcn suffix
+  // shadcn compound suffix (FieldGroup, ButtonGroup, InputGroup, ...)
+  if (
+    [...SHADCN_COMPOUND_SUFFIXES].some(
+      (suffix) => basename === suffix || basename.endsWith(`-${suffix}`),
+    )
+  ) {
+    return true;
+  }
+
+  // shadcn single-token suffix
   const suffix = getSuffix(basename);
   if (SHADCN_SUFFIXES.has(suffix)) return true;
 
