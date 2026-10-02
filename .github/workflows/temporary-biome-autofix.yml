@@ -1,0 +1,36 @@
+name: Temporary Biome Autofix
+
+on:
+  push:
+    branches:
+      - space
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Set up project toolchain
+        uses: ./.github/actions/setup-project
+      - name: Apply safe Biome fixes
+        run: pnpm exec biome check --write src/components/firebase || true
+      - name: Commit Biome fixes
+        run: |
+          if git diff --quiet -- src/components/firebase; then
+            echo "No Biome changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/components/firebase
+          git commit -m "style: apply biome fixes to firebase components"
+          git push origin HEAD:space
