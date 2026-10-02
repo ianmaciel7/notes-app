@@ -12,7 +12,7 @@ import {
   SettingsDialog,
   SettingsDialogContent,
 } from "@/components/notes-app/settings-dialog";
-import { SettingsForm } from "@/components/notes-app/settings-form";
+import { SettingsFieldGroup } from "@/components/notes-app/settings-field-group";
 import { SidebarUserMenu } from "@/components/notes-app/sidebar-user-menu";
 import { SpaceLoading } from "@/components/notes-app/space-loading";
 import { SpaceSwitcher } from "@/components/notes-app/space-switcher";
@@ -180,7 +180,7 @@ function SpaceShell({
               {settingsT("settingsDescription")}
             </DialogDescription>
           </DialogHeader>
-          <SettingsForm />
+          <SettingsFieldGroup />
           <DialogFooter>
             <Button onClick={() => setSettingsDialogOpen(false)}>
               {spacesT("done")}
