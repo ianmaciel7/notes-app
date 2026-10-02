@@ -16,7 +16,7 @@
       "!!**/build",
       "!!**/.stryker-tmp",
       "!!**/coverage",
-      "!!src/components/ui/**"
+      "!!src/components/ui"
     ]
   },
   "formatter": {
