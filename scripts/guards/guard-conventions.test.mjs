@@ -228,30 +228,16 @@ export async function a() {}`,
   );
 });
 
-test("ui primitives follow the registry file shape", () => {
+test("registry primitives are exempt from the project guard", () => {
+  // Their file shape is review-only (CONVENTIONS.md Enforcement Index), so no
+  // mechanical rule may fire on them.
   const ui = (content) => ruleIds("src/components/ui/thing.tsx", content);
-  const lines = (...parts) => parts.join("\n");
+  assert.deepEqual(ui("export function Thing() {}\nexport { Thing };"), []);
   assert.deepEqual(
-    ui(lines("export function Thing() {}", "export { Thing };")),
-    ["ui-primitive-trailing-export-block"],
-  );
-  assert.deepEqual(
-    ui(lines("interface P {}", "function Thing() {}", "export { Thing };")),
-    ["ui-primitive-no-interface"],
-  );
-  assert.deepEqual(ui("export default function Thing() {}"), [
-    "ui-primitive-no-default-export",
-  ]);
-  assert.deepEqual(
-    ui(
-      lines(
-        "export type T = string;",
-        "function Thing() { return useMemo(() => 1, []); }",
-        "export { Thing };",
-      ),
-    ),
+    ui("interface P {}\nfunction Thing() {}\nexport { Thing };"),
     [],
   );
+  assert.deepEqual(ui("export default function Thing() {}"), []);
 });
 
 test("flags arbitrary px/rem values that the Tailwind scale covers", () => {
@@ -287,20 +273,11 @@ test("Button must use a size variant instead of a size-*/h-* override", () => {
   );
 });
 
-test("overlay content must live in a dedicated dialog/sheet/drawer file", () => {
+test("overlay content is not restricted to a dedicated file", () => {
   const content = `<Dialog><DialogContent /></Dialog>`;
-  assert.deepEqual(ruleIds("src/components/notes-app/x-card.tsx", content), [
-    "overlay-content-own-file",
-  ]);
+  assert.deepEqual(ruleIds("src/components/notes-app/x-card.tsx", content), []);
   assert.deepEqual(
     ruleIds("src/components/notes-app/settings-dialog.tsx", content),
-    [],
-  );
-  assert.deepEqual(
-    ruleIds(
-      "src/components/notes-app/x-sheet.tsx",
-      `<Sheet><SheetContent /></Sheet>`,
-    ),
     [],
   );
 });

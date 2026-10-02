@@ -47,11 +47,4 @@ function ForgotPasswordCard({
   );
 }
 
-type ForgotPasswordAuthScreenProps = ForgotPasswordCardProps;
-
-export {
-  ForgotPasswordCard,
-  ForgotPasswordCard as ForgotPasswordAuthScreen,
-  type ForgotPasswordCardProps,
-  type ForgotPasswordAuthScreenProps,
-};
+export { ForgotPasswordCard, type ForgotPasswordCardProps };

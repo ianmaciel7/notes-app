@@ -7,11 +7,9 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { UserCredential } from "firebase/auth";
+import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import {
-  AuthCard,
-  AuthCardProviderGroup,
-} from "@/components/notes-app/auth-card";
+import { AuthCard } from "@/components/notes-app/auth-card";
 import { LoginForm } from "@/components/notes-app/login-form";
 import {
   CardContent,
@@ -19,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FieldGroup, FieldSeparator } from "@/components/ui/field";
 
 type LoginCardProps = FirebaseSignInAuthScreenProps &
   Omit<ComponentProps<"div">, "children">;
@@ -31,6 +30,7 @@ function LoginCard({
   ...props
 }: LoginCardProps) {
   const ui = useUI();
+  const t = useTranslations("auth");
 
   const titleText = getTranslation(ui, "labels", "signIn");
   const subtitleText = getTranslation(ui, "prompts", "signInToAccount");
@@ -52,16 +52,16 @@ function LoginCard({
           onSignUpClick={onSignUpClick}
         />
         {children ? (
-          <AuthCardProviderGroup>{children}</AuthCardProviderGroup>
+          <FieldGroup data-slot="login-card-provider-group" className="pt-1">
+            <FieldSeparator className="uppercase [&>span]:bg-card">
+              {t("orContinueWith")}
+            </FieldSeparator>
+            <FieldGroup className="gap-2.5">{children}</FieldGroup>
+          </FieldGroup>
         ) : null}
       </CardContent>
     </AuthCard>
   );
 }
 
-export {
-  LoginCard,
-  LoginCard as SignInAuthScreen,
-  type LoginCardProps,
-  type LoginCardProps as SignInAuthScreenProps,
-};
+export { LoginCard, type LoginCardProps };

@@ -4,11 +4,11 @@ import test from "node:test";
 import ts from "typescript";
 import {
   checkAlertProps,
-  checkConnectionAlertContract,
   checkInlinePropsTypes,
   checkLoginCardProps,
   checkPrimaryExportMatchesFilename,
   checkPropsInFile,
+  checkSingleComponentFile,
   checkStandaloneSurfaceComponents,
 } from "./guard-component-props.mjs";
 
@@ -32,7 +32,7 @@ test("guard-component-props passes on current clean codebase", () => {
   );
   assert.match(
     output,
-    /all component props in src\/components\/notes-app\/\*\.tsx adhere to standard inheritance/,
+    /all application component props in src\/components\/ \(outside ui\/ and firebase\/\) adhere to standard inheritance/,
   );
 });
 
@@ -126,43 +126,80 @@ test("checkAlertProps requires the canonical alert props type", () => {
   assert.equal(valid, null);
 });
 
-test("checkConnectionAlertContract enforces compound children", () => {
-  const missingChildren = `
-    interface ConnectionAlertProps extends React.ComponentProps<"div"> {}
+test("checkSingleComponentFile rejects compound components in one file", () => {
+  const compound = `
     function ConnectionAlert() { return <div />; }
-    function ConnectionAlertAction() { return <div />; }
-    function ConnectionAlertDescription() { return <div />; }
-    function ConnectionAlertIcon() { return <div />; }
     function ConnectionAlertTitle() { return <div />; }
-    export { ConnectionAlert, ConnectionAlertAction, ConnectionAlertDescription, ConnectionAlertIcon, ConnectionAlertTitle, type ConnectionAlertProps };
+    function ConnectionAlertAction() { return <div />; }
+    export { ConnectionAlert, ConnectionAlertTitle, ConnectionAlertAction };
   `;
-  const missingChildrenViolation = checkConnectionAlertContract(
-    parseTsx(missingChildren, "connection-alert.tsx"),
+  const violations = checkSingleComponentFile(
+    parseTsx(compound, "connection-alert.tsx"),
     "connection-alert.tsx",
-    missingChildren,
   );
-  assert.ok(missingChildrenViolation !== null);
-  assert.match(missingChildrenViolation.message, /must require children/);
+  assert.equal(violations.length, 1);
+  assert.match(violations[0].message, /declares 3 components/);
+});
 
-  const fallback = `
-    interface ConnectionAlertProps extends React.ComponentProps<"div"> { children: React.ReactNode }
-    function ConnectionAlert({ children }: ConnectionAlertProps) { return <div>{children ?? <span />}</div>; }
-    function ConnectionAlertAction() { return <div />; }
-    function ConnectionAlertDescription() { return <div />; }
-    function ConnectionAlertIcon() { return <div />; }
-    function ConnectionAlertTitle() { return <div />; }
-    const cn = () => "";
-    export { ConnectionAlert, ConnectionAlertAction, ConnectionAlertDescription, ConnectionAlertIcon, ConnectionAlertTitle, type ConnectionAlertProps };
+test("checkSingleComponentFile counts arrow components and ignores hooks and helpers", () => {
+  const arrows = `
+    const A = () => <div />;
+    const B = () => <div />;
   `;
-  const fallbackViolation = checkConnectionAlertContract(
-    parseTsx(fallback, "connection-alert.tsx"),
-    "connection-alert.tsx",
-    fallback,
+  assert.equal(
+    checkSingleComponentFile(parseTsx(arrows, "a-card.tsx"), "a-card.tsx")
+      .length,
+    1,
   );
-  assert.ok(fallbackViolation !== null);
-  assert.match(
-    fallbackViolation.message,
-    /must not substitute default children/,
+
+  const single = `
+    function useThing() { return 1; }
+    function helper() { return 2; }
+    function ThingCard() { return <div />; }
+  `;
+  assert.deepEqual(
+    checkSingleComponentFile(
+      parseTsx(single, "thing-card.tsx"),
+      "thing-card.tsx",
+    ),
+    [],
+  );
+});
+
+test("checkSingleComponentFile rejects createContext and Object.assign parts", () => {
+  const context = `
+    import { createContext } from "react";
+    const Ctx = createContext(null);
+    function ThingCard() { return <div />; }
+  `;
+  const contextViolations = checkSingleComponentFile(
+    parseTsx(context, "thing-card.tsx"),
+    "thing-card.tsx",
+  );
+  assert.equal(contextViolations.length, 1);
+  assert.match(contextViolations[0].message, /createContext/);
+
+  const assign = `
+    function ThingCard() { return <div />; }
+    export const X = Object.assign(ThingCard, { Part: ThingCard });
+  `;
+  const assignViolations = checkSingleComponentFile(
+    parseTsx(assign, "thing-card.tsx"),
+    "thing-card.tsx",
+  );
+  assert.equal(assignViolations.length, 1);
+  assert.match(assignViolations[0].message, /Object\.assign/);
+});
+
+test("checkSingleComponentFile skips test files", () => {
+  const two =
+    "function A() { return <div />; } function B() { return <div />; }";
+  assert.deepEqual(
+    checkSingleComponentFile(
+      parseTsx(two, "a-card.test.tsx"),
+      "a-card.test.tsx",
+    ),
+    [],
   );
 });
 

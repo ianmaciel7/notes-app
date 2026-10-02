@@ -7,20 +7,19 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { UserCredential } from "firebase/auth";
+import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import {
-  AuthCard,
-  AuthCardProviderGroup,
-} from "@/components/notes-app/auth-card";
-import { EmailLinkAuthForm } from "@/components/notes-app/email-link-form";
+import { AuthCard } from "@/components/notes-app/auth-card";
+import { EmailLinkForm } from "@/components/notes-app/email-link-form";
 import { MfaAssertionCard } from "@/components/notes-app/mfa-assertion-card";
-import { RedirectError } from "@/components/notes-app/redirect-error-alert";
+import { RedirectErrorAlert } from "@/components/notes-app/redirect-error-alert";
 import {
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FieldGroup, FieldSeparator } from "@/components/ui/field";
 
 type EmailLinkCardProps = FirebaseEmailLinkAuthScreenProps &
   Omit<ComponentProps<"div">, "children">;
@@ -33,6 +32,7 @@ function EmailLinkCard({
   ...props
 }: EmailLinkCardProps) {
   const ui = useUI();
+  const t = useTranslations("auth");
 
   const titleText = getTranslation(ui, "labels", "signIn");
   const subtitleText = getTranslation(ui, "prompts", "signInToAccount");
@@ -52,26 +52,27 @@ function EmailLinkCard({
         <CardDescription>{subtitleText}</CardDescription>
       </CardHeader>
       <CardContent>
-        <EmailLinkAuthForm
+        <EmailLinkForm
           onSignIn={(credential: UserCredential) => onSignIn?.(credential.user)}
           onEmailSent={onEmailSent}
         />
         {children ? (
-          <AuthCardProviderGroup>
-            {children}
-            <RedirectError />
-          </AuthCardProviderGroup>
+          <FieldGroup
+            data-slot="email-link-card-provider-group"
+            className="pt-1"
+          >
+            <FieldSeparator className="uppercase [&>span]:bg-card">
+              {t("orContinueWith")}
+            </FieldSeparator>
+            <FieldGroup className="gap-2.5">
+              {children}
+              <RedirectErrorAlert />
+            </FieldGroup>
+          </FieldGroup>
         ) : null}
       </CardContent>
     </AuthCard>
   );
 }
 
-type EmailLinkAuthScreenProps = EmailLinkCardProps;
-
-export {
-  EmailLinkCard,
-  EmailLinkCard as EmailLinkAuthScreen,
-  type EmailLinkCardProps,
-  type EmailLinkAuthScreenProps,
-};
+export { EmailLinkCard, type EmailLinkCardProps };

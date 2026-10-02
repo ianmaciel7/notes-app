@@ -2,8 +2,8 @@
 /**
  * guard-component-naming.mjs
  *
- * Enforces that every *.tsx file in src/components/notes-app/ (excluding
- * test files) either:
+ * Enforces that every *.tsx file in an application folder of src/components/
+ * (every folder except ui/ and firebase/, excluding test files) either:
  *   1. Ends with a recognised shadcn-style UI suffix, OR
  *   2. Is a Next.js special-cased reserved filename, OR
  *   3. Is an explicitly allowed React/project-specific pattern.
@@ -12,12 +12,11 @@
  * project adopts them.
  */
 
-import { readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { listApplicationComponentFiles } from "./component-scope-lib.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
-const componentsDir = path.join(root, "src/components/notes-app");
 
 // ---------------------------------------------------------------------------
 // Allowed application component role suffixes. The suffix describes the
@@ -141,21 +140,15 @@ function isCompliant(filename) {
 // Runner
 // ---------------------------------------------------------------------------
 
-let files;
-try {
-  files = readdirSync(componentsDir);
-} catch {
-  console.error(
-    `[guard-component-naming] Directory not found: ${componentsDir}`,
-  );
-  process.exit(1);
-}
+const files = listApplicationComponentFiles(root).map((file) =>
+  path.relative(path.join(root, "src/components"), file).replaceAll("\\", "/"),
+);
 
-const violations = files.filter((f) => !isCompliant(f));
+const violations = files.filter((f) => !isCompliant(path.posix.basename(f)));
 
 if (violations.length === 0) {
   console.log(
-    `[guard-component-naming] ✓ All ${files.filter((f) => f.endsWith(".tsx") && !f.endsWith(".test.tsx") && !f.endsWith(".stories.tsx")).length} component files in src/components/notes-app/ have a valid shadcn-style suffix.`,
+    `[guard-component-naming] ✓ All ${files.filter((f) => f.endsWith(".tsx") && !f.endsWith(".test.tsx") && !f.endsWith(".stories.tsx")).length} application component files in src/components/ (outside ui/ and firebase/) have a valid shadcn-style suffix.`,
   );
   process.exit(0);
 } else {
@@ -166,10 +159,10 @@ if (violations.length === 0) {
     console.error(`  • ${v}`);
   }
   console.error(`
-Each component file in src/components/notes-app/ must end with a recognised
+Each application component file in src/components/ (outside ui/ and firebase/) must end with a recognised
 shadcn-style suffix (e.g. -card, -form, -button, -select, -alert, -menu,
 -provider, -switcher, -header, etc.) or be listed in ALLOWED_BASENAMES in
-scripts/guard-component-naming.mjs.
+scripts/guards/guard-component-naming.mjs.
 
 Next.js reserved filenames (page.tsx, layout.tsx, …) are exempt.
 `);

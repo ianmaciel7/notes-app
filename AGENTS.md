@@ -136,6 +136,7 @@ skill behavior from its name alone.
 | Firebase Auth emulator, seeds, and auth test environment | `firebase-setup` |
 | Firestore rules or schema change; `firestore.rules` | `firestore-rules-change` |
 | Health check for quality, tests, context, and token savings | `verify-health` |
+| Verify code against `CONVENTIONS.md` and `CONSTRAINTS.md`; run the quality gates and the review-only rules | `verify-code` |
 
 Treat project-owned skills and `skills-lock.json` as controlled configuration.
 Do not edit, add, refresh, replace, or remove remote skills unless requested by the user.

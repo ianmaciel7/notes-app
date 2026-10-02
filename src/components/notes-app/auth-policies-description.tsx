@@ -1,51 +1,11 @@
 import { getTranslation } from "@firebase-oss/ui-core";
-import { PolicyContext, type PolicyURL, useUI } from "@firebase-oss/ui-react";
-import {
-  type ComponentProps,
-  Fragment,
-  type PropsWithChildren,
-  use,
-} from "react";
-import { Button } from "@/components/ui/button";
+import { PolicyContext, useUI } from "@firebase-oss/ui-react";
+import { type ComponentProps, Fragment, use } from "react";
+import { PolicyLinkButton } from "@/components/notes-app/policy-link-button";
 import { FieldDescription } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 type AuthPoliciesDescriptionProps = ComponentProps<"div">;
-
-type PolicyLinkProps = PropsWithChildren<{
-  onNavigate?: (url: PolicyURL) => void;
-  url: PolicyURL;
-}>;
-
-function PolicyLink({ onNavigate, url, children }: PolicyLinkProps) {
-  if (onNavigate) {
-    return (
-      <Button
-        data-slot="policy-link"
-        variant="link"
-        size="sm"
-        type="button"
-        onClick={() => onNavigate(url)}
-      >
-        {children}
-      </Button>
-    );
-  }
-
-  return (
-    <Button
-      data-slot="policy-link"
-      variant="link"
-      size="sm"
-      nativeButton={false}
-      render={
-        <a href={String(url)} target="_blank" rel="noopener noreferrer">
-          {children}
-        </a>
-      }
-    />
-  );
-}
 
 function AuthPoliciesDescription({
   className,
@@ -80,25 +40,25 @@ function AuthPoliciesDescription({
       {keyedParts.map(({ key, part }) => {
         if (part === "{tos}") {
           return (
-            <PolicyLink
+            <PolicyLinkButton
               key={key}
               onNavigate={onNavigate}
               url={termsOfServiceUrl}
             >
               {getTranslation(ui, "labels", "termsOfService")}
-            </PolicyLink>
+            </PolicyLinkButton>
           );
         }
 
         if (part === "{privacy}") {
           return (
-            <PolicyLink
+            <PolicyLinkButton
               key={key}
               onNavigate={onNavigate}
               url={privacyPolicyUrl}
             >
               {getTranslation(ui, "labels", "privacyPolicy")}
-            </PolicyLink>
+            </PolicyLinkButton>
           );
         }
 
@@ -108,8 +68,4 @@ function AuthPoliciesDescription({
   );
 }
 
-export {
-  AuthPoliciesDescription,
-  AuthPoliciesDescription as Policies,
-  type AuthPoliciesDescriptionProps,
-};
+export { AuthPoliciesDescription, type AuthPoliciesDescriptionProps };

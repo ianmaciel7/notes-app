@@ -15,7 +15,7 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { AuthFormInput } from "@/components/notes-app/auth-form-input";
-import { Policies } from "@/components/notes-app/auth-policies-description";
+import { AuthPoliciesDescription } from "@/components/notes-app/auth-policies-description";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup } from "@/components/ui/field";
@@ -44,7 +44,7 @@ function ForgotPasswordForm({
     },
   });
 
-  async function onSubmit(values: ForgotPasswordAuthFormSchema) {
+  const onSubmit = async (values: ForgotPasswordAuthFormSchema) => {
     try {
       await action(values);
       setEmailSent(true);
@@ -54,7 +54,7 @@ function ForgotPasswordForm({
         error instanceof FirebaseUIError ? error.message : String(error);
       form.setError("root", { message });
     }
-  }
+  };
 
   if (emailSent) {
     return (
@@ -83,7 +83,7 @@ function ForgotPasswordForm({
             type="email"
             label={getTranslation(ui, "labels", "emailAddress")}
           />
-          <Policies />
+          <AuthPoliciesDescription />
           <Field>
             <Button type="submit" disabled={ui.state !== "idle"}>
               {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
@@ -116,9 +116,4 @@ function ForgotPasswordForm({
   );
 }
 
-export {
-  ForgotPasswordForm,
-  type ForgotPasswordFormProps,
-  ForgotPasswordForm as ForgotPasswordAuthForm,
-  type ForgotPasswordFormProps as ForgotPasswordAuthFormProps,
-};
+export { ForgotPasswordForm, type ForgotPasswordFormProps };

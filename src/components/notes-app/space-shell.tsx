@@ -6,12 +6,10 @@ import { SettingsDialog } from "@/components/notes-app/settings-dialog";
 import { SidebarUserMenu } from "@/components/notes-app/sidebar-user-menu";
 import { SpaceLoading } from "@/components/notes-app/space-loading";
 import { SpaceSwitcher } from "@/components/notes-app/space-switcher";
+import { SpacesErrorStatus } from "@/components/notes-app/spaces-error-status";
 import { SpacesList } from "@/components/notes-app/spaces-list";
-import {
-  SpacesErrorStatus,
-  SpacesLoadingStatus,
-  SpacesNotFoundStatus,
-} from "@/components/notes-app/spaces-status";
+import { SpacesLoadingStatus } from "@/components/notes-app/spaces-loading-status";
+import { SpacesNotFoundStatus } from "@/components/notes-app/spaces-not-found-status";
 import {
   Sidebar,
   SidebarFooter,

@@ -4,13 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import "./globals.css";
 import { AuthProvider } from "@/components/notes-app/auth-provider";
-import {
-  ConnectionAlert,
-  ConnectionAlertAction,
-  ConnectionAlertDescription,
-  ConnectionAlertIcon,
-  ConnectionAlertTitle,
-} from "@/components/notes-app/connection-alert";
+import { ConnectionAlert } from "@/components/notes-app/connection-alert";
 import { ThemeProvider } from "@/components/notes-app/theme-provider";
 import { Toaster } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
@@ -59,12 +53,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <AuthProvider>{children}</AuthProvider>
-            <ConnectionAlert>
-              <ConnectionAlertIcon />
-              <ConnectionAlertTitle />
-              <ConnectionAlertDescription />
-              <ConnectionAlertAction />
-            </ConnectionAlert>
+            <ConnectionAlert />
             <Toaster />
           </ThemeProvider>
         </NextIntlClientProvider>

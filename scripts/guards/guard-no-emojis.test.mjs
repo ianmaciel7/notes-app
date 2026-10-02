@@ -34,5 +34,8 @@ test("guard-no-emojis script passes on current src/ directory", () => {
   const output = execFileSync("node", ["scripts/guards/guard-no-emojis.mjs"], {
     encoding: "utf8",
   });
-  assert.match(output, /Zero emojis found in src\//);
+  assert.match(
+    output,
+    /Zero emojis found in project source outside src\/components\/ui\//,
+  );
 });

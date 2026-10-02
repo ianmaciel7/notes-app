@@ -12,7 +12,7 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { ComponentProps } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { AuthFormInput } from "@/components/notes-app/auth-form-input";
-import { Policies } from "@/components/notes-app/auth-policies-description";
+import { AuthPoliciesDescription } from "@/components/notes-app/auth-policies-description";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup } from "@/components/ui/field";
@@ -42,7 +42,7 @@ function LoginForm({
     },
   });
 
-  async function onSubmit(values: SignInAuthFormSchema) {
+  const onSubmit = async (values: SignInAuthFormSchema) => {
     try {
       const credential = await action(values);
       if (credential) {
@@ -53,7 +53,7 @@ function LoginForm({
         error instanceof FirebaseUIError ? error.message : String(error);
       form.setError("root", { message });
     }
-  }
+  };
 
   return (
     <FormProvider {...form}>
@@ -108,7 +108,7 @@ function LoginForm({
               {getTranslation(ui, "labels", "signIn")}
             </Button>
           </Field>
-          <Policies />
+          <AuthPoliciesDescription />
           {onSignUpClick ? (
             <Field>
               <Button
@@ -129,9 +129,4 @@ function LoginForm({
   );
 }
 
-export {
-  LoginForm,
-  type LoginFormProps,
-  LoginForm as SignInAuthForm,
-  type LoginFormProps as SignInAuthFormProps,
-};
+export { LoginForm, type LoginFormProps };

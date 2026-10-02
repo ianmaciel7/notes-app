@@ -8,12 +8,7 @@ import {
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { BACKEND_UNREACHABLE_EVENT } from "@/lib/error-capture/firebase-logs";
 import { reconnectFirestore } from "@/lib/firebase/firestore";
-import {
-  ConnectionAlert,
-  ConnectionAlertAction,
-  ConnectionAlertDescription,
-  ConnectionAlertTitle,
-} from "./connection-alert";
+import { ConnectionAlert } from "./connection-alert";
 
 vi.mock("@/components/ui/spinner", () => ({
   Spinner: (props: React.ComponentProps<"svg">) => (
@@ -33,13 +28,7 @@ vi.mock("@/lib/error-capture/firebase-logs", () => ({
 
 describe("ConnectionAlert", () => {
   function renderConnectionAlert() {
-    return render(
-      <ConnectionAlert>
-        <ConnectionAlertTitle />
-        <ConnectionAlertDescription />
-        <ConnectionAlertAction />
-      </ConnectionAlert>,
-    );
+    return render(<ConnectionAlert />);
   }
 
   beforeEach(() => {
@@ -70,19 +59,16 @@ describe("ConnectionAlert", () => {
     ).not.toBeNull();
   });
 
-  it("renders custom children using the Alert composition contract", () => {
-    render(
-      <ConnectionAlert>
-        <span>Custom connection content</span>
-      </ConnectionAlert>,
-    );
+  it("forwards className and props to the alert root", () => {
+    render(<ConnectionAlert className="custom-class" data-testid="alert" />);
 
     act(() => {
       window.dispatchEvent(new Event(BACKEND_UNREACHABLE_EVENT));
     });
 
-    expect(screen.queryByText("Custom connection content")).not.toBeNull();
-    expect(screen.queryByText("connection.title")).toBeNull();
+    const alert = screen.getByTestId("alert");
+    expect(alert.className).toContain("custom-class");
+    expect(alert.getAttribute("data-slot")).toBe("connection-alert");
   });
 
   it("calls reconnectFirestore when retry is clicked", async () => {

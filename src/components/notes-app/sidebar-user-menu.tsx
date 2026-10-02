@@ -11,7 +11,7 @@ import {
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import type { ComponentProps } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/notes-app/user-avatar";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import {
@@ -36,20 +36,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-
-type UserAvatarProps = ComponentProps<typeof Avatar> & {
-  displayName: string;
-  photoUrl: string | null;
-};
-
-function UserAvatar({ displayName, photoUrl, ...props }: UserAvatarProps) {
-  return (
-    <Avatar data-slot="user-avatar" {...props} size="sm">
-      {photoUrl && <AvatarImage src={photoUrl} alt="" />}
-      <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
-    </Avatar>
-  );
-}
 
 type SidebarUserMenuProps = ComponentProps<typeof SidebarMenu> & {
   user: User;

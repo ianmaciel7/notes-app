@@ -133,6 +133,7 @@ internal script paths. Numeric thresholds and what blocks a change are owned by
 | `check:ci` | `check:fast`, docs verifier, harness tests, guard tests, Firebase emulator tests, coverage, agents sync check, production build | `Quality` workflow |
 | `harness:health` | `check:ci`, Knip, mutation tests, dependency audit | `Harness Health` workflow |
 | `verify:health` | consolidated health report | on demand |
+| `verify:code` | every gate declared in `CONSTRAINTS.md` and the `CONVENTIONS.md` Enforcement Index (`--scope task\|ci\|all`), failures mapped to convention rules, plus the `review-only` rule ids to check by hand | `verify-code` skill, on demand |
 
 > [!TIP]
 > Biome remains the single formatter/linter. Use the smallest relevant subset while
@@ -198,7 +199,7 @@ entry (`<name>.mjs`), pure logic in `<name>-lib.mjs`, and `node:test` tests in
 | :--- | :--- | :--- |
 | `scripts/guards/` | Deterministic policy and architecture checks that fail on violations. | `scripts/guards/floor-guard.mjs`, `scripts/guards/guard-component-naming.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/guards/guard-conventions.mjs`, `scripts/guards/guard-i18n-strings.mjs`, `scripts/guards/guard-no-emojis.mjs`, `scripts/guards/guard-rsc-boundaries.mjs` |
 | `scripts/hooks/` | Agent and editor hook adapters plus shared payload and path logic. | `scripts/hooks/hook-biome-on-edit.mjs`, `scripts/hooks/hook-guard-agent-delegation.mjs`, `scripts/hooks/hook-guard-bash.mjs`, `scripts/hooks/hook-guard-paths.mjs` |
-| `scripts/verify/` | Repository-wide verification and health orchestration. | `scripts/verify/verify-ai-tooling.mjs`, `scripts/verify/verify-control-docs.mjs`, `scripts/verify/verify-docs.mjs`, `scripts/verify/verify-health.mjs` |
+| `scripts/verify/` | Repository-wide verification and health orchestration. | `scripts/verify/verify-ai-tooling.mjs`, `scripts/verify/verify-code.mjs`, `scripts/verify/verify-control-docs.mjs`, `scripts/verify/verify-docs.mjs`, `scripts/verify/verify-health.mjs` |
 | `scripts/tooling/` | Adapters around external development CLIs. | `scripts/tooling/run-agents-cli.mjs` |
 
 - Tests are wired into `test:guards` in `package.json`, which `check:ci` runs.

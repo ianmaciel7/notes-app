@@ -39,11 +39,4 @@ function MfaAssertionCard({ ...props }: MfaAssertionCardProps) {
   );
 }
 
-type MultiFactorAuthAssertionScreenProps = MfaAssertionCardProps;
-
-export {
-  MfaAssertionCard,
-  MfaAssertionCard as MultiFactorAuthAssertionScreen,
-  type MfaAssertionCardProps,
-  type MultiFactorAuthAssertionScreenProps,
-};
+export { MfaAssertionCard, type MfaAssertionCardProps };

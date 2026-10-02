@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { listApplicationComponentFiles } from "./component-scope-lib.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
-const componentsDir = path.join(root, "src/components/notes-app");
 
 const NON_VISUAL_FILES = new Set([
   "auth-provider.tsx",
+  "phone-auth-form.tsx",
   "spaces-list.tsx",
   "theme-provider.tsx",
 ]);
@@ -83,7 +84,7 @@ const COMPONENT_ROLE_SUFFIXES = new Set([
 ]);
 
 const COMPONENT_NAME_EXEMPTIONS = new Set(["RequireAuth", "RequireGuest"]);
-const CANONICAL_COMPONENT_EXEMPT_FILES = new Set(["spaces-status.tsx"]);
+const CANONICAL_COMPONENT_EXEMPT_FILES = new Set([]);
 const PASCAL_SEGMENTS = new Map([["oauth", "OAuth"]]);
 
 function violation(file, rule, message) {
@@ -342,14 +343,9 @@ export {
 };
 
 export function runGuard() {
-  if (!existsSync(componentsDir)) return [];
-
-  return readdirSync(componentsDir)
-    .filter((file) => file.endsWith(".tsx") && !file.endsWith(".test.tsx"))
-    .flatMap((file) => {
-      const fullPath = path.join(componentsDir, file);
-      return checkFile(fullPath, readFileSync(fullPath, "utf8"));
-    });
+  return listApplicationComponentFiles(root)
+    .filter((fullPath) => !fullPath.endsWith(".test.tsx"))
+    .flatMap((fullPath) => checkFile(fullPath, readFileSync(fullPath, "utf8")));
 }
 
 const isMain =
@@ -369,6 +365,6 @@ if (isMain) {
   }
 
   console.log(
-    "guard-notes-app-pattern: notes-app components use simple domain surfaces over shared UI primitives.",
+    "guard-notes-app-pattern: application components use simple domain surfaces over shared UI primitives.",
   );
 }

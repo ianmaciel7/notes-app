@@ -190,8 +190,8 @@ full public anatomy. A component name describes the product responsibility rathe
 the primitive used internally; for example, `SettingsForm` may use `FieldGroup` as
 its visual root. When a behavior-bearing Base UI primitive needs to render another
 component, use its `render` composition API so focus, keyboard, ARIA, and state
-behavior remain owned by the primitive. Application-level compound APIs are introduced
-only when consumers genuinely need independently composable parts.
+behavior remain owned by the primitive. Application-level compound APIs are not used; each part is its own
+single-component file.
 
 Visual component structure must remain compatible with the interaction contract in
 [ADR 0016](./docs/adr/0016-prefer-simple-domain-components-and-dedicated-hooks.md).

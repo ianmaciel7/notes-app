@@ -121,11 +121,11 @@ describe("SpaceShell", () => {
 
     renderWithIntl(<SpaceShell />);
 
-    expect(screen.getByTestId("spaces-status-error")).toBeDefined();
+    expect(screen.getByTestId("spaces-error-status")).toBeDefined();
     expect(screen.getByRole("alert")).toBeDefined();
     expect(screen.getByText("Connection Error")).toBeDefined();
 
-    const retryBtn = screen.getByTestId("spaces-status-retry-btn");
+    const retryBtn = screen.getByTestId("spaces-error-status-retry-btn");
     expect(retryBtn.textContent).toContain("Retry Connection");
     fireEvent.click(retryBtn);
     expect(retryMock).toHaveBeenCalled();
@@ -171,7 +171,7 @@ describe("SpaceShell", () => {
     });
 
     renderWithIntl(<SpaceShell />);
-    expect(screen.getByTestId("spaces-status-loading")).toBeDefined();
+    expect(screen.getByTestId("spaces-loading-status")).toBeDefined();
     expect(screen.getByText("Loading spaces...")).toBeDefined();
   });
 
@@ -332,11 +332,11 @@ describe("SpaceShell", () => {
 
     renderWithIntl(<SpaceShell currentSpaceId="missing-space" />);
 
-    expect(screen.getByTestId("spaces-status-not-found")).toBeDefined();
+    expect(screen.getByTestId("spaces-not-found-status")).toBeDefined();
     expect(screen.getByTestId("space-shell")).toBeDefined();
     expect(screen.getByTestId("space-switcher-trigger")).toBeDefined();
 
-    fireEvent.click(screen.getByTestId("spaces-status-back-btn"));
+    fireEvent.click(screen.getByTestId("spaces-not-found-status-back-btn"));
     expect(mockReplace).toHaveBeenCalledWith("/");
   });
 });

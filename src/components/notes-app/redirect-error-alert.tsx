@@ -26,9 +26,4 @@ function RedirectErrorAlert({ className, ...props }: RedirectErrorAlertProps) {
   );
 }
 
-export {
-  RedirectErrorAlert,
-  type RedirectErrorAlertProps,
-  RedirectErrorAlert as RedirectError,
-  type RedirectErrorAlertProps as RedirectErrorProps,
-};
+export { RedirectErrorAlert, type RedirectErrorAlertProps };

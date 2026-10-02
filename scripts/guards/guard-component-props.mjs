@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
+import { listApplicationComponentFiles } from "./component-scope-lib.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
-const componentsDir = path.join(root, "src/components/notes-app");
 
 /**
  * Valid standard patterns / base types for props extension:
@@ -318,99 +318,62 @@ export function checkAlertProps(sf, filePath) {
 }
 
 /**
- * Enforces the compound-Alert contract for ConnectionAlert. The component is
- * intentionally explicit: callers provide the children, while the wrapper
- * forwards native props and owns only connection state.
+ * Application component files declare exactly one React component. Compound
+ * components (a root plus sibling parts such as `ConnectionAlertTitle`) are not
+ * used: put each part in its own file, or fold it into the owning component. A
+ * `createContext` or `Object.assign(Component, { Part })` in a component file is
+ * the machinery of a compound API, so it is rejected too.
+ *
+ * Hooks (`useX`) and non-component helpers are not counted; only top-level
+ * PascalCase function/arrow declarations are.
  */
-export function checkConnectionAlertContract(sf, filePath, content) {
-  if (path.basename(filePath) !== "connection-alert.tsx") {
-    return null;
+export function checkSingleComponentFile(sf, filePath) {
+  const baseName = path.basename(filePath);
+  if (!baseName.endsWith(".tsx") || baseName.endsWith(".test.tsx")) {
+    return [];
   }
 
-  const exportedNames = collectExportedNames(sf);
-  const requiredExports = [
-    "ConnectionAlert",
-    "ConnectionAlertAction",
-    "ConnectionAlertDescription",
-    "ConnectionAlertIcon",
-    "ConnectionAlertTitle",
-    "ConnectionAlertProps",
-  ];
-  const missingExports = requiredExports.filter(
-    (name) => !exportedNames.has(name),
-  );
+  const file = path.relative(root, filePath);
+  const violations = [];
+  const components = [];
 
-  if (missingExports.length > 0) {
-    return {
-      file: path.relative(root, filePath),
-      propName: "ConnectionAlert",
-      message: `connection-alert.tsx must export the compound Alert parts: ${missingExports.join(", ")}.`,
-    };
-  }
-
-  const requiresChildren = (members) =>
-    members.some(
-      (member) =>
-        ts.isPropertySignature(member) &&
-        member.name.getText(sf) === "children" &&
-        !member.questionToken,
-    );
-  const typeLiterals = (typeNode) =>
-    ts.isIntersectionTypeNode(typeNode)
-      ? typeNode.types.filter(ts.isTypeLiteralNode)
-      : ts.isTypeLiteralNode(typeNode)
-        ? [typeNode]
-        : [];
-
-  let childrenIsRequired = false;
   ts.forEachChild(sf, (node) => {
-    if (
-      ts.isInterfaceDeclaration(node) &&
-      node.name.text === "ConnectionAlertProps"
-    ) {
-      childrenIsRequired = requiresChildren(node.members);
-    } else if (
-      ts.isTypeAliasDeclaration(node) &&
-      node.name.text === "ConnectionAlertProps"
-    ) {
-      childrenIsRequired = typeLiterals(node.type).some((literal) =>
-        requiresChildren(literal.members),
-      );
+    const component = getComponentFunction(node);
+    if (component && /^[A-Z]/.test(component.name)) {
+      components.push(component.name);
     }
   });
 
-  if (!childrenIsRequired) {
-    return {
-      file: path.relative(root, filePath),
-      propName: "ConnectionAlertProps",
-      message:
-        "ConnectionAlertProps must require children; compound alerts must not provide a default child tree.",
-    };
+  if (components.length > 1) {
+    violations.push({
+      file,
+      propName: components[0],
+      message: `${baseName} declares ${components.length} components (${components.join(", ")}). Declare exactly one component per file and move each other component to its own appropriately named file; compound components are not used.`,
+    });
   }
 
-  if (/\bchildren\s*(\?\?|\|\|)/.test(content)) {
-    return {
-      file: path.relative(root, filePath),
-      propName: "ConnectionAlert",
-      message:
-        "ConnectionAlert must render caller-provided children directly and must not substitute default children.",
-    };
-  }
+  const visit = (node) => {
+    if (ts.isCallExpression(node)) {
+      const callee = node.expression.getText(sf);
+      if (callee === "createContext" || callee === "React.createContext") {
+        violations.push({
+          file,
+          propName: components[0] ?? baseName,
+          message: `${baseName} calls createContext. A context shared by sibling parts is a compound-component API; compose the parts in one component instead.`,
+        });
+      } else if (callee === "Object.assign") {
+        violations.push({
+          file,
+          propName: components[0] ?? baseName,
+          message: `${baseName} uses Object.assign to attach static parts. Compound components are not used; give each part its own file.`,
+        });
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sf);
 
-  if (
-    !content.includes("className") ||
-    !content.includes("...props") ||
-    !content.includes("cn(")
-  ) {
-    return {
-      file: path.relative(root, filePath),
-      propName: "ConnectionAlert",
-      message:
-        "ConnectionAlert must forward className and remaining props through cn() following the shared Alert pattern.",
-    };
-  }
-
-  return null;
+  return violations;
 }
 
 function getComponentFunction(node) {
@@ -540,13 +503,7 @@ export function checkPropsInFile(filePath, content) {
   const alertPropsViolation = checkAlertProps(sf, filePath);
   if (alertPropsViolation) violations.push(alertPropsViolation);
 
-  const connectionAlertViolation = checkConnectionAlertContract(
-    sf,
-    filePath,
-    content,
-  );
-  if (connectionAlertViolation) violations.push(connectionAlertViolation);
-
+  violations.push(...checkSingleComponentFile(sf, filePath));
   violations.push(...checkInlinePropsTypes(sf, filePath));
   violations.push(...checkStandaloneSurfaceComponents(sf, filePath));
 
@@ -567,21 +524,13 @@ export function checkPropsInFile(filePath, content) {
 }
 
 export function runGuard() {
-  if (!existsSync(componentsDir)) {
-    console.log(
-      "guard-component-props: components directory does not exist, skipping.",
-    );
-    return [];
-  }
-
-  const files = readdirSync(componentsDir).filter(
-    (f) => f.endsWith(".tsx") && !f.endsWith(".test.tsx"),
+  const files = listApplicationComponentFiles(root).filter(
+    (f) => !f.endsWith(".test.tsx"),
   );
 
   const allViolations = [];
 
-  for (const file of files) {
-    const fullPath = path.join(componentsDir, file);
+  for (const fullPath of files) {
     const content = readFileSync(fullPath, "utf8");
     const violations = checkPropsInFile(fullPath, content);
     allViolations.push(...violations);
@@ -608,7 +557,7 @@ if (isMain) {
   }
 
   console.log(
-    "guard-component-props: all component props in src/components/notes-app/*.tsx adhere to standard inheritance.",
+    "guard-component-props: all application component props in src/components/ (outside ui/ and firebase/) adhere to standard inheritance.",
   );
   process.exit(0);
 }

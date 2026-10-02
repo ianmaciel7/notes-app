@@ -1,6 +1,4 @@
 {
-  "signIn": {
-    "allowDuplicateEmails": false
-  },
-  "blockAuth": false
+  "signIn": { "allowDuplicateEmails": false },
+  "emailPrivacyConfig": { "enableImprovedEmailPrivacy": false }
 }

@@ -1,9 +1,11 @@
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { isApplicationComponentPath } from "./component-scope-lib.mjs";
 
-// `src/components/ui/` is registry-installed and intentionally excluded from
-// project-wide convention enforcement. All other project source is in scope.
-const EXCLUDED_PREFIXES = ["src/components/ui/"];
+// `src/components/ui/` and `src/components/firebase/` are registry-installed and
+// intentionally excluded from project-wide convention enforcement. All other
+// project source is in scope.
+const EXCLUDED_PREFIXES = ["src/components/ui/", "src/components/firebase/"];
 const UI_PREFIX = "src/components/ui/";
 const SOURCE_EXTENSIONS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs"]);
 const STYLE_EXTENSIONS = new Set([...SOURCE_EXTENSIONS, ".css"]);
@@ -56,7 +58,6 @@ function patternRule(id, message, regex, options = {}) {
   };
 }
 
-const COMPONENT_FILE = /^src\/components\/notes-app\/[^/]+\.tsx$/;
 const MAX_COMPONENT_LINES = 400;
 
 // A name that places a component inside a surface (`space-sidebar-empty`,
@@ -171,7 +172,7 @@ export const CONVENTION_RULES = [
     includeTests: false,
     uiOnly: false,
     allowed: [],
-    appliesTo: (relPath) => COMPONENT_FILE.test(relPath),
+    appliesTo: (relPath) => isApplicationComponentPath(relPath),
     check({ relPath, code }) {
       const stem = path.posix.basename(relPath, ".tsx");
       return stem
@@ -190,7 +191,7 @@ export const CONVENTION_RULES = [
     includeTests: false,
     uiOnly: false,
     allowed: [],
-    appliesTo: (relPath) => COMPONENT_FILE.test(relPath),
+    appliesTo: (relPath) => isApplicationComponentPath(relPath),
     check({ relPath, code }) {
       const stem = path.posix.basename(relPath, ".tsx");
       const hits = [];
@@ -212,7 +213,7 @@ export const CONVENTION_RULES = [
     includeTests: false,
     uiOnly: false,
     allowed: [],
-    appliesTo: (relPath) => COMPONENT_FILE.test(relPath),
+    appliesTo: (relPath) => isApplicationComponentPath(relPath),
     check({ content }) {
       const count = content.split("\n").length;
       return count > MAX_COMPONENT_LINES

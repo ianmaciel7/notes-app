@@ -15,12 +15,13 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
+import { listApplicationComponentDirs } from "./component-scope-lib.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const configuredScanRoots = [
   path.join(root, "src/app"),
   path.join(root, "src/components/firebase"),
-  path.join(root, "src/components/notes-app"),
+  ...listApplicationComponentDirs(root),
 ];
 const scanRoots = configuredScanRoots.filter((scanRoot) =>
   existsSync(scanRoot),

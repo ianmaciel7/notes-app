@@ -81,39 +81,31 @@ function MfaAssertionForm({
       {resolver.hints.map((hint) => {
         if (hint.factorId === TotpMultiFactorGenerator.FACTOR_ID) {
           return (
-            <TotpButton key={hint.factorId} onClick={() => setHint(hint)} />
+            <Button
+              key={hint.factorId}
+              onClick={() => setHint(hint)}
+              variant="outline"
+            >
+              {getTranslation(ui, "labels", "mfaTotpVerification")}
+            </Button>
           );
         }
 
         if (hint.factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
           return (
-            <SmsButton key={hint.factorId} onClick={() => setHint(hint)} />
+            <Button
+              key={hint.factorId}
+              onClick={() => setHint(hint)}
+              variant="outline"
+            >
+              {getTranslation(ui, "labels", "mfaSmsVerification")}
+            </Button>
           );
         }
 
         return null;
       })}
     </FieldGroup>
-  );
-}
-
-function TotpButton(props: ComponentProps<typeof Button>) {
-  const ui = useUI();
-  const labelText = getTranslation(ui, "labels", "mfaTotpVerification");
-  return (
-    <Button data-slot="mfa-assertion-totp-button" {...props} variant="outline">
-      {labelText}
-    </Button>
-  );
-}
-
-function SmsButton(props: ComponentProps<typeof Button>) {
-  const ui = useUI();
-  const labelText = getTranslation(ui, "labels", "mfaSmsVerification");
-  return (
-    <Button data-slot="mfa-assertion-sms-button" {...props} variant="outline">
-      {labelText}
-    </Button>
   );
 }
 

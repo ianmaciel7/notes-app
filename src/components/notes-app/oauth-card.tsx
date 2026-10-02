@@ -3,21 +3,19 @@
 import { getTranslation } from "@firebase-oss/ui-core";
 import { useOnUserAuthenticated, useUI } from "@firebase-oss/ui-react";
 import type { User } from "firebase/auth";
+import { useTranslations } from "next-intl";
 import type { ComponentProps, PropsWithChildren } from "react";
-import {
-  AuthCard,
-  AuthCardProviderGroup,
-} from "@/components/notes-app/auth-card";
-import { Policies } from "@/components/notes-app/auth-policies-description";
-import { MultiFactorAuthAssertionScreen } from "@/components/notes-app/mfa-assertion-card";
-import { RedirectError } from "@/components/notes-app/redirect-error-alert";
+import { AuthCard } from "@/components/notes-app/auth-card";
+import { AuthPoliciesDescription } from "@/components/notes-app/auth-policies-description";
+import { MfaAssertionCard } from "@/components/notes-app/mfa-assertion-card";
+import { RedirectErrorAlert } from "@/components/notes-app/redirect-error-alert";
 import {
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { FieldGroup } from "@/components/ui/field";
+import { FieldGroup, FieldSeparator } from "@/components/ui/field";
 
 type OAuthCardProps = PropsWithChildren<
   Omit<ComponentProps<"div">, "children">
@@ -27,6 +25,7 @@ type OAuthCardProps = PropsWithChildren<
 
 function OAuthCard({ children, onSignIn, ...props }: OAuthCardProps) {
   const ui = useUI();
+  const t = useTranslations("auth");
 
   const titleText = getTranslation(ui, "labels", "signIn");
   const subtitleText = getTranslation(ui, "prompts", "signInToAccount");
@@ -34,7 +33,7 @@ function OAuthCard({ children, onSignIn, ...props }: OAuthCardProps) {
   useOnUserAuthenticated(onSignIn);
 
   if (ui.multiFactorResolver) {
-    return <MultiFactorAuthAssertionScreen />;
+    return <MfaAssertionCard />;
   }
 
   return (
@@ -46,10 +45,15 @@ function OAuthCard({ children, onSignIn, ...props }: OAuthCardProps) {
         <CardDescription>{subtitleText}</CardDescription>
       </CardHeader>
       <CardContent>
-        <AuthCardProviderGroup>{children}</AuthCardProviderGroup>
+        <FieldGroup data-slot="oauth-card-provider-group" className="pt-1">
+          <FieldSeparator className="uppercase [&>span]:bg-card">
+            {t("orContinueWith")}
+          </FieldSeparator>
+          <FieldGroup className="gap-2.5">{children}</FieldGroup>
+        </FieldGroup>
         <FieldGroup className="mt-4">
-          <RedirectError />
-          <Policies />
+          <RedirectErrorAlert />
+          <AuthPoliciesDescription />
         </FieldGroup>
       </CardContent>
     </AuthCard>

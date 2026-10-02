@@ -27,6 +27,7 @@ function MfaEnrollmentForm({
   className,
   ...props
 }: MfaEnrollmentFormProps) {
+  const ui = useUI();
   const hints = hintsProp ?? DEFAULT_HINTS;
 
   if (hints.length === 0) {
@@ -70,36 +71,24 @@ function MfaEnrollmentForm({
     >
       {hints.map((hint) => {
         if (hint === FactorId.TOTP) {
-          return <TotpButton key={hint} onClick={() => setHint(hint)} />;
+          return (
+            <Button key={hint} onClick={() => setHint(hint)} variant="outline">
+              {getTranslation(ui, "labels", "mfaTotpVerification")}
+            </Button>
+          );
         }
 
         if (hint === FactorId.PHONE) {
-          return <SmsButton key={hint} onClick={() => setHint(hint)} />;
+          return (
+            <Button key={hint} onClick={() => setHint(hint)} variant="outline">
+              {getTranslation(ui, "labels", "mfaSmsVerification")}
+            </Button>
+          );
         }
 
         return null;
       })}
     </FieldGroup>
-  );
-}
-
-function TotpButton(props: ComponentProps<typeof Button>) {
-  const ui = useUI();
-  const labelText = getTranslation(ui, "labels", "mfaTotpVerification");
-  return (
-    <Button data-slot="mfa-enrollment-totp-button" {...props} variant="outline">
-      {labelText}
-    </Button>
-  );
-}
-
-function SmsButton(props: ComponentProps<typeof Button>) {
-  const ui = useUI();
-  const labelText = getTranslation(ui, "labels", "mfaSmsVerification");
-  return (
-    <Button data-slot="mfa-enrollment-sms-button" {...props} variant="outline">
-      {labelText}
-    </Button>
   );
 }
 

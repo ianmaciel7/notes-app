@@ -24,7 +24,7 @@ vi.mock("@firebase-oss/ui-core", () => ({
 }));
 
 vi.mock("./auth-policies-description", () => ({
-  Policies: () => null,
+  AuthPoliciesDescription: () => null,
 }));
 
 describe("LoginForm", () => {

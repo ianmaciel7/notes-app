@@ -41,10 +41,4 @@ function AuthGreetingHeader({ className, ...props }: AuthGreetingHeaderProps) {
   );
 }
 
-// Backwards-compatible aliases
-export {
-  AuthGreetingHeader as AuthGreeting,
-  AuthGreetingHeader,
-  type AuthGreetingHeaderProps,
-  type AuthGreetingHeaderProps as AuthGreetingProps,
-};
+export { AuthGreetingHeader, type AuthGreetingHeaderProps };

@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { RedirectError } from "./redirect-error-alert";
+import { RedirectErrorAlert } from "./redirect-error-alert";
 
 vi.mock("@firebase-oss/ui-react", () => ({
   useRedirectError: vi.fn(),
@@ -8,7 +8,7 @@ vi.mock("@firebase-oss/ui-react", () => ({
 
 import { useRedirectError } from "@firebase-oss/ui-react";
 
-describe("RedirectError", () => {
+describe("RedirectErrorAlert", () => {
   afterEach(() => {
     cleanup();
   });
@@ -16,7 +16,7 @@ describe("RedirectError", () => {
   it("renders null when there is no error", () => {
     vi.mocked(useRedirectError).mockReturnValue(undefined);
 
-    const { container } = render(<RedirectError />);
+    const { container } = render(<RedirectErrorAlert />);
     expect(container.firstChild).toBeNull();
   });
 
@@ -24,7 +24,7 @@ describe("RedirectError", () => {
     vi.mocked(useRedirectError).mockReturnValue("Email or password invalid.");
 
     render(
-      <RedirectError
+      <RedirectErrorAlert
         data-testid="redirect-error-msg"
         className="custom-error-class"
         role="alert"

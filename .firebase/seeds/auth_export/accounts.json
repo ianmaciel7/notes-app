@@ -2,40 +2,4813 @@
   "kind": "identitytoolkit#DownloadAccountResponse",
   "users": [
     {
-      "localId": "tester1-uid-123456",
-      "email": "tester1@notesapp.dev",
+      "localId": "0XGmEr85EI2AzKUdI8vVOqjb1b8W",
+      "createdAt": "1790895173160",
+      "lastLoginAt": "1790895173197",
+      "passwordHash": "fakeHash:salt=fakeSaltHqtR77SkFCNY7swefIDG:password=securePassword123",
+      "salt": "fakeSaltHqtR77SkFCNY7swefIDG",
+      "passwordUpdatedAt": 1790935815029,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790895173147@notesapp.dev",
+          "federatedId": "emulator-test-1790895173147@notesapp.dev",
+          "rawId": "emulator-test-1790895173147@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790895173147@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "0YmWgxTQmg33sUUDqg7PkmUiRSCR",
+      "lastLoginAt": "1790943808759",
+      "emailVerified": false,
+      "email": "firestore-owner-1790943807954@notesapp.dev",
+      "salt": "fakeSaltJSGYITLEeDuLFCkfyftm",
+      "passwordHash": "fakeHash:salt=fakeSaltJSGYITLEeDuLFCkfyftm:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790943807974,
+      "validSince": "1790943807",
+      "createdAt": "1790943807974",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790943807954@notesapp.dev",
+          "federatedId": "firestore-owner-1790943807954@notesapp.dev",
+          "rawId": "firestore-owner-1790943807954@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T12:23:28.759Z"
+    },
+    {
+      "localId": "0xXHU6M5L6WqKnqYHp7Kxe0ug6u5",
+      "lastLoginAt": "1790942274901",
+      "createdAt": "1790942274901",
+      "lastRefreshAt": "2026-10-02T11:57:54.901Z"
+    },
+    {
+      "localId": "1BTbBW29IfyY9KKfrhd1FafNWdBz",
+      "createdAt": "1790895078706",
+      "lastLoginAt": "1790895078706",
+      "passwordHash": "fakeHash:salt=fakeSaltgrwnGQxc5zElugPd7B4L:password=emulatorPassword123",
+      "salt": "fakeSaltgrwnGQxc5zElugPd7B4L",
+      "passwordUpdatedAt": 1790935815029,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790895078696-o758ma@notesapp.dev",
+          "federatedId": "rules-intruder-1790895078696-o758ma@notesapp.dev",
+          "rawId": "rules-intruder-1790895078696-o758ma@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790895078696-o758ma@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "1IoWz8eukjV9xy7JOI1INKb9XYuA",
+      "createdAt": "1790896863415",
+      "lastLoginAt": "1790896863931",
+      "passwordHash": "fakeHash:salt=fakeSaltO0SqhDQBt8rhkCN44K6r:password=emulatorPassword123",
+      "salt": "fakeSaltO0SqhDQBt8rhkCN44K6r",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790896863407-rgg6wu@notesapp.dev",
+          "federatedId": "rules-owner-1790896863407-rgg6wu@notesapp.dev",
+          "rawId": "rules-owner-1790896863407-rgg6wu@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790896863407-rgg6wu@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "1OJsYyOQufEuPiGA4JHrKRvxEkdx",
+      "createdAt": "1790889183197",
+      "lastLoginAt": "1790889183530",
+      "passwordHash": "fakeHash:salt=fakeSaltxJ7z25iNIWLH0b80ayF5:password=emulatorPassword123",
+      "salt": "fakeSaltxJ7z25iNIWLH0b80ayF5",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790889183183@notesapp.dev",
+          "federatedId": "firestore-owner-1790889183183@notesapp.dev",
+          "rawId": "firestore-owner-1790889183183@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790889183183@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "1Zb0IvlOQhWlXMB64NkXSho0r80H",
+      "createdAt": "1790889294492",
+      "lastLoginAt": "1790889294529",
+      "passwordHash": "fakeHash:salt=fakeSaltyFiKjmMvN92Kg0lYuVf3:password=securePassword123",
+      "salt": "fakeSaltyFiKjmMvN92Kg0lYuVf3",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790889294479@notesapp.dev",
+          "federatedId": "emulator-test-1790889294479@notesapp.dev",
+          "rawId": "emulator-test-1790889294479@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790889294479@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "1tte4K3b6kLOwenpz2Vmr4rjt10Z",
+      "createdAt": "1790889294810",
+      "lastLoginAt": "1790889295458",
+      "passwordHash": "fakeHash:salt=fakeSaltaUAPCkibO99DIcWHE2LI:password=emulatorPassword123",
+      "salt": "fakeSaltaUAPCkibO99DIcWHE2LI",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790889294796@notesapp.dev",
+          "federatedId": "firestore-owner-1790889294796@notesapp.dev",
+          "rawId": "firestore-owner-1790889294796@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790889294796@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "2WHHtxdBHPoWVToTEcBdLcDG4pP6",
+      "createdAt": "1790895174768",
+      "lastLoginAt": "1790895175356",
+      "passwordHash": "fakeHash:salt=fakeSaltdNlx4Md2d7XRqRpp5ttl:password=emulatorPassword123",
+      "salt": "fakeSaltdNlx4Md2d7XRqRpp5ttl",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790895174758-iuzj9t@notesapp.dev",
+          "federatedId": "rules-owner-1790895174758-iuzj9t@notesapp.dev",
+          "rawId": "rules-owner-1790895174758-iuzj9t@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790895174758-iuzj9t@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "2eHWz3vJvlzYV7qiLMAR4FMjXtOS",
+      "createdAt": "1790894428882",
+      "lastLoginAt": "1790894429493",
+      "passwordHash": "fakeHash:salt=fakeSaltjPjEeDno9L4hWLN9Bl0s:password=emulatorPassword123",
+      "salt": "fakeSaltjPjEeDno9L4hWLN9Bl0s",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790894428870-1l2k80@notesapp.dev",
+          "federatedId": "rules-owner-1790894428870-1l2k80@notesapp.dev",
+          "rawId": "rules-owner-1790894428870-1l2k80@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790894428870-1l2k80@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "2j935zrJJIi3rf3v4pCVsS5vcaWi",
+      "createdAt": "1790894988384",
+      "lastLoginAt": "1790894988900",
+      "passwordHash": "fakeHash:salt=fakeSaltOarQ70oOcxviwMhJy9CW:password=emulatorPassword123",
+      "salt": "fakeSaltOarQ70oOcxviwMhJy9CW",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790894988372-j6dbgn@notesapp.dev",
+          "federatedId": "rules-owner-1790894988372-j6dbgn@notesapp.dev",
+          "rawId": "rules-owner-1790894988372-j6dbgn@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790894988372-j6dbgn@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "3Fp7rjnqn0A6SWwjCqZj1X3ucnKU",
+      "lastLoginAt": "1790942272807",
+      "emailVerified": false,
+      "email": "emulator-test-1790942272752@notesapp.dev",
+      "salt": "fakeSaltOBK1YH1KNNCOytiN8Nmw",
+      "passwordHash": "fakeHash:salt=fakeSaltOBK1YH1KNNCOytiN8Nmw:password=securePassword123",
+      "passwordUpdatedAt": 1790942272768,
+      "validSince": "1790942272",
+      "createdAt": "1790942272768",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790942272752@notesapp.dev",
+          "federatedId": "emulator-test-1790942272752@notesapp.dev",
+          "rawId": "emulator-test-1790942272752@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:57:52.807Z"
+    },
+    {
+      "localId": "3R9ORZySzghZGwsYNWLVZw7lWNVk",
+      "createdAt": "1790894428729",
+      "lastLoginAt": "1790894428729",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "3kAHFNsZfJEhDFHmN0QhB3WPk9Qn",
+      "createdAt": "1790889171542",
+      "lastLoginAt": "1790889171542",
+      "passwordHash": "fakeHash:salt=fakeSalt5WTmSet3M62kX8SLHpwu:password=emulatorPassword123",
+      "salt": "fakeSalt5WTmSet3M62kX8SLHpwu",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790889171534-rjr92j@notesapp.dev",
+          "federatedId": "rules-owner-1790889171534-rjr92j@notesapp.dev",
+          "rawId": "rules-owner-1790889171534-rjr92j@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790889171534-rjr92j@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "3mV0OKCUJFvyodbGRuYGXjpQLJuO",
+      "createdAt": "1790895443921",
+      "lastLoginAt": "1790895443921",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "3tgpeGzYUq7d3bykBLWkEtGm41R3",
+      "createdAt": "1790898598505",
+      "lastLoginAt": "1790898598505",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "454jQoAWhzwqbildJboOEbzngIUX",
+      "createdAt": "1790895078097",
+      "lastLoginAt": "1790895078783",
+      "passwordHash": "fakeHash:salt=fakeSaltnnUVRZkdTCRUMfBxlDxt:password=emulatorPassword123",
+      "salt": "fakeSaltnnUVRZkdTCRUMfBxlDxt",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790895078083-mk568z@notesapp.dev",
+          "federatedId": "rules-owner-1790895078083-mk568z@notesapp.dev",
+          "rawId": "rules-owner-1790895078083-mk568z@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790895078083-mk568z@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "47BjR9sxVBfAhzg0J9zCov4xrRyG",
+      "createdAt": "1790896479435",
+      "lastLoginAt": "1790896479435",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "4BzyuwLBRK5XAIwXSpgFPagY9XUo",
+      "lastLoginAt": "1790942440402",
+      "emailVerified": false,
+      "email": "firestore-owner-1790942439551@notesapp.dev",
+      "salt": "fakeSaltyPclui0hqamLFt7tGfYu",
+      "passwordHash": "fakeHash:salt=fakeSaltyPclui0hqamLFt7tGfYu:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942439570,
+      "validSince": "1790942439",
+      "createdAt": "1790942439570",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790942439551@notesapp.dev",
+          "federatedId": "firestore-owner-1790942439551@notesapp.dev",
+          "rawId": "firestore-owner-1790942439551@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T12:00:40.402Z"
+    },
+    {
+      "localId": "4WVUjvcrbtWuaaDSPtifmMsoL0Se",
+      "createdAt": "1790898570201",
+      "lastLoginAt": "1790898570658",
+      "passwordHash": "fakeHash:salt=fakeSaltj1Z0akg907lzRmIzAX6D:password=emulatorPassword123",
+      "salt": "fakeSaltj1Z0akg907lzRmIzAX6D",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790898570194-5wi8ff@notesapp.dev",
+          "federatedId": "rules-owner-1790898570194-5wi8ff@notesapp.dev",
+          "rawId": "rules-owner-1790898570194-5wi8ff@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790898570194-5wi8ff@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "5CEf0xUFhtCPofzzIL89J93ODKhh",
+      "lastLoginAt": "1790942183032",
+      "emailVerified": false,
+      "email": "rules-intruder-1790942183018-vcwg2y@notesapp.dev",
+      "salt": "fakeSalttfl5FMJAZj1onVRDuXd5",
+      "passwordHash": "fakeHash:salt=fakeSalttfl5FMJAZj1onVRDuXd5:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942183032,
+      "validSince": "1790942183",
+      "createdAt": "1790942183032",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790942183018-vcwg2y@notesapp.dev",
+          "federatedId": "rules-intruder-1790942183018-vcwg2y@notesapp.dev",
+          "rawId": "rules-intruder-1790942183018-vcwg2y@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:56:23.032Z"
+    },
+    {
+      "localId": "5YE7din1oKO7ZDcVV7i8eUKMud75",
+      "createdAt": "1790896790254",
+      "lastLoginAt": "1790896790254",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "5j6mtgyVCEhIdAd6NgHGkLuPG8tY",
+      "lastLoginAt": "1790942275721",
+      "emailVerified": false,
+      "email": "rules-owner-1790942275055-a7m3ll@notesapp.dev",
+      "salt": "fakeSaltDSoow1bmWe5GgpnQCUGv",
+      "passwordHash": "fakeHash:salt=fakeSaltDSoow1bmWe5GgpnQCUGv:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942275064,
+      "validSince": "1790942275",
+      "createdAt": "1790942275063",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790942275055-a7m3ll@notesapp.dev",
+          "federatedId": "rules-owner-1790942275055-a7m3ll@notesapp.dev",
+          "rawId": "rules-owner-1790942275055-a7m3ll@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:57:55.721Z"
+    },
+    {
+      "localId": "5oEqszbg9F3QExpFgf2Oe6heLSMN",
+      "createdAt": "1790896480742",
+      "lastLoginAt": "1790896481525",
+      "passwordHash": "fakeHash:salt=fakeSaltqJJQEMtJg7gkdFkmza3Z:password=emulatorPassword123",
+      "salt": "fakeSaltqJJQEMtJg7gkdFkmza3Z",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790896480726@notesapp.dev",
+          "federatedId": "firestore-owner-1790896480726@notesapp.dev",
+          "rawId": "firestore-owner-1790896480726@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790896480726@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "5wWtoTZRnSsQ1FOI4MICefz3SdTa",
+      "lastLoginAt": "1790942168226",
+      "emailVerified": false,
+      "email": "rules-intruder-1790942168216-l0z0yc@notesapp.dev",
+      "salt": "fakeSalteYbUbws6EwT1lIlOfqsX",
+      "passwordHash": "fakeHash:salt=fakeSalteYbUbws6EwT1lIlOfqsX:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942168226,
+      "validSince": "1790942168",
+      "createdAt": "1790942168226",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790942168216-l0z0yc@notesapp.dev",
+          "federatedId": "rules-intruder-1790942168216-l0z0yc@notesapp.dev",
+          "rawId": "rules-intruder-1790942168216-l0z0yc@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:56:08.226Z"
+    },
+    {
+      "localId": "5zXfQdTi5znFb9qMQQFevQz5o5mH",
+      "createdAt": "1790889115920",
+      "lastLoginAt": "1790889115957",
+      "passwordHash": "fakeHash:salt=fakeSaltHOHa3Orx1rHqwPoe61E4:password=securePassword123",
+      "salt": "fakeSaltHOHa3Orx1rHqwPoe61E4",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790889115909@notesapp.dev",
+          "federatedId": "emulator-test-1790889115909@notesapp.dev",
+          "rawId": "emulator-test-1790889115909@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790889115909@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "6EdoF0HdVWzq3XMh4oNBclGENVts",
+      "createdAt": "1790889284031",
+      "lastLoginAt": "1790889284427",
+      "passwordHash": "fakeHash:salt=fakeSalt4VT9oPMqqoMdjwAjYxl6:password=emulatorPassword123",
+      "salt": "fakeSalt4VT9oPMqqoMdjwAjYxl6",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790889284023@notesapp.dev",
+          "federatedId": "firestore-owner-1790889284023@notesapp.dev",
+          "rawId": "firestore-owner-1790889284023@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790889284023@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "6FzEisJiLiS8tgJoApaQTBnqC8Ma",
+      "lastLoginAt": "1790938859650",
+      "emailVerified": false,
+      "email": "rules-intruder-1790938859641-mlx2u6@notesapp.dev",
+      "salt": "fakeSaltMHK5lCKd7TkHYqoqB2pp",
+      "passwordHash": "fakeHash:salt=fakeSaltMHK5lCKd7TkHYqoqB2pp:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790938859650,
+      "validSince": "1790938859",
+      "createdAt": "1790938859650",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790938859641-mlx2u6@notesapp.dev",
+          "federatedId": "rules-intruder-1790938859641-mlx2u6@notesapp.dev",
+          "rawId": "rules-intruder-1790938859641-mlx2u6@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:00:59.651Z"
+    },
+    {
+      "localId": "6H3ry43ifzLEjKLz456WGwJ1LjVt",
+      "createdAt": "1790894429402",
+      "lastLoginAt": "1790894429402",
+      "passwordHash": "fakeHash:salt=fakeSaltKe7bAAV0T0PrsofbVLYh:password=emulatorPassword123",
+      "salt": "fakeSaltKe7bAAV0T0PrsofbVLYh",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790894429392-a72g3u@notesapp.dev",
+          "federatedId": "rules-intruder-1790894429392-a72g3u@notesapp.dev",
+          "rawId": "rules-intruder-1790894429392-a72g3u@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790894429392-a72g3u@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "6SEzk97j6FvjfyCBd8QYNFXuxUPN",
+      "createdAt": "1790889096058",
+      "lastLoginAt": "1790889096058",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "6YNb9zAXWrSeDXxrqyL3y9MAMdAS",
+      "createdAt": "1790898243523",
+      "lastLoginAt": "1790898243980",
+      "passwordHash": "fakeHash:salt=fakeSaltx0qrDwlLdcNzR7c9q1Vo:password=emulatorPassword123",
+      "salt": "fakeSaltx0qrDwlLdcNzR7c9q1Vo",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790898243516-ndobia@notesapp.dev",
+          "federatedId": "rules-owner-1790898243516-ndobia@notesapp.dev",
+          "rawId": "rules-owner-1790898243516-ndobia@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790898243516-ndobia@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "6enPx0K0worjibYCTaekDsM62oen",
+      "createdAt": "1790897749250",
+      "lastLoginAt": "1790897749250",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "6jqwFRuPRLGrVoEwxzZCVk6XJDOD",
+      "lastLoginAt": "1790938858920",
+      "createdAt": "1790938858920",
+      "lastRefreshAt": "2026-10-02T11:00:58.920Z"
+    },
+    {
+      "localId": "6x4wB0graMoBxb1Zch9LCmvI7lsB",
+      "createdAt": "1790894830310",
+      "lastLoginAt": "1790894831016",
+      "passwordHash": "fakeHash:salt=fakeSaltejtSJuloX1W2S9ZonhyZ:password=emulatorPassword123",
+      "salt": "fakeSaltejtSJuloX1W2S9ZonhyZ",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790894830300-lqlwps@notesapp.dev",
+          "federatedId": "rules-owner-1790894830300-lqlwps@notesapp.dev",
+          "rawId": "rules-owner-1790894830300-lqlwps@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790894830300-lqlwps@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "73Vnh5WRO6WmMRAqFh3QwSeGx4ao",
+      "createdAt": "1790898872758",
+      "lastLoginAt": "1790898872758",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "76hCvVkg3XYCxRP9uBOfHpZoSw3M",
+      "createdAt": "1790894841634",
+      "lastLoginAt": "1790894841680",
+      "passwordHash": "fakeHash:salt=fakeSaltdHn6Y90HFtljVeKetlW5:password=securePassword123",
+      "salt": "fakeSaltdHn6Y90HFtljVeKetlW5",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790894841624@notesapp.dev",
+          "federatedId": "emulator-test-1790894841624@notesapp.dev",
+          "rawId": "emulator-test-1790894841624@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790894841624@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "7GVKjeYtTfhzLn9Sdb01VrgTZ5VO",
+      "createdAt": "1790896482223",
+      "lastLoginAt": "1790896482223",
+      "passwordHash": "fakeHash:salt=fakeSaltGJldOKNlZWoip5iDbIIM:password=emulatorPassword123",
+      "salt": "fakeSaltGJldOKNlZWoip5iDbIIM",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790896482206-q5kfcu@notesapp.dev",
+          "federatedId": "rules-intruder-1790896482206-q5kfcu@notesapp.dev",
+          "rawId": "rules-intruder-1790896482206-q5kfcu@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790896482206-q5kfcu@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "7Qm5KMgyiPG6GcIPiEf6IjNErTbr",
+      "lastLoginAt": "1790938753898",
+      "emailVerified": false,
+      "email": "firestore-owner-1790938753241@notesapp.dev",
+      "salt": "fakeSaltiuXdd2nPimAvevdcAjCt",
+      "passwordHash": "fakeHash:salt=fakeSaltiuXdd2nPimAvevdcAjCt:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790938753258,
+      "validSince": "1790938753",
+      "createdAt": "1790938753258",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790938753241@notesapp.dev",
+          "federatedId": "firestore-owner-1790938753241@notesapp.dev",
+          "rawId": "firestore-owner-1790938753241@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T10:59:13.898Z"
+    },
+    {
+      "localId": "7ZHXEPMHnYwnGO1J98BRIIciMXAR",
+      "createdAt": "1790891437306",
+      "lastLoginAt": "1790891437306",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "7ihOFexHYyqFIdxpT8w394VmseXG",
+      "createdAt": "1790894842868",
+      "lastLoginAt": "1790894843397",
+      "passwordHash": "fakeHash:salt=fakeSaltbstHCK5tKd2MfB8bS8IM:password=emulatorPassword123",
+      "salt": "fakeSaltbstHCK5tKd2MfB8bS8IM",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790894842859-b3mh4b@notesapp.dev",
+          "federatedId": "rules-owner-1790894842859-b3mh4b@notesapp.dev",
+          "rawId": "rules-owner-1790894842859-b3mh4b@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790894842859-b3mh4b@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "7xQhFfo1A77hsLPdSdwgttFOXs1U",
+      "createdAt": "1790889630003",
+      "lastLoginAt": "1790889630003",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "80HcYCwvqBO3Yrd1LJTbdyqjUtBz",
+      "createdAt": "1790896950685",
+      "lastLoginAt": "1790896951588",
+      "passwordHash": "fakeHash:salt=fakeSalttOUjB94frfjZIbafW9y6:password=emulatorPassword123",
+      "salt": "fakeSalttOUjB94frfjZIbafW9y6",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790896950676-pdmmk1@notesapp.dev",
+          "federatedId": "rules-owner-1790896950676-pdmmk1@notesapp.dev",
+          "rawId": "rules-owner-1790896950676-pdmmk1@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790896950676-pdmmk1@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "81shioJKXXeZYiEqfdN7GkFVjyR3",
+      "createdAt": "1790896791573",
+      "lastLoginAt": "1790896792075",
+      "passwordHash": "fakeHash:salt=fakeSaltsbK7s1uWgdkxT9oN3GSJ:password=emulatorPassword123",
+      "salt": "fakeSaltsbK7s1uWgdkxT9oN3GSJ",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790896791566-8pc0sl@notesapp.dev",
+          "federatedId": "rules-owner-1790896791566-8pc0sl@notesapp.dev",
+          "rawId": "rules-owner-1790896791566-8pc0sl@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790896791566-8pc0sl@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "8AktK6SbqlXyY6X8GyyUlqvha1Zs",
+      "lastLoginAt": "1790942160771",
+      "createdAt": "1790942160771",
+      "lastRefreshAt": "2026-10-02T11:56:00.772Z"
+    },
+    {
+      "localId": "8CxhVSLgdOqIIhiLLFyD2EOzChnH",
+      "createdAt": "1790898872172",
+      "lastLoginAt": "1790898872807",
+      "passwordHash": "fakeHash:salt=fakeSaltTZ4Cp6fU3d6E5fsq3BCF:password=emulatorPassword123",
+      "salt": "fakeSaltTZ4Cp6fU3d6E5fsq3BCF",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790898872159@notesapp.dev",
+          "federatedId": "firestore-owner-1790898872159@notesapp.dev",
+          "rawId": "firestore-owner-1790898872159@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790898872159@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "8QV4Y5r8DP0CL1gcFlc4Pzm7IcPL",
+      "createdAt": "1790898401975",
+      "lastLoginAt": "1790898401975",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "8ZuGjgtk7Pmzn3O6SwAUuc0zBWnF",
+      "createdAt": "1790898403219",
+      "lastLoginAt": "1790898403674",
+      "passwordHash": "fakeHash:salt=fakeSalttsWUYZM8Q2nyrtLDP7UY:password=emulatorPassword123",
+      "salt": "fakeSalttsWUYZM8Q2nyrtLDP7UY",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790898403209-rbb2x2@notesapp.dev",
+          "federatedId": "rules-owner-1790898403209-rbb2x2@notesapp.dev",
+          "rawId": "rules-owner-1790898403209-rbb2x2@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790898403209-rbb2x2@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "8dcI3FdRZTfStVhAdrq4P97X3Ec8",
+      "createdAt": "1790894986287",
+      "lastLoginAt": "1790894986319",
+      "passwordHash": "fakeHash:salt=fakeSaltd5QAZ1vO7ATxnmPTEzoE:password=securePassword123",
+      "salt": "fakeSaltd5QAZ1vO7ATxnmPTEzoE",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790894986275@notesapp.dev",
+          "federatedId": "emulator-test-1790894986275@notesapp.dev",
+          "rawId": "emulator-test-1790894986275@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790894986275@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "8kGRKusOiJl3SaVRs35PpwGhWMIm",
+      "lastLoginAt": "1790943963717",
+      "createdAt": "1790943963717",
+      "lastRefreshAt": "2026-10-02T12:26:03.717Z"
+    },
+    {
+      "localId": "8kPRhzRFAfQK2wq7yWMzLoGuZQNi",
+      "createdAt": "1790898598540",
+      "lastLoginAt": "1790898598571",
+      "passwordHash": "fakeHash:salt=fakeSalt57lmNXdBAHsn8Os3OfIf:password=securePassword123",
+      "salt": "fakeSalt57lmNXdBAHsn8Os3OfIf",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790898598528@notesapp.dev",
+          "federatedId": "emulator-test-1790898598528@notesapp.dev",
+          "rawId": "emulator-test-1790898598528@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790898598528@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "9EzjmrT1tb5GIoM8GmlDVxFPLHEa",
+      "lastLoginAt": "1790940430553",
+      "emailVerified": false,
+      "email": "rules-intruder-1790940430544-96w5zy@notesapp.dev",
+      "salt": "fakeSalt7q03tRwtEltRxlkFkton",
+      "passwordHash": "fakeHash:salt=fakeSalt7q03tRwtEltRxlkFkton:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790940430553,
+      "validSince": "1790940430",
+      "createdAt": "1790940430553",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790940430544-96w5zy@notesapp.dev",
+          "federatedId": "rules-intruder-1790940430544-96w5zy@notesapp.dev",
+          "rawId": "rules-intruder-1790940430544-96w5zy@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:27:10.553Z"
+    },
+    {
+      "localId": "9Kl2RXF9cnFJFW4XXnVECupqQilZ",
+      "createdAt": "1790896790286",
+      "lastLoginAt": "1790896790360",
+      "passwordHash": "fakeHash:salt=fakeSalt0V12RZMnnbso51kbxT0M:password=securePassword123",
+      "salt": "fakeSalt0V12RZMnnbso51kbxT0M",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790896790277@notesapp.dev",
+          "federatedId": "emulator-test-1790896790277@notesapp.dev",
+          "rawId": "emulator-test-1790896790277@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790896790277@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "9MpBBbbsWtQyY2Ic8CFebhYU8Ikj",
+      "lastLoginAt": "1790942275593",
+      "emailVerified": false,
+      "email": "rules-intruder-1790942275581-y62ljc@notesapp.dev",
+      "salt": "fakeSaltSOmYk5O6g7ztHMhzluMO",
+      "passwordHash": "fakeHash:salt=fakeSaltSOmYk5O6g7ztHMhzluMO:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942275593,
+      "validSince": "1790942275",
+      "createdAt": "1790942275593",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790942275581-y62ljc@notesapp.dev",
+          "federatedId": "rules-intruder-1790942275581-y62ljc@notesapp.dev",
+          "rawId": "rules-intruder-1790942275581-y62ljc@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:57:55.593Z"
+    },
+    {
+      "localId": "9MzrONHREoMXYa8yaEE7mQCmYdUs",
+      "lastLoginAt": "1790938752882",
+      "emailVerified": false,
+      "email": "emulator-test-1790938752833@notesapp.dev",
+      "salt": "fakeSalteBWBYsrRZlfe8Z7VYtpL",
+      "passwordHash": "fakeHash:salt=fakeSalteBWBYsrRZlfe8Z7VYtpL:password=securePassword123",
+      "passwordUpdatedAt": 1790938752846,
+      "validSince": "1790938752",
+      "createdAt": "1790938752846",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790938752833@notesapp.dev",
+          "federatedId": "emulator-test-1790938752833@notesapp.dev",
+          "rawId": "emulator-test-1790938752833@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T10:59:12.882Z"
+    },
+    {
+      "localId": "9PfyK4IQjRJOexqpd0Vx6HsTdWRj",
+      "createdAt": "1790895756796",
+      "lastLoginAt": "1790895757561",
+      "passwordHash": "fakeHash:salt=fakeSaltksAvAbAl1AtWfKAgKZF6:password=emulatorPassword123",
+      "salt": "fakeSaltksAvAbAl1AtWfKAgKZF6",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790895756775@notesapp.dev",
+          "federatedId": "firestore-owner-1790895756775@notesapp.dev",
+          "rawId": "firestore-owner-1790895756775@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790895756775@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "AAQ5Hu1jsDp0cszsGcd4UZl0HoCL",
+      "createdAt": "1790889116656",
+      "lastLoginAt": "1790889116656",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "B2iazAALgZbxYxHANgMAU2XHVnIF",
+      "createdAt": "1790889295533",
+      "lastLoginAt": "1790889295804",
+      "passwordHash": "fakeHash:salt=fakeSaltu4bTt4lon4halkzM5I9G:password=emulatorPassword123",
+      "salt": "fakeSaltu4bTt4lon4halkzM5I9G",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790889295523-7a7x0e@notesapp.dev",
+          "federatedId": "rules-owner-1790889295523-7a7x0e@notesapp.dev",
+          "rawId": "rules-owner-1790889295523-7a7x0e@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790889295523-7a7x0e@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "BJtTufJqzzbemu69LICN5ktOspzi",
+      "createdAt": "1790898426660",
+      "lastLoginAt": "1790898426699",
+      "passwordHash": "fakeHash:salt=fakeSaltme2A6qVyyvDO5m38XA8v:password=securePassword123",
+      "salt": "fakeSaltme2A6qVyyvDO5m38XA8v",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790898426647@notesapp.dev",
+          "federatedId": "emulator-test-1790898426647@notesapp.dev",
+          "rawId": "emulator-test-1790898426647@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790898426647@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "BykvTO2oHEX9TrODwzZKCts0nfAq",
+      "createdAt": "1790894392240",
+      "lastLoginAt": "1790894392240",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "C4EPNZFwPBckObXK95TX9ArHKDY6",
+      "createdAt": "1790898872869",
+      "lastLoginAt": "1790898873353",
+      "passwordHash": "fakeHash:salt=fakeSaltspGA3eOZ5139XFkFM43J:password=emulatorPassword123",
+      "salt": "fakeSaltspGA3eOZ5139XFkFM43J",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790898872862-qkhiwo@notesapp.dev",
+          "federatedId": "rules-owner-1790898872862-qkhiwo@notesapp.dev",
+          "rawId": "rules-owner-1790898872862-qkhiwo@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790898872862-qkhiwo@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "CCsJl43q3JYyovfGKmOaaKDlV1KE",
+      "createdAt": "1790893206794",
+      "lastLoginAt": "1790893207442",
+      "passwordHash": "fakeHash:salt=fakeSaltC6QbqDXRT7SbOS1kJoUF:password=emulatorPassword123",
+      "salt": "fakeSaltC6QbqDXRT7SbOS1kJoUF",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790893206780@notesapp.dev",
+          "federatedId": "firestore-owner-1790893206780@notesapp.dev",
+          "rawId": "firestore-owner-1790893206780@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790893206780@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "CHo1SbScWA4w1O2LGA6BNDYiOgzo",
+      "createdAt": "1790898630269",
+      "lastLoginAt": "1790898630904",
+      "passwordHash": "fakeHash:salt=fakeSaltpnLJuxnkNff7jK1d504g:password=emulatorPassword123",
+      "salt": "fakeSaltpnLJuxnkNff7jK1d504g",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790898630255@notesapp.dev",
+          "federatedId": "firestore-owner-1790898630255@notesapp.dev",
+          "rawId": "firestore-owner-1790898630255@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790898630255@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "COciMw9IFZrygSiCprvIyAoynDSs",
+      "createdAt": "1790894390309",
+      "lastLoginAt": "1790894390309",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "CPjdLlsTOZl5PlMnaX670QiK3qgP",
+      "createdAt": "1790894453823",
+      "lastLoginAt": "1790894453823",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "CPsAJzsjeomzV4kQI7pGrYhoBxsF",
+      "createdAt": "1790898873273",
+      "lastLoginAt": "1790898873273",
+      "passwordHash": "fakeHash:salt=fakeSaltrRAnLL995M9JWcfiTEti:password=emulatorPassword123",
+      "salt": "fakeSaltrRAnLL995M9JWcfiTEti",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790898873263-zl51k9@notesapp.dev",
+          "federatedId": "rules-intruder-1790898873263-zl51k9@notesapp.dev",
+          "rawId": "rules-intruder-1790898873263-zl51k9@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790898873263-zl51k9@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "CVy6Hlo4SM0rS8CzmtasWM7QDODp",
+      "createdAt": "1790889102416",
+      "lastLoginAt": "1790889102416",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Cgui1Em3UqoZrprQMYchWXi49gJ2",
+      "createdAt": "1790891437445",
+      "lastLoginAt": "1790891438193",
+      "passwordHash": "fakeHash:salt=fakeSaltXh4KT68wglqOj9CpYe1E:password=emulatorPassword123",
+      "salt": "fakeSaltXh4KT68wglqOj9CpYe1E",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790891437436-9n75i9@notesapp.dev",
+          "federatedId": "rules-owner-1790891437436-9n75i9@notesapp.dev",
+          "rawId": "rules-owner-1790891437436-9n75i9@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790891437436-9n75i9@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "DCKCJMPVdEbUw7ErVCdjTFGLtX7z",
+      "createdAt": "1790889636135",
+      "lastLoginAt": "1790889637098",
+      "passwordHash": "fakeHash:salt=fakeSaltLgI9xfi9PBtOaoSGAtEG:password=emulatorPassword123",
+      "salt": "fakeSaltLgI9xfi9PBtOaoSGAtEG",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790889636114@notesapp.dev",
+          "federatedId": "firestore-owner-1790889636114@notesapp.dev",
+          "rawId": "firestore-owner-1790889636114@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790889636114@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "DG9ovvNF1yBwqmOUvb869d1Warvf",
+      "lastLoginAt": "1790943965762",
+      "emailVerified": false,
+      "email": "rules-intruder-1790943965751-yn6zgy@notesapp.dev",
+      "salt": "fakeSaltlopQcjM0a9xax4NRw6pI",
+      "passwordHash": "fakeHash:salt=fakeSaltlopQcjM0a9xax4NRw6pI:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790943965762,
+      "validSince": "1790943965",
+      "createdAt": "1790943965762",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790943965751-yn6zgy@notesapp.dev",
+          "federatedId": "rules-intruder-1790943965751-yn6zgy@notesapp.dev",
+          "rawId": "rules-intruder-1790943965751-yn6zgy@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T12:26:05.762Z"
+    },
+    {
+      "localId": "DjZUB5GmYPzqNf8YHqRcXa5MjopG",
+      "createdAt": "1790894390397",
+      "lastLoginAt": "1790894390441",
+      "passwordHash": "fakeHash:salt=fakeSaltmbYYcUzCsIAjfEHF2EgV:password=securePassword123",
+      "salt": "fakeSaltmbYYcUzCsIAjfEHF2EgV",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790894390380@notesapp.dev",
+          "federatedId": "emulator-test-1790894390380@notesapp.dev",
+          "rawId": "emulator-test-1790894390380@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790894390380@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "DteC5g6YaxokPDlNbMwgAsIyAwtv",
+      "createdAt": "1790894970928",
+      "lastLoginAt": "1790894971682",
+      "passwordHash": "fakeHash:salt=fakeSaltv9HipoVCz0xk0YoGYHOy:password=emulatorPassword123",
+      "salt": "fakeSaltv9HipoVCz0xk0YoGYHOy",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790894970915@notesapp.dev",
+          "federatedId": "firestore-owner-1790894970915@notesapp.dev",
+          "rawId": "firestore-owner-1790894970915@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790894970915@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Dy9lnwhLT1AHugAIOxJz2KsJGmKs",
+      "lastLoginAt": "1790938857769",
+      "emailVerified": false,
+      "email": "emulator-test-1790938857720@notesapp.dev",
+      "salt": "fakeSaltxDcs9eO1kpYpLuS2ZHo8",
+      "passwordHash": "fakeHash:salt=fakeSaltxDcs9eO1kpYpLuS2ZHo8:password=securePassword123",
+      "passwordUpdatedAt": 1790938857733,
+      "validSince": "1790938857",
+      "createdAt": "1790938857733",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790938857720@notesapp.dev",
+          "federatedId": "emulator-test-1790938857720@notesapp.dev",
+          "rawId": "emulator-test-1790938857720@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:00:57.769Z"
+    },
+    {
+      "localId": "ELa49QszyoWDVHfUleeJ1dIJdJO5",
+      "lastLoginAt": "1790938631052",
+      "emailVerified": false,
+      "email": "rules-owner-1790938630178-fsnzwg@notesapp.dev",
+      "salt": "fakeSaltMVp4A4gj9AgqmnxMytX6",
+      "passwordHash": "fakeHash:salt=fakeSaltMVp4A4gj9AgqmnxMytX6:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790938630185,
+      "validSince": "1790938630",
+      "createdAt": "1790938630185",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790938630178-fsnzwg@notesapp.dev",
+          "federatedId": "rules-owner-1790938630178-fsnzwg@notesapp.dev",
+          "rawId": "rules-owner-1790938630178-fsnzwg@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T10:57:11.052Z"
+    },
+    {
+      "localId": "EUdikQs4Ef7q1jxCXY7E5xDj50gl",
+      "lastLoginAt": "1790939957604",
+      "createdAt": "1790939957604",
+      "lastRefreshAt": "2026-10-02T11:19:17.604Z"
+    },
+    {
+      "localId": "EZnkP58CFjIaE9YgyOlYoaFR5PKQ",
+      "createdAt": "1790898629411",
+      "lastLoginAt": "1790898629444",
+      "passwordHash": "fakeHash:salt=fakeSaltt2Bq7eF7SuqiukM1lkYe:password=securePassword123",
+      "salt": "fakeSaltt2Bq7eF7SuqiukM1lkYe",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790898629401@notesapp.dev",
+          "federatedId": "emulator-test-1790898629401@notesapp.dev",
+          "rawId": "emulator-test-1790898629401@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790898629401@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "EcV6GaoW8VNQrshOUI3qHZSAFNUD",
+      "createdAt": "1790898402523",
+      "lastLoginAt": "1790898403140",
+      "passwordHash": "fakeHash:salt=fakeSaltw0cLajrkPPPwspmHkiXI:password=emulatorPassword123",
+      "salt": "fakeSaltw0cLajrkPPPwspmHkiXI",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790898402512@notesapp.dev",
+          "federatedId": "firestore-owner-1790898402512@notesapp.dev",
+          "rawId": "firestore-owner-1790898402512@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790898402512@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "EjeQJ2H3bkYyqMBg86r8cSdZDoF7",
+      "lastLoginAt": "1790940158014",
+      "createdAt": "1790940158014",
+      "lastRefreshAt": "2026-10-02T11:22:38.015Z"
+    },
+    {
+      "localId": "FBpC81NBGlQLIBFgHeYppYw91DUy",
+      "createdAt": "1790896862718",
+      "lastLoginAt": "1790896863349",
+      "passwordHash": "fakeHash:salt=fakeSaltTogGUySBKy0tQf0qL0O3:password=emulatorPassword123",
+      "salt": "fakeSaltTogGUySBKy0tQf0qL0O3",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790896862703@notesapp.dev",
+          "federatedId": "firestore-owner-1790896862703@notesapp.dev",
+          "rawId": "firestore-owner-1790896862703@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790896862703@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "FHqEh4nbxm5y9MDijqlt3uF8rL51",
+      "createdAt": "1790897536796",
+      "lastLoginAt": "1790897536796",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "FM1jFmmjTSQw8tGf2CpyiH9DQ2Hz",
+      "createdAt": "1790891436659",
+      "lastLoginAt": "1790891437364",
+      "passwordHash": "fakeHash:salt=fakeSaltOLBpZUEosm4jiLs3yl6w:password=emulatorPassword123",
+      "salt": "fakeSaltOLBpZUEosm4jiLs3yl6w",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790891436644@notesapp.dev",
+          "federatedId": "firestore-owner-1790891436644@notesapp.dev",
+          "rawId": "firestore-owner-1790891436644@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790891436644@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "FMpBrJAuINvJSPz7iIgr5vDkCH6F",
+      "lastLoginAt": "1790942182388",
+      "createdAt": "1790942182388",
+      "lastRefreshAt": "2026-10-02T11:56:22.388Z"
+    },
+    {
+      "localId": "FdnbobOS03fVctemXb7Q6tBMyzbg",
+      "createdAt": "1790896862147",
+      "lastLoginAt": "1790896862179",
+      "passwordHash": "fakeHash:salt=fakeSaltSLNeCPazRBY2VGoWxdyH:password=securePassword123",
+      "salt": "fakeSaltSLNeCPazRBY2VGoWxdyH",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790896862135@notesapp.dev",
+          "federatedId": "emulator-test-1790896862135@notesapp.dev",
+          "rawId": "emulator-test-1790896862135@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790896862135@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "GNRnnbtJHAOZ5sOxUMiAaSLao32S",
+      "createdAt": "1790898861005",
+      "lastLoginAt": "1790898861005",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "GQaBvuvizAMSR1AUBFMMJWcsrMjN",
+      "createdAt": "1790894841599",
+      "lastLoginAt": "1790894841599",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "GdU5b8ErkqAahFoNx19TADV7qElK",
+      "createdAt": "1790894971763",
+      "lastLoginAt": "1790894972358",
+      "passwordHash": "fakeHash:salt=fakeSaltPiZPqUUUiaOVEsLu4dhq:password=emulatorPassword123",
+      "salt": "fakeSaltPiZPqUUUiaOVEsLu4dhq",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790894971756-6mzay2@notesapp.dev",
+          "federatedId": "rules-owner-1790894971756-6mzay2@notesapp.dev",
+          "rawId": "rules-owner-1790894971756-6mzay2@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790894971756-6mzay2@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "GhmKYvqsEh8f6IhAs5YPjax7gGAG",
+      "createdAt": "1790890458015",
+      "lastLoginAt": "1790890458071",
+      "passwordHash": "fakeHash:salt=fakeSaltfQJPSOjX9JZdicRqHgtR:password=securePassword123",
+      "salt": "fakeSaltfQJPSOjX9JZdicRqHgtR",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790890457950@notesapp.dev",
+          "federatedId": "emulator-test-1790890457950@notesapp.dev",
+          "rawId": "emulator-test-1790890457950@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790890457950@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "H4kIDUUIoe7zaRwsJQamWhVQXebT",
+      "createdAt": "1790895758187",
+      "lastLoginAt": "1790895758187",
+      "passwordHash": "fakeHash:salt=fakeSalt1FcddqaIVttB1PFQIJnN:password=emulatorPassword123",
+      "salt": "fakeSalt1FcddqaIVttB1PFQIJnN",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790895758175-4j3kf8@notesapp.dev",
+          "federatedId": "rules-intruder-1790895758175-4j3kf8@notesapp.dev",
+          "rawId": "rules-intruder-1790895758175-4j3kf8@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790895758175-4j3kf8@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "HzQOk2qAgkY9eCEcoLmJcciBITwA",
+      "createdAt": "1790895173118",
+      "lastLoginAt": "1790895173118",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "IEZa0xlR6evJakkIIV8ef5gMzPm7",
+      "createdAt": "1790895443998",
+      "lastLoginAt": "1790895444040",
+      "passwordHash": "fakeHash:salt=fakeSaltTTMTmCP8RV6rY5pux57Z:password=securePassword123",
+      "salt": "fakeSaltTTMTmCP8RV6rY5pux57Z",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790895443984@notesapp.dev",
+          "federatedId": "emulator-test-1790895443984@notesapp.dev",
+          "rawId": "emulator-test-1790895443984@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790895443984@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Il7RaUOBhCXkJcbCqH9kPEqX5wGx",
+      "createdAt": "1790894972265",
+      "lastLoginAt": "1790894972265",
+      "passwordHash": "fakeHash:salt=fakeSaltYRA65dXzeeZgJ6AL6tKB:password=emulatorPassword123",
+      "salt": "fakeSaltYRA65dXzeeZgJ6AL6tKB",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790894972255-t4bdjq@notesapp.dev",
+          "federatedId": "rules-intruder-1790894972255-t4bdjq@notesapp.dev",
+          "rawId": "rules-intruder-1790894972255-t4bdjq@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790894972255-t4bdjq@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "J2Qet6o6MFcl2nNuxhcHDKeBmlTY",
+      "createdAt": "1790888721108",
+      "lastLoginAt": "1790888721110",
+      "displayName": "Otter Peach",
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "7576779560588045495797221997717552646187",
+          "federatedId": "7576779560588045495797221997717552646187",
+          "displayName": "Otter Peach",
+          "email": "otter.peach.325@example.com",
+          "screenName": "peach_otter"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "otter.peach.325@example.com",
       "emailVerified": true,
+      "disabled": false,
+      "lastRefreshAt": "2026-10-02T12:01:11.530Z"
+    },
+    {
+      "localId": "JQkSbZMJdxBhKz0wugMC8xpeNAax",
+      "lastLoginAt": "1790938630926",
+      "emailVerified": false,
+      "email": "rules-intruder-1790938630916-t9s6un@notesapp.dev",
+      "salt": "fakeSaltf5AI4EGH3BePAZacN95T",
+      "passwordHash": "fakeHash:salt=fakeSaltf5AI4EGH3BePAZacN95T:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790938630926,
+      "validSince": "1790938630",
+      "createdAt": "1790938630926",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790938630916-t9s6un@notesapp.dev",
+          "federatedId": "rules-intruder-1790938630916-t9s6un@notesapp.dev",
+          "rawId": "rules-intruder-1790938630916-t9s6un@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T10:57:10.926Z"
+    },
+    {
+      "localId": "JYXulorRwwSPJvnBzLSHmRJylGte",
+      "createdAt": "1790890458536",
+      "lastLoginAt": "1790890459379",
+      "passwordHash": "fakeHash:salt=fakeSaltmgdODcdZHGg9GCOzs9m6:password=emulatorPassword123",
+      "salt": "fakeSaltmgdODcdZHGg9GCOzs9m6",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790890458516@notesapp.dev",
+          "federatedId": "firestore-owner-1790890458516@notesapp.dev",
+          "rawId": "firestore-owner-1790890458516@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790890458516@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "JiknuPHczKlZyTW5OS0yRfTalUHq",
+      "createdAt": "1790898599682",
+      "lastLoginAt": "1790898600306",
+      "passwordHash": "fakeHash:salt=fakeSalt7ttoTYNbl76Wsa2A2vZ7:password=emulatorPassword123",
+      "salt": "fakeSalt7ttoTYNbl76Wsa2A2vZ7",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790898599675-ky91v9@notesapp.dev",
+          "federatedId": "rules-owner-1790898599675-ky91v9@notesapp.dev",
+          "rawId": "rules-owner-1790898599675-ky91v9@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790898599675-ky91v9@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "JkOxTKzdLz5mCu549E8Y7meHist0",
+      "lastLoginAt": "1790938753842",
+      "createdAt": "1790938753842",
+      "lastRefreshAt": "2026-10-02T10:59:13.843Z"
+    },
+    {
+      "localId": "K3BEL7fxqoPeHChhJkphpsljsMBH",
+      "createdAt": "1790897538823",
+      "lastLoginAt": "1790897538823",
+      "passwordHash": "fakeHash:salt=fakeSaltKdVhZGRbGtJn5xK2YKo4:password=emulatorPassword123",
+      "salt": "fakeSaltKdVhZGRbGtJn5xK2YKo4",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790897538812-fdrfym@notesapp.dev",
+          "federatedId": "rules-intruder-1790897538812-fdrfym@notesapp.dev",
+          "rawId": "rules-intruder-1790897538812-fdrfym@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790897538812-fdrfym@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "K7ndh0pG3HT5cRvjDhHDzik3s889",
+      "createdAt": "1790895175259",
+      "lastLoginAt": "1790895175259",
+      "passwordHash": "fakeHash:salt=fakeSaltI3Nf2Ov73pgS5GvEBZ70:password=emulatorPassword123",
+      "salt": "fakeSaltI3Nf2Ov73pgS5GvEBZ70",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790895175245-3wedhh@notesapp.dev",
+          "federatedId": "rules-intruder-1790895175245-3wedhh@notesapp.dev",
+          "rawId": "rules-intruder-1790895175245-3wedhh@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790895175245-3wedhh@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "K7nt3DzW0EPM8Gp9ULAe3K0D2K0x",
+      "createdAt": "1790889171409",
+      "lastLoginAt": "1790889171409",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "K97MZjcxCxb0dbzKM32QDprWEpkx",
+      "lastLoginAt": "1790943963799",
+      "emailVerified": false,
+      "email": "emulator-test-1790943963745@notesapp.dev",
+      "salt": "fakeSaltNQ7XHh5Uk4uFZ1QPabgy",
+      "passwordHash": "fakeHash:salt=fakeSaltNQ7XHh5Uk4uFZ1QPabgy:password=securePassword123",
+      "passwordUpdatedAt": 1790943963759,
+      "validSince": "1790943963",
+      "createdAt": "1790943963759",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790943963745@notesapp.dev",
+          "federatedId": "emulator-test-1790943963745@notesapp.dev",
+          "rawId": "emulator-test-1790943963745@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T12:26:03.799Z"
+    },
+    {
+      "localId": "KJ6SshhWIIf0PUBOgvCCHKtbHAKd",
+      "lastLoginAt": "1790939952768",
+      "emailVerified": false,
+      "email": "emulator-test-1790939952733@notesapp.dev",
+      "salt": "fakeSaltqxPpS31yEQdX1jWdmNkM",
+      "passwordHash": "fakeHash:salt=fakeSaltqxPpS31yEQdX1jWdmNkM:password=securePassword123",
+      "passwordUpdatedAt": 1790939952744,
+      "validSince": "1790939952",
+      "createdAt": "1790939952744",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790939952733@notesapp.dev",
+          "federatedId": "emulator-test-1790939952733@notesapp.dev",
+          "rawId": "emulator-test-1790939952733@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:19:12.768Z"
+    },
+    {
+      "localId": "KzvIu1xyQ9vA2zLQ9Lpowf5NWzyE",
+      "createdAt": "1790894455663",
+      "lastLoginAt": "1790894455663",
+      "passwordHash": "fakeHash:salt=fakeSalt9POsmuxDjKVIaU6rLejX:password=emulatorPassword123",
+      "salt": "fakeSalt9POsmuxDjKVIaU6rLejX",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790894455652-u230m5@notesapp.dev",
+          "federatedId": "rules-intruder-1790894455652-u230m5@notesapp.dev",
+          "rawId": "rules-intruder-1790894455652-u230m5@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790894455652-u230m5@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "L7PPU4mGN1hYpdNRgIOiIing8xxL",
+      "createdAt": "1790898861090",
+      "lastLoginAt": "1790898861538",
+      "passwordHash": "fakeHash:salt=fakeSaltPoNRrzaqDIMDbZcKjlmS:password=emulatorPassword123",
+      "salt": "fakeSaltPoNRrzaqDIMDbZcKjlmS",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790898861085-a57rmc@notesapp.dev",
+          "federatedId": "rules-owner-1790898861085-a57rmc@notesapp.dev",
+          "rawId": "rules-owner-1790898861085-a57rmc@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790898861085-a57rmc@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "LEhhGr4n2P07J6Jutx2rbDiip4at",
+      "createdAt": "1790893165492",
+      "lastLoginAt": "1790893166142",
+      "passwordHash": "fakeHash:salt=fakeSaltvn2513QJJ67CVXojg471:password=emulatorPassword123",
+      "salt": "fakeSaltvn2513QJJ67CVXojg471",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790893165481@notesapp.dev",
+          "federatedId": "firestore-owner-1790893165481@notesapp.dev",
+          "rawId": "firestore-owner-1790893165481@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790893165481@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "LPcMvMRXKLKydna45J1jJzQwzQ3Z",
+      "createdAt": "1790894987408",
+      "lastLoginAt": "1790894988295",
+      "passwordHash": "fakeHash:salt=fakeSaltQDCq99dWKdzPFcqqKJzp:password=emulatorPassword123",
+      "salt": "fakeSaltQDCq99dWKdzPFcqqKJzp",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790894987393@notesapp.dev",
+          "federatedId": "firestore-owner-1790894987393@notesapp.dev",
+          "rawId": "firestore-owner-1790894987393@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790894987393@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "LxO5I2d9KJjmFA35z57WwoxMDY7d",
+      "createdAt": "1790896481595",
+      "lastLoginAt": "1790896482317",
+      "passwordHash": "fakeHash:salt=fakeSaltLuss69oIIO2uo92Tmp8y:password=emulatorPassword123",
+      "salt": "fakeSaltLuss69oIIO2uo92Tmp8y",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790896481588-b68i91@notesapp.dev",
+          "federatedId": "rules-owner-1790896481588-b68i91@notesapp.dev",
+          "rawId": "rules-owner-1790896481588-b68i91@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790896481588-b68i91@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "MBctzI1QlHtZCaWfWO6Xn03J73BG",
+      "createdAt": "1790898871765",
+      "lastLoginAt": "1790898871794",
+      "passwordHash": "fakeHash:salt=fakeSaltXb4BETUy0AAHFbTCpqgE:password=securePassword123",
+      "salt": "fakeSaltXb4BETUy0AAHFbTCpqgE",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790898871756@notesapp.dev",
+          "federatedId": "emulator-test-1790898871756@notesapp.dev",
+          "rawId": "emulator-test-1790898871756@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790898871756@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "MERSKGQDbkLkkOdeOqvBTHjo9Zoj",
+      "lastLoginAt": "1790940153896",
+      "createdAt": "1790940153896",
+      "lastRefreshAt": "2026-10-02T11:22:33.897Z"
+    },
+    {
+      "localId": "MNgbOAaSWD2BTjKghZAqFujnWYEa",
+      "createdAt": "1790894829253",
+      "lastLoginAt": "1790894830237",
+      "passwordHash": "fakeHash:salt=fakeSalteD8xGFQjzbYZQ8hHNEbS:password=emulatorPassword123",
+      "salt": "fakeSalteD8xGFQjzbYZQ8hHNEbS",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790894829237@notesapp.dev",
+          "federatedId": "firestore-owner-1790894829237@notesapp.dev",
+          "rawId": "firestore-owner-1790894829237@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790894829237@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "MexpyHaTyHQ0W8OGedwpNGSMBDZj",
+      "createdAt": "1790894391553",
+      "lastLoginAt": "1790894392306",
+      "passwordHash": "fakeHash:salt=fakeSaltoevVxwiC1P28xI2zHLAY:password=emulatorPassword123",
+      "salt": "fakeSaltoevVxwiC1P28xI2zHLAY",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790894391533@notesapp.dev",
+          "federatedId": "firestore-owner-1790894391533@notesapp.dev",
+          "rawId": "firestore-owner-1790894391533@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790894391533@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "MkziuVFfoyD35wsDfZIYR7eh4aYn",
+      "lastLoginAt": "1790938754885",
+      "emailVerified": false,
+      "email": "rules-owner-1790938753981-ibxf46@notesapp.dev",
+      "salt": "fakeSaltgQ51YLGcc6qxV6IUf5HP",
+      "passwordHash": "fakeHash:salt=fakeSaltgQ51YLGcc6qxV6IUf5HP:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790938753991,
+      "validSince": "1790938753",
+      "createdAt": "1790938753991",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790938753981-ibxf46@notesapp.dev",
+          "federatedId": "rules-owner-1790938753981-ibxf46@notesapp.dev",
+          "rawId": "rules-owner-1790938753981-ibxf46@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T10:59:14.885Z"
+    },
+    {
+      "localId": "MtEy1cb0ScjCV3OXbMP1D7L0hlz0",
+      "createdAt": "1790889115882",
+      "lastLoginAt": "1790889115882",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "NB8JRGInSBXnXHewtzeLW6YHScI8",
+      "lastLoginAt": "1790941285507",
+      "createdAt": "1790941285507",
+      "lastRefreshAt": "2026-10-02T11:41:25.507Z"
+    },
+    {
+      "localId": "NWqSuLn5y4BJBbNLNIp63bh8kM0D",
+      "createdAt": "1790889096105",
+      "lastLoginAt": "1790889096172",
+      "passwordHash": "fakeHash:salt=fakeSalt6FRFc5OVk0LJBSEQUxxJ:password=securePassword123",
+      "salt": "fakeSalt6FRFc5OVk0LJBSEQUxxJ",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790889096094@notesapp.dev",
+          "federatedId": "emulator-test-1790889096094@notesapp.dev",
+          "rawId": "emulator-test-1790889096094@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790889096094@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "NmDqXWS4PTwfDR1fiBmwLiMakKty",
+      "createdAt": "1790898428164",
+      "lastLoginAt": "1790898428164",
+      "passwordHash": "fakeHash:salt=fakeSaltf4tR8VclHqf01SjxvvKV:password=emulatorPassword123",
+      "salt": "fakeSaltf4tR8VclHqf01SjxvvKV",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790898428097-bprswm@notesapp.dev",
+          "federatedId": "rules-intruder-1790898428097-bprswm@notesapp.dev",
+          "rawId": "rules-intruder-1790898428097-bprswm@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790898428097-bprswm@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "O2GX78VrAGUyLZi6MAMZauO7v3wm",
+      "createdAt": "1790893205923",
+      "lastLoginAt": "1790893205967",
+      "passwordHash": "fakeHash:salt=fakeSaltsWGvZypxqLfCfJpM3YHi:password=securePassword123",
+      "salt": "fakeSaltsWGvZypxqLfCfJpM3YHi",
+      "passwordUpdatedAt": 1790935815030,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790893205910@notesapp.dev",
+          "federatedId": "emulator-test-1790893205910@notesapp.dev",
+          "rawId": "emulator-test-1790893205910@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790893205910@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "O5OK6WqxobZocjBot4LyL2FNuZx7",
+      "createdAt": "1790889637347",
+      "lastLoginAt": "1790889638483",
+      "passwordHash": "fakeHash:salt=fakeSaltJWlaaBH6mOOFzW3jYjjC:password=emulatorPassword123",
+      "salt": "fakeSaltJWlaaBH6mOOFzW3jYjjC",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790889637286-csznvl@notesapp.dev",
+          "federatedId": "rules-owner-1790889637286-csznvl@notesapp.dev",
+          "rawId": "rules-owner-1790889637286-csznvl@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790889637286-csznvl@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "O5z6pXzltYnGKYzbI84tjU3P5RFU",
+      "createdAt": "1790898861453",
+      "lastLoginAt": "1790898861453",
+      "passwordHash": "fakeHash:salt=fakeSaltspBs5feD3OR95YFx2Ktq:password=emulatorPassword123",
+      "salt": "fakeSaltspBs5feD3OR95YFx2Ktq",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790898861446-c4z9q8@notesapp.dev",
+          "federatedId": "rules-intruder-1790898861446-c4z9q8@notesapp.dev",
+          "rawId": "rules-intruder-1790898861446-c4z9q8@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790898861446-c4z9q8@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "O9BrdOpDDaqUK5h1H2aaM3W0ZBff",
+      "createdAt": "1790889102511",
+      "lastLoginAt": "1790889102511",
+      "passwordHash": "fakeHash:salt=fakeSaltYlKfQnIxHh2DZtEmCg5h:password=emulatorPassword123",
+      "salt": "fakeSaltYlKfQnIxHh2DZtEmCg5h",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790889102505-zji6el@notesapp.dev",
+          "federatedId": "rules-owner-1790889102505-zji6el@notesapp.dev",
+          "rawId": "rules-owner-1790889102505-zji6el@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790889102505-zji6el@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "OHQT8FvqOjPPTY46wmLHONRvcjuq",
+      "lastLoginAt": "1790943965132",
+      "createdAt": "1790943965132",
+      "lastRefreshAt": "2026-10-02T12:26:05.132Z"
+    },
+    {
+      "localId": "OOZA09n0e91wF0M8Bd1okvEnQXVI",
+      "lastLoginAt": "1790940430642",
+      "emailVerified": false,
+      "email": "rules-owner-1790940430051-usuut9@notesapp.dev",
+      "salt": "fakeSaltQfIKqkw6JxQnUOYTuvOM",
+      "passwordHash": "fakeHash:salt=fakeSaltQfIKqkw6JxQnUOYTuvOM:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790940430058,
+      "validSince": "1790940430",
+      "createdAt": "1790940430058",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790940430051-usuut9@notesapp.dev",
+          "federatedId": "rules-owner-1790940430051-usuut9@notesapp.dev",
+          "rawId": "rules-owner-1790940430051-usuut9@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:27:10.642Z"
+    },
+    {
+      "localId": "OWpO8FvYPAIaE7ma222ac4O0O3sR",
+      "lastLoginAt": "1790940158789",
+      "emailVerified": false,
+      "email": "rules-owner-1790940158120-cmtwyn@notesapp.dev",
+      "salt": "fakeSaltxz8CGzJttzH35YtrSGMa",
+      "passwordHash": "fakeHash:salt=fakeSaltxz8CGzJttzH35YtrSGMa:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790940158127,
+      "validSince": "1790940158",
+      "createdAt": "1790940158127",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790940158120-cmtwyn@notesapp.dev",
+          "federatedId": "rules-owner-1790940158120-cmtwyn@notesapp.dev",
+          "rawId": "rules-owner-1790940158120-cmtwyn@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:22:38.789Z"
+    },
+    {
+      "localId": "OYsk8sI1KeE7knOUcVRG3GwJea9t",
+      "createdAt": "1790891435458",
+      "lastLoginAt": "1790891435458",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "OxxG6hsklyqMzSQwEVTZC1Hvd5jE",
+      "lastLoginAt": "1790942274972",
+      "emailVerified": false,
+      "email": "firestore-owner-1790942274000@notesapp.dev",
+      "salt": "fakeSaltJjvt9Es7gcTC0ceeIc21",
+      "passwordHash": "fakeHash:salt=fakeSaltJjvt9Es7gcTC0ceeIc21:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942274016,
+      "validSince": "1790942274",
+      "createdAt": "1790942274016",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790942274000@notesapp.dev",
+          "federatedId": "firestore-owner-1790942274000@notesapp.dev",
+          "rawId": "firestore-owner-1790942274000@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:57:54.972Z"
+    },
+    {
+      "localId": "P5RwubL1cLzdcET2mad0mWM0OJKJ",
+      "createdAt": "1790898569330",
+      "lastLoginAt": "1790898570124",
+      "passwordHash": "fakeHash:salt=fakeSaltG7evXULZX57nqwfLonbM:password=emulatorPassword123",
+      "salt": "fakeSaltG7evXULZX57nqwfLonbM",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790898569314@notesapp.dev",
+          "federatedId": "firestore-owner-1790898569314@notesapp.dev",
+          "rawId": "firestore-owner-1790898569314@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790898569314@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "PUf3UQroT9M1fKuiiRoIq3D93XMa",
+      "createdAt": "1790894969811",
+      "lastLoginAt": "1790894969811",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "PYQLPUgRY86VW5aVEO1A8LidvWyw",
+      "createdAt": "1790895173659",
+      "lastLoginAt": "1790895174676",
+      "passwordHash": "fakeHash:salt=fakeSaltiuqJGwQ0xySts9X2O2Xm:password=emulatorPassword123",
+      "salt": "fakeSaltiuqJGwQ0xySts9X2O2Xm",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790895173639@notesapp.dev",
+          "federatedId": "firestore-owner-1790895173639@notesapp.dev",
+          "rawId": "firestore-owner-1790895173639@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790895173639@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "PeOxdV6VNu1gmr1vmsFiQ7ag4Hjo",
+      "createdAt": "1790898570083",
+      "lastLoginAt": "1790898570083",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "PkrDiwYCaCYyzEj9gHAk70TwPa6b",
+      "lastLoginAt": "1790942167678",
+      "createdAt": "1790942167678",
+      "lastRefreshAt": "2026-10-02T11:56:07.678Z"
+    },
+    {
+      "localId": "PqbSKNfQ4MkPbc9FVHZQnDVmXzh0",
+      "createdAt": "1790898860643",
+      "lastLoginAt": "1790898861032",
+      "passwordHash": "fakeHash:salt=fakeSaltHhq8Wf1FAGagdtBCXn8P:password=emulatorPassword123",
+      "salt": "fakeSaltHhq8Wf1FAGagdtBCXn8P",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790898860636@notesapp.dev",
+          "federatedId": "firestore-owner-1790898860636@notesapp.dev",
+          "rawId": "firestore-owner-1790898860636@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790898860636@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "PrLOXsoZfDQEtOEAecydSFvAkLae",
+      "createdAt": "1790893166236",
+      "lastLoginAt": "1790893166852",
+      "passwordHash": "fakeHash:salt=fakeSaltvA5hMPAa5QcN1wBLZ1eH:password=emulatorPassword123",
+      "salt": "fakeSaltvA5hMPAa5QcN1wBLZ1eH",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790893166223-njkl1e@notesapp.dev",
+          "federatedId": "rules-owner-1790893166223-njkl1e@notesapp.dev",
+          "rawId": "rules-owner-1790893166223-njkl1e@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790893166223-njkl1e@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Puo4DzxzkxSKZYXDXGRKGfkT1npK",
+      "createdAt": "1790889252055",
+      "lastLoginAt": "1790889252055",
+      "passwordHash": "fakeHash:salt=fakeSaltcljTgdxaqKvXL0F3VH9i:password=emulatorPassword123",
+      "salt": "fakeSaltcljTgdxaqKvXL0F3VH9i",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790889252051-qosa8e@notesapp.dev",
+          "federatedId": "rules-owner-1790889252051-qosa8e@notesapp.dev",
+          "rawId": "rules-owner-1790889252051-qosa8e@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790889252051-qosa8e@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Q5uTThSDRc1OyEe6GO5mPE85XJfF",
+      "createdAt": "1790897750628",
+      "lastLoginAt": "1790897751099",
+      "passwordHash": "fakeHash:salt=fakeSaltaZq73ZTFq6BRFdpVpHkG:password=emulatorPassword123",
+      "salt": "fakeSaltaZq73ZTFq6BRFdpVpHkG",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790897750621-yklfob@notesapp.dev",
+          "federatedId": "rules-owner-1790897750621-yklfob@notesapp.dev",
+          "rawId": "rules-owner-1790897750621-yklfob@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790897750621-yklfob@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Q7YvcaXS42V1dVHyWKL4MJGrs1cn",
+      "createdAt": "1790889630046",
+      "lastLoginAt": "1790889630080",
+      "passwordHash": "fakeHash:salt=fakeSaltOqhXiqdxUPxd0dmvIrtG:password=securePassword123",
+      "salt": "fakeSaltOqhXiqdxUPxd0dmvIrtG",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790889630032@notesapp.dev",
+          "federatedId": "emulator-test-1790889630032@notesapp.dev",
+          "rawId": "emulator-test-1790889630032@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790889630032@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "QYx37ZU7Ulu2lgFJxTz30RwxcDnC",
+      "createdAt": "1790897749285",
+      "lastLoginAt": "1790897749318",
+      "passwordHash": "fakeHash:salt=fakeSalt0G3j3r1RFuGyIPVqDBsd:password=securePassword123",
+      "salt": "fakeSalt0G3j3r1RFuGyIPVqDBsd",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790897749274@notesapp.dev",
+          "federatedId": "emulator-test-1790897749274@notesapp.dev",
+          "rawId": "emulator-test-1790897749274@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790897749274@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "QmtIvjWetmQJR5dbbs6R3Fl6PIFq",
+      "lastLoginAt": "1790938857695",
+      "createdAt": "1790938857695",
+      "lastRefreshAt": "2026-10-02T11:00:57.696Z"
+    },
+    {
+      "localId": "QoLpsggSpNgz1pDd7oWldQ1cq7uO",
+      "createdAt": "1790889284382",
+      "lastLoginAt": "1790889284382",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Qpp6q5SMKZonndTXOOetra68xWAJ",
+      "createdAt": "1790898871733",
+      "lastLoginAt": "1790898871733",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "REtdIfDp7o9ymDjOPnlqaexrlHU8",
+      "createdAt": "1790890457873",
+      "lastLoginAt": "1790890457873",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "RNMxQezM1sPRorwYSA2rdcBOr5kM",
+      "createdAt": "1790894392998",
+      "lastLoginAt": "1790894392998",
+      "passwordHash": "fakeHash:salt=fakeSaltCJTwCAFoLaiqp3ZFCeFi:password=emulatorPassword123",
+      "salt": "fakeSaltCJTwCAFoLaiqp3ZFCeFi",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790894392976-nyb86j@notesapp.dev",
+          "federatedId": "rules-intruder-1790894392976-nyb86j@notesapp.dev",
+          "rawId": "rules-intruder-1790894392976-nyb86j@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790894392976-nyb86j@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "RR9arTE5l2WXo7e2qy0wjZ2YbzWC",
+      "createdAt": "1790896791992",
+      "lastLoginAt": "1790896791992",
+      "passwordHash": "fakeHash:salt=fakeSaltEwtvTdzEovZZxZgpHK5J:password=emulatorPassword123",
+      "salt": "fakeSaltEwtvTdzEovZZxZgpHK5J",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790896791983-9vse4a@notesapp.dev",
+          "federatedId": "rules-intruder-1790896791983-9vse4a@notesapp.dev",
+          "rawId": "rules-intruder-1790896791983-9vse4a@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790896791983-9vse4a@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "RYkWHoOiVZa5ZOfYcoZTOFlXYAYv",
+      "createdAt": "1790889171031",
+      "lastLoginAt": "1790889171466",
+      "passwordHash": "fakeHash:salt=fakeSalt0vA2Gkap4jS6nNoXGlu3:password=emulatorPassword123",
+      "salt": "fakeSalt0vA2Gkap4jS6nNoXGlu3",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790889171016@notesapp.dev",
+          "federatedId": "firestore-owner-1790889171016@notesapp.dev",
+          "rawId": "firestore-owner-1790889171016@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790889171016@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "RoPebVd2dNTNqXHt7KkMuFpK7pIM",
+      "lastLoginAt": "1790939958499",
+      "emailVerified": false,
+      "email": "rules-intruder-1790939958489-9n46cv@notesapp.dev",
+      "salt": "fakeSaltwghI48hZOpV2KBCa7T1B",
+      "passwordHash": "fakeHash:salt=fakeSaltwghI48hZOpV2KBCa7T1B:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790939958499,
+      "validSince": "1790939958",
+      "createdAt": "1790939958499",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790939958489-9n46cv@notesapp.dev",
+          "federatedId": "rules-intruder-1790939958489-9n46cv@notesapp.dev",
+          "rawId": "rules-intruder-1790939958489-9n46cv@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:19:18.499Z"
+    },
+    {
+      "localId": "RuGcqIu3lNQ1kqJwsJYmTUYttn6a",
+      "createdAt": "1790896949761",
+      "lastLoginAt": "1790896950500",
+      "passwordHash": "fakeHash:salt=fakeSaltaukC4aS6CY6M1IjngeKI:password=emulatorPassword123",
+      "salt": "fakeSaltaukC4aS6CY6M1IjngeKI",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790896949741@notesapp.dev",
+          "federatedId": "firestore-owner-1790896949741@notesapp.dev",
+          "rawId": "firestore-owner-1790896949741@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790896949741@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "S6tu6Sz38TTGPUVjqaOGKG6FJoWF",
+      "createdAt": "1790898403087",
+      "lastLoginAt": "1790898403087",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "SIRE3EM7ODYQi4VbWtZhxqkZc6AO",
+      "createdAt": "1790897537397",
+      "lastLoginAt": "1790897538027",
+      "passwordHash": "fakeHash:salt=fakeSaltWBvfcJV5WUrHpA0DVpXd:password=emulatorPassword123",
+      "salt": "fakeSaltWBvfcJV5WUrHpA0DVpXd",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790897537380@notesapp.dev",
+          "federatedId": "firestore-owner-1790897537380@notesapp.dev",
+          "rawId": "firestore-owner-1790897537380@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790897537380@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "SKV2HRX1dHWthUr0p99oY45g9n6Q",
+      "createdAt": "1790894830925",
+      "lastLoginAt": "1790894830925",
+      "passwordHash": "fakeHash:salt=fakeSaltqFS7jKvr2d7JSKMWEyXe:password=emulatorPassword123",
+      "salt": "fakeSaltqFS7jKvr2d7JSKMWEyXe",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790894830915-oun9lx@notesapp.dev",
+          "federatedId": "rules-intruder-1790894830915-oun9lx@notesapp.dev",
+          "rawId": "rules-intruder-1790894830915-oun9lx@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790894830915-oun9lx@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "SqdORYx7ORAYvT5vE4URdQ6qMew2",
+      "createdAt": "1790896951409",
+      "lastLoginAt": "1790896951409",
+      "passwordHash": "fakeHash:salt=fakeSaltBp80BZT2AcNNy6n9R4CZ:password=emulatorPassword123",
+      "salt": "fakeSaltBp80BZT2AcNNy6n9R4CZ",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790896951382-hwb303@notesapp.dev",
+          "federatedId": "rules-intruder-1790896951382-hwb303@notesapp.dev",
+          "rawId": "rules-intruder-1790896951382-hwb303@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790896951382-hwb303@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "T0fiOFjRDpaJtnsIHiJxTF9Re4gD",
+      "createdAt": "1790893163794",
+      "lastLoginAt": "1790893163829",
+      "passwordHash": "fakeHash:salt=fakeSaltIim0tdJyELLkqQWOt15u:password=securePassword123",
+      "salt": "fakeSaltIim0tdJyELLkqQWOt15u",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790893163778@notesapp.dev",
+          "federatedId": "emulator-test-1790893163778@notesapp.dev",
+          "rawId": "emulator-test-1790893163778@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790893163778@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "TBpUSkjaWZLhYYm8COUXqkvTwXbN",
+      "createdAt": "1790895448899",
+      "lastLoginAt": "1790895449944",
+      "passwordHash": "fakeHash:salt=fakeSaltXEfbmFnmvBMU3SNZXfFz:password=emulatorPassword123",
+      "salt": "fakeSaltXEfbmFnmvBMU3SNZXfFz",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790895448889-5lk652@notesapp.dev",
+          "federatedId": "rules-owner-1790895448889-5lk652@notesapp.dev",
+          "rawId": "rules-owner-1790895448889-5lk652@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790895448889-5lk652@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "TLYURmyd2C09V7mqjr3AjFemzQlx",
+      "createdAt": "1790896481469",
+      "lastLoginAt": "1790896481469",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "TVFvE6K9vhaifATufArbdNisYgP8",
+      "lastLoginAt": "1790942182446",
+      "emailVerified": false,
+      "email": "firestore-owner-1790942181770@notesapp.dev",
+      "salt": "fakeSalt7lStf54vIqHs8aLrlCRF",
+      "passwordHash": "fakeHash:salt=fakeSalt7lStf54vIqHs8aLrlCRF:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942181790,
+      "validSince": "1790942181",
+      "createdAt": "1790942181789",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790942181770@notesapp.dev",
+          "federatedId": "firestore-owner-1790942181770@notesapp.dev",
+          "rawId": "firestore-owner-1790942181770@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:56:22.446Z"
+    },
+    {
+      "localId": "TXBuhvHKRrWw5cIJCD9oO91hCYKZ",
+      "createdAt": "1790898568777",
+      "lastLoginAt": "1790898568777",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "TazL5yyr8H3OQ29IJgdQvMQn2QxW",
+      "createdAt": "1790898426623",
+      "lastLoginAt": "1790898426623",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Tqu5cdZBGcictWnNSFUSWseszyoY",
+      "createdAt": "1790895755513",
+      "lastLoginAt": "1790895755552",
+      "passwordHash": "fakeHash:salt=fakeSaltogo7wrjtXLhf8HwYXyLN:password=securePassword123",
+      "salt": "fakeSaltogo7wrjtXLhf8HwYXyLN",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790895755502@notesapp.dev",
+          "federatedId": "emulator-test-1790895755502@notesapp.dev",
+          "rawId": "emulator-test-1790895755502@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790895755502@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "TxcxmxF6MgVxjMTXOfjR2kFEGQdW",
+      "createdAt": "1790895757480",
+      "lastLoginAt": "1790895757480",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "UHLX5QWlJjQoqcB5tiIej054Uhex",
+      "lastLoginAt": "1790938752810",
+      "createdAt": "1790938752810",
+      "lastRefreshAt": "2026-10-02T10:59:12.810Z"
+    },
+    {
+      "localId": "Unut5WK3IL1DuG6YbnZX0iLjV79R",
+      "lastLoginAt": "1790942183137",
+      "emailVerified": false,
+      "email": "rules-owner-1790942182516-n34l4c@notesapp.dev",
+      "salt": "fakeSaltZWqYmE7uNPkWeNBnirh5",
+      "passwordHash": "fakeHash:salt=fakeSaltZWqYmE7uNPkWeNBnirh5:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942182524,
+      "validSince": "1790942182",
+      "createdAt": "1790942182524",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790942182516-n34l4c@notesapp.dev",
+          "federatedId": "rules-owner-1790942182516-n34l4c@notesapp.dev",
+          "rawId": "rules-owner-1790942182516-n34l4c@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:56:23.137Z"
+    },
+    {
+      "localId": "VEeQHflp59s65FOElitif0P1v1D4",
+      "createdAt": "1790898402012",
+      "lastLoginAt": "1790898402063",
+      "passwordHash": "fakeHash:salt=fakeSaltm2JPM4LGxJ11u5yi7tjr:password=securePassword123",
+      "salt": "fakeSaltm2JPM4LGxJ11u5yi7tjr",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790898401999@notesapp.dev",
+          "federatedId": "emulator-test-1790898401999@notesapp.dev",
+          "rawId": "emulator-test-1790898401999@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790898401999@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "VKWKRZTI0hmf9t0WNghb80cj5JwO",
+      "lastLoginAt": "1790942285003",
+      "createdAt": "1790942285003",
+      "lastRefreshAt": "2026-10-02T11:58:05.003Z"
+    },
+    {
+      "localId": "VZwXVCXs4khvwxXHUPd5lxQgxFQX",
+      "createdAt": "1790898856987",
+      "lastLoginAt": "1790898856987",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "VaKE1rMZlHz0ftufqdQ4yRCUjeCv",
+      "lastLoginAt": "1790943808702",
+      "createdAt": "1790943808702",
+      "lastRefreshAt": "2026-10-02T12:23:28.703Z"
+    },
+    {
+      "localId": "VhUQEghVEE8QmUBGnVZ4d9klt9GZ",
+      "createdAt": "1790895077928",
+      "lastLoginAt": "1790895077928",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Vmc2FoY2sexxQMdRG6725nXCDBwR",
+      "createdAt": "1790889116792",
+      "lastLoginAt": "1790889116792",
+      "passwordHash": "fakeHash:salt=fakeSaltsJG6IRHTKXe383k7KhaV:password=emulatorPassword123",
+      "salt": "fakeSaltsJG6IRHTKXe383k7KhaV",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790889116783-cfd6sn@notesapp.dev",
+          "federatedId": "rules-owner-1790889116783-cfd6sn@notesapp.dev",
+          "rawId": "rules-owner-1790889116783-cfd6sn@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790889116783-cfd6sn@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "VzdqxqVjZ4HnzM0QXhVr6Tl6i3OX",
+      "lastLoginAt": "1790941286272",
+      "emailVerified": false,
+      "email": "rules-owner-1790941285601-mntgtu@notesapp.dev",
+      "salt": "fakeSaltDBXTJWTWQHelJOYGLxkm",
+      "passwordHash": "fakeHash:salt=fakeSaltDBXTJWTWQHelJOYGLxkm:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790941285607,
+      "validSince": "1790941285",
+      "createdAt": "1790941285607",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790941285601-mntgtu@notesapp.dev",
+          "federatedId": "rules-owner-1790941285601-mntgtu@notesapp.dev",
+          "rawId": "rules-owner-1790941285601-mntgtu@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:41:26.272Z"
+    },
+    {
+      "localId": "WE2LUg1FP9BAVcK8rBYVeKzdtAHp",
+      "createdAt": "1790898629376",
+      "lastLoginAt": "1790898629376",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "WEe9LKJ2sZfRuUXVGyhu3MxgJZH8",
+      "createdAt": "1790898599582",
+      "lastLoginAt": "1790898599582",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "WRGg5J5Pk5jPxkueCY23N4SLyZ6f",
+      "lastLoginAt": "1790938859746",
+      "emailVerified": false,
+      "email": "rules-owner-1790938859037-lspgc4@notesapp.dev",
+      "salt": "fakeSaltxgPNe9r9cfT0L2YKEAOo",
+      "passwordHash": "fakeHash:salt=fakeSaltxgPNe9r9cfT0L2YKEAOo:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790938859047,
+      "validSince": "1790938859",
+      "createdAt": "1790938859047",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790938859037-lspgc4@notesapp.dev",
+          "federatedId": "rules-owner-1790938859037-lspgc4@notesapp.dev",
+          "rawId": "rules-owner-1790938859037-lspgc4@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:00:59.746Z"
+    },
+    {
+      "localId": "WSDkQ5Ab0xkZY4vYD0szt9p5T0SO",
+      "createdAt": "1790889605001",
+      "lastLoginAt": "1790889605001",
+      "passwordHash": "fakeHash:salt=fakeSalt5uo0PYoay15UN1FNi7LD:password=emulatorPassword123",
+      "salt": "fakeSalt5uo0PYoay15UN1FNi7LD",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790889604992-l898fw@notesapp.dev",
+          "federatedId": "rules-intruder-1790889604992-l898fw@notesapp.dev",
+          "rawId": "rules-intruder-1790889604992-l898fw@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790889604992-l898fw@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "WW8O8OZiWQ4WRIFdqMj8KSwPmhGX",
+      "createdAt": "1790898403596",
+      "lastLoginAt": "1790898403596",
+      "passwordHash": "fakeHash:salt=fakeSaltsUXprkpsMxumdQS7xnue:password=emulatorPassword123",
+      "salt": "fakeSaltsUXprkpsMxumdQS7xnue",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790898403587-22cw2p@notesapp.dev",
+          "federatedId": "rules-intruder-1790898403587-22cw2p@notesapp.dev",
+          "rawId": "rules-intruder-1790898403587-22cw2p@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790898403587-22cw2p@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "WlnkdCfypEuBUxBdpBWd6T29YcK3",
+      "createdAt": "1790894455068",
+      "lastLoginAt": "1790894455068",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "WsMYGousHWOxSZoq2qt61MziEnxh",
+      "lastLoginAt": "1790940153968",
+      "emailVerified": false,
+      "email": "emulator-test-1790940153921@notesapp.dev",
+      "salt": "fakeSalt0WTCbSNf1NXI8OU2NioR",
+      "passwordHash": "fakeHash:salt=fakeSalt0WTCbSNf1NXI8OU2NioR:password=securePassword123",
+      "passwordUpdatedAt": 1790940153931,
+      "validSince": "1790940153",
+      "createdAt": "1790940153931",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790940153921@notesapp.dev",
+          "federatedId": "emulator-test-1790940153921@notesapp.dev",
+          "rawId": "emulator-test-1790940153921@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:22:33.968Z"
+    },
+    {
+      "localId": "X4V6WLkCHPIvKUbeqPyRPQCdus3c",
+      "lastLoginAt": "1790938630029",
+      "createdAt": "1790938630029",
+      "lastRefreshAt": "2026-10-02T10:57:10.030Z"
+    },
+    {
+      "localId": "XT2OyghrTMTkNWqAjsH1Ci2spVF5",
+      "createdAt": "1790894825025",
+      "lastLoginAt": "1790894825025",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "XXnAfMO4N6LipEaG3btxiRW8DSYt",
+      "lastLoginAt": "1790940429983",
+      "emailVerified": false,
+      "email": "firestore-owner-1790940429347@notesapp.dev",
+      "salt": "fakeSalt6bfnEZdZEllMe0QpXSsA",
+      "passwordHash": "fakeHash:salt=fakeSalt6bfnEZdZEllMe0QpXSsA:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790940429362,
+      "validSince": "1790940429",
+      "createdAt": "1790940429362",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790940429347@notesapp.dev",
+          "federatedId": "firestore-owner-1790940429347@notesapp.dev",
+          "rawId": "firestore-owner-1790940429347@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:27:09.983Z"
+    },
+    {
+      "localId": "Xh2nhc9oitwrpjxiUwBAlJbjwQjn",
+      "createdAt": "1790898600195",
+      "lastLoginAt": "1790898600195",
+      "passwordHash": "fakeHash:salt=fakeSaltnGTtxsmXHYvVDuLn4Rp9:password=emulatorPassword123",
+      "salt": "fakeSaltnGTtxsmXHYvVDuLn4Rp9",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790898600185-2vtb7o@notesapp.dev",
+          "federatedId": "rules-intruder-1790898600185-2vtb7o@notesapp.dev",
+          "rawId": "rules-intruder-1790898600185-2vtb7o@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790898600185-2vtb7o@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "XkDFlNKtUGAl4LXlNQq4ogbgjZYu",
+      "createdAt": "1790894988815",
+      "lastLoginAt": "1790894988815",
+      "passwordHash": "fakeHash:salt=fakeSaltwnMfWPFMLNcGMVEIajGy:password=emulatorPassword123",
+      "salt": "fakeSaltwnMfWPFMLNcGMVEIajGy",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790894988803-9196s8@notesapp.dev",
+          "federatedId": "rules-intruder-1790894988803-9196s8@notesapp.dev",
+          "rawId": "rules-intruder-1790894988803-9196s8@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790894988803-9196s8@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "YA9NkmfW26zwaZzaTClLTLDYAF5o",
+      "createdAt": "1790889284588",
+      "lastLoginAt": "1790889284588",
+      "passwordHash": "fakeHash:salt=fakeSaltEEoF0G7WGsPvZAfY2Xws:password=emulatorPassword123",
+      "salt": "fakeSaltEEoF0G7WGsPvZAfY2Xws",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790889284582-weplwt@notesapp.dev",
+          "federatedId": "rules-intruder-1790889284582-weplwt@notesapp.dev",
+          "rawId": "rules-intruder-1790889284582-weplwt@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790889284582-weplwt@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "YcpyINQkJWEumvtF7mO9kHWhEMV3",
+      "createdAt": "1790889294456",
+      "lastLoginAt": "1790889294456",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Yh4iedIrteO23WDE70dEbirEIISz",
+      "createdAt": "1790896863309",
+      "lastLoginAt": "1790896863309",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Ym1caHtEQR6WDPHTQX4zQ2iqXAH7",
+      "createdAt": "1790897537970",
+      "lastLoginAt": "1790897537970",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "YvfQGY0DzcU3oLvDz5KRjwU3vOc1",
+      "createdAt": "1790898630853",
+      "lastLoginAt": "1790898630853",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Z0P0AyDVi0mR18Cg7zdSJ3glWPr3",
+      "lastLoginAt": "1790939958629",
+      "emailVerified": false,
+      "email": "rules-owner-1790939957736-twjjch@notesapp.dev",
+      "salt": "fakeSaltJeiqqkqTdCzUA7zTShqu",
+      "passwordHash": "fakeHash:salt=fakeSaltJeiqqkqTdCzUA7zTShqu:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790939957745,
+      "validSince": "1790939957",
+      "createdAt": "1790939957745",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790939957736-twjjch@notesapp.dev",
+          "federatedId": "rules-owner-1790939957736-twjjch@notesapp.dev",
+          "rawId": "rules-owner-1790939957736-twjjch@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:19:18.629Z"
+    },
+    {
+      "localId": "ZBk8KdGx4hWFStzFCzcBWCGWNmOg",
+      "lastLoginAt": "1790943965887",
+      "emailVerified": false,
+      "email": "rules-owner-1790943965273-pyqe9s@notesapp.dev",
+      "salt": "fakeSalt6VJJOS4wYB7K4AOx0rB5",
+      "passwordHash": "fakeHash:salt=fakeSalt6VJJOS4wYB7K4AOx0rB5:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790943965280,
+      "validSince": "1790943965",
+      "createdAt": "1790943965280",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790943965273-pyqe9s@notesapp.dev",
+          "federatedId": "rules-owner-1790943965273-pyqe9s@notesapp.dev",
+          "rawId": "rules-owner-1790943965273-pyqe9s@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T12:26:05.887Z"
+    },
+    {
+      "localId": "ZDhg9xR2YWSxF5CMqjhk3KMHgujm",
+      "createdAt": "1790890459473",
+      "lastLoginAt": "1790890460194",
+      "passwordHash": "fakeHash:salt=fakeSaltEgwGz8uALI3MTLknR9V9:password=emulatorPassword123",
+      "salt": "fakeSaltEgwGz8uALI3MTLknR9V9",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790890459465-3b0p5w@notesapp.dev",
+          "federatedId": "rules-owner-1790890459465-3b0p5w@notesapp.dev",
+          "rawId": "rules-owner-1790890459465-3b0p5w@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790890459465-3b0p5w@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "Zda2tLAzPmrdFi0N9lkJCpd6PuFv",
+      "lastLoginAt": "1790942441165",
+      "emailVerified": false,
+      "email": "rules-owner-1790942440479-g45e8u@notesapp.dev",
+      "salt": "fakeSaltTkarrXqcdWl28lZ8ZDUJ",
+      "passwordHash": "fakeHash:salt=fakeSaltTkarrXqcdWl28lZ8ZDUJ:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942440492,
+      "validSince": "1790942440",
+      "createdAt": "1790942440492",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790942440479-g45e8u@notesapp.dev",
+          "federatedId": "rules-owner-1790942440479-g45e8u@notesapp.dev",
+          "rawId": "rules-owner-1790942440479-g45e8u@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T12:00:41.165Z"
+    },
+    {
+      "localId": "ZzoRruOAu0JNUTtCId1YCmIStYRC",
+      "createdAt": "1790889636946",
+      "lastLoginAt": "1790889636946",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "a0e16p1XsaYR4v4RBZyCOQ6BrY2H",
+      "createdAt": "1790895075523",
+      "lastLoginAt": "1790895075563",
+      "passwordHash": "fakeHash:salt=fakeSaltRY8tonRmlNc1aEGZUNWp:password=securePassword123",
+      "salt": "fakeSaltRY8tonRmlNc1aEGZUNWp",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790895075507@notesapp.dev",
+          "federatedId": "emulator-test-1790895075507@notesapp.dev",
+          "rawId": "emulator-test-1790895075507@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790895075507@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "a4c7exp4aT3skT1L8dulESJV2Msa",
+      "createdAt": "1790893207392",
+      "lastLoginAt": "1790893207392",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "a4jHCEqJcq9eLRKY3Wyy9G2v1X5w",
+      "createdAt": "1790895755475",
+      "lastLoginAt": "1790895755475",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "aCtpxdTp88Wd4gXXDjo9M6PlQjEd",
+      "lastLoginAt": "1790942167720",
+      "emailVerified": false,
+      "email": "firestore-owner-1790942167257@notesapp.dev",
+      "salt": "fakeSaltV83IAITsna9gASSEZHdZ",
+      "passwordHash": "fakeHash:salt=fakeSaltV83IAITsna9gASSEZHdZ:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942167268,
+      "validSince": "1790942167",
+      "createdAt": "1790942167268",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790942167257@notesapp.dev",
+          "federatedId": "firestore-owner-1790942167257@notesapp.dev",
+          "rawId": "firestore-owner-1790942167257@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:56:07.720Z"
+    },
+    {
+      "localId": "aNrtygQiipbJknZWLWwaWWCNM7HA",
+      "lastLoginAt": "1790942440354",
+      "createdAt": "1790942440354",
+      "lastRefreshAt": "2026-10-02T12:00:40.354Z"
+    },
+    {
+      "localId": "aY3zOuV5rfIIJiLgb3v6sY9GU0QT",
+      "createdAt": "1790889183586",
+      "lastLoginAt": "1790889183586",
+      "passwordHash": "fakeHash:salt=fakeSalt093qu4EEgJg4hn7pqkFQ:password=emulatorPassword123",
+      "salt": "fakeSalt093qu4EEgJg4hn7pqkFQ",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790889183580-11bav7@notesapp.dev",
+          "federatedId": "rules-owner-1790889183580-11bav7@notesapp.dev",
+          "rawId": "rules-owner-1790889183580-11bav7@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790889183580-11bav7@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "aaZhyaftmcSbPjdrQTA0l8WKfmlU",
+      "createdAt": "1790890460077",
+      "lastLoginAt": "1790890460077",
+      "passwordHash": "fakeHash:salt=fakeSaltZt6XbJ4wwChOsZEZHemk:password=emulatorPassword123",
+      "salt": "fakeSaltZt6XbJ4wwChOsZEZHemk",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790890460060-9bf8xq@notesapp.dev",
+          "federatedId": "rules-intruder-1790890460060-9bf8xq@notesapp.dev",
+          "rawId": "rules-intruder-1790890460060-9bf8xq@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790890460060-9bf8xq@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "ayhvmSmqAhvW1D5YzD6gMQ8XGVGA",
+      "createdAt": "1790898599050",
+      "lastLoginAt": "1790898599623",
+      "passwordHash": "fakeHash:salt=fakeSalthHPSFvfxnnzNJR6BHrDY:password=emulatorPassword123",
+      "salt": "fakeSalthHPSFvfxnnzNJR6BHrDY",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790898599036@notesapp.dev",
+          "federatedId": "firestore-owner-1790898599036@notesapp.dev",
+          "rawId": "firestore-owner-1790898599036@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790898599036@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "aypT1vUxar6ZSZKg9iK92M01MVaS",
+      "lastLoginAt": "1790941281479",
+      "createdAt": "1790941281479",
+      "lastRefreshAt": "2026-10-02T11:41:21.481Z"
+    },
+    {
+      "localId": "bImISUbvonB5YQFqMhpBQmTQroCr",
+      "lastLoginAt": "1790938858974",
+      "emailVerified": false,
+      "email": "firestore-owner-1790938858258@notesapp.dev",
+      "salt": "fakeSaltKBar50HIxDzSl820M6Uz",
+      "passwordHash": "fakeHash:salt=fakeSaltKBar50HIxDzSl820M6Uz:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790938858276,
+      "validSince": "1790938858",
+      "createdAt": "1790938858276",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790938858258@notesapp.dev",
+          "federatedId": "firestore-owner-1790938858258@notesapp.dev",
+          "rawId": "firestore-owner-1790938858258@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:00:58.974Z"
+    },
+    {
+      "localId": "bZe3TUbAHdhzxCUUqHofwvRaFTEr",
+      "lastLoginAt": "1790942272724",
+      "createdAt": "1790942272724",
+      "lastRefreshAt": "2026-10-02T11:57:52.724Z"
+    },
+    {
+      "localId": "c6UWIN9eIrHb5ffVMt4wbnBJvYk7",
+      "createdAt": "1790898427713",
+      "lastLoginAt": "1790898428243",
+      "passwordHash": "fakeHash:salt=fakeSalt3Ywe4fSbTQWWPUEiBR9A:password=emulatorPassword123",
+      "salt": "fakeSalt3Ywe4fSbTQWWPUEiBR9A",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790898427704-uulk16@notesapp.dev",
+          "federatedId": "rules-owner-1790898427704-uulk16@notesapp.dev",
+          "rawId": "rules-owner-1790898427704-uulk16@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790898427704-uulk16@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "cpH1JNpztSoQlBNwvin4bam0ueDN",
+      "createdAt": "1790898631683",
+      "lastLoginAt": "1790898631683",
+      "passwordHash": "fakeHash:salt=fakeSaltgGSUuY3KyRaQmrVKBHPx:password=emulatorPassword123",
+      "salt": "fakeSaltgGSUuY3KyRaQmrVKBHPx",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790898631673-p7rxuj@notesapp.dev",
+          "federatedId": "rules-intruder-1790898631673-p7rxuj@notesapp.dev",
+          "rawId": "rules-intruder-1790898631673-p7rxuj@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790898631673-p7rxuj@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "dLAv94KLgRBjRcusb6ucUrsxETAt",
+      "createdAt": "1790898630987",
+      "lastLoginAt": "1790898631777",
+      "passwordHash": "fakeHash:salt=fakeSaltVCNJYYDaVmpWZECY2UyQ:password=emulatorPassword123",
+      "salt": "fakeSaltVCNJYYDaVmpWZECY2UyQ",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790898630978-9ckhgt@notesapp.dev",
+          "federatedId": "rules-owner-1790898630978-9ckhgt@notesapp.dev",
+          "rawId": "rules-owner-1790898630978-9ckhgt@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790898630978-9ckhgt@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "dVbKQcEPKwzJVJPu1Zq123lmqNjw",
+      "lastLoginAt": "1790942438679",
+      "createdAt": "1790942438679",
+      "lastRefreshAt": "2026-10-02T12:00:38.680Z"
+    },
+    {
+      "localId": "dZrwo8nROCvrQsDFi0BYgLKKPZ63",
+      "createdAt": "1790894830183",
+      "lastLoginAt": "1790894830183",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "dhbefRPXzuhFR85bwKn6Yfh6pyPU",
+      "createdAt": "1790898242087",
+      "lastLoginAt": "1790898242087",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "dnPdwuFktRVT7wTewz72LPd5CxXi",
+      "createdAt": "1790897750001",
+      "lastLoginAt": "1790897750553",
+      "passwordHash": "fakeHash:salt=fakeSaltNgE5vsZqHFK6xRwT6Jm3:password=emulatorPassword123",
+      "salt": "fakeSaltNgE5vsZqHFK6xRwT6Jm3",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790897749987@notesapp.dev",
+          "federatedId": "firestore-owner-1790897749987@notesapp.dev",
+          "rawId": "firestore-owner-1790897749987@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790897749987@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "dqEeKzCyQScP4LH759IzJHpHcNcv",
+      "lastLoginAt": "1790942286767",
+      "emailVerified": false,
+      "email": "rules-owner-1790942286137-b9ok0x@notesapp.dev",
+      "salt": "fakeSaltA6RKlarSchMYpcxCHNdx",
+      "passwordHash": "fakeHash:salt=fakeSaltA6RKlarSchMYpcxCHNdx:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942286146,
+      "validSince": "1790942286",
+      "createdAt": "1790942286146",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790942286137-b9ok0x@notesapp.dev",
+          "federatedId": "rules-owner-1790942286137-b9ok0x@notesapp.dev",
+          "rawId": "rules-owner-1790942286137-b9ok0x@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:58:06.767Z"
+    },
+    {
+      "localId": "dxPErlAKjRkpAWOz8imAmTgq8stK",
+      "createdAt": "1790889603395",
+      "lastLoginAt": "1790889604257",
+      "passwordHash": "fakeHash:salt=fakeSaltI0jPQ7XJqVCT0RYWiljV:password=emulatorPassword123",
+      "salt": "fakeSaltI0jPQ7XJqVCT0RYWiljV",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790889603351@notesapp.dev",
+          "federatedId": "firestore-owner-1790889603351@notesapp.dev",
+          "rawId": "firestore-owner-1790889603351@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790889603351@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "eD8SgbrBvSnUm1EzwqHkulVsUDrr",
+      "lastLoginAt": "1790940428970",
+      "emailVerified": false,
+      "email": "emulator-test-1790940428925@notesapp.dev",
+      "salt": "fakeSaltEk1FHktpOLTdKtzGLjQM",
+      "passwordHash": "fakeHash:salt=fakeSaltEk1FHktpOLTdKtzGLjQM:password=securePassword123",
+      "passwordUpdatedAt": 1790940428936,
+      "validSince": "1790940428",
+      "createdAt": "1790940428936",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790940428925@notesapp.dev",
+          "federatedId": "emulator-test-1790940428925@notesapp.dev",
+          "rawId": "emulator-test-1790940428925@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:27:08.970Z"
+    },
+    {
+      "localId": "eHF3AwD7NE6l9cTfHyVw6kLiylPV",
+      "createdAt": "1790898427591",
+      "lastLoginAt": "1790898427591",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "eP7bDR4Bqs0LfNLgLzvocZoYvtaV",
+      "lastLoginAt": "1790940158067",
+      "emailVerified": false,
+      "email": "firestore-owner-1790940157525@notesapp.dev",
+      "salt": "fakeSalt6Vlo6gLgFJvJ4RYPmxaN",
+      "passwordHash": "fakeHash:salt=fakeSalt6Vlo6gLgFJvJ4RYPmxaN:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790940157538,
+      "validSince": "1790940157",
+      "createdAt": "1790940157538",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790940157525@notesapp.dev",
+          "federatedId": "firestore-owner-1790940157525@notesapp.dev",
+          "rawId": "firestore-owner-1790940157525@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:22:38.067Z"
+    },
+    {
+      "localId": "eu0nUSFgqnNtogYmm59S9ZP1F19l",
+      "createdAt": "1790898857010",
+      "lastLoginAt": "1790898857032",
+      "passwordHash": "fakeHash:salt=fakeSaltMlWaGvcBsqW3HRD0o9cD:password=securePassword123",
+      "salt": "fakeSaltMlWaGvcBsqW3HRD0o9cD",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790898857003@notesapp.dev",
+          "federatedId": "emulator-test-1790898857003@notesapp.dev",
+          "rawId": "emulator-test-1790898857003@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790898857003@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "ez439qhRKPmiyxmuIUEnTvhGoNH6",
+      "createdAt": "1790893163746",
+      "lastLoginAt": "1790893163746",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "ezbm1onV7uSQtKBRzUM5we1LGeVQ",
+      "createdAt": "1790894453857",
+      "lastLoginAt": "1790894453894",
+      "passwordHash": "fakeHash:salt=fakeSaltWYLdALiJdE6aPKZAWSX3:password=securePassword123",
+      "salt": "fakeSaltWYLdALiJdE6aPKZAWSX3",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790894453846@notesapp.dev",
+          "federatedId": "emulator-test-1790894453846@notesapp.dev",
+          "rawId": "emulator-test-1790894453846@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790894453846@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "ezvBAoF90zEnSHb6kgc6PorCv4tJ",
+      "createdAt": "1790889295407",
+      "lastLoginAt": "1790889295407",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "fVOKbMqU1rLoz0SMHFOwWvBul01y",
+      "createdAt": "1790895449844",
+      "lastLoginAt": "1790895449844",
+      "passwordHash": "fakeHash:salt=fakeSaltP5UvqGUVvD5w5HXfE8ui:password=emulatorPassword123",
+      "salt": "fakeSaltP5UvqGUVvD5w5HXfE8ui",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790895449834-ujqsw5@notesapp.dev",
+          "federatedId": "rules-intruder-1790895449834-ujqsw5@notesapp.dev",
+          "rawId": "rules-intruder-1790895449834-ujqsw5@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790895449834-ujqsw5@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "fdSAbdxnji9NslHDBbRyeKB3e5KO",
+      "lastLoginAt": "1790942168323",
+      "emailVerified": false,
+      "email": "rules-owner-1790942167767-p86n1g@notesapp.dev",
+      "salt": "fakeSaltTeXvnUDevWwZXzctBNfO",
+      "passwordHash": "fakeHash:salt=fakeSaltTeXvnUDevWwZXzctBNfO:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942167772,
+      "validSince": "1790942167",
+      "createdAt": "1790942167772",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790942167767-p86n1g@notesapp.dev",
+          "federatedId": "rules-owner-1790942167767-p86n1g@notesapp.dev",
+          "rawId": "rules-owner-1790942167767-p86n1g@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:56:08.323Z"
+    },
+    {
+      "localId": "fms17RG78m8zjtzbRKGhpMHLhMIn",
+      "lastLoginAt": "1790943965195",
+      "emailVerified": false,
+      "email": "firestore-owner-1790943964432@notesapp.dev",
+      "salt": "fakeSaltyrcSMFIm0njqKg2oGBqU",
+      "passwordHash": "fakeHash:salt=fakeSaltyrcSMFIm0njqKg2oGBqU:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790943964451,
+      "validSince": "1790943964",
+      "createdAt": "1790943964451",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790943964432@notesapp.dev",
+          "federatedId": "firestore-owner-1790943964432@notesapp.dev",
+          "rawId": "firestore-owner-1790943964432@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T12:26:05.195Z"
+    },
+    {
+      "localId": "fzhfaYLa3aKOcAGVCIhWBpr31bma",
+      "lastLoginAt": "1790942285086",
+      "emailVerified": false,
+      "email": "emulator-test-1790942285030@notesapp.dev",
+      "salt": "fakeSalt91WNLF5rsIfLVVtwS51J",
+      "passwordHash": "fakeHash:salt=fakeSalt91WNLF5rsIfLVVtwS51J:password=securePassword123",
+      "passwordUpdatedAt": 1790942285044,
+      "validSince": "1790942285",
+      "createdAt": "1790942285044",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790942285030@notesapp.dev",
+          "federatedId": "emulator-test-1790942285030@notesapp.dev",
+          "rawId": "emulator-test-1790942285030@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:58:05.086Z"
+    },
+    {
+      "localId": "g9JHtRK8pK98GdxbjI06iUpKHZyX",
+      "createdAt": "1790897750500",
+      "lastLoginAt": "1790897750500",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "gItIXQ6qIN3ZZzQ0kFSZ58Npk9Lq",
+      "createdAt": "1790893166757",
+      "lastLoginAt": "1790893166757",
+      "passwordHash": "fakeHash:salt=fakeSaltIv6daFCgL0Bq9Fg8TMVk:password=emulatorPassword123",
+      "salt": "fakeSaltIv6daFCgL0Bq9Fg8TMVk",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790893166751-mh6a9f@notesapp.dev",
+          "federatedId": "rules-intruder-1790893166751-mh6a9f@notesapp.dev",
+          "rawId": "rules-intruder-1790893166751-mh6a9f@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790893166751-mh6a9f@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "gYH4AEN1dqrEBcJIe9dTebsosCVu",
+      "createdAt": "1790898243899",
+      "lastLoginAt": "1790898243899",
+      "passwordHash": "fakeHash:salt=fakeSalth0mWxDZvmFeNDB7daLcQ:password=emulatorPassword123",
+      "salt": "fakeSalth0mWxDZvmFeNDB7daLcQ",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790898243891-mu2wu3@notesapp.dev",
+          "federatedId": "rules-intruder-1790898243891-mu2wu3@notesapp.dev",
+          "rawId": "rules-intruder-1790898243891-mu2wu3@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790898243891-mu2wu3@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "goXxhePbNyJ22WSzgItRAB6sr46b",
+      "lastLoginAt": "1790940429932",
+      "createdAt": "1790940429932",
+      "lastRefreshAt": "2026-10-02T11:27:09.932Z"
+    },
+    {
+      "localId": "hJPaNH40mzsb4IcOaeapfUlV4XjL",
+      "lastLoginAt": "1790938628015",
+      "createdAt": "1790938628015",
+      "lastRefreshAt": "2026-10-02T10:57:08.018Z"
+    },
+    {
+      "localId": "hQKkHKyGaeiSACdxFREXl1FlAkoo",
+      "createdAt": "1790894971628",
+      "lastLoginAt": "1790894971628",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "hZh1kivOMlOvxmC2y54Xn26ZABEk",
+      "createdAt": "1790898243402",
+      "lastLoginAt": "1790898243402",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "hicUSOiMFejyvZDq1OQH7TNwwEPV",
+      "createdAt": "1790894392394",
+      "lastLoginAt": "1790894393105",
+      "passwordHash": "fakeHash:salt=fakeSaltRTipJfY9W6pCgZgJQfhI:password=emulatorPassword123",
+      "salt": "fakeSaltRTipJfY9W6pCgZgJQfhI",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790894392382-bn1t9d@notesapp.dev",
+          "federatedId": "rules-owner-1790894392382-bn1t9d@notesapp.dev",
+          "rawId": "rules-owner-1790894392382-bn1t9d@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790894392382-bn1t9d@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "i5zP0jqVoOCQpRoPMd6cxg7iQnyM",
+      "createdAt": "1790889101528",
+      "lastLoginAt": "1790889102455",
+      "passwordHash": "fakeHash:salt=fakeSaltS8b4CqI0nLlUhljJS6vB:password=emulatorPassword123",
+      "salt": "fakeSaltS8b4CqI0nLlUhljJS6vB",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790889101515@notesapp.dev",
+          "federatedId": "firestore-owner-1790889101515@notesapp.dev",
+          "rawId": "firestore-owner-1790889101515@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790889101515@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "iRkLqNA9cGy6irsOvqTNEw9JdhSo",
+      "createdAt": "1790897751027",
+      "lastLoginAt": "1790897751027",
+      "passwordHash": "fakeHash:salt=fakeSaltE3bKPkVJnJD4xFICao6s:password=emulatorPassword123",
+      "salt": "fakeSaltE3bKPkVJnJD4xFICao6s",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790897751018-7hhmg3@notesapp.dev",
+          "federatedId": "rules-intruder-1790897751018-7hhmg3@notesapp.dev",
+          "rawId": "rules-intruder-1790897751018-7hhmg3@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790897751018-7hhmg3@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "iZUkDnCB1oA4UjTMUJYMgSw21uRq",
+      "lastLoginAt": "1790938628084",
+      "emailVerified": false,
+      "email": "emulator-test-1790938628041@notesapp.dev",
+      "salt": "fakeSaltvvMBEx8W7NxumJk9RTT1",
+      "passwordHash": "fakeHash:salt=fakeSaltvvMBEx8W7NxumJk9RTT1:password=securePassword123",
+      "passwordUpdatedAt": 1790938628049,
+      "validSince": "1790938628",
+      "createdAt": "1790938628048",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790938628041@notesapp.dev",
+          "federatedId": "emulator-test-1790938628041@notesapp.dev",
+          "rawId": "emulator-test-1790938628041@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T10:57:08.084Z"
+    },
+    {
+      "localId": "ixxW3jWkviqGVXgrUg9xotkQJr7d",
+      "createdAt": "1790889129507",
+      "lastLoginAt": "1790889129507",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "j12KU46ipCTS4niZ03KUR6OTJIFY",
+      "createdAt": "1790896790851",
+      "lastLoginAt": "1790896791499",
+      "passwordHash": "fakeHash:salt=fakeSaltePkQjgOBZgP0cQzgR9Cu:password=emulatorPassword123",
+      "salt": "fakeSaltePkQjgOBZgP0cQzgR9Cu",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790896790835@notesapp.dev",
+          "federatedId": "firestore-owner-1790896790835@notesapp.dev",
+          "rawId": "firestore-owner-1790896790835@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790896790835@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "jC7vTVda1iUaUu6uhSVa2FFp9L2Y",
+      "lastLoginAt": "1790942286005",
+      "createdAt": "1790942286005",
+      "lastRefreshAt": "2026-10-02T11:58:06.005Z"
+    },
+    {
+      "localId": "jDuuaSFmCRn3BCbwSMsioqVp9obY",
+      "createdAt": "1790896949168",
+      "lastLoginAt": "1790896949212",
+      "passwordHash": "fakeHash:salt=fakeSaltHwhMn5YNk7uxSRvSUGSG:password=securePassword123",
+      "salt": "fakeSaltHwhMn5YNk7uxSRvSUGSG",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790896949151@notesapp.dev",
+          "federatedId": "emulator-test-1790896949151@notesapp.dev",
+          "rawId": "emulator-test-1790896949151@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790896949151@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "jG6XDb3juneXQgm6iymCoa1w6oIj",
+      "lastLoginAt": "1790942181201",
+      "createdAt": "1790942181201",
+      "lastRefreshAt": "2026-10-02T11:56:21.201Z"
+    },
+    {
+      "localId": "jIWRI2J9tEW797EqOgrJ1ArnypOF",
+      "lastLoginAt": "1790941285551",
+      "emailVerified": false,
+      "email": "firestore-owner-1790941285070@notesapp.dev",
+      "salt": "fakeSaltN1jpyUN0epYtDiKEf1bL",
+      "passwordHash": "fakeHash:salt=fakeSaltN1jpyUN0epYtDiKEf1bL:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790941285079,
+      "validSince": "1790941285",
+      "createdAt": "1790941285079",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790941285070@notesapp.dev",
+          "federatedId": "firestore-owner-1790941285070@notesapp.dev",
+          "rawId": "firestore-owner-1790941285070@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:41:25.552Z"
+    },
+    {
+      "localId": "jN2gtAcBhGoVstfEpY2jwkmhfwqg",
+      "createdAt": "1790889604341",
+      "lastLoginAt": "1790889605082",
+      "passwordHash": "fakeHash:salt=fakeSaltekkK8k2P30bSXPKRcKr6:password=emulatorPassword123",
+      "salt": "fakeSaltekkK8k2P30bSXPKRcKr6",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790889604330-si41ne@notesapp.dev",
+          "federatedId": "rules-owner-1790889604330-si41ne@notesapp.dev",
+          "rawId": "rules-owner-1790889604330-si41ne@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790889604330-si41ne@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "jOIX8lcVrVmeZfR8xGGTorYJfLzj",
+      "lastLoginAt": "1790940158685",
+      "emailVerified": false,
+      "email": "rules-intruder-1790940158674-0m24k8@notesapp.dev",
+      "salt": "fakeSaltMK9MG8r5F3kzwxUoopO9",
+      "passwordHash": "fakeHash:salt=fakeSaltMK9MG8r5F3kzwxUoopO9:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790940158685,
+      "validSince": "1790940158",
+      "createdAt": "1790940158685",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790940158674-0m24k8@notesapp.dev",
+          "federatedId": "rules-intruder-1790940158674-0m24k8@notesapp.dev",
+          "rawId": "rules-intruder-1790940158674-0m24k8@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:22:38.685Z"
+    },
+    {
+      "localId": "jePnKExCspz5xzyNyVSdvZD475uF",
+      "createdAt": "1790895075476",
+      "lastLoginAt": "1790895075476",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "jgXbaczxAOFzLr5QD7g9pI8qzifo",
+      "createdAt": "1790894988236",
+      "lastLoginAt": "1790894988236",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "kXMqpD2hKJ5aX4tXmPG5jrlDXLcM",
+      "createdAt": "1790894454481",
+      "lastLoginAt": "1790894455110",
+      "passwordHash": "fakeHash:salt=fakeSaltVcessfAOeT9UEggO1gKG:password=emulatorPassword123",
+      "salt": "fakeSaltVcessfAOeT9UEggO1gKG",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790894454465@notesapp.dev",
+          "federatedId": "firestore-owner-1790894454465@notesapp.dev",
+          "rawId": "firestore-owner-1790894454465@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790894454465@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "ku62O7hIRSCpO97XODjF4DGhQvdA",
+      "createdAt": "1790898570575",
+      "lastLoginAt": "1790898570575",
+      "passwordHash": "fakeHash:salt=fakeSaltvIU9waL7q5oarcxyEUxi:password=emulatorPassword123",
+      "salt": "fakeSaltvIU9waL7q5oarcxyEUxi",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790898570567-f4p0w2@notesapp.dev",
+          "federatedId": "rules-intruder-1790898570567-f4p0w2@notesapp.dev",
+          "rawId": "rules-intruder-1790898570567-f4p0w2@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790898570567-f4p0w2@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "lOPYN18NLRC5wJQObxePvLDeuaNP",
+      "createdAt": "1790894842730",
+      "lastLoginAt": "1790894842730",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "lnH5eTXHqEjgAyhqHVx857NY7HM9",
+      "createdAt": "1790895446819",
+      "lastLoginAt": "1790895448814",
+      "passwordHash": "fakeHash:salt=fakeSalt3wUuvcdrm1dKQMLPkvdx:password=emulatorPassword123",
+      "salt": "fakeSalt3wUuvcdrm1dKQMLPkvdx",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790895446801@notesapp.dev",
+          "federatedId": "firestore-owner-1790895446801@notesapp.dev",
+          "rawId": "firestore-owner-1790895446801@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790895446801@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "ly0nRPFqrvkDYYSbwEF7GvxoOj4v",
+      "createdAt": "1790895757638",
+      "lastLoginAt": "1790895758302",
+      "passwordHash": "fakeHash:salt=fakeSalt9IrzsXJFV3giZb2qO3Jm:password=emulatorPassword123",
+      "salt": "fakeSalt9IrzsXJFV3giZb2qO3Jm",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790895757630-mbapos@notesapp.dev",
+          "federatedId": "rules-owner-1790895757630-mbapos@notesapp.dev",
+          "rawId": "rules-owner-1790895757630-mbapos@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790895757630-mbapos@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "m0DnUGiay9USQSMaazrLEIPQmvyX",
+      "createdAt": "1790898568817",
+      "lastLoginAt": "1790898568852",
+      "passwordHash": "fakeHash:salt=fakeSalt2wWsdgMPZy32xCynlRJM:password=securePassword123",
+      "salt": "fakeSalt2wWsdgMPZy32xCynlRJM",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790898568802@notesapp.dev",
+          "federatedId": "emulator-test-1790898568802@notesapp.dev",
+          "rawId": "emulator-test-1790898568802@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790898568802@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "m4Davzi6EIaPBiZgAGv1QWrDWJ3K",
+      "lastLoginAt": "1790942438764",
+      "emailVerified": false,
+      "email": "emulator-test-1790942438716@notesapp.dev",
+      "salt": "fakeSaltXxs2iCcxAFqj5hhkBCM9",
+      "passwordHash": "fakeHash:salt=fakeSaltXxs2iCcxAFqj5hhkBCM9:password=securePassword123",
+      "passwordUpdatedAt": 1790942438726,
+      "validSince": "1790942438",
+      "createdAt": "1790942438726",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790942438716@notesapp.dev",
+          "federatedId": "emulator-test-1790942438716@notesapp.dev",
+          "rawId": "emulator-test-1790942438716@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T12:00:38.764Z"
+    },
+    {
+      "localId": "m8U1qdfRNC7G2jUe2doVkSvhulyJ",
+      "createdAt": "1790894986247",
+      "lastLoginAt": "1790894986247",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "nDXzlqFaY4WVjZunGrGg4yzGlo3U",
+      "createdAt": "1790894842064",
+      "lastLoginAt": "1790894842779",
+      "passwordHash": "fakeHash:salt=fakeSaltd90yDKwcLF5fUKgL8TH5:password=emulatorPassword123",
+      "salt": "fakeSaltd90yDKwcLF5fUKgL8TH5",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790894842050@notesapp.dev",
+          "federatedId": "firestore-owner-1790894842050@notesapp.dev",
+          "rawId": "firestore-owner-1790894842050@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790894842050@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "nIGaU4djFYJq0r12Lf79xydchCiM",
+      "lastLoginAt": "1790942441065",
+      "emailVerified": false,
+      "email": "rules-intruder-1790942441054-so8uq7@notesapp.dev",
+      "salt": "fakeSaltBLs3PaI9jjGrc5jUgpQB",
+      "passwordHash": "fakeHash:salt=fakeSaltBLs3PaI9jjGrc5jUgpQB:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942441065,
+      "validSince": "1790942441",
+      "createdAt": "1790942441065",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790942441054-so8uq7@notesapp.dev",
+          "federatedId": "rules-intruder-1790942441054-so8uq7@notesapp.dev",
+          "rawId": "rules-intruder-1790942441054-so8uq7@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T12:00:41.065Z"
+    },
+    {
+      "localId": "nLElqkKMEOHwcPpoHOFKG8Z4D9fP",
+      "lastLoginAt": "1790943803921",
+      "createdAt": "1790943803921",
+      "lastRefreshAt": "2026-10-02T12:23:23.921Z"
+    },
+    {
+      "localId": "nfJZTkQshvh37pLOiXBM7pmdwyIs",
+      "createdAt": "1790893207523",
+      "lastLoginAt": "1790893208052",
+      "passwordHash": "fakeHash:salt=fakeSaltAVS2lNDqYE2EzGAFfrcy:password=emulatorPassword123",
+      "salt": "fakeSaltAVS2lNDqYE2EzGAFfrcy",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790893207516-ny9cw7@notesapp.dev",
+          "federatedId": "rules-owner-1790893207516-ny9cw7@notesapp.dev",
+          "rawId": "rules-owner-1790893207516-ny9cw7@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790893207516-ny9cw7@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "nfvKcrevUbSTV1oU1fcpJKhc3lc1",
+      "createdAt": "1790898426950",
+      "lastLoginAt": "1790898427633",
+      "passwordHash": "fakeHash:salt=fakeSalth9Yg1d1JLXp5UASqy66u:password=emulatorPassword123",
+      "salt": "fakeSalth9Yg1d1JLXp5UASqy66u",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790898426931@notesapp.dev",
+          "federatedId": "firestore-owner-1790898426931@notesapp.dev",
+          "rawId": "firestore-owner-1790898426931@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790898426931@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "nvoKELt5wYYB2VRD8Y9gZdxBsFq9",
+      "lastLoginAt": "1790940428901",
+      "createdAt": "1790940428901",
+      "lastRefreshAt": "2026-10-02T11:27:08.901Z"
+    },
+    {
+      "localId": "nx9qQlMkHiJbhGkzf1nRpTtMnFEc",
+      "createdAt": "1790893207976",
+      "lastLoginAt": "1790893207976",
+      "passwordHash": "fakeHash:salt=fakeSalt3URnB7lbIHZZtYzGUABw:password=emulatorPassword123",
+      "salt": "fakeSalt3URnB7lbIHZZtYzGUABw",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790893207967-d7sygi@notesapp.dev",
+          "federatedId": "rules-intruder-1790893207967-d7sygi@notesapp.dev",
+          "rawId": "rules-intruder-1790893207967-d7sygi@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790893207967-d7sygi@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "o2T5o5u2VyPJidbxE3km4wU5vdKO",
+      "createdAt": "1790891435522",
+      "lastLoginAt": "1790891435562",
+      "passwordHash": "fakeHash:salt=fakeSalt4Qi0WQFK0LqITCkdgMak:password=securePassword123",
+      "salt": "fakeSalt4Qi0WQFK0LqITCkdgMak",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790891435500@notesapp.dev",
+          "federatedId": "emulator-test-1790891435500@notesapp.dev",
+          "rawId": "emulator-test-1790891435500@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790891435500@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "oVHUSTqC9dOFy9zai6SwmMFL1KhU",
+      "lastLoginAt": "1790941281566",
+      "emailVerified": false,
+      "email": "emulator-test-1790941281516@notesapp.dev",
+      "salt": "fakeSalty1tlZIqOqozK4H10ASvP",
+      "passwordHash": "fakeHash:salt=fakeSalty1tlZIqOqozK4H10ASvP:password=securePassword123",
+      "passwordUpdatedAt": 1790941281524,
+      "validSince": "1790941281",
+      "createdAt": "1790941281524",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790941281516@notesapp.dev",
+          "federatedId": "emulator-test-1790941281516@notesapp.dev",
+          "rawId": "emulator-test-1790941281516@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:41:21.566Z"
+    },
+    {
+      "localId": "oYYVxXHskGNZ67JJhUCmNNNO78eW",
+      "lastLoginAt": "1790938630094",
+      "emailVerified": false,
+      "email": "firestore-owner-1790938629331@notesapp.dev",
+      "salt": "fakeSaltxNBP93RmDl974trZiUYP",
+      "passwordHash": "fakeHash:salt=fakeSaltxNBP93RmDl974trZiUYP:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790938629347,
+      "validSince": "1790938629",
+      "createdAt": "1790938629347",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790938629331@notesapp.dev",
+          "federatedId": "firestore-owner-1790938629331@notesapp.dev",
+          "rawId": "firestore-owner-1790938629331@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T10:57:10.095Z"
+    },
+    {
+      "localId": "obiSjee8SPLT2ghFpz17kKe3h7Wd",
+      "createdAt": "1790894427701",
+      "lastLoginAt": "1790894427701",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "oocCQzDeHh3SNuaInEn1Wm2HV7hW",
+      "createdAt": "1790894825081",
+      "lastLoginAt": "1790894825158",
+      "passwordHash": "fakeHash:salt=fakeSaltXtyE9MNfe1IBIPrmIvMw:password=securePassword123",
+      "salt": "fakeSaltXtyE9MNfe1IBIPrmIvMw",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790894825066@notesapp.dev",
+          "federatedId": "emulator-test-1790894825066@notesapp.dev",
+          "rawId": "emulator-test-1790894825066@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790894825066@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "pWLYlQHsnhPSiQwgPpMDr6fCJqzn",
+      "createdAt": "1790894969856",
+      "lastLoginAt": "1790894969894",
+      "passwordHash": "fakeHash:salt=fakeSaltZJ2UvK18LntoRxktjXjw:password=securePassword123",
+      "salt": "fakeSaltZJ2UvK18LntoRxktjXjw",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790894969842@notesapp.dev",
+          "federatedId": "emulator-test-1790894969842@notesapp.dev",
+          "rawId": "emulator-test-1790894969842@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790894969842@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "pZdNKcmS53FgZ7WMl64tMo9iLQCL",
+      "lastLoginAt": "1790942181271",
+      "emailVerified": false,
+      "email": "emulator-test-1790942181225@notesapp.dev",
+      "salt": "fakeSaltoPbWVt7Qe44CnZO0P3vI",
+      "passwordHash": "fakeHash:salt=fakeSaltoPbWVt7Qe44CnZO0P3vI:password=securePassword123",
+      "passwordUpdatedAt": 1790942181237,
+      "validSince": "1790942181",
+      "createdAt": "1790942181237",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790942181225@notesapp.dev",
+          "federatedId": "emulator-test-1790942181225@notesapp.dev",
+          "rawId": "emulator-test-1790942181225@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:56:21.271Z"
+    },
+    {
+      "localId": "pesZQjW9lcYr6sbbBdd5tLvZjpNb",
+      "createdAt": "1790897538100",
+      "lastLoginAt": "1790897539000",
+      "passwordHash": "fakeHash:salt=fakeSalt6IesysNYi82vpYUidyEv:password=emulatorPassword123",
+      "salt": "fakeSalt6IesysNYi82vpYUidyEv",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790897538090-tfqe7u@notesapp.dev",
+          "federatedId": "rules-owner-1790897538090-tfqe7u@notesapp.dev",
+          "rawId": "rules-owner-1790897538090-tfqe7u@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790897538090-tfqe7u@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "pulAPCabAG1D8QrxTPRIgOX1UZHj",
+      "createdAt": "1790891438096",
+      "lastLoginAt": "1790891438096",
+      "passwordHash": "fakeHash:salt=fakeSaltp4aQDXb5v8Mzjn1Uzbvu:password=emulatorPassword123",
+      "salt": "fakeSaltp4aQDXb5v8Mzjn1Uzbvu",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790891438086-s0omvo@notesapp.dev",
+          "federatedId": "rules-intruder-1790891438086-s0omvo@notesapp.dev",
+          "rawId": "rules-intruder-1790891438086-s0omvo@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790891438086-s0omvo@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "qKwlVj1fs2QcW0cThf1ejmHjJFA3",
+      "createdAt": "1790895076898",
+      "lastLoginAt": "1790895077997",
+      "passwordHash": "fakeHash:salt=fakeSalt6gnR6SIHrKkcSZkohBTC:password=emulatorPassword123",
+      "salt": "fakeSalt6gnR6SIHrKkcSZkohBTC",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790895076875@notesapp.dev",
+          "federatedId": "firestore-owner-1790895076875@notesapp.dev",
+          "rawId": "firestore-owner-1790895076875@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790895076875@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "qsJB3LtGU6nlxULgcyOoe52FS48N",
+      "lastLoginAt": "1790939952695",
+      "createdAt": "1790939952695",
+      "lastRefreshAt": "2026-10-02T11:19:12.696Z"
+    },
+    {
+      "localId": "r1WPP9XZUOTDvDsQexPyUGG4qMfT",
+      "createdAt": "1790895174607",
+      "lastLoginAt": "1790895174607",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "r6JAiyi0ucbqI2xcJHlMX2ZLGcSj",
+      "createdAt": "1790897536837",
+      "lastLoginAt": "1790897536868",
+      "passwordHash": "fakeHash:salt=fakeSaltCTyNw3VJMznaGcmgX8xr:password=securePassword123",
+      "salt": "fakeSaltCTyNw3VJMznaGcmgX8xr",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790897536827@notesapp.dev",
+          "federatedId": "emulator-test-1790897536827@notesapp.dev",
+          "rawId": "emulator-test-1790897536827@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790897536827@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "r8hpOqyu1WlIehog50l20kxCvZtW",
+      "lastLoginAt": "1790941286163",
+      "emailVerified": false,
+      "email": "rules-intruder-1790941286153-0uyc71@notesapp.dev",
+      "salt": "fakeSaltA7Tm9VZWmVG4WDpyZlir",
+      "passwordHash": "fakeHash:salt=fakeSaltA7Tm9VZWmVG4WDpyZlir:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790941286163,
+      "validSince": "1790941286",
+      "createdAt": "1790941286163",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790941286153-0uyc71@notesapp.dev",
+          "federatedId": "rules-intruder-1790941286153-0uyc71@notesapp.dev",
+          "rawId": "rules-intruder-1790941286153-0uyc71@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:41:26.163Z"
+    },
+    {
+      "localId": "rD3fnBiYIf6gYVspqg1TgktrrqrR",
+      "createdAt": "1790898242124",
+      "lastLoginAt": "1790898242154",
+      "passwordHash": "fakeHash:salt=fakeSaltD1yIvU5HOCl493dQTVU9:password=securePassword123",
+      "salt": "fakeSaltD1yIvU5HOCl493dQTVU9",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790898242113@notesapp.dev",
+          "federatedId": "emulator-test-1790898242113@notesapp.dev",
+          "rawId": "emulator-test-1790898242113@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790898242113@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "rOmZPuI6XGgslrjTbDJQxc4t7BH5",
+      "lastLoginAt": "1790942160894",
+      "emailVerified": false,
+      "email": "emulator-test-1790942160832@notesapp.dev",
+      "salt": "fakeSaltleplRsb4T04FH4ukyI2t",
+      "passwordHash": "fakeHash:salt=fakeSaltleplRsb4T04FH4ukyI2t:password=securePassword123",
+      "passwordUpdatedAt": 1790942160845,
+      "validSince": "1790942160",
+      "createdAt": "1790942160844",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790942160832@notesapp.dev",
+          "federatedId": "emulator-test-1790942160832@notesapp.dev",
+          "rawId": "emulator-test-1790942160832@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:56:00.894Z"
+    },
+    {
+      "localId": "sDuZsRhUPMe7QWzdPlorvcsgW9QN",
+      "createdAt": "1790889604171",
+      "lastLoginAt": "1790889604171",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "t6R30x6VqLc98JlnR9n3QMdNMQfn",
+      "lastLoginAt": "1790942286069",
+      "emailVerified": false,
+      "email": "firestore-owner-1790942285389@notesapp.dev",
+      "salt": "fakeSaltLoOoFBv9rL5ZdJi2NUTk",
+      "passwordHash": "fakeHash:salt=fakeSaltLoOoFBv9rL5ZdJi2NUTk:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942285407,
+      "validSince": "1790942285",
+      "createdAt": "1790942285407",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790942285389@notesapp.dev",
+          "federatedId": "firestore-owner-1790942285389@notesapp.dev",
+          "rawId": "firestore-owner-1790942285389@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:58:06.069Z"
+    },
+    {
+      "localId": "t6rb7qZXugMrGsTUhDvyRaRxmqV8",
+      "createdAt": "1790896863847",
+      "lastLoginAt": "1790896863847",
+      "passwordHash": "fakeHash:salt=fakeSaltC7lyJ0GTO7OrpWwPn8Ah:password=emulatorPassword123",
+      "salt": "fakeSaltC7lyJ0GTO7OrpWwPn8Ah",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790896863837-81vk9r@notesapp.dev",
+          "federatedId": "rules-intruder-1790896863837-81vk9r@notesapp.dev",
+          "rawId": "rules-intruder-1790896863837-81vk9r@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790896863837-81vk9r@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "tDcDmilJR00ilwpBLGzje5Gtt0Ep",
+      "createdAt": "1790893205882",
+      "lastLoginAt": "1790893205882",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "tDmo6zEVrsaW4TQq1Jmkbk71ci8i",
+      "createdAt": "1790889295733",
+      "lastLoginAt": "1790889295733",
+      "passwordHash": "fakeHash:salt=fakeSaltmZ1inRt9UkeeDVo4kgMM:password=emulatorPassword123",
+      "salt": "fakeSaltmZ1inRt9UkeeDVo4kgMM",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790889295722-tz85td@notesapp.dev",
+          "federatedId": "rules-intruder-1790889295722-tz85td@notesapp.dev",
+          "rawId": "rules-intruder-1790889295722-tz85td@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790889295722-tz85td@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "tF259oJobKByyNE2NfY4oKFZdXF6",
+      "createdAt": "1790890459306",
+      "lastLoginAt": "1790890459306",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "tHsbz7tRcQUNPKZn6cWYeLejf14X",
+      "createdAt": "1790896791442",
+      "lastLoginAt": "1790896791442",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "tU1WKvqTVSeXS4SJpWRHEtWEYpn2",
+      "createdAt": "1790889638356",
+      "lastLoginAt": "1790889638356",
+      "passwordHash": "fakeHash:salt=fakeSaltwm9EijpA22yCNDLIdzLX:password=emulatorPassword123",
+      "salt": "fakeSaltwm9EijpA22yCNDLIdzLX",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790889638344-8nxkc8@notesapp.dev",
+          "federatedId": "rules-intruder-1790889638344-8nxkc8@notesapp.dev",
+          "rawId": "rules-intruder-1790889638344-8nxkc8@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790889638344-8nxkc8@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "tester1-uid-123456",
+      "createdAt": "1727500000000",
+      "lastLoginAt": "1727500000000",
       "displayName": "Tester One",
       "passwordHash": "fakeHash123",
       "salt": "fakeSalt123",
-      "createdAt": "1727500000000",
-      "lastLoginAt": "1727500000000",
+      "passwordUpdatedAt": 1790935815031,
       "providerUserInfo": [
         {
           "providerId": "password",
-          "rawId": "tester1@notesapp.dev",
           "email": "tester1@notesapp.dev",
+          "federatedId": "tester1@notesapp.dev",
+          "rawId": "tester1@notesapp.dev",
           "displayName": "Tester One"
         }
-      ]
+      ],
+      "validSince": "1790935815",
+      "email": "tester1@notesapp.dev",
+      "emailVerified": true,
+      "disabled": false
     },
     {
       "localId": "tester2-uid-654321",
-      "email": "tester2@notesapp.dev",
-      "emailVerified": true,
+      "createdAt": "1727500000000",
+      "lastLoginAt": "1727500000000",
       "displayName": "Tester Two",
       "passwordHash": "fakeHash123",
       "salt": "fakeSalt123",
-      "createdAt": "1727500000000",
-      "lastLoginAt": "1727500000000",
+      "passwordUpdatedAt": 1790935815031,
       "providerUserInfo": [
         {
           "providerId": "password",
-          "rawId": "tester2@notesapp.dev",
           "email": "tester2@notesapp.dev",
+          "federatedId": "tester2@notesapp.dev",
+          "rawId": "tester2@notesapp.dev",
           "displayName": "Tester Two"
         }
-      ]
+      ],
+      "validSince": "1790935815",
+      "email": "tester2@notesapp.dev",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "uVzkGGDJVLsZmtbsZUCLsi8I5MSp",
+      "createdAt": "1790889183505",
+      "lastLoginAt": "1790889183505",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "upFRa08XAfZSMWg518aSPKSop0im",
+      "createdAt": "1790889129185",
+      "lastLoginAt": "1790889129545",
+      "passwordHash": "fakeHash:salt=fakeSaltlojdjSqCRUgO8mYjxTLx:password=emulatorPassword123",
+      "salt": "fakeSaltlojdjSqCRUgO8mYjxTLx",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790889129171@notesapp.dev",
+          "federatedId": "firestore-owner-1790889129171@notesapp.dev",
+          "rawId": "firestore-owner-1790889129171@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790889129171@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "veQE4TJj6HY7bv8sfsVWwe63RYNf",
+      "lastLoginAt": "1790943803991",
+      "emailVerified": false,
+      "email": "emulator-test-1790943803951@notesapp.dev",
+      "salt": "fakeSaltPlL9r9vvRpBNTawvxZ0Q",
+      "passwordHash": "fakeHash:salt=fakeSaltPlL9r9vvRpBNTawvxZ0Q:password=securePassword123",
+      "passwordUpdatedAt": 1790943803961,
+      "validSince": "1790943803",
+      "createdAt": "1790943803961",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790943803951@notesapp.dev",
+          "federatedId": "emulator-test-1790943803951@notesapp.dev",
+          "rawId": "emulator-test-1790943803951@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T12:23:23.991Z"
+    },
+    {
+      "localId": "wKOP610hxeot7ktBiy1qS2lauLvE",
+      "createdAt": "1790894427740",
+      "lastLoginAt": "1790894427775",
+      "passwordHash": "fakeHash:salt=fakeSaltLPmf2MtSj0PtV1svWnv9:password=securePassword123",
+      "salt": "fakeSaltLPmf2MtSj0PtV1svWnv9",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790894427727@notesapp.dev",
+          "federatedId": "emulator-test-1790894427727@notesapp.dev",
+          "rawId": "emulator-test-1790894427727@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790894427727@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "wT6WWvpwmeJuxohZTeY6bM4YZ28G",
+      "createdAt": "1790889251667",
+      "lastLoginAt": "1790889252001",
+      "passwordHash": "fakeHash:salt=fakeSaltnZtuajEx1SPvwJfgnVYe:password=emulatorPassword123",
+      "salt": "fakeSaltnZtuajEx1SPvwJfgnVYe",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790889251657@notesapp.dev",
+          "federatedId": "firestore-owner-1790889251657@notesapp.dev",
+          "rawId": "firestore-owner-1790889251657@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790889251657@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "wU3CIYDP6Bsw2UQDR4FOxZJSQKvQ",
+      "createdAt": "1790889116051",
+      "lastLoginAt": "1790889116711",
+      "passwordHash": "fakeHash:salt=fakeSaltioOXMRwf1qfSY4z3TwWK:password=emulatorPassword123",
+      "salt": "fakeSaltioOXMRwf1qfSY4z3TwWK",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790889116028@notesapp.dev",
+          "federatedId": "firestore-owner-1790889116028@notesapp.dev",
+          "rawId": "firestore-owner-1790889116028@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790889116028@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "wu8dj4MmAMuSU8zjUPbpMSpNeFgw",
+      "createdAt": "1790896479511",
+      "lastLoginAt": "1790896479553",
+      "passwordHash": "fakeHash:salt=fakeSaltnpAGvcfbPm4jNHGUqoAy:password=securePassword123",
+      "salt": "fakeSaltnpAGvcfbPm4jNHGUqoAy",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "emulator-test-1790896479499@notesapp.dev",
+          "federatedId": "emulator-test-1790896479499@notesapp.dev",
+          "rawId": "emulator-test-1790896479499@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "emulator-test-1790896479499@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "xA36yDeWYsKkG6igKcqfxzclb364",
+      "createdAt": "1790894428080",
+      "lastLoginAt": "1790894428788",
+      "passwordHash": "fakeHash:salt=fakeSaltkET7R1laEpux7Ldoubkc:password=emulatorPassword123",
+      "salt": "fakeSaltkET7R1laEpux7Ldoubkc",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790894428065@notesapp.dev",
+          "federatedId": "firestore-owner-1790894428065@notesapp.dev",
+          "rawId": "firestore-owner-1790894428065@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790894428065@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "xjAEyQeN89JhngpHyNNVPpuZ2NdG",
+      "createdAt": "1790894455192",
+      "lastLoginAt": "1790894455740",
+      "passwordHash": "fakeHash:salt=fakeSaltF02Zq1QuYp0OMxt2kbkN:password=emulatorPassword123",
+      "salt": "fakeSaltF02Zq1QuYp0OMxt2kbkN",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790894455183-3sjsjd@notesapp.dev",
+          "federatedId": "rules-owner-1790894455183-3sjsjd@notesapp.dev",
+          "rawId": "rules-owner-1790894455183-3sjsjd@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790894455183-3sjsjd@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "xoMwQI6UnnsKdfKVqE4uFX1WXvsa",
+      "createdAt": "1790889251960",
+      "lastLoginAt": "1790889251960",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "yEC9dVeTx3JILZ9jZRTeYkMuMVCk",
+      "createdAt": "1790896949122",
+      "lastLoginAt": "1790896949122",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "yH02ln7n1i9m1gYIaCG0KkKbEJLc",
+      "createdAt": "1790889129602",
+      "lastLoginAt": "1790889129602",
+      "passwordHash": "fakeHash:salt=fakeSaltrxGHMpdQxLy1em7L4uF7:password=emulatorPassword123",
+      "salt": "fakeSaltrxGHMpdQxLy1em7L4uF7",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790889129597-6s4cu1@notesapp.dev",
+          "federatedId": "rules-owner-1790889129597-6s4cu1@notesapp.dev",
+          "rawId": "rules-owner-1790889129597-6s4cu1@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790889129597-6s4cu1@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "yVpuXwHgHU5I3Ku61sJniQkwdqK4",
+      "lastLoginAt": "1790939957653",
+      "emailVerified": false,
+      "email": "firestore-owner-1790939956937@notesapp.dev",
+      "salt": "fakeSalt4ALKq3FMrXJdxIs7rlcd",
+      "passwordHash": "fakeHash:salt=fakeSalt4ALKq3FMrXJdxIs7rlcd:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790939956953,
+      "validSince": "1790939956",
+      "createdAt": "1790939956953",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790939956937@notesapp.dev",
+          "federatedId": "firestore-owner-1790939956937@notesapp.dev",
+          "rawId": "firestore-owner-1790939956937@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:19:17.653Z"
+    },
+    {
+      "localId": "ycqnvQ8c9egXn0NT672t6m0rlgAx",
+      "createdAt": "1790894843304",
+      "lastLoginAt": "1790894843304",
+      "passwordHash": "fakeHash:salt=fakeSaltYJellAll9RZQAK1PAe0z:password=emulatorPassword123",
+      "salt": "fakeSaltYJellAll9RZQAK1PAe0z",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790894843296-pyzkht@notesapp.dev",
+          "federatedId": "rules-intruder-1790894843296-pyzkht@notesapp.dev",
+          "rawId": "rules-intruder-1790894843296-pyzkht@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-intruder-1790894843296-pyzkht@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "yetW9KvQZ08m3hR7dJsOwvLX82LV",
+      "createdAt": "1790898242852",
+      "lastLoginAt": "1790898243443",
+      "passwordHash": "fakeHash:salt=fakeSaltyEqbVwyditq8RsR3Joxi:password=emulatorPassword123",
+      "salt": "fakeSaltyEqbVwyditq8RsR3Joxi",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "firestore-owner-1790898242839@notesapp.dev",
+          "federatedId": "firestore-owner-1790898242839@notesapp.dev",
+          "rawId": "firestore-owner-1790898242839@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "firestore-owner-1790898242839@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "ypiwmomgGDaerwOPxuBuehPMafVK",
+      "lastLoginAt": "1790943809483",
+      "emailVerified": false,
+      "email": "rules-owner-1790943808842-9w0or0@notesapp.dev",
+      "salt": "fakeSaltaIgJt7NBw91ybjYev17t",
+      "passwordHash": "fakeHash:salt=fakeSaltaIgJt7NBw91ybjYev17t:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790943808852,
+      "validSince": "1790943808",
+      "createdAt": "1790943808852",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790943808842-9w0or0@notesapp.dev",
+          "federatedId": "rules-owner-1790943808842-9w0or0@notesapp.dev",
+          "rawId": "rules-owner-1790943808842-9w0or0@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T12:23:29.483Z"
+    },
+    {
+      "localId": "ywmGiznvgGzldXQ2eRrX3tSSx8nl",
+      "createdAt": "1790893166054",
+      "lastLoginAt": "1790893166054",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "zDebsggA0yd0Ocq7MEWdnFHN4oJ8",
+      "createdAt": "1790895448759",
+      "lastLoginAt": "1790895448759",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "zKNyIFB7sZMLmcj516gAPZPU1F3z",
+      "lastLoginAt": "1790938754773",
+      "emailVerified": false,
+      "email": "rules-intruder-1790938754763-4wwti9@notesapp.dev",
+      "salt": "fakeSalt25GGl0LSCx7bvp5G645v",
+      "passwordHash": "fakeHash:salt=fakeSalt25GGl0LSCx7bvp5G645v:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790938754773,
+      "validSince": "1790938754",
+      "createdAt": "1790938754773",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790938754763-4wwti9@notesapp.dev",
+          "federatedId": "rules-intruder-1790938754763-4wwti9@notesapp.dev",
+          "rawId": "rules-intruder-1790938754763-4wwti9@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T10:59:14.773Z"
+    },
+    {
+      "localId": "zQUHXcBkPdZF3Yynfyh5a2vE3NtB",
+      "createdAt": "1790889284484",
+      "lastLoginAt": "1790889284633",
+      "passwordHash": "fakeHash:salt=fakeSalt4nwyttmFcM33W7k7bv5p:password=emulatorPassword123",
+      "salt": "fakeSalt4nwyttmFcM33W7k7bv5p",
+      "passwordUpdatedAt": 1790935815031,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-owner-1790889284478-70vaaf@notesapp.dev",
+          "federatedId": "rules-owner-1790889284478-70vaaf@notesapp.dev",
+          "rawId": "rules-owner-1790889284478-70vaaf@notesapp.dev"
+        }
+      ],
+      "validSince": "1790935815",
+      "email": "rules-owner-1790889284478-70vaaf@notesapp.dev",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "zRgTgSFQfbVi5A6DmamoDxiMOryZ",
+      "createdAt": "1790896862111",
+      "lastLoginAt": "1790896862111",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "zlD682Lg5ApbBfji0BMDRExZTt2h",
+      "createdAt": "1790896950410",
+      "lastLoginAt": "1790896950410",
+      "validSince": "1790935815",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "zrg1mmjaWQp5IJje762cmGwd3aNV",
+      "lastLoginAt": "1790942286680",
+      "emailVerified": false,
+      "email": "rules-intruder-1790942286669-o3ub08@notesapp.dev",
+      "salt": "fakeSaltrXO9gLUcnJKFcTo9Yx0R",
+      "passwordHash": "fakeHash:salt=fakeSaltrXO9gLUcnJKFcTo9Yx0R:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790942286680,
+      "validSince": "1790942286",
+      "createdAt": "1790942286680",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790942286669-o3ub08@notesapp.dev",
+          "federatedId": "rules-intruder-1790942286669-o3ub08@notesapp.dev",
+          "rawId": "rules-intruder-1790942286669-o3ub08@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T11:58:06.680Z"
+    },
+    {
+      "localId": "zvjGycUvKeoiQHl76qojBGiZUcUa",
+      "lastLoginAt": "1790943809390",
+      "emailVerified": false,
+      "email": "rules-intruder-1790943809379-7cmzxq@notesapp.dev",
+      "salt": "fakeSaltOAUqCIHeunrKxRB1moYM",
+      "passwordHash": "fakeHash:salt=fakeSaltOAUqCIHeunrKxRB1moYM:password=emulatorPassword123",
+      "passwordUpdatedAt": 1790943809391,
+      "validSince": "1790943809",
+      "createdAt": "1790943809390",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "rules-intruder-1790943809379-7cmzxq@notesapp.dev",
+          "federatedId": "rules-intruder-1790943809379-7cmzxq@notesapp.dev",
+          "rawId": "rules-intruder-1790943809379-7cmzxq@notesapp.dev"
+        }
+      ],
+      "lastRefreshAt": "2026-10-02T12:23:29.391Z"
     }
   ]
 }

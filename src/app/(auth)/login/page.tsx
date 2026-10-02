@@ -13,9 +13,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Suspense, useEffect, useState } from "react";
 import { GoogleSignInButton } from "@/components/notes-app/google-sign-in-button";
-import { SignInAuthScreen } from "@/components/notes-app/login-card";
+import { LoginCard } from "@/components/notes-app/login-card";
 import { RequireGuest } from "@/components/notes-app/require-guest";
-import { SignUpAuthScreen } from "@/components/notes-app/sign-up-card";
+import { SignUpCard } from "@/components/notes-app/sign-up-card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { captureError } from "@/lib/error-capture/capture";
@@ -133,7 +133,7 @@ function LoginContent() {
             </Alert>
           ) : null}
           {mode === "signIn" ? (
-            <SignInAuthScreen
+            <LoginCard
               onSignIn={() => router.replace(nextUrl)}
               onSignUpClick={() => setMode("signUp")}
             >
@@ -147,9 +147,9 @@ function LoginContent() {
               >
                 {t("continueAsGuest")}
               </Button>
-            </SignInAuthScreen>
+            </LoginCard>
           ) : (
-            <SignUpAuthScreen
+            <SignUpCard
               onSignUp={() => router.replace(nextUrl)}
               onSignInClick={() => setMode("signIn")}
             >
@@ -163,7 +163,7 @@ function LoginContent() {
               >
                 {t("continueAsGuest")}
               </Button>
-            </SignUpAuthScreen>
+            </SignUpCard>
           )}
         </div>
 

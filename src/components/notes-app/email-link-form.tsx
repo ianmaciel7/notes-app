@@ -15,7 +15,7 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { AuthFormInput } from "@/components/notes-app/auth-form-input";
-import { Policies } from "@/components/notes-app/auth-policies-description";
+import { AuthPoliciesDescription } from "@/components/notes-app/auth-policies-description";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup } from "@/components/ui/field";
@@ -46,7 +46,7 @@ function EmailLinkForm({
 
   useEmailLinkAuthFormCompleteSignIn(onSignIn);
 
-  async function onSubmit(values: EmailLinkAuthFormSchema) {
+  const onSubmit = async (values: EmailLinkAuthFormSchema) => {
     try {
       await action(values);
       setEmailSent(true);
@@ -56,7 +56,7 @@ function EmailLinkForm({
         error instanceof FirebaseUIError ? error.message : String(error);
       form.setError("root", { message });
     }
-  }
+  };
 
   if (emailSent) {
     return (
@@ -85,7 +85,7 @@ function EmailLinkForm({
             type="email"
             label={getTranslation(ui, "labels", "emailAddress")}
           />
-          <Policies />
+          <AuthPoliciesDescription />
           <Field>
             <Button type="submit" disabled={ui.state !== "idle"}>
               {ui.state !== "idle" && <Spinner data-icon="inline-start" />}
@@ -105,9 +105,4 @@ function EmailLinkForm({
   );
 }
 
-export {
-  EmailLinkForm,
-  type EmailLinkFormProps,
-  EmailLinkForm as EmailLinkAuthForm,
-  type EmailLinkFormProps as EmailLinkAuthFormProps,
-};
+export { EmailLinkForm, type EmailLinkFormProps };
