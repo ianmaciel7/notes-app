@@ -4,7 +4,7 @@ import { getTranslation } from "@firebase-oss/ui-core";
 import { useOnUserAuthenticated, useUI } from "@firebase-oss/ui-react";
 import type { User } from "firebase/auth";
 import type { ComponentProps, PropsWithChildren } from "react";
-import { AuthCard, AuthCardProviders } from "@/components/notes-app/auth-card";
+import { AuthCard, AuthCardProviderGroup } from "@/components/notes-app/auth-card";
 import { MfaAssertionCard } from "@/components/notes-app/mfa-assertion-card";
 import { PhoneAuthForm } from "@/components/notes-app/phone-auth-form";
 import { RedirectError } from "@/components/notes-app/redirect-error-alert";
@@ -44,10 +44,10 @@ function PhoneAuthCard({ children, onSignIn, ...props }: PhoneAuthCardProps) {
       <CardContent>
         <PhoneAuthForm />
         {children ? (
-          <AuthCardProviders>
+          <AuthCardProviderGroup>
             {children}
             <RedirectError />
-          </AuthCardProviders>
+          </AuthCardProviderGroup>
         ) : null}
       </CardContent>
     </AuthCard>
