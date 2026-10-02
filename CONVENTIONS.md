@@ -257,12 +257,16 @@ changing an installed primitive.
   context provider (e.g., `useSidebar` in `sidebar.tsx`, `useToastManager` in `toast.tsx`)
   or manage private compound state. Declare them as top-level exported functions; never define
   hooks inside a component render body.
-- **Extract stateful application behavior when it clarifies a real concern:** Prefer a
-  top-level co-located hook when authentication, subscriptions, navigation effects, or
-  multi-step state form a coherent behavior that benefits from isolation. Do not
-  extract a custom hook merely because a component contains an arbitrary number of
-  state/effect calls. Keep a hook co-located when only that component family consumes
-  it; move it to `src/hooks/` only when independent components or routes share it.
+- **Dedicated component hook owns behavior:** When a component already has a
+  dedicated hook named for that component (for example `SpaceShell` +
+  `useSpaceShell`), keep component-owned React state/effects/refs/transitions,
+  subscriptions, navigation, and behavioral handlers inside that hook. The component
+  should consume derived values and semantic callbacks and stay focused on rendering.
+  Presentation-only hooks such as translations may remain in the component.
+- **Extract stateful application behavior when it clarifies a real concern:** Do not
+  create a dedicated hook merely because a component contains an arbitrary number of
+  state/effect calls. Create one when the behavior forms a coherent boundary; once
+  that dedicated hook exists, it owns that behavior consistently.
 - **Shared Standalone Hooks (`src/hooks/`):** Place hooks in `src/hooks/` only when they
   are generic, shared across multiple independent components or routes (e.g., `useIsMobile`,
   `useAuth`), encapsulate reusable browser APIs (media queries, listeners, sensors), or require
@@ -382,6 +386,7 @@ row here in the same change that adds or changes a rule; prefer promoting a
 | `canonical-props-name` | `check:props` |
 | `identifier-casing` | `check:lint` |
 | `notes-app-composition-contract` | `check:ui-pattern` |
+| `dedicated-hook-owns-state` | `check:ui-pattern` |
 | `base-ui-render-composition` | review-only |
 | `no-as-child` | `check:conventions` |
 | `reuse-primitives` | review-only |

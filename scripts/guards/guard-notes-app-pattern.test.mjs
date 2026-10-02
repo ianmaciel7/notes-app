@@ -155,6 +155,43 @@ test("requires data-slot on visual components", () => {
   );
 });
 
+test("dedicated component hooks own React state and effects", () => {
+  const violations = checkFile(
+    "space-shell.tsx",
+    `import { useState } from "react";
+     import { useSpaceShell } from "@/hooks/use-space-shell";
+     import { SidebarProvider } from "@/components/ui/sidebar";
+     function SpaceShell({ children }) {
+       useSpaceShell({});
+       const [open] = useState(false);
+       return <SidebarProvider data-slot="space-shell" className={cn("x")}>{children}{open}</SidebarProvider>;
+     }`,
+  );
+
+  assert.ok(
+    violations.some(
+      (item) => item.rule === "notes-app-dedicated-hook-owns-state",
+    ),
+  );
+});
+
+test("allows a component to render from its dedicated hook without local state", () => {
+  const source = `
+    import { useSpaceShell } from "@/hooks/use-space-shell";
+    import { SidebarProvider } from "@/components/ui/sidebar";
+    function SpaceShell({ children }) {
+      useSpaceShell({});
+      return <SidebarProvider data-slot="space-shell" className={cn("x")}>{children}</SidebarProvider>;
+    }
+  `;
+
+  assert.ok(
+    !checkFile("space-shell.tsx", source).some(
+      (item) => item.rule === "notes-app-dedicated-hook-owns-state",
+    ),
+  );
+});
+
 test("enforces the SpaceShell wrapper contract", () => {
   const violations = checkFile(
     "space-shell.tsx",

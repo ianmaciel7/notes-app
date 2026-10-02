@@ -144,6 +144,42 @@ function checkSurfaceRoot(filePath, fileName, content) {
   ];
 }
 
+function checkDedicatedHookOwnsState(filePath, fileName, content) {
+  const componentName = toPascalCase(fileName);
+  const hookName = `use${componentName}`;
+  const hookCall = new RegExp(`\\b${hookName}\\s*\\(`);
+
+  if (!hookCall.test(content)) return [];
+
+  const statefulHooks = [
+    "useState",
+    "useReducer",
+    "useEffect",
+    "useLayoutEffect",
+    "useInsertionEffect",
+    "useTransition",
+    "useDeferredValue",
+    "useOptimistic",
+    "useActionState",
+    "useSyncExternalStore",
+    "useRef",
+    "useImperativeHandle",
+  ];
+  const directCalls = statefulHooks.filter((hook) =>
+    new RegExp(`\\b${hook}\\s*\\(`).test(content),
+  );
+
+  if (directCalls.length === 0) return [];
+
+  return [
+    violation(
+      filePath,
+      "notes-app-dedicated-hook-owns-state",
+      `${fileName} delegates behavior to ${hookName}; move component-owned ${directCalls.join(", ")} calls into that dedicated hook.`,
+    ),
+  ];
+}
+
 function checkSpaceShellContract(filePath, fileName, content) {
   if (fileName !== "space-shell.tsx") return [];
 
@@ -275,6 +311,7 @@ function checkFile(filePath, content) {
   }
 
   violations.push(...checkSurfaceRoot(filePath, fileName, content));
+  violations.push(...checkDedicatedHookOwnsState(filePath, fileName, content));
   violations.push(...checkSpaceShellContract(filePath, fileName, content));
   violations.push(...checkRawLayoutWrappers(filePath, fileName, content));
   violations.push(...checkComponentRoleNames(filePath, fileName, content));
@@ -310,6 +347,7 @@ export {
   COMPONENT_ROLE_SUFFIXES,
   COMPONENT_NAME_EXEMPTIONS,
   CANONICAL_COMPONENT_EXEMPT_FILES,
+  checkDedicatedHookOwnsState,
   checkSpaceShellContract,
   checkComponentRoleNames,
   checkComponentSlots,

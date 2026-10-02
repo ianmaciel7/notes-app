@@ -1,7 +1,6 @@
 "use client";
 
 import type { ComponentProps, ReactNode } from "react";
-import { useState } from "react";
 import { CreateSpaceDialog } from "@/components/notes-app/create-space-dialog";
 import { SettingsDialog } from "@/components/notes-app/settings-dialog";
 import { SidebarUserMenu } from "@/components/notes-app/sidebar-user-menu";
@@ -20,7 +19,7 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar";
-import { useSpaceSidebar } from "@/hooks/use-space-sidebar";
+import { useSpaceShell } from "@/hooks/use-space-shell";
 import { cn } from "@/lib/utils";
 
 type SpaceShellProps = Omit<
@@ -40,24 +39,28 @@ function SpaceShell({
   ...props
 }: SpaceShellProps) {
   const {
+    activeSpace,
     authLoading,
-    createSpace,
+    backToSpaces,
+    createDialogOpen,
     error,
+    isCreating,
     isOffline,
     loading,
+    notFound,
+    onCreateDialogOpenChange,
+    onSettingsDialogOpenChange,
+    openCreateDialog,
+    openSettingsDialog,
     retry,
-    router,
+    selectSpace,
+    settingsDialogOpen,
     signOutUser,
     spaces,
+    submitCreateSpace,
     user,
-  } = useSpaceSidebar({ currentSpaceId });
-  const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
-  const activeSpace = currentSpaceId
-    ? spaces.find((space) => space.id === currentSpaceId)
-    : spaces[0];
-  const notFound = Boolean(currentSpaceId && !activeSpace);
+  } = useSpaceShell({ currentSpaceId, onSelectSpace });
+
   const status = error ? (
     <SpacesErrorStatus
       isOffline={isOffline}
@@ -69,7 +72,7 @@ function SpaceShell({
     <SpacesLoadingStatus {...props} className={className} />
   ) : notFound ? (
     <SpacesNotFoundStatus
-      onBack={() => router.replace("/")}
+      onBack={backToSpaces}
       {...props}
       className={className}
     />
@@ -80,20 +83,6 @@ function SpaceShell({
   }
 
   if (!user || error || loading) return status;
-
-  const handleSelect = (spaceId: string) =>
-    onSelectSpace ? onSelectSpace(spaceId) : router.push(`/${spaceId}`);
-
-  const handleCreate = async (name: string, icon: string) => {
-    setIsCreating(true);
-    try {
-      const id = await createSpace({ name, icon });
-      setCreateDialogOpen(false);
-      handleSelect(id);
-    } finally {
-      setIsCreating(false);
-    }
-  };
 
   return (
     <>
@@ -107,15 +96,15 @@ function SpaceShell({
           <SidebarHeader>
             <SpaceSwitcher
               activeSpace={activeSpace}
-              onCreate={() => setCreateDialogOpen(true)}
-              onSelect={handleSelect}
+              onCreate={openCreateDialog}
+              onSelect={selectSpace}
               spaces={spaces}
             />
           </SidebarHeader>
           <SidebarFooter>
             <SidebarUserMenu
               user={user}
-              onOpenSettings={() => setSettingsDialogOpen(true)}
+              onOpenSettings={openSettingsDialog}
               onSignOut={signOutUser}
             />
           </SidebarFooter>
@@ -123,7 +112,7 @@ function SpaceShell({
         <SidebarInset>
           <SpacesList
             notFound={notFound}
-            onCreate={() => setCreateDialogOpen(true)}
+            onCreate={openCreateDialog}
             showEmptyState={spaces.length === 0}
             status={status}
           >
@@ -134,13 +123,13 @@ function SpaceShell({
 
       <CreateSpaceDialog
         open={createDialogOpen}
-        onOpenChange={setCreateDialogOpen}
-        onSubmitSpace={handleCreate}
+        onOpenChange={onCreateDialogOpenChange}
+        onSubmitSpace={submitCreateSpace}
         isLoading={isCreating}
       />
       <SettingsDialog
         open={settingsDialogOpen}
-        onOpenChange={setSettingsDialogOpen}
+        onOpenChange={onSettingsDialogOpenChange}
       />
     </>
   );
