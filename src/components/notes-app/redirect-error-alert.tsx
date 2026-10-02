@@ -15,7 +15,12 @@ function RedirectErrorAlert({ className, ...props }: RedirectErrorAlertProps) {
   }
 
   return (
-    <Alert data-slot="redirect-error-alert" {...props} variant="destructive" className={cn(className)}>
+    <Alert
+      data-slot="redirect-error-alert"
+      {...props}
+      variant="destructive"
+      className={cn(className)}
+    >
       <AlertDescription>{error}</AlertDescription>
     </Alert>
   );

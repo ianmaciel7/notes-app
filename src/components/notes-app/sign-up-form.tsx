@@ -59,7 +59,8 @@ function SignUpForm({
 
   return (
     <FormProvider {...form}>
-      <form data-slot="sign-up-form"
+      <form
+        data-slot="sign-up-form"
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);

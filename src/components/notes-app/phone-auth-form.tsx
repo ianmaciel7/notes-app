@@ -81,7 +81,8 @@ function VerifyPhoneNumberForm({
 
   return (
     <FormProvider {...form}>
-      <form data-slot="verify-phone-number-form"
+      <form
+        data-slot="verify-phone-number-form"
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
@@ -156,7 +157,8 @@ function PhoneNumberForm({
 
   return (
     <FormProvider {...form}>
-      <form data-slot="phone-number-form"
+      <form
+        data-slot="phone-number-form"
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
@@ -208,11 +210,17 @@ function PhoneAuthForm(props: PhoneAuthFormProps) {
   const [verificationId, setVerificationId] = useState<string | null>(null);
 
   if (!verificationId) {
-    return <PhoneNumberForm data-slot="phone-auth-form" onSubmit={setVerificationId} />;
+    return (
+      <PhoneNumberForm
+        data-slot="phone-auth-form"
+        onSubmit={setVerificationId}
+      />
+    );
   }
 
   return (
-    <VerifyPhoneNumberForm data-slot="phone-auth-form"
+    <VerifyPhoneNumberForm
+      data-slot="phone-auth-form"
       verificationId={verificationId}
       onSuccess={(credential) => {
         props.onSignIn?.(credential);

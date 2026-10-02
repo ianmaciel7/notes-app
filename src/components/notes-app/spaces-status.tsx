@@ -36,7 +36,8 @@ function SpacesErrorStatus({
   const t = useTranslations("spaces");
 
   return (
-    <Alert data-slot="spaces-error-status"
+    <Alert
+      data-slot="spaces-error-status"
       {...props}
       data-testid="spaces-status-error"
       variant="destructive"
@@ -73,7 +74,8 @@ function SpacesLoadingStatus({
   const t = useTranslations("spaces");
 
   return (
-    <Empty data-slot="spaces-loading-status"
+    <Empty
+      data-slot="spaces-loading-status"
       {...props}
       data-testid="spaces-status-loading"
       className={cn(
@@ -102,7 +104,8 @@ function SpacesNotFoundStatus({
   const t = useTranslations("spaces");
 
   return (
-    <Empty data-slot="spaces-not-found-status"
+    <Empty
+      data-slot="spaces-not-found-status"
       {...props}
       data-testid="spaces-status-not-found"
       className={cn("flex flex-1 items-center justify-center p-8", className)}

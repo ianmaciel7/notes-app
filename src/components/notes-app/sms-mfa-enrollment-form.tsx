@@ -111,7 +111,8 @@ function MultiFactorEnrollmentPhoneNumberForm({
 
   return (
     <FormProvider {...form}>
-      <form data-slot="multi-factor-enrollment-phone-number-form"
+      <form
+        data-slot="multi-factor-enrollment-phone-number-form"
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
@@ -220,7 +221,8 @@ function MultiFactorEnrollmentVerifyPhoneNumberForm({
 
   return (
     <FormProvider {...form}>
-      <form data-slot="multi-factor-enrollment-verify-phone-number-form"
+      <form
+        data-slot="multi-factor-enrollment-verify-phone-number-form"
         onSubmit={form.handleSubmit(onSubmit)}
         {...props}
         className={cn("flex flex-col gap-4", className)}
@@ -298,7 +300,11 @@ function SmsMfaEnrollmentForm({
   }
 
   return (
-    <FieldGroup data-slot="sms-mfa-enrollment-form" {...props} className={cn(className)}>
+    <FieldGroup
+      data-slot="sms-mfa-enrollment-form"
+      {...props}
+      className={cn(className)}
+    >
       {!verification ? (
         <MultiFactorEnrollmentPhoneNumberForm
           onSubmit={(verificationId, displayName) =>

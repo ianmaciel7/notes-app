@@ -8,7 +8,10 @@ import {
 } from "@firebase-oss/ui-react";
 import type { User, UserCredential } from "firebase/auth";
 import { type ComponentProps, useRef } from "react";
-import { AuthCard, AuthCardProviderGroup } from "@/components/notes-app/auth-card";
+import {
+  AuthCard,
+  AuthCardProviderGroup,
+} from "@/components/notes-app/auth-card";
 import {
   CardContent,
   CardDescription,
@@ -59,7 +62,9 @@ function SignUpCard({
             handleSignUp(credential.user);
           }}
         />
-        {children ? <AuthCardProviderGroup>{children}</AuthCardProviderGroup> : null}
+        {children ? (
+          <AuthCardProviderGroup>{children}</AuthCardProviderGroup>
+        ) : null}
       </CardContent>
     </AuthCard>
   );

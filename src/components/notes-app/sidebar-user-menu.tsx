@@ -74,7 +74,8 @@ function SidebarUserMenu({
   const userIdentifier = user.displayName || user.email || userName;
 
   return (
-    <SidebarMenu data-slot="sidebar-user-menu"
+    <SidebarMenu
+      data-slot="sidebar-user-menu"
       {...props}
       className={cn("items-center gap-1 pr-1.5", className)}
       aria-label={t("openUserMenu")}

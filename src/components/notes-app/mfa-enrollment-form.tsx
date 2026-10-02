@@ -63,7 +63,11 @@ function MfaEnrollmentForm({
   }
 
   return (
-    <FieldGroup data-slot="mfa-enrollment-form" {...props} className={cn("gap-2", className)}>
+    <FieldGroup
+      data-slot="mfa-enrollment-form"
+      {...props}
+      className={cn("gap-2", className)}
+    >
       {hints.map((hint) => {
         if (hint === FactorId.TOTP) {
           return <TotpButton key={hint} onClick={() => setHint(hint)} />;

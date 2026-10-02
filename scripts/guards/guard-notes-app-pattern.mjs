@@ -212,8 +212,9 @@ function checkDialogComposition(filePath, fileName, content) {
 }
 
 function checkFamilyContext(filePath, fileName, content) {
-  const contextCount = [...content.matchAll(/\bcreateContext\s*(?:<[^;]+?>)?\s*\(/g)]
-    .length;
+  const contextCount = [
+    ...content.matchAll(/\bcreateContext\s*(?:<[^;]+?>)?\s*\(/g),
+  ].length;
 
   if (contextCount <= 1) return [];
 

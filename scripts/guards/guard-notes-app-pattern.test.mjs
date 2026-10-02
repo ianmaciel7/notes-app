@@ -143,9 +143,7 @@ test("rejects multiple contexts in one component family", () => {
   );
 
   assert.ok(
-    violations.some(
-      (item) => item.rule === "notes-app-single-family-context",
-    ),
+    violations.some((item) => item.rule === "notes-app-single-family-context"),
   );
 });
 
@@ -225,7 +223,6 @@ test("rejects raw forwarded layout wrappers", () => {
     violations.some((item) => item.rule === "notes-app-no-raw-layout-wrapper"),
   );
 });
-
 
 test("rejects subcomponents without a role suffix", () => {
   const violations = checkFile(

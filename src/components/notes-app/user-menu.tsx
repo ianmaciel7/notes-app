@@ -18,7 +18,8 @@ function UserMenu({ className, ...props }: UserMenuProps) {
 
   if (isLoading) {
     return (
-      <Skeleton data-slot="user-menu"
+      <Skeleton
+        data-slot="user-menu"
         data-testid="user-menu-loading"
         {...props}
         className={cn("h-8 w-24", className)}
@@ -28,7 +29,8 @@ function UserMenu({ className, ...props }: UserMenuProps) {
 
   if (!user) {
     return (
-      <ButtonGroup data-slot="user-menu"
+      <ButtonGroup
+        data-slot="user-menu"
         {...props}
         className={cn("flex items-center gap-3", className)}
       >
@@ -53,7 +55,8 @@ function UserMenu({ className, ...props }: UserMenuProps) {
     (user.isAnonymous ? t("anonymous") : t("defaultUser"));
 
   return (
-    <ButtonGroup data-slot="user-menu"
+    <ButtonGroup
+      data-slot="user-menu"
       data-testid="user-menu"
       {...props}
       className={cn(
