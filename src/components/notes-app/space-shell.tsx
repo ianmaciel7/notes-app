@@ -1,20 +1,18 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { ComponentProps, ReactNode } from "react";
 import { useState } from "react";
 import {
   CreateSpaceDialog,
   CreateSpaceDialogContent,
-  CreateSpaceDialogForm,
-  CreateSpaceDialogHeader,
 } from "@/components/notes-app/create-space-dialog";
+import { CreateSpaceForm } from "@/components/notes-app/create-space-form";
 import {
   SettingsDialog,
   SettingsDialogContent,
-  SettingsDialogFieldGroup,
-  SettingsDialogFooter,
-  SettingsDialogHeader,
 } from "@/components/notes-app/settings-dialog";
+import { SettingsForm } from "@/components/notes-app/settings-form";
 import { SidebarUserMenu } from "@/components/notes-app/sidebar-user-menu";
 import { SpaceLoading } from "@/components/notes-app/space-loading";
 import { SpaceSwitcher } from "@/components/notes-app/space-switcher";
@@ -24,6 +22,13 @@ import {
   SpacesLoadingStatus,
   SpacesNotFoundStatus,
 } from "@/components/notes-app/spaces-status";
+import { Button } from "@/components/ui/button";
+import {
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Sidebar,
   SidebarFooter,
@@ -50,6 +55,8 @@ function SpaceShell({
   onSelectSpace,
   ...props
 }: SpaceShellProps) {
+  const spacesT = useTranslations("spaces");
+  const settingsT = useTranslations("settings");
   const {
     authLoading,
     createSpace,
@@ -94,6 +101,7 @@ function SpaceShell({
 
   const handleSelect = (spaceId: string) =>
     onSelectSpace ? onSelectSpace(spaceId) : router.push(`/${spaceId}`);
+
   const handleCreate = async (name: string, icon: string) => {
     setIsCreating(true);
     try {
@@ -141,27 +149,43 @@ function SpaceShell({
           </SpacesList>
         </SidebarInset>
       </SidebarProvider>
+
       <CreateSpaceDialog
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
       >
         <CreateSpaceDialogContent>
-          <CreateSpaceDialogHeader />
-          <CreateSpaceDialogForm
-            onSubmit={handleCreate}
+          <DialogHeader>
+            <DialogTitle>{spacesT("dialogTitle")}</DialogTitle>
+            <DialogDescription>
+              {spacesT("dialogDescription")}
+            </DialogDescription>
+          </DialogHeader>
+          <CreateSpaceForm
+            onSubmitSpace={handleCreate}
             isLoading={isCreating}
             onCancel={() => setCreateDialogOpen(false)}
           />
         </CreateSpaceDialogContent>
       </CreateSpaceDialog>
+
       <SettingsDialog
         open={settingsDialogOpen}
         onOpenChange={setSettingsDialogOpen}
       >
         <SettingsDialogContent>
-          <SettingsDialogHeader />
-          <SettingsDialogFieldGroup />
-          <SettingsDialogFooter onDone={() => setSettingsDialogOpen(false)} />
+          <DialogHeader>
+            <DialogTitle>{settingsT("settings")}</DialogTitle>
+            <DialogDescription>
+              {settingsT("settingsDescription")}
+            </DialogDescription>
+          </DialogHeader>
+          <SettingsForm />
+          <DialogFooter>
+            <Button onClick={() => setSettingsDialogOpen(false)}>
+              {spacesT("done")}
+            </Button>
+          </DialogFooter>
         </SettingsDialogContent>
       </SettingsDialog>
     </>

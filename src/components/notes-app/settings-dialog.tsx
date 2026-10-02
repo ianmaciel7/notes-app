@@ -1,26 +1,7 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useTheme } from "next-themes";
 import type { ComponentProps, ReactNode } from "react";
-import { LanguageSelect } from "@/components/notes-app/language-select";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Switch } from "@/components/ui/switch";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 type SettingsDialogProps = ComponentProps<typeof Dialog> & {
   open: boolean;
@@ -29,11 +10,6 @@ type SettingsDialogProps = ComponentProps<typeof Dialog> & {
 };
 
 type SettingsDialogContentProps = ComponentProps<typeof DialogContent>;
-type SettingsDialogHeaderProps = ComponentProps<typeof DialogHeader>;
-type SettingsDialogFieldGroupProps = ComponentProps<typeof FieldGroup>;
-type SettingsDialogFooterProps = ComponentProps<typeof DialogFooter> & {
-  onDone: () => void;
-};
 
 function SettingsDialog({
   open,
@@ -42,7 +18,12 @@ function SettingsDialog({
   ...props
 }: SettingsDialogProps) {
   return (
-    <Dialog data-slot="settings-dialog" {...props} open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      {...props}
+      data-slot="settings-dialog"
+      open={open}
+      onOpenChange={onOpenChange}
+    >
       {children}
     </Dialog>
   );
@@ -53,71 +34,19 @@ function SettingsDialogContent({
   ...props
 }: SettingsDialogContentProps) {
   return (
-    <DialogContent data-slot="settings-dialog-content" {...props} data-testid="settings-dialog">
+    <DialogContent
+      {...props}
+      data-slot="settings-dialog-content"
+      data-testid="settings-dialog"
+    >
       {children}
     </DialogContent>
-  );
-}
-
-function SettingsDialogHeader({ ...props }: SettingsDialogHeaderProps) {
-  const settingsT = useTranslations("settings");
-
-  return (
-    <DialogHeader data-slot="settings-dialog-header" {...props}>
-      <DialogTitle>{settingsT("settings")}</DialogTitle>
-      <DialogDescription>{settingsT("settingsDescription")}</DialogDescription>
-    </DialogHeader>
-  );
-}
-
-function SettingsDialogFieldGroup({ ...props }: SettingsDialogFieldGroupProps) {
-  const settingsT = useTranslations("settings");
-  const { resolvedTheme, setTheme } = useTheme();
-
-  return (
-    <FieldGroup data-slot="settings-dialog-field-group" {...props}>
-      <Field orientation="horizontal">
-        <FieldContent>
-          <FieldLabel htmlFor="theme-switch">
-            {settingsT("darkMode")}
-          </FieldLabel>
-          <FieldDescription>
-            {settingsT("darkModeDescription")}
-          </FieldDescription>
-        </FieldContent>
-        <Switch
-          id="theme-switch"
-          checked={resolvedTheme === "dark"}
-          onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
-        />
-      </Field>
-      <Field>
-        <FieldLabel>{settingsT("language")}</FieldLabel>
-        <LanguageSelect />
-      </Field>
-    </FieldGroup>
-  );
-}
-
-function SettingsDialogFooter({ onDone, ...props }: SettingsDialogFooterProps) {
-  const t = useTranslations("spaces");
-
-  return (
-    <DialogFooter data-slot="settings-dialog-footer" {...props}>
-      <Button onClick={onDone}>{t("done")}</Button>
-    </DialogFooter>
   );
 }
 
 export {
   SettingsDialog,
   SettingsDialogContent,
-  SettingsDialogFieldGroup,
-  SettingsDialogFooter,
-  SettingsDialogHeader,
   type SettingsDialogContentProps,
-  type SettingsDialogFieldGroupProps,
-  type SettingsDialogFooterProps,
-  type SettingsDialogHeaderProps,
   type SettingsDialogProps,
 };
