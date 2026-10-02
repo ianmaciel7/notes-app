@@ -1,17 +1,30 @@
 "use client";
 
 import { getTranslation } from "@firebase-oss/ui-core";
-import { useUI, type EmailLinkAuthScreenProps, useOnUserAuthenticated } from "@firebase-oss/ui-react";
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import {
+  type EmailLinkAuthScreenProps,
+  useOnUserAuthenticated,
+  useUI,
+} from "@firebase-oss/ui-react";
 import { EmailLinkAuthForm } from "@/components/firebase/email-link-auth-form";
 import { MultiFactorAuthAssertionScreen } from "@/components/firebase/multi-factor-auth-assertion-screen";
 import { RedirectError } from "@/components/firebase/redirect-error";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export type { EmailLinkAuthScreenProps };
 
-export function EmailLinkAuthScreen({ children, onSignIn, ...props }: EmailLinkAuthScreenProps) {
+export function EmailLinkAuthScreen({
+  children,
+  onSignIn,
+  ...props
+}: EmailLinkAuthScreenProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "signIn");

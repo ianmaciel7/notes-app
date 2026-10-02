@@ -1,8 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import { useState } from "react";
-import { TotpMultiFactorGenerator, type TotpSecret } from "firebase/auth";
 import {
   enrollWithMultiFactorAssertion,
   FirebaseUIError,
@@ -15,19 +12,27 @@ import {
   useMultiFactorTotpAuthVerifyFormSchema,
   useUI,
 } from "@firebase-oss/ui-react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { TotpMultiFactorGenerator, type TotpSecret } from "firebase/auth";
+import Image from "next/image";
+import { useState } from "react";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 type TotpMultiFactorSecretGenerationFormProps = {
   onSubmit: (secret: TotpSecret, displayName: string) => void;
 };
 
-function TotpMultiFactorSecretGenerationForm(props: TotpMultiFactorSecretGenerationFormProps) {
+function TotpMultiFactorSecretGenerationForm(
+  props: TotpMultiFactorSecretGenerationFormProps,
+) {
   const ui = useUI();
   const schema = useMultiFactorTotpAuthNumberFormSchema();
 
@@ -44,29 +49,44 @@ function TotpMultiFactorSecretGenerationForm(props: TotpMultiFactorSecretGenerat
       const secret = await generateTotpSecret(ui);
       props.onSubmit(secret, values.displayName);
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
+      const message =
+        error instanceof FirebaseUIError ? error.message : String(error);
       form.setError("root", { message });
     }
   };
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-y-4"
+      >
         <Controller
           control={form.control}
           name="displayName"
           render={({ field, fieldState }) => (
             <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="displayName">{getTranslation(ui, "labels", "displayName")}</FieldLabel>
-              <Input {...field} id="displayName" type="text" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              <FieldLabel htmlFor="displayName">
+                {getTranslation(ui, "labels", "displayName")}
+              </FieldLabel>
+              <Input
+                {...field}
+                id="displayName"
+                type="text"
+                aria-invalid={!!fieldState.error}
+              />
+              {fieldState.error && (
+                <FieldError>{fieldState.error.message}</FieldError>
+              )}
             </Field>
           )}
         />
         <Button type="submit" disabled={ui.state !== "idle"}>
           {getTranslation(ui, "labels", "generateQrCode")}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
+        {form.formState.errors.root && (
+          <FieldError>{form.formState.errors.root.message}</FieldError>
+        )}
       </form>
     </FormProvider>
   );
@@ -78,7 +98,9 @@ type MultiFactorEnrollmentVerifyTotpFormProps = {
   onSuccess: () => void;
 };
 
-export function MultiFactorEnrollmentVerifyTotpForm(props: MultiFactorEnrollmentVerifyTotpFormProps) {
+export function MultiFactorEnrollmentVerifyTotpForm(
+  props: MultiFactorEnrollmentVerifyTotpFormProps,
+) {
   const ui = useUI();
   const schema = useMultiFactorTotpAuthVerifyFormSchema();
 
@@ -92,11 +114,19 @@ export function MultiFactorEnrollmentVerifyTotpForm(props: MultiFactorEnrollment
 
   const onSubmit = async (values: { verificationCode: string }) => {
     try {
-      const assertion = TotpMultiFactorGenerator.assertionForEnrollment(props.secret, values.verificationCode);
-      await enrollWithMultiFactorAssertion(ui, assertion, values.verificationCode);
+      const assertion = TotpMultiFactorGenerator.assertionForEnrollment(
+        props.secret,
+        values.verificationCode,
+      );
+      await enrollWithMultiFactorAssertion(
+        ui,
+        assertion,
+        values.verificationCode,
+      );
       props.onSuccess();
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
+      const message =
+        error instanceof FirebaseUIError ? error.message : String(error);
       form.setError("root", { message });
     }
   };
@@ -114,20 +144,32 @@ export function MultiFactorEnrollmentVerifyTotpForm(props: MultiFactorEnrollment
           unoptimized
           className="mx-auto"
         />
-        <code className="text-xs text-muted-foreground text-center">{props.secret.secretKey.toString()}</code>
+        <code className="text-xs text-muted-foreground text-center">
+          {props.secret.secretKey.toString()}
+        </code>
         <p className="text-xs text-muted-foreground text-center">
           {getTranslation(ui, "prompts", "mfaTotpQrCodePrompt")}
         </p>
       </div>
       <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-y-4"
+        >
           <Controller
             control={form.control}
             name="verificationCode"
             render={({ field, fieldState }) => (
               <Field data-invalid={!!fieldState.error}>
-                <FieldLabel htmlFor="verificationCode">{getTranslation(ui, "labels", "verificationCode")}</FieldLabel>
-                <InputOTP id="verificationCode" maxLength={6} {...field} aria-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="verificationCode">
+                  {getTranslation(ui, "labels", "verificationCode")}
+                </FieldLabel>
+                <InputOTP
+                  id="verificationCode"
+                  maxLength={6}
+                  {...field}
+                  aria-invalid={!!fieldState.error}
+                >
                   <InputOTPGroup>
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />
@@ -137,14 +179,18 @@ export function MultiFactorEnrollmentVerifyTotpForm(props: MultiFactorEnrollment
                     <InputOTPSlot index={5} />
                   </InputOTPGroup>
                 </InputOTP>
-                {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
               </Field>
             )}
           />
           <Button type="submit" disabled={ui.state !== "idle"}>
             {getTranslation(ui, "labels", "verifyCode")}
           </Button>
-          {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
+          {form.formState.errors.root && (
+            <FieldError>{form.formState.errors.root.message}</FieldError>
+          )}
         </form>
       </FormProvider>
     </div>
@@ -155,7 +201,9 @@ export type TotpMultiFactorEnrollmentFormProps = {
   onSuccess?: () => void;
 };
 
-export function TotpMultiFactorEnrollmentForm(props: TotpMultiFactorEnrollmentFormProps) {
+export function TotpMultiFactorEnrollmentForm(
+  props: TotpMultiFactorEnrollmentFormProps,
+) {
   const ui = useUI();
 
   const [enrollment, setEnrollment] = useState<{
@@ -164,12 +212,18 @@ export function TotpMultiFactorEnrollmentForm(props: TotpMultiFactorEnrollmentFo
   } | null>(null);
 
   if (!ui.auth.currentUser) {
-    throw new Error("User must be authenticated to enroll with multi-factor authentication");
+    throw new Error(
+      "User must be authenticated to enroll with multi-factor authentication",
+    );
   }
 
   if (!enrollment) {
     return (
-      <TotpMultiFactorSecretGenerationForm onSubmit={(secret, displayName) => setEnrollment({ secret, displayName })} />
+      <TotpMultiFactorSecretGenerationForm
+        onSubmit={(secret, displayName) =>
+          setEnrollment({ secret, displayName })
+        }
+      />
     );
   }
 

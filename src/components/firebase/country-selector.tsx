@@ -7,7 +7,7 @@ import {
   useCountries,
   useDefaultCountry,
 } from "@firebase-oss/ui-react";
-import { useImperativeHandle, useState, type Ref } from "react";
+import { type Ref, useImperativeHandle, useState } from "react";
 
 import {
   Select,

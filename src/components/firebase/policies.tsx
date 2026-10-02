@@ -1,6 +1,6 @@
 import { getTranslation } from "@firebase-oss/ui-core";
 import { PolicyContext, useUI } from "@firebase-oss/ui-react";
-import { use, type ReactNode } from "react";
+import { type ReactNode, use } from "react";
 
 type PolicyActionProps = {
   children: ReactNode;

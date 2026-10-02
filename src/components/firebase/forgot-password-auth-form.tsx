@@ -1,21 +1,20 @@
 "use client";
 
 import type { ForgotPasswordAuthFormSchema } from "@firebase-oss/ui-core";
+import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
 import {
+  type ForgotPasswordAuthFormProps,
   useForgotPasswordAuthFormAction,
   useForgotPasswordAuthFormSchema,
   useUI,
-  type ForgotPasswordAuthFormProps,
 } from "@firebase-oss/ui-react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
-
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { Policies } from "./policies";
 
 export type { ForgotPasswordAuthFormProps };
@@ -40,7 +39,8 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
       setEmailSent(true);
       props.onPasswordSent?.();
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
+      const message =
+        error instanceof FirebaseUIError ? error.message : String(error);
       form.setError("root", { message });
     }
   }
@@ -57,15 +57,27 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-y-4"
+      >
         <Controller
           control={form.control}
           name="email"
           render={({ field, fieldState }) => (
             <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
-              <Input {...field} id="email" type="email" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              <FieldLabel htmlFor="email">
+                {getTranslation(ui, "labels", "emailAddress")}
+              </FieldLabel>
+              <Input
+                {...field}
+                id="email"
+                type="email"
+                aria-invalid={!!fieldState.error}
+              />
+              {fieldState.error && (
+                <FieldError>{fieldState.error.message}</FieldError>
+              )}
             </Field>
           )}
         />
@@ -73,9 +85,16 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
         <Button type="submit" disabled={ui.state !== "idle"}>
           {getTranslation(ui, "labels", "resetPassword")}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
+        {form.formState.errors.root && (
+          <FieldError>{form.formState.errors.root.message}</FieldError>
+        )}
         {props.onBackToSignInClick ? (
-          <Button type="button" variant="link" size="sm" onClick={props.onBackToSignInClick}>
+          <Button
+            type="button"
+            variant="link"
+            size="sm"
+            onClick={props.onBackToSignInClick}
+          >
             <span className="inline-flex items-center gap-1 text-xs">
               <ArrowLeft aria-hidden="true" className="size-3" />
               {getTranslation(ui, "labels", "backToSignIn")}

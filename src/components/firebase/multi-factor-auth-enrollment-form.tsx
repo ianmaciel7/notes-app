@@ -1,9 +1,9 @@
 "use client";
 
-import { type ComponentProps, useState } from "react";
-import { FactorId } from "firebase/auth";
 import { getTranslation } from "@firebase-oss/ui-core";
 import { useUI } from "@firebase-oss/ui-react";
+import { FactorId } from "firebase/auth";
+import { type ComponentProps, useState } from "react";
 
 import { SmsMultiFactorEnrollmentForm } from "@/components/firebase/sms-multi-factor-enrollment-form";
 import { TotpMultiFactorEnrollmentForm } from "@/components/firebase/totp-multi-factor-enrollment-form";
@@ -18,15 +18,21 @@ export type MultiFactorAuthEnrollmentFormProps = {
 
 const DEFAULT_HINTS = [FactorId.TOTP, FactorId.PHONE] as const;
 
-export function MultiFactorAuthEnrollmentForm(props: MultiFactorAuthEnrollmentFormProps) {
+export function MultiFactorAuthEnrollmentForm(
+  props: MultiFactorAuthEnrollmentFormProps,
+) {
   const hints = props.hints ?? DEFAULT_HINTS;
 
   if (hints.length === 0) {
-    throw new Error("MultiFactorAuthEnrollmentForm must have at least one hint");
+    throw new Error(
+      "MultiFactorAuthEnrollmentForm must have at least one hint",
+    );
   }
 
   // If only a single hint is provided, select it by default to improve UX.
-  const [hint, setHint] = useState<Hint | undefined>(hints.length === 1 ? hints[0] : undefined);
+  const [hint, setHint] = useState<Hint | undefined>(
+    hints.length === 1 ? hints[0] : undefined,
+  );
 
   if (hint) {
     if (hint === FactorId.TOTP) {

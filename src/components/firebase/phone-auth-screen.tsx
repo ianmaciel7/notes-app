@@ -1,14 +1,20 @@
 "use client";
 
-import type { PropsWithChildren } from "react";
 import { getTranslation } from "@firebase-oss/ui-core";
-import { useUI, useOnUserAuthenticated } from "@firebase-oss/ui-react";
-import { Card, CardContent, CardHeader, CardDescription, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { PhoneAuthForm } from "@/components/firebase/phone-auth-form";
-import { MultiFactorAuthAssertionScreen } from "@/components/firebase/multi-factor-auth-assertion-screen";
-import { RedirectError } from "@/components/firebase/redirect-error";
+import { useOnUserAuthenticated, useUI } from "@firebase-oss/ui-react";
 import type { User } from "firebase/auth";
+import type { PropsWithChildren } from "react";
+import { MultiFactorAuthAssertionScreen } from "@/components/firebase/multi-factor-auth-assertion-screen";
+import { PhoneAuthForm } from "@/components/firebase/phone-auth-form";
+import { RedirectError } from "@/components/firebase/redirect-error";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export type PhoneAuthScreenProps = PropsWithChildren<{
   onSignIn?: (user: User) => void;
