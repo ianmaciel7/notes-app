@@ -11,17 +11,20 @@
  * Grounded in CONVENTIONS.md: "Internationalization (i18n) & Localized Strings".
  */
 
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
-const scanRoots = [
+const configuredScanRoots = [
   path.join(root, "src/app"),
   path.join(root, "src/components/firebase"),
   path.join(root, "src/components/notes-app"),
 ];
+const scanRoots = configuredScanRoots.filter((scanRoot) =>
+  existsSync(scanRoot),
+);
 
 // Known user-facing action/status phrases that must never be hardcoded
 export const FORBIDDEN_PHRASES = [
