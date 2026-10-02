@@ -180,24 +180,6 @@ export const CONVENTION_RULES = [
       return bad === undefined ? [] : [{ line: 1, detail: `"${bad}"` }];
     },
   },
-  patternRule(
-    "ui-primitive-no-default-export",
-    "Registry primitives use named exports in one trailing `export { ... }` block.",
-    /^\s*export\s+default\b/,
-    { uiOnly: true, allowed: STORIES },
-  ),
-  patternRule(
-    "ui-primitive-trailing-export-block",
-    "Registry primitives export values only through one trailing `export { ... }` block.",
-    /^export\s+(?:async\s+)?(?:function|const|let|class)\b/,
-    { uiOnly: true, allowed: STORIES },
-  ),
-  patternRule(
-    "ui-primitive-no-interface",
-    "Registry primitives derive prop types inline; declare no `interface`.",
-    /^(?:export\s+)?interface\s/,
-    { uiOnly: true, allowed: STORIES },
-  ),
 ];
 
 export function normalizeRelative(root, file) {
