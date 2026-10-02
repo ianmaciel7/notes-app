@@ -153,6 +153,8 @@ Before changing code:
 
 While changing code:
 
+- For project-owned application UI, follow `.agents/rules/component-composition.md` in addition to `CONVENTIONS.md`.
+
 - Follow existing patterns and the canonical owner for the affected context.
 - Dedicated component hooks own stateful behavior: if `Component` has `useComponent`, keep its component-owned state/effects/refs/transitions/navigation and derived handlers in that hook; keep the component focused on rendering and composition.
 - Prefer focused edits; do not edit generated outputs directly.

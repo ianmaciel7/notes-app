@@ -25,7 +25,7 @@ security procedures.
 for exact versions instead of copying volatile pins.]
 
 ## 4. Runtime State & Data Flow
-[Requests, data flow, persistence, cache/state lifecycle, important runtime boundaries.]
+[Requests, data flow, persistence, cache/state lifecycle, state ownership boundaries, important runtime boundaries.]
 
 ## 5. Cross-Cutting Architecture
 [Observability, performance architecture, security-boundary pointers, quality-floor

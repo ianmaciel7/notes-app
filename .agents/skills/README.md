@@ -30,3 +30,12 @@ Keep skills narrow and reusable. Prefer one clear outcome per skill.
 - Directory name should match frontmatter `name`.
 - Use kebab-case for `name` (lowercase letters, numbers, `-`).
 - Keep `description` specific so tools can trigger the skill correctly.
+
+
+## Project-owned vs. vendored skills
+
+Project-specific workflows may be updated when repository policy changes. Vendored or
+upstream skills (for example Vercel, Graphify, or third-party framework skills) remain
+upstream-compatible; do not edit them merely to encode notes-app policy. Put
+notes-app-specific composition, hook ownership, and verification rules in project-owned
+skills/rules and canonical control documents.

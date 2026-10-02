@@ -40,3 +40,5 @@ unless a workflow executes them.]
 4. Keep CI claims grounded in `.github/workflows/`.
 5. Prefer behavior-focused tests and the smallest verification layer that proves the
    behavior.
+
+6. For component libraries and headless primitives, test behavior-bearing composition through observable outcomes rather than wrapper implementation details.

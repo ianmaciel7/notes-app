@@ -22,7 +22,7 @@ task-end command matrix.]
 [Files, components, functions, types, exports.]
 
 ## 3. Component / Module Composition
-[Composition rules, boundaries, public API conventions.]
+[Composition rules, boundaries, public API conventions, state ownership, and when to prefer simple components vs. compound APIs.]
 
 ## 4. Framework-Specific Rules
 [Only rules grounded in the installed framework/library.]
@@ -44,3 +44,5 @@ task-end command matrix.]
    `CONTRIBUTING.md` as appropriate.
 3. Reference `DESIGN.md` for visual-token semantics rather than copying token values.
 4. Do not document speculative framework patterns that the repository does not use.
+
+5. When the repository uses a primitive library, distinguish product-facing component semantics from implementation primitives; do not require filenames to mirror primitive roots unless that is an explicit product/API rule.
