@@ -119,9 +119,4 @@ function SmsButton(props: ComponentProps<typeof Button>) {
   );
 }
 
-export {
-  MfaAssertionFieldGroup,
-  MfaAssertionFieldGroup as MultiFactorAuthAssertionForm,
-  type MfaAssertionFieldGroupProps,
-  type MfaAssertionFieldGroupProps as MultiFactorAuthAssertionFormProps,
-};
+export { MfaAssertionFieldGroup, type MfaAssertionFieldGroupProps };

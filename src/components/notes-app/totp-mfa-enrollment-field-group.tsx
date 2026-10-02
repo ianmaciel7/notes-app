@@ -85,22 +85,19 @@ function TotpMultiFactorSecretGenerationForm({
   );
 }
 
-type MultiFactorEnrollmentVerifyTotpFormProps = Omit<
-  ComponentProps<"form">,
-  "onSubmit"
-> & {
+type MultiFactorEnrollmentVerifyTotpFieldGroupProps = ComponentProps<typeof FieldGroup> & {
   secret: TotpSecret;
   displayName: string;
   onSuccess: () => void;
 };
 
-function MultiFactorEnrollmentVerifyTotpForm({
+function MultiFactorEnrollmentVerifyTotpFieldGroup({
   secret,
   displayName,
   onSuccess,
   className,
   ...props
-}: MultiFactorEnrollmentVerifyTotpFormProps) {
+}: MultiFactorEnrollmentVerifyTotpFieldGroupProps) {
   const ui = useUI();
   const t = useTranslations("auth");
   const schema = useMultiFactorTotpAuthVerifyFormSchema();
@@ -136,7 +133,7 @@ function MultiFactorEnrollmentVerifyTotpForm({
 
   return (
     <FieldGroup
-      data-slot="multi-factor-enrollment-verify-totp-form"
+      data-slot="multi-factor-enrollment-verify-totp-field-group"
       className="gap-4"
     >
       <Field className="items-center justify-center">
@@ -180,15 +177,15 @@ function MultiFactorEnrollmentVerifyTotpForm({
   );
 }
 
-type TotpMfaEnrollmentFormProps = ComponentProps<"div"> & {
+type TotpMfaEnrollmentFieldGroupProps = ComponentProps<typeof FieldGroup> & {
   onSuccess?: () => void;
 };
 
-function TotpMfaEnrollmentForm({
+function TotpMfaEnrollmentFieldGroup({
   onSuccess,
   className,
   ...props
-}: TotpMfaEnrollmentFormProps) {
+}: TotpMfaEnrollmentFieldGroupProps) {
   const ui = useUI();
 
   const [enrollment, setEnrollment] = useState<{
@@ -204,7 +201,7 @@ function TotpMfaEnrollmentForm({
 
   return (
     <FieldGroup
-      data-slot="totp-mfa-enrollment-form"
+      data-slot="totp-mfa-enrollment-field-group"
       {...props}
       className={cn(className)}
     >
@@ -215,7 +212,7 @@ function TotpMfaEnrollmentForm({
           }
         />
       ) : (
-        <MultiFactorEnrollmentVerifyTotpForm
+        <MultiFactorEnrollmentVerifyTotpFieldGroup
           {...enrollment}
           onSuccess={() => {
             onSuccess?.();
@@ -227,11 +224,9 @@ function TotpMfaEnrollmentForm({
 }
 
 export {
-  MultiFactorEnrollmentVerifyTotpForm,
-  TotpMfaEnrollmentForm,
-  TotpMfaEnrollmentForm as TotpMultiFactorEnrollmentForm,
+  MultiFactorEnrollmentVerifyTotpFieldGroup,
+  TotpMfaEnrollmentFieldGroup,
   type TotpMultiFactorSecretGenerationFormProps,
-  type MultiFactorEnrollmentVerifyTotpFormProps,
-  type TotpMfaEnrollmentFormProps,
-  type TotpMfaEnrollmentFormProps as TotpMultiFactorEnrollmentFormProps,
+  type MultiFactorEnrollmentVerifyTotpFieldGroupProps,
+  type TotpMfaEnrollmentFieldGroupProps,
 };

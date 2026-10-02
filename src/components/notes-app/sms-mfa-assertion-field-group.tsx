@@ -4,7 +4,7 @@ import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
 import {
   useMultiFactorPhoneAuthVerifyFormSchema,
   useRecaptchaVerifier,
-  useSmsMultiFactorAssertionPhoneFormAction,
+  useSmsMultiFactorAssertionPhoneFieldGroupAction,
   useSmsMultiFactorAssertionVerifyFormAction,
   useUI,
 } from "@firebase-oss/ui-react";
@@ -35,24 +35,24 @@ type PhoneMultiFactorInfo = MultiFactorInfo & {
   phoneNumber?: string;
 };
 
-type SmsMultiFactorAssertionPhoneFormProps = Omit<
-  ComponentProps<"div">,
+type SmsMultiFactorAssertionPhoneFieldGroupProps = Omit<
+  ComponentProps<typeof FieldGroup>,
   "onSubmit"
 > & {
   hint: MultiFactorInfo;
   onSubmit: (verificationId: string) => void;
 };
 
-function SmsMultiFactorAssertionPhoneForm({
+function SmsMultiFactorAssertionPhoneFieldGroup({
   hint,
   onSubmit: onSubmitProp,
   className,
   ...props
-}: SmsMultiFactorAssertionPhoneFormProps) {
+}: SmsMultiFactorAssertionPhoneFieldGroupProps) {
   const ui = useUI();
   const recaptchaContainerRef = useRef<HTMLDivElement>(null);
   const recaptchaVerifier = useRecaptchaVerifier(recaptchaContainerRef);
-  const action = useSmsMultiFactorAssertionPhoneFormAction();
+  const action = useSmsMultiFactorAssertionPhoneFieldGroupAction();
   const [error, setError] = useState<string | null>(null);
 
   const onSubmit = async () => {
@@ -77,7 +77,7 @@ function SmsMultiFactorAssertionPhoneForm({
 
   return (
     <FieldGroup
-      data-slot="sms-multi-factor-assertion-phone-form"
+      data-slot="sms-multi-factor-assertion-phone-field-group"
       {...props}
       className={cn(className)}
     >
@@ -207,29 +207,29 @@ function SmsMultiFactorAssertionVerifyForm({
   );
 }
 
-type SmsMfaAssertionFormProps = ComponentProps<"div"> & {
+type SmsMfaAssertionFieldGroupProps = ComponentProps<typeof FieldGroup> & {
   hint: MultiFactorInfo;
   onSuccess?: (credential: UserCredential) => void;
 };
 
-function SmsMfaAssertionForm({
+function SmsMfaAssertionFieldGroup({
   hint,
   onSuccess,
   className,
   ...props
-}: SmsMfaAssertionFormProps) {
+}: SmsMfaAssertionFieldGroupProps) {
   const [verification, setVerification] = useState<{
     verificationId: string;
   } | null>(null);
 
   return (
     <FieldGroup
-      data-slot="sms-mfa-assertion-form"
+      data-slot="sms-mfa-assertion-field-group"
       {...props}
       className={cn(className)}
     >
       {!verification ? (
-        <SmsMultiFactorAssertionPhoneForm
+        <SmsMultiFactorAssertionPhoneFieldGroup
           hint={hint}
           onSubmit={(verificationId) => setVerification({ verificationId })}
         />
@@ -246,10 +246,8 @@ function SmsMfaAssertionForm({
 }
 
 export {
-  SmsMfaAssertionForm,
-  SmsMfaAssertionForm as SmsMultiFactorAssertionForm,
-  type SmsMultiFactorAssertionPhoneFormProps,
+  SmsMfaAssertionFieldGroup,
+  type SmsMultiFactorAssertionPhoneFieldGroupProps,
   type SmsMultiFactorAssertionVerifyFormProps,
-  type SmsMfaAssertionFormProps,
-  type SmsMfaAssertionFormProps as SmsMultiFactorAssertionFormProps,
+  type SmsMfaAssertionFieldGroupProps,
 };

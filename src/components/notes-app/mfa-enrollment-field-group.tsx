@@ -41,7 +41,7 @@ function MfaEnrollmentFieldGroup({
   if (hint) {
     if (hint === FactorId.TOTP) {
       return (
-        <TotpMultiFactorEnrollmentForm
+        <TotpMfaEnrollmentFieldGroup
           onSuccess={onEnrollment}
           {...props}
           className={className}
@@ -51,7 +51,7 @@ function MfaEnrollmentFieldGroup({
 
     if (hint === FactorId.PHONE) {
       return (
-        <SmsMultiFactorEnrollmentForm
+        <SmsMfaEnrollmentFieldGroup
           onSuccess={onEnrollment}
           {...props}
           className={className}

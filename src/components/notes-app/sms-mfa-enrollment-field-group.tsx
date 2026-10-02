@@ -277,15 +277,15 @@ function MultiFactorEnrollmentVerifyPhoneNumberForm({
   );
 }
 
-type SmsMfaEnrollmentFormProps = ComponentProps<"div"> & {
+type SmsMfaEnrollmentFieldGroupProps = ComponentProps<typeof FieldGroup> & {
   onSuccess?: () => void;
 };
 
-function SmsMfaEnrollmentForm({
+function SmsMfaEnrollmentFieldGroup({
   onSuccess,
   className,
   ...props
-}: SmsMfaEnrollmentFormProps) {
+}: SmsMfaEnrollmentFieldGroupProps) {
   const ui = useUI();
 
   const [verification, setVerification] = useState<{
@@ -301,7 +301,7 @@ function SmsMfaEnrollmentForm({
 
   return (
     <FieldGroup
-      data-slot="sms-mfa-enrollment-form"
+      data-slot="sms-mfa-enrollment-field-group"
       {...props}
       className={cn(className)}
     >
@@ -325,10 +325,8 @@ function SmsMfaEnrollmentForm({
 
 export {
   MultiFactorEnrollmentVerifyPhoneNumberForm,
-  SmsMfaEnrollmentForm,
-  SmsMfaEnrollmentForm as SmsMultiFactorEnrollmentForm,
+  SmsMfaEnrollmentFieldGroup,
   type MultiFactorEnrollmentPhoneNumberFormProps,
   type MultiFactorEnrollmentVerifyPhoneNumberFormProps,
-  type SmsMfaEnrollmentFormProps,
-  type SmsMfaEnrollmentFormProps as SmsMultiFactorEnrollmentFormProps,
+  type SmsMfaEnrollmentFieldGroupProps,
 };
