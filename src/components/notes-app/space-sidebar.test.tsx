@@ -193,7 +193,7 @@ describe("SpaceSidebar", () => {
     expect(screen.queryByText("No matching spaces")).toBeNull();
   });
 
-  it("shows no-search-results only after filtering existing spaces", () => {
+  it("shows existing spaces in the switcher menu", () => {
     const spaces: Space[] = [
       {
         id: "space-1",
@@ -218,11 +218,10 @@ describe("SpaceSidebar", () => {
     });
 
     renderWithIntl(<SpaceSidebar currentSpaceId="space-1" />);
-    fireEvent.change(screen.getByRole("textbox", { name: "Search" }), {
-      target: { value: "missing" },
-    });
+    fireEvent.click(screen.getByTestId("space-switcher-trigger"));
 
-    expect(screen.getByText("No matching spaces")).toBeDefined();
+    expect(screen.getByTestId("space-item-space-1")).toBeDefined();
+    expect(screen.queryByText("No matching spaces")).toBeNull();
   });
 
   it("renders inline switcher trigger and enter button when spaces exist", () => {
