@@ -27,7 +27,10 @@ const COMPOSITION_RULES = [
     required: ["Select", "SelectTrigger", "SelectContent"],
   },
   { suffix: "-empty.tsx", required: ["Empty", "EmptyHeader"] },
-  { suffix: "-sidebar.tsx", required: ["Sidebar"] },
+  {
+    suffix: "-sidebar.tsx",
+    required: ["Sidebar", "SidebarHeader", "SidebarFooter"],
+  },
   { suffix: "-status.tsx", required: ["Empty"] },
   { suffix: "-button.tsx", required: ["Button"] },
   { suffix: "-header.tsx", required: ["Item"] },
@@ -36,8 +39,179 @@ const COMPOSITION_RULES = [
 
 const LEAF_WRAPPER_SUFFIXES = new Set(["-button.tsx", "-input.tsx"]);
 
+const STATUS_COMPOSITION_PARTS = [
+  "SpacesErrorStatus",
+  "SpacesLoadingStatus",
+  "SpacesNotFoundStatus",
+];
+
+const DIALOG_COMPOSITION_PARTS = ["children", "content"];
+
+const COMPONENT_ANATOMY_RULES = new Map([
+  [
+    "space-switcher.tsx",
+    ["SidebarGroup", "SidebarGroupContent", "InputGroup", "Empty"],
+  ],
+  [
+    "sidebar-user-menu.tsx",
+    ["SidebarMenu", "SidebarMenuItem", "DropdownMenuGroup", "ButtonGroup"],
+  ],
+  [
+    "space-shell.tsx",
+    [
+      "SidebarProvider",
+      "Sidebar",
+      "SidebarHeader",
+      "SidebarFooter",
+      "SidebarInset",
+      "CreateSpaceDialog",
+      "SettingsDialog",
+    ],
+  ],
+]);
+
 function violation(file, rule, message) {
   return { file: path.relative(root, file), rule, message };
+}
+
+function checkStatusComposition(filePath, fileName, content) {
+  if (fileName !== "spaces-status.tsx") return [];
+
+  const missing = STATUS_COMPOSITION_PARTS.filter(
+    (part) => !new RegExp(`function\\s+${part}\\b`).test(content),
+  );
+  if (missing.length === 0) return [];
+
+  return [
+    violation(
+      filePath,
+      "notes-app-status-composition",
+      `spaces-status.tsx must expose explicit status parts: ${missing.join(", ")}.`,
+    ),
+  ];
+}
+
+function checkDialogComposition(filePath, fileName, content) {
+  if (!fileName.endsWith("-dialog.tsx")) return [];
+
+  const missing = DIALOG_COMPOSITION_PARTS.filter((part) =>
+    part === "children"
+      ? !/\bchildren\b/.test(content)
+      : !new RegExp(`function\\s+${toPascalCase(fileName)}Content\\b`).test(
+          content,
+        ),
+  );
+  if (missing.length === 0) return [];
+
+  return [
+    violation(
+      filePath,
+      "notes-app-dialog-composition",
+      `${fileName} must expose caller-provided composition through ${missing.join(", ")}.`,
+    ),
+  ];
+}
+
+function checkEmptyLayoutParts(filePath, fileName, content) {
+  const emptyParts = [
+    "SidebarContent",
+    "SidebarGroup",
+    "SidebarGroupContent",
+    "SidebarMenu",
+    "CardHeader",
+    "CardContent",
+    "CardFooter",
+    "FieldGroup",
+    "EmptyHeader",
+    "EmptyContent",
+  ];
+  const violations = [];
+
+  for (const part of emptyParts) {
+    const selfClosing = new RegExp(`<${part}(?:\\s[^>]*)?\\s*/>`).test(content);
+    const emptyPair = new RegExp(`<${part}(?:\\s[^>]*)?>\\s*</${part}>`).test(
+      content,
+    );
+    if (selfClosing || emptyPair) {
+      violations.push(
+        violation(
+          filePath,
+          "notes-app-empty-composition-part",
+          `${fileName} must not render empty ${part}; remove it or compose its required children.`,
+        ),
+      );
+    }
+  }
+
+  return violations;
+}
+
+function checkRawLayoutWrappers(filePath, fileName, content) {
+  if (fileName === "phone-auth-form.tsx" || fileName.startsWith("sms-mfa-")) {
+    return [];
+  }
+
+  if (/<div\s+\{\.\.\.props\}\s+className=/.test(content)) {
+    return [
+      violation(
+        filePath,
+        "notes-app-no-raw-layout-wrapper",
+        `${fileName} must compose a role-specific ui primitive instead of forwarding layout props through a raw div.`,
+      ),
+    ];
+  }
+
+  return [];
+}
+
+function checkComponentAnatomy(filePath, fileName, content) {
+  const required = COMPONENT_ANATOMY_RULES.get(fileName);
+  if (!required) return [];
+
+  const missing = required.filter(
+    (part) => !new RegExp(`<${part}(?:\\s|>)`).test(content),
+  );
+  if (missing.length === 0) return [];
+
+  return [
+    violation(
+      filePath,
+      "notes-app-component-anatomy",
+      `${fileName} must compose ${missing.join(", ")} so its internal surface anatomy stays explicit.`,
+    ),
+  ];
+}
+
+function checkSpaceShellContract(filePath, fileName, content) {
+  if (fileName !== "space-shell.tsx") return [];
+
+  const requirements = [
+    ["children", /children\??\s*:/],
+    ["SidebarProvider root", /<SidebarProvider\b/],
+    ["data-slot", /data-slot=["']space-shell["']/],
+    ["cn layout merge", /className=\{cn\(/],
+  ];
+  const missing = requirements
+    .filter(([, pattern]) => !pattern.test(content))
+    .map(([name]) => name);
+
+  if (missing.length === 0) return [];
+
+  return [
+    violation(
+      filePath,
+      "notes-app-space-shell-contract",
+      `space-shell.tsx must preserve the SidebarProvider wrapper contract; missing ${missing.join(", ")}.`,
+    ),
+  ];
+}
+
+function toPascalCase(fileName) {
+  return fileName
+    .replace(/\.tsx$/, "")
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join("");
 }
 
 function checkFile(filePath, content) {
@@ -92,6 +266,13 @@ function checkFile(filePath, content) {
     }
   }
 
+  violations.push(...checkStatusComposition(filePath, fileName, content));
+  violations.push(...checkDialogComposition(filePath, fileName, content));
+  violations.push(...checkComponentAnatomy(filePath, fileName, content));
+  violations.push(...checkSpaceShellContract(filePath, fileName, content));
+  violations.push(...checkEmptyLayoutParts(filePath, fileName, content));
+  violations.push(...checkRawLayoutWrappers(filePath, fileName, content));
+
   const openingTagPattern = /<[A-Za-z][\w.]*(?:\s|\n)[\s\S]*?>/g;
   for (const match of content.matchAll(openingTagPattern)) {
     const tag = match[0];
@@ -120,6 +301,10 @@ export {
   COMPOSITION_RULES,
   LEAF_WRAPPER_SUFFIXES,
   NON_VISUAL_FILES,
+  STATUS_COMPOSITION_PARTS,
+  DIALOG_COMPOSITION_PARTS,
+  COMPONENT_ANATOMY_RULES,
+  checkSpaceShellContract,
   checkFile,
 };
 

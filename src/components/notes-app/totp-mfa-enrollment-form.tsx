@@ -199,7 +199,7 @@ function TotpMfaEnrollmentForm({
   }
 
   return (
-    <div {...props} className={cn(className)}>
+    <FieldGroup {...props} className={cn(className)}>
       {!enrollment ? (
         <TotpMultiFactorSecretGenerationForm
           onSubmit={(secret, displayName) =>
@@ -214,7 +214,7 @@ function TotpMfaEnrollmentForm({
           }}
         />
       )}
-    </div>
+    </FieldGroup>
   );
 }
 

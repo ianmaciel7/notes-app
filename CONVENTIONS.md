@@ -36,14 +36,14 @@ contributor workflow to `CONTRIBUTING.md`.
   - `-alert` / `*Alert` for notification and error banners (e.g. `redirect-error-alert.tsx` -> `RedirectErrorAlert`)
   - `-button` / `*Button`, `-select` / `*Select`, `-menu` / `*Menu`, `-switcher` / `*Switcher` for interactive UI controls
   - `-description` / `*Description` for descriptive field or policy text surfaces
-  - `-sidebar` / `*Sidebar` for navigation shells (e.g. `space-sidebar.tsx` -> `SpaceSidebar`)
+  - `-sidebar` / `*Sidebar` for navigation primitives and parts; domain orchestration belongs in a `-shell` component (e.g. `space-shell.tsx` -> `SpaceShell`)
   - `-provider` / `*Provider` for React context providers
   - `-dialog` / `*Dialog`, `-status` / `*Status`, `-empty` / `*Empty` for standalone overlays and state surfaces split out of a larger component (e.g. `settings-dialog.tsx` -> `SettingsDialog`, `spaces-status.tsx` -> `SpacesStatus`)
 - **Canonical Props Naming (`${ComponentName}Props`)**: Component prop types must be declared canonically using the component's canonical PascalCase name (e.g. `login-card.tsx` declares and uses `type LoginCardProps = ...`, never `SignInAuthScreenProps` as the primary type). Declare them with `type`, never `interface`, exactly as `src/components/ui/` does. Legacy or library names may only be re-exported as backwards-compatible aliases inside the file's trailing export block (e.g. `type LoginCardProps as SignInAuthScreenProps`). Enforced by `check:props` and `component-no-interface`.
 - **Export shape (`src/components/notes-app/`)**: Application components follow the same file anatomy as `src/components/ui/`. Declare components and hooks as plain `function` declarations without `export`, and publish every value and type through one trailing `export { ... }` block (types with an inline `type` modifier, aliases as `X as Alias`). Do not write `export function`, `export const`, or `export interface`. Enforced by `component-trailing-export-block`.
 - **Name by what it renders, never by where the code came from.** When a component is extracted or moved, re-derive its name from what it renders and where it is rendered instead of keeping the old name or prefixing it with the name of the file it came from (`SpaceSidebarEmpty`, rendered in the main area and not in the sidebar, became `SpacesEmpty`). A surface word before the final role suffix (`sidebar`, `dialog`, `sheet`, `drawer`, `popover`) must be backed by that surface's primitive in the file; otherwise the name is wrong (`name-matches-surface`). Use the domain terms in `CONTEXT.md`: `Space` is one user-owned context, so a component about the collection or its absence is `Spaces*`, never `Space*`, which would read as an empty Space.
 - **Test ids follow the file name.** Every `data-testid` in `src/components/notes-app/<name>.tsx` is `<name>` or starts with `<name>-` (`spaces-empty.tsx` -> `spaces-empty`, `spaces-empty-create-btn`). Renaming or extracting a component renames its test ids in the same change, so a stale id can never survive (`testid-starts-with-component`). After any rename, search the old name across components, test ids, tests, `e2e/`, and docs, and leave zero matches.
-- **Standalone overlays**: A dialog, sheet, or drawer owns its own open state and concern, so it lives in its own file named after it (e.g. `CreateSpaceDialog` in `create-space-dialog.tsx`), never inside another component's file such as `space-sidebar.tsx`. Cards and forms are exempt because multi-step flows keep their step forms next to the flow. Enforced by `check:props` (`checkStandaloneSurfaceComponents`) for named `*Dialog`/`*Sheet`/`*Drawer` components, and by `overlay-content-own-file` for inline overlay JSX: `DialogContent`, `SheetContent`, `AlertDialogContent`, and `DrawerContent` may only appear in a `*-dialog.tsx`, `*-sheet.tsx`, or `*-drawer.tsx` file, so the parent keeps only the `open` state.
+  - **Standalone overlays**: A dialog, sheet, or drawer owns its own open state and concern, so it lives in its own file named after it (e.g. `CreateSpaceDialog` in `create-space-dialog.tsx`), never inside the navigation primitive. Cards and forms are exempt because multi-step flows keep their step forms next to the flow. Enforced by `check:props` (`checkStandaloneSurfaceComponents`) for named `*Dialog`/`*Sheet`/`*Drawer` components, and by `overlay-content-own-file` for inline overlay JSX: `DialogContent`, `SheetContent`, `AlertDialogContent`, and `DrawerContent` may only appear in a `*-dialog.tsx`, `*-sheet.tsx`, or `*-drawer.tsx` file, so the parent keeps only the `open` state.
 
 ## 3. Component Composition
 
@@ -58,6 +58,14 @@ contributor workflow to `CONTRIBUTING.md`.
   behavior, ARIA, and primitive state attributes.
 - Use CVA only for meaningful variant axes with typed `VariantProps` and sensible
   defaults.
+- **Use the native compound primitive as the surface.** When a domain area is
+  already represented by a shadcn compound primitive, compose that primitive
+  directly instead of creating a parallel domain wrapper with the same anatomy.
+  Put domain state, navigation, and dialogs in a focused `-shell` orchestrator;
+  keep the primitive's `Provider`, root, header, footer, content, and inset as
+  the actual layout. Header/footer domain components receive `children` when
+  they are composition points, and standalone dialogs remain siblings owned by
+  the shell rather than being nested inside the navigation primitive.
 
 ## 4. shadcn / Base UI
 
@@ -315,18 +323,34 @@ Do not:
 ### Notes-app UI composition contract
 
 Every visual component in `src/components/notes-app/` follows one composition
-pattern:
+contract. The contract uses the same root/content/parts shape as the installed
+shadcn primitives:
 
 - compose at least one primitive from `src/components/ui/`;
-- use compound composition for every visual surface: a card, form, alert,
-  dialog, empty state, menu, sidebar, status, header, or description must use
-  the role-specific child parts listed below; do not collapse a surface into a
-  single ad-hoc element;
+- compose every visual surface from its role-specific child parts; cards,
+  forms, alerts, dialogs, empty states, menus, sidebars, statuses, headers, and
+  descriptions must not collapse their anatomy into one ad-hoc element;
+- compound surfaces expose caller-provided `children` and named parts when the
+  caller controls the composition or when sibling parts share context. The
+  canonical example is `ConnectionAlert`, whose root owns connection state and
+  whose title, description, icon, and action are separate parts;
+- dialogs use the same explicit tree as the `Dialog` primitive: root, content,
+  then header/body/form/footer parts. `CreateSpaceDialog` and `SettingsDialog`
+  must not hide `DialogContent` inside their root component;
+- state surfaces expose explicit state parts instead of combining unrelated
+  boolean flags. `SpacesStatus` uses `SpacesErrorStatus`,
+  `SpacesLoadingStatus`, and `SpacesNotFoundStatus`;
 - allow thin wrappers only for leaf controls such as buttons and inputs. A leaf
   wrapper may add domain behavior, labels, loading, or Firebase integration,
-  but it must not recreate the primitive's visual anatomy;
+  but it must not recreate the primitive's visual anatomy or hide a composite
+  surface;
 - keep domain behavior in `notes-app` and visual anatomy in the composed
   `src/components/ui/` primitives;
+- for shell-like surfaces, do not introduce a duplicate domain root such as
+  `SpaceSidebar` when the native `Sidebar` is already the visual root. Use a
+  `SpaceShell` only for orchestration around the native sidebar compound tree;
+  this keeps one sidebar anatomy and prevents navigation, dialogs, and route
+  state from accumulating in one component;
 - never use raw interactive HTML controls (`button`, `input`, `select`,
   `textarea`, or `label`);
 - spread caller props before required layout classes and semantic attributes;
@@ -359,6 +383,7 @@ row here in the same change that adds or changes a rule; prefer promoting a
 | `component-role-suffix` | `check:naming` |
 | `canonical-props-name` | `check:props` |
 | `identifier-casing` | `check:lint` |
+| `notes-app-composition-contract` | `check:ui-pattern` |
 | `reuse-primitives` | review-only |
 | `no-render-props-api` | `check:conventions` |
 | `composition-over-boolean-props` | review-only |

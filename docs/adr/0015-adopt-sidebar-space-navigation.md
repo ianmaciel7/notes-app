@@ -17,8 +17,9 @@ design system defines a compact navigation language.
 Keep the existing `/${spaceId}` route contract and move Space navigation into a
 sidebar shell:
 
-1. `SpaceSidebar` owns the interactive sidebar shell while the route page keeps
-   its server-rendered content as children.
+1. `SpaceShell` owns orchestration while composing the native `SidebarProvider`,
+   `Sidebar`, `SidebarHeader`, `SidebarFooter`, and `SidebarInset` primitives;
+   the route page keeps its server-rendered content as children.
 2. The sidebar remains visible and non-collapsible on the Space route. It lists
    the authenticated user's real Spaces from Firestore and
    navigates with App Router client navigation.

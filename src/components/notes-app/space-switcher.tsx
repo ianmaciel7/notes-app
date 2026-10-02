@@ -1,8 +1,8 @@
 "use client";
 
-import { Check, ChevronsUpDown, Plus } from "lucide-react";
+import { Check, ChevronsUpDown, Plus, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
-import type { ComponentProps } from "react";
+import { type ComponentProps, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Empty, EmptyDescription, EmptyHeader } from "@/components/ui/empty";
 import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import {
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -28,7 +36,6 @@ type SpaceSwitcherMenuProps = Omit<
   onCreate: () => void;
   onSelect: (spaceId: string) => void;
   spaces: Space[];
-  visibleSpaces: Space[];
 };
 
 function SpaceSwitcherMenu({
@@ -36,76 +43,116 @@ function SpaceSwitcherMenu({
   onCreate,
   onSelect,
   spaces,
-  visibleSpaces,
   ...props
 }: SpaceSwitcherMenuProps) {
   const t = useTranslations("spaces");
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const visibleSpaces = spaces.filter((space) =>
+    space.name.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()),
+  );
+
   return (
-    <SidebarMenu {...props} aria-label={t("workspace")}>
-      <SidebarMenuItem>
-        {spaces.length > 0 ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <SidebarMenuButton
-                  data-testid="space-switcher-trigger"
-                  aria-label={t("switchSpace")}
-                >
-                  <SpaceIcon iconKey={activeSpace?.icon} />
-                  <span className="min-w-0 truncate text-sm">
-                    {activeSpace?.name ?? t("selectSpace")}
-                  </span>
-                  <ChevronsUpDown className="ml-auto" />
-                </SidebarMenuButton>
-              }
-            />
-            <DropdownMenuContent
-              align="start"
-              sideOffset={4}
-              className="min-w-60"
-            >
-              <DropdownMenuGroup>
-                <DropdownMenuLabel>{t("workspace")}</DropdownMenuLabel>
-                {visibleSpaces.length > 0 ? (
-                  visibleSpaces.map((space) => (
-                    <DropdownMenuItem
-                      key={space.id}
-                      onClick={() => onSelect(space.id)}
-                      data-testid={`space-switcher-item-${space.id}`}
+    <SidebarGroup>
+      <SidebarGroupContent>
+        <SidebarMenu {...props} aria-label={t("workspace")}>
+          <SidebarMenuItem>
+            {spaces.length > 0 ? (
+              <DropdownMenu
+                open={open}
+                onOpenChange={(nextOpen) => {
+                  setOpen(nextOpen);
+                  if (!nextOpen) setQuery("");
+                }}
+              >
+                <DropdownMenuTrigger
+                  render={
+                    <SidebarMenuButton
+                      data-testid="space-switcher-trigger"
+                      aria-label={t("switchSpace")}
                     >
-                      <SpaceIcon iconKey={space.icon} />
-                      <span className="min-w-0 flex-1 truncate">
-                        {space.name}
+                      <SpaceIcon iconKey={activeSpace?.icon} />
+                      <span className="min-w-0 truncate text-sm">
+                        {activeSpace?.name ?? t("selectSpace")}
                       </span>
-                      {space.id === activeSpace?.id && <Check />}
+                      <ChevronsUpDown className="ml-auto" />
+                    </SidebarMenuButton>
+                  }
+                />
+                <DropdownMenuContent
+                  align="start"
+                  sideOffset={4}
+                  className="min-w-60"
+                >
+                  <InputGroup className="mb-1">
+                    <InputGroupAddon>
+                      <Search aria-hidden="true" />
+                    </InputGroupAddon>
+                    <InputGroupInput
+                      value={query}
+                      onChange={(event) => setQuery(event.target.value)}
+                      onKeyDown={(event) => event.stopPropagation()}
+                      placeholder={t("searchPlaceholder")}
+                      aria-label={t("searchPlaceholder")}
+                      data-testid="space-switcher-search"
+                    />
+                  </InputGroup>
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel>{t("workspace")}</DropdownMenuLabel>
+                    {visibleSpaces.length > 0 ? (
+                      visibleSpaces.map((space) => (
+                        <DropdownMenuItem
+                          key={space.id}
+                          onClick={() => onSelect(space.id)}
+                          data-testid={`space-switcher-item-${space.id}`}
+                        >
+                          <SpaceIcon iconKey={space.icon} />
+                          <span className="min-w-0 flex-1 truncate">
+                            {space.name}
+                          </span>
+                          {space.id === activeSpace?.id && <Check />}
+                        </DropdownMenuItem>
+                      ))
+                    ) : (
+                      <Empty className="min-h-20 p-3">
+                        <EmptyHeader>
+                          <EmptyDescription>
+                            {t("noSearchResults")}
+                          </EmptyDescription>
+                        </EmptyHeader>
+                      </Empty>
+                    )}
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onClick={onCreate}>
+                      <Plus />
+                      {t("createSpace")}
                     </DropdownMenuItem>
-                  ))
-                ) : (
-                  <DropdownMenuItem disabled>
-                    {t("noSearchResults")}
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem onClick={onCreate}>
-                  <Plus />
-                  {t("createSpace")}
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ) : (
-          <SidebarMenuButton
-            data-testid="space-switcher-create-trigger"
-            onClick={onCreate}
-          >
-            <Plus />
-            <span>{t("createFirstSpace")}</span>
-          </SidebarMenuButton>
-        )}
-      </SidebarMenuItem>
-    </SidebarMenu>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <SidebarMenuButton
+                data-testid="space-switcher-create-trigger"
+                onClick={onCreate}
+              >
+                <Plus />
+                <span>{t("createFirstSpace")}</span>
+              </SidebarMenuButton>
+            )}
+          </SidebarMenuItem>
+          {spaces.length > 0 && (
+            <SidebarMenuItem>
+              <SidebarMenuButton onClick={onCreate}>
+                <Plus />
+                <span>{t("newSpace")}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 }
 

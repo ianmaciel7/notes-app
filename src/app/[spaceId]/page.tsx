@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { RequireAuth } from "@/components/notes-app/require-auth";
-import { SpaceSidebar } from "@/components/notes-app/space-sidebar";
+import { SpaceShell } from "@/components/notes-app/space-shell";
 
 export default async function SpacePage({ params }: PageProps<"/[spaceId]">) {
   const { spaceId } = await params;
@@ -9,7 +9,7 @@ export default async function SpacePage({ params }: PageProps<"/[spaceId]">) {
 
   return (
     <RequireAuth redirectTo={`/login?next=${encodeURIComponent(nextPath)}`}>
-      <SpaceSidebar currentSpaceId={spaceId}>
+      <SpaceShell currentSpaceId={spaceId}>
         <div className="flex flex-1 flex-col bg-background font-sans">
           <main className="flex flex-1 flex-col items-center justify-center p-8 text-center">
             <div className="flex flex-col items-center gap-2">
@@ -22,7 +22,7 @@ export default async function SpacePage({ params }: PageProps<"/[spaceId]">) {
             </div>
           </main>
         </div>
-      </SpaceSidebar>
+      </SpaceShell>
     </RequireAuth>
   );
 }

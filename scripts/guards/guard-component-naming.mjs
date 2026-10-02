@@ -41,6 +41,7 @@ const SHADCN_SUFFIXES = new Set([
   "header",
   "footer",
   "sidebar",
+  "shell",
   "drawer",
   "popover",
   "tooltip",

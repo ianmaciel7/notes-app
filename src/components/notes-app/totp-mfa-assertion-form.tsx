@@ -54,7 +54,7 @@ function TotpMfaAssertionForm({
   };
 
   return (
-    <div {...props} className={cn(className)}>
+    <FieldGroup {...props} className={cn(className)}>
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -71,7 +71,7 @@ function TotpMfaAssertionForm({
           </FieldGroup>
         </form>
       </FormProvider>
-    </div>
+    </FieldGroup>
   );
 }
 

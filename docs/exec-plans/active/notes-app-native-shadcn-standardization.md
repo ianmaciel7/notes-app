@@ -16,7 +16,7 @@ primitive's own variants. Behavior, test ids, Firebase UI hooks, and i18n stay u
 - In: `src/components/notes-app/*.tsx` (and their tests), plus new keys in
   `src/messages/{en,es,pt-BR}.json` when a string becomes translatable.
 - Out: `src/components/firebase/` (immutable vendor drop, ADR 0008), `src/components/ui/`,
-  the duplicated `ICON_MAP` between `space-sidebar.tsx` and `create-space-form.tsx`, extracting an
+  the duplicated `ICON_MAP` between `space-switcher.tsx` and `create-space-form.tsx`, extracting an
   OTP wrapper (rename-only wrappers are discouraged by `CONVENTIONS.md` section 3),
   `connection-alert.tsx`, `theme-provider.tsx`, `auth-provider.tsx`, and a searchable Combobox for
   `country-select.tsx` (changes UX).
@@ -48,13 +48,13 @@ Wave 1 (parallel):
 - [x] T5 Small components: `google-sign-in-button`, `auth-policies-card`, `auth-greeting-header`,
   `redirect-error-alert`, `require-auth`, `require-guest`, `language-select`
 
-Wave 2 (serial, `space-sidebar.tsx`, `space-sidebar.test.tsx` green after each):
+Wave 2 (serial, `space-shell.tsx`, `space-shell.test.tsx` green after each):
 
-- [ ] T6 Header: search to `InputGroup`, "New space" in a `SidebarGroup`, `Empty` for no results,
+- [x] T6 Header: search to `InputGroup`, "New space" in a `SidebarGroup`, `Empty` for no results,
   remove the wrapper div duplicated over `SidebarProvider`
-- [ ] T7 Menus: items inside `DropdownMenuGroup`, sign-out as `DropdownMenuItem`, identity block
+- [x] T7 Menus: items inside `DropdownMenuGroup`, sign-out as `DropdownMenuItem`, identity block
   without raw div/span, `cn()` instead of template literals and override piles
-- [ ] T8 Footer and states: `SidebarMenuItem` + `SidebarMenuButton tooltip`, `SidebarMenuSkeleton`
+- [x] T8 Footer and states: `SidebarMenuItem` + `SidebarMenuButton tooltip`, `SidebarMenuSkeleton`
   for loading, re-evaluate the fixed offline badge against `ConnectionAlert`
 
 Wave 3 (parallel):
@@ -75,7 +75,9 @@ Wave 3 (parallel):
   and `totp-mfa-enrollment-form` used the missing translation key `auth.totpSecret` (added to
   en, es, pt-BR). `check:i18n` only catches hardcoded text, not missing keys, so every later
   job must list the translation keys it uses and the lead verifies them in all locales.
-  Next: wave 2 (`space-sidebar.tsx`, serial).
+  Wave 2 completed by replacing the app-specific sidebar wrapper with `SpaceShell`, which
+  composes the native `SidebarProvider`, `Sidebar`, `SidebarHeader`, `SidebarFooter`, and
+  `SidebarInset` directly.
 
 ## Decision Log
 

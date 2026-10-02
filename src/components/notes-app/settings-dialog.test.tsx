@@ -2,7 +2,13 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import messages from "@/messages/en.json";
-import { SettingsDialog } from "./settings-dialog";
+import {
+  SettingsDialog,
+  SettingsDialogContent,
+  SettingsDialogFields,
+  SettingsDialogFooter,
+  SettingsDialogHeader,
+} from "./settings-dialog";
 
 const mockSetTheme = vi.fn();
 let mockResolvedTheme = "light";
@@ -19,7 +25,13 @@ vi.mock("next/navigation", () => ({
 function renderDialog(open = true, onOpenChange = vi.fn()) {
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <SettingsDialog open={open} onOpenChange={onOpenChange} />
+      <SettingsDialog open={open} onOpenChange={onOpenChange}>
+        <SettingsDialogContent>
+          <SettingsDialogHeader />
+          <SettingsDialogFields />
+          <SettingsDialogFooter onDone={() => onOpenChange(false)} />
+        </SettingsDialogContent>
+      </SettingsDialog>
     </NextIntlClientProvider>,
   );
   return onOpenChange;

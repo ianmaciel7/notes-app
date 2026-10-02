@@ -75,3 +75,102 @@ test("enforces form anatomy", () => {
     violations.some((item) => item.rule === "notes-app-composition-anatomy"),
   );
 });
+
+test("enforces explicit status composition", () => {
+  const violations = checkFile(
+    "spaces-status.tsx",
+    `import { Empty } from "@/components/ui/empty"; function SpacesStatus() { return <Empty />; }`,
+  );
+
+  assert.ok(
+    violations.some((item) => item.rule === "notes-app-status-composition"),
+  );
+});
+
+test("enforces dialog composition through children", () => {
+  const violations = checkFile(
+    "example-dialog.tsx",
+    `import { Dialog } from "@/components/ui/dialog"; function ExampleDialog() { return <Dialog />; }`,
+  );
+
+  assert.ok(
+    violations.some((item) => item.rule === "notes-app-dialog-composition"),
+  );
+});
+
+test("rejects empty layout primitives", () => {
+  const violations = checkFile(
+    "example-sidebar.tsx",
+    `import { Sidebar, SidebarHeader, SidebarFooter, SidebarContent } from "@/components/ui/sidebar"; function ExampleSidebar() { return <Sidebar><SidebarHeader /><SidebarContent /><SidebarFooter /></Sidebar>; }`,
+  );
+
+  assert.ok(
+    violations.some((item) => item.rule === "notes-app-empty-composition-part"),
+  );
+
+  const emptyWithProps = checkFile(
+    "example-sidebar.tsx",
+    `import { Sidebar, SidebarHeader, SidebarFooter, SidebarContent } from "@/components/ui/sidebar"; function ExampleSidebar() { return <Sidebar><SidebarHeader /><SidebarContent className="grow" /><SidebarFooter /></Sidebar>; }`,
+  );
+
+  assert.ok(
+    emptyWithProps.some(
+      (item) => item.rule === "notes-app-empty-composition-part",
+    ),
+  );
+});
+
+test("enforces internal sidebar anatomy", () => {
+  const violations = checkFile(
+    "space-switcher.tsx",
+    `import { SidebarMenu } from "@/components/ui/sidebar"; function SpaceSwitcher() { return <SidebarMenu />; }`,
+  );
+
+  assert.ok(
+    violations.some((item) => item.rule === "notes-app-component-anatomy"),
+  );
+});
+
+test("does not count imports as composed sidebar anatomy", () => {
+  const violations = checkFile(
+    "space-shell.tsx",
+    `import { SidebarProvider, SidebarHeader, SidebarFooter, SidebarInset } from "@/components/ui/sidebar"; function SpaceShell() { return <SidebarProvider><Sidebar /></SidebarProvider>; }`,
+  );
+
+  assert.ok(
+    violations.some((item) => item.rule === "notes-app-component-anatomy"),
+  );
+});
+
+test("enforces the SpaceShell wrapper contract", () => {
+  const violations = checkFile(
+    "space-shell.tsx",
+    `import { SidebarProvider } from "@/components/ui/sidebar"; type Props = { children?: ReactNode }; function SpaceShell({ children }: Props) { return <SidebarProvider><Sidebar /></SidebarProvider>; }`,
+  );
+
+  assert.ok(
+    violations.some((item) => item.rule === "notes-app-space-shell-contract"),
+  );
+});
+
+test("enforces the SpaceShell composition", () => {
+  const violations = checkFile(
+    "space-shell.tsx",
+    `import { Sidebar } from "@/components/ui/sidebar"; function SpaceShell() { return <Sidebar />; }`,
+  );
+
+  assert.ok(
+    violations.some((item) => item.rule === "notes-app-component-anatomy"),
+  );
+});
+
+test("rejects raw forwarded layout wrappers", () => {
+  const violations = checkFile(
+    "example-form.tsx",
+    `import { FieldGroup } from "@/components/ui/field"; function ExampleForm({ ...props }) { return <div {...props} className={cn(className)} />; }`,
+  );
+
+  assert.ok(
+    violations.some((item) => item.rule === "notes-app-no-raw-layout-wrapper"),
+  );
+});
