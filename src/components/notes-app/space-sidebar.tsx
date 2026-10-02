@@ -14,6 +14,7 @@ import {
   RefreshCw,
   Search,
   Settings,
+  UserRound,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -567,72 +568,82 @@ function SpaceSidebar({
          */}
         <SidebarContent />
         <SidebarFooter>
-          <SidebarMenu aria-label={t("openUserMenu")}>
-            <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  render={
-                    <SidebarMenuButton aria-label={t("openUserMenu")}>
-                      <UserAvatar
-                        displayName={userIdentifier}
-                        photoUrl={user.photoURL}
-                      />
-                      <span className="min-w-0 truncate">{userIdentifier}</span>
-                      <ChevronsUpDown className="ml-auto" />
-                    </SidebarMenuButton>
-                  }
-                />
-                <DropdownMenuContent
-                  side="top"
-                  align="start"
-                  sideOffset={6}
-                  className={cn(SIDEBAR_MENU_POPUP, "p-2")}
-                >
-                  <DropdownMenuGroup>
-                    <DropdownMenuLabel className="p-0">
-                      <Item size="xs">
-                        <ItemMedia>
-                          <UserAvatar
-                            displayName={userIdentifier}
-                            photoUrl={user.photoURL}
-                          />
-                        </ItemMedia>
-                        <ItemContent>
-                          <ItemTitle>{userName}</ItemTitle>
-                          {user.email && (
-                            <ItemDescription>{user.email}</ItemDescription>
-                          )}
-                        </ItemContent>
-                      </Item>
-                    </DropdownMenuLabel>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator className="mx-0" />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={() => signOutUser()}>
-                      <LogOut />
-                      {authT("signOut")}
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => setSettingsDialogOpen(true)}>
-                <Settings />
-                <span>{settingsT("settings")}</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                onClick={() =>
-                  setTheme(resolvedTheme === "dark" ? "light" : "dark")
-                }
-              >
-                <Moon />
-                <span>{settingsT("darkMode")}</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          <div className="flex items-center gap-1 pr-1.5">
+            <SidebarMenu
+              aria-label={t("openUserMenu")}
+              className="min-w-0 flex-1"
+            >
+              <SidebarMenuItem>
+                <DropdownMenu>
+                  <DropdownMenuTrigger
+                    render={
+                      <SidebarMenuButton aria-label={t("openUserMenu")}>
+                        <UserRound />
+                        <span className="min-w-0 truncate text-[13px] text-foreground">
+                          {userIdentifier}
+                        </span>
+                        <span className="ml-auto -mr-0.5 flex size-6 shrink-0 items-center justify-center">
+                          <ChevronsUpDown className="size-4 text-muted-foreground" />
+                        </span>
+                      </SidebarMenuButton>
+                    }
+                  />
+                  <DropdownMenuContent
+                    side="top"
+                    align="start"
+                    sideOffset={6}
+                    className={cn(SIDEBAR_MENU_POPUP, "p-2")}
+                  >
+                    <DropdownMenuGroup>
+                      <DropdownMenuLabel className="p-0">
+                        <Item size="xs">
+                          <ItemMedia>
+                            <UserAvatar
+                              displayName={userIdentifier}
+                              photoUrl={user.photoURL}
+                            />
+                          </ItemMedia>
+                          <ItemContent>
+                            <ItemTitle>{userName}</ItemTitle>
+                            {user.email && (
+                              <ItemDescription>{user.email}</ItemDescription>
+                            )}
+                          </ItemContent>
+                        </Item>
+                      </DropdownMenuLabel>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator className="mx-0" />
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem onClick={() => signOutUser()}>
+                        <LogOut />
+                        {authT("signOut")}
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </SidebarMenuItem>
+            </SidebarMenu>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-6 shrink-0"
+              onClick={() => setSettingsDialogOpen(true)}
+              aria-label={settingsT("settings")}
+            >
+              <Settings />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-6 shrink-0"
+              onClick={() =>
+                setTheme(resolvedTheme === "dark" ? "light" : "dark")
+              }
+              aria-label={settingsT("darkMode")}
+            >
+              <Moon />
+            </Button>
+          </div>
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
