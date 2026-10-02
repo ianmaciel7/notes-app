@@ -1,20 +1,18 @@
 import { cleanup, render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SettingsDialog } from "@/components/notes-app/settings-dialog";
-import {
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import messages from "@/messages/en.json";
+
+vi.mock("@/components/notes-app/settings-form", () => ({
+  SettingsForm: () => <div data-testid="settings-form" />,
+}));
 
 function renderDialog(open = true, onOpenChange = vi.fn()) {
   render(
-    <SettingsDialog open={open} onOpenChange={onOpenChange}>
-      <DialogHeader>
-        <DialogTitle>Settings</DialogTitle>
-        <DialogDescription>Preferences</DialogDescription>
-      </DialogHeader>
-    </SettingsDialog>,
+    <NextIntlClientProvider locale="en" messages={messages}>
+      <SettingsDialog open={open} onOpenChange={onOpenChange} />
+    </NextIntlClientProvider>,
   );
 
   return onOpenChange;
@@ -32,11 +30,11 @@ describe("SettingsDialog", () => {
     expect(screen.queryByTestId("settings-dialog")).toBeNull();
   });
 
-  it("renders caller-provided children while open", () => {
+  it("renders the settings surface while open", () => {
     renderDialog();
 
     expect(screen.getByTestId("settings-dialog")).toBeDefined();
-    expect(screen.getByRole("heading", { name: "Settings" })).toBeDefined();
-    expect(screen.getByText("Preferences")).toBeDefined();
+    expect(screen.getByTestId("settings-form")).toBeDefined();
+    expect(screen.getByRole("dialog")).toBeDefined();
   });
 });
