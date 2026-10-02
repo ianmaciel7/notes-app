@@ -36,7 +36,12 @@ export const CountrySelector = forwardRef<CountrySelectorRef, CountrySelectorPro
   );
 
   return (
-    <Select value={selected.code} onValueChange={setCountry}>
+    <Select
+      value={selected.code}
+      onValueChange={(code) => {
+        if (code) setCountry(code);
+      }}
+    >
       <SelectTrigger className="w-[120px]">
         <SelectValue>
           {selected.emoji} {selected.dialCode}

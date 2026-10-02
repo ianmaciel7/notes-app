@@ -38,7 +38,7 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
   async function onSubmit(values: SignUpAuthFormSchema) {
     try {
       const credential = await action(values);
-      props.onSignUp?.(credential);
+      if (credential) props.onSignUp?.(credential);
     } catch (error) {
       const message = error instanceof FirebaseUIError ? error.message : String(error);
       form.setError("root", { message });

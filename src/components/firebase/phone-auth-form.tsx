@@ -51,7 +51,7 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
   async function onSubmit(values: PhoneAuthVerifyFormSchema) {
     try {
       const credential = await action(values);
-      props.onSuccess(credential);
+      if (credential) props.onSuccess(credential);
     } catch (error) {
       const message = error instanceof FirebaseUIError ? error.message : String(error);
       form.setError("root", { message });
