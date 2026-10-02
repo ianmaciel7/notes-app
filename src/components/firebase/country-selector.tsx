@@ -1,45 +1,54 @@
 "use client";
 
-import { forwardRef, useCallback, useImperativeHandle, useState } from "react";
 import type { CountryCode, CountryData } from "@firebase-oss/ui-core";
 import {
-  type CountrySelectorRef,
   type CountrySelectorProps,
+  type CountrySelectorRef,
   useCountries,
   useDefaultCountry,
 } from "@firebase-oss/ui-react";
+import { useImperativeHandle, useState, type Ref } from "react";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export type { CountrySelectorRef };
+type CountrySelectorComponentProps = CountrySelectorProps & {
+  ref?: Ref<CountrySelectorRef>;
+};
 
-export const CountrySelector = forwardRef<CountrySelectorRef, CountrySelectorProps>((_props, ref) => {
+function findCountry(countries: CountryData[], code: CountryCode) {
+  return countries.find((country) => country.code === code);
+}
+
+function CountrySelector({ ref }: CountrySelectorComponentProps) {
   const countries = useCountries();
   const defaultCountry = useDefaultCountry();
   const [selected, setSelected] = useState<CountryData>(defaultCountry);
-
-  const setCountry = useCallback(
-    (code: CountryCode) => {
-      const foundCountry = countries.find((country) => country.code === code);
-      setSelected(foundCountry!);
-    },
-    [countries]
-  );
 
   useImperativeHandle(
     ref,
     () => ({
       getCountry: () => selected,
-      setCountry,
+      setCountry: (code) => {
+        const country = findCountry(countries, code);
+        if (country) setSelected(country);
+      },
     }),
-    [selected, setCountry]
+    [countries, selected],
   );
 
   return (
     <Select
       value={selected.code}
       onValueChange={(code) => {
-        if (code) setCountry(code);
+        if (!code) return;
+        const country = findCountry(countries, code);
+        if (country) setSelected(country);
       }}
     >
       <SelectTrigger className="w-[120px]">
@@ -56,6 +65,6 @@ export const CountrySelector = forwardRef<CountrySelectorRef, CountrySelectorPro
       </SelectContent>
     </Select>
   );
-});
+}
 
-CountrySelector.displayName = "CountrySelector";
+export { CountrySelector, type CountrySelectorRef };

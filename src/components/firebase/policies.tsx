@@ -1,50 +1,77 @@
-import { cn } from "@/lib/utils";
 import { getTranslation } from "@firebase-oss/ui-core";
-import { useUI, PolicyContext } from "@firebase-oss/ui-react";
-import { cloneElement, useContext } from "react";
+import { PolicyContext, useUI } from "@firebase-oss/ui-react";
+import { use, type ReactNode } from "react";
 
-export function Policies() {
-  const ui = useUI();
-  const policies = useContext(PolicyContext);
+type PolicyActionProps = {
+  children: ReactNode;
+  href: string;
+  onNavigate?: (url: string) => void;
+};
 
-  if (!policies) {
-    return null;
+function PolicyAction({ children, href, onNavigate }: PolicyActionProps) {
+  const className = "font-semibold hover:underline";
+
+  if (onNavigate) {
+    return (
+      <button
+        type="button"
+        className={className}
+        onClick={() => onNavigate(href)}
+      >
+        {children}
+      </button>
+    );
   }
 
-  const { termsOfServiceUrl, privacyPolicyUrl, onNavigate } = policies;
-  const termsAndPrivacyText = getTranslation(ui, "messages", "termsAndPrivacy");
-  const parts = termsAndPrivacyText.split(/(\{tos\}|\{privacy\})/);
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+      {children}
+    </a>
+  );
+}
 
-  const className = cn("hover:underline font-semibold");
-  const Handler = onNavigate ? (
-    <button className={className} />
-  ) : (
-    <a target="_blank" rel="noopener noreferrer" className={className} />
+function Policies() {
+  const ui = useUI();
+  const policies = use(PolicyContext);
+
+  if (!policies) return null;
+
+  const { termsOfServiceUrl, privacyPolicyUrl, onNavigate } = policies;
+  const parts = getTranslation(ui, "messages", "termsAndPrivacy").split(
+    /(\{tos\}|\{privacy\})/,
   );
 
   return (
-    <div className="text-text-muted text-center text-xs">
-      {parts.map((part: string, index: number) => {
+    <div className="text-center text-xs text-muted-foreground">
+      {parts.map((part) => {
         if (part === "{tos}") {
-          return cloneElement(Handler, {
-            key: index,
-            onClick: onNavigate ? () => onNavigate(termsOfServiceUrl) : undefined,
-            href: onNavigate ? undefined : termsOfServiceUrl,
-            children: getTranslation(ui, "labels", "termsOfService"),
-          });
+          return (
+            <PolicyAction
+              key="terms-of-service"
+              href={termsOfServiceUrl}
+              onNavigate={onNavigate}
+            >
+              {getTranslation(ui, "labels", "termsOfService")}
+            </PolicyAction>
+          );
         }
 
         if (part === "{privacy}") {
-          return cloneElement(Handler, {
-            key: index,
-            onClick: onNavigate ? () => onNavigate(privacyPolicyUrl) : undefined,
-            href: onNavigate ? undefined : privacyPolicyUrl,
-            children: getTranslation(ui, "labels", "privacyPolicy"),
-          });
+          return (
+            <PolicyAction
+              key="privacy-policy"
+              href={privacyPolicyUrl}
+              onNavigate={onNavigate}
+            >
+              {getTranslation(ui, "labels", "privacyPolicy")}
+            </PolicyAction>
+          );
         }
 
-        return <span key={index}>{part}</span>;
+        return part;
       })}
     </div>
   );
 }
+
+export { Policies };

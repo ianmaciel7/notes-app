@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { TotpMultiFactorGenerator, type TotpSecret } from "firebase/auth";
 import {
@@ -105,7 +106,14 @@ export function MultiFactorEnrollmentVerifyTotpForm(props: MultiFactorEnrollment
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-y-4 items-center justify-center">
-        <img src={qrCodeDataUrl} alt="TOTP QR Code" className="mx-auto" />
+        <Image
+          src={qrCodeDataUrl}
+          alt={getTranslation(ui, "prompts", "mfaTotpQrCodePrompt")}
+          width={200}
+          height={200}
+          unoptimized
+          className="mx-auto"
+        />
         <code className="text-xs text-muted-foreground text-center">{props.secret.secretKey.toString()}</code>
         <p className="text-xs text-muted-foreground text-center">
           {getTranslation(ui, "prompts", "mfaTotpQrCodePrompt")}

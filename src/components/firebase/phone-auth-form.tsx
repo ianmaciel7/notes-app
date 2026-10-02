@@ -119,8 +119,14 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
 
   async function onSubmit(values: PhoneAuthNumberFormSchema) {
     try {
-      const formatted = formatPhoneNumber(values.phoneNumber, countrySelector.current!.getCountry());
-      const verificationId = await action({ phoneNumber: formatted, recaptchaVerifier: recaptchaVerifier! });
+      const country = countrySelector.current?.getCountry();
+      if (!country || !recaptchaVerifier) return;
+
+      const formatted = formatPhoneNumber(values.phoneNumber, country);
+      const verificationId = await action({
+        phoneNumber: formatted,
+        recaptchaVerifier,
+      });
       props.onSubmit(verificationId);
     } catch (error) {
       const message = error instanceof FirebaseUIError ? error.message : String(error);

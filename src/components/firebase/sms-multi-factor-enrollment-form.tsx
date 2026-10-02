@@ -46,9 +46,18 @@ function MultiFactorEnrollmentPhoneNumberForm(props: MultiFactorEnrollmentPhoneN
 
   const onSubmit = async (values: { displayName: string; phoneNumber: string }) => {
     try {
-      const formatted = formatPhoneNumber(values.phoneNumber, countrySelector.current!.getCountry());
-      const mfaUser = multiFactor(ui.auth.currentUser!);
-      const confirmationResult = await verifyPhoneNumber(ui, formatted, recaptchaVerifier!, mfaUser);
+      const country = countrySelector.current?.getCountry();
+      const currentUser = ui.auth.currentUser;
+      if (!country || !currentUser || !recaptchaVerifier) return;
+
+      const formatted = formatPhoneNumber(values.phoneNumber, country);
+      const mfaUser = multiFactor(currentUser);
+      const confirmationResult = await verifyPhoneNumber(
+        ui,
+        formatted,
+        recaptchaVerifier,
+        mfaUser,
+      );
       props.onSubmit(confirmationResult, values.displayName);
     } catch (error) {
       const message = error instanceof FirebaseUIError ? error.message : String(error);
