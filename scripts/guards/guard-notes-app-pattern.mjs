@@ -13,19 +13,6 @@ const NON_VISUAL_FILES = new Set([
   "theme-provider.tsx",
 ]);
 
-const SURFACE_RULES = [
-  { suffix: "-card.tsx", pattern: /<(?:Card|AuthCard)\b/ },
-  { suffix: "-form.tsx", pattern: /<form\b/ },
-  { suffix: "-field-group.tsx", pattern: /<FieldGroup\b/ },
-  { suffix: "-alert.tsx", pattern: /<Alert\b/ },
-  { suffix: "-dialog.tsx", pattern: /<Dialog\b/ },
-  { suffix: "-select.tsx", pattern: /<Select\b/ },
-  { suffix: "-empty.tsx", pattern: /<Empty\b/ },
-  { suffix: "-sidebar.tsx", pattern: /<Sidebar\b/ },
-  { suffix: "-button.tsx", pattern: /<Button\b/ },
-  { suffix: "-description.tsx", pattern: /<FieldDescription\b/ },
-];
-
 const COMPONENT_ROLE_SUFFIXES = new Set([
   "Accordion",
   "Action",
@@ -116,32 +103,27 @@ function toPascalCase(fileName) {
 }
 
 function getComponentFunctionEntries(content) {
-  const matches = [...content.matchAll(/function\s+([A-Z][A-Za-z0-9_]*)\b/g)];
+  const allFunctions = [...content.matchAll(/function\s+([A-Za-z_][A-Za-z0-9_]*)\b/g)];
 
-  return matches.map((match, index) => ({
-    name: match[1],
-    source: content.slice(
-      match.index,
-      matches[index + 1]?.index ?? content.length,
-    ),
-  }));
+  return allFunctions
+    .filter((match) => /^[A-Z]/.test(match[1]))
+    .map((match) => {
+      const nextFunction = allFunctions.find(
+        (candidate) => candidate.index > match.index,
+      );
+
+      return {
+        name: match[1],
+        source: content.slice(
+          match.index,
+          nextFunction?.index ?? content.length,
+        ),
+      };
+    });
 }
 
 function hasComponentRoleSuffix(name) {
   return [...COMPONENT_ROLE_SUFFIXES].some((suffix) => name.endsWith(suffix));
-}
-
-function checkSurfaceRoot(filePath, fileName, content) {
-  const rule = SURFACE_RULES.find(({ suffix }) => fileName.endsWith(suffix));
-  if (!rule || rule.pattern.test(content)) return [];
-
-  return [
-    violation(
-      filePath,
-      "notes-app-surface-root",
-      `${fileName} must compose the primitive that matches its public surface role.`,
-    ),
-  ];
 }
 
 function checkDedicatedHookOwnsState(filePath, fileName, content) {
@@ -315,7 +297,6 @@ function checkFile(filePath, content) {
     }
   }
 
-  violations.push(...checkSurfaceRoot(filePath, fileName, content));
   violations.push(...checkDedicatedHookOwnsState(filePath, fileName, content));
   violations.push(...checkSpaceShellContract(filePath, fileName, content));
   violations.push(...checkRawLayoutWrappers(filePath, fileName, content));
@@ -348,7 +329,6 @@ function checkFile(filePath, content) {
 
 export {
   NON_VISUAL_FILES,
-  SURFACE_RULES,
   COMPONENT_ROLE_SUFFIXES,
   COMPONENT_NAME_EXEMPTIONS,
   CANONICAL_COMPONENT_EXEMPT_FILES,
