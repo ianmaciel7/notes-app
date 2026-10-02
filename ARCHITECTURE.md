@@ -217,3 +217,4 @@ architectural choices rather than duplicating version pins.
 - [`docs/adr/0013-adopt-native-firebase-firestore-with-persistent-local-cache.md`](./docs/adr/0013-adopt-native-firebase-firestore-with-persistent-local-cache.md)
 - [`docs/adr/0014-certification-exam-and-study-simulator-domain-model.md`](./docs/adr/0014-certification-exam-and-study-simulator-domain-model.md)
 - [`docs/adr/0015-adopt-sidebar-space-navigation.md`](./docs/adr/0015-adopt-sidebar-space-navigation.md)
+- [`docs/adr/0016-prefer-simple-domain-components-and-dedicated-hooks.md`](./docs/adr/0016-prefer-simple-domain-components-and-dedicated-hooks.md)

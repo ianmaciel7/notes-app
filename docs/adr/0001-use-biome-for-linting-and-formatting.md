@@ -24,9 +24,10 @@ We chose Biome (`biome check`) as our single toolchain for linting, formatting, 
 
 ## Architectural Rules and Invariants
 
-- All source files and configuration must adhere to `biome.json` rules.
-- Pre-commit checks and CI workflows must execute `biome check` to enforce formatting and linting standards.
-- ESLint and Prettier configurations must not be added to the repository.
+- Biome is the single formatter, linter, and import organizer for project-owned source, scripts, evals, and supported configuration targets.
+- `src/components/ui/` is registry-managed shadcn code and is intentionally excluded from the project-wide Biome gate; application/domain code must not use that exclusion as a general escape hatch.
+- Pre-commit uses staged Biome checks, pre-push uses the changed-file Biome gate, and task-end/CI verification uses the full configured Biome target set.
+- ESLint and Prettier configurations must not be added as parallel sources of truth.
 
 ## Related References and Control Documents
 

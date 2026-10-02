@@ -3,7 +3,7 @@
 **Status:** Active  
 **Owner:** Claude Code (lead), implementation delegated to Codex jobs  
 **Started:** 2026-10-01  
-**Last Updated:** 2026-10-01
+**Last Updated:** 2026-10-02
 
 ## Objective
 
@@ -26,7 +26,7 @@ primitive's own variants. Behavior, test ids, Firebase UI hooks, and i18n stay u
 - Product intent: `INTENT.md`
 - Product requirement IDs: none; this is a code-quality refactor with no product change.
 - Architecture / ADRs: `ARCHITECTURE.md` section 2, ADR 0008 and 0010 (Firebase UI), ADR 0015
-  (sidebar navigation).
+  (sidebar navigation), and ADR 0016 (simple application composition and dedicated hooks).
 - Constraints / security / testing: `CONVENTIONS.md` sections 2-6 (role suffixes, canonical
   `${ComponentName}Props`, shadcn / Base UI, Field vs Form, i18n), `DESIGN.md` "Sidebar
   Navigation", `TESTING.md`, `CONSTRAINTS.md` (no deleted or weakened tests).
@@ -92,11 +92,22 @@ Wave 3 (parallel):
   jobs are told that repo-wide check failures from other jobs' files are reported, not fixed.
 - 2026-10-01 — Keep `country-select` a `Select` with the Base UI `items` prop; a Combobox is a UX
   change and stays out of scope.
+- 2026-10-02 — Simplify application composition: domain components no longer mirror every shadcn
+  compound part or rename themselves to the implementation root primitive. `SettingsForm` may
+  use `FieldGroup`; simple dialogs own their cohesive content; Base UI `render` composes
+  behavior-bearing parts such as close actions.
+- 2026-10-02 — When a component has a dedicated same-family hook (for example `SpaceShell` +
+  `useSpaceShell`), that hook owns the component's stateful React behavior and semantic handlers.
+  The rendering component consumes returned values/actions and stays declarative.
+- 2026-10-02 — Local quality gates now cover project-owned source broadly while keeping
+  `src/components/ui/` registry-managed. Biome remains the single formatter/linter, and
+  `check:ui-pattern` owns the remaining notes-app-specific composition invariants.
 
 ## Verification
 
-- [ ] Per job: `rtk pnpm check:types`, `check:lint`, `check:naming`, `check:props`, `check:i18n`,
-  `deps:check`, and `rtk pnpm exec vitest run <affected files>`
+- [ ] Per job: `rtk pnpm check:types`, `check:lint`, `check:naming`, `check:props`,
+  `check:ui-pattern`, `check:i18n`, `deps:check`, and
+  `rtk pnpm exec vitest run <affected files>`
 - [ ] Per wave (lead): `rtk pnpm check:fast`
 - [ ] Behavioral/runtime verification: `rtk pnpm build` and before/after screenshots of login,
   sign-up, forgot-password, MFA, the sidebar (search and user menu), and the create-space dialog
