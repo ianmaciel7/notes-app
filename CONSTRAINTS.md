@@ -20,13 +20,14 @@ not be weakened merely to make a change pass.
 | Dimension | Rule | Checked by | Runs at |
 | --- | --- | --- | --- |
 | Types | Zero type errors | `pnpm run check:types` | task end |
-| Lint | Zero Biome CI errors and warnings across project-owned application, script, eval, and configuration targets | `pnpm run check:lint` | task end |
+| Lint | Zero Biome CI errors and warnings across project-owned application, script, eval, and configuration targets; registry-managed `src/components/ui/` is excluded by `biome.json` | `pnpm run check:lint` | task end |
 | Conventions | Zero mechanical `CONVENTIONS.md` rule violations and a consistent Enforcement Index | `pnpm run check:conventions` | task end |
 | Architecture | Zero dependency-cruiser violations | `pnpm run deps:check` | task end |
 | RSC Boundaries | Zero server component boundary findings | `pnpm run check:rsc` | task end |
 | Component Props | Zero invalid component prop interface findings | `pnpm run check:props` | task end |
 | Component Naming | Zero application component files without an allowed role suffix | `pnpm run check:naming` | task end |
-| Emojis | Zero emoji literals anywhere under `src/` | `pnpm run check:emojis` | task end |
+| UI Composition | Zero notes-app composition and dedicated-hook ownership findings | `pnpm run check:ui-pattern` | task end |
+| Emojis | Zero emoji literals in project-owned source under `src/`; registry-managed `src/components/ui/` is excluded | `pnpm run check:emojis` | task end |
 | i18n Strings | Zero hardcoded user-facing strings or forbidden copy in UI components | `pnpm run check:i18n` | task end |
 | Duplication | At most 10% by configured jscpd threshold | `pnpm run check:duplication` | task end |
 | Dependency audit | No high/critical package-manager advisories | `pnpm run check:security` | dependency/security review |

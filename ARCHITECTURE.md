@@ -20,7 +20,7 @@ environment. The implemented product-domain schema is intentionally narrow: user
 - `src/app/`: routing, root layout, application entry surfaces, and global styles.
 - `src/components/`: reusable application-level components and providers.
 - `src/components/ui/`: generic shadcn/Base UI primitives; no notes-domain behavior. Must only import `@/lib/utils` (or `cn`) from `src/lib/`.
-- `src/hooks/`: reusable, cross-cutting React hooks (device sensors, browser APIs, shared auth state). Must not depend on application routes (`src/app/`). Component-specific hooks coupled to compound context providers (e.g. `useSidebar`, `useToastManager`) remain co-located within their component files.
+- `src/hooks/`: reusable cross-cutting hooks plus dedicated application-behavior hooks when a component has a coherent stateful flow (for example `useSpaceShell`). Hooks must not depend on application routes (`src/app/`). Primitive-family hooks coupled to a shared UI context (for example `useSidebar`) remain co-located with that primitive.
 - `src/lib/`: shared utilities that do not depend on UI components.
 - Firebase integration is concentrated in `src/lib/firebase/`; the first product
   data slice uses `src/hooks/use-spaces.ts`, `src/types/space.ts`, and
@@ -36,6 +36,28 @@ Current dependency direction:
 - shared utilities and DAL modules must not depend on UI or application layers;
 - client UI components and hooks must not import server-side data modules when a
   product-specific DAL is introduced.
+
+### 2.7 Application Component Composition and Behavior Ownership
+
+Application components under `src/components/notes-app/` are intentionally smaller
+than the reusable primitive APIs they consume:
+
+- name application components by product responsibility, not by the implementation
+  primitive used as their root. `SettingsForm` may compose `FieldGroup` internally;
+- default to one cohesive public component rather than mirroring a shadcn compound API
+  with application-specific `Root`/`Content`/`Header` wrappers;
+- use Base UI's native `render` composition when a behavior-bearing primitive must
+  render another component (for example `DialogClose render={<Button />}`);
+- create component-family context only when sibling parts genuinely require shared
+  state. Context is not a wiring mechanism for ordinary application composition;
+- when a dedicated hook named for an application component exists (for example
+  `SpaceShell` + `useSpaceShell`), that hook owns the component's stateful React
+  behavior, effects, navigation, subscriptions, and state-derived handlers. The
+  component consumes semantic state/actions and focuses on rendering.
+
+These rules are recorded in
+[ADR 0016](./docs/adr/0016-prefer-simple-domain-components-and-dedicated-hooks.md)
+and mechanically checked where practical by `check:ui-pattern`.
 
 ### 2.5 Current Firebase data boundary
 
@@ -148,6 +170,7 @@ architectural choices rather than duplicating version pins.
 | Application framework | Next.js App Router | File-based application structure and React server/client model |
 | Language | TypeScript in strict mode | Static type safety |
 | UI primitives | shadcn `base-nova` on Base UI | Accessible composable primitive layer |
+| Application UI composition | Simple domain components + Base UI `render` + dedicated behavior hooks | Avoid duplicate compound APIs and keep stateful behavior outside rendering components ([ADR 0016](./docs/adr/0016-prefer-simple-domain-components-and-dedicated-hooks.md)) |
 | Styling | Tailwind CSS v4 + CSS-variable design tokens | Token-driven styling |
 | Formatting/linting | Biome | Unified formatting and linting |
 | Architecture analysis | dependency-cruiser | Executable dependency-boundary checks |

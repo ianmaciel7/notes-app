@@ -183,6 +183,19 @@ composition, not a source-file inventory.
 Current shared UI families include actions/triggers, navigation/layout, overlays,
 forms/input, data display/feedback, and conversational extensions.
 
+### Application Component Composition
+
+Product components compose the shared shadcn/Base UI primitives without cloning their
+full public anatomy. A component name describes the product responsibility rather than
+the primitive used internally; for example, `SettingsForm` may use `FieldGroup` as
+its visual root. When a behavior-bearing Base UI primitive needs to render another
+component, use its `render` composition API so focus, keyboard, ARIA, and state
+behavior remain owned by the primitive. Application-level compound APIs are introduced
+only when consumers genuinely need independently composable parts.
+
+Visual component structure must remain compatible with the interaction contract in
+[ADR 0016](./docs/adr/0016-prefer-simple-domain-components-and-dedicated-hooks.md).
+
 ### Sidebar Navigation
 
 The active Space route uses the shared, always-visible sidebar shell as its

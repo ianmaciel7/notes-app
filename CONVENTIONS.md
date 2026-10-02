@@ -29,8 +29,8 @@ contributor workflow to `CONTRIBUTING.md`.
   instead of duplicating them manually (enforced by `check:props`).
 - **Component and Subcomponent Role Suffixes (`src/components/notes-app/`)**: Application UI component files must carry an explicit archetype suffix in the filename (`kebab-case`), the canonical exported component must match the file name in `PascalCase`, and every named visual subcomponent must also end in a recognized UI role suffix. Compound parts use roles such as `Content`, `Header`, `Footer`, `Form`, `Group`, `Title`, `Description`, `Action`, `Icon`, `Avatar`, or `Link`; do not use generic names such as `Part`, `Section`, or plural container nouns such as `Fields`. This preserves the same role-oriented anatomy used by `src/components/ui/`:
   - `-card` / `*Card` for screen or container cards (e.g. `login-card.tsx` -> `LoginCard`)
-  - `-form` / `*Form` only when the component owns a real `<form>` submission surface (e.g. `login-form.tsx` -> `LoginForm`)
-  - `-field-group` / `*FieldGroup` when the canonical root surface is `FieldGroup` (e.g. `settings-field-group.tsx` -> `SettingsFieldGroup`)
+  - `-form` / `*Form` for a cohesive form/settings responsibility (e.g. `login-form.tsx` -> `LoginForm`, `settings-form.tsx` -> `SettingsForm`). The implementation may use `FieldGroup` without requiring a filename rename; use a native `<form>` only when the component owns submission semantics.
+  - `-field-group` / `*FieldGroup` only when reusable field grouping itself is the component's public responsibility, not merely because `FieldGroup` is its internal root primitive
   - `-header` / `*Header` for heading and greeting presentation blocks (e.g. `auth-greeting-header.tsx` -> `AuthGreetingHeader`)
   - `-alert` / `*Alert` for notification and error banners (e.g. `redirect-error-alert.tsx` -> `RedirectErrorAlert`)
   - `-button` / `*Button`, `-select` / `*Select`, `-menu` / `*Menu`, `-switcher` / `*Switcher` for interactive UI controls
@@ -38,7 +38,6 @@ contributor workflow to `CONTRIBUTING.md`.
   - `-sidebar` / `*Sidebar` for navigation primitives and parts; domain orchestration belongs in a `-shell` component (e.g. `space-shell.tsx` -> `SpaceShell`)
   - `-provider` / `*Provider` for React context providers
   - `-dialog` / `*Dialog`, `-status` / `*Status`, `-empty` / `*Empty` for standalone overlays and state surfaces split out of a larger component (e.g. `settings-dialog.tsx` -> `SettingsDialog`, `spaces-status.tsx` -> `SpacesStatus`)
-- **Root role symmetry:** The canonical file/component suffix follows the root UI surface. A component rooted in `FieldGroup` is `*FieldGroup`; use `*Form` only when the component owns an actual `<form>` submission surface.
 - **Visual component slots**: Every visual component and named visual subcomponent in `src/components/notes-app/` exposes a `data-slot`. Compound parts use a family-prefixed slot (`settings-dialog-header`, `connection-alert-action`) just like shadcn primitives. Pure providers and conditional orchestration components that do not own a DOM/UI surface remain exempt; never add wrapper markup only to manufacture a slot.
 - **Canonical Props Naming (`${ComponentName}Props`)**: Component prop types must be declared canonically using the component's canonical PascalCase name (e.g. `login-card.tsx` declares and uses `type LoginCardProps = ...`, never `SignInAuthScreenProps` as the primary type). Declare them with `type`, never `interface`, exactly as `src/components/ui/` does. Legacy or library names may only be re-exported as backwards-compatible aliases inside the file's trailing export block (e.g. `type LoginCardProps as SignInAuthScreenProps`). Enforced by `check:props` and `component-no-interface`.
 - **Export shape (`src/components/notes-app/`)**: Application components follow the same file anatomy as `src/components/ui/`. Declare components and hooks as plain `function` declarations without `export`, and publish every value and type through one trailing `export { ... }` block (types with an inline `type` modifier, aliases as `X as Alias`). Do not write `export function`, `export const`, or `export interface`. Enforced by `component-trailing-export-block`.
@@ -48,10 +47,15 @@ contributor workflow to `CONTRIBUTING.md`.
 
 ## 3. Component Composition
 
+This section implements [ADR 0016](./docs/adr/0016-prefer-simple-domain-components-and-dedicated-hooks.md).
+
 - Reuse the nearest existing primitive and variant before creating a wrapper or new
   primitive.
-- Prefer `children`, explicit variants, and compound components over boolean-prop
-  matrices or `renderX` APIs.
+- Prefer simple application components that compose existing shadcn/Base UI parts.
+  Use `children` for variable content, explicit variants for real visual axes, and
+  Base UI's native `render` prop for behavioral element composition. Do not invent
+  parallel compound APIs or custom `renderX` props when the shared primitive already
+  provides the necessary structure.
 - Keep generic primitives free of product/domain behavior.
 - **Keep application components focused.** Keep each `src/components/notes-app/` file focused on one concern; the hard limit is four hundred lines (`max-component-lines`). When a file accumulates a second concern (its own state, translations, or hooks that the rest of the file does not use), move that concern to its own `<name>-<role>.tsx` instead of growing the file. Fix visual tweaks by composing primitives, not by adding wrapper markup and class overrides.
 - Keep public APIs focused; avoid rename-only wrappers and unnecessary DOM nodes.
@@ -59,14 +63,13 @@ contributor workflow to `CONTRIBUTING.md`.
   behavior, ARIA, and primitive state attributes.
 - Use CVA only for meaningful variant axes with typed `VariantProps` and sensible
   defaults.
-- **Use the native compound primitive as the surface.** When a domain area is
-  already represented by a shadcn compound primitive, compose that primitive
-  directly instead of creating a parallel domain wrapper with the same anatomy.
-  Put domain state, navigation, and dialogs in a focused `-shell` orchestrator;
-  keep the primitive's `Provider`, root, header, footer, content, and inset as
-  the actual layout. Header/footer domain components receive `children` when
-  they are composition points, and standalone dialogs remain siblings owned by
-  the shell rather than being nested inside the navigation primitive.
+- **Keep application APIs smaller than primitive APIs.** A domain component may
+  compose a shadcn compound primitive internally without re-exporting every primitive
+  part. Prefer one cohesive component when consumers do not need to rearrange its
+  internals. Expose application-level compound parts only when callers genuinely need
+  independent composition or shared family state. `SpaceShell` keeps the native
+  Sidebar tree visible because that layout is itself a composition boundary; dialogs
+  such as `SettingsDialog` remain simple domain components.
 
 ## 4. shadcn / Base UI
 

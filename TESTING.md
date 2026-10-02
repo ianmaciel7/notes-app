@@ -41,7 +41,7 @@ Agent behavioral evaluations are configured separately under `.agents/evals/`.
 - **Playwright**: end-to-end (E2E) browser testing framework with Next.js webServer lifecycle management ([ADR 0012](./docs/adr/0012-adopt-playwright-for-e2e-testing.md)).
 - **StrykerJS**: mutation testing.
 - **Lighthouse CI**: production-browser audit.
-- **Automated Guards**: custom floor, React Server Component boundary, component-prop, component-naming, conventions, i18n-string, no-emoji, and hook regression guards (`scripts/guards/floor-guard.mjs`, `scripts/guards/guard-rsc-boundaries.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/guards/guard-component-naming.mjs`, `scripts/guards/guard-conventions.mjs`, `scripts/verify/verify-conventions-index.mjs`, `scripts/guards/guard-i18n-strings.mjs`, `scripts/guards/guard-no-emojis.mjs`, `scripts/hooks/hooks.test.mjs`).
+- **Automated Guards**: custom floor, React Server Component boundary, component-prop, component-naming, notes-app composition/state ownership, conventions, i18n-string, no-emoji, and repository hook guards (`scripts/guards/floor-guard.mjs`, `scripts/guards/guard-rsc-boundaries.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/guards/guard-component-naming.mjs`, `scripts/guards/guard-notes-app-pattern.mjs`, `scripts/guards/guard-conventions.mjs`, `scripts/verify/verify-conventions-index.mjs`, `scripts/guards/guard-i18n-strings.mjs`, `scripts/guards/guard-no-emojis.mjs`, `scripts/hooks/hooks.test.mjs`).
 - **Documentation verifier**: `scripts/verify/verify-docs.mjs` runs the control-doc verifiers plus repository-wide markdown checks (links and anchors, referenced paths and `pnpm` commands, path portability, English-only text, `AGENTS.md` size and skill routing, skill frontmatter, and the `docs/` tree rules for ADRs, execution plans, and product specs). Its logic is covered by `scripts/verify/verify-docs.test.mjs`.
 - **Harness eval runner**: provider-neutral Node runner with Codex and Antigravity adapters.
 
@@ -110,6 +110,8 @@ The repository employs a multi-layered testing strategy for Firebase Authenticat
 ## 6. Test Design
 
 - Test observable behavior rather than implementation details.
+- Dedicated application hooks are tested as the owner of state transitions, effects, navigation, and state-derived handlers. Components that consume those hooks should test rendered states and user-visible interactions rather than duplicate the hook's internal state-machine assertions.
+- Base UI `render` composition should be tested through behavior (for example, a rendered `DialogClose` button actually closes the dialog), not by asserting implementation-specific wrapper markup.
 - Keep unit tests deterministic and isolated.
 - Mock `next/navigation` (`useRouter`, `useSearchParams`, `usePathname`) using Vitest spies when verifying client navigation behavior.
 - Add integration tests when multiple application boundaries must be verified
