@@ -202,7 +202,7 @@ describe("AuthProvider and Auth components", () => {
   });
 
   it("RequireAuth renders fallback during loading", () => {
-    render(
+    renderWithIntl(
       <AuthContext
         value={{
           user: null,
@@ -228,7 +228,7 @@ describe("AuthProvider and Auth components", () => {
       email: "tester1@notesapp.dev",
     } as unknown as User;
 
-    render(
+    renderWithIntl(
       <AuthContext
         value={{
           user: mockUser,
