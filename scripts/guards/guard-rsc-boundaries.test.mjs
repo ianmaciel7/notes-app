@@ -10,5 +10,5 @@ test("guard-rsc-boundaries passes on current repository structure", () => {
       encoding: "utf8",
     },
   );
-  assert.match(output, /all App Router boundaries and hygiene checks passed/);
+  assert.match(output, /top-level App Router server boundaries passed/);
 });

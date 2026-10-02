@@ -128,14 +128,16 @@ internal script paths. Numeric thresholds and what blocks a change are owned by
 
 | Aggregate | Runs | Wired to |
 | :--- | :--- | :--- |
-| `check:fast` | types, Biome CI, RSC, naming, props, emojis, i18n, dependency-cruiser, floor guard, Vitest, jscpd | `pre-push` hook |
+| `check:push` | types, Biome on committed changes since `origin/main`, project guards, dependency-cruiser, floor guard, Vitest affected tests | `pre-push` hook |
+| `check:fast` | full types, full Biome CI, RSC, naming, conventions, props, emojis, i18n, dependency-cruiser, floor guard, full Vitest, jscpd | task-end / handoff |
 | `check:ci` | `check:fast`, docs verifier, harness tests, guard tests, Firebase emulator tests, coverage, agents sync check, production build | `Quality` workflow |
 | `harness:health` | `check:ci`, Knip, mutation tests, dependency audit | `Harness Health` workflow |
 | `verify:health` | consolidated health report | on demand |
 
 > [!TIP]
-> Use the smallest relevant subset while iterating (for example `rtk pnpm check:types`
-> or a single guard), then `rtk pnpm check:fast` before handoff.
+> Biome remains the single formatter/linter. Use the smallest relevant subset while
+> iterating, let `pre-commit` validate only staged files, use `check:push` before
+> push, and reserve `check:fast` for task-end or handoff verification.
 
 ---
 
@@ -145,9 +147,9 @@ internal script paths. Numeric thresholds and what blocks a change are owned by
 
 | Hook | Runs | Purpose |
 | :--- | :--- | :--- |
-| `pre-commit` | `lint-staged` (Biome check with write on staged files), then `check:conventions` | Format and lint what is committed and block convention violations early |
+| `pre-commit` | `lint-staged`: Biome check/write, then conventions guard on the same staged files | Keep the commit path incremental and auto-fixable |
 | `commit-msg` | `commitlint` | Enforce Conventional Commits |
-| `pre-push` | `check:fast` | Fast gate before code leaves the machine |
+| `pre-push` | `check:push` | Check committed changes plus affected tests before code leaves the machine |
 
 `post-commit` and `post-checkout` hooks are generated per clone by Graphify (see
 [section 6](#6-automation-boundaries)) and are gitignored.

@@ -241,25 +241,20 @@ changing an installed primitive.
   context provider (e.g., `useSidebar` in `sidebar.tsx`, `useToastManager` in `toast.tsx`)
   or manage private compound state. Declare them as top-level exported functions; never define
   hooks inside a component render body.
-- **Extract stateful application behavior:** When an application component combines
-  authentication, data subscriptions, navigation effects, or multi-step local state,
-  extract that behavior into a top-level co-located hook (for example,
-  `useSpaceSidebar` in `space-sidebar.tsx`) and keep the component focused on
-  composition and presentation. Keep the hook co-located when only that component
-  consumes it; move it to `src/hooks/` only when multiple independent components or
-  routes share the behavior.
+- **Extract stateful application behavior when it clarifies a real concern:** Prefer a
+  top-level co-located hook when authentication, subscriptions, navigation effects, or
+  multi-step state form a coherent behavior that benefits from isolation. Do not
+  extract a custom hook merely because a component contains an arbitrary number of
+  state/effect calls. Keep a hook co-located when only that component family consumes
+  it; move it to `src/hooks/` only when independent components or routes share it.
 - **Shared Standalone Hooks (`src/hooks/`):** Place hooks in `src/hooks/` only when they
   are generic, shared across multiple independent components or routes (e.g., `useIsMobile`,
   `useAuth`), encapsulate reusable browser APIs (media queries, listeners, sensors), or require
   isolated unit testing. Hooks in `src/hooks/` must never depend on application routes (`src/app/`).
 
-- **Stateful Component Extraction:** When a component in `src/components/notes-app/`
-  combines multiple state/effect primitives, asynchronous submission/retry logic, or
-  authentication/data subscriptions with presentation, extract that behavior into a
-  top-level `useX` hook. Keep it co-located when only that component family uses it;
-  move it to `src/hooks/` only when independent components or routes share it. The
-  component should remain focused on composition and presentation. `check:hooks`
-  validates this rule for changed component files.
+- **Stateful Component Extraction:** Treat hook extraction as a design/review decision,
+  not a numeric quality gate. Extract when it produces a meaningful behavioral
+  boundary; keep straightforward local state in the component when that is clearer.
 
 ### Internationalization (i18n) & Localized Strings
 - **No Hardcoded User-Facing Text**: Hardcoding user-facing strings (such as button labels like "Retry Connection", "Sign in", headings, error messages, or placeholders) directly in JSX or UI components is strictly forbidden.

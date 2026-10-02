@@ -11,6 +11,7 @@
     "test:firebase-emulator": "pnpm dlx firebase-tools@15.26.0 emulators:exec --only auth,firestore \"pnpm vitest run src/lib/firebase/auth-emulator.test.ts src/lib/firebase/firestore-emulator.test.ts\"",
     "lint": "biome check",
     "test": "vitest run",
+    "test:changed": "vitest run --changed=origin/main",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
@@ -20,6 +21,7 @@
     "deps:check": "dependency-cruiser --config .dependency-cruiser.cjs src",
     "check:types": "next typegen && tsc --noEmit",
     "check:lint": "biome ci --error-on-warnings src scripts .agents/evals package.json .dependency-cruiser.cjs",
+    "check:changed": "biome ci --error-on-warnings --changed --since=origin/main",
     "check:floor": "node scripts/guards/floor-guard.mjs",
     "check:rsc": "node scripts/guards/guard-rsc-boundaries.mjs",
     "check:props": "node scripts/guards/guard-component-props.mjs",
@@ -28,7 +30,8 @@
     "check:security": "pnpm audit --audit-level high",
     "check:osv": "osv-scanner scan source --config osv-scanner.toml --recursive .",
     "check:agents": "pnpm run .agents:sync && node scripts/tooling/run-agents-cli.mjs sync --check",
-    "check:fast": "pnpm run check:types && pnpm run check:lint && pnpm run check:rsc && pnpm run check:naming && pnpm run check:conventions && pnpm run check:hooks && pnpm run check:props && pnpm run check:emojis && pnpm run check:i18n && pnpm run deps:check && pnpm run check:floor && pnpm run test && pnpm run check:duplication",
+    "check:fast": "pnpm run check:types && pnpm run check:lint && pnpm run check:rsc && pnpm run check:naming && pnpm run check:conventions && pnpm run check:props && pnpm run check:emojis && pnpm run check:i18n && pnpm run deps:check && pnpm run check:floor && pnpm run test && pnpm run check:duplication",
+    "check:push": "pnpm run check:types && pnpm run check:changed && pnpm run check:rsc && pnpm run check:naming && pnpm run check:conventions && pnpm run check:props && pnpm run check:emojis && pnpm run check:i18n && pnpm run deps:check && pnpm run check:floor && pnpm run test:changed",
     "knip": "knip",
     "lighthouse": "pnpm build && lhci autorun",
     "format": "biome format --write",
@@ -55,7 +58,10 @@
     "eval:compare": "node .agents/evals/compare.mjs"
   },
   "lint-staged": {
-    "*.{cjs,css,json,jsonc,js,mjs,ts,tsx}": "biome check --write"
+    "*.{cjs,css,json,jsonc,js,mjs,ts,tsx}": [
+      "biome check --write",
+      "node scripts/guards/guard-conventions.mjs"
+    ]
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
