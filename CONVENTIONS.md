@@ -334,9 +334,15 @@ shadcn primitives:
   part carries its role suffix and a family-prefixed `data-slot`. The
   canonical example is `ConnectionAlert`, whose root owns connection state and
   whose title, description, icon, and action are separate parts;
-- dialogs use the same explicit tree as the `Dialog` primitive: root, content,
-  then header/body/form/footer parts. `CreateSpaceDialog` and `SettingsDialog`
-  must not hide `DialogContent` inside their root component;
+- dialog files have one responsibility: own the overlay primitive contract only.
+  A `*-dialog.tsx` may expose the Dialog root, a Content wrapper, and at most one
+  family-local context when compound parts genuinely need shared state. It must not
+  import translations, theme state, application hooks, forms, or other
+  `notes-app` domain components. Header/body/form/footer content is composed by
+  the caller and passed through `children`, matching shadcn's compound pattern;
+- each compound component family may declare at most one local context. Keep that
+  context in the family file and use it only to coordinate sibling parts; do not
+  introduce multiple contexts or a global context merely to wire a surface together;
 - state surfaces expose explicit state parts instead of combining unrelated
   boolean flags. `SpacesStatus` uses `SpacesErrorStatus`,
   `SpacesLoadingStatus`, and `SpacesNotFoundStatus`;
@@ -386,6 +392,8 @@ row here in the same change that adds or changes a rule; prefer promoting a
 | `canonical-props-name` | `check:props` |
 | `identifier-casing` | `check:lint` |
 | `notes-app-composition-contract` | `check:ui-pattern` |
+| `dialog-single-responsibility` | `check:ui-pattern` |
+| `single-family-context` | `check:ui-pattern` |
 | `reuse-primitives` | review-only |
 | `no-render-props-api` | `check:conventions` |
 | `composition-over-boolean-props` | review-only |

@@ -21,7 +21,7 @@ const COMPOSITION_RULES = [
   },
   { suffix: "-form.tsx", required: ["FieldGroup"] },
   { suffix: "-alert.tsx", required: ["Alert"] },
-  { suffix: "-dialog.tsx", required: ["DialogContent", "DialogTitle"] },
+  { suffix: "-dialog.tsx", required: ["DialogContent"] },
   {
     suffix: "-select.tsx",
     required: ["Select", "SelectTrigger", "SelectContent"],
@@ -46,6 +46,16 @@ const STATUS_COMPOSITION_PARTS = [
 ];
 
 const DIALOG_COMPOSITION_PARTS = ["children", "content"];
+
+const DIALOG_FORBIDDEN_IMPORTS = [
+  {
+    pattern: /from\s+["']@\/components\/notes-app\//,
+    label: "notes-app domain components",
+  },
+  { pattern: /from\s+["']@\/hooks\//, label: "application hooks" },
+  { pattern: /from\s+["']next-intl["']/, label: "translations" },
+  { pattern: /from\s+["']next-themes["']/, label: "theme state" },
+];
 
 const COMPONENT_ROLE_SUFFIXES = new Set([
   "Accordion",
@@ -165,6 +175,7 @@ function checkStatusComposition(filePath, fileName, content) {
 function checkDialogComposition(filePath, fileName, content) {
   if (!fileName.endsWith("-dialog.tsx")) return [];
 
+  const violations = [];
   const missing = DIALOG_COMPOSITION_PARTS.filter((part) =>
     part === "children"
       ? !/\bchildren\b/.test(content)
@@ -172,13 +183,45 @@ function checkDialogComposition(filePath, fileName, content) {
           content,
         ),
   );
-  if (missing.length === 0) return [];
+
+  if (missing.length > 0) {
+    violations.push(
+      violation(
+        filePath,
+        "notes-app-dialog-composition",
+        `${fileName} must expose caller-provided composition through ${missing.join(", ")}.`,
+      ),
+    );
+  }
+
+  const forbidden = DIALOG_FORBIDDEN_IMPORTS.filter(({ pattern }) =>
+    pattern.test(content),
+  ).map(({ label }) => label);
+
+  if (forbidden.length > 0) {
+    violations.push(
+      violation(
+        filePath,
+        "notes-app-dialog-single-responsibility",
+        `${fileName} owns only Dialog root/content behavior. Move ${forbidden.join(", ")} to the composition root and pass the rendered body through children.`,
+      ),
+    );
+  }
+
+  return violations;
+}
+
+function checkFamilyContext(filePath, fileName, content) {
+  const contextCount = [...content.matchAll(/\bcreateContext\s*(?:<[^;]+?>)?\s*\(/g)]
+    .length;
+
+  if (contextCount <= 1) return [];
 
   return [
     violation(
       filePath,
-      "notes-app-dialog-composition",
-      `${fileName} must expose caller-provided composition through ${missing.join(", ")}.`,
+      "notes-app-single-family-context",
+      `${fileName} declares ${contextCount} contexts. A compound component family may own at most one local context.`,
     ),
   ];
 }
@@ -409,6 +452,7 @@ function checkFile(filePath, content) {
 
   violations.push(...checkStatusComposition(filePath, fileName, content));
   violations.push(...checkDialogComposition(filePath, fileName, content));
+  violations.push(...checkFamilyContext(filePath, fileName, content));
   violations.push(...checkComponentAnatomy(filePath, fileName, content));
   violations.push(...checkSpaceShellContract(filePath, fileName, content));
   violations.push(...checkEmptyLayoutParts(filePath, fileName, content));
@@ -446,6 +490,7 @@ export {
   NON_VISUAL_FILES,
   STATUS_COMPOSITION_PARTS,
   DIALOG_COMPOSITION_PARTS,
+  DIALOG_FORBIDDEN_IMPORTS,
   COMPONENT_ANATOMY_RULES,
   COMPONENT_ROLE_SUFFIXES,
   COMPONENT_NAME_EXEMPTIONS,

@@ -98,6 +98,57 @@ test("enforces dialog composition through children", () => {
   );
 });
 
+test("accepts a dialog that owns only root and content composition", () => {
+  const source = `
+    import { Dialog, DialogContent } from "@/components/ui/dialog";
+    function ExampleDialog({ children }) {
+      return <Dialog data-slot="example-dialog">{children}</Dialog>;
+    }
+    function ExampleDialogContent({ children }) {
+      return <DialogContent data-slot="example-dialog-content">{children}</DialogContent>;
+    }
+  `;
+
+  assert.deepEqual(checkFile("example-dialog.tsx", source), []);
+});
+
+test("rejects domain behavior inside dialog wrappers", () => {
+  const violations = checkFile(
+    "example-dialog.tsx",
+    `import { useTranslations } from "next-intl";
+     import { ExampleForm } from "@/components/notes-app/example-form";
+     import { Dialog, DialogContent } from "@/components/ui/dialog";
+     function ExampleDialog({ children }) {
+       return <Dialog data-slot="example-dialog">{children}</Dialog>;
+     }
+     function ExampleDialogContent({ children }) {
+       return <DialogContent data-slot="example-dialog-content">{children}<ExampleForm /></DialogContent>;
+     }`,
+  );
+
+  assert.ok(
+    violations.some(
+      (item) => item.rule === "notes-app-dialog-single-responsibility",
+    ),
+  );
+});
+
+test("rejects multiple contexts in one component family", () => {
+  const violations = checkFile(
+    "example-provider.tsx",
+    `import { createContext } from "react";
+     const FirstContext = createContext(null);
+     const SecondContext = createContext(null);
+     function ExampleProvider() { return null; }`,
+  );
+
+  assert.ok(
+    violations.some(
+      (item) => item.rule === "notes-app-single-family-context",
+    ),
+  );
+});
+
 test("rejects empty layout primitives", () => {
   const violations = checkFile(
     "example-sidebar.tsx",
