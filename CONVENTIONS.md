@@ -323,35 +323,36 @@ Do not:
 
 ### Notes-app UI composition contract
 
-Application components in `src/components/notes-app/` are simple domain
-surfaces built on the shared shadcn/Base UI primitives:
+Application components should expose the smallest API that matches their product
+responsibility. They compose the installed shadcn/Base UI primitives, but they do
+not have to reproduce the primitive's full compound API.
 
-- default to one public domain component per file; do not create a custom
-  compound API merely to mirror the compound parts already provided by
-  `src/components/ui/`;
-- compose the installed primitive directly and keep the file/component suffix
-  aligned with its primary surface (`*Dialog`, `*Card`, `*FieldGroup`,
-  `*Form`, and so on);
-- when a primitive or thin wrapper needs to render through a caller-provided
-  element, use Base UI's standard `render` prop rather than inventing
-  `renderX`, `asChild`, or another polymorphic API. Components passed to
-  `render` must forward the received props and ref;
-- keep `render` focused on element/behavior composition. Domain content still
-  flows through ordinary props and `children`;
-- dialogs are simple wrappers when a domain-specific name is useful: one
-  component may own `Dialog` + `DialogContent` and render caller-provided
-  `children`. Do not create parallel `XDialogContent` application parts when
-  `DialogContent` already exists in `src/components/ui/`;
-- keep context for real providers or primitives that genuinely need shared
-  family state. Do not add context merely to manufacture an application-level
-  compound component;
-- reuse interactive primitives from `src/components/ui/` instead of raw
-  `button`, `input`, `select`, `textarea`, or `label` controls;
-- keep domain behavior in `notes-app` and visual primitive anatomy in
-  `src/components/ui/`;
+- compose visual application components from `src/components/ui/` primitives;
+- name components by their application role. A `SettingsForm` may use
+  `FieldGroup` as its visual root; the filename does not need to mirror the
+  implementation primitive;
+- prefer a simple component with normal props when the surface has one cohesive
+  responsibility. A dialog may own its header, body/form, and footer when those
+  pieces are not independently reusable;
+- expose compound subcomponents only when consumers genuinely need to rearrange
+  or address those parts independently, or when shared family state makes a local
+  context useful;
+- when a Base UI primitive needs to render another element/component, use its
+  native `render={<Component />}` composition API (for example
+  `DialogClose render={<Button />}`) instead of inventing `renderX` props,
+  `asChild` compatibility layers, or extra wrapper components;
+- keep `src/components/ui/` responsible for reusable visual anatomy and keep
+  notes-domain behavior in `src/components/notes-app/`;
+- state surfaces may expose explicit state parts when those states are separately
+  reusable; do not create parts solely to satisfy a naming or anatomy rule;
+- for shell-like surfaces, keep the native shadcn primitive tree visible when it
+  materially clarifies layout. `SpaceShell` orchestrates the native Sidebar
+  tree without introducing a second sidebar abstraction;
+- never replace available shadcn/Base UI controls with raw interactive HTML
+  controls (`button`, `input`, `select`, `textarea`, or `label`);
 - spread caller props before required layout classes and semantic attributes;
 - keep `auth-provider.tsx`, `spaces-list.tsx`, and `theme-provider.tsx` as
-  explicit non-visual orchestration/provider exceptions.
+  explicit non-visual/conditional orchestration exceptions.
 
 This contract is enforced by `scripts/guards/guard-notes-app-pattern.mjs`,
 exposed through `check:ui-pattern`, and covered by
