@@ -146,10 +146,15 @@ function checkSurfaceRoot(filePath, fileName, content) {
 
 function checkDedicatedHookOwnsState(filePath, fileName, content) {
   const componentName = toPascalCase(fileName);
+  const component = getComponentFunctionEntries(content).find(
+    ({ name }) => name === componentName,
+  );
+  if (!component) return [];
+
   const hookName = `use${componentName}`;
   const hookCall = new RegExp(`\\b${hookName}\\s*\\(`);
 
-  if (!hookCall.test(content)) return [];
+  if (!hookCall.test(component.source)) return [];
 
   const statefulHooks = [
     "useState",
@@ -166,7 +171,7 @@ function checkDedicatedHookOwnsState(filePath, fileName, content) {
     "useImperativeHandle",
   ];
   const directCalls = statefulHooks.filter((hook) =>
-    new RegExp(`\\b${hook}\\s*\\(`).test(content),
+    new RegExp(`\\b${hook}\\s*\\(`).test(component.source),
   );
 
   if (directCalls.length === 0) return [];
