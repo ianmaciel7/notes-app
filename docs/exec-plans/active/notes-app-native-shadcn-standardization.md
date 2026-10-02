@@ -15,7 +15,7 @@ primitive's own variants. Behavior, test ids, Firebase UI hooks, and i18n stay u
 
 - In: `src/components/notes-app/*.tsx` (and their tests), plus new keys in
   `src/messages/{en,es,pt-BR}.json` when a string becomes translatable.
-- Out: `src/components/firebase/` (immutable vendor drop, ADR 0008), `src/components/ui/`,
+- Out: `src/components/ui/`, the removed local Firebase registry mirror (ADR 0008),
   the duplicated `ICON_MAP` between `space-switcher.tsx` and `create-space-form.tsx`, extracting an
   OTP wrapper (rename-only wrappers are discouraged by `CONVENTIONS.md` section 3),
   `connection-alert.tsx`, `theme-provider.tsx`, `auth-provider.tsx`, and a searchable Combobox for
@@ -44,7 +44,7 @@ Wave 1 (parallel):
 - [x] T3 Phone and SMS: `phone-auth-form`, `sms-mfa-assertion-form`, `sms-mfa-enrollment-form`,
   `country-select`
 - [x] T4 TOTP and MFA: `totp-mfa-assertion-form`, `totp-mfa-enrollment-form`,
-  `mfa-enrollment-form`, `mfa-assertion-form`
+  `mfa-enrollment-field-group`, `mfa-assertion-field-group`
 - [x] T5 Small components: `google-sign-in-button`, `auth-policies-card`, `auth-greeting-header`,
   `redirect-error-alert`, `require-auth`, `require-guest`, `language-select`
 
