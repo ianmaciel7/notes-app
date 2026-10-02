@@ -37,19 +37,19 @@ const ConnectionAlertContext =
   createContext<ConnectionAlertContextValue | null>(null);
 
 function ConnectionAlertIcon({ ...props }: ConnectionAlertIconProps) {
-  return <WifiOffIcon aria-hidden="true" {...props} />;
+  return <WifiOffIcon data-slot="connection-alert-icon" aria-hidden="true" {...props} />;
 }
 
 function ConnectionAlertTitle({ ...props }: ConnectionAlertTitleProps) {
   const t = useTranslations("connection");
-  return <AlertTitle {...props}>{t("title")}</AlertTitle>;
+  return <AlertTitle data-slot="connection-alert-title" {...props}>{t("title")}</AlertTitle>;
 }
 
 function ConnectionAlertDescription({
   ...props
 }: ConnectionAlertDescriptionProps) {
   const t = useTranslations("connection");
-  return <AlertDescription {...props}>{t("description")}</AlertDescription>;
+  return <AlertDescription data-slot="connection-alert-description" {...props}>{t("description")}</AlertDescription>;
 }
 
 function ConnectionAlertAction({ ...props }: ConnectionAlertActionProps) {
@@ -63,7 +63,7 @@ function ConnectionAlertAction({ ...props }: ConnectionAlertActionProps) {
   }
 
   return (
-    <AlertAction {...props}>
+    <AlertAction data-slot="connection-alert-action" {...props}>
       <Button
         size="sm"
         variant="outline"
@@ -90,7 +90,7 @@ function ConnectionAlert({
     <ConnectionAlertContext.Provider
       value={{ onReconnect: handleReconnect, reconnecting }}
     >
-      <Alert
+      <Alert data-slot="connection-alert"
         {...props}
         variant="destructive"
         aria-live="assertive"

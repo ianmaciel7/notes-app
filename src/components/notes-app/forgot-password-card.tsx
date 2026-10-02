@@ -30,7 +30,7 @@ function ForgotPasswordCard({
   const subtitleText = getTranslation(ui, "prompts", "enterEmailToReset");
 
   return (
-    <AuthCard ref={ref} {...props}>
+    <AuthCard data-slot="forgot-password-card" ref={ref} {...props}>
       <CardHeader>
         <CardTitle>
           <h1>{titleText}</h1>

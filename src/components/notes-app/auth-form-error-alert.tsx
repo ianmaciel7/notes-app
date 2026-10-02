@@ -19,7 +19,7 @@ function AuthFormErrorAlert({
   if (!message) return null;
 
   return (
-    <Alert {...props} variant="destructive" className={cn(className)}>
+    <Alert data-slot="auth-form-error-alert" {...props} variant="destructive" className={cn(className)}>
       <AlertDescription>{message}</AlertDescription>
     </Alert>
   );

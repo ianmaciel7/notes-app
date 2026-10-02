@@ -32,7 +32,7 @@ function AuthFormInput<TFieldValues extends FieldValues = FieldValues>({
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <Field data-invalid={!!fieldState.error}>
+        <Field data-slot="auth-form-input" data-invalid={!!fieldState.error}>
           {labelAction ? (
             <Field orientation="horizontal">
               <FieldLabel htmlFor={name}>{label}</FieldLabel>

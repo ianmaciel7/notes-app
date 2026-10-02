@@ -63,7 +63,7 @@ function TotpMultiFactorSecretGenerationForm({
 
   return (
     <FormProvider {...form}>
-      <form
+      <form data-slot="totp-multi-factor-secret-generation-form"
         onSubmit={form.handleSubmit(onSubmit)}
         {...props}
         className={cn("flex flex-col gap-4", className)}
@@ -134,7 +134,7 @@ function MultiFactorEnrollmentVerifyTotpForm({
   const qrCodeDataUrl = generateTotpQrCode(ui, secret, displayName);
 
   return (
-    <FieldGroup className="gap-4">
+    <FieldGroup data-slot="multi-factor-enrollment-verify-totp-form" className="gap-4">
       <Field className="items-center justify-center">
         <Image
           src={qrCodeDataUrl}
@@ -199,7 +199,7 @@ function TotpMfaEnrollmentForm({
   }
 
   return (
-    <FieldGroup {...props} className={cn(className)}>
+    <FieldGroup data-slot="totp-mfa-enrollment-form" {...props} className={cn(className)}>
       {!enrollment ? (
         <TotpMultiFactorSecretGenerationForm
           onSubmit={(secret, displayName) =>

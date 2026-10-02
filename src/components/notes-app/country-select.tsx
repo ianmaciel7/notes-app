@@ -57,7 +57,7 @@ function CountrySelect({ ref }: CountrySelectProps) {
         }
       }}
     >
-      <SelectTrigger className="w-30" aria-label={t("countrySelector")}>
+      <SelectTrigger data-slot="country-select" className="w-30" aria-label={t("countrySelector")}>
         <SelectValue>
           {selected.code} {selected.dialCode}
         </SelectValue>

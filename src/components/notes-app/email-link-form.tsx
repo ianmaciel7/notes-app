@@ -70,7 +70,7 @@ function EmailLinkForm({
 
   return (
     <FormProvider {...form}>
-      <form
+      <form data-slot="email-link-form"
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);

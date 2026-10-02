@@ -63,7 +63,7 @@ function MfaEnrollmentForm({
   }
 
   return (
-    <FieldGroup {...props} className={cn("gap-2", className)}>
+    <FieldGroup data-slot="mfa-enrollment-form" {...props} className={cn("gap-2", className)}>
       {hints.map((hint) => {
         if (hint === FactorId.TOTP) {
           return <TotpButton key={hint} onClick={() => setHint(hint)} />;
@@ -83,7 +83,7 @@ function TotpButton(props: ComponentProps<typeof Button>) {
   const ui = useUI();
   const labelText = getTranslation(ui, "labels", "mfaTotpVerification");
   return (
-    <Button {...props} variant="outline">
+    <Button data-slot="mfa-enrollment-totp-button" {...props} variant="outline">
       {labelText}
     </Button>
   );
@@ -93,7 +93,7 @@ function SmsButton(props: ComponentProps<typeof Button>) {
   const ui = useUI();
   const labelText = getTranslation(ui, "labels", "mfaSmsVerification");
   return (
-    <Button {...props} variant="outline">
+    <Button data-slot="mfa-enrollment-sms-button" {...props} variant="outline">
       {labelText}
     </Button>
   );

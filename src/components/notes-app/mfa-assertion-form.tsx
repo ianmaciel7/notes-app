@@ -72,7 +72,7 @@ function MfaAssertionForm({
   }
 
   return (
-    <FieldGroup {...props} className={cn("gap-2", className)}>
+    <FieldGroup data-slot="mfa-assertion-form" {...props} className={cn("gap-2", className)}>
       <Field>
         <FieldDescription>{mfaAssertionFactorPrompt}</FieldDescription>
       </Field>
@@ -99,7 +99,7 @@ function TotpButton(props: ComponentProps<typeof Button>) {
   const ui = useUI();
   const labelText = getTranslation(ui, "labels", "mfaTotpVerification");
   return (
-    <Button {...props} variant="outline">
+    <Button data-slot="mfa-assertion-totp-button" {...props} variant="outline">
       {labelText}
     </Button>
   );
@@ -109,7 +109,7 @@ function SmsButton(props: ComponentProps<typeof Button>) {
   const ui = useUI();
   const labelText = getTranslation(ui, "labels", "mfaSmsVerification");
   return (
-    <Button {...props} variant="outline">
+    <Button data-slot="mfa-assertion-sms-button" {...props} variant="outline">
       {labelText}
     </Button>
   );

@@ -34,7 +34,7 @@ function PhoneAuthCard({ children, onSignIn, ...props }: PhoneAuthCardProps) {
   }
 
   return (
-    <AuthCard {...props}>
+    <AuthCard data-slot="phone-auth-card" {...props}>
       <CardHeader>
         <CardTitle>
           <h1>{titleText}</h1>

@@ -12,7 +12,7 @@ function SpaceLoading({ className, ...props }: SpaceLoadingProps) {
   const t = useTranslations("spaces");
 
   return (
-    <Empty
+    <Empty data-slot="space-loading"
       {...props}
       className={cn(
         "flex min-h-svh w-full items-center justify-center",

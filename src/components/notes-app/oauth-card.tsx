@@ -4,7 +4,7 @@ import { getTranslation } from "@firebase-oss/ui-core";
 import { useOnUserAuthenticated, useUI } from "@firebase-oss/ui-react";
 import type { User } from "firebase/auth";
 import type { ComponentProps, PropsWithChildren } from "react";
-import { AuthCard, AuthCardProviders } from "@/components/notes-app/auth-card";
+import { AuthCard, AuthCardProviderGroup } from "@/components/notes-app/auth-card";
 import { Policies } from "@/components/notes-app/auth-policies-description";
 import { MultiFactorAuthAssertionScreen } from "@/components/notes-app/mfa-assertion-card";
 import { RedirectError } from "@/components/notes-app/redirect-error-alert";
@@ -35,7 +35,7 @@ function OAuthCard({ children, onSignIn, ...props }: OAuthCardProps) {
   }
 
   return (
-    <AuthCard {...props}>
+    <AuthCard data-slot="oauth-card" {...props}>
       <CardHeader>
         <CardTitle>
           <h1>{titleText}</h1>
@@ -43,7 +43,7 @@ function OAuthCard({ children, onSignIn, ...props }: OAuthCardProps) {
         <CardDescription>{subtitleText}</CardDescription>
       </CardHeader>
       <CardContent>
-        <AuthCardProviders>{children}</AuthCardProviders>
+        <AuthCardProviderGroup>{children}</AuthCardProviderGroup>
         <FieldGroup className="mt-4">
           <RedirectError />
           <Policies />

@@ -28,7 +28,7 @@ import {
 import { SpaceIcon } from "@/lib/space-icons";
 import type { Space } from "@/types/space";
 
-type SpaceSwitcherMenuProps = Omit<
+type SpaceSwitcherProps = Omit<
   ComponentProps<typeof SidebarMenu>,
   "onSelect"
 > & {
@@ -38,13 +38,13 @@ type SpaceSwitcherMenuProps = Omit<
   spaces: Space[];
 };
 
-function SpaceSwitcherMenu({
+function SpaceSwitcher({
   activeSpace,
   onCreate,
   onSelect,
   spaces,
   ...props
-}: SpaceSwitcherMenuProps) {
+}: SpaceSwitcherProps) {
   const t = useTranslations("spaces");
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -53,7 +53,7 @@ function SpaceSwitcherMenu({
   );
 
   return (
-    <SidebarGroup>
+    <SidebarGroup data-slot="space-switcher">
       <SidebarGroupContent>
         <SidebarMenu {...props} aria-label={t("workspace")}>
           <SidebarMenuItem>
@@ -156,4 +156,4 @@ function SpaceSwitcherMenu({
   );
 }
 
-export { SpaceSwitcherMenu, type SpaceSwitcherMenuProps };
+export { SpaceSwitcher, type SpaceSwitcherProps };

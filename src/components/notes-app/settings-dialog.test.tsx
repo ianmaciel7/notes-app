@@ -5,7 +5,7 @@ import messages from "@/messages/en.json";
 import {
   SettingsDialog,
   SettingsDialogContent,
-  SettingsDialogFields,
+  SettingsDialogFieldGroup,
   SettingsDialogFooter,
   SettingsDialogHeader,
 } from "./settings-dialog";
@@ -28,7 +28,7 @@ function renderDialog(open = true, onOpenChange = vi.fn()) {
       <SettingsDialog open={open} onOpenChange={onOpenChange}>
         <SettingsDialogContent>
           <SettingsDialogHeader />
-          <SettingsDialogFields />
+          <SettingsDialogFieldGroup />
           <SettingsDialogFooter onDone={() => onOpenChange(false)} />
         </SettingsDialogContent>
       </SettingsDialog>

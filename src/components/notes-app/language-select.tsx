@@ -41,7 +41,7 @@ function LanguageSelect({ className, ...props }: LanguageSelectProps) {
   };
 
   return (
-    <ButtonGroup
+    <ButtonGroup data-slot="language-select"
       data-testid="language-select-container"
       {...props}
       className={cn(

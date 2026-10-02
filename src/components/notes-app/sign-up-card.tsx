@@ -8,7 +8,7 @@ import {
 } from "@firebase-oss/ui-react";
 import type { User, UserCredential } from "firebase/auth";
 import { type ComponentProps, useRef } from "react";
-import { AuthCard, AuthCardProviders } from "@/components/notes-app/auth-card";
+import { AuthCard, AuthCardProviderGroup } from "@/components/notes-app/auth-card";
 import {
   CardContent,
   CardDescription,
@@ -45,7 +45,7 @@ function SignUpCard({
   useOnUserAuthenticated(children ? handleSignUp : undefined);
 
   return (
-    <AuthCard ref={ref} {...props}>
+    <AuthCard data-slot="sign-up-card" ref={ref} {...props}>
       <CardHeader>
         <CardTitle>
           <h1>{titleText}</h1>
@@ -59,7 +59,7 @@ function SignUpCard({
             handleSignUp(credential.user);
           }}
         />
-        {children ? <AuthCardProviders>{children}</AuthCardProviders> : null}
+        {children ? <AuthCardProviderGroup>{children}</AuthCardProviderGroup> : null}
       </CardContent>
     </AuthCard>
   );

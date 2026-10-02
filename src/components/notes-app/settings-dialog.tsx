@@ -29,6 +29,8 @@ type SettingsDialogProps = ComponentProps<typeof Dialog> & {
 };
 
 type SettingsDialogContentProps = ComponentProps<typeof DialogContent>;
+type SettingsDialogHeaderProps = ComponentProps<typeof DialogHeader>;
+type SettingsDialogFieldGroupProps = ComponentProps<typeof FieldGroup>;
 type SettingsDialogFooterProps = ComponentProps<typeof DialogFooter> & {
   onDone: () => void;
 };
@@ -40,7 +42,7 @@ function SettingsDialog({
   ...props
 }: SettingsDialogProps) {
   return (
-    <Dialog {...props} open={open} onOpenChange={onOpenChange}>
+    <Dialog data-slot="settings-dialog" {...props} open={open} onOpenChange={onOpenChange}>
       {children}
     </Dialog>
   );
@@ -51,29 +53,29 @@ function SettingsDialogContent({
   ...props
 }: SettingsDialogContentProps) {
   return (
-    <DialogContent {...props} data-testid="settings-dialog">
+    <DialogContent data-slot="settings-dialog-content" {...props} data-testid="settings-dialog">
       {children}
     </DialogContent>
   );
 }
 
-function SettingsDialogHeader() {
+function SettingsDialogHeader({ ...props }: SettingsDialogHeaderProps) {
   const settingsT = useTranslations("settings");
 
   return (
-    <DialogHeader>
+    <DialogHeader data-slot="settings-dialog-header" {...props}>
       <DialogTitle>{settingsT("settings")}</DialogTitle>
       <DialogDescription>{settingsT("settingsDescription")}</DialogDescription>
     </DialogHeader>
   );
 }
 
-function SettingsDialogFields() {
+function SettingsDialogFieldGroup({ ...props }: SettingsDialogFieldGroupProps) {
   const settingsT = useTranslations("settings");
   const { resolvedTheme, setTheme } = useTheme();
 
   return (
-    <FieldGroup>
+    <FieldGroup data-slot="settings-dialog-field-group" {...props}>
       <Field orientation="horizontal">
         <FieldContent>
           <FieldLabel htmlFor="theme-switch">
@@ -101,7 +103,7 @@ function SettingsDialogFooter({ onDone, ...props }: SettingsDialogFooterProps) {
   const t = useTranslations("spaces");
 
   return (
-    <DialogFooter {...props}>
+    <DialogFooter data-slot="settings-dialog-footer" {...props}>
       <Button onClick={onDone}>{t("done")}</Button>
     </DialogFooter>
   );
@@ -110,10 +112,12 @@ function SettingsDialogFooter({ onDone, ...props }: SettingsDialogFooterProps) {
 export {
   SettingsDialog,
   SettingsDialogContent,
-  SettingsDialogFields,
+  SettingsDialogFieldGroup,
   SettingsDialogFooter,
   SettingsDialogHeader,
   type SettingsDialogContentProps,
+  type SettingsDialogFieldGroupProps,
   type SettingsDialogFooterProps,
+  type SettingsDialogHeaderProps,
   type SettingsDialogProps,
 };

@@ -18,6 +18,7 @@ type CreateSpaceDialogProps = ComponentProps<typeof Dialog> & {
 };
 
 type CreateSpaceDialogContentProps = ComponentProps<typeof DialogContent>;
+type CreateSpaceDialogHeaderProps = ComponentProps<typeof DialogHeader>;
 
 type CreateSpaceDialogFormProps = Omit<ComponentProps<"form">, "onSubmit"> & {
   onSubmit: (name: string, icon: string) => Promise<void>;
@@ -32,7 +33,7 @@ function CreateSpaceDialog({
   ...props
 }: CreateSpaceDialogProps) {
   return (
-    <Dialog {...props} open={open} onOpenChange={onOpenChange}>
+    <Dialog data-slot="create-space-dialog" {...props} open={open} onOpenChange={onOpenChange}>
       {children}
     </Dialog>
   );
@@ -43,17 +44,17 @@ function CreateSpaceDialogContent({
   ...props
 }: CreateSpaceDialogContentProps) {
   return (
-    <DialogContent {...props} data-testid="create-space-dialog">
+    <DialogContent data-slot="create-space-dialog-content" {...props} data-testid="create-space-dialog">
       {children}
     </DialogContent>
   );
 }
 
-function CreateSpaceDialogHeader() {
+function CreateSpaceDialogHeader({ ...props }: CreateSpaceDialogHeaderProps) {
   const t = useTranslations("spaces");
 
   return (
-    <DialogHeader>
+    <DialogHeader data-slot="create-space-dialog-header" {...props}>
       <DialogTitle>{t("dialogTitle")}</DialogTitle>
       <DialogDescription>{t("dialogDescription")}</DialogDescription>
     </DialogHeader>
@@ -67,7 +68,7 @@ function CreateSpaceDialogForm({
   ...props
 }: CreateSpaceDialogFormProps) {
   return (
-    <CreateSpaceForm
+    <CreateSpaceForm data-slot="create-space-dialog-form"
       {...props}
       onSubmitSpace={onSubmit}
       onCancel={onCancel}
@@ -83,5 +84,6 @@ export {
   CreateSpaceDialogHeader,
   type CreateSpaceDialogFormProps,
   type CreateSpaceDialogContentProps,
+  type CreateSpaceDialogHeaderProps,
   type CreateSpaceDialogProps,
 };

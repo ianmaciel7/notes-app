@@ -41,7 +41,7 @@ function EmailLinkCard({
   }
 
   return (
-    <AuthCard ref={ref} {...props}>
+    <AuthCard data-slot="email-link-card" ref={ref} {...props}>
       <CardHeader>
         <CardTitle>
           <h1>{titleText}</h1>

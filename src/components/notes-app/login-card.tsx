@@ -8,7 +8,7 @@ import {
 } from "@firebase-oss/ui-react";
 import type { UserCredential } from "firebase/auth";
 import type { ComponentProps } from "react";
-import { AuthCard, AuthCardProviders } from "@/components/notes-app/auth-card";
+import { AuthCard, AuthCardProviderGroup } from "@/components/notes-app/auth-card";
 import { LoginForm } from "@/components/notes-app/login-form";
 import {
   CardContent,
@@ -35,7 +35,7 @@ function LoginCard({
   useOnUserAuthenticated(onSignIn);
 
   return (
-    <AuthCard {...props}>
+    <AuthCard data-slot="login-card" {...props}>
       <CardHeader>
         <CardTitle>
           <h1>{titleText}</h1>
@@ -48,7 +48,7 @@ function LoginCard({
           onForgotPasswordClick={onForgotPasswordClick}
           onSignUpClick={onSignUpClick}
         />
-        {children ? <AuthCardProviders>{children}</AuthCardProviders> : null}
+        {children ? <AuthCardProviderGroup>{children}</AuthCardProviderGroup> : null}
       </CardContent>
     </AuthCard>
   );

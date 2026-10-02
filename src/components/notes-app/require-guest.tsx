@@ -27,7 +27,7 @@ function RequireGuest({
   if (isLoading) {
     return (
       fallback ?? (
-        <Empty data-testid="require-guest-loading">
+        <Empty data-slot="require-guest" data-testid="require-guest-loading">
           <EmptyHeader>
             <EmptyMedia>
               <Spinner />

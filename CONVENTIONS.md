@@ -27,9 +27,7 @@ contributor workflow to `CONTRIBUTING.md`.
   framework-required default exports, but the underlying component declaration must be a named function.
 - Derive props from the underlying primitive or native element where practical
   instead of duplicating them manually (enforced by `check:props`).
-- **Component File Role Suffixes (`src/components/notes-app/`)**: Application UI components
-  must carry an explicit archetype suffix in both filename (`kebab-case`) and component name
-  (`PascalCase`) to preserve contract clarity:
+- **Component and Subcomponent Role Suffixes (`src/components/notes-app/`)**: Application UI component files must carry an explicit archetype suffix in the filename (`kebab-case`), the canonical exported component must match the file name in `PascalCase`, and every named visual subcomponent must also end in a recognized UI role suffix. Compound parts use roles such as `Content`, `Header`, `Footer`, `Form`, `Group`, `Title`, `Description`, `Action`, `Icon`, `Avatar`, or `Link`; do not use generic names such as `Part`, `Section`, or plural container nouns such as `Fields`. This preserves the same role-oriented anatomy used by `src/components/ui/`:
   - `-card` / `*Card` for screen or container cards (e.g. `login-card.tsx` -> `LoginCard`)
   - `-form` / `*Form` for form sections and submit containers (e.g. `login-form.tsx` -> `LoginForm`)
   - `-header` / `*Header` for heading and greeting presentation blocks (e.g. `auth-greeting-header.tsx` -> `AuthGreetingHeader`)
@@ -39,6 +37,7 @@ contributor workflow to `CONTRIBUTING.md`.
   - `-sidebar` / `*Sidebar` for navigation primitives and parts; domain orchestration belongs in a `-shell` component (e.g. `space-shell.tsx` -> `SpaceShell`)
   - `-provider` / `*Provider` for React context providers
   - `-dialog` / `*Dialog`, `-status` / `*Status`, `-empty` / `*Empty` for standalone overlays and state surfaces split out of a larger component (e.g. `settings-dialog.tsx` -> `SettingsDialog`, `spaces-status.tsx` -> `SpacesStatus`)
+- **Visual component slots**: Every visual component and named visual subcomponent in `src/components/notes-app/` exposes a `data-slot`. Compound parts use a family-prefixed slot (`settings-dialog-header`, `connection-alert-action`) just like shadcn primitives. Pure providers and conditional orchestration components that do not own a DOM/UI surface remain exempt; never add wrapper markup only to manufacture a slot.
 - **Canonical Props Naming (`${ComponentName}Props`)**: Component prop types must be declared canonically using the component's canonical PascalCase name (e.g. `login-card.tsx` declares and uses `type LoginCardProps = ...`, never `SignInAuthScreenProps` as the primary type). Declare them with `type`, never `interface`, exactly as `src/components/ui/` does. Legacy or library names may only be re-exported as backwards-compatible aliases inside the file's trailing export block (e.g. `type LoginCardProps as SignInAuthScreenProps`). Enforced by `check:props` and `component-no-interface`.
 - **Export shape (`src/components/notes-app/`)**: Application components follow the same file anatomy as `src/components/ui/`. Declare components and hooks as plain `function` declarations without `export`, and publish every value and type through one trailing `export { ... }` block (types with an inline `type` modifier, aliases as `X as Alias`). Do not write `export function`, `export const`, or `export interface`. Enforced by `component-trailing-export-block`.
 - **Name by what it renders, never by where the code came from.** When a component is extracted or moved, re-derive its name from what it renders and where it is rendered instead of keeping the old name or prefixing it with the name of the file it came from (`SpaceSidebarEmpty`, rendered in the main area and not in the sidebar, became `SpacesEmpty`). A surface word before the final role suffix (`sidebar`, `dialog`, `sheet`, `drawer`, `popover`) must be backed by that surface's primitive in the file; otherwise the name is wrong (`name-matches-surface`). Use the domain terms in `CONTEXT.md`: `Space` is one user-owned context, so a component about the collection or its absence is `Spaces*`, never `Space*`, which would read as an empty Space.
@@ -331,7 +330,8 @@ shadcn primitives:
   forms, alerts, dialogs, empty states, menus, sidebars, statuses, headers, and
   descriptions must not collapse their anatomy into one ad-hoc element;
 - compound surfaces expose caller-provided `children` and named parts when the
-  caller controls the composition or when sibling parts share context. The
+  caller controls the composition or when sibling parts share context. Every named
+  part carries its role suffix and a family-prefixed `data-slot`. The
   canonical example is `ConnectionAlert`, whose root owns connection state and
   whose title, description, icon, and action are separate parts;
 - dialogs use the same explicit tree as the `Dialog` primitive: root, content,
@@ -381,6 +381,8 @@ row here in the same change that adds or changes a rule; prefer promoting a
 | `kebab-case-filename` | `check:conventions` |
 | `no-default-export` | `check:conventions` |
 | `component-role-suffix` | `check:naming` |
+| `subcomponent-role-suffix` | `check:ui-pattern` |
+| `component-data-slot` | `check:ui-pattern` |
 | `canonical-props-name` | `check:props` |
 | `identifier-casing` | `check:lint` |
 | `notes-app-composition-contract` | `check:ui-pattern` |

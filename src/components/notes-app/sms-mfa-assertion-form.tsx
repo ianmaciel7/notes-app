@@ -76,7 +76,7 @@ function SmsMultiFactorAssertionPhoneForm({
   };
 
   return (
-    <FieldGroup {...props} className={cn(className)}>
+    <FieldGroup data-slot="sms-multi-factor-assertion-phone-form" {...props} className={cn(className)}>
       <FieldGroup className="gap-4">
         <Field>
           <FieldTitle>{getTranslation(ui, "labels", "phoneNumber")}</FieldTitle>
@@ -147,7 +147,7 @@ function SmsMultiFactorAssertionVerifyForm({
 
   return (
     <FormProvider {...form}>
-      <form
+      <form data-slot="sms-multi-factor-assertion-verify-form"
         onSubmit={form.handleSubmit(onSubmit)}
         {...props}
         className={cn("flex flex-col gap-4", className)}
@@ -218,7 +218,7 @@ function SmsMfaAssertionForm({
   } | null>(null);
 
   return (
-    <FieldGroup {...props} className={cn(className)}>
+    <FieldGroup data-slot="sms-mfa-assertion-form" {...props} className={cn(className)}>
       {!verification ? (
         <SmsMultiFactorAssertionPhoneForm
           hint={hint}

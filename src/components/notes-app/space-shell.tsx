@@ -11,13 +11,13 @@ import {
 import {
   SettingsDialog,
   SettingsDialogContent,
-  SettingsDialogFields,
+  SettingsDialogFieldGroup,
   SettingsDialogFooter,
   SettingsDialogHeader,
 } from "@/components/notes-app/settings-dialog";
 import { SidebarUserMenu } from "@/components/notes-app/sidebar-user-menu";
 import { SpaceLoading } from "@/components/notes-app/space-loading";
-import { SpaceSwitcherMenu } from "@/components/notes-app/space-switcher";
+import { SpaceSwitcher } from "@/components/notes-app/space-switcher";
 import { SpacesList } from "@/components/notes-app/spaces-list";
 import {
   SpacesErrorStatus,
@@ -115,7 +115,7 @@ function SpaceShell({
       >
         <Sidebar variant="inset" collapsible="none" className="h-svh">
           <SidebarHeader>
-            <SpaceSwitcherMenu
+            <SpaceSwitcher
               activeSpace={activeSpace}
               onCreate={() => setCreateDialogOpen(true)}
               onSelect={handleSelect}
@@ -160,7 +160,7 @@ function SpaceShell({
       >
         <SettingsDialogContent>
           <SettingsDialogHeader />
-          <SettingsDialogFields />
+          <SettingsDialogFieldGroup />
           <SettingsDialogFooter onDone={() => setSettingsDialogOpen(false)} />
         </SettingsDialogContent>
       </SettingsDialog>

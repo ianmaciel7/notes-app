@@ -20,7 +20,7 @@ type PolicyLinkProps = PropsWithChildren<{
 function PolicyLink({ onNavigate, url, children }: PolicyLinkProps) {
   if (onNavigate) {
     return (
-      <Button
+      <Button data-slot="policy-link"
         variant="link"
         size="sm"
         type="button"
@@ -32,7 +32,7 @@ function PolicyLink({ onNavigate, url, children }: PolicyLinkProps) {
   }
 
   return (
-    <Button
+    <Button data-slot="policy-link"
       variant="link"
       size="sm"
       nativeButton={false}
@@ -70,7 +70,7 @@ function AuthPoliciesDescription({
   });
 
   return (
-    <FieldDescription
+    <FieldDescription data-slot="auth-policies-description"
       {...props}
       className={cn("text-muted-foreground text-center text-xs", className)}
     >

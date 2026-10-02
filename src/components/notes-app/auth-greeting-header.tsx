@@ -22,7 +22,7 @@ function AuthGreetingHeader({ className, ...props }: AuthGreetingHeaderProps) {
     (user?.email ? user.email.split("@")[0] : t("defaultUser"));
 
   return (
-    <Item {...props} className={cn("flex flex-col gap-2", className)}>
+    <Item data-slot="auth-greeting-header" {...props} className={cn("flex flex-col gap-2", className)}>
       <ItemContent>
         <ItemTitle className="text-2xl font-bold tracking-tight text-foreground">
           <h1>

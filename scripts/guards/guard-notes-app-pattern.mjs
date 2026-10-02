@@ -47,6 +47,77 @@ const STATUS_COMPOSITION_PARTS = [
 
 const DIALOG_COMPOSITION_PARTS = ["children", "content"];
 
+const COMPONENT_ROLE_SUFFIXES = new Set([
+  "Accordion",
+  "Action",
+  "Alert",
+  "Avatar",
+  "Badge",
+  "Breadcrumb",
+  "Button",
+  "Calendar",
+  "Card",
+  "Carousel",
+  "Chart",
+  "Checkbox",
+  "Close",
+  "Collapsible",
+  "Combobox",
+  "Command",
+  "Content",
+  "Description",
+  "Dialog",
+  "Drawer",
+  "Dropdown",
+  "Empty",
+  "Footer",
+  "Form",
+  "Group",
+  "Header",
+  "Icon",
+  "Input",
+  "Item",
+  "Label",
+  "Link",
+  "List",
+  "Loading",
+  "Media",
+  "Menu",
+  "Navigation",
+  "Overlay",
+  "Pagination",
+  "Popover",
+  "Portal",
+  "Progress",
+  "Provider",
+  "Radio",
+  "Resizable",
+  "Scroll",
+  "Select",
+  "Separator",
+  "Sheet",
+  "Shell",
+  "Sidebar",
+  "Skeleton",
+  "Slider",
+  "Sonner",
+  "Spinner",
+  "Status",
+  "Switcher",
+  "Table",
+  "Tabs",
+  "Textarea",
+  "Title",
+  "Toast",
+  "Toaster",
+  "Toggle",
+  "Tooltip",
+  "Trigger",
+]);
+
+const COMPONENT_NAME_EXEMPTIONS = new Set(["RequireAuth", "RequireGuest"]);
+const CANONICAL_COMPONENT_EXEMPT_FILES = new Set(["spaces-status.tsx"]);
+
 const COMPONENT_ANATOMY_RULES = new Map([
   [
     "space-switcher.tsx",
@@ -214,6 +285,78 @@ function toPascalCase(fileName) {
     .join("");
 }
 
+function getComponentFunctionEntries(content) {
+  const matches = [
+    ...content.matchAll(/function\s+([A-Z][A-Za-z0-9_]*)\b/g),
+  ];
+
+  return matches.map((match, index) => ({
+    name: match[1],
+    source: content.slice(
+      match.index,
+      matches[index + 1]?.index ?? content.length,
+    ),
+  }));
+}
+
+function hasComponentRoleSuffix(name) {
+  return [...COMPONENT_ROLE_SUFFIXES].some((suffix) => name.endsWith(suffix));
+}
+
+function checkComponentRoleNames(filePath, fileName, content) {
+  const entries = getComponentFunctionEntries(content);
+  const invalid = entries
+    .map(({ name }) => name)
+    .filter(
+      (name) =>
+        !COMPONENT_NAME_EXEMPTIONS.has(name) && !hasComponentRoleSuffix(name),
+    );
+
+  const violations = [];
+  if (invalid.length > 0) {
+    violations.push(
+      violation(
+        filePath,
+        "notes-app-component-role-suffix",
+        `${fileName} has component names without a recognized shadcn-style role suffix: ${invalid.join(", ")}.`,
+      ),
+    );
+  }
+
+  if (!CANONICAL_COMPONENT_EXEMPT_FILES.has(fileName)) {
+    const canonicalName = toPascalCase(fileName);
+    if (!entries.some(({ name }) => name === canonicalName)) {
+      violations.push(
+        violation(
+          filePath,
+          "notes-app-canonical-component-name",
+          `${fileName} must declare its canonical component as ${canonicalName}.`,
+        ),
+      );
+    }
+  }
+
+  return violations;
+}
+
+function checkComponentSlots(filePath, fileName, content) {
+  if (NON_VISUAL_FILES.has(fileName)) return [];
+
+  const missing = getComponentFunctionEntries(content)
+    .filter(({ source }) => !/data-slot=["'][^"']+["']/.test(source))
+    .map(({ name }) => name);
+
+  if (missing.length === 0) return [];
+
+  return [
+    violation(
+      filePath,
+      "notes-app-component-data-slot",
+      `${fileName} must give every visual component and subcomponent a data-slot; missing: ${missing.join(", ")}.`,
+    ),
+  ];
+}
+
 function checkFile(filePath, content) {
   const fileName = path.basename(filePath);
   if (!fileName.endsWith(".tsx") || fileName.endsWith(".test.tsx")) {
@@ -272,6 +415,8 @@ function checkFile(filePath, content) {
   violations.push(...checkSpaceShellContract(filePath, fileName, content));
   violations.push(...checkEmptyLayoutParts(filePath, fileName, content));
   violations.push(...checkRawLayoutWrappers(filePath, fileName, content));
+  violations.push(...checkComponentRoleNames(filePath, fileName, content));
+  violations.push(...checkComponentSlots(filePath, fileName, content));
 
   const openingTagPattern = /<[A-Za-z][\w.]*(?:\s|\n)[\s\S]*?>/g;
   for (const match of content.matchAll(openingTagPattern)) {
@@ -304,7 +449,12 @@ export {
   STATUS_COMPOSITION_PARTS,
   DIALOG_COMPOSITION_PARTS,
   COMPONENT_ANATOMY_RULES,
+  COMPONENT_ROLE_SUFFIXES,
+  COMPONENT_NAME_EXEMPTIONS,
+  CANONICAL_COMPONENT_EXEMPT_FILES,
   checkSpaceShellContract,
+  checkComponentRoleNames,
+  checkComponentSlots,
   checkFile,
 };
 

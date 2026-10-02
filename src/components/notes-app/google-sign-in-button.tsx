@@ -27,7 +27,7 @@ function GoogleSignInButton({
     t("signInWithGoogle");
 
   return (
-    <Button
+    <Button data-slot="google-sign-in-button"
       data-testid="google-sign-in-button"
       type="button"
       variant="outline"

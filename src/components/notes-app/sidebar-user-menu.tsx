@@ -44,7 +44,7 @@ type UserAvatarProps = ComponentProps<typeof Avatar> & {
 
 function UserAvatar({ displayName, photoUrl, ...props }: UserAvatarProps) {
   return (
-    <Avatar {...props} size="sm">
+    <Avatar data-slot="user-avatar" {...props} size="sm">
       {photoUrl && <AvatarImage src={photoUrl} alt="" />}
       <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
     </Avatar>
@@ -74,7 +74,7 @@ function SidebarUserMenu({
   const userIdentifier = user.displayName || user.email || userName;
 
   return (
-    <SidebarMenu
+    <SidebarMenu data-slot="sidebar-user-menu"
       {...props}
       className={cn("items-center gap-1 pr-1.5", className)}
       aria-label={t("openUserMenu")}

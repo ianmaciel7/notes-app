@@ -27,7 +27,7 @@ function RequireAuth({
   if (isLoading) {
     return (
       fallback ?? (
-        <Empty data-testid="require-auth-loading">
+        <Empty data-slot="require-auth" data-testid="require-auth-loading">
           <EmptyHeader>
             <EmptyMedia>
               <Spinner />

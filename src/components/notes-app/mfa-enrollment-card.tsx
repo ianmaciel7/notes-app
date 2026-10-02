@@ -25,7 +25,7 @@ function MfaEnrollmentCard({ ...props }: MfaEnrollmentCardProps) {
   const subtitleText = getTranslation(ui, "prompts", "mfaEnrollmentPrompt");
 
   return (
-    <AuthCard {...props}>
+    <AuthCard data-slot="mfa-enrollment-card" {...props}>
       <CardHeader>
         <CardTitle>
           <h1>{titleText}</h1>

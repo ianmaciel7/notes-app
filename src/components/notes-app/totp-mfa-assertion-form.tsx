@@ -54,7 +54,7 @@ function TotpMfaAssertionForm({
   };
 
   return (
-    <FieldGroup {...props} className={cn(className)}>
+    <FieldGroup data-slot="totp-mfa-assertion-form" {...props} className={cn(className)}>
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

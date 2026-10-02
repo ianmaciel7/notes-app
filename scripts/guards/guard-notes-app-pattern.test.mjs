@@ -5,8 +5,8 @@ import { checkFile } from "./guard-notes-app-pattern.mjs";
 test("accepts a visual component composed from ui with props first", () => {
   const source = `
     import { Alert } from "@/components/ui/alert";
-    function Example({ className, ...props }) {
-      return <Alert {...props} className={className} />;
+    function ExampleAlert({ className, ...props }) {
+      return <Alert {...props} data-slot="example-alert" className={className} />;
     }
   `;
 
@@ -172,5 +172,52 @@ test("rejects raw forwarded layout wrappers", () => {
 
   assert.ok(
     violations.some((item) => item.rule === "notes-app-no-raw-layout-wrapper"),
+  );
+});
+
+
+test("rejects subcomponents without a role suffix", () => {
+  const violations = checkFile(
+    "example-dialog.tsx",
+    `import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+     function ExampleDialog() { return <Dialog data-slot="example-dialog"><ExampleDialogPart /></Dialog>; }
+     function ExampleDialogPart() { return <DialogContent data-slot="example-dialog-part"><DialogTitle>Title</DialogTitle></DialogContent>; }`,
+  );
+
+  assert.ok(
+    violations.some(
+      (item) => item.rule === "notes-app-component-role-suffix",
+    ),
+  );
+});
+
+test("requires the canonical component name to match the file", () => {
+  const violations = checkFile(
+    "space-switcher.tsx",
+    `import { SidebarGroup, SidebarGroupContent } from "@/components/ui/sidebar";
+     import { InputGroup } from "@/components/ui/input-group";
+     import { Empty } from "@/components/ui/empty";
+     function SpaceSwitcherMenu() { return <SidebarGroup data-slot="space-switcher"><SidebarGroupContent><InputGroup /><Empty /></SidebarGroupContent></SidebarGroup>; }`,
+  );
+
+  assert.ok(
+    violations.some(
+      (item) => item.rule === "notes-app-canonical-component-name",
+    ),
+  );
+});
+
+test("requires data-slot on every visual subcomponent", () => {
+  const violations = checkFile(
+    "example-dialog.tsx",
+    `import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+     function ExampleDialog() { return <Dialog data-slot="example-dialog"><ExampleDialogContent /></Dialog>; }
+     function ExampleDialogContent() { return <DialogContent><DialogTitle>Title</DialogTitle></DialogContent>; }`,
+  );
+
+  assert.ok(
+    violations.some(
+      (item) => item.rule === "notes-app-component-data-slot",
+    ),
   );
 });

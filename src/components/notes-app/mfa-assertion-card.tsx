@@ -25,7 +25,7 @@ function MfaAssertionCard({ ...props }: MfaAssertionCardProps) {
   const subtitleText = getTranslation(ui, "prompts", "mfaAssertionPrompt");
 
   return (
-    <AuthCard {...props}>
+    <AuthCard data-slot="mfa-assertion-card" {...props}>
       <CardHeader>
         <CardTitle>
           <h1>{titleText}</h1>
