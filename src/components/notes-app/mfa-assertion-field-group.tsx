@@ -38,7 +38,7 @@ function MfaAssertionFieldGroup({
 
   if (!resolver) {
     throw new Error(
-      "MultiFactorAuthAssertionForm requires a multi-factor resolver",
+      "MfaAssertionFieldGroup requires a multi-factor resolver",
     );
   }
 

@@ -133,8 +133,9 @@ function MultiFactorEnrollmentVerifyTotpFieldGroup({
 
   return (
     <FieldGroup
+      {...props}
       data-slot="multi-factor-enrollment-verify-totp-field-group"
-      className="gap-4"
+      className={cn("gap-4", className)}
     >
       <Field className="items-center justify-center">
         <Image
@@ -159,8 +160,7 @@ function MultiFactorEnrollmentVerifyTotpFieldGroup({
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          {...props}
-          className={cn("flex flex-col gap-4", className)}
+          className="flex flex-col gap-4"
         >
           <FieldGroup>
             <VerificationCodeInput
