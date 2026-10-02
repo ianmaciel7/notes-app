@@ -6,31 +6,31 @@ import { FactorId } from "firebase/auth";
 import type { ComponentProps } from "react";
 import { useState } from "react";
 
-import { SmsMultiFactorEnrollmentForm } from "@/components/notes-app/sms-mfa-enrollment-form";
-import { TotpMultiFactorEnrollmentForm } from "@/components/notes-app/totp-mfa-enrollment-form";
+import { SmsMultiFactorEnrollmentForm } from "@/components/notes-app/sms-mfa-enrollment-field-group";
+import { TotpMultiFactorEnrollmentForm } from "@/components/notes-app/totp-mfa-enrollment-field-group";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 type Hint = (typeof FactorId)[keyof typeof FactorId];
 
-type MfaEnrollmentFormProps = ComponentProps<"div"> & {
+type MfaEnrollmentFieldGroupProps = ComponentProps<typeof FieldGroup> & {
   onEnrollment?: () => void;
   hints?: Hint[];
 };
 
 const DEFAULT_HINTS = [FactorId.TOTP, FactorId.PHONE] as const;
 
-function MfaEnrollmentForm({
+function MfaEnrollmentFieldGroup({
   onEnrollment,
   hints: hintsProp,
   className,
   ...props
-}: MfaEnrollmentFormProps) {
+}: MfaEnrollmentFieldGroupProps) {
   const hints = hintsProp ?? DEFAULT_HINTS;
 
   if (hints.length === 0) {
-    throw new Error("MfaEnrollmentForm must have at least one hint");
+    throw new Error("MfaEnrollmentFieldGroup must have at least one hint");
   }
 
   // If only a single hint is provided, select it by default to improve UX.
@@ -64,7 +64,7 @@ function MfaEnrollmentForm({
 
   return (
     <FieldGroup
-      data-slot="mfa-enrollment-form"
+      data-slot="mfa-enrollment-field-group"
       {...props}
       className={cn("gap-2", className)}
     >
@@ -103,4 +103,4 @@ function SmsButton(props: ComponentProps<typeof Button>) {
   );
 }
 
-export { MfaEnrollmentForm, type MfaEnrollmentFormProps };
+export { MfaEnrollmentFieldGroup, type MfaEnrollmentFieldGroupProps };

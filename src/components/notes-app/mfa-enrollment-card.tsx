@@ -7,7 +7,7 @@ import {
 } from "@firebase-oss/ui-react";
 import type { ComponentProps } from "react";
 import { AuthCard } from "@/components/notes-app/auth-card";
-import { MfaEnrollmentForm } from "@/components/notes-app/mfa-enrollment-form";
+import { MfaEnrollmentFieldGroup } from "@/components/notes-app/mfa-enrollment-field-group";
 import {
   CardContent,
   CardDescription,
@@ -33,7 +33,7 @@ function MfaEnrollmentCard({ ...props }: MfaEnrollmentCardProps) {
         <CardDescription>{subtitleText}</CardDescription>
       </CardHeader>
       <CardContent>
-        <MfaEnrollmentForm {...props} />
+        <MfaEnrollmentFieldGroup {...props} />
       </CardContent>
     </AuthCard>
   );

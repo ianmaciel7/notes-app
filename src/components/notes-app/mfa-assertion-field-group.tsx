@@ -11,21 +11,21 @@ import {
 import type { ComponentProps } from "react";
 import { useState } from "react";
 
-import { SmsMfaAssertionForm } from "@/components/notes-app/sms-mfa-assertion-form";
-import { TotpMfaAssertionForm } from "@/components/notes-app/totp-mfa-assertion-form";
+import { SmsMfaAssertionFieldGroup } from "@/components/notes-app/sms-mfa-assertion-field-group";
+import { TotpMfaAssertionFieldGroup } from "@/components/notes-app/totp-mfa-assertion-field-group";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-type MfaAssertionFormProps = ComponentProps<"div"> & {
+type MfaAssertionFieldGroupProps = ComponentProps<typeof FieldGroup> & {
   onSuccess?: (credential: UserCredential) => void;
 };
 
-function MfaAssertionForm({
+function MfaAssertionFieldGroup({
   onSuccess,
   className,
   ...props
-}: MfaAssertionFormProps) {
+}: MfaAssertionFieldGroupProps) {
   const ui = useUI();
   const resolver = ui.multiFactorResolver;
   const mfaAssertionFactorPrompt = getTranslation(
@@ -50,7 +50,7 @@ function MfaAssertionForm({
   if (hint) {
     if (hint.factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
       return (
-        <SmsMfaAssertionForm
+        <SmsMfaAssertionFieldGroup
           hint={hint}
           onSuccess={onSuccess}
           {...props}
@@ -61,7 +61,7 @@ function MfaAssertionForm({
 
     if (hint.factorId === TotpMultiFactorGenerator.FACTOR_ID) {
       return (
-        <TotpMfaAssertionForm
+        <TotpMfaAssertionFieldGroup
           hint={hint}
           onSuccess={onSuccess}
           {...props}
@@ -73,7 +73,7 @@ function MfaAssertionForm({
 
   return (
     <FieldGroup
-      data-slot="mfa-assertion-form"
+      data-slot="mfa-assertion-field-group"
       {...props}
       className={cn("gap-2", className)}
     >
@@ -120,8 +120,8 @@ function SmsButton(props: ComponentProps<typeof Button>) {
 }
 
 export {
-  MfaAssertionForm,
-  MfaAssertionForm as MultiFactorAuthAssertionForm,
-  type MfaAssertionFormProps,
-  type MfaAssertionFormProps as MultiFactorAuthAssertionFormProps,
+  MfaAssertionFieldGroup,
+  MfaAssertionFieldGroup as MultiFactorAuthAssertionForm,
+  type MfaAssertionFieldGroupProps,
+  type MfaAssertionFieldGroupProps as MultiFactorAuthAssertionFormProps,
 };
