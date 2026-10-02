@@ -185,9 +185,7 @@ test("rejects subcomponents without a role suffix", () => {
   );
 
   assert.ok(
-    violations.some(
-      (item) => item.rule === "notes-app-component-role-suffix",
-    ),
+    violations.some((item) => item.rule === "notes-app-component-role-suffix"),
   );
 });
 
@@ -216,8 +214,6 @@ test("requires data-slot on every visual subcomponent", () => {
   );
 
   assert.ok(
-    violations.some(
-      (item) => item.rule === "notes-app-component-data-slot",
-    ),
+    violations.some((item) => item.rule === "notes-app-component-data-slot"),
   );
 });

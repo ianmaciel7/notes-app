@@ -72,7 +72,11 @@ function MfaAssertionForm({
   }
 
   return (
-    <FieldGroup data-slot="mfa-assertion-form" {...props} className={cn("gap-2", className)}>
+    <FieldGroup
+      data-slot="mfa-assertion-form"
+      {...props}
+      className={cn("gap-2", className)}
+    >
       <Field>
         <FieldDescription>{mfaAssertionFactorPrompt}</FieldDescription>
       </Field>

@@ -8,7 +8,10 @@ import {
 } from "@firebase-oss/ui-react";
 import type { UserCredential } from "firebase/auth";
 import type { ComponentProps } from "react";
-import { AuthCard, AuthCardProviderGroup } from "@/components/notes-app/auth-card";
+import {
+  AuthCard,
+  AuthCardProviderGroup,
+} from "@/components/notes-app/auth-card";
 import { LoginForm } from "@/components/notes-app/login-form";
 import {
   CardContent,
@@ -48,7 +51,9 @@ function LoginCard({
           onForgotPasswordClick={onForgotPasswordClick}
           onSignUpClick={onSignUpClick}
         />
-        {children ? <AuthCardProviderGroup>{children}</AuthCardProviderGroup> : null}
+        {children ? (
+          <AuthCardProviderGroup>{children}</AuthCardProviderGroup>
+        ) : null}
       </CardContent>
     </AuthCard>
   );

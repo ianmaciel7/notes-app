@@ -69,7 +69,8 @@ function CreateSpaceForm({
   };
 
   return (
-    <form data-slot="create-space-form"
+    <form
+      data-slot="create-space-form"
       data-testid="create-space-form"
       onSubmit={handleSubmit}
       {...props}

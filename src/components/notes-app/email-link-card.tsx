@@ -8,7 +8,10 @@ import {
 } from "@firebase-oss/ui-react";
 import type { UserCredential } from "firebase/auth";
 import type { ComponentProps } from "react";
-import { AuthCard, AuthCardProviderGroup } from "@/components/notes-app/auth-card";
+import {
+  AuthCard,
+  AuthCardProviderGroup,
+} from "@/components/notes-app/auth-card";
 import { EmailLinkAuthForm } from "@/components/notes-app/email-link-form";
 import { MfaAssertionCard } from "@/components/notes-app/mfa-assertion-card";
 import { RedirectError } from "@/components/notes-app/redirect-error-alert";

@@ -68,7 +68,8 @@ function ForgotPasswordForm({
 
   return (
     <FormProvider {...form}>
-      <form data-slot="forgot-password-form"
+      <form
+        data-slot="forgot-password-form"
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);

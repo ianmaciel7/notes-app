@@ -33,7 +33,12 @@ function CreateSpaceDialog({
   ...props
 }: CreateSpaceDialogProps) {
   return (
-    <Dialog data-slot="create-space-dialog" {...props} open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      data-slot="create-space-dialog"
+      {...props}
+      open={open}
+      onOpenChange={onOpenChange}
+    >
       {children}
     </Dialog>
   );
@@ -44,7 +49,11 @@ function CreateSpaceDialogContent({
   ...props
 }: CreateSpaceDialogContentProps) {
   return (
-    <DialogContent data-slot="create-space-dialog-content" {...props} data-testid="create-space-dialog">
+    <DialogContent
+      data-slot="create-space-dialog-content"
+      {...props}
+      data-testid="create-space-dialog"
+    >
       {children}
     </DialogContent>
   );
@@ -68,7 +77,8 @@ function CreateSpaceDialogForm({
   ...props
 }: CreateSpaceDialogFormProps) {
   return (
-    <CreateSpaceForm data-slot="create-space-dialog-form"
+    <CreateSpaceForm
+      data-slot="create-space-dialog-form"
       {...props}
       onSubmitSpace={onSubmit}
       onCancel={onCancel}
