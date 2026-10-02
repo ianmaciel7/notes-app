@@ -31,6 +31,10 @@ const SHADCN_COMPOUND_SUFFIXES = new Set([
 ]);
 
 const SHADCN_SUFFIXES = new Set([
+  "field-group",
+  "button-group",
+  "input-group",
+  "toggle-group",
   "card",
   "form",
   "button",
@@ -124,9 +128,10 @@ function getBasename(filename) {
   return path.basename(filename, ".tsx");
 }
 
-function getSuffix(basename) {
-  const idx = basename.lastIndexOf("-");
-  return idx === -1 ? basename : basename.slice(idx + 1);
+function hasRecognizedSuffix(basename) {
+  return [...SHADCN_SUFFIXES].some(
+    (suffix) => basename === suffix || basename.endsWith(`-${suffix}`),
+  );
 }
 
 function isCompliant(filename) {
