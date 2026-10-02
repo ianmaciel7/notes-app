@@ -103,7 +103,9 @@ function toPascalCase(fileName) {
 }
 
 function getComponentFunctionEntries(content) {
-  const allFunctions = [...content.matchAll(/function\s+([A-Za-z_][A-Za-z0-9_]*)\b/g)];
+  const allFunctions = [
+    ...content.matchAll(/function\s+([A-Za-z_][A-Za-z0-9_]*)\b/g),
+  ];
 
   return allFunctions
     .filter((match) => /^[A-Z]/.test(match[1]))
