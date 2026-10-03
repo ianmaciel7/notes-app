@@ -115,6 +115,12 @@
       "skillPath": "skills/engineering/implement/SKILL.md",
       "computedHash": "130cac2d72bfde8cd526bf3b754211e2fe00e84bc4d9f9c56f749b9541a3afad"
     },
+    "implementing-drag-drop": {
+      "source": "ancoleman/ai-design-components",
+      "sourceType": "github",
+      "skillPath": "skills/implementing-drag-drop/SKILL.md",
+      "computedHash": "861ba06673879b5f79dd95c3d3643be20f4e9608ed86140d9ab8f74492eed507"
+    },
     "lighthouse-verification": {
       "source": "GoogleChrome/lighthouse",
       "sourceType": "github",

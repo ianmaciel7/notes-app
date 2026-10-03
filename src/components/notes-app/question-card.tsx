@@ -1,9 +1,12 @@
 "use client";
 
-import { CheckIcon, XIcon } from "lucide-react";
+import { RotateCcwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { Badge } from "@/components/ui/badge";
+import { QuestionAnswerGroup } from "@/components/notes-app/question-answer-group";
+import { QuestionExplanationDescription } from "@/components/notes-app/question-explanation-description";
+import { QuestionImageItem } from "@/components/notes-app/question-image-item";
+import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
 import { Button } from "@/components/ui/button";
 import {
   CardContent,
@@ -25,62 +28,6 @@ type QuestionCardProps = Omit<ComponentProps<typeof CardRoot>, "children"> & {
   total: number;
 };
 
-interface QuestionOptionProps {
-  optionIndex: number;
-  selected: boolean;
-  isCorrect: boolean;
-  wrongPick: boolean;
-  rightKey: boolean;
-  text: string;
-}
-
-function QuestionOptionButton({
-  optionIndex,
-  selected,
-  isCorrect: _isCorrect,
-  wrongPick,
-  rightKey,
-  text,
-  onSelect,
-}: QuestionOptionProps & { onSelect: () => void }) {
-  const t = useTranslations("exam");
-  const key = String.fromCharCode(65 + optionIndex);
-
-  return (
-    <Button
-      type="button"
-      variant="outline"
-      data-slot="question-option"
-      aria-pressed={selected}
-      aria-disabled={wrongPick}
-      onClick={onSelect}
-      className={cn(
-        "h-auto min-h-9 justify-start gap-2 whitespace-normal py-2 text-left font-normal hover:bg-muted/50",
-        rightKey &&
-          "border-primary bg-primary/10 font-medium text-foreground hover:bg-primary/10 dark:border-primary dark:bg-primary/15 dark:hover:bg-primary/15",
-        wrongPick &&
-          "border-destructive bg-destructive/10 text-destructive hover:bg-destructive/10 hover:text-destructive dark:border-destructive dark:bg-destructive/15 dark:hover:bg-destructive/15",
-        !wrongPick && selected && "border-primary dark:border-primary",
-      )}
-    >
-      <span className="font-semibold">{key}.</span>
-      <span className="flex-1">{text}</span>
-      {rightKey ? (
-        <>
-          <CheckIcon aria-hidden="true" />
-          <span className="sr-only">{t("correctOptionAria", { key })}</span>
-        </>
-      ) : null}
-      {wrongPick ? (
-        <>
-          <XIcon aria-hidden="true" />
-          <span className="sr-only">{t("incorrectOptionAria", { key })}</span>
-        </>
-      ) : null}
-    </Button>
-  );
-}
-
 function QuestionCard({
   spaceId,
   question,
@@ -93,138 +40,105 @@ function QuestionCard({
   const t = useTranslations("exam");
   const {
     status,
-    selectedOptionIds,
+    answer,
+    isSubmitting,
     isResolved,
+    isGradable,
+    needsConfirmation,
+    canSubmit,
     showExplanation,
     hasSaveError,
-    selectOption,
+    setAnswer,
+    submit,
     showAnswer,
+    retry,
   } = useQuestionCard({ spaceId, question, card });
-
   const { properties } = question;
-
-  // Type guard for choice-based questions
-  const isChoiceQuestion =
-    properties.type === "single-choice" ||
-    properties.type === "multiple-choice" ||
-    properties.type === "true-false";
-
-  if (!isChoiceQuestion || !("options" in properties)) {
-    return null;
-  }
-
-  const { prompt, options, explanation } = properties;
-  const isMultipleChoice = properties.type === "multiple-choice";
-  const correctOptionIds =
-    properties.type === "single-choice"
-      ? [properties.correctAnswer]
-      : properties.type === "multiple-choice"
-        ? properties.correctAnswer
-        : [properties.correctAnswer];
 
   return (
     <CardRoot
       data-slot="question-card"
       data-status={status}
+      data-type={properties.type}
       {...props}
       className={cn("w-full pt-0", className)}
     >
       <CardHeader className="border-b border-border bg-muted/50 pt-(--card-spacing)">
         <CardTitle className="flex items-center justify-between gap-2 text-sm font-semibold text-foreground">
           <span>{t("questionIndex", { current: index + 1, total })}</span>
-          {status === "answeredCorrect" ? (
-            <Badge>
-              <CheckIcon aria-hidden="true" data-icon="inline-start" />
-              {t("correct")}
-            </Badge>
-          ) : null}
-          {status === "answeredIncorrect" ? (
-            <Badge variant="destructive">
-              <XIcon aria-hidden="true" data-icon="inline-start" />
-              {t("incorrect")}
-            </Badge>
-          ) : null}
+          <span aria-live="polite">
+            {status === "answeredCorrect" ? (
+              <QuestionResultBadge state="correct" />
+            ) : null}
+            {status === "answeredIncorrect" ? (
+              <QuestionResultBadge state="incorrect" />
+            ) : null}
+          </span>
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <p className="whitespace-pre-wrap font-sans text-foreground">
-          {prompt}
+          {properties.prompt}
         </p>
-        {isMultipleChoice ? (
+        {properties.promptImage ? (
+          <QuestionImageItem
+            url={properties.promptImage.url}
+            alt={properties.promptImage.alt}
+            className="max-w-xl"
+          />
+        ) : null}
+        {properties.type === "multiple-choice" ? (
           <p className="text-xs text-muted-foreground">{t("multipleHint")}</p>
         ) : null}
-        <fieldset className="m-0 flex min-w-0 flex-col gap-2 border-0 p-0">
-          <legend className="sr-only">{prompt}</legend>
-          {options.map((option, optionIndex) => {
-            const selected = selectedOptionIds.includes(option.id);
-            const isCorrect = (correctOptionIds as string[]).includes(
-              option.id,
-            );
-            const wrongPick = isResolved && selected && !isCorrect;
-            const rightKey = isResolved && isCorrect;
-
-            return (
-              <QuestionOptionButton
-                key={option.id}
-                optionIndex={optionIndex}
-                selected={selected}
-                isCorrect={isCorrect}
-                wrongPick={wrongPick}
-                rightKey={rightKey}
-                text={option.text}
-                onSelect={() => selectOption(option.id)}
-              />
-            );
-          })}
-        </fieldset>
+        {isGradable ? null : (
+          <p className="text-xs text-muted-foreground">{t("revealOnly")}</p>
+        )}
+        <QuestionAnswerGroup
+          question={properties}
+          answer={answer}
+          resolved={isResolved}
+          onAnswerChange={setAnswer}
+        />
         {hasSaveError ? (
           <p role="alert" className="text-xs text-destructive">
             {t("saveFailed")}
           </p>
         ) : null}
-        {showExplanation && explanation ? (
-          <section
-            data-slot="question-explanation"
-            aria-label={t("explanation")}
-            className="flex flex-col gap-2 rounded-xl border border-border bg-muted/30 p-4"
-          >
-            <h3 className="text-sm font-semibold text-foreground">
-              {t("explanation")}
-            </h3>
-            <p className="whitespace-pre-wrap text-sm text-foreground">
-              {explanation.text}
-            </p>
-            {explanation.referenceUrls.length > 0 ? (
-              <div className="flex flex-col gap-1">
-                <h4 className="text-xs font-semibold text-muted-foreground">
-                  {t("references")}
-                </h4>
-                <ul className="flex flex-col gap-1 text-xs">
-                  {explanation.referenceUrls.map((url) => (
-                    <li key={url}>
-                      <a
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="break-all text-primary underline-offset-4 hover:underline"
-                      >
-                        {url}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-          </section>
+        {showExplanation && properties.explanation ? (
+          <QuestionExplanationDescription
+            explanation={properties.explanation}
+          />
         ) : null}
       </CardContent>
-      {isResolved ? null : (
-        <CardFooter>
-          <Button type="button" variant="ghost" size="sm" onClick={showAnswer}>
-            {t("showAnswer")}
+      <CardFooter className="gap-2">
+        {isResolved ? (
+          <Button type="button" variant="outline" size="sm" onClick={retry}>
+            <RotateCcwIcon aria-hidden="true" data-icon="inline-start" />
+            {t("tryAgain")}
           </Button>
-        </CardFooter>
-      )}
+        ) : (
+          <>
+            {needsConfirmation ? (
+              <Button
+                type="button"
+                size="sm"
+                disabled={!canSubmit || isSubmitting}
+                onClick={submit}
+              >
+                {t("checkAnswer")}
+              </Button>
+            ) : null}
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={showAnswer}
+            >
+              {t("showAnswer")}
+            </Button>
+          </>
+        )}
+      </CardFooter>
     </CardRoot>
   );
 }

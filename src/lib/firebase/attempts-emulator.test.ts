@@ -80,11 +80,20 @@ describe("submitAttempt against the Firestore emulator", () => {
         rating: 3,
         reviewMode: "review",
         elapsedMilliseconds: 1500,
+        questionType: "matching",
+        submittedAnswer: { type: "matching", value: { l1: "r1", l2: "r2" } },
+        isCorrect: true,
       },
     });
 
     const attempt = (await getDoc(doc(spaceRef, "attempts", attemptId))).data();
     expect(attempt?.rating).toBe(3);
+    expect(attempt?.questionType).toBe("matching");
+    expect(attempt?.submittedAnswer).toEqual({
+      type: "matching",
+      value: { l1: "r1", l2: "r2" },
+    });
+    expect(attempt?.isCorrect).toBe(true);
     expect(attempt?.fsrsSnapshot.state).toBe(0);
 
     const updatedCard = (await getDoc(cardRef)).data();
@@ -104,6 +113,9 @@ describe("submitAttempt against the Firestore emulator", () => {
           rating: 3,
           reviewMode: "review",
           elapsedMilliseconds: 1500,
+          questionType: "matching",
+          submittedAnswer: { type: "matching", value: { l1: "r1", l2: "r2" } },
+          isCorrect: true,
         },
       }),
     ).rejects.toMatchObject({ code: "permission-denied" });

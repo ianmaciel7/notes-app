@@ -1,4 +1,5 @@
 import type { FirestoreTime } from "@/types/card";
+import type { QuestionProperties } from "@/types/question";
 
 export type LifecycleState =
   | "active"
@@ -33,36 +34,6 @@ export interface ExamProperties {
 export interface ExamObject extends BaseObjectDocument {
   objectTypeId: "exam";
   properties: ExamProperties;
-}
-
-export interface QuestionOption {
-  id: string;
-  text: string;
-}
-
-export type AnswerProvenance =
-  | "official"
-  | "suggested"
-  | "community"
-  | "user"
-  | "ai";
-
-export interface GroundedExplanation {
-  text: string;
-  referenceUrls: string[];
-  answerProvenance: AnswerProvenance;
-}
-
-export type QuestionFormat = "single_choice" | "multiple_choice";
-
-export interface QuestionProperties {
-  statement: string;
-  options: QuestionOption[];
-  correctOptionIds: string[];
-  groundedExplanation?: GroundedExplanation;
-  examId: string;
-  orderIndex: number;
-  format: QuestionFormat;
 }
 
 export interface QuestionObject extends BaseObjectDocument {

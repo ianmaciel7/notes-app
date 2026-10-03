@@ -68,7 +68,11 @@ function QuestionSlotItem({
       <FieldContent className="gap-2">
         <FieldLabel htmlFor={selectId}>{slot.label}</FieldLabel>
         {placed ? (
-          <QuestionDragItem item={placed} disabled={resolved} />
+          <QuestionDragItem
+            item={placed}
+            disabled={resolved}
+            className="w-fit"
+          />
         ) : (
           <p className="text-xs text-muted-foreground">{t("dragSlotEmpty")}</p>
         )}

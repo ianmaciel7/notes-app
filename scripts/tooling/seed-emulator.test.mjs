@@ -45,8 +45,23 @@ describe("seed-emulator-lib", () => {
     const questions = docs.filter(
       (doc) => doc.data.objectTypeId === "question",
     );
-    assert.equal(questions.length, 3);
+    assert.equal(questions.length, 8);
+    assert.deepEqual(
+      questions.map((question) => question.data.properties.type),
+      [
+        "single-choice",
+        "multiple-choice",
+        "true-false",
+        "fill-blank",
+        "matching",
+        "drag-and-drop",
+        "hotspot",
+        "case-study",
+      ],
+    );
     for (const question of questions) {
+      assert.equal(question.data.properties.statement, undefined);
+      assert.equal(question.data.properties.format, undefined);
       assert.equal(question.data.properties.examId, EXAM_ID);
       const questionId = question.path.split("/").pop();
       assert.ok(

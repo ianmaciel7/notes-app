@@ -7,6 +7,9 @@ const valid = {
   rating: 3,
   reviewMode: "review",
   elapsedMilliseconds: 1200,
+  questionType: "single-choice",
+  submittedAnswer: { type: "single-choice", value: "b" },
+  isCorrect: true,
 };
 
 describe("validateCreateAttemptInput", () => {
@@ -14,6 +17,8 @@ describe("validateCreateAttemptInput", () => {
     const result = validateCreateAttemptInput(valid);
     expect(result.success).toBe(true);
     expect(result.data?.questionId).toBe("q1");
+    expect(result.data?.submittedAnswer).toEqual(valid.submittedAnswer);
+    expect(result.data?.isCorrect).toBe(true);
     expect(result.data).not.toHaveProperty("userConfidence");
   });
 
@@ -37,6 +42,9 @@ describe("validateCreateAttemptInput", () => {
       reviewMode: "other",
       elapsedMilliseconds: -1,
       userConfidence: "sure",
+      questionType: "essay",
+      submittedAnswer: "b",
+      isCorrect: "yes",
     });
     expect(result.error).toBe("validationFailed");
     expect(result.fieldErrors).toEqual({
@@ -46,6 +54,53 @@ describe("validateCreateAttemptInput", () => {
       reviewMode: "invalidReviewMode",
       elapsedMilliseconds: "invalidElapsed",
       userConfidence: "invalidConfidence",
+      questionType: "invalidQuestionType",
+      submittedAnswer: "invalidSubmittedAnswer",
+      isCorrect: "invalidIsCorrect",
     });
+  });
+
+  it("rejects an answer whose type differs from the question type", () => {
+    const result = validateCreateAttemptInput({
+      ...valid,
+      submittedAnswer: { type: "hotspot", value: ["lb"] },
+    });
+    expect(result.fieldErrors).toEqual({
+      submittedAnswer: "invalidSubmittedAnswer",
+    });
+  });
+
+  it.each([
+    ["multiple-choice", ["a", "b"]],
+    ["true-false", "false"],
+    ["fill-blank", "run"],
+    ["matching", { l1: "r1" }],
+    ["drag-and-drop", { s1: "i1" }],
+    ["hotspot", ["lb"]],
+    ["case-study", { p1: "a", p2: ["x"] }],
+  ])("accepts a %s answer", (type, value) => {
+    const result = validateCreateAttemptInput({
+      ...valid,
+      questionType: type,
+      submittedAnswer: { type, value },
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it.each([
+    ["single-choice", ""],
+    ["multiple-choice", []],
+    ["true-false", "maybe"],
+    ["fill-blank", "  "],
+    ["matching", { l1: "" }],
+    ["hotspot", [1]],
+    ["case-study", { p1: 1 }],
+  ])("rejects an empty or malformed %s answer", (type, value) => {
+    const result = validateCreateAttemptInput({
+      ...valid,
+      questionType: type,
+      submittedAnswer: { type, value },
+    });
+    expect(result.fieldErrors?.submittedAnswer).toBe("invalidSubmittedAnswer");
   });
 });

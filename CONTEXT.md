@@ -182,8 +182,16 @@ Top-level certification assessment object (`objectTypeId: "exam"`), maintaining 
 **Avoid in this product context:** certification (as entity), test, course
 
 **Quest&atilde;o** · `Question`:  
-Assessment item object (`objectTypeId: "question"`) containing structured prompt, options, correct answer, and grounded explanation in `properties`, while leaving `content` free for user personal notes.  
+Assessment item object (`objectTypeId: "question"`) containing a `type`, prompt, type-specific data, correct answer, and grounded explanation in `properties`, while leaving `content` free for user personal notes.  
 **Avoid in this product context:** Flashcard, card, item, exercise
+
+**Tipo de quest&atilde;o** · `QuestionType`:  
+Discriminator of a Question (`single-choice`, `multiple-choice`, `true-false`, `fill-blank`, `matching`, `drag-and-drop`, `hotspot`, `case-study`) that fixes which fields it requires and forbids and which control answers it. An image is an attribute of a Question or option, never a type.  
+**Avoid in this product context:** format, kind, image question
+
+**Resposta enviada** · `SubmittedAnswer`:  
+The answer a learner sent for a Question, stored with its Attempt as `{ type, value }` and never edited afterward.  
+**Avoid in this product context:** user answer, response
 
 **Explica&ccedil;&atilde;o fundamentada** · `GroundedExplanation`:  
 Rationale within a Question linking correct choices to official documentation URLs and architectural insights.  
@@ -202,7 +210,7 @@ Exam simulation mode: Questions filtered by criteria, answered sequentially, opt
 **Avoid in this product context:** test, exam, quiz, Simulation
 
 **Tentativa** · `Attempt`:  
-Append-only immutable record of each answer submitted to a Question in Review or Mock Exam. Forms a single unified history; failing a Question during a Mock Exam accelerates its next Review appearance.  
+Append-only immutable record of each answer submitted to a Question in Review or Mock Exam, including the Submitted Answer and whether it was correct. Forms a single unified history; failing a Question during a Mock Exam accelerates its next Review appearance.  
 **Avoid in this product context:** review log, response, history
 
 **Plano de prova** · `ExamPlan`:  

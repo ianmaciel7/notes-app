@@ -161,6 +161,19 @@ service cloud.firestore {
         && data.elapsedMilliseconds is int
         && data.elapsedMilliseconds >= 0
         && data.get('userConfidence', 'confident') in ['guessed', 'uncertain', 'confident']
+        && data.get('questionType', 'single-choice') in [
+          'single-choice',
+          'multiple-choice',
+          'true-false',
+          'fill-blank',
+          'matching',
+          'drag-and-drop',
+          'hotspot',
+          'case-study'
+        ]
+        && data.get('submittedAnswer', {}) is map
+        && data.get('submittedAnswer', {}).get('type', data.get('questionType', '')) == data.get('questionType', '')
+        && data.get('isCorrect', false) is bool
         && data.fsrsSnapshot is map
         && data.reviewedAt is timestamp;
     }

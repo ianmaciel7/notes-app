@@ -1,4 +1,6 @@
 import type { CreateAttemptInput } from "@/types/attempt";
+import { QUESTION_TYPES } from "@/types/question";
+import { parseSubmittedAnswer } from "./submitted-answer";
 
 export type AttemptValidationErrorCode =
   | "invalidInput"
@@ -8,7 +10,10 @@ export type AttemptValidationErrorCode =
   | "invalidRating"
   | "invalidReviewMode"
   | "invalidElapsed"
-  | "invalidConfidence";
+  | "invalidConfidence"
+  | "invalidQuestionType"
+  | "invalidSubmittedAnswer"
+  | "invalidIsCorrect";
 
 export type AttemptValidationField =
   | "questionId"
@@ -16,7 +21,10 @@ export type AttemptValidationField =
   | "rating"
   | "reviewMode"
   | "elapsedMilliseconds"
-  | "userConfidence";
+  | "userConfidence"
+  | "questionType"
+  | "submittedAnswer"
+  | "isCorrect";
 
 export interface AttemptValidationResult {
   success: boolean;
@@ -30,6 +38,34 @@ export interface AttemptValidationResult {
 const RATINGS = [1, 2, 3, 4] as const;
 const MODES = ["review", "mockExam"] as const;
 const CONFIDENCES = ["guessed", "uncertain", "confident"] as const;
+
+type AnswerFields = Pick<
+  CreateAttemptInput,
+  "questionType" | "submittedAnswer" | "isCorrect"
+>;
+
+/** Validates the type, submitted answer, and correctness flag recorded with an attempt. */
+function readAnswerFields(
+  raw: Record<string, unknown>,
+  fieldErrors: NonNullable<AttemptValidationResult["fieldErrors"]>,
+): AnswerFields | null {
+  const questionType = QUESTION_TYPES.find((type) => type === raw.questionType);
+  if (!questionType) fieldErrors.questionType = "invalidQuestionType";
+
+  const submittedAnswer = parseSubmittedAnswer(raw.submittedAnswer);
+  if (!submittedAnswer || submittedAnswer.type !== questionType) {
+    fieldErrors.submittedAnswer = "invalidSubmittedAnswer";
+  }
+
+  const isCorrect = raw.isCorrect;
+  if (typeof isCorrect !== "boolean")
+    fieldErrors.isCorrect = "invalidIsCorrect";
+
+  if (!questionType || !submittedAnswer || typeof isCorrect !== "boolean") {
+    return null;
+  }
+  return { questionType, submittedAnswer, isCorrect };
+}
 
 export function validateCreateAttemptInput(
   input: unknown,
@@ -67,7 +103,9 @@ export function validateCreateAttemptInput(
     fieldErrors.userConfidence = "invalidConfidence";
   }
 
-  if (Object.keys(fieldErrors).length > 0) {
+  const answerFields = readAnswerFields(raw, fieldErrors);
+
+  if (Object.keys(fieldErrors).length > 0 || !answerFields) {
     return { success: false, error: "validationFailed", fieldErrors };
   }
 
@@ -79,6 +117,7 @@ export function validateCreateAttemptInput(
       rating: raw.rating as CreateAttemptInput["rating"],
       reviewMode: raw.reviewMode as CreateAttemptInput["reviewMode"],
       elapsedMilliseconds: elapsed as number,
+      ...answerFields,
       ...(raw.userConfidence !== undefined
         ? {
             userConfidence:

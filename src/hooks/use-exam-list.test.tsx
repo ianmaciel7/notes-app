@@ -96,6 +96,46 @@ describe("useExamList", () => {
     expect(result.current.cardsByQuestionId.get("q1")?.id).toBe("c1");
   });
 
+  it("converts legacy-shaped questions on read and skips unconvertible ones", () => {
+    const { result } = renderHook(
+      () => useExamList({ spaceId: "s1", examId: "e1" }),
+      { wrapper: wrapperFor("u1") },
+    );
+    const legacy = {
+      statement: "Which one?",
+      options: [
+        { id: "a", text: "A" },
+        { id: "b", text: "B" },
+      ],
+      correctOptionIds: ["b"],
+      examId: "e1",
+      orderIndex: 0,
+      format: "single_choice",
+    };
+
+    act(() => {
+      bySuffix("/objects").next({
+        docs: [
+          { id: "q1", data: () => ({ title: "Q1", properties: legacy }) },
+          {
+            id: "q2",
+            data: () => ({
+              title: "Q2",
+              properties: { ...legacy, correctOptionIds: [] },
+            }),
+          },
+        ],
+      });
+    });
+
+    expect(result.current.questions).toHaveLength(1);
+    expect(result.current.questions[0].properties).toMatchObject({
+      type: "single-choice",
+      prompt: "Which one?",
+      correctAnswer: "b",
+    });
+  });
+
   it("surfaces snapshot errors from either subscription", () => {
     const { result } = renderHook(
       () => useExamList({ spaceId: "s1", examId: "e1" }),

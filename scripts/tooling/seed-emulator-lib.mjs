@@ -10,7 +10,7 @@ export const SPACE_ID = "demo-space";
 export const EXAM_ID = "gcp-cdl";
 
 // The emulator treats this bearer token as an admin and skips security rules.
-const ADMIN_HEADERS = {
+export const ADMIN_HEADERS = {
   Authorization: "Bearer owner",
   "Content-Type": "application/json",
 };
@@ -51,19 +51,29 @@ export function googleIdpPostBody({ email, name }) {
   return `providerId=google.com&id_token=${idToken}`;
 }
 
+// One sample per question type (ADR 0018). `examId` and `orderIndex` are added
+// when the documents are built; nothing here uses the legacy ExamTopics shape.
 const QUESTIONS = [
   {
     id: "q1",
-    format: "single_choice",
-    statement:
+    type: "single-choice",
+    prompt:
       "A company wants to run stateless containers without managing servers. Which Google Cloud service fits best?",
     options: [
-      ["a", "Cloud Run"],
-      ["b", "Compute Engine"],
-      ["c", "Cloud SQL"],
-      ["d", "Cloud Storage"],
+      {
+        id: "a",
+        text: "Cloud Run",
+        explanation: "Fully managed containers that scale to zero.",
+      },
+      {
+        id: "b",
+        text: "Compute Engine",
+        explanation: "You manage the virtual machines yourself.",
+      },
+      { id: "c", text: "Cloud SQL" },
+      { id: "d", text: "Cloud Storage" },
     ],
-    correct: ["a"],
+    correctAnswer: "a",
     explanation: {
       text: "Cloud Run runs stateless containers on a fully managed platform and scales to zero.",
       referenceUrls: [
@@ -74,31 +84,136 @@ const QUESTIONS = [
   },
   {
     id: "q2",
-    format: "multiple_choice",
-    statement: "Which two services are serverless? (Choose two.)",
+    type: "multiple-choice",
+    prompt: "Which two services are serverless? (Choose two.)",
     options: [
-      ["a", "Cloud Run"],
-      ["b", "Compute Engine"],
-      ["c", "Cloud Functions"],
-      ["d", "Persistent Disk"],
+      { id: "a", text: "Cloud Run" },
+      { id: "b", text: "Compute Engine" },
+      { id: "c", text: "Cloud Functions" },
+      { id: "d", text: "Persistent Disk" },
     ],
-    correct: ["a", "c"],
+    correctAnswer: ["a", "c"],
   },
   {
     id: "q3",
-    format: "single_choice",
-    statement: "Which service stores unstructured objects such as images?",
+    type: "true-false",
+    prompt: "Cloud Run can scale to zero instances when there is no traffic.",
     options: [
-      ["a", "Cloud SQL"],
-      ["b", "Cloud Storage"],
-      ["c", "Bigtable"],
+      { id: "true", text: "True" },
+      { id: "false", text: "False" },
     ],
-    correct: ["b"],
+    correctAnswer: "true",
     explanation: {
-      text: "Cloud Storage is object storage for unstructured data.",
+      text: "Scaling to zero is a core Cloud Run behavior.",
       referenceUrls: [],
       answerProvenance: "official",
     },
+  },
+  {
+    id: "q4",
+    type: "fill-blank",
+    prompt:
+      "The fully managed container platform from Google Cloud is Cloud ____.",
+    correctAnswer: ["Run", "Cloud Run"],
+  },
+  {
+    id: "q5",
+    type: "matching",
+    prompt: "Match each service with its category.",
+    leftItems: [
+      { id: "l1", text: "Cloud Run" },
+      { id: "l2", text: "Cloud SQL" },
+      { id: "l3", text: "Cloud Storage" },
+    ],
+    rightItems: [
+      { id: "r1", text: "Compute" },
+      { id: "r2", text: "Relational database" },
+      { id: "r3", text: "Object storage" },
+      { id: "r4", text: "Networking" },
+    ],
+    correctAnswer: { l1: "r1", l2: "r2", l3: "r3" },
+  },
+  {
+    id: "q6",
+    type: "drag-and-drop",
+    prompt: "Place the layers of a typical web request path in order.",
+    items: [
+      { id: "i1", text: "Load balancer" },
+      { id: "i2", text: "Cloud Run service" },
+      { id: "i3", text: "Cloud SQL database" },
+      { id: "i4", text: "Pub/Sub topic" },
+    ],
+    slots: [
+      { id: "s1", label: "First" },
+      { id: "s2", label: "Second" },
+      { id: "s3", label: "Third" },
+    ],
+    correctAnswer: { s1: "i1", s2: "i2", s3: "i3" },
+  },
+  {
+    id: "q7",
+    type: "hotspot",
+    prompt: "Select the component that stores the application data.",
+    image: {
+      url: "/seed/architecture.svg",
+      alt: "Diagram with a load balancer on the left, a service in the middle and a database on the right",
+    },
+    areas: [
+      {
+        id: "lb",
+        label: "Load balancer",
+        shape: { kind: "rect", x: 5, y: 35, width: 20, height: 30 },
+      },
+      {
+        id: "svc",
+        label: "Service",
+        shape: { kind: "rect", x: 40, y: 35, width: 20, height: 30 },
+      },
+      {
+        id: "db",
+        label: "Database",
+        shape: { kind: "rect", x: 75, y: 35, width: 20, height: 30 },
+        explanation: "Cloud SQL keeps the relational data.",
+      },
+    ],
+    correctAnswer: ["db"],
+  },
+  {
+    id: "q8",
+    type: "case-study",
+    prompt: "Read the case study and answer the questions.",
+    title: "Acme migration",
+    context: "Acme Corp runs a monolith on-premises and wants to modernize it.",
+    sections: [
+      {
+        id: "overview",
+        title: "Overview",
+        content: "Acme sells widgets online and has seasonal traffic spikes.",
+      },
+      {
+        id: "goals",
+        title: "Goals",
+        content: "Reduce operational cost and scale automatically.",
+      },
+    ],
+    parts: [
+      {
+        id: "p1",
+        type: "single-choice",
+        prompt: "Which approach best fits the goals?",
+        options: [
+          { id: "a", text: "Serverless containers" },
+          { id: "b", text: "More virtual machines" },
+        ],
+        explanation: "Serverless removes server management and scales out.",
+      },
+      {
+        id: "p2",
+        type: "fill-blank",
+        prompt: "Which billing model charges only for what runs?",
+      },
+    ],
+    correctAnswer: { p1: "a", p2: ["pay per use", "pay as you go"] },
   },
 ];
 
@@ -145,21 +260,11 @@ export function buildExamSeed({ uid, now }) {
     },
   ];
 
-  for (const [orderIndex, question] of QUESTIONS.entries()) {
-    const properties = {
-      statement: question.statement,
-      options: question.options.map(([id, text]) => ({ id, text })),
-      correctOptionIds: question.correct,
-      examId: EXAM_ID,
-      orderIndex,
-      format: question.format,
-    };
-    if (question.explanation) {
-      properties.groundedExplanation = question.explanation;
-    }
+  for (const [orderIndex, { id, ...fields }] of QUESTIONS.entries()) {
+    const properties = { ...fields, examId: EXAM_ID, orderIndex };
     documents.push(
       {
-        path: `${spacePath}/objects/${question.id}`,
+        path: `${spacePath}/objects/${id}`,
         data: {
           ...base,
           objectTypeId: "question",
@@ -170,11 +275,11 @@ export function buildExamSeed({ uid, now }) {
       {
         // Placeholder memory values satisfy firestore.rules (difficulty 1..10);
         // scheduleCard ignores them while the card is New.
-        path: `${spacePath}/cards/card-${question.id}`,
+        path: `${spacePath}/cards/card-${id}`,
         data: {
           schemaVersion: 4,
           spaceId: SPACE_ID,
-          questionId: question.id,
+          questionId: id,
           cardIndex: 0,
           state: 0,
           due: now,

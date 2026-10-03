@@ -22,5 +22,5 @@ quality contracts.
 
 ## Active Plans
 
-No active plans.
+- [`active/0018-unified-question-types.md`](./active/0018-unified-question-types.md) — unified question type system ([ADR 0018](../adr/0018-unified-question-type-system.md)).
 

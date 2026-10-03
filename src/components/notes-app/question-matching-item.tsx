@@ -1,0 +1,95 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import type { ComponentProps } from "react";
+import { useId } from "react";
+import { QuestionImageItem } from "@/components/notes-app/question-image-item";
+import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+} from "@/components/ui/field";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
+import type { QuestionItem } from "@/types/question";
+
+type QuestionMatchingItemProps = Omit<
+  ComponentProps<typeof Field>,
+  "children" | "onChange"
+> & {
+  item: QuestionItem;
+  rightItems: QuestionItem[];
+  /** The right item picked for this left item, or "" when none. */
+  chosenId: string;
+  correctId: string;
+  resolved: boolean;
+  onChosenChange: (rightId: string) => void;
+};
+
+function QuestionMatchingItem({
+  item,
+  rightItems,
+  chosenId,
+  correctId,
+  resolved,
+  onChosenChange,
+  ...props
+}: QuestionMatchingItemProps) {
+  const t = useTranslations("exam");
+  const selectId = useId();
+  const picked = chosenId !== "";
+  const isCorrect = chosenId === correctId;
+  const correctText = rightItems.find((right) => right.id === correctId)?.text;
+
+  return (
+    <Field
+      data-slot="question-matching-item"
+      orientation="responsive"
+      {...props}
+    >
+      <FieldContent className="gap-2">
+        <FieldLabel htmlFor={selectId}>{item.text}</FieldLabel>
+        {item.imageUrl ? (
+          <QuestionImageItem
+            url={item.imageUrl}
+            alt={item.imageAlt ?? item.text}
+            className="max-w-xs"
+          />
+        ) : null}
+        {resolved && !isCorrect ? (
+          <FieldDescription>
+            {t("correctMatch", { match: correctText ?? correctId })}
+          </FieldDescription>
+        ) : null}
+      </FieldContent>
+      <div className="flex items-center gap-2">
+        <NativeSelect
+          id={selectId}
+          value={chosenId}
+          disabled={resolved}
+          aria-label={t("matchLabel", { item: item.text })}
+          aria-invalid={resolved && picked && !isCorrect}
+          onChange={(event) => onChosenChange(event.target.value)}
+        >
+          <NativeSelectOption value="">
+            {t("matchPlaceholder")}
+          </NativeSelectOption>
+          {rightItems.map((right) => (
+            <NativeSelectOption key={right.id} value={right.id}>
+              {right.text}
+            </NativeSelectOption>
+          ))}
+        </NativeSelect>
+        {resolved && picked ? (
+          <QuestionResultBadge state={isCorrect ? "correct" : "incorrect"} />
+        ) : null}
+      </div>
+    </Field>
+  );
+}
+
+export { QuestionMatchingItem, type QuestionMatchingItemProps };

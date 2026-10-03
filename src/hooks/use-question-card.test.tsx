@@ -3,8 +3,17 @@ import type { User } from "firebase/auth";
 import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthContext } from "@/lib/auth-context";
+import {
+  caseStudyFixture,
+  fillBlankFixture,
+  hotspotFixture,
+  makeQuestionObject,
+  multipleChoiceFixture,
+  singleChoiceFixture,
+  trueFalseFixture,
+} from "@/lib/exam/question-fixtures";
 import type { Card } from "@/types/card";
-import type { QuestionObject } from "@/types/object";
+import type { QuestionProperties } from "@/types/question";
 import { useQuestionCard } from "./use-question-card";
 
 const mockSubmitAttempt = vi.fn();
@@ -34,35 +43,6 @@ const card: Card = {
   updatedAt: now,
 };
 
-function buildQuestion(
-  overrides: Partial<QuestionObject["properties"]> = {},
-): QuestionObject {
-  return {
-    id: "q1",
-    spaceId: "s1",
-    schemaVersion: 4,
-    objectTypeId: "question",
-    title: "Q1",
-    lifecycleState: "active",
-    stateVersion: 1,
-    createdAt: now,
-    updatedAt: now,
-    properties: {
-      type: "single-choice",
-      prompt: "Which?",
-      options: [
-        { id: "a", text: "A" },
-        { id: "b", text: "B" },
-        { id: "c", text: "C" },
-      ],
-      correctAnswer: "a",
-      examId: "e1",
-      orderIndex: 0,
-      ...overrides,
-    } as any,
-  };
-}
-
 function wrapperFor(user: Pick<User, "uid"> | null) {
   return ({ children }: { children: ReactNode }) => (
     <AuthContext
@@ -77,36 +57,50 @@ function wrapperFor(user: Pick<User, "uid"> | null) {
   );
 }
 
+function renderCard(
+  properties: QuestionProperties = singleChoiceFixture,
+  options: { user?: Pick<User, "uid"> | null; card?: Card | null } = {},
+) {
+  const { user = { uid: "u1" }, card: companion = card } = options;
+  return renderHook(
+    () =>
+      useQuestionCard({
+        spaceId: "s1",
+        question: makeQuestionObject(properties),
+        card: companion,
+      }),
+    { wrapper: wrapperFor(user) },
+  );
+}
+
 describe("useQuestionCard", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockSubmitAttempt.mockResolvedValue("attempt-1");
   });
 
-  it("starts unanswered with nothing selected", () => {
-    const { result } = renderHook(
-      () => useQuestionCard({ spaceId: "s1", question: buildQuestion(), card }),
-      { wrapper: wrapperFor({ uid: "u1" }) },
-    );
+  it("starts unanswered", () => {
+    const { result } = renderCard();
     expect(result.current.status).toBe("unanswered");
-    expect(result.current.answer).toBe(null);
+    expect(result.current.answer).toBeNull();
     expect(result.current.isResolved).toBe(false);
+    expect(result.current.needsConfirmation).toBe(false);
   });
 
-  it("grades a correct single-choice click instantly with rating Good", async () => {
-    const { result } = renderHook(
-      () => useQuestionCard({ spaceId: "s1", question: buildQuestion(), card }),
-      { wrapper: wrapperFor({ uid: "u1" }) },
-    );
+  it("grades a correct single-choice click instantly and logs the submitted answer", async () => {
+    const { result } = renderCard();
 
     await act(async () => {
-      result.current.setAnswer({ type: "single-choice", value: "a" });
+      result.current.setAnswer({ type: "single-choice", value: "b" });
     });
 
     expect(result.current.status).toBe("answeredCorrect");
+    expect(result.current.answer).toEqual({
+      type: "single-choice",
+      value: "b",
+    });
     expect(mockSubmitAttempt).toHaveBeenCalledTimes(1);
-    const args = mockSubmitAttempt.mock.calls[0][0];
-    expect(args).toMatchObject({
+    expect(mockSubmitAttempt.mock.calls[0][0]).toMatchObject({
       userId: "u1",
       spaceId: "s1",
       card,
@@ -115,109 +109,137 @@ describe("useQuestionCard", () => {
         cardId: "c1",
         rating: 3,
         reviewMode: "review",
+        questionType: "single-choice",
+        submittedAnswer: { type: "single-choice", value: "b" },
+        isCorrect: true,
       },
     });
   });
 
   it("grades an incorrect click with rating Forgot", async () => {
-    const { result } = renderHook(
-      () => useQuestionCard({ spaceId: "s1", question: buildQuestion(), card }),
-      { wrapper: wrapperFor({ uid: "u1" }) },
-    );
+    const { result } = renderCard();
 
     await act(async () => {
-      result.current.setAnswer({ type: "single-choice", value: "b" });
+      result.current.setAnswer({ type: "single-choice", value: "a" });
     });
 
     expect(result.current.status).toBe("answeredIncorrect");
-    expect(mockSubmitAttempt.mock.calls[0][0].input.rating).toBe(1);
+    expect(mockSubmitAttempt.mock.calls[0][0].input).toMatchObject({
+      rating: 1,
+      isCorrect: false,
+    });
   });
 
-  it("ignores further clicks once resolved", async () => {
-    const { result } = renderHook(
-      () => useQuestionCard({ spaceId: "s1", question: buildQuestion(), card }),
-      { wrapper: wrapperFor({ uid: "u1" }) },
-    );
+  it("grades true-false instantly", async () => {
+    const { result } = renderCard(trueFalseFixture);
 
     await act(async () => {
-      result.current.setAnswer({ type: "single-choice", value: "b" });
+      result.current.setAnswer({ type: "true-false", value: "true" });
     });
+
+    expect(result.current.status).toBe("answeredCorrect");
+  });
+
+  it("ignores further answers once resolved", async () => {
+    const { result } = renderCard();
+
     await act(async () => {
       result.current.setAnswer({ type: "single-choice", value: "a" });
+    });
+    await act(async () => {
+      result.current.setAnswer({ type: "single-choice", value: "b" });
     });
 
     expect(result.current.answer).toEqual({
       type: "single-choice",
-      value: "b",
+      value: "a",
     });
     expect(mockSubmitAttempt).toHaveBeenCalledTimes(1);
   });
 
-  it("toggles multiple-choice options and submits at the required count", async () => {
-    const question = buildQuestion({
-      type: "multiple-choice",
-      correctAnswer: ["a", "b"],
-    });
-    const { result } = renderHook(
-      () => useQuestionCard({ spaceId: "s1", question, card }),
-      { wrapper: wrapperFor({ uid: "u1" }) },
-    );
+  it("waits for confirmation before grading multiple-choice", async () => {
+    const { result } = renderCard(multipleChoiceFixture);
+    expect(result.current.needsConfirmation).toBe(true);
+    expect(result.current.canSubmit).toBe(false);
 
-    await act(async () => {
+    act(() => {
       result.current.setAnswer({ type: "multiple-choice", value: ["a"] });
     });
     expect(result.current.status).toBe("unanswered");
+    expect(result.current.canSubmit).toBe(true);
+    expect(mockSubmitAttempt).not.toHaveBeenCalled();
 
-    await act(async () => {
-      result.current.setAnswer({ type: "multiple-choice", value: [] });
+    act(() => {
+      result.current.setAnswer({ type: "multiple-choice", value: ["a", "c"] });
     });
-    expect(result.current.answer).toEqual({
-      type: "multiple-choice",
-      value: [],
-    });
-
     await act(async () => {
-      result.current.setAnswer({ type: "multiple-choice", value: ["a", "b"] });
+      result.current.submit();
     });
 
     expect(result.current.status).toBe("answeredCorrect");
-    expect(mockSubmitAttempt).toHaveBeenCalledTimes(1);
+    expect(mockSubmitAttempt.mock.calls[0][0].input.submittedAnswer).toEqual({
+      type: "multiple-choice",
+      value: ["a", "c"],
+    });
+  });
+
+  it("does not submit an incomplete answer", async () => {
+    const { result } = renderCard(fillBlankFixture);
+
+    act(() => {
+      result.current.setAnswer({ type: "fill-blank", value: "   " });
+    });
+    await act(async () => {
+      result.current.submit();
+    });
+
+    expect(result.current.canSubmit).toBe(false);
+    expect(result.current.status).toBe("unanswered");
+    expect(mockSubmitAttempt).not.toHaveBeenCalled();
+  });
+
+  it("grades fill-blank ignoring case and spacing", async () => {
+    const { result } = renderCard(fillBlankFixture);
+
+    act(() => {
+      result.current.setAnswer({ type: "fill-blank", value: "  CLOUD   run " });
+    });
+    await act(async () => {
+      result.current.submit();
+    });
+
+    expect(result.current.status).toBe("answeredCorrect");
+  });
+
+  it("starts structured types from an empty draft", () => {
+    expect(renderCard(hotspotFixture).result.current.answer).toEqual({
+      type: "hotspot",
+      value: [],
+    });
+    expect(renderCard(caseStudyFixture).result.current.answer).toEqual({
+      type: "case-study",
+      value: {},
+    });
   });
 
   it("shows the explanation only after resolution and only when present", async () => {
-    const question = buildQuestion({
-      explanation: {
-        text: "Because",
-        referenceUrls: [],
-        answerProvenance: "official",
-      },
-    });
-    const { result } = renderHook(
-      () => useQuestionCard({ spaceId: "s1", question, card }),
-      { wrapper: wrapperFor({ uid: "u1" }) },
-    );
+    const { result } = renderCard();
     expect(result.current.showExplanation).toBe(false);
 
     await act(async () => {
-      result.current.setAnswer({ type: "single-choice", value: "a" });
+      result.current.setAnswer({ type: "single-choice", value: "b" });
     });
     expect(result.current.showExplanation).toBe(true);
 
-    const bare = renderHook(
-      () => useQuestionCard({ spaceId: "s1", question: buildQuestion(), card }),
-      { wrapper: wrapperFor({ uid: "u1" }) },
-    );
+    const bare = renderCard({ ...singleChoiceFixture, explanation: undefined });
     await act(async () => {
-      bare.result.current.setAnswer({ type: "single-choice", value: "a" });
+      bare.result.current.setAnswer({ type: "single-choice", value: "b" });
     });
     expect(bare.result.current.showExplanation).toBe(false);
   });
 
   it("reveals the answer without logging an attempt", () => {
-    const { result } = renderHook(
-      () => useQuestionCard({ spaceId: "s1", question: buildQuestion(), card }),
-      { wrapper: wrapperFor({ uid: "u1" }) },
-    );
+    const { result } = renderCard();
 
     act(() => {
       result.current.showAnswer();
@@ -231,46 +253,87 @@ describe("useQuestionCard", () => {
     expect(mockSubmitAttempt).not.toHaveBeenCalled();
   });
 
+  it("treats a case study without parts as reveal-only", () => {
+    const { result } = renderCard({
+      ...caseStudyFixture,
+      parts: [],
+      correctAnswer: {},
+    });
+
+    expect(result.current.isGradable).toBe(false);
+    expect(result.current.needsConfirmation).toBe(false);
+
+    act(() => {
+      result.current.setAnswer({ type: "case-study", value: {} });
+    });
+    expect(result.current.status).toBe("unanswered");
+    expect(mockSubmitAttempt).not.toHaveBeenCalled();
+  });
+
   it("grades locally without writing when there is no companion card or user", async () => {
-    const noCard = renderHook(
-      () =>
-        useQuestionCard({
-          spaceId: "s1",
-          question: buildQuestion(),
-          card: null,
-        }),
-      { wrapper: wrapperFor({ uid: "u1" }) },
-    );
+    const noCard = renderCard(singleChoiceFixture, { card: null });
     await act(async () => {
-      noCard.result.current.setAnswer({ type: "single-choice", value: "a" });
+      noCard.result.current.setAnswer({ type: "single-choice", value: "b" });
     });
     expect(noCard.result.current.status).toBe("answeredCorrect");
 
-    const noUser = renderHook(
-      () => useQuestionCard({ spaceId: "s1", question: buildQuestion(), card }),
-      { wrapper: wrapperFor(null) },
-    );
+    const noUser = renderCard(singleChoiceFixture, { user: null });
     await act(async () => {
-      noUser.result.current.setAnswer({ type: "single-choice", value: "b" });
+      noUser.result.current.setAnswer({ type: "single-choice", value: "a" });
     });
     expect(noUser.result.current.status).toBe("answeredIncorrect");
     expect(mockSubmitAttempt).not.toHaveBeenCalled();
   });
 
-  it("resets and flags an error when the write fails", async () => {
+  it("keeps the answer and flags an error when the write fails", async () => {
     mockSubmitAttempt.mockRejectedValue(new Error("offline"));
-    const { result } = renderHook(
-      () => useQuestionCard({ spaceId: "s1", question: buildQuestion(), card }),
-      { wrapper: wrapperFor({ uid: "u1" }) },
-    );
+    const { result } = renderCard();
 
     await act(async () => {
-      result.current.setAnswer({ type: "single-choice", value: "a" });
+      result.current.setAnswer({ type: "single-choice", value: "b" });
     });
 
     await waitFor(() => expect(result.current.hasSaveError).toBe(true));
     expect(result.current.status).toBe("unanswered");
-    expect(result.current.answer).toBe(null);
+    expect(result.current.answer).toEqual({
+      type: "single-choice",
+      value: "b",
+    });
     expect(result.current.isSubmitting).toBe(false);
+  });
+
+  it("retry starts a new attempt without erasing the earlier one", async () => {
+    const { result } = renderCard();
+
+    await act(async () => {
+      result.current.setAnswer({ type: "single-choice", value: "a" });
+    });
+    expect(result.current.status).toBe("answeredIncorrect");
+
+    act(() => {
+      result.current.retry();
+    });
+    expect(result.current.status).toBe("unanswered");
+    expect(result.current.answer).toBeNull();
+
+    await act(async () => {
+      result.current.setAnswer({ type: "single-choice", value: "b" });
+    });
+    expect(result.current.status).toBe("answeredCorrect");
+    expect(mockSubmitAttempt).toHaveBeenCalledTimes(2);
+    expect(
+      mockSubmitAttempt.mock.calls.map((call) => call[0].input.submittedAnswer),
+    ).toEqual([
+      { type: "single-choice", value: "a" },
+      { type: "single-choice", value: "b" },
+    ]);
+  });
+
+  it("retry is a no-op before the question is resolved", () => {
+    const { result } = renderCard();
+    act(() => {
+      result.current.retry();
+    });
+    expect(result.current.status).toBe("unanswered");
   });
 });

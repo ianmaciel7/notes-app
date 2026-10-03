@@ -63,10 +63,10 @@ colors:
 
 typography:
   heading:
-    fontFamily: "Inter Variable, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    fontFamily: "Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
     fontWeight: 600
   body:
-    fontFamily: "Inter Variable, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    fontFamily: "Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
     fontWeight: 400
   mono:
     fontFamily: "Geist Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
@@ -143,9 +143,17 @@ implemented by the CSS variable blocks in `src/app/globals.css`.
 - `{typography.body}`: default application copy.
 - `{typography.mono}`: code and technical identifiers only.
 
-Heading/body currently share Inter Variable with different weight intent; mono uses
-Geist Mono. There is no product-specific type scale beyond configured Tailwind
-utilities.
+Heading/body currently share Geist with different weight intent; mono uses Geist
+Mono. There is no product-specific type scale beyond configured Tailwind utilities.
+
+### Rendered Markdown
+
+The shared rendered-content stylesheet lives in `src/app/typeset.css` and is
+imported by `src/app/globals.css`. It is opt-in: a markdown or rich-content
+surface must be wrapped with `typeset typeset-docs` before these styles apply.
+The `typeset-docs` preset uses Geist for body and headings, Geist Mono for code,
+15px body text, 1.75 line height, and 1.25em block flow. No current application
+surface uses this wrapper yet.
 
 ### Font Loading Invariants
 - Typography must be loaded via `@fontsource-variable` or `next/font` with zero Cumulative Layout Shift (CLS).

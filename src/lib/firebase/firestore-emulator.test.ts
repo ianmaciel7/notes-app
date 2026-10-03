@@ -80,6 +80,9 @@ function buildAttemptData(spaceId: string, overrides = {}) {
     rating: 3,
     reviewMode: "review",
     elapsedMilliseconds: 1200,
+    questionType: "hotspot",
+    submittedAnswer: { type: "hotspot", value: ["lb"] },
+    isCorrect: true,
     fsrsSnapshot: { state: 0, reps: 0, lapses: 0 },
     reviewedAt: serverTimestamp(),
     ...overrides,
@@ -296,6 +299,20 @@ describe("Firebase Firestore Emulator Integration", () => {
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await expect(
       setDoc(attemptRef, buildAttemptData(spaceId, { reviewMode: "other" })),
+    ).rejects.toMatchObject(PERMISSION_DENIED);
+    await expect(
+      setDoc(attemptRef, buildAttemptData(spaceId, { questionType: "essay" })),
+    ).rejects.toMatchObject(PERMISSION_DENIED);
+    await expect(
+      setDoc(attemptRef, buildAttemptData(spaceId, { isCorrect: "yes" })),
+    ).rejects.toMatchObject(PERMISSION_DENIED);
+    await expect(
+      setDoc(
+        attemptRef,
+        buildAttemptData(spaceId, {
+          submittedAnswer: { type: "matching", value: { l1: "r1" } },
+        }),
+      ),
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await setDoc(attemptRef, buildAttemptData(spaceId));
     await expect(updateDoc(attemptRef, { rating: 1 })).rejects.toMatchObject(

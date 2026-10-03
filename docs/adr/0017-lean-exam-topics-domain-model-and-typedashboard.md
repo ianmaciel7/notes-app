@@ -4,6 +4,7 @@
 - **Date:** 2026-10-03
 - **Canonical Owner:** `ARCHITECTURE.md`
 - **Supersedes:** `docs/adr/0014-certification-exam-and-study-simulator-domain-model.md`
+- **Amended by:** `docs/adr/0018-unified-question-type-system.md` (the Question `properties` shape in section 1, answer evaluation, and the Attempt payload in section 3; the `format` / `correctOptionIds` shape below is the legacy ExamTopics shape)
 
 ## Context and Problem Statement
 

@@ -219,3 +219,4 @@ architectural choices rather than duplicating version pins.
 - [`docs/adr/0015-adopt-sidebar-space-navigation.md`](./docs/adr/0015-adopt-sidebar-space-navigation.md)
 - [`docs/adr/0016-prefer-simple-domain-components-and-dedicated-hooks.md`](./docs/adr/0016-prefer-simple-domain-components-and-dedicated-hooks.md)
 - [`docs/adr/0017-lean-exam-topics-domain-model-and-typedashboard.md`](./docs/adr/0017-lean-exam-topics-domain-model-and-typedashboard.md)
+- [`docs/adr/0018-unified-question-type-system.md`](./docs/adr/0018-unified-question-type-system.md)

@@ -2,41 +2,19 @@ import { NextIntlClientProvider } from "next-intl";
 import type { ReactNode } from "react";
 import { QuestionCard } from "@/components/notes-app/question-card";
 import { AuthContext } from "@/lib/auth-context";
+import {
+  caseStudyFixture,
+  dragAndDropFixture,
+  fillBlankFixture,
+  hotspotFixture,
+  makeQuestionObject,
+  matchingFixture,
+  multipleChoiceFixture,
+  singleChoiceFixture,
+  trueFalseFixture,
+} from "@/lib/exam/question-fixtures";
 import messages from "@/messages/en.json";
-import type { QuestionObject } from "@/types/object";
-
-const timestamp = new Date("2026-10-03T12:00:00Z");
-
-function buildQuestion(
-  properties: Partial<QuestionObject["properties"]> = {},
-): QuestionObject {
-  return {
-    id: "question-1",
-    spaceId: "space-1",
-    schemaVersion: 4,
-    objectTypeId: "question",
-    title: "Serverless containers",
-    lifecycleState: "active",
-    stateVersion: 1,
-    createdAt: timestamp,
-    updatedAt: timestamp,
-    properties: {
-      type: "single-choice",
-      prompt:
-        "A company wants to run stateless containers without managing servers. Which Google Cloud service fits best?",
-      options: [
-        { id: "a", text: "Cloud Run" },
-        { id: "b", text: "Compute Engine" },
-        { id: "c", text: "Cloud SQL" },
-        { id: "d", text: "Cloud Storage" },
-      ],
-      correctAnswer: "a",
-      examId: "exam-1",
-      orderIndex: 0,
-      ...properties,
-    } as any,
-  };
-}
+import type { QuestionProperties } from "@/types/question";
 
 /** Signed-out context: answers are graded locally and nothing is written. */
 function StoryProviders({ children }: { children: ReactNode }) {
@@ -51,12 +29,12 @@ function StoryProviders({ children }: { children: ReactNode }) {
   );
 }
 
-function Story({ question }: { question: QuestionObject }) {
+function Story({ properties }: { properties: QuestionProperties }) {
   return (
     <StoryProviders>
       <QuestionCard
         spaceId="space-1"
-        question={question}
+        question={makeQuestionObject(properties, "question-1")}
         card={null}
         index={0}
         total={12}
@@ -65,37 +43,61 @@ function Story({ question }: { question: QuestionObject }) {
   );
 }
 
-/** Click any option to see instant correct/incorrect feedback. */
-export const Unanswered = () => <Story question={buildQuestion()} />;
+/** Click an option to see instant feedback, the option notes, and the explanation. */
+export const SingleChoice = () => <Story properties={singleChoiceFixture} />;
 
-/** Clicking an option expands the grounded explanation and reference links. */
-export const WithGroundedExplanation = () => (
+/** A single-choice question whose prompt and options carry images. */
+export const WithImages = () => (
   <Story
-    question={buildQuestion({
-      explanation: {
-        text: "Cloud Run runs stateless containers on a fully managed platform and scales to zero.",
-        referenceUrls: [
-          "https://cloud.google.com/run/docs/overview/what-is-cloud-run",
-        ],
-        answerProvenance: "official",
+    properties={{
+      ...singleChoiceFixture,
+      promptImage: {
+        url: "https://placehold.co/960x540/png",
+        alt: "Placeholder architecture diagram",
       },
-    })}
+      options: [
+        {
+          id: "a",
+          text: "Compute Engine",
+          imageUrl: "https://placehold.co/320x180/png",
+          imageAlt: "Placeholder virtual machine",
+        },
+        { id: "b", text: "Cloud Run" },
+      ],
+    }}
   />
 );
 
-/** Multiple choice evaluates once the required number of options is selected. */
+/** Select every correct option, then confirm with "Check answer". */
 export const MultipleChoice = () => (
+  <Story properties={multipleChoiceFixture} />
+);
+
+export const TrueFalse = () => <Story properties={trueFalseFixture} />;
+
+/** Case, spacing, and Unicode form are ignored; accents are not. */
+export const FillBlank = () => <Story properties={fillBlankFixture} />;
+
+export const Matching = () => <Story properties={matchingFixture} />;
+
+/** Drag items into slots, or use the select in each slot with the keyboard. */
+export const DragAndDrop = () => <Story properties={dragAndDropFixture} />;
+
+export const Hotspot = () => (
   <Story
-    question={buildQuestion({
-      type: "multiple-choice",
-      prompt: "Which two services are serverless? (Choose two.)",
-      correctAnswer: ["a", "c"],
-      options: [
-        { id: "a", text: "Cloud Run" },
-        { id: "b", text: "Compute Engine" },
-        { id: "c", text: "Cloud Functions" },
-        { id: "d", text: "Persistent Disk" },
-      ],
-    })}
+    properties={{
+      ...hotspotFixture,
+      image: {
+        url: "https://placehold.co/960x540/png",
+        alt: "Placeholder architecture diagram",
+      },
+    }}
   />
+);
+
+export const CaseStudy = () => <Story properties={caseStudyFixture} />;
+
+/** A case study without questions can only be read, then revealed. */
+export const CaseStudyRevealOnly = () => (
+  <Story properties={{ ...caseStudyFixture, parts: [], correctAnswer: {} }} />
 );

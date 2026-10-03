@@ -30,20 +30,21 @@ export interface UseQuestionCardResult {
   hasSaveError: boolean;
   /** True once the correct answer is shown (answered or revealed). */
   isResolved: boolean;
-  /** `single-choice` and `true-false` are graded on the click that selects. */
+  /** False for a case study without parts: there is nothing to answer or grade. */
+  isGradable: boolean;
+  /** Types other than `single-choice` and `true-false` are sent with a confirm action. */
   needsConfirmation: boolean;
   canSubmit: boolean;
   /** The general explanation is only surfaced after resolution and when present. */
   showExplanation: boolean;
+  /** Currently selected option IDs (empty array if none selected). */
+  selectedOptionIds: string[];
   setAnswer: (answer: SubmittedAnswer) => void;
+  selectOption: (optionId: string) => void;
   submit: () => void;
   showAnswer: () => void;
   /** Starts a fresh attempt; earlier attempts stay in the immutable log. */
   retry: () => void;
-  /** For choice-based questions: currently selected option IDs. */
-  selectedOptionIds: string[];
-  /** For choice-based questions: set the selected option. */
-  selectOption: (optionId: string) => void;
 }
 
 export function useQuestionCard({
@@ -62,8 +63,11 @@ export function useQuestionCard({
   const startedAt = useRef(Date.now());
 
   const isResolved = status !== "unanswered";
-  const needsConfirmation =
-    properties.type !== "single-choice" && properties.type !== "true-false";
+  const isGradable =
+    properties.type !== "case-study" || properties.parts.length > 0;
+  const isInstant =
+    properties.type === "single-choice" || properties.type === "true-false";
+  const needsConfirmation = isGradable && !isInstant;
   const canSubmit =
     !isResolved && !isSubmitting && isAnswerComplete(properties, answer);
 
@@ -100,10 +104,62 @@ export function useQuestionCard({
     }
   };
 
+  const getSelectedOptionIds = (): string[] => {
+    if (!answer) return [];
+    if (answer.type === "single-choice" || answer.type === "true-false") {
+      return [answer.value];
+    }
+    if (answer.type === "multiple-choice") {
+      return answer.value;
+    }
+    if (answer.type === "hotspot") {
+      return answer.value;
+    }
+    return [];
+  };
+
   const setAnswer = (next: SubmittedAnswer) => {
-    if (isResolved || isSubmitting) return;
+    if (!isGradable || isResolved || isSubmitting) return;
     setAnswerState(next);
-    if (!needsConfirmation) void submitAnswer(next);
+    if (isInstant) void submitAnswer(next);
+  };
+
+  const toggleMultipleAnswer = (current: string[], optionId: string) => {
+    return current.includes(optionId)
+      ? current.filter((id) => id !== optionId)
+      : [...current, optionId];
+  };
+
+  const buildAnswerForOption = (optionId: string): SubmittedAnswer | null => {
+    if (properties.type === "single-choice") {
+      return { type: "single-choice", value: optionId };
+    }
+    if (properties.type === "true-false") {
+      return { type: "true-false", value: optionId as "true" | "false" };
+    }
+    if (properties.type === "multiple-choice") {
+      const current = answer?.type === "multiple-choice" ? answer.value : [];
+      return {
+        type: "multiple-choice",
+        value: toggleMultipleAnswer(current, optionId),
+      };
+    }
+    if (properties.type === "hotspot") {
+      const current = answer?.type === "hotspot" ? answer.value : [];
+      return {
+        type: "hotspot",
+        value: toggleMultipleAnswer(current, optionId),
+      };
+    }
+    return null;
+  };
+
+  const selectOption = (optionId: string) => {
+    if (!isGradable || isResolved || isSubmitting) return;
+    const next = buildAnswerForOption(optionId);
+    if (next) {
+      setAnswer(next);
+    }
   };
 
   const submit = () => {
@@ -125,50 +181,21 @@ export function useQuestionCard({
     startedAt.current = Date.now();
   };
 
-  const selectedOptionIds =
-    answer &&
-    "value" in answer &&
-    typeof answer.value === "object" &&
-    "includes" in answer.value
-      ? (answer.value as string[])
-      : answer && "value" in answer && typeof answer.value === "string"
-        ? [answer.value as string]
-        : [];
-
-  const selectOption = (optionId: string) => {
-    if (
-      properties.type === "single-choice" ||
-      properties.type === "true-false"
-    ) {
-      setAnswer({ type: properties.type, value: optionId } as SubmittedAnswer);
-    } else if (properties.type === "multiple-choice") {
-      const currentValue = Array.isArray(selectedOptionIds)
-        ? selectedOptionIds
-        : [];
-      const newValue = currentValue.includes(optionId)
-        ? currentValue.filter((id) => id !== optionId)
-        : [...currentValue, optionId];
-      setAnswer({
-        type: "multiple-choice",
-        value: newValue,
-      } as SubmittedAnswer);
-    }
-  };
-
   return {
     status,
     answer,
     isSubmitting,
     hasSaveError,
     isResolved,
+    isGradable,
     needsConfirmation,
     canSubmit,
     showExplanation: isResolved && Boolean(properties.explanation),
+    selectedOptionIds: getSelectedOptionIds(),
     setAnswer,
+    selectOption,
     submit,
     showAnswer,
     retry,
-    selectedOptionIds,
-    selectOption,
   };
 }

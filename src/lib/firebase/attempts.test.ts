@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { CreateAttemptInput } from "@/types/attempt";
 import type { Card } from "@/types/card";
 import { submitAttempt } from "./attempts";
 
@@ -40,7 +41,7 @@ const card: Card = {
   stateVersion: 3,
   updatedAt: now,
 };
-const input: any = {
+const input: CreateAttemptInput = {
   questionId: "q1",
   cardId: "c1",
   rating: 3,

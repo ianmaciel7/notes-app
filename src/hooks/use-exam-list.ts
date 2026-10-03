@@ -9,11 +9,31 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import {
+  isLegacyQuestion,
+  migrateLegacyQuestion,
+} from "@/lib/exam/migrate-legacy-question";
 import { db } from "@/lib/firebase/firestore";
 import type { Card } from "@/types/card";
 import type { QuestionObject } from "@/types/object";
 
 export const SCROLL_TO_TOP_THRESHOLD = 400;
+
+/**
+ * Questions stored in the legacy ExamTopics shape are converted on read until
+ * `scripts/tooling/migrate-questions.mjs` has rewritten them; one that cannot
+ * be converted is skipped rather than rendered wrongly.
+ */
+function toQuestionObject(
+  id: string,
+  data: Record<string, unknown>,
+): QuestionObject | null {
+  const question = { ...data, id } as unknown as QuestionObject;
+  if (!isLegacyQuestion(question.properties)) return question;
+
+  const migrated = migrateLegacyQuestion(question.properties);
+  return migrated.ok ? { ...question, properties: migrated.properties } : null;
+}
 
 export interface UseExamListOptions {
   spaceId: string;
@@ -64,10 +84,10 @@ export function useExamList({
       questionsQuery,
       (snapshot) => {
         setQuestions(
-          snapshot.docs.map(
-            (docSnap) =>
-              ({ ...docSnap.data(), id: docSnap.id }) as QuestionObject,
-          ),
+          snapshot.docs.flatMap((docSnap) => {
+            const question = toQuestionObject(docSnap.id, docSnap.data());
+            return question ? [question] : [];
+          }),
         );
         setLoading(false);
         setError(null);

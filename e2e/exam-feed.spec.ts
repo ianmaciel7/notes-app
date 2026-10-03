@@ -81,7 +81,14 @@ async function createUser(email: string, password: string): Promise<string> {
   return (await response.json()).localId;
 }
 
-async function seedExam(uid: string, spaceId: string, examId: string) {
+type SeedQuestion = { id: string } & Record<string, unknown>;
+
+async function seedExam(
+  uid: string,
+  spaceId: string,
+  examId: string,
+  questions: SeedQuestion[],
+) {
   const now = new Date();
   const spacePath = `users/${uid}/spaces/${spaceId}`;
   const base = {
@@ -92,31 +99,6 @@ async function seedExam(uid: string, spaceId: string, examId: string) {
     createdAt: now,
     updatedAt: now,
   };
-  const questions = [
-    {
-      id: "q1",
-      statement: "Which service runs stateless containers without servers?",
-      options: [
-        { id: "a", text: "Cloud Run" },
-        { id: "b", text: "Compute Engine" },
-      ],
-      correctOptionIds: ["a"],
-      groundedExplanation: {
-        text: "Cloud Run is a fully managed serverless container platform.",
-        referenceUrls: ["https://cloud.google.com/run/docs"],
-        answerProvenance: "official",
-      },
-    },
-    {
-      id: "q2",
-      statement: "Which service stores unstructured objects?",
-      options: [
-        { id: "a", text: "Cloud SQL" },
-        { id: "b", text: "Cloud Storage" },
-      ],
-      correctOptionIds: ["b"],
-    },
-  ];
 
   await seedDocument(spacePath, {
     id: spaceId,
@@ -148,12 +130,7 @@ async function seedExam(uid: string, spaceId: string, examId: string) {
       ...base,
       objectTypeId: "question",
       title: `Question ${orderIndex + 1}`,
-      properties: {
-        ...properties,
-        examId,
-        orderIndex,
-        format: "single_choice",
-      },
+      properties: { ...properties, examId, orderIndex },
     });
     await seedDocument(`${spacePath}/cards/card-${id}`, {
       schemaVersion: 4,
@@ -188,45 +165,84 @@ async function signInThroughLogin(
   await page.waitForURL(`**${next}`);
 }
 
+async function openSeededExam(page: Page, questions: SeedQuestion[]) {
+  const suffix = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const email = `exam-e2e-${suffix}@notesapp.dev`;
+  const password = "emulatorPassword123";
+  const spaceId = `exam-space-${suffix}`;
+  const examId = `exam-${suffix}`;
+  const uid = await createUser(email, password);
+  await seedExam(uid, spaceId, examId, questions);
+
+  await signInThroughLogin(page, email, password, `/${spaceId}`);
+  // The feed is discoverable from the space sidebar, no URL typing needed.
+  await page.getByRole("link", { name: "Cloud Fundamentals" }).click();
+  await page.waitForURL(`**/${spaceId}/exams/${examId}`);
+  return { spacePath: `users/${uid}/spaces/${spaceId}` };
+}
+
+const SINGLE_CHOICE: SeedQuestion = {
+  id: "q1",
+  type: "single-choice",
+  prompt: "Which service runs stateless containers without servers?",
+  options: [
+    { id: "a", text: "Cloud Run" },
+    { id: "b", text: "Compute Engine", explanation: "You manage the VMs." },
+  ],
+  correctAnswer: "a",
+  explanation: {
+    text: "Cloud Run is a fully managed serverless container platform.",
+    referenceUrls: ["https://cloud.google.com/run/docs"],
+    answerProvenance: "official",
+  },
+};
+
 test.describe("Exam feed", () => {
   test("gives instant feedback and persists attempts with FSRS updates", async ({
     page,
   }) => {
-    const suffix = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    const email = `exam-e2e-${suffix}@notesapp.dev`;
-    const password = "emulatorPassword123";
-    const spaceId = `exam-space-${suffix}`;
-    const examId = `exam-${suffix}`;
-    const uid = await createUser(email, password);
-    await seedExam(uid, spaceId, examId);
-
-    await signInThroughLogin(page, email, password, `/${spaceId}`);
-
-    // The feed is discoverable from the space sidebar, no URL typing needed.
-    await page.getByRole("link", { name: "Cloud Fundamentals" }).click();
-    await page.waitForURL(`**/${spaceId}/exams/${examId}`);
+    const { spacePath } = await openSeededExam(page, [
+      SINGLE_CHOICE,
+      {
+        id: "q2",
+        type: "single-choice",
+        prompt: "Which service stores unstructured objects?",
+        options: [
+          { id: "a", text: "Cloud SQL" },
+          { id: "b", text: "Cloud Storage" },
+        ],
+        correctAnswer: "b",
+      },
+    ]);
 
     const cards = page.locator('[data-slot="question-card"]');
     await expect(cards).toHaveCount(2);
 
     // Correct answer: instant feedback, non-color indicator and explanation.
     const first = cards.nth(0);
-    await first.getByRole("button", { name: /Cloud Run/ }).click();
+    await first.getByRole("radio", { name: /Cloud Run/ }).click();
     await expect(first).toHaveAttribute("data-status", "answeredCorrect");
-    await expect(first.getByText("Correct", { exact: true })).toBeVisible();
     await expect(
-      first.locator('[data-slot="question-explanation"]'),
+      first.getByText("Correct", { exact: true }).first(),
+    ).toBeVisible();
+    await expect(
+      first.locator('[data-slot="question-explanation-description"]'),
     ).toBeVisible();
 
     // Incorrect answer flags the pick and reveals the right option.
     const second = cards.nth(1);
-    await second.getByRole("button", { name: /Cloud SQL/ }).click();
+    await second.getByRole("radio", { name: /Cloud SQL/ }).click();
     await expect(second).toHaveAttribute("data-status", "answeredIncorrect");
-    await expect(second.getByText("Incorrect", { exact: true })).toBeVisible();
-    await expect(second.getByText("Option B is correct")).toBeAttached();
+    await expect(
+      second.getByText("Incorrect", { exact: true }).first(),
+    ).toBeVisible();
+    await expect(
+      second.locator(
+        '[data-slot="question-choice-item"][data-result="correct"]',
+      ),
+    ).toContainText("Cloud Storage");
 
     // Atomic dual-write: two immutable attempts and both cards advanced.
-    const spacePath = `users/${uid}/spaces/${spaceId}`;
     await expect
       .poll(async () => (await listDocuments(`${spacePath}/attempts`)).length)
       .toBe(2);
@@ -235,5 +251,111 @@ test.describe("Exam feed", () => {
       expect(card.fields.stateVersion.integerValue).toBe("2");
       expect(card.fields.reps.integerValue).toBe("1");
     }
+  });
+
+  test("grades the other question types and keeps each submitted answer", async ({
+    page,
+  }) => {
+    const { spacePath } = await openSeededExam(page, [
+      {
+        id: "q1",
+        type: "multiple-choice",
+        prompt: "Select every serverless product.",
+        options: [
+          { id: "a", text: "Cloud Run" },
+          { id: "b", text: "Compute Engine" },
+          { id: "c", text: "Cloud Functions" },
+        ],
+        correctAnswer: ["a", "c"],
+      },
+      {
+        id: "q2",
+        type: "fill-blank",
+        prompt: "The managed container platform is Cloud ____.",
+        correctAnswer: ["Run"],
+      },
+      {
+        id: "q3",
+        type: "hotspot",
+        prompt: "Select the database.",
+        image: { url: "/seed/architecture.svg", alt: "Architecture diagram" },
+        areas: [
+          {
+            id: "lb",
+            label: "Load balancer",
+            shape: { kind: "rect", x: 5, y: 35, width: 20, height: 30 },
+          },
+          {
+            id: "db",
+            label: "Database",
+            shape: { kind: "circle", cx: 85, cy: 50, r: 10 },
+          },
+        ],
+        correctAnswer: ["db"],
+      },
+      // Legacy ExamTopics shape: converted when read, until it is migrated.
+      {
+        id: "q4",
+        statement: "Which service stores unstructured objects?",
+        options: [
+          { id: "a", text: "Cloud SQL" },
+          { id: "b", text: "Cloud Storage" },
+        ],
+        correctOptionIds: ["b"],
+        format: "single_choice",
+      },
+    ]);
+
+    const cards = page.locator('[data-slot="question-card"]');
+    await expect(cards).toHaveCount(4);
+
+    const multiple = cards.nth(0);
+    await multiple.getByText("Cloud Run", { exact: true }).click();
+    await multiple.getByText("Cloud Functions", { exact: true }).click();
+    await expect(multiple).toHaveAttribute("data-status", "unanswered");
+    await multiple.getByRole("button", { name: "Check answer" }).click();
+    await expect(multiple).toHaveAttribute("data-status", "answeredCorrect");
+
+    const fill = cards.nth(1);
+    await fill.getByRole("textbox").fill("  rUN ");
+    await fill.getByRole("button", { name: "Check answer" }).click();
+    await expect(fill).toHaveAttribute("data-status", "answeredCorrect");
+
+    const hotspot = cards.nth(2);
+    await hotspot.getByRole("button", { name: "Database" }).click();
+    await hotspot.getByRole("button", { name: "Check answer" }).click();
+    await expect(hotspot).toHaveAttribute("data-status", "answeredCorrect");
+
+    const legacy = cards.nth(3);
+    await legacy.getByRole("radio", { name: /Cloud Storage/ }).click();
+    await expect(legacy).toHaveAttribute("data-status", "answeredCorrect");
+
+    // Retrying records a new attempt and never rewrites the earlier one.
+    await legacy.getByRole("button", { name: "Try again" }).click();
+    await expect(legacy).toHaveAttribute("data-status", "unanswered");
+    await legacy.getByRole("radio", { name: /Cloud SQL/ }).click();
+    await expect(legacy).toHaveAttribute("data-status", "answeredIncorrect");
+
+    await expect
+      .poll(async () => (await listDocuments(`${spacePath}/attempts`)).length)
+      .toBe(5);
+    const attempts = (await listDocuments(`${spacePath}/attempts`)) as {
+      fields: {
+        questionType: { stringValue: string };
+        isCorrect: { booleanValue: boolean };
+      };
+    }[];
+    expect(
+      attempts.map((attempt) => attempt.fields.questionType.stringValue).sort(),
+    ).toEqual([
+      "fill-blank",
+      "hotspot",
+      "multiple-choice",
+      "single-choice",
+      "single-choice",
+    ]);
+    expect(
+      attempts.filter((attempt) => !attempt.fields.isCorrect.booleanValue),
+    ).toHaveLength(1);
   });
 });

@@ -1,4 +1,5 @@
 import type { FirestoreTime, FsrsSnapshot } from "@/types/card";
+import type { QuestionType, SubmittedAnswer } from "@/types/question";
 
 export type AttemptRating = 1 | 2 | 3 | 4;
 export type ReviewMode = "review" | "mockExam";
@@ -15,6 +16,10 @@ export interface Attempt {
   reviewMode: ReviewMode;
   elapsedMilliseconds: number;
   userConfidence?: UserConfidence;
+  /** Absent on attempts written before ADR 0018. */
+  questionType?: QuestionType;
+  submittedAnswer?: SubmittedAnswer;
+  isCorrect?: boolean;
   fsrsSnapshot: FsrsSnapshot;
   reviewedAt: FirestoreTime;
 }
@@ -26,4 +31,7 @@ export interface CreateAttemptInput {
   reviewMode: ReviewMode;
   elapsedMilliseconds: number;
   userConfidence?: UserConfidence;
+  questionType: QuestionType;
+  submittedAnswer: SubmittedAnswer;
+  isCorrect: boolean;
 }
