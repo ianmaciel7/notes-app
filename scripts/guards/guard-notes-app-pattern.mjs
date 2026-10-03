@@ -37,6 +37,7 @@ const COMPONENT_ROLE_SUFFIXES = new Set([
   "Drawer",
   "Dropdown",
   "Empty",
+  "Field",
   "FieldGroup",
   "Footer",
   "Form",

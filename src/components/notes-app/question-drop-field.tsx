@@ -4,7 +4,7 @@ import { useDroppable } from "@dnd-kit/core";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { useId } from "react";
-import { QuestionDragItem } from "@/components/notes-app/question-drag-item";
+import { QuestionDraggableItem } from "@/components/notes-app/question-draggable-item";
 import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -13,28 +13,31 @@ import {
   NativeSelectOption,
 } from "@/components/ui/native-select";
 import { cn } from "@/lib/utils";
-import type { QuestionItem, QuestionSlot } from "@/types/question";
+import type {
+  QuestionDropField as QuestionDropFieldType,
+  QuestionItem,
+} from "@/types/question";
 
-type QuestionSlotItemProps = Omit<
+type QuestionDropFieldProps = Omit<
   ComponentProps<"div">,
-  "children" | "onChange" | "slot"
+  "children" | "onChange"
 > & {
-  slot: QuestionSlot;
+  field: QuestionDropFieldType;
   items: QuestionItem[];
-  /** Item currently in this slot, or "" when empty. */
+  /** Item currently in this field, or "" when empty. */
   placedId: string;
   correctId: string;
   resolved: boolean;
-  /** Called with an item id, or "" to empty the slot. */
+  /** Called with an item id, or "" to empty the field. */
   onPlace: (itemId: string) => void;
 };
 
 /**
- * A drop target. The select inside it is the keyboard and screen reader path:
+ * A drop target field. The select inside it is the keyboard and screen reader path:
  * the same placement is possible without dragging.
  */
-function QuestionSlotItem({
-  slot,
+function QuestionDropField({
+  field,
   items,
   placedId,
   correctId,
@@ -42,10 +45,10 @@ function QuestionSlotItem({
   onPlace,
   className,
   ...props
-}: QuestionSlotItemProps) {
+}: QuestionDropFieldProps) {
   const t = useTranslations("exam");
   const selectId = useId();
-  const { setNodeRef, isOver } = useDroppable({ id: slot.id });
+  const { setNodeRef, isOver } = useDroppable({ id: field.id });
   const placed = items.find((item) => item.id === placedId);
   const isCorrect = placedId === correctId;
   const correctText = items.find((item) => item.id === correctId)?.text;
@@ -54,7 +57,7 @@ function QuestionSlotItem({
 
   return (
     <div
-      data-slot="question-slot-item"
+      data-slot="question-drop-field"
       {...props}
       className={cn("flex flex-col gap-1.5", className)}
     >
@@ -63,7 +66,7 @@ function QuestionSlotItem({
           htmlFor={selectId}
           className="text-xs font-semibold text-muted-foreground tracking-wide"
         >
-          {slot.label}
+          {field.label}
         </Label>
         <div className="flex items-center gap-2">
           {resolved ? (
@@ -84,7 +87,7 @@ function QuestionSlotItem({
             id={selectId}
             value={placedId}
             disabled={resolved}
-            aria-label={t("dragSlotSelectLabel", { slot: slot.label })}
+            aria-label={t("dragSlotSelectLabel", { slot: field.label })}
             aria-invalid={resolved && !isCorrect}
             aria-describedby={resolved && !isCorrect ? descId : undefined}
             className="sr-only focus:not-sr-only focus:h-7 focus:w-auto focus:py-0 focus:px-2 focus:text-xs"
@@ -113,7 +116,7 @@ function QuestionSlotItem({
         )}
       >
         {placed ? (
-          <QuestionDragItem
+          <QuestionDraggableItem
             item={placed}
             disabled={resolved}
             className="w-full justify-start shadow-xs hover:border-primary/50"
@@ -134,4 +137,4 @@ function QuestionSlotItem({
   );
 }
 
-export { QuestionSlotItem, type QuestionSlotItemProps };
+export { QuestionDropField, type QuestionDropFieldProps };

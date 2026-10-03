@@ -1,7 +1,7 @@
 import type {
   QuestionBody,
+  QuestionDropField,
   QuestionItem,
-  QuestionSlot,
 } from "@/types/question";
 import {
   hasDuplicates,
@@ -28,9 +28,9 @@ function checkItems(value: unknown, minimum: number): ItemsResult {
   return { items };
 }
 
-function parseSlots(value: unknown): QuestionSlot[] | null {
+function parseSlots(value: unknown): QuestionDropField[] | null {
   if (!Array.isArray(value)) return null;
-  const slots: QuestionSlot[] = [];
+  const slots: QuestionDropField[] = [];
   for (const entry of value) {
     if (!isRecord(entry)) return null;
     const id = readText(entry.id);

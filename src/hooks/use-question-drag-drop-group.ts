@@ -9,14 +9,14 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { useTranslations } from "next-intl";
-import type { QuestionItem, QuestionSlot } from "@/types/question";
+import type { QuestionDropField, QuestionItem } from "@/types/question";
 
 /** Droppable id of the list of items that are not in a slot. */
 export const DRAG_POOL_ID = "pool";
 
 export type UseQuestionDragDropGroupOptions = {
   items: QuestionItem[];
-  slots: QuestionSlot[];
+  slots: QuestionDropField[];
   /** slotId -> itemId placed so far. */
   value: Readonly<Record<string, string>>;
   onValueChange: (next: Record<string, string>) => void;

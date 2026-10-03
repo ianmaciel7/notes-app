@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { QuestionItem } from "@/types/question";
 
-type QuestionDragItemProps = Omit<
+type QuestionDraggableItemProps = Omit<
   ComponentProps<typeof Button>,
   "children" | "id" | "onClick"
 > & {
@@ -16,18 +16,18 @@ type QuestionDragItemProps = Omit<
 };
 
 /** A chip the learner can drag with a pointer or move with the keyboard. */
-function QuestionDragItem({
+function QuestionDraggableItem({
   item,
   disabled,
   className,
   ...props
-}: QuestionDragItemProps) {
+}: QuestionDraggableItemProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({ id: item.id, disabled });
 
   return (
     <Button
-      data-slot="question-drag-item"
+      data-slot="question-draggable-item"
       data-dragging={isDragging || undefined}
       type="button"
       variant="outline"
@@ -60,4 +60,4 @@ function QuestionDragItem({
   );
 }
 
-export { QuestionDragItem, type QuestionDragItemProps };
+export { QuestionDraggableItem, type QuestionDraggableItemProps };

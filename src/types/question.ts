@@ -50,10 +50,12 @@ export interface QuestionItem {
   imageAlt?: string;
 }
 
-export interface QuestionSlot {
+export interface QuestionDropField {
   id: string;
   label: string;
 }
+
+export type QuestionSlot = QuestionDropField;
 
 /** Hotspot geometry in percentages (0-100) of the image width and height. */
 export type HotspotShape =
@@ -131,7 +133,7 @@ export type QuestionBody =
   | {
       type: "drag-and-drop";
       items: QuestionItem[];
-      slots: QuestionSlot[];
+      slots: QuestionDropField[];
       correctAnswer: Record<string, string>;
     }
   | {

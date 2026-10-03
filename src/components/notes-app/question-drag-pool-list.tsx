@@ -3,7 +3,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionDragItem } from "@/components/notes-app/question-drag-item";
+import { QuestionDraggableItem } from "@/components/notes-app/question-draggable-item";
 import { Card } from "@/components/ui/card";
 import { DRAG_POOL_ID } from "@/hooks/use-question-drag-drop-group";
 import { cn } from "@/lib/utils";
@@ -45,7 +45,7 @@ function QuestionDragPoolList({
       ) : (
         <div className="flex flex-col gap-2">
           {items.map((item) => (
-            <QuestionDragItem
+            <QuestionDraggableItem
               key={item.id}
               item={item}
               disabled={disabled}

@@ -1,7 +1,7 @@
 import type { Active, Over } from "@dnd-kit/core";
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import type { QuestionItem, QuestionSlot } from "@/types/question";
+import type { QuestionDropField, QuestionItem } from "@/types/question";
 import {
   DRAG_POOL_ID,
   useQuestionDragDropGroup,
@@ -18,7 +18,7 @@ const items: QuestionItem[] = [
   { id: "i3", text: "Compute Engine" },
 ];
 
-const slots: QuestionSlot[] = [
+const slots: QuestionDropField[] = [
   { id: "s1", label: "Serverless Container" },
   { id: "s2", label: "Event-driven Functions" },
 ];

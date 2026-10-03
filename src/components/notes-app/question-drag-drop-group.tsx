@@ -4,11 +4,14 @@ import { DndContext } from "@dnd-kit/core";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { QuestionDragPoolList } from "@/components/notes-app/question-drag-pool-list";
-import { QuestionSlotItem } from "@/components/notes-app/question-slot-item";
+import { QuestionDropField } from "@/components/notes-app/question-drop-field";
 import { FieldLegend, FieldSet, FieldTitle } from "@/components/ui/field";
 import { useQuestionDragDropGroup } from "@/hooks/use-question-drag-drop-group";
 import { cn } from "@/lib/utils";
-import type { QuestionItem, QuestionSlot } from "@/types/question";
+import type {
+  QuestionDropField as QuestionDropFieldType,
+  QuestionItem,
+} from "@/types/question";
 
 type QuestionDragDropGroupProps = Omit<
   ComponentProps<typeof FieldSet>,
@@ -16,7 +19,7 @@ type QuestionDragDropGroupProps = Omit<
 > & {
   legend: string;
   items: QuestionItem[];
-  slots: QuestionSlot[];
+  slots: QuestionDropFieldType[];
   /** slotId -> itemId placed so far. */
   value: Readonly<Record<string, string>>;
   /** slotId -> itemId key, used to mark slots once `resolved`. */
@@ -65,9 +68,9 @@ function QuestionDragDropGroup({
               className="flex min-h-40 flex-col gap-3 rounded-lg border border-border bg-muted/20 p-3"
             >
               {slots.map((slot) => (
-                <QuestionSlotItem
+                <QuestionDropField
                   key={slot.id}
-                  slot={slot}
+                  field={slot}
                   items={items}
                   placedId={value[slot.id] ?? ""}
                   correctId={correctAnswer[slot.id] ?? ""}
