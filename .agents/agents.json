@@ -160,6 +160,22 @@
           "--context=codex",
           "--project-from-cwd"
         ]
+      },
+      "playwright": {
+        "transport": "stdio",
+        "enabled": true,
+        "targets": ["codex", "antigravity", "claude"],
+        "description": "Browser automation to verify UI and auth flows in the running app",
+        "command": "npx",
+        "args": ["-y", "@playwright/mcp@0.0.83"]
+      },
+      "firebase": {
+        "transport": "stdio",
+        "enabled": true,
+        "targets": ["codex", "antigravity", "claude"],
+        "description": "Firebase project, Firestore rules, and Auth tooling",
+        "command": "npx",
+        "args": ["-y", "firebase-tools@15.26.0", "mcp"]
       }
     }
   },

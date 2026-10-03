@@ -167,6 +167,13 @@ delegation hooks still use the same repository adapters:
 | `PostToolUse` on file writes | `scripts/hooks/hook-biome-on-edit.mjs` | Auto-format and check the edited file with Biome and `guard-conventions` |
 | `PreToolUse` on `Agent`/`Task` (Claude Code only) | `scripts/hooks/hook-guard-agent-delegation.mjs` | Block native subagents; only the `codex:codex-rescue` agent is allowed, so delegation goes through the Codex plugin |
 | `PreToolUse` on `Bash` (Claude Code only; the script itself selects `git` and `rtk git` segments, so `rtk git ...` and chained commands are covered) | `scripts/hooks/hook-guard-bash.mjs` | Deny git commands that skip the gates: `--no-verify`, `--no-gpg-sign`, and `--force` without `--force-with-lease` |
+| `PostToolUse` on file writes (Claude Code only) | `scripts/hooks/hook-firestore-rules.mjs` | After `firestore.rules` changes, run `test:firebase-emulator` and block only when the Vitest output shows failing tests. A missing Java install, port clash, or timeout is logged as `skipped` and never blocks |
+| `Stop` (Claude Code only) | `scripts/hooks/hook-typecheck-on-stop.mjs` | When the working tree has TypeScript changes, run `check:types` and block only on real `error TS####` output. It skips when `stop_hook_active` is set, so a failing check cannot loop |
+
+Claude-only hooks are registered in the local, gitignored `.claude/settings.json`; the scripts and
+their tests are the versioned part. Both new hooks run their check through `rtk proxy` so the raw
+output keeps the failure markers they classify on, and their spawn timeout stays below the
+registered hook timeout.
 
 PreToolUse adapters answer with exit 0 and the documented `hookSpecificOutput.permissionDecision`
 JSON, and every hook sets a `timeout` so a hang cannot stall the agent. Deny/ask events are appended
@@ -198,7 +205,7 @@ entry (`<name>.mjs`), pure logic in `<name>-lib.mjs`, and `node:test` tests in
 | Directory | Responsibility | Entry points |
 | :--- | :--- | :--- |
 | `scripts/guards/` | Deterministic policy and architecture checks that fail on violations. | `scripts/guards/floor-guard.mjs`, `scripts/guards/guard-component-naming.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/guards/guard-conventions.mjs`, `scripts/guards/guard-i18n-strings.mjs`, `scripts/guards/guard-no-emojis.mjs`, `scripts/guards/guard-rsc-boundaries.mjs` |
-| `scripts/hooks/` | Agent and editor hook adapters plus shared payload and path logic. | `scripts/hooks/hook-biome-on-edit.mjs`, `scripts/hooks/hook-guard-agent-delegation.mjs`, `scripts/hooks/hook-guard-bash.mjs`, `scripts/hooks/hook-guard-paths.mjs` |
+| `scripts/hooks/` | Agent and editor hook adapters plus shared payload and path logic. | `scripts/hooks/hook-biome-on-edit.mjs`, `scripts/hooks/hook-firestore-rules.mjs`, `scripts/hooks/hook-guard-agent-delegation.mjs`, `scripts/hooks/hook-guard-bash.mjs`, `scripts/hooks/hook-guard-paths.mjs`, `scripts/hooks/hook-typecheck-on-stop.mjs` |
 | `scripts/verify/` | Repository-wide verification and health orchestration. | `scripts/verify/verify-ai-tooling.mjs`, `scripts/verify/verify-code.mjs`, `scripts/verify/verify-control-docs.mjs`, `scripts/verify/verify-docs.mjs`, `scripts/verify/verify-health.mjs` |
 | `scripts/tooling/` | Adapters around external development CLIs. | `scripts/tooling/run-agents-cli.mjs` |
 
@@ -245,6 +252,8 @@ Prefer a configured MCP over a shell equivalent; bypassing requires stating the 
 | **Git** | stdio (`uvx`) | Structured repository status, diff, history, commits | `git_status`, `git_diff`, `git_log`, `git_add`, `git_commit`, `git_branch`, `git_checkout` |
 | **Filesystem** | stdio (`npx`) | Safe project file reads and writes | `read_text_file`, `read_multiple_files`, `write_file`, `edit_file`, `list_directory`, `search_files` |
 | **Fetch** | stdio (`uvx`) | Retrieve public web pages as readable text | `fetch` |
+| **Playwright** | stdio (`npx`, pinned version) | Drive the running app in a real browser to check UI and auth flows before writing or changing `e2e/` specs | declared in `agents.json`; specs and commands are in the Playwright row of section 3 |
+| **Firebase** | stdio (`npx`, pinned `firebase-tools`) | Inspect the Firebase project, Firestore rules, and Auth configuration. It acts with the signed-in `firebase` CLI credentials, so keep it to read and validate work unless the user asks otherwise | declared in `agents.json`; schema ownership stays in `DER.md` and rules changes follow the `firestore-rules-change` skill |
 | **GitHub** | stdio (`uvx`) | Pull requests, issues, and repository management | declared in `agents.json`; the issue tracker flow is in `docs/agents/issue-tracker.md` |
 
 Use `rtk agents mcp test --runtime` to validate configured servers and the

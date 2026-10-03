@@ -18,7 +18,7 @@ Keep the existing `/${spaceId}` route contract and move Space navigation into a
 sidebar shell:
 
 1. `SpaceShell` composes the native `SidebarProvider`, `Sidebar`,
-   `SidebarHeader`, `SidebarFooter`, and `SidebarInset` primitives while
+   `SidebarHeader`, `SidebarContent`, `SidebarFooter`, and `SidebarInset` primitives while
    `useSpaceShell` owns shell-specific state, effects, navigation, and behavioral
    handlers; the route page keeps its server-rendered content as children.
 2. The sidebar remains visible and non-collapsible on the Space route. It lists

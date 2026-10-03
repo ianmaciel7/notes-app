@@ -195,6 +195,10 @@ single-component file.
 
 Visual component structure must remain compatible with the interaction contract in
 [ADR 0016](./docs/adr/0016-prefer-simple-domain-components-and-dedicated-hooks.md).
+Empty and missing-resource status states compose the shared `Empty` primitive. Within
+full-height flex containers such as `SidebarInset`, card-styled empty surfaces prevent
+vertical stretching using `grow-0` and maintain a balanced, centered layout (`max-w-lg`)
+with responsive padding (`p-8 md:p-10`).
 
 ### Sidebar Navigation
 

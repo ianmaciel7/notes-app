@@ -210,6 +210,45 @@ export function isBiomeChecked(relative) {
   return BIOME_EXTENSIONS.has(path.posix.extname(relative));
 }
 
+export function isFirestoreRules(relative) {
+  return relative === "firestore.rules";
+}
+
+// Verdict for a spawned check: "pass", "fail" (the check ran and found real
+// problems; safe to block on) or "environment" (it could not run properly, for
+// example no Java for the Firestore emulator; never block on this).
+function classifyRun({ error, status, output }, failurePattern) {
+  if (error) return "environment";
+  if (status === 0) return "pass";
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: strips ANSI colors
+  const plain = (output ?? "").replace(/\u001b\[[0-9;]*m/g, "");
+  return failurePattern.test(plain) ? "fail" : "environment";
+}
+
+// Vitest prints these only after the emulators started and tests executed.
+const VITEST_FAILURE =
+  /^\s*(FAIL\s|Test Files\s+\d+ failed|Tests\s+\d+ failed)/m;
+
+export function classifyEmulatorRun(run) {
+  return classifyRun(run, VITEST_FAILURE);
+}
+
+// tsc reports real type errors as "error TS1234"; a crashed `next typegen`
+// does not.
+export function classifyTypecheckRun(run) {
+  return classifyRun(run, /error TS\d+/);
+}
+
+// A Stop hook that blocks re-fires after Claude continues; this flag is the
+// only protection against an endless block loop.
+export function isStopHookActive(raw) {
+  try {
+    return JSON.parse(raw)?.stop_hook_active === true;
+  } catch {
+    return false;
+  }
+}
+
 export function classifyPath(relative) {
   const generated = GENERATED.find((rule) => rule.test(relative));
   if (generated) {

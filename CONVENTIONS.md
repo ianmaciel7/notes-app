@@ -256,24 +256,30 @@ changing an installed primitive.
 
 ### Hook Placement & Usage
 - **Co-located Component Hooks (inside component file):** Keep custom hooks co-located
-  within the component file when they are strictly coupled to that component family's
-  context provider (e.g., `useSidebar` in `sidebar.tsx`, `useToastManager` in `toast.tsx`)
-  or manage private compound state. Declare them as top-level exported functions; never define
-  hooks inside a component render body.
-- **Dedicated component hook owns behavior:** When a component already has a
-  dedicated hook named for that component (for example `SpaceShell` +
-  `useSpaceShell`), keep component-owned React state/effects/refs/transitions,
-  subscriptions, navigation, and behavioral handlers inside that hook. The component
-  should consume derived values and semantic callbacks and stay focused on rendering.
-  Presentation-only hooks such as translations may remain in the component.
+  within the component file only when they are strictly coupled to that component family's
+  context provider (e.g., `useSidebar` in `sidebar.tsx`, `useCarousel` in `carousel.tsx`,
+  `useChart` in `chart.tsx`, `useDrawer` in `drawer.tsx`, `useToastManager` in `toast.tsx`)
+  or manage private compound state. In the shadcn/ui registry architecture, these belong to
+  `registry:ui` single-file primitives exposing an internal `React.createContext`. Declare them
+  as top-level exported functions in the trailing export block; never define hooks inside a
+  component render body.
+- **Dedicated component hook owns behavior:** When an application component already has a
+  dedicated hook named for that component (for example `SpaceShell` + `useSpaceShell`,
+  `ConnectionAlert` + `useConnectionAlert`), keep component-owned React
+  state/effects/refs/transitions, subscriptions, navigation, and behavioral handlers inside
+  that hook in `src/hooks/`. The component should consume derived values and semantic
+  callbacks and stay focused on rendering (ADR 0016), preserving Fast Refresh boundaries
+  and the `single-component-per-file` invariant. Presentation-only hooks such as translations
+  may remain in the component.
 - **Extract stateful application behavior when it clarifies a real concern:** Do not
   create a dedicated hook merely because a component contains an arbitrary number of
   state/effect calls. Create one when the behavior forms a coherent boundary; once
   that dedicated hook exists, it owns that behavior consistently.
-- **Shared Standalone Hooks (`src/hooks/`):** Place hooks in `src/hooks/` only when they
-  are generic, shared across multiple independent components or routes (e.g., `useIsMobile`,
-  `useAuth`), encapsulate reusable browser APIs (media queries, listeners, sensors), or require
-  isolated unit testing. Hooks in `src/hooks/` must never depend on application routes (`src/app/`).
+- **Shared Standalone Hooks (`src/hooks/`):** Place hooks in `src/hooks/` when they
+  are generic utilities or browser APIs (media queries, listeners, sensors; mapped to
+  `registry:hook` and `aliases.hooks` in `components.json`, e.g., `useIsMobile`), domain/data
+  hooks (e.g., `useAuth`, `useSpaces`), or require isolated unit testing. Hooks in `src/hooks/`
+  must never depend on application routes (`src/app/`).
 
 - **Stateful Component Extraction:** Treat hook extraction as a design/review decision,
   not a numeric quality gate. Extract when it produces a meaningful behavioral

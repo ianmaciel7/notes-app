@@ -4,8 +4,12 @@ import test from "node:test";
 import {
   classifyBashCommand,
   classifyDelegation,
+  classifyEmulatorRun,
   classifyPath,
+  classifyTypecheckRun,
   isBiomeChecked,
+  isFirestoreRules,
+  isStopHookActive,
   parseHookFilePath,
   preToolUseDecision,
   repoRelativePath,
@@ -176,6 +180,57 @@ test("non-Bash payloads are not judged by the Bash guard", () => {
   assert.equal(classifyBashCommand("not json"), null);
   assert.equal(classifyBashCommand("{}"), null);
   assert.equal(classifyBashCommand('{"tool_input":{"command":3}}'), null);
+});
+
+test("only the Firestore rules file triggers the rules hook", () => {
+  assert.equal(isFirestoreRules("firestore.rules"), true);
+  for (const file of [
+    "firestore.indexes.json",
+    "docs/firestore.rules",
+    "src/lib/firebase/firestore-emulator.test.ts",
+  ]) {
+    assert.equal(isFirestoreRules(file), false, file);
+  }
+});
+
+test("emulator runs block only on failing tests", () => {
+  const run = (status, output, error) =>
+    classifyEmulatorRun({ status, output, error });
+  assert.equal(run(0, "Tests  4 passed (4)"), "pass");
+  assert.equal(
+    run(1, " FAIL  src/lib/firebase/firestore-emulator.test.ts"),
+    "fail",
+  );
+  assert.equal(run(1, "Test Files  1 failed | 1 passed (2)"), "fail");
+  assert.equal(run(1, "\u001b[31m FAIL \u001b[39m rules denies read"), "fail");
+});
+
+test("emulator environment failures never block", () => {
+  const run = (status, output, error) =>
+    classifyEmulatorRun({ status, output, error });
+  for (const output of [
+    "Error: Could not spawn `java -version`. Please make sure Java is installed",
+    "Port 8080 is not open on localhost, could not start Firestore Emulator.",
+    "",
+  ]) {
+    assert.equal(run(1, output), "environment", output);
+  }
+  assert.equal(run(null, "", new Error("ETIMEDOUT")), "environment");
+  assert.equal(run(null, "FAIL", new Error("ENOENT")), "environment");
+});
+
+test("typecheck runs block only on real type errors", () => {
+  const run = (status, output) => classifyTypecheckRun({ status, output });
+  assert.equal(run(0, ""), "pass");
+  assert.equal(run(2, "src/a.ts(1,1): error TS2322: bad"), "fail");
+  assert.equal(run(1, "next typegen crashed: EPERM"), "environment");
+});
+
+test("a continuing Stop hook is detected from its payload", () => {
+  assert.equal(isStopHookActive('{"stop_hook_active":true}'), true);
+  for (const payload of ['{"stop_hook_active":false}', "{}", "not json"]) {
+    assert.equal(isStopHookActive(payload), false, payload);
+  }
 });
 
 test("PreToolUse decisions use the documented JSON shape", () => {
