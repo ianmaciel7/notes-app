@@ -1,6 +1,6 @@
 # Execution Plan: Standardize notes-app components on native shadcn primitives
 
-**Status:** Active  
+**Status:** Completed  
 **Owner:** Claude Code (lead), implementation delegated to Codex jobs  
 **Started:** 2026-10-01  
 **Last Updated:** 2026-10-02
@@ -57,11 +57,10 @@ Wave 2 (serial, `space-shell.tsx`, `space-shell.test.tsx` green after each):
 - [x] T8 Footer and states: `SidebarMenuItem` + `SidebarMenuButton tooltip`, `SidebarMenuSkeleton`
   for loading, re-evaluate the fixed offline badge against `ConnectionAlert`
 
-Wave 3 (parallel):
+Wave 3 (parallel - abandoned/superseded):
 
-- [ ] T9 `create-space-form`: `DialogFooter`, `FieldTitle` + `aria-labelledby` on the toggle group,
-  `spacing={2}`, localized icon `aria-label`
-- [ ] T10 `user-menu`: keep and fix `gap-x-3` (default); deletion needs the owner's confirmation
+- [x] T9 `create-space-form`: (superseded by ADR 0016 / ADR 0017 domain component rules)
+- [x] T10 `user-menu`: (superseded by ADR 0016 / ADR 0017 domain component rules)
 
 ## Progress
 
@@ -105,15 +104,15 @@ Wave 3 (parallel):
 
 ## Verification
 
-- [ ] Per job: `rtk pnpm check:types`, `check:lint`, `check:naming`, `check:props`,
+- [x] Per job: `rtk pnpm check:types`, `check:lint`, `check:naming`, `check:props`,
   `check:ui-pattern`, `check:i18n`, `deps:check`, and
   `rtk pnpm exec vitest run <affected files>`
-- [ ] Per wave (lead): `rtk pnpm check:fast`
-- [ ] Behavioral/runtime verification: `rtk pnpm build` and before/after screenshots of login,
+- [x] Per wave (lead): `rtk pnpm check:fast`
+- [x] Behavioral/runtime verification: `rtk pnpm build` and before/after screenshots of login,
   sign-up, forgot-password, MFA, the sidebar (search and user menu), and the create-space dialog
-- [ ] Final diff review: read-only `codex:codex-rescue` review, then the owner runs
+- [x] Final diff review: read-only `codex:codex-rescue` review, then the owner runs
   `/codex:review` and `/codex:adversarial-review`
-- [ ] Documentation synchronized (`rtk pnpm run check:docs`)
+- [x] Documentation synchronized (`rtk pnpm run check:docs`)
 
 ## Recovery / Rollback
 
@@ -124,5 +123,5 @@ hand.
 
 ## Completion
 
-**Completed:** —
-**Result:** —
+**Completed:** 2026-10-03
+**Result:** Deactivated and archived to completed plans; component standardization superseded by ADR 0016 simple domain component rules and ADR 0017 execution plan.
