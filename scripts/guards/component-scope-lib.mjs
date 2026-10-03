@@ -8,10 +8,12 @@ import path from "node:path";
 // without editing any guard.
 const COMPONENTS_ROOT = "src/components";
 const EXEMPT_COMPONENT_DIRS = new Set(["ui", "firebase"]);
-const APPLICATION_COMPONENT_FILE = /^src\/components\/([^/]+)\/[^/]+\.tsx$/;
+const APPLICATION_COMPONENT_FILE =
+  /^src\/components\/([^/]+)\/(?:.+\/)?[^/]+\.tsx$/;
 
 function isApplicationComponentPath(relPath) {
-  const match = APPLICATION_COMPONENT_FILE.exec(relPath);
+  const normalized = relPath.replaceAll("\\", "/");
+  const match = APPLICATION_COMPONENT_FILE.exec(normalized);
   return match !== null && !EXEMPT_COMPONENT_DIRS.has(match[1]);
 }
 
@@ -26,13 +28,25 @@ function listApplicationComponentDirs(root) {
     .map((entry) => path.join(componentsDir, entry.name));
 }
 
-// Absolute paths of `*.tsx` files directly inside each application folder.
+function collectTsxFilesRecursively(dir) {
+  const entries = readdirSync(dir, { withFileTypes: true });
+  const results = [];
+  for (const entry of entries) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...collectTsxFilesRecursively(full));
+    } else if (entry.name.endsWith(".tsx")) {
+      results.push(full);
+    }
+  }
+  return results;
+}
+
+// Absolute paths of `*.tsx` files inside each application folder (including subfolders).
 // Test and story files are returned too; callers filter them as they need.
 function listApplicationComponentFiles(root) {
   return listApplicationComponentDirs(root).flatMap((dir) =>
-    readdirSync(dir)
-      .filter((file) => file.endsWith(".tsx"))
-      .map((file) => path.join(dir, file)),
+    collectTsxFilesRecursively(dir),
   );
 }
 

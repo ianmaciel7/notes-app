@@ -14,7 +14,7 @@ import type { QuestionDropField, QuestionItem } from "@/types/question";
 /** Droppable id of the list of items that are not in a slot. */
 export const DRAG_POOL_ID = "pool";
 
-export type UseQuestionDragDropGroupOptions = {
+export type UseQuestionDraggableItemGroupOptions = {
   items: QuestionItem[];
   slots: QuestionDropField[];
   /** slotId -> itemId placed so far. */
@@ -22,12 +22,12 @@ export type UseQuestionDragDropGroupOptions = {
   onValueChange: (next: Record<string, string>) => void;
 };
 
-export function useQuestionDragDropGroup({
+export function useQuestionDraggableItemGroup({
   items,
   slots,
   value,
   onValueChange,
-}: UseQuestionDragDropGroupOptions) {
+}: UseQuestionDraggableItemGroupOptions) {
   const t = useTranslations("exam");
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),

@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { useId } from "react";
-import { QuestionImageItem } from "@/components/notes-app/question-image-item";
+import { QuestionImageFigure } from "@/components/notes-app/question-image-figure";
 import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
 import {
   Field,
@@ -55,7 +55,7 @@ function QuestionMatchingItem({
       <FieldContent className="gap-2">
         <FieldLabel htmlFor={selectId}>{item.text}</FieldLabel>
         {item.imageUrl ? (
-          <QuestionImageItem
+          <QuestionImageFigure
             url={item.imageUrl}
             alt={item.imageAlt ?? item.text}
             className="max-w-xs"

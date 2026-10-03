@@ -3,7 +3,7 @@
 import { useDraggable } from "@dnd-kit/core";
 import { GripVerticalIcon } from "lucide-react";
 import type { ComponentProps } from "react";
-import { QuestionImageItem } from "@/components/notes-app/question-image-item";
+import { QuestionImageFigure } from "@/components/notes-app/question-image-figure";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { QuestionItem } from "@/types/question";
@@ -50,7 +50,7 @@ function QuestionDraggableItem({
       {disabled ? null : <GripVerticalIcon aria-hidden="true" />}
       <span>{item.text}</span>
       {item.imageUrl ? (
-        <QuestionImageItem
+        <QuestionImageFigure
           url={item.imageUrl}
           alt={item.imageAlt ?? item.text}
           className="w-24"

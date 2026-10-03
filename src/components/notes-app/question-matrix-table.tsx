@@ -16,7 +16,7 @@ import {
 import { cn } from "@/lib/utils";
 import type { MatrixColumn, MatrixRow } from "@/types/question";
 
-interface QuestionMatrixGroupProps
+interface QuestionMatrixTableProps
   extends Omit<ComponentProps<typeof FieldSet>, "children" | "onChange"> {
   legend: string;
   columns: MatrixColumn[];
@@ -27,7 +27,7 @@ interface QuestionMatrixGroupProps
   onValueChange: (value: Record<string, string>) => void;
 }
 
-function QuestionMatrixGroup({
+function QuestionMatrixTable({
   legend,
   columns,
   rows,
@@ -37,7 +37,7 @@ function QuestionMatrixGroup({
   onValueChange,
   className,
   ...props
-}: QuestionMatrixGroupProps) {
+}: QuestionMatrixTableProps) {
   const t = useTranslations("exam");
   const groupId = useId();
 
@@ -131,4 +131,4 @@ function QuestionMatrixGroup({
   );
 }
 
-export { QuestionMatrixGroup, type QuestionMatrixGroupProps };
+export { QuestionMatrixTable, type QuestionMatrixTableProps };

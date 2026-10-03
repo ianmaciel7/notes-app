@@ -2,14 +2,14 @@
 
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionChoiceGroup } from "@/components/notes-app/question-choice-group";
-import { QuestionDropdownGroup } from "@/components/notes-app/question-dropdown-group";
-import { QuestionFillBlankInput } from "@/components/notes-app/question-fill-blank-input";
+import { QuestionChoiceFieldSet } from "@/components/notes-app/question-choice-field-set";
+import { QuestionDropdownFieldSet } from "@/components/notes-app/question-dropdown-field-set";
+import { QuestionFillBlankField } from "@/components/notes-app/question-fill-blank-field";
 import { FieldDescription, FieldLegend, FieldSet } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { CaseStudyPart, CaseStudyPartAnswer } from "@/types/question";
 
-type QuestionPartItemProps = Omit<
+type QuestionCaseStudyItemProps = Omit<
   ComponentProps<typeof FieldSet>,
   "children" | "onChange"
 > & {
@@ -40,10 +40,10 @@ function renderPartControl({
   correctAnswer,
   resolved,
   onValueChange,
-}: Omit<QuestionPartItemProps, "position" | "className">) {
+}: Omit<QuestionCaseStudyItemProps, "position" | "className">) {
   if (item.type === "fill-blank") {
     return (
-      <QuestionFillBlankInput
+      <QuestionFillBlankField
         value={typeof value === "string" ? value : ""}
         acceptedAnswers={asList(correctAnswer)}
         resolved={resolved}
@@ -54,7 +54,7 @@ function renderPartControl({
 
   if (item.type === "dropdown") {
     return (
-      <QuestionDropdownGroup
+      <QuestionDropdownFieldSet
         legend={item.prompt}
         dropdowns={item.dropdowns}
         value={asMapping(value)}
@@ -66,14 +66,14 @@ function renderPartControl({
   }
 
   return (
-    <QuestionChoiceGroup
+    <QuestionChoiceFieldSet
       legend={item.prompt}
       mode={item.type === "multiple-choice" ? "multiple" : "single"}
       options={item.options}
       value={asList(value)}
       correctIds={asList(correctAnswer)}
       resolved={resolved}
-      onValueChange={(ids) =>
+      onValueChange={(ids: string[]) =>
         onValueChange(item.type === "multiple-choice" ? ids : (ids[0] ?? ""))
       }
     />
@@ -81,7 +81,7 @@ function renderPartControl({
 }
 
 /** One answerable sub-question of a case study. */
-function QuestionPartItem({
+function QuestionCaseStudyItem({
   item,
   position,
   value,
@@ -90,7 +90,7 @@ function QuestionPartItem({
   onValueChange,
   className,
   ...props
-}: QuestionPartItemProps) {
+}: QuestionCaseStudyItemProps) {
   const t = useTranslations("exam");
 
   return (
@@ -122,4 +122,4 @@ function QuestionPartItem({
   );
 }
 
-export { QuestionPartItem, type QuestionPartItemProps };
+export { QuestionCaseStudyItem, type QuestionCaseStudyItemProps };

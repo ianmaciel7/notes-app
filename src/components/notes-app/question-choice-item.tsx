@@ -1,7 +1,7 @@
 "use client";
 
 import type { ComponentProps } from "react";
-import { QuestionImageItem } from "@/components/notes-app/question-image-item";
+import { QuestionImageFigure } from "@/components/notes-app/question-image-figure";
 import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -87,7 +87,7 @@ function QuestionChoiceItem({
           </FieldLabel>
         </FieldTitle>
         {option.imageUrl ? (
-          <QuestionImageItem
+          <QuestionImageFigure
             url={option.imageUrl}
             alt={option.imageAlt ?? option.text}
             className="mt-2 max-w-xs"

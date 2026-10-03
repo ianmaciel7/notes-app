@@ -17,7 +17,7 @@ describe("normalizeText", () => {
   });
 
   it("composes accents but keeps them significant", () => {
-    expect(normalizeText("é")).toBe(normalizeText("é"));
+    expect(normalizeText("é")).toBe(normalizeText("é"));
     expect(normalizeText("cafe")).not.toBe(normalizeText("café"));
   });
 });

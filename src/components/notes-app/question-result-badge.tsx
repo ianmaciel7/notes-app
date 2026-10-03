@@ -1,32 +1,38 @@
 "use client";
 
-import { CheckIcon, XIcon } from "lucide-react";
+import { CheckCircleIcon, XCircleIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
-type QuestionResultBadgeProps = Omit<
-  ComponentProps<typeof Badge>,
-  "children" | "variant"
-> & {
+type QuestionResultBadgeProps = ComponentProps<"div"> & {
   state: "correct" | "incorrect";
 };
 
-/** Text plus icon, so a result never depends on color alone. */
-function QuestionResultBadge({ state, ...props }: QuestionResultBadgeProps) {
+function QuestionResultBadge({
+  state,
+  className,
+  ...props
+}: QuestionResultBadgeProps) {
   const t = useTranslations("exam");
-  const Icon = state === "correct" ? CheckIcon : XIcon;
 
   return (
-    <Badge
+    <div
       data-slot="question-result-badge"
       data-state={state}
-      variant={state === "correct" ? "default" : "destructive"}
       {...props}
+      className={cn("inline-flex", className)}
     >
-      <Icon aria-hidden="true" data-icon="inline-start" />
-      {t(state)}
-    </Badge>
+      <Badge variant={state === "correct" ? "default" : "destructive"}>
+        {state === "correct" ? (
+          <CheckCircleIcon aria-hidden="true" data-icon="inline-start" />
+        ) : (
+          <XCircleIcon aria-hidden="true" data-icon="inline-start" />
+        )}
+        {t(state)}
+      </Badge>
+    </div>
   );
 }
 

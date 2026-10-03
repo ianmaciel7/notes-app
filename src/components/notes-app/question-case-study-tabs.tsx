@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionPartItem } from "@/components/notes-app/question-part-item";
+import { QuestionCaseStudyItem } from "@/components/notes-app/question-case-study-item";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import type {
@@ -76,7 +76,7 @@ function QuestionCaseStudyTabs({
             {t("caseStudyQuestions")}
           </h4>
           {parts.map((part, index) => (
-            <QuestionPartItem
+            <QuestionCaseStudyItem
               key={part.id}
               item={part}
               position={index + 1}

@@ -7,7 +7,7 @@ vi.mock("next-intl/server", () => ({
     const translations: Record<string, Record<string, string>> = {
       app: {
         title: "Notes App",
-        footer: "Notes App • Firebase Auth",
+        footer: "Notes App â€¢ Firebase Auth",
       },
       spaces: {
         backToHome: "Back to Home",

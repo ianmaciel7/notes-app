@@ -7,7 +7,7 @@ import { useId } from "react";
 import { QuestionDraggableItem } from "@/components/notes-app/question-draggable-item";
 import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import {
   NativeSelect,
   NativeSelectOption,
@@ -18,56 +18,88 @@ import type {
   QuestionItem,
 } from "@/types/question";
 
-type QuestionDropFieldProps = Omit<
-  ComponentProps<"div">,
+type QuestionDroppableFieldProps = Omit<
+  ComponentProps<typeof Field>,
   "children" | "onChange"
 > & {
-  field: QuestionDropFieldType;
+  field?: QuestionDropFieldType;
+  isPool?: boolean;
   items: QuestionItem[];
-  /** Item currently in this field, or "" when empty. */
-  placedId: string;
-  correctId: string;
-  resolved: boolean;
-  /** Called with an item id, or "" to empty the field. */
-  onPlace: (itemId: string) => void;
+  placedId?: string;
+  correctId?: string;
+  resolved?: boolean;
+  onPlace?: (itemId: string) => void;
 };
 
-/**
- * A drop target field. The select inside it is the keyboard and screen reader path:
- * the same placement is possible without dragging.
- */
-function QuestionDropField({
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: dual rendering paths
+function QuestionDroppableField({
   field,
+  isPool = false,
   items,
-  placedId,
-  correctId,
-  resolved,
+  placedId = "",
+  correctId = "",
+  resolved = false,
   onPlace,
   className,
   ...props
-}: QuestionDropFieldProps) {
+}: QuestionDroppableFieldProps) {
   const t = useTranslations("exam");
+  const droppableId = isPool ? "pool" : (field?.id ?? "pool");
+  const { setNodeRef, isOver } = useDroppable({ id: droppableId });
   const selectId = useId();
-  const { setNodeRef, isOver } = useDroppable({ id: field.id });
+  const descId = `${selectId}-desc`;
+
+  if (isPool) {
+    return (
+      <Field
+        data-slot="question-droppable-field"
+        data-over={isOver || undefined}
+        ref={setNodeRef}
+        {...props}
+        className={cn(
+          "flex min-h-40 flex-col gap-2 rounded-lg border border-border bg-muted/20 p-3 data-[over]:border-primary data-[over]:bg-primary/5",
+          className,
+        )}
+      >
+        {items.length === 0 ? (
+          <div className="flex flex-1 items-center justify-center p-4">
+            <p className="text-xs text-muted-foreground">
+              {t("dragPoolEmpty")}
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {items.map((item) => (
+              <QuestionDraggableItem
+                key={item.id}
+                item={item}
+                disabled={Boolean(resolved)}
+                className="w-full justify-start shadow-xs hover:border-primary/50"
+              />
+            ))}
+          </div>
+        )}
+      </Field>
+    );
+  }
+
   const placed = items.find((item) => item.id === placedId);
   const isCorrect = placedId === correctId;
   const correctText = items.find((item) => item.id === correctId)?.text;
 
-  const descId = `${selectId}-desc`;
-
   return (
-    <div
-      data-slot="question-drop-field"
+    <Field
+      data-slot="question-droppable-field"
       {...props}
       className={cn("flex flex-col gap-1.5", className)}
     >
       <div className="flex items-center justify-between gap-2">
-        <Label
+        <FieldLabel
           htmlFor={selectId}
-          className="text-xs font-semibold text-muted-foreground tracking-wide"
+          className="text-xs font-semibold tracking-wide text-muted-foreground"
         >
-          {field.label}
-        </Label>
+          {field?.label}
+        </FieldLabel>
         <div className="flex items-center gap-2">
           {resolved ? (
             <QuestionResultBadge state={isCorrect ? "correct" : "incorrect"} />
@@ -77,7 +109,7 @@ function QuestionDropField({
               type="button"
               variant="ghost"
               size="xs"
-              onClick={() => onPlace("")}
+              onClick={() => onPlace?.("")}
               className="h-auto p-0 text-xs text-muted-foreground transition-colors hover:bg-transparent hover:text-destructive"
             >
               {t("dragSlotClear")}
@@ -87,11 +119,11 @@ function QuestionDropField({
             id={selectId}
             value={placedId}
             disabled={resolved}
-            aria-label={t("dragSlotSelectLabel", { slot: field.label })}
+            aria-label={t("dragSlotSelectLabel", { slot: field?.label ?? "" })}
             aria-invalid={resolved && !isCorrect}
             aria-describedby={resolved && !isCorrect ? descId : undefined}
-            className="sr-only focus:not-sr-only focus:h-7 focus:w-auto focus:py-0 focus:px-2 focus:text-xs"
-            onChange={(event) => onPlace(event.target.value)}
+            className="sr-only focus:not-sr-only focus:h-7 focus:w-auto focus:px-2 focus:py-0 focus:text-xs"
+            onChange={(event) => onPlace?.(event.target.value)}
           >
             <NativeSelectOption value="">
               {t("dragSlotSelectPlaceholder")}
@@ -118,7 +150,7 @@ function QuestionDropField({
         {placed ? (
           <QuestionDraggableItem
             item={placed}
-            disabled={resolved}
+            disabled={Boolean(resolved)}
             className="w-full justify-start shadow-xs hover:border-primary/50"
           />
         ) : (
@@ -129,12 +161,12 @@ function QuestionDropField({
       </div>
 
       {resolved && !isCorrect ? (
-        <p id={descId} className="text-xs text-destructive">
+        <FieldDescription id={descId} className="text-xs text-destructive">
           {t("correctSlotItem", { item: correctText ?? correctId })}
-        </p>
+        </FieldDescription>
       ) : null}
-    </div>
+    </Field>
   );
 }
 
-export { QuestionDropField, type QuestionDropFieldProps };
+export { QuestionDroppableField, type QuestionDroppableFieldProps };

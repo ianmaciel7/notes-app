@@ -4,8 +4,8 @@ import { describe, expect, it, vi } from "vitest";
 import type { QuestionDropField, QuestionItem } from "@/types/question";
 import {
   DRAG_POOL_ID,
-  useQuestionDragDropGroup,
-} from "./use-question-drag-drop-group";
+  useQuestionDraggableItemGroup,
+} from "./use-question-draggable-item-group";
 
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string, values?: Record<string, unknown>) =>
@@ -23,11 +23,11 @@ const slots: QuestionDropField[] = [
   { id: "s2", label: "Event-driven Functions" },
 ];
 
-describe("useQuestionDragDropGroup", () => {
+describe("useQuestionDraggableItemGroup", () => {
   it("filters poolItems to only unassigned items", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionDragDropGroup({
+      useQuestionDraggableItemGroup({
         items,
         slots,
         value: { s1: "i1" },
@@ -41,7 +41,7 @@ describe("useQuestionDragDropGroup", () => {
   it("places an item into an empty slot", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionDragDropGroup({
+      useQuestionDraggableItemGroup({
         items,
         slots,
         value: {},
@@ -59,7 +59,7 @@ describe("useQuestionDragDropGroup", () => {
   it("moves an item from one slot to another and evicts previous placement", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionDragDropGroup({
+      useQuestionDraggableItemGroup({
         items,
         slots,
         value: { s1: "i1", s2: "i2" },
@@ -77,7 +77,7 @@ describe("useQuestionDragDropGroup", () => {
   it("clears a slot when slotId is null or itemId is empty string", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionDragDropGroup({
+      useQuestionDraggableItemGroup({
         items,
         slots,
         value: { s1: "i1", s2: "i2" },
@@ -95,7 +95,7 @@ describe("useQuestionDragDropGroup", () => {
   it("handles drag end over a valid slot", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionDragDropGroup({
+      useQuestionDraggableItemGroup({
         items,
         slots,
         value: {},
@@ -119,7 +119,7 @@ describe("useQuestionDragDropGroup", () => {
   it("handles drag end over the pool by unassigning the item", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionDragDropGroup({
+      useQuestionDraggableItemGroup({
         items,
         slots,
         value: { s1: "i1" },
@@ -143,7 +143,7 @@ describe("useQuestionDragDropGroup", () => {
   it("ignores drag end when over is null", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionDragDropGroup({
+      useQuestionDraggableItemGroup({
         items,
         slots,
         value: { s1: "i1" },
@@ -167,7 +167,7 @@ describe("useQuestionDragDropGroup", () => {
   it("provides localized announcements for screen readers", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionDragDropGroup({
+      useQuestionDraggableItemGroup({
         items,
         slots,
         value: {},

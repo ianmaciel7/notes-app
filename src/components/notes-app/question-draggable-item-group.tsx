@@ -3,17 +3,16 @@
 import { DndContext } from "@dnd-kit/core";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionDragPoolList } from "@/components/notes-app/question-drag-pool-list";
-import { QuestionDropField } from "@/components/notes-app/question-drop-field";
+import { QuestionDroppableField } from "@/components/notes-app/question-droppable-field";
 import { FieldLegend, FieldSet, FieldTitle } from "@/components/ui/field";
-import { useQuestionDragDropGroup } from "@/hooks/use-question-drag-drop-group";
+import { useQuestionDraggableItemGroup } from "@/hooks/use-question-draggable-item-group";
 import { cn } from "@/lib/utils";
 import type {
   QuestionDropField as QuestionDropFieldType,
   QuestionItem,
 } from "@/types/question";
 
-type QuestionDragDropGroupProps = Omit<
+type QuestionDraggableItemGroupProps = Omit<
   ComponentProps<typeof FieldSet>,
   "children" | "onChange"
 > & {
@@ -28,7 +27,7 @@ type QuestionDragDropGroupProps = Omit<
   onValueChange: (next: Record<string, string>) => void;
 };
 
-function QuestionDragDropGroup({
+function QuestionDraggableItemGroup({
   legend,
   items,
   slots,
@@ -38,14 +37,14 @@ function QuestionDragDropGroup({
   onValueChange,
   className,
   ...props
-}: QuestionDragDropGroupProps) {
+}: QuestionDraggableItemGroupProps) {
   const t = useTranslations("exam");
   const { sensors, accessibility, poolItems, placeItem, handleDragEnd } =
-    useQuestionDragDropGroup({ items, slots, value, onValueChange });
+    useQuestionDraggableItemGroup({ items, slots, value, onValueChange });
 
   return (
     <FieldSet
-      data-slot="question-drag-drop-group"
+      data-slot="question-draggable-item-group"
       {...props}
       className={cn("min-w-0 gap-3", className)}
     >
@@ -59,7 +58,11 @@ function QuestionDragDropGroup({
         <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
           <div className="flex flex-col gap-2">
             <FieldTitle>{t("dragPool")}</FieldTitle>
-            <QuestionDragPoolList items={poolItems} disabled={resolved} />
+            <QuestionDroppableField
+              isPool
+              items={poolItems}
+              resolved={resolved}
+            />
           </div>
           <div className="flex flex-col gap-2">
             <FieldTitle>{t("dragAnswerArea")}</FieldTitle>
@@ -68,7 +71,7 @@ function QuestionDragDropGroup({
               className="flex min-h-40 flex-col gap-3 rounded-lg border border-border bg-muted/20 p-3"
             >
               {slots.map((slot) => (
-                <QuestionDropField
+                <QuestionDroppableField
                   key={slot.id}
                   field={slot}
                   items={items}
@@ -86,4 +89,4 @@ function QuestionDragDropGroup({
   );
 }
 
-export { QuestionDragDropGroup, type QuestionDragDropGroupProps };
+export { QuestionDraggableItemGroup, type QuestionDraggableItemGroupProps };

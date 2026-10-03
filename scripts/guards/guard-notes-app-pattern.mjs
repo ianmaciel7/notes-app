@@ -82,6 +82,11 @@ const COMPONENT_ROLE_SUFFIXES = new Set([
   "Toggle",
   "Tooltip",
   "Trigger",
+  "Section",
+  "FieldSet",
+  "Figure",
+  "Row",
+  "Cell",
 ]);
 
 const COMPONENT_NAME_EXEMPTIONS = new Set(["RequireAuth", "RequireGuest"]);

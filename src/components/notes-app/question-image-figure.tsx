@@ -3,7 +3,7 @@ import type { ComponentProps } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "@/lib/utils";
 
-type QuestionImageItemProps = Omit<
+type QuestionImageFigureProps = Omit<
   ComponentProps<typeof AspectRatio>,
   "children" | "ratio"
 > & {
@@ -13,21 +13,20 @@ type QuestionImageItemProps = Omit<
 
 /**
  * A fixed-ratio frame so a remote image never shifts the layout while loading.
- * Author-supplied hosts are not known ahead of time, so the image is served
- * as-is (`unoptimized`) instead of through the optimizer.
  */
-function QuestionImageItem({
+function QuestionImageFigure({
   url,
   alt,
   className,
+  style,
   ...props
-}: QuestionImageItemProps) {
+}: QuestionImageFigureProps) {
   return (
     <AspectRatio
-      data-slot="question-image-item"
+      data-slot="question-image-figure"
       ratio={16 / 9}
+      style={{ position: "relative", ...style }}
       {...props}
-      style={{ position: "relative", ...props.style }}
       className={cn(
         "relative w-full overflow-hidden rounded-lg border border-border bg-muted/30",
         className,
@@ -45,4 +44,4 @@ function QuestionImageItem({
   );
 }
 
-export { QuestionImageItem, type QuestionImageItemProps };
+export { QuestionImageFigure, type QuestionImageFigureProps };

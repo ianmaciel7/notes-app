@@ -1,14 +1,13 @@
 "use client";
 
-import type { ComponentProps } from "react";
-import { useId } from "react";
+import { type ComponentProps, useId } from "react";
 import { QuestionChoiceItem } from "@/components/notes-app/question-choice-item";
-import { FieldLegend, FieldSet } from "@/components/ui/field";
+import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import type { QuestionOption } from "@/types/question";
 
-type QuestionChoiceGroupProps = Omit<
+type QuestionChoiceFieldSetProps = Omit<
   ComponentProps<typeof FieldSet>,
   "children" | "onChange"
 > & {
@@ -34,7 +33,7 @@ function resultFor(
   return selected ? "incorrect" : undefined;
 }
 
-function QuestionChoiceGroup({
+function QuestionChoiceFieldSet({
   legend,
   mode,
   options,
@@ -44,7 +43,7 @@ function QuestionChoiceGroup({
   onValueChange,
   className,
   ...props
-}: QuestionChoiceGroupProps) {
+}: QuestionChoiceFieldSetProps) {
   const groupId = useId();
 
   const items = options.map((option, index) => {
@@ -72,7 +71,7 @@ function QuestionChoiceGroup({
 
   return (
     <FieldSet
-      data-slot="question-choice-group"
+      data-slot="question-choice-field-set"
       {...props}
       className={cn("min-w-0 gap-2", className)}
     >
@@ -86,10 +85,10 @@ function QuestionChoiceGroup({
           {items}
         </RadioGroup>
       ) : (
-        <div className="grid w-full gap-2">{items}</div>
+        <FieldGroup className="gap-2">{items}</FieldGroup>
       )}
     </FieldSet>
   );
 }
 
-export { QuestionChoiceGroup, type QuestionChoiceGroupProps };
+export { QuestionChoiceFieldSet, type QuestionChoiceFieldSetProps };

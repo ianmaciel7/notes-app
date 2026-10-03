@@ -2,15 +2,15 @@
 
 import type { ComponentProps, ReactNode } from "react";
 import { QuestionCaseStudyTabs } from "@/components/notes-app/question-case-study-tabs";
-import { QuestionChoiceGroup } from "@/components/notes-app/question-choice-group";
-import { QuestionDragDropGroup } from "@/components/notes-app/question-drag-drop-group";
-import { QuestionDropdownGroup } from "@/components/notes-app/question-dropdown-group";
-import { QuestionFillBlankInput } from "@/components/notes-app/question-fill-blank-input";
-import { QuestionHotspotGroup } from "@/components/notes-app/question-hotspot-group";
-import { QuestionMatchingGroup } from "@/components/notes-app/question-matching-group";
-import { QuestionMatrixGroup } from "@/components/notes-app/question-matrix-group";
-import { QuestionOrderingGroup } from "@/components/notes-app/question-ordering-group";
-import { QuestionSimulationGroup } from "@/components/notes-app/question-simulation-group";
+import { QuestionChoiceFieldSet } from "@/components/notes-app/question-choice-field-set";
+import { QuestionDraggableItemGroup } from "@/components/notes-app/question-draggable-item-group";
+import { QuestionDropdownFieldSet } from "@/components/notes-app/question-dropdown-field-set";
+import { QuestionFillBlankField } from "@/components/notes-app/question-fill-blank-field";
+import { QuestionHotspotFigure } from "@/components/notes-app/question-hotspot-figure";
+import { QuestionMatchingFieldSet } from "@/components/notes-app/question-matching-field-set";
+import { QuestionMatrixTable } from "@/components/notes-app/question-matrix-table";
+import { QuestionOrderingItemGroup } from "@/components/notes-app/question-ordering-item-group";
+import { QuestionSimulationCard } from "@/components/notes-app/question-simulation-card";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type {
@@ -47,7 +47,7 @@ function choiceAnswer(
 ): ReactNode {
   const current = answer?.type === question.type ? answer.value : "";
   return (
-    <QuestionChoiceGroup
+    <QuestionChoiceFieldSet
       legend={question.prompt}
       mode="single"
       options={question.options}
@@ -70,7 +70,7 @@ function multipleChoiceAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionChoiceGroup
+    <QuestionChoiceFieldSet
       legend={question.prompt}
       mode="multiple"
       options={question.options}
@@ -87,7 +87,7 @@ function fillBlankAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionFillBlankInput
+    <QuestionFillBlankField
       value={answer?.type === "fill-blank" ? answer.value : ""}
       acceptedAnswers={question.correctAnswer}
       resolved={resolved}
@@ -101,7 +101,7 @@ function matchingAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionMatchingGroup
+    <QuestionMatchingFieldSet
       legend={question.prompt}
       leftItems={question.leftItems}
       rightItems={question.rightItems}
@@ -118,7 +118,7 @@ function dragAndDropAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionDragDropGroup
+    <QuestionDraggableItemGroup
       legend={question.prompt}
       items={question.items}
       slots={question.slots}
@@ -135,7 +135,7 @@ function hotspotAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionHotspotGroup
+    <QuestionHotspotFigure
       legend={question.prompt}
       image={question.image}
       areas={question.areas}
@@ -152,7 +152,7 @@ function dropdownAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionDropdownGroup
+    <QuestionDropdownFieldSet
       legend={question.prompt}
       dropdowns={question.dropdowns}
       value={answer?.type === "dropdown" ? answer.value : {}}
@@ -168,7 +168,7 @@ function matrixAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionMatrixGroup
+    <QuestionMatrixTable
       legend={question.prompt}
       columns={question.columns}
       rows={question.rows}
@@ -185,7 +185,7 @@ function orderingAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionOrderingGroup
+    <QuestionOrderingItemGroup
       legend={question.prompt}
       items={question.items}
       value={answer?.type === "ordering" ? answer.value : []}
@@ -201,7 +201,7 @@ function simulationAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionSimulationGroup
+    <QuestionSimulationCard
       legend={question.prompt}
       scenarioDescription={question.scenarioDescription}
       terminalPrompt={question.terminalPrompt}

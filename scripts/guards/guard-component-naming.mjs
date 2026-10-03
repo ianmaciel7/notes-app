@@ -25,6 +25,7 @@ const root = fileURLToPath(new URL("../../", import.meta.url));
 const SHADCN_SUFFIXES = new Set([
   "card",
   "form",
+  "field",
   "button",
   "select",
   "alert",
@@ -78,6 +79,15 @@ const SHADCN_SUFFIXES = new Set([
   "loading",
   "empty",
   "description",
+  "title",
+  "content",
+  "section",
+  "figure",
+  "overlay",
+  "row",
+  "cell",
+  "trigger",
+  "set",
 ]);
 
 // ---------------------------------------------------------------------------

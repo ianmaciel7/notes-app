@@ -3,14 +3,14 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionHotspotItem } from "@/components/notes-app/question-hotspot-item";
+import { QuestionHotspotButton } from "@/components/notes-app/question-hotspot-button";
 import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
 import { Badge } from "@/components/ui/badge";
 import { FieldLegend, FieldSet } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { HotspotArea, QuestionImage } from "@/types/question";
 
-type QuestionHotspotGroupProps = Omit<
+type QuestionHotspotFigureProps = Omit<
   ComponentProps<typeof FieldSet>,
   "children" | "onChange"
 > & {
@@ -37,7 +37,7 @@ function areaResult(
   return isKey ? "missed" : undefined;
 }
 
-function QuestionHotspotGroup({
+function QuestionHotspotFigure({
   legend,
   image,
   areas,
@@ -47,7 +47,7 @@ function QuestionHotspotGroup({
   onValueChange,
   className,
   ...props
-}: QuestionHotspotGroupProps) {
+}: QuestionHotspotFigureProps) {
   const t = useTranslations("exam");
 
   const states = areas.map((area) => {
@@ -68,7 +68,7 @@ function QuestionHotspotGroup({
 
   return (
     <FieldSet
-      data-slot="question-hotspot-group"
+      data-slot="question-hotspot-figure"
       {...props}
       className={cn("min-w-0 gap-3", className)}
     >
@@ -85,7 +85,7 @@ function QuestionHotspotGroup({
           className="h-auto w-full"
         />
         {states.map(({ area, selected, result }) => (
-          <QuestionHotspotItem
+          <QuestionHotspotButton
             key={area.id}
             area={area}
             pressed={selected}
@@ -121,4 +121,4 @@ function QuestionHotspotGroup({
   );
 }
 
-export { QuestionHotspotGroup, type QuestionHotspotGroupProps };
+export { QuestionHotspotFigure, type QuestionHotspotFigureProps };

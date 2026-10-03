@@ -10,7 +10,7 @@ import { FieldLegend, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-interface QuestionSimulationGroupProps
+interface QuestionSimulationCardProps
   extends Omit<ComponentProps<typeof FieldSet>, "children" | "onChange"> {
   legend: string;
   scenarioDescription: string;
@@ -22,7 +22,7 @@ interface QuestionSimulationGroupProps
   onValueChange: (value: string[]) => void;
 }
 
-function QuestionSimulationGroup({
+function QuestionSimulationCard({
   legend,
   scenarioDescription,
   terminalPrompt = "cloudshell:~$",
@@ -33,7 +33,7 @@ function QuestionSimulationGroup({
   onValueChange,
   className,
   ...props
-}: QuestionSimulationGroupProps) {
+}: QuestionSimulationCardProps) {
   const t = useTranslations("exam");
   const [currentInput, setCurrentInput] = useState("");
 
@@ -130,4 +130,4 @@ function QuestionSimulationGroup({
   );
 }
 
-export { QuestionSimulationGroup, type QuestionSimulationGroupProps };
+export { QuestionSimulationCard, type QuestionSimulationCardProps };

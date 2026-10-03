@@ -7,7 +7,7 @@ import { FieldLegend, FieldSet } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { QuestionItem } from "@/types/question";
 
-type QuestionMatchingGroupProps = Omit<
+type QuestionMatchingFieldSetProps = Omit<
   ComponentProps<typeof FieldSet>,
   "children" | "onChange"
 > & {
@@ -22,7 +22,7 @@ type QuestionMatchingGroupProps = Omit<
   onValueChange: (next: Record<string, string>) => void;
 };
 
-function QuestionMatchingGroup({
+function QuestionMatchingFieldSet({
   legend,
   leftItems,
   rightItems,
@@ -32,12 +32,12 @@ function QuestionMatchingGroup({
   onValueChange,
   className,
   ...props
-}: QuestionMatchingGroupProps) {
+}: QuestionMatchingFieldSetProps) {
   const t = useTranslations("exam");
 
   return (
     <FieldSet
-      data-slot="question-matching-group"
+      data-slot="question-matching-field-set"
       {...props}
       className={cn("min-w-0 gap-3", className)}
     >
@@ -63,4 +63,4 @@ function QuestionMatchingGroup({
   );
 }
 
-export { QuestionMatchingGroup, type QuestionMatchingGroupProps };
+export { QuestionMatchingFieldSet, type QuestionMatchingFieldSetProps };
