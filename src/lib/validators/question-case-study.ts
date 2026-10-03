@@ -17,6 +17,7 @@ import {
   type QuestionFieldErrors,
   readText,
 } from "./question-fields";
+import { parseDropdownsList } from "./question-structured";
 
 const CHOICE_PART_TYPES: readonly ChoiceType[] = [
   "single-choice",
@@ -56,6 +57,12 @@ function parsePart(entry: unknown): CaseStudyPart | null {
   if (entry.type === "fill-blank") {
     return entry.options === undefined ? { ...base, type: "fill-blank" } : null;
   }
+  if (entry.type === "dropdown") {
+    const dropdownsResult = parseDropdownsList(entry.dropdowns);
+    return typeof dropdownsResult === "string"
+      ? null
+      : { ...base, type: "dropdown", dropdowns: dropdownsResult };
+  }
   if (!isChoiceType(entry.type)) return null;
   const { options, error } = checkOptions(entry.type, entry.options);
   return error ? null : { ...base, type: entry.type, options };
@@ -72,14 +79,35 @@ function parseParts(value: unknown): CaseStudyPart[] | null {
   return hasDuplicates(parts.map((part) => part.id)) ? null : parts;
 }
 
+function readDropdownPartAnswer(
+  dropdowns: readonly { id: string; options: readonly { id: string }[] }[],
+  answer: unknown,
+): Record<string, string> | null {
+  if (!isRecord(answer)) return null;
+  const result: Record<string, string> = {};
+  for (const dd of dropdowns) {
+    const val = answer[dd.id];
+    if (typeof val !== "string" || !dd.options.some((o) => o.id === val)) {
+      return null;
+    }
+    result[dd.id] = val;
+  }
+  return result;
+}
+
 function readPartAnswer(
   part: CaseStudyPart,
   answer: unknown,
 ): CaseStudyPartAnswer | null {
-  const error =
-    part.type === "fill-blank"
-      ? checkFillBlankAnswer(answer)
-      : checkChoiceAnswer(part.type, part.options, answer);
+  if (part.type === "fill-blank") {
+    const error = checkFillBlankAnswer(answer);
+    if (error) return null;
+    return isStringList(answer) ? answer : null;
+  }
+  if (part.type === "dropdown") {
+    return readDropdownPartAnswer(part.dropdowns, answer);
+  }
+  const error = checkChoiceAnswer(part.type, part.options, answer);
   if (error) return null;
   if (typeof answer === "string") return answer;
   return isStringList(answer) ? answer : null;

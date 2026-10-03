@@ -45,7 +45,7 @@ describe("seed-emulator-lib", () => {
     const questions = docs.filter(
       (doc) => doc.data.objectTypeId === "question",
     );
-    assert.equal(questions.length, 8);
+    assert.equal(questions.length, 12);
     assert.deepEqual(
       questions.map((question) => question.data.properties.type),
       [
@@ -57,6 +57,10 @@ describe("seed-emulator-lib", () => {
         "drag-and-drop",
         "hotspot",
         "case-study",
+        "dropdown",
+        "ordering",
+        "matrix",
+        "simulation",
       ],
     );
     for (const question of questions) {

@@ -63,6 +63,19 @@ function evaluatePartAnswer(
         Array.isArray(key) &&
         matchesAcceptedAnswer(value, key)
       );
+    case "dropdown":
+      return (
+        typeof value === "object" &&
+        value !== null &&
+        typeof key === "object" &&
+        key !== null &&
+        !Array.isArray(value) &&
+        !Array.isArray(key) &&
+        sameMapping(
+          value as Record<string, string>,
+          key as Record<string, string>,
+        )
+      );
     case "multiple-choice":
       return Array.isArray(value) && Array.isArray(key) && sameSet(value, key);
     case "single-choice":
@@ -91,17 +104,33 @@ function isCorrect(
         answer.type === question.type &&
         matchesAcceptedAnswer(answer.value, question.correctAnswer)
       );
+    case "dropdown":
+    case "matrix":
     case "matching":
     case "drag-and-drop":
       return (
         answer.type === question.type &&
         sameMapping(answer.value, question.correctAnswer)
       );
+    case "ordering":
+      return (
+        answer.type === question.type &&
+        Array.isArray(answer.value) &&
+        answer.value.length === question.correctAnswer.length &&
+        answer.value.every((id, idx) => id === question.correctAnswer[idx])
+      );
     case "hotspot":
       return (
         answer.type === question.type &&
         sameSet(answer.value, question.correctAnswer)
       );
+    case "simulation": {
+      if (answer.type !== "simulation" || !Array.isArray(answer.value))
+        return false;
+      const executed = answer.value.map(normalizeText);
+      const target = question.correctAnswer.map(normalizeText);
+      return target.every((expected) => executed.includes(expected));
+    }
     case "case-study": {
       const submitted = answer.type === "case-study" ? answer.value : null;
       return (

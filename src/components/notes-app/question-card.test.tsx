@@ -13,11 +13,15 @@ import { AuthContext } from "@/lib/auth-context";
 import {
   caseStudyFixture,
   dragAndDropFixture,
+  dropdownFixture,
   fillBlankFixture,
   hotspotFixture,
   makeQuestionObject,
   matchingFixture,
+  matrixFixture,
   multipleChoiceFixture,
+  orderingFixture,
+  simulationFixture,
   singleChoiceFixture,
   trueFalseFixture,
 } from "@/lib/exam/question-fixtures";
@@ -532,6 +536,83 @@ describe("QuestionCard", () => {
       await click(screen.getByText("showAnswer"));
       expect(cardStatus(container)).toBe("revealed");
       expect(mockSubmitAttempt).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("dropdown", () => {
+    it("renders dropdown placeholders and prompt", () => {
+      renderCard(dropdownFixture);
+      expect(screen.getAllByText("dropdownPlaceholder").length).toBeGreaterThan(
+        0,
+      );
+    });
+  });
+
+  describe("ordering", () => {
+    it("renders items with sequence numbers and allows submitting order", async () => {
+      const { container } = renderCard(orderingFixture);
+      expect(screen.getByText("Commit Code")).toBeTruthy();
+      expect(screen.getByText("Run Tests")).toBeTruthy();
+
+      await click(screen.getByText("checkAnswer"));
+      expect(cardStatus(container)).toBe("answeredCorrect");
+      expect(submittedAnswer()).toEqual({
+        type: "ordering",
+        value: ["step1", "step2", "step3"],
+      });
+    });
+  });
+
+  describe("matrix", () => {
+    it("renders matrix rows and grades when all rows are selected", async () => {
+      const { container } = renderCard(matrixFixture);
+      const checkBtn = screen.getByText("checkAnswer").closest("button");
+      expect(checkBtn?.hasAttribute("disabled")).toBe(true);
+
+      const r1True = screen.getByRole("radio", {
+        name: /Cloud Run can scale to zero instances.*True/,
+      });
+      const r2False = screen.getByRole("radio", {
+        name: /Cloud Run requires Kubernetes management.*False/,
+      });
+
+      await click(r1True);
+      expect(checkBtn?.hasAttribute("disabled")).toBe(true);
+
+      await click(r2False);
+      expect(checkBtn?.hasAttribute("disabled")).toBe(false);
+
+      await click(screen.getByText("checkAnswer"));
+      expect(cardStatus(container)).toBe("answeredCorrect");
+      expect(submittedAnswer()).toEqual({
+        type: "matrix",
+        value: { r1: "col_true", r2: "col_false" },
+      });
+    });
+  });
+
+  describe("simulation", () => {
+    it("executes CLI command in terminal and grades successfully", async () => {
+      const { container } = renderCard(simulationFixture);
+      expect(screen.getByText("simulationTitle")).toBeTruthy();
+      expect(screen.getByText("simulationBanner")).toBeTruthy();
+
+      const input = screen.getByRole("textbox");
+      fireEvent.change(input, {
+        target: { value: "gcloud run deploy my-app --image gcr.io/demo/app" },
+      });
+      await click(screen.getByText("simulationRun"));
+
+      expect(
+        screen.getByText("gcloud run deploy my-app --image gcr.io/demo/app"),
+      ).toBeTruthy();
+
+      await click(screen.getByText("checkAnswer"));
+      expect(cardStatus(container)).toBe("answeredCorrect");
+      expect(submittedAnswer()).toEqual({
+        type: "simulation",
+        value: ["gcloud run deploy my-app --image gcr.io/demo/app"],
+      });
     });
   });
 });

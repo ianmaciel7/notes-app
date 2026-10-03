@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { QuestionChoiceGroup } from "@/components/notes-app/question-choice-group";
+import { QuestionDropdownGroup } from "@/components/notes-app/question-dropdown-group";
 import { QuestionFillBlankInput } from "@/components/notes-app/question-fill-blank-input";
 import { FieldDescription, FieldLegend, FieldSet } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
@@ -23,7 +24,60 @@ type QuestionPartItemProps = Omit<
 
 function asList(value: CaseStudyPartAnswer | undefined): string[] {
   if (Array.isArray(value)) return value;
-  return value ? [value] : [];
+  if (typeof value === "string") return [value];
+  return [];
+}
+
+function asMapping(value: unknown): Record<string, string> {
+  return typeof value === "object" && !Array.isArray(value) && value !== null
+    ? (value as Record<string, string>)
+    : {};
+}
+
+function renderPartControl({
+  item,
+  value,
+  correctAnswer,
+  resolved,
+  onValueChange,
+}: Omit<QuestionPartItemProps, "position" | "className">) {
+  if (item.type === "fill-blank") {
+    return (
+      <QuestionFillBlankInput
+        value={typeof value === "string" ? value : ""}
+        acceptedAnswers={asList(correctAnswer)}
+        resolved={resolved}
+        onValueChange={onValueChange}
+      />
+    );
+  }
+
+  if (item.type === "dropdown") {
+    return (
+      <QuestionDropdownGroup
+        legend={item.prompt}
+        dropdowns={item.dropdowns}
+        value={asMapping(value)}
+        correctAnswer={asMapping(correctAnswer)}
+        resolved={resolved}
+        onValueChange={onValueChange}
+      />
+    );
+  }
+
+  return (
+    <QuestionChoiceGroup
+      legend={item.prompt}
+      mode={item.type === "multiple-choice" ? "multiple" : "single"}
+      options={item.options}
+      value={asList(value)}
+      correctIds={asList(correctAnswer)}
+      resolved={resolved}
+      onValueChange={(ids) =>
+        onValueChange(item.type === "multiple-choice" ? ids : (ids[0] ?? ""))
+      }
+    />
+  );
 }
 
 /** One answerable sub-question of a case study. */
@@ -54,28 +108,13 @@ function QuestionPartItem({
       <p className="whitespace-pre-wrap text-sm text-foreground">
         {item.prompt}
       </p>
-      {item.type === "fill-blank" ? (
-        <QuestionFillBlankInput
-          value={typeof value === "string" ? value : ""}
-          acceptedAnswers={asList(correctAnswer)}
-          resolved={resolved}
-          onValueChange={onValueChange}
-        />
-      ) : (
-        <QuestionChoiceGroup
-          legend={item.prompt}
-          mode={item.type === "multiple-choice" ? "multiple" : "single"}
-          options={item.options}
-          value={asList(value)}
-          correctIds={asList(correctAnswer)}
-          resolved={resolved}
-          onValueChange={(ids) =>
-            onValueChange(
-              item.type === "multiple-choice" ? ids : (ids[0] ?? ""),
-            )
-          }
-        />
-      )}
+      {renderPartControl({
+        item,
+        value,
+        correctAnswer,
+        resolved,
+        onValueChange,
+      })}
       {resolved && item.explanation ? (
         <FieldDescription>{item.explanation}</FieldDescription>
       ) : null}

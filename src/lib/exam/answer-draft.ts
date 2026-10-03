@@ -22,7 +22,11 @@ export function createEmptyAnswer(
       return { type: question.type, value: "" };
     case "multiple-choice":
     case "hotspot":
+    case "ordering":
+    case "simulation":
       return { type: question.type, value: [] };
+    case "dropdown":
+    case "matrix":
     case "matching":
     case "drag-and-drop":
     case "case-study":
@@ -36,6 +40,9 @@ function isPartAnswered(
 ): boolean {
   if (value === undefined) return false;
   if (Array.isArray(value)) return value.length > 0;
+  if (typeof value === "object") {
+    return Object.keys(value).length > 0 && Object.values(value).every(Boolean);
+  }
   return part.type === "fill-blank"
     ? normalizeText(value) !== ""
     : value !== "";
@@ -62,6 +69,30 @@ export function isAnswerComplete(
     case "multiple-choice":
     case "hotspot":
       return answer.type === question.type && answer.value.length > 0;
+    case "ordering":
+      return (
+        answer.type === question.type &&
+        answer.value.length === question.items.length
+      );
+    case "simulation":
+      return answer.type === question.type && answer.value.length > 0;
+    case "dropdown":
+      return (
+        answer.type === question.type &&
+        question.dropdowns.every(
+          (dd) =>
+            Object.hasOwn(answer.value, dd.id) && Boolean(answer.value[dd.id]),
+        )
+      );
+    case "matrix":
+      return (
+        answer.type === question.type &&
+        question.rows.every(
+          (row) =>
+            Object.hasOwn(answer.value, row.id) &&
+            Boolean(answer.value[row.id]),
+        )
+      );
     case "matching":
       return (
         answer.type === question.type &&

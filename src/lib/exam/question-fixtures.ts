@@ -134,14 +134,80 @@ export const caseStudyFixture: QuestionPropertiesOf<"case-study"> = {
   correctAnswer: { p1: "a", p2: ["pay per use"] },
 };
 
+export const dropdownFixture: QuestionPropertiesOf<"dropdown"> = {
+  ...base,
+  type: "dropdown",
+  prompt: "Select the appropriate storage solution for each requirement.",
+  dropdowns: [
+    {
+      id: "dd1",
+      label: "Object Storage",
+      options: [
+        { id: "cs", text: "Cloud Storage" },
+        { id: "pd", text: "Persistent Disk" },
+      ],
+    },
+    {
+      id: "dd2",
+      label: "Relational Database",
+      options: [
+        { id: "csql", text: "Cloud SQL" },
+        { id: "bt", text: "Bigtable" },
+      ],
+    },
+  ],
+  correctAnswer: { dd1: "cs", dd2: "csql" },
+};
+
+export const orderingFixture: QuestionPropertiesOf<"ordering"> = {
+  ...base,
+  type: "ordering",
+  prompt: "Order the CI/CD pipeline steps.",
+  items: [
+    { id: "step1", text: "Commit Code" },
+    { id: "step2", text: "Run Tests" },
+    { id: "step3", text: "Deploy to Production" },
+  ],
+  correctAnswer: ["step1", "step2", "step3"],
+};
+
+export const matrixFixture: QuestionPropertiesOf<"matrix"> = {
+  ...base,
+  type: "matrix",
+  prompt: "Indicate whether each statement about Cloud Run is True or False.",
+  columns: [
+    { id: "col_true", label: "True" },
+    { id: "col_false", label: "False" },
+  ],
+  rows: [
+    { id: "r1", prompt: "Cloud Run can scale to zero instances." },
+    { id: "r2", prompt: "Cloud Run requires Kubernetes management." },
+  ],
+  correctAnswer: { r1: "col_true", r2: "col_false" },
+};
+
+export const simulationFixture: QuestionPropertiesOf<"simulation"> = {
+  ...base,
+  type: "simulation",
+  prompt: "Deploy a container image to Cloud Run using the command line.",
+  scenarioDescription: "Deploy image gcr.io/demo/app to service my-app.",
+  terminalPrompt: "user@cloudshell:~$",
+  allowedCommands: ["gcloud run deploy my-app --image gcr.io/demo/app"],
+  correctAnswer: ["gcloud run deploy my-app --image gcr.io/demo/app"],
+};
+
 export const QUESTION_FIXTURES: Record<QuestionType, QuestionProperties> = {
   "single-choice": singleChoiceFixture,
   "multiple-choice": multipleChoiceFixture,
   "true-false": trueFalseFixture,
   "fill-blank": fillBlankFixture,
+  dropdown: dropdownFixture,
   matching: matchingFixture,
+  ordering: orderingFixture,
   "drag-and-drop": dragAndDropFixture,
   hotspot: hotspotFixture,
+  matrix: matrixFixture,
+  simulation: simulationFixture,
   "case-study": caseStudyFixture,
 };
 

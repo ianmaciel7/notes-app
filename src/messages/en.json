@@ -155,6 +155,14 @@
     "caseStudySections": "Case study sections",
     "caseStudyQuestions": "Questions",
     "caseStudyQuestionIndex": "Question {current}",
-    "revealOnly": "Review the case study, then show the answer."
+    "revealOnly": "Review the case study, then show the answer.",
+    "dropdownPlaceholder": "Select an answer...",
+    "matrixStatement": "Statement",
+    "matrixResult": "Result",
+    "simulationObjective": "Objective:",
+    "simulationTitle": "Cloud Shell Simulator",
+    "simulationBanner": "Google Cloud Shell v2.4. Type required command and press Enter.",
+    "simulationPlaceholder": "e.g. gcloud run deploy...",
+    "simulationRun": "Run"
   }
 }

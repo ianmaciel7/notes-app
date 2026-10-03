@@ -21,7 +21,11 @@ import {
 } from "./question-fields";
 import {
   validateDragAndDropBody,
+  validateDropdownBody,
   validateMatchingBody,
+  validateMatrixBody,
+  validateOrderingBody,
+  validateSimulationBody,
 } from "./question-structured";
 import { validateHotspotBody } from "./question-visual";
 
@@ -50,11 +54,20 @@ const COMMON_KEYS = [
 const TYPE_KEYS: Record<QuestionType, readonly string[]> = {
   "single-choice": ["options", "correctAnswer"],
   "multiple-choice": ["options", "correctAnswer"],
-  "true-false": ["options", "correctAnswer"],
+  "true-false": ["options", "correctAnswer", "variant"],
   "fill-blank": ["correctAnswer"],
+  dropdown: ["dropdowns", "correctAnswer"],
   matching: ["leftItems", "rightItems", "correctAnswer"],
+  ordering: ["items", "correctAnswer"],
   "drag-and-drop": ["items", "slots", "correctAnswer"],
   hotspot: ["image", "areas", "correctAnswer"],
+  matrix: ["columns", "rows", "correctAnswer"],
+  simulation: [
+    "scenarioDescription",
+    "terminalPrompt",
+    "allowedCommands",
+    "correctAnswer",
+  ],
   "case-study": ["title", "context", "sections", "parts", "correctAnswer"],
 };
 
@@ -171,12 +184,20 @@ function readBody(
       return validateChoiceBody(type, raw, errors);
     case "fill-blank":
       return validateFillBlankBody(raw, errors);
+    case "dropdown":
+      return validateDropdownBody(raw, errors);
     case "matching":
       return validateMatchingBody(raw, errors);
+    case "ordering":
+      return validateOrderingBody(raw, errors);
     case "drag-and-drop":
       return validateDragAndDropBody(raw, errors);
     case "hotspot":
       return validateHotspotBody(raw, errors);
+    case "matrix":
+      return validateMatrixBody(raw, errors);
+    case "simulation":
+      return validateSimulationBody(raw, errors);
     case "case-study":
       return validateCaseStudyBody(raw, errors);
   }

@@ -4,9 +4,13 @@ import type { ComponentProps, ReactNode } from "react";
 import { QuestionCaseStudyTabs } from "@/components/notes-app/question-case-study-tabs";
 import { QuestionChoiceGroup } from "@/components/notes-app/question-choice-group";
 import { QuestionDragDropGroup } from "@/components/notes-app/question-drag-drop-group";
+import { QuestionDropdownGroup } from "@/components/notes-app/question-dropdown-group";
 import { QuestionFillBlankInput } from "@/components/notes-app/question-fill-blank-input";
 import { QuestionHotspotGroup } from "@/components/notes-app/question-hotspot-group";
 import { QuestionMatchingGroup } from "@/components/notes-app/question-matching-group";
+import { QuestionMatrixGroup } from "@/components/notes-app/question-matrix-group";
+import { QuestionOrderingGroup } from "@/components/notes-app/question-ordering-group";
+import { QuestionSimulationGroup } from "@/components/notes-app/question-simulation-group";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type {
@@ -143,6 +147,73 @@ function hotspotAnswer(
   );
 }
 
+function dropdownAnswer(
+  question: QuestionPropertiesOf<"dropdown">,
+  { answer, resolved, onAnswerChange }: Context,
+): ReactNode {
+  return (
+    <QuestionDropdownGroup
+      legend={question.prompt}
+      dropdowns={question.dropdowns}
+      value={answer?.type === "dropdown" ? answer.value : {}}
+      correctAnswer={question.correctAnswer}
+      resolved={resolved}
+      onValueChange={(value) => onAnswerChange({ type: question.type, value })}
+    />
+  );
+}
+
+function matrixAnswer(
+  question: QuestionPropertiesOf<"matrix">,
+  { answer, resolved, onAnswerChange }: Context,
+): ReactNode {
+  return (
+    <QuestionMatrixGroup
+      legend={question.prompt}
+      columns={question.columns}
+      rows={question.rows}
+      value={answer?.type === "matrix" ? answer.value : {}}
+      correctAnswer={question.correctAnswer}
+      resolved={resolved}
+      onValueChange={(value) => onAnswerChange({ type: question.type, value })}
+    />
+  );
+}
+
+function orderingAnswer(
+  question: QuestionPropertiesOf<"ordering">,
+  { answer, resolved, onAnswerChange }: Context,
+): ReactNode {
+  return (
+    <QuestionOrderingGroup
+      legend={question.prompt}
+      items={question.items}
+      value={answer?.type === "ordering" ? answer.value : []}
+      correctAnswer={question.correctAnswer}
+      resolved={resolved}
+      onValueChange={(value) => onAnswerChange({ type: question.type, value })}
+    />
+  );
+}
+
+function simulationAnswer(
+  question: QuestionPropertiesOf<"simulation">,
+  { answer, resolved, onAnswerChange }: Context,
+): ReactNode {
+  return (
+    <QuestionSimulationGroup
+      legend={question.prompt}
+      scenarioDescription={question.scenarioDescription}
+      terminalPrompt={question.terminalPrompt}
+      allowedCommands={question.allowedCommands}
+      correctAnswer={question.correctAnswer}
+      value={answer?.type === "simulation" ? answer.value : []}
+      resolved={resolved}
+      onValueChange={(value) => onAnswerChange({ type: question.type, value })}
+    />
+  );
+}
+
 function caseStudyAnswer(
   question: QuestionPropertiesOf<"case-study">,
   { answer, resolved, onAnswerChange }: Context,
@@ -173,12 +244,20 @@ function answerControl(
       return multipleChoiceAnswer(question, context);
     case "fill-blank":
       return fillBlankAnswer(question, context);
+    case "dropdown":
+      return dropdownAnswer(question, context);
     case "matching":
       return matchingAnswer(question, context);
+    case "ordering":
+      return orderingAnswer(question, context);
     case "drag-and-drop":
       return dragAndDropAnswer(question, context);
     case "hotspot":
       return hotspotAnswer(question, context);
+    case "matrix":
+      return matrixAnswer(question, context);
+    case "simulation":
+      return simulationAnswer(question, context);
     case "case-study":
       return caseStudyAnswer(question, context);
   }

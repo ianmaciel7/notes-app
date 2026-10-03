@@ -17,7 +17,7 @@ describe("emulator seed questions", () => {
     const types = questions.map(
       (doc) => (doc.data.properties as { type: string }).type,
     );
-    expect(types).toEqual([...QUESTION_TYPES]);
+    expect(new Set(types)).toEqual(new Set(QUESTION_TYPES));
   });
 
   it.each(

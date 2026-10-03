@@ -12,7 +12,7 @@ The exam feed only understands single and multiple choice. Learners also practic
 
 ## Solution
 
-One question model with eight explicit types, per-type answering controls, immediate or confirmed grading, per-item feedback, and an immutable attempt log that stores the submitted answer.
+One question model with twelve explicit types, per-type answering controls, immediate or confirmed grading, per-item feedback, and an immutable attempt log that stores the submitted answer.
 
 ---
 
@@ -22,11 +22,15 @@ One question model with eight explicit types, per-type answering controls, immed
 | --- | --- | --- | --- |
 | `single-choice` | radio group | on selection | the selected option is the key |
 | `multiple-choice` | checkboxes | confirm | the selected set equals the key set |
-| `true-false` | radio group (`true`, `false`) | on selection | the selection is the key |
+| `true-false` | radio group (`true`, `false`; optional `yes-no` labels) | on selection | the selection is the key |
 | `fill-blank` | text input or textarea | confirm | the normalized text equals an accepted answer |
+| `dropdown` | one select per dropdown field | confirm | every dropdown holds its key option |
 | `matching` | one select per left item | confirm | every left item maps to its key item |
+| `ordering` | reorderable item list (keyboard accessible) | confirm | the items are in the exact key order |
 | `drag-and-drop` | draggable items and slots (keyboard accessible) | confirm | every slot holds its key item |
 | `hotspot` | image with clickable areas | confirm | the selected areas equal the key areas |
+| `matrix` | one choice per row across shared columns | confirm | every row maps to its key column |
+| `simulation` | simulated terminal accepting typed commands | confirm | every normalized key command was executed |
 | `case-study` | tabs for context sections plus answerable parts | confirm | every part is correct (reveal-only when it has no parts) |
 
 ## User Stories
@@ -47,7 +51,7 @@ One question model with eight explicit types, per-type answering controls, immed
 3. Feedback never relies on color alone: icons and screen-reader text accompany correct and incorrect states.
 4. `fill-blank` normalization: trim, collapse whitespace, Unicode NFC, case-insensitive. Accents are significant.
 5. Hotspot areas use percentage coordinates (0-100) of the image box, as `rect`, `circle`, or `polygon`. A `circle` radius is a percentage of both axes, so it renders as an ellipse on a non-square image; use a `rect` or `polygon` when the exact shape matters. Each area is a toggle button named by its label, and graded areas are also listed as text. Image sources are `https:` URLs or same-origin paths.
-6. `case-study` parts are single-choice, multiple-choice, true-false, or fill-blank questions; case studies do not nest.
+6. `case-study` parts are single-choice, multiple-choice, true-false, fill-blank, or dropdown questions; case studies do not nest.
 7. Legacy ExamTopics-shaped questions are migrated by `pnpm migrate:questions` and converted on read until then. A legacy question without options becomes `fill-blank` when it has textual answers, otherwise a reveal-only `case-study`.
 8. Drag and drop uses `@dnd-kit/core` (pointer and keyboard sensors with localized announcements). Each slot also has a select, so every placement works without dragging.
 9. Multiple choice no longer grades itself when the selection reaches the number of correct options (that leaked the count); it is confirmed with "Check answer".

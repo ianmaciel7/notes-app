@@ -186,7 +186,7 @@ Assessment item object (`objectTypeId: "question"`) containing a `type`, prompt,
 **Avoid in this product context:** Flashcard, card, item, exercise
 
 **Tipo de quest&atilde;o** · `QuestionType`:  
-Discriminator of a Question (`single-choice`, `multiple-choice`, `true-false`, `fill-blank`, `matching`, `drag-and-drop`, `hotspot`, `case-study`) that fixes which fields it requires and forbids and which control answers it. An image is an attribute of a Question or option, never a type.  
+Discriminator of a Question (`single-choice`, `multiple-choice`, `true-false`, `fill-blank`, `dropdown`, `matching`, `ordering`, `drag-and-drop`, `hotspot`, `matrix`, `simulation`, `case-study`) that fixes which fields it requires and forbids and which control answers it. An image is an attribute of a Question or option, never a type.  
 **Avoid in this product context:** format, kind, image question
 
 **Resposta enviada** · `SubmittedAnswer`:  

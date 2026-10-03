@@ -24,6 +24,10 @@ export type QuestionValidationErrorCode =
   | "invalidParts"
   | "invalidTitle"
   | "invalidContext"
+  | "invalidDropdowns"
+  | "invalidColumns"
+  | "invalidRows"
+  | "invalidCommands"
   | "duplicateId"
   | "invalidCorrectAnswer";
 

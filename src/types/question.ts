@@ -3,9 +3,13 @@ export const QUESTION_TYPES = [
   "multiple-choice",
   "true-false",
   "fill-blank",
+  "dropdown",
   "matching",
+  "ordering",
   "drag-and-drop",
   "hotspot",
+  "matrix",
+  "simulation",
   "case-study",
 ] as const;
 
@@ -42,7 +46,7 @@ export interface QuestionOption {
   imageAlt?: string;
 }
 
-/** A selectable or draggable entry in matching and drag-and-drop questions. */
+/** A selectable or draggable entry in matching, ordering, and drag-and-drop questions. */
 export interface QuestionItem {
   id: string;
   text: string;
@@ -92,6 +96,22 @@ export interface QuestionBase {
 
 export type TrueFalseValue = "true" | "false";
 
+export interface QuestionDropdownField {
+  id: string;
+  label?: string;
+  options: QuestionOption[];
+}
+
+export interface MatrixColumn {
+  id: string;
+  label: string;
+}
+
+export interface MatrixRow {
+  id: string;
+  prompt: string;
+}
+
 /** A case-study sub-question: a stem without its key (the key lives in `correctAnswer`). */
 export type CaseStudyPart = {
   id: string;
@@ -102,10 +122,11 @@ export type CaseStudyPart = {
   | { type: "multiple-choice"; options: QuestionOption[] }
   | { type: "true-false"; options: QuestionOption[] }
   | { type: "fill-blank" }
+  | { type: "dropdown"; dropdowns: QuestionDropdownField[] }
 );
 
 /** Answer for one case-study part: option id(s), accepted answers, or typed text. */
-export type CaseStudyPartAnswer = string | string[];
+export type CaseStudyPartAnswer = string | string[] | Record<string, string>;
 
 export type QuestionBody =
   | {
@@ -122,13 +143,24 @@ export type QuestionBody =
       type: "true-false";
       options: QuestionOption[];
       correctAnswer: TrueFalseValue;
+      variant?: "true-false" | "yes-no";
     }
   | { type: "fill-blank"; correctAnswer: string[] }
+  | {
+      type: "dropdown";
+      dropdowns: QuestionDropdownField[];
+      correctAnswer: Record<string, string>;
+    }
   | {
       type: "matching";
       leftItems: QuestionItem[];
       rightItems: QuestionItem[];
       correctAnswer: Record<string, string>;
+    }
+  | {
+      type: "ordering";
+      items: QuestionItem[];
+      correctAnswer: string[];
     }
   | {
       type: "drag-and-drop";
@@ -140,6 +172,19 @@ export type QuestionBody =
       type: "hotspot";
       image: QuestionImage;
       areas: HotspotArea[];
+      correctAnswer: string[];
+    }
+  | {
+      type: "matrix";
+      columns: MatrixColumn[];
+      rows: MatrixRow[];
+      correctAnswer: Record<string, string>;
+    }
+  | {
+      type: "simulation";
+      scenarioDescription: string;
+      terminalPrompt?: string;
+      allowedCommands: string[];
       correctAnswer: string[];
     }
   | {
@@ -164,7 +209,11 @@ export type SubmittedAnswer =
   | { type: "multiple-choice"; value: string[] }
   | { type: "true-false"; value: TrueFalseValue }
   | { type: "fill-blank"; value: string }
+  | { type: "dropdown"; value: Record<string, string> }
   | { type: "matching"; value: Record<string, string> }
+  | { type: "ordering"; value: string[] }
   | { type: "drag-and-drop"; value: Record<string, string> }
   | { type: "hotspot"; value: string[] }
+  | { type: "matrix"; value: Record<string, string> }
+  | { type: "simulation"; value: string[] }
   | { type: "case-study"; value: Record<string, CaseStudyPartAnswer> };

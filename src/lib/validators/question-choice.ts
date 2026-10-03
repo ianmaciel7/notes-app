@@ -96,6 +96,33 @@ export function checkFillBlankAnswer(
     : "invalidCorrectAnswer";
 }
 
+function formatChoiceBody(
+  type: ChoiceType,
+  options: QuestionOption[],
+  raw: Record<string, unknown>,
+): QuestionBody | undefined {
+  const answer = raw.correctAnswer;
+  if (type === "multiple-choice" && isStringList(answer)) {
+    return { type, options, correctAnswer: answer };
+  }
+  if (type === "true-false" && isTrueFalse(answer)) {
+    const variant =
+      raw.variant === "yes-no" || raw.variant === "true-false"
+        ? raw.variant
+        : undefined;
+    return {
+      type,
+      options,
+      correctAnswer: answer,
+      ...(variant ? { variant } : {}),
+    };
+  }
+  if (type === "single-choice" && typeof answer === "string") {
+    return { type, options, correctAnswer: answer };
+  }
+  return undefined;
+}
+
 export function validateChoiceBody(
   type: ChoiceType,
   raw: Record<string, unknown>,
@@ -108,17 +135,7 @@ export function validateChoiceBody(
   if (answerError) errors.correctAnswer = answerError;
   if (error || answerError) return undefined;
 
-  const answer = raw.correctAnswer;
-  if (type === "multiple-choice" && isStringList(answer)) {
-    return { type, options, correctAnswer: answer };
-  }
-  if (type === "true-false" && isTrueFalse(answer)) {
-    return { type, options, correctAnswer: answer };
-  }
-  if (type === "single-choice" && typeof answer === "string") {
-    return { type, options, correctAnswer: answer };
-  }
-  return undefined;
+  return formatChoiceBody(type, options, raw);
 }
 
 export function validateFillBlankBody(

@@ -49,6 +49,7 @@ Implement the unified question type system from [ADR 0018](../../adr/0018-unifie
 - 2026-10-03 — Implemented steps 1-10: unified types, per-type validators, evaluation, legacy converter and `migrate:questions`, `useQuestionCard` and `useQuestionDragDropGroup`, one answering component per style, localized catalogs, attempt rules and payload, seed with one question per type, Ladle stories, and `e2e/exam-feed.spec.ts` (passes against the emulators in Chromium).
 - 2026-10-03 — Polished Drag and Drop and Matching layout to align with ExamTopics / certification standards (2-column responsive grid for Actions and Answer Area, clean drop target states, and divided card table for matching).
 - 2026-10-03 — Pending: run `pnpm migrate:questions` on each persisted emulator dataset, then remove the read-path converter and its tests.
+- 2026-10-03 — Added `dropdown`, `ordering`, `matrix`, and `simulation` types (validators, evaluation, answer drafts, answering components, i18n, fixtures, and seed), dropdown parts in case studies, and an optional `yes-no` variant for `true-false`.
 
 ## Decision Log
 
