@@ -32,8 +32,8 @@ function SpacesNotFoundStatus({
       data-testid="spaces-not-found-status"
       className={cn("flex flex-1 items-center justify-center p-8", className)}
     >
-      <Empty className="max-w-sm border border-dashed p-6">
-        <EmptyHeader>
+      <Empty className="w-full max-w-lg grow-0 border border-dashed p-8 md:p-10">
+        <EmptyHeader className="max-w-md">
           <EmptyMedia variant="icon">
             <AlertCircle />
           </EmptyMedia>

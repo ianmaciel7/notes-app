@@ -12,6 +12,7 @@ import { SpacesLoadingStatus } from "@/components/notes-app/spaces-loading-statu
 import { SpacesNotFoundStatus } from "@/components/notes-app/spaces-not-found-status";
 import {
   Sidebar,
+  SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarInset,
@@ -99,7 +100,8 @@ function SpaceShell({
               spaces={spaces}
             />
           </SidebarHeader>
-          <SidebarFooter>
+          <SidebarContent />
+          <SidebarFooter className="mt-auto">
             <SidebarUserMenu
               user={user}
               onOpenSettings={openSettingsDialog}

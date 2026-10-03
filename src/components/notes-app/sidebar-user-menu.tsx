@@ -63,10 +63,10 @@ function SidebarUserMenu({
     <SidebarMenu
       data-slot="sidebar-user-menu"
       {...props}
-      className={cn("items-center gap-1 pr-1.5", className)}
+      className={cn("flex-row items-center gap-1 pr-1.5", className)}
       aria-label={t("openUserMenu")}
     >
-      <SidebarMenuItem>
+      <SidebarMenuItem className="flex-1 min-w-0">
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
