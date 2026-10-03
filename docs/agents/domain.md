@@ -52,3 +52,7 @@ If the concept you need isn't in the glossary yet, that's a signal: either you'r
 If your output contradicts an existing ADR, surface it explicitly rather than silently overriding:
 
 > _Contradicts ADR-0007 (event-sourced orders), but worth reopening because…_
+
+## Historical Reports and Architecture Context
+
+- [Orchestration and Subagent Patterns Evolution across Worktrees](worktree-orchestration-patterns-report.md): Historical architecture analysis and extracted invariants across `.worktrees/`.

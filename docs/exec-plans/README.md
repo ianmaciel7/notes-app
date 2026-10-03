@@ -20,7 +20,7 @@ do not create process overhead for routine edits.
 Plans coordinate work; they do not replace `INTENT.md`, product specs, ADRs, or
 quality contracts.
 
-## Research and Architecture Reports
+## Active Plans
 
-- [Orchestration and Subagent Patterns Evolution across Worktrees](worktree-orchestration-patterns-report.md): Historical architecture analysis and extracted invariants across `.worktrees/`.
+- [0017-lean-exam-topics-feed-and-domain-model.md](active/0017-lean-exam-topics-feed-and-domain-model.md): Active recall certification study engine and continuous question feed for ADR 0017.
 

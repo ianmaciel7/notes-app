@@ -47,6 +47,7 @@ Read only the owner relevant to the task:
 | Tool catalog & capabilities | `TOOLING.md` |
 | Search, discovery, and navigation hierarchy | `.agents/rules/search-and-discovery.md` |
 | Lead Orchestrator & subagent execution | `.agents/rules/orchestration.md` |
+| ADR implementation & planning guard | `.agents/rules/adr-implementation-guard.md` |
 | Emoji prohibition & icon standards | `.agents/rules/no-emojis.md` |
 
 The complete ownership/boundary map is canonical in
@@ -151,6 +152,7 @@ Before changing code:
 3. For third-party behavior, use the applicable documentation skill before relying on
    memory.
 4. **shadcn-first for UI**: Always prefer existing shadcn/ui components (`src/components/ui/`) before writing custom markup or ad-hoc wrappers. Application components stay simple and domain-named; they may compose any appropriate primitive internally without mirroring its filename. Use Base UI `render` for behavioral element composition instead of custom `renderX`/`asChild` APIs, and search registries (`rtk pnpm dlx shadcn@latest search`) before building from scratch.
+5. **No ADR implementation without an active plan**: When turning an ADR into code, always create an execution plan (`docs/exec-plans/active/`) or decompose it via `/to-spec` -> `/to-tickets` before modifying `src/` (see `.agents/rules/adr-implementation-guard.md`).
 
 While changing code:
 

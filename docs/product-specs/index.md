@@ -12,6 +12,7 @@ stable so existing IDs and historical references remain valid.
 | --- | --- | --- |
 | Current scope | `INTENT.md` | implemented Firebase foundation, initial Space slice, and current non-goals |
 | Current vocabulary | `CONTEXT.md` | implemented User/Space terms plus clearly marked future vocabulary |
+| ExamTopics Feed Spec | `exam-topics-feed.md` | Active recall certification study engine and instant validation feed (ADR 0017) |
 | Future proposal | `knowledge-learning-workspace.md` | deferred knowledge-workspace concepts and requirements |
 
 The former stable section map remains valid for historical references within the
