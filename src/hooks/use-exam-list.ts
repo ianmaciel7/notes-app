@@ -14,6 +14,7 @@ import {
   migrateLegacyQuestion,
 } from "@/lib/exam/migrate-legacy-question";
 import { db } from "@/lib/firebase/firestore";
+import { validateQuestionProperties } from "@/lib/validators/question";
 import type { Card } from "@/types/card";
 import type { QuestionObject } from "@/types/object";
 
@@ -29,25 +30,33 @@ function toQuestionObject(
   data: Record<string, unknown>,
 ): QuestionObject | null {
   const question = { ...data, id } as unknown as QuestionObject;
-  if (!isLegacyQuestion(question.properties)) return question;
+  if (!question.properties) return question;
+  if (isLegacyQuestion(question.properties)) {
+    const migrated = migrateLegacyQuestion(question.properties);
+    return migrated.ok
+      ? { ...question, properties: migrated.properties }
+      : null;
+  }
 
-  const migrated = migrateLegacyQuestion(question.properties);
-  return migrated.ok ? { ...question, properties: migrated.properties } : null;
+  const validation = validateQuestionProperties(question.properties);
+  return validation.success && validation.data
+    ? { ...question, properties: validation.data }
+    : null;
 }
 
-export interface UseExamListOptions {
+export type UseExamListOptions = {
   spaceId: string;
   examId: string;
-}
+};
 
-export interface UseExamListResult {
+export type UseExamListResult = {
   questions: QuestionObject[];
   cardsByQuestionId: ReadonlyMap<string, Card>;
   loading: boolean;
   error: Error | null;
   showScrollToTop: boolean;
   scrollToTop: () => void;
-}
+};
 
 export function useExamList({
   spaceId,

@@ -47,6 +47,7 @@ Implement the unified question type system from [ADR 0018](../../adr/0018-unifie
 
 - 2026-10-03 — ADR 0018 accepted; plan created.
 - 2026-10-03 — Implemented steps 1-10: unified types, per-type validators, evaluation, legacy converter and `migrate:questions`, `useQuestionCard` and `useQuestionDragDropGroup`, one answering component per style, localized catalogs, attempt rules and payload, seed with one question per type, Ladle stories, and `e2e/exam-feed.spec.ts` (passes against the emulators in Chromium).
+- 2026-10-03 — Polished Drag and Drop and Matching layout to align with ExamTopics / certification standards (2-column responsive grid for Actions and Answer Area, clean drop target states, and divided card table for matching).
 - 2026-10-03 — Pending: run `pnpm migrate:questions` on each persisted emulator dataset, then remove the read-path converter and its tests.
 
 ## Decision Log
@@ -54,6 +55,7 @@ Implement the unified question type system from [ADR 0018](../../adr/0018-unifie
 - 2026-10-03 — "Legacy `exam_topic` format" means the ADR 0017 shape already stored in Firestore (`format`, `statement`, `correctOptionIds`); no literal `exam_topic` value exists in the repository.
 - 2026-10-03 — Migration is a script that rewrites documents plus a read-path converter as a safety net; chosen over read-time-only conversion so stored data converges on one shape.
 - 2026-10-03 — Drag and drop uses `@dnd-kit` for keyboard and screen-reader support instead of a hand-written implementation.
+- 2026-10-03 — Drag and drop presents a symmetric 2-column layout (Available items / Answer area) matching certification exams, with full-width action tiles and accessible select controls visible upon focus without duplicating placed cards.
 - 2026-10-03 — The hotspot answer is built from toggle buttons placed over the image (not an interactive SVG) so each area is a native button with `aria-pressed`; `@dnd-kit/core` is the only new dependency (sortable and utilities are not needed).
 - 2026-10-03 — Multiple choice no longer auto-submits when the number of selections reaches the number of correct options, because that leaked how many options are correct; it uses an explicit confirm action.
 

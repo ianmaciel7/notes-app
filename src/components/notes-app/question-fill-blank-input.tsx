@@ -33,8 +33,9 @@ function QuestionFillBlankInput({
 }: QuestionFillBlankInputProps) {
   const t = useTranslations("exam");
   const inputId = useId();
-  const typed = value.trim() !== "";
   const matches = matchesAcceptedAnswer(value, acceptedAnswers);
+
+  const descId = `${inputId}-desc`;
 
   return (
     <Field data-slot="question-fill-blank-input" {...props}>
@@ -44,18 +45,20 @@ function QuestionFillBlankInput({
           <Input
             id={inputId}
             value={value}
+            disabled={resolved}
             readOnly={resolved}
             autoComplete="off"
             placeholder={t("fillBlankPlaceholder")}
-            aria-invalid={resolved && typed && !matches}
+            aria-invalid={resolved && !matches}
+            aria-describedby={resolved && !matches ? descId : undefined}
             onChange={(event) => onValueChange(event.target.value)}
           />
-          {resolved && typed ? (
+          {resolved ? (
             <QuestionResultBadge state={matches ? "correct" : "incorrect"} />
           ) : null}
         </div>
         {resolved && !matches ? (
-          <FieldDescription>
+          <FieldDescription id={descId}>
             {t("acceptedAnswers", { answers: acceptedAnswers.join(", ") })}
           </FieldDescription>
         ) : null}

@@ -31,6 +31,7 @@ function QuestionDragItem({
       data-dragging={isDragging || undefined}
       type="button"
       variant="outline"
+      disabled={disabled}
       {...props}
       {...attributes}
       {...listeners}

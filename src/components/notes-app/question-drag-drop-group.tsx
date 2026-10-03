@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { QuestionDragPoolList } from "@/components/notes-app/question-drag-pool-list";
 import { QuestionSlotItem } from "@/components/notes-app/question-slot-item";
-import { FieldLegend, FieldSet } from "@/components/ui/field";
+import { FieldLegend, FieldSet, FieldTitle } from "@/components/ui/field";
 import { useQuestionDragDropGroup } from "@/hooks/use-question-drag-drop-group";
 import { cn } from "@/lib/utils";
 import type { QuestionItem, QuestionSlot } from "@/types/question";
@@ -53,18 +53,31 @@ function QuestionDragDropGroup({
         accessibility={accessibility}
         onDragEnd={handleDragEnd}
       >
-        <QuestionDragPoolList items={poolItems} disabled={resolved} />
-        {slots.map((slot) => (
-          <QuestionSlotItem
-            key={slot.id}
-            slot={slot}
-            items={items}
-            placedId={value[slot.id] ?? ""}
-            correctId={correctAnswer[slot.id] ?? ""}
-            resolved={resolved}
-            onPlace={(itemId) => placeItem(itemId, slot.id)}
-          />
-        ))}
+        <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
+          <div className="flex flex-col gap-2">
+            <FieldTitle>{t("dragPool")}</FieldTitle>
+            <QuestionDragPoolList items={poolItems} disabled={resolved} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <FieldTitle>{t("dragAnswerArea")}</FieldTitle>
+            <div
+              data-slot="question-answer-area"
+              className="flex min-h-40 flex-col gap-3 rounded-lg border border-border bg-muted/20 p-3"
+            >
+              {slots.map((slot) => (
+                <QuestionSlotItem
+                  key={slot.id}
+                  slot={slot}
+                  items={items}
+                  placedId={value[slot.id] ?? ""}
+                  correctId={correctAnswer[slot.id] ?? ""}
+                  resolved={resolved}
+                  onPlace={(itemId) => placeItem(itemId, slot.id)}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
       </DndContext>
     </FieldSet>
   );

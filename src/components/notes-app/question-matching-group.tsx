@@ -43,19 +43,22 @@ function QuestionMatchingGroup({
     >
       <FieldLegend className="sr-only">{legend}</FieldLegend>
       <p className="text-xs text-muted-foreground">{t("matchingHint")}</p>
-      {leftItems.map((item) => (
-        <QuestionMatchingItem
-          key={item.id}
-          item={item}
-          rightItems={rightItems}
-          chosenId={value[item.id] ?? ""}
-          correctId={correctAnswer[item.id] ?? ""}
-          resolved={resolved}
-          onChosenChange={(rightId) =>
-            onValueChange({ ...value, [item.id]: rightId })
-          }
-        />
-      ))}
+      <div className="divide-y divide-border rounded-lg border border-border bg-card">
+        {leftItems.map((item) => (
+          <div key={item.id} className="p-3">
+            <QuestionMatchingItem
+              item={item}
+              rightItems={rightItems}
+              chosenId={value[item.id] ?? ""}
+              correctId={correctAnswer[item.id] ?? ""}
+              resolved={resolved}
+              onChosenChange={(rightId) =>
+                onValueChange({ ...value, [item.id]: rightId })
+              }
+            />
+          </div>
+        ))}
+      </div>
     </FieldSet>
   );
 }

@@ -90,10 +90,13 @@ describe("validateCreateAttemptInput", () => {
   it.each([
     ["single-choice", ""],
     ["multiple-choice", []],
+    ["multiple-choice", ["a", "a"]],
     ["true-false", "maybe"],
     ["fill-blank", "  "],
+    ["fill-blank", "a".repeat(1001)],
     ["matching", { l1: "" }],
     ["hotspot", [1]],
+    ["hotspot", ["lb", "lb"]],
     ["case-study", { p1: 1 }],
   ])("rejects an empty or malformed %s answer", (type, value) => {
     const result = validateCreateAttemptInput({

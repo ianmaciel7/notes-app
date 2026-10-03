@@ -41,9 +41,10 @@ function QuestionMatchingItem({
 }: QuestionMatchingItemProps) {
   const t = useTranslations("exam");
   const selectId = useId();
-  const picked = chosenId !== "";
   const isCorrect = chosenId === correctId;
   const correctText = rightItems.find((right) => right.id === correctId)?.text;
+
+  const descId = `${selectId}-desc`;
 
   return (
     <Field
@@ -61,7 +62,7 @@ function QuestionMatchingItem({
           />
         ) : null}
         {resolved && !isCorrect ? (
-          <FieldDescription>
+          <FieldDescription id={descId}>
             {t("correctMatch", { match: correctText ?? correctId })}
           </FieldDescription>
         ) : null}
@@ -72,7 +73,8 @@ function QuestionMatchingItem({
           value={chosenId}
           disabled={resolved}
           aria-label={t("matchLabel", { item: item.text })}
-          aria-invalid={resolved && picked && !isCorrect}
+          aria-invalid={resolved && !isCorrect}
+          aria-describedby={resolved && !isCorrect ? descId : undefined}
           onChange={(event) => onChosenChange(event.target.value)}
         >
           <NativeSelectOption value="">
@@ -84,7 +86,7 @@ function QuestionMatchingItem({
             </NativeSelectOption>
           ))}
         </NativeSelect>
-        {resolved && picked ? (
+        {resolved ? (
           <QuestionResultBadge state={isCorrect ? "correct" : "incorrect"} />
         ) : null}
       </div>

@@ -16,8 +16,8 @@ import { cn } from "@/lib/utils";
 import type { QuestionOption } from "@/types/question";
 
 type QuestionChoiceItemProps = Omit<
-  ComponentProps<typeof FieldLabel>,
-  "children" | "htmlFor"
+  ComponentProps<typeof Field>,
+  "children"
 > & {
   option: QuestionOption;
   /** Letter shown before the option text (A, B, ...). */
@@ -25,6 +25,7 @@ type QuestionChoiceItemProps = Omit<
   mode: "single" | "multiple";
   inputId: string;
   selected: boolean;
+  disabled?: boolean;
   /** Set once graded: the key option, or a wrong pick. */
   result?: "correct" | "incorrect";
   onSelectedChange?: (selected: boolean) => void;
@@ -36,6 +37,7 @@ function QuestionChoiceItem({
   mode,
   inputId,
   selected,
+  disabled = false,
   result,
   onSelectedChange,
   className,
@@ -45,45 +47,58 @@ function QuestionChoiceItem({
   const showExplanation = result !== undefined;
 
   return (
-    <FieldLabel
+    <Field
+      orientation="horizontal"
       data-slot="question-choice-item"
       data-result={result}
-      htmlFor={inputId}
       {...props}
       className={cn(
-        "cursor-pointer rounded-lg border border-border font-normal hover:bg-muted/50 data-[result=correct]:border-primary data-[result=correct]:bg-primary/10 data-[result=incorrect]:border-destructive data-[result=incorrect]:bg-destructive/10 [&_[data-slot=checkbox]:not([data-checked])]:bg-background [&_[data-slot=radio-group-item]:not([data-checked])]:bg-background",
+        "rounded-lg border border-border p-3 font-normal transition-colors",
+        disabled
+          ? "cursor-default opacity-85"
+          : "cursor-pointer hover:bg-muted/50",
+        "data-[result=correct]:border-primary data-[result=correct]:bg-primary/10",
+        "data-[result=incorrect]:border-destructive data-[result=incorrect]:bg-destructive/10",
+        "[&_[data-slot=checkbox]:not([data-checked])]:bg-background [&_[data-slot=radio-group-item]:not([data-checked])]:bg-background",
         className,
       )}
     >
-      <Field orientation="horizontal">
-        {mode === "single" ? (
-          <RadioGroupItem value={option.id} id={inputId} />
-        ) : (
-          <Checkbox
-            id={inputId}
-            checked={selected}
-            onCheckedChange={(checked) => onSelectedChange?.(checked)}
-          />
-        )}
-        <FieldContent>
-          <FieldTitle className="items-start">
+      {mode === "single" ? (
+        <RadioGroupItem value={option.id} id={inputId} disabled={disabled} />
+      ) : (
+        <Checkbox
+          id={inputId}
+          checked={selected}
+          disabled={disabled}
+          onCheckedChange={(checked) => onSelectedChange?.(checked)}
+        />
+      )}
+      <FieldContent>
+        <FieldTitle className="items-start">
+          <FieldLabel
+            htmlFor={inputId}
+            className={cn(
+              "font-normal",
+              disabled ? "cursor-default" : "cursor-pointer",
+            )}
+          >
             <span className="font-semibold">{marker}.</span>
             <span>{option.text}</span>
-          </FieldTitle>
-          {option.imageUrl ? (
-            <QuestionImageItem
-              url={option.imageUrl}
-              alt={option.imageAlt ?? option.text}
-              className="mt-2 max-w-xs"
-            />
-          ) : null}
-          {showExplanation && option.explanation ? (
-            <FieldDescription>{option.explanation}</FieldDescription>
-          ) : null}
-        </FieldContent>
-        {result ? <QuestionResultBadge state={result} /> : null}
-      </Field>
-    </FieldLabel>
+          </FieldLabel>
+        </FieldTitle>
+        {option.imageUrl ? (
+          <QuestionImageItem
+            url={option.imageUrl}
+            alt={option.imageAlt ?? option.text}
+            className="mt-2 max-w-xs"
+          />
+        ) : null}
+        {showExplanation && option.explanation ? (
+          <FieldDescription>{option.explanation}</FieldDescription>
+        ) : null}
+      </FieldContent>
+      {result ? <QuestionResultBadge state={result} /> : null}
+    </Field>
   );
 }
 

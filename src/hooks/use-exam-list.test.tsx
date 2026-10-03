@@ -136,6 +136,32 @@ describe("useExamList", () => {
     });
   });
 
+  it("skips invalid non-legacy questions", () => {
+    const { result } = renderHook(
+      () => useExamList({ spaceId: "s1", examId: "e1" }),
+      { wrapper: wrapperFor("u1") },
+    );
+
+    act(() => {
+      bySuffix("/objects").next({
+        docs: [
+          {
+            id: "q_bad",
+            data: () => ({
+              title: "Bad Question",
+              properties: {
+                type: "single-choice",
+                // missing prompt, options, etc.
+              },
+            }),
+          },
+        ],
+      });
+    });
+
+    expect(result.current.questions).toHaveLength(0);
+  });
+
   it("surfaces snapshot errors from either subscription", () => {
     const { result } = renderHook(
       () => useExamList({ spaceId: "s1", examId: "e1" }),

@@ -90,6 +90,7 @@ function QuestionHotspotGroup({
             area={area}
             pressed={selected}
             result={result}
+            disabled={resolved}
             aria-disabled={resolved || undefined}
             onPressedChange={(pressed) => toggle(area.id, pressed)}
           />

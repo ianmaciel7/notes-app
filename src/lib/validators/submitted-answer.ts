@@ -1,5 +1,5 @@
 import type { SubmittedAnswer } from "@/types/question";
-import { isRecord, isStringList } from "./question-fields";
+import { hasDuplicates, isRecord, isStringList } from "./question-fields";
 
 function isIdMap(value: unknown): value is Record<string, string> {
   return (
@@ -22,7 +22,9 @@ function isPartAnswerMap(
 }
 
 function isNonEmptyText(value: unknown): value is string {
-  return typeof value === "string" && value.trim() !== "";
+  return (
+    typeof value === "string" && value.trim() !== "" && value.length <= 1000
+  );
 }
 
 /** Narrows an untrusted value to a well-formed `SubmittedAnswer`, or null. */
@@ -38,7 +40,9 @@ export function parseSubmittedAnswer(input: unknown): SubmittedAnswer | null {
       return value === "true" || value === "false" ? { type, value } : null;
     case "multiple-choice":
     case "hotspot":
-      return isStringList(value) && value.length > 0 ? { type, value } : null;
+      return isStringList(value) && value.length > 0 && !hasDuplicates(value)
+        ? { type, value }
+        : null;
     case "matching":
     case "drag-and-drop":
       return isIdMap(value) ? { type, value } : null;

@@ -27,8 +27,9 @@ function QuestionImageItem({
       data-slot="question-image-item"
       ratio={16 / 9}
       {...props}
+      style={{ position: "relative", ...props.style }}
       className={cn(
-        "w-full overflow-hidden rounded-lg border border-border bg-muted/30",
+        "relative w-full overflow-hidden rounded-lg border border-border bg-muted/30",
         className,
       )}
     >

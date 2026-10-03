@@ -6,12 +6,8 @@ import type { ComponentProps } from "react";
 import { useId } from "react";
 import { QuestionDragItem } from "@/components/notes-app/question-drag-item";
 import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   NativeSelect,
   NativeSelectOption,
@@ -20,7 +16,7 @@ import { cn } from "@/lib/utils";
 import type { QuestionItem, QuestionSlot } from "@/types/question";
 
 type QuestionSlotItemProps = Omit<
-  ComponentProps<typeof Field>,
+  ComponentProps<"div">,
   "children" | "onChange" | "slot"
 > & {
   slot: QuestionSlot;
@@ -54,56 +50,87 @@ function QuestionSlotItem({
   const isCorrect = placedId === correctId;
   const correctText = items.find((item) => item.id === correctId)?.text;
 
+  const descId = `${selectId}-desc`;
+
   return (
-    <Field
+    <div
       data-slot="question-slot-item"
-      data-over={isOver || undefined}
-      ref={setNodeRef}
       {...props}
-      className={cn(
-        "rounded-lg border border-dashed border-border p-3 data-[over]:border-primary data-[over]:bg-primary/5",
-        className,
-      )}
+      className={cn("flex flex-col gap-1.5", className)}
     >
-      <FieldContent className="gap-2">
-        <FieldLabel htmlFor={selectId}>{slot.label}</FieldLabel>
+      <div className="flex items-center justify-between gap-2">
+        <Label
+          htmlFor={selectId}
+          className="text-xs font-semibold text-muted-foreground tracking-wide"
+        >
+          {slot.label}
+        </Label>
+        <div className="flex items-center gap-2">
+          {resolved ? (
+            <QuestionResultBadge state={isCorrect ? "correct" : "incorrect"} />
+          ) : null}
+          {placed && !resolved ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="xs"
+              onClick={() => onPlace("")}
+              className="h-auto p-0 text-xs text-muted-foreground transition-colors hover:bg-transparent hover:text-destructive"
+            >
+              {t("dragSlotClear")}
+            </Button>
+          ) : null}
+          <NativeSelect
+            id={selectId}
+            value={placedId}
+            disabled={resolved}
+            aria-label={t("dragSlotSelectLabel", { slot: slot.label })}
+            aria-invalid={resolved && !isCorrect}
+            aria-describedby={resolved && !isCorrect ? descId : undefined}
+            className="sr-only focus:not-sr-only focus:h-7 focus:w-auto focus:py-0 focus:px-2 focus:text-xs"
+            onChange={(event) => onPlace(event.target.value)}
+          >
+            <NativeSelectOption value="">
+              {t("dragSlotSelectPlaceholder")}
+            </NativeSelectOption>
+            {items.map((item) => (
+              <NativeSelectOption key={item.id} value={item.id}>
+                {item.text}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+        </div>
+      </div>
+
+      <div
+        ref={setNodeRef}
+        data-over={isOver || undefined}
+        className={cn(
+          "flex min-h-11 items-center justify-center rounded-md border border-dashed transition-all",
+          placed
+            ? "border-transparent bg-background shadow-xs"
+            : "border-border/80 bg-background/40 px-3 py-2 text-xs text-muted-foreground data-[over]:border-primary data-[over]:bg-primary/10",
+        )}
+      >
         {placed ? (
           <QuestionDragItem
             item={placed}
             disabled={resolved}
-            className="w-fit"
+            className="w-full justify-start shadow-xs hover:border-primary/50"
           />
         ) : (
-          <p className="text-xs text-muted-foreground">{t("dragSlotEmpty")}</p>
+          <span className="text-xs text-muted-foreground/70">
+            {t("dragSlotEmpty")}
+          </span>
         )}
-        {resolved && !isCorrect ? (
-          <FieldDescription>
-            {t("correctSlotItem", { item: correctText ?? correctId })}
-          </FieldDescription>
-        ) : null}
-      </FieldContent>
-      <div className="flex items-center gap-2">
-        <NativeSelect
-          id={selectId}
-          value={placedId}
-          disabled={resolved}
-          aria-label={t("dragSlotSelectLabel", { slot: slot.label })}
-          onChange={(event) => onPlace(event.target.value)}
-        >
-          <NativeSelectOption value="">
-            {t("dragSlotSelectPlaceholder")}
-          </NativeSelectOption>
-          {items.map((item) => (
-            <NativeSelectOption key={item.id} value={item.id}>
-              {item.text}
-            </NativeSelectOption>
-          ))}
-        </NativeSelect>
-        {resolved && placed ? (
-          <QuestionResultBadge state={isCorrect ? "correct" : "incorrect"} />
-        ) : null}
       </div>
-    </Field>
+
+      {resolved && !isCorrect ? (
+        <p id={descId} className="text-xs text-destructive">
+          {t("correctSlotItem", { item: correctText ?? correctId })}
+        </p>
+      ) : null}
+    </div>
   );
 }
 

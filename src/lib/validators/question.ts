@@ -27,13 +27,13 @@ import { validateHotspotBody } from "./question-visual";
 
 export type { QuestionValidationErrorCode } from "./question-fields";
 
-export interface QuestionValidationResult {
+export type QuestionValidationResult = {
   success: boolean;
   data?: QuestionProperties;
   error?: QuestionValidationErrorCode;
   /** Keyed by the offending property name, including fields foreign to the type. */
   fieldErrors?: Partial<Record<string, QuestionValidationErrorCode>>;
-}
+};
 
 const COMMON_KEYS = [
   "type",

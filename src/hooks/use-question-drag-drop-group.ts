@@ -14,13 +14,13 @@ import type { QuestionItem, QuestionSlot } from "@/types/question";
 /** Droppable id of the list of items that are not in a slot. */
 export const DRAG_POOL_ID = "pool";
 
-export interface UseQuestionDragDropGroupOptions {
+export type UseQuestionDragDropGroupOptions = {
   items: QuestionItem[];
   slots: QuestionSlot[];
   /** slotId -> itemId placed so far. */
   value: Readonly<Record<string, string>>;
   onValueChange: (next: Record<string, string>) => void;
-}
+};
 
 export function useQuestionDragDropGroup({
   items,

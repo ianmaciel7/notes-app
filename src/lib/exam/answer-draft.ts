@@ -65,19 +65,29 @@ export function isAnswerComplete(
     case "matching":
       return (
         answer.type === question.type &&
-        question.leftItems.every((item) => Boolean(answer.value[item.id]))
+        question.leftItems.every(
+          (item) =>
+            Object.hasOwn(answer.value, item.id) &&
+            Boolean(answer.value[item.id]),
+        )
       );
     case "drag-and-drop":
       return (
         answer.type === question.type &&
-        question.slots.every((slot) => Boolean(answer.value[slot.id]))
+        question.slots.every(
+          (slot) =>
+            Object.hasOwn(answer.value, slot.id) &&
+            Boolean(answer.value[slot.id]),
+        )
       );
     case "case-study":
       return (
         answer.type === question.type &&
         question.parts.length > 0 &&
-        question.parts.every((part) =>
-          isPartAnswered(part, answer.value[part.id]),
+        question.parts.every(
+          (part) =>
+            Object.hasOwn(answer.value, part.id) &&
+            isPartAnswered(part, answer.value[part.id]),
         )
       );
   }

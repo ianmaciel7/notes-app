@@ -43,7 +43,15 @@ function QuestionHotspotItem({
         clipPath: areaClipPath(area.shape),
       }}
       className={cn(
-        "absolute min-w-0 border-2 border-dashed border-border bg-transparent p-0 data-[shape=circle]:rounded-full data-[shape=polygon]:border-0 data-pressed:border-solid data-pressed:border-primary data-pressed:bg-primary/20 focus-visible:bg-ring/30 data-[result=correct]:border-solid data-[result=correct]:border-primary data-[result=correct]:bg-primary/25 data-[result=incorrect]:border-destructive data-[result=incorrect]:bg-destructive/25 data-[result=missed]:border-primary data-[result=missed]:bg-primary/10",
+        "absolute min-w-0 p-0 transition-colors",
+        "border-2 border-dashed border-primary/60 bg-primary/5 hover:bg-primary/15",
+        "data-[shape=circle]:rounded-full",
+        "data-[shape=polygon]:border-0 data-[shape=polygon]:[filter:drop-shadow(0_0_1px_rgba(0,0,0,0.8))_drop-shadow(0_0_2px_rgba(255,255,255,0.8))]",
+        "data-pressed:border-solid data-pressed:border-primary data-pressed:bg-primary/25",
+        "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset focus-visible:bg-ring/40 focus-visible:outline-none",
+        "data-[result=correct]:border-solid data-[result=correct]:border-primary data-[result=correct]:bg-primary/30",
+        "data-[result=incorrect]:border-solid data-[result=incorrect]:border-destructive data-[result=incorrect]:bg-destructive/30",
+        "data-[result=missed]:border-primary data-[result=missed]:bg-primary/15",
         className,
       )}
     />

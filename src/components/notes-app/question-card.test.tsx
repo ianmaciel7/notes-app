@@ -373,6 +373,7 @@ describe("QuestionCard", () => {
     it("offers draggable items and a keyboard-accessible select per slot", async () => {
       const { container } = renderCard(dragAndDropFixture);
       expect(screen.getByText("dragPool")).toBeTruthy();
+      expect(screen.getByText("dragAnswerArea")).toBeTruthy();
       expect(screen.getAllByRole("combobox")).toHaveLength(2);
 
       fireEvent.change(screen.getByLabelText(/dragSlotSelectLabel.*First/), {

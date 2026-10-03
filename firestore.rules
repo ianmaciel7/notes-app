@@ -149,31 +149,54 @@ service cloud.firestore {
           'fsrsSnapshot',
           'reviewedAt'
         ])
+        && data.keys().hasOnly([
+          'schemaVersion',
+          'spaceId',
+          'questionId',
+          'cardId',
+          'rating',
+          'reviewMode',
+          'elapsedMilliseconds',
+          'userConfidence',
+          'questionType',
+          'submittedAnswer',
+          'isCorrect',
+          'fsrsSnapshot',
+          'reviewedAt'
+        ])
         && hasNestedBase(spaceId)
         && data.questionId is string
         && data.questionId.size() > 0
+        && data.questionId.size() <= 100
         && data.cardId is string
         && data.cardId.size() > 0
+        && data.cardId.size() <= 100
         && data.rating is int
         && data.rating >= 1
         && data.rating <= 4
         && data.reviewMode in ['review', 'mockExam']
         && data.elapsedMilliseconds is int
         && data.elapsedMilliseconds >= 0
-        && data.get('userConfidence', 'confident') in ['guessed', 'uncertain', 'confident']
-        && data.get('questionType', 'single-choice') in [
-          'single-choice',
-          'multiple-choice',
-          'true-false',
-          'fill-blank',
-          'matching',
-          'drag-and-drop',
-          'hotspot',
-          'case-study'
-        ]
-        && data.get('submittedAnswer', {}) is map
-        && data.get('submittedAnswer', {}).get('type', data.get('questionType', '')) == data.get('questionType', '')
-        && data.get('isCorrect', false) is bool
+        && data.elapsedMilliseconds <= 86400000
+        && (!('userConfidence' in data) || data.userConfidence in ['guessed', 'uncertain', 'confident'])
+        && (!('questionType' in data) || (
+          data.questionType in [
+            'single-choice',
+            'multiple-choice',
+            'true-false',
+            'fill-blank',
+            'matching',
+            'drag-and-drop',
+            'hotspot',
+            'case-study'
+          ]
+          && ('submittedAnswer' in data)
+          && data.submittedAnswer is map
+          && data.submittedAnswer.keys().hasAll(['type', 'value'])
+          && data.submittedAnswer.type == data.questionType
+          && ('isCorrect' in data)
+          && data.isCorrect is bool
+        ))
         && data.fsrsSnapshot is map
         && data.reviewedAt is timestamp;
     }

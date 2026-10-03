@@ -57,6 +57,7 @@ function QuestionChoiceGroup({
         mode={mode}
         inputId={`${groupId}-${option.id}`}
         selected={selected}
+        disabled={resolved}
         result={resultFor(resolved, selected, correctIds.includes(option.id))}
         onSelectedChange={(checked) =>
           onValueChange(
@@ -79,7 +80,7 @@ function QuestionChoiceGroup({
       {mode === "single" ? (
         <RadioGroup
           value={value[0] ?? ""}
-          readOnly={resolved}
+          disabled={resolved}
           onValueChange={(next) => onValueChange([String(next)])}
         >
           {items}
