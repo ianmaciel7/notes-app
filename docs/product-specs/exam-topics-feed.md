@@ -1,6 +1,6 @@
 # Feature Specification: Lean ExamTopics Feed & Active Recall Simulator
 
-**Linked ADR:** [ADR 0017](../../adr/0017-lean-exam-topics-domain-model-and-typedashboard.md)  
+**Linked ADR:** [ADR 0017](../adr/0017-lean-exam-topics-domain-model-and-typedashboard.md)  
 **Triage Label:** `ready-for-agent`  
 **Status:** Accepted  
 
@@ -45,11 +45,11 @@ A distraction-free, single-column continuous question feed that enables instanta
 1. **Polymorphic Persistence Model (`schemaVersion: 4`)**:
    - Exams and Questions are stored as polymorphic objects (`ExamObject`, `QuestionObject`) within the `objects` collection.
    - Core domain fields live inside `properties` (`examId`, `orderIndex`, `options`, `correctOptionIds`, `groundedExplanation`), while user notes live in `content`.
-   - Graph relationships between Exams and Questions are established via `object_relations` using the single-record relation invariant (`INV-10`).
+   - Graph relationships between Exams and Questions are established via `relations` using the single-record relation invariant (`INV-10`).
    - Practice attempts are stored as append-only records in an `attempts` subcollection (`INV-11`).
 
 2. **Component Architecture & Behavior Ownership (`ADR 0016`)**:
-   - `ExamFeedView` renders the continuous question feed and pagination, while its dedicated hook `useExamFeed` owns query state, cursor pagination, and scroll tracking.
+   - `ExamList` renders the continuous question feed and pagination, while its dedicated hook `useExamList` owns query state, cursor pagination, and scroll tracking.
    - `QuestionCard` renders individual question prompts and options, while its dedicated hook `useQuestionCard` owns selection states, instant verification logic, and atomic FSRS attempt submissions.
    - Primitives are sourced directly from shadcn / Base UI (`src/components/ui/`) without ad-hoc wrapper elements.
 

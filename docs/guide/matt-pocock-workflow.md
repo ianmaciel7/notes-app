@@ -129,7 +129,7 @@ Follow this step-by-step example to take a raw idea through the entire lifecycle
 
 ### Step 4: Implementation (TDD)
 *Open a **NEW** session for Ticket 01.*
-> **User:** "Please `/implement` `.scratch/pdf-feature/issues/01-pdf-service.md`."
+> **User:** "Please `/implement` e.g. `.scratch/pdf-feature/issues/01-pdf-service.md`."
 > **Agent:** Reads the ticket, writes a failing test for the PDF utility, implements the utility, verifies type safety, and runs the test. Completes when tests pass.
 
 ### Step 5: Code Review
