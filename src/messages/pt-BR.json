@@ -101,5 +101,25 @@
     "description": "Não foi possível alcançar o servidor. Você está trabalhando offline e as alterações serão sincronizadas quando a conexão voltar.",
     "retry": "Tentar novamente",
     "retrying": "Reconectando..."
+  },
+  "exam": {
+    "feedLabel": "Questões do exame",
+    "questionIndex": "Questão {current} de {total}",
+    "multipleHint": "Selecione todas que se aplicam",
+    "optionAria": "Opção {key}: {text}",
+    "correct": "Correta",
+    "incorrect": "Incorreta",
+    "correctOptionAria": "A opção {key} está correta",
+    "incorrectOptionAria": "A opção {key} está incorreta",
+    "explanation": "Explicação",
+    "references": "Referências",
+    "scrollToTop": "Voltar ao topo",
+    "loading": "Carregando questões do exame...",
+    "empty": "Nenhuma questão encontrada para este exame.",
+    "saveFailed": "Não foi possível salvar sua resposta. Tente novamente.",
+    "showAnswer": "Mostrar resposta",
+    "navLabel": "Exames",
+    "navEmpty": "Ainda não há exames neste espaço.",
+    "navError": "Não foi possível carregar os exames."
   }
 }

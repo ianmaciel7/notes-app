@@ -101,5 +101,25 @@
     "description": "Cannot reach the server. You are working offline and changes will sync when the connection returns.",
     "retry": "Retry",
     "retrying": "Retrying..."
+  },
+  "exam": {
+    "feedLabel": "Exam questions",
+    "questionIndex": "Question {current} of {total}",
+    "multipleHint": "Select all that apply",
+    "optionAria": "Option {key}: {text}",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "correctOptionAria": "Option {key} is correct",
+    "incorrectOptionAria": "Option {key} is incorrect",
+    "explanation": "Explanation",
+    "references": "References",
+    "scrollToTop": "Scroll to top",
+    "loading": "Loading exam questions...",
+    "empty": "No questions found for this exam.",
+    "saveFailed": "Could not save your answer. Please try again.",
+    "showAnswer": "Show answer",
+    "navLabel": "Exams",
+    "navEmpty": "No exams in this space yet.",
+    "navError": "Could not load exams."
   }
 }

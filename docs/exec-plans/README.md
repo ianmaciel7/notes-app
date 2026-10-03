@@ -22,5 +22,5 @@ quality contracts.
 
 ## Active Plans
 
-- [0017-lean-exam-topics-feed-and-domain-model.md](active/0017-lean-exam-topics-feed-and-domain-model.md): Active recall certification study engine and continuous question feed for ADR 0017.
+No active plans.
 

@@ -17,6 +17,8 @@ The primary orchestrator delegates tasks according to this matrix:
 | **`a11y-reviewer`** | UI accessibility audits (WCAG 2.1 AA, keyboard, contrast) | Read-only + Tools | [`a11y-reviewer.md`](./a11y-reviewer.md) |
 | **`firebase-specialist`** | Firebase Auth, Emulators, Seeds, Rules & Client Lifecycle | Read + Write + Subagents + Tools | [`firebase-specialist.md`](./firebase-specialist.md) |
 
+Agents are dispatched as squads (a gate, disjoint-scope writers, and a non-author checker) whose work units come from the knowledge graph. The graph-driven task graph is canonical in [`.agents/rules/orchestration.md`](../rules/orchestration.md); squad compositions, effort scaling, and gates in [`.agents/rules/squads.md`](../rules/squads.md).
+
 ## Specification Standard
 
 Each agent file defines:

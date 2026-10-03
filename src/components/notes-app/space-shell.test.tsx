@@ -27,6 +27,10 @@ vi.mock("@/hooks/use-spaces", () => ({
   useSpaces: () => mockUseSpaces(),
 }));
 
+vi.mock("@/hooks/use-exam-navigation", () => ({
+  useExamNavigation: () => ({ exams: [], loading: false, error: null }),
+}));
+
 const mockUseAuth = vi.fn();
 vi.mock("@/hooks/use-auth", () => ({
   useAuth: () => mockUseAuth(),

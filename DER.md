@@ -314,7 +314,7 @@ Provides an append-only audit trail of every practice event.
 
 ## 4. Firestore Indexing Specifications
 
-To avoid unindexed full-collection scans and N+1 query amplification, the following composite indexes must be defined in `firestore.indexes.json`. That file does not exist yet and `firebase.json` does not reference it; create both together with the first query that needs them.
+To avoid unindexed full-collection scans and N+1 query amplification, the following composite indexes are defined in `firestore.indexes.json`, which `firebase.json` registers for deployment and the emulator.
 
 Firestore serves queries that combine only equality filters (no `orderBy`) from its automatic single-field indexes via index merging, so those queries need no composite entry.
 
@@ -359,6 +359,21 @@ Enables fast calculation of retention rates and lapse counts per question:
   "fields": [
     { "fieldPath": "questionId", "order": "ASCENDING" },
     { "fieldPath": "reviewedAt", "order": "DESCENDING" }
+  ]
+}
+```
+
+### 4.4 Exam Question Feed Index
+Enables the ordered exam feed (`objectTypeId == "question"`, `properties.examId ==`, ascending `properties.orderIndex`) read by `useExamList`:
+
+```json
+{
+  "collectionGroup": "objects",
+  "queryScope": "COLLECTION",
+  "fields": [
+    { "fieldPath": "objectTypeId", "order": "ASCENDING" },
+    { "fieldPath": "properties.examId", "order": "ASCENDING" },
+    { "fieldPath": "properties.orderIndex", "order": "ASCENDING" }
   ]
 }
 ```

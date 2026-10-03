@@ -2,6 +2,7 @@
 
 import type { ComponentProps, ReactNode } from "react";
 import { CreateSpaceDialog } from "@/components/notes-app/create-space-dialog";
+import { ExamNavigation } from "@/components/notes-app/exam-navigation";
 import { SettingsDialog } from "@/components/notes-app/settings-dialog";
 import { SidebarUserMenu } from "@/components/notes-app/sidebar-user-menu";
 import { SpaceLoading } from "@/components/notes-app/space-loading";
@@ -91,7 +92,11 @@ function SpaceShell({
         data-slot="space-shell"
         data-testid="space-shell"
       >
-        <Sidebar variant="inset" collapsible="none" className="h-svh">
+        <Sidebar
+          variant="inset"
+          collapsible="none"
+          className="sticky top-0 h-svh self-start"
+        >
           <SidebarHeader>
             <SpaceSwitcher
               activeSpace={activeSpace}
@@ -100,7 +105,9 @@ function SpaceShell({
               spaces={spaces}
             />
           </SidebarHeader>
-          <SidebarContent />
+          <SidebarContent>
+            {activeSpace ? <ExamNavigation spaceId={activeSpace.id} /> : null}
+          </SidebarContent>
           <SidebarFooter className="mt-auto">
             <SidebarUserMenu
               user={user}

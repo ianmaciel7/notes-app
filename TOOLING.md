@@ -72,7 +72,7 @@ Versions are owned by `package.json`. Tools without a package entry are run thro
 | **Repomix** | Pack the repository into one AI-friendly snapshot. Never concatenate files by hand. | `rtk pnpm dlx repomix` | [repomix.config.json](./repomix.config.json), [.agents/skills/repomix/SKILL.md](./.agents/skills/repomix/SKILL.md) |
 | **ast-grep** | Outline a file's structure, search or rewrite by syntax tree. | `rtk ast-grep outline src/components`<br/>`rtk ast-grep run -p '$HOOK($$$ARGS)' src` | [.agents/skills/ast-grep/SKILL.md](./.agents/skills/ast-grep/SKILL.md), [.agents/skills/ast-grep-outline/SKILL.md](./.agents/skills/ast-grep-outline/SKILL.md) |
 | **agents CLI** (`@agents-dev/cli`) | Sync MCP servers, skills, and integrations across AI tools from one source. | `rtk agents status`<br/>`rtk agents mcp list` | [.agents/agents.json](./.agents/agents.json), [.agents/README.md](./.agents/README.md) |
-| **Subagents** | Delegate scoped work (research, review, tests, security, a11y, Firebase). | n/a (orchestrator-dispatched) | [.agents/agents/README.md](./.agents/agents/README.md), [.agents/rules/orchestration.md](./.agents/rules/orchestration.md) |
+| **Subagents** | Delegate scoped work (research, review, tests, security, a11y, Firebase). | n/a (orchestrator-dispatched) | [.agents/agents/README.md](./.agents/agents/README.md), [.agents/rules/orchestration.md](./.agents/rules/orchestration.md), [.agents/rules/squads.md](./.agents/rules/squads.md) |
 | **Agent evals** | Compare agent behavior across providers with deterministic scenarios. | `rtk pnpm eval:codex`<br/>`rtk pnpm eval:antigravity`<br/>`rtk pnpm eval:compare` | [.agents/evals/README.md](./.agents/evals/README.md), [.agents/skills/eval-harness/SKILL.md](./.agents/skills/eval-harness/SKILL.md) |
 
 ### Code quality and static analysis
@@ -116,7 +116,7 @@ Versions are owned by `package.json`. Tools without a package entry are run thro
 | Tool | Use it to | Command | Config and owner |
 | :--- | :--- | :--- | :--- |
 | **Next.js and Turbopack** | Serve, build, and run the App Router app. | `rtk pnpm dev`<br/>`rtk pnpm build`<br/>`rtk pnpm start` | [next.config.ts](./next.config.ts), [ARCHITECTURE.md](./ARCHITECTURE.md) |
-| **Firebase CLI and emulators** | Run Auth and Firestore locally with seeded state. | `rtk pnpm emulator`<br/>`rtk pnpm emulator:start`<br/>`rtk pnpm test:firebase-emulator` | [firebase.json](./firebase.json), [docs/adr/0009-adopt-firebase-auth-with-local-emulator.md](./docs/adr/0009-adopt-firebase-auth-with-local-emulator.md) |
+| **Firebase CLI and emulators** | Run Auth and Firestore locally with seeded state. `emulator:dev` persists data in the gitignored `.emulator-data/` across restarts (`--import` and `--export-on-exit`); `emulator:start` stays ephemeral for e2e. `seed:emulator` links a Google identity (the emulator's Google widget only lists accounts that have the `google.com` provider) and seeds a sample exam; pass `--email <address>` to seed your own account. | `rtk pnpm emulator`<br/>`rtk pnpm emulator:start`<br/>`rtk pnpm emulator:dev`<br/>`rtk pnpm seed:emulator`<br/>`rtk pnpm test:firebase-emulator` | [firebase.json](./firebase.json), [docs/adr/0009-adopt-firebase-auth-with-local-emulator.md](./docs/adr/0009-adopt-firebase-auth-with-local-emulator.md) |
 
 ---
 
@@ -208,7 +208,7 @@ entry (`<name>.mjs`), pure logic in `<name>-lib.mjs`, and `node:test` tests in
 | `scripts/guards/` | Deterministic policy and architecture checks that fail on violations. | `scripts/guards/floor-guard.mjs`, `scripts/guards/guard-adr-plan.mjs`, `scripts/guards/guard-component-naming.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/guards/guard-conventions.mjs`, `scripts/guards/guard-doc-sync.mjs`, `scripts/guards/guard-i18n-strings.mjs`, `scripts/guards/guard-no-emojis.mjs`, `scripts/guards/guard-rsc-boundaries.mjs` |
 | `scripts/hooks/` | Agent and editor hook adapters plus shared payload and path logic. | `scripts/hooks/hook-biome-on-edit.mjs`, `scripts/hooks/hook-doc-sync-on-stop.mjs`, `scripts/hooks/hook-firestore-rules.mjs`, `scripts/hooks/hook-guard-agent-delegation.mjs`, `scripts/hooks/hook-guard-bash.mjs`, `scripts/hooks/hook-guard-paths.mjs`, `scripts/hooks/hook-typecheck-on-stop.mjs` |
 | `scripts/verify/` | Repository-wide verification and health orchestration. | `scripts/verify/verify-ai-tooling.mjs`, `scripts/verify/verify-code.mjs`, `scripts/verify/verify-control-docs.mjs`, `scripts/verify/verify-docs.mjs`, `scripts/verify/verify-health.mjs` |
-| `scripts/tooling/` | Adapters around external development CLIs. | `scripts/tooling/run-agents-cli.mjs` |
+| `scripts/tooling/` | Adapters around external development CLIs and local emulators. | `scripts/tooling/run-agents-cli.mjs`, `scripts/tooling/seed-emulator.mjs` |
 
 - Tests are wired into `test:guards` in `package.json`, which `check:ci` runs.
 - Scripts stay deterministic, non-interactive in CI, repository-relative, and free of product-domain behavior.

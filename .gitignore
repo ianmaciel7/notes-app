@@ -89,3 +89,6 @@ RTK.md.bak
 # Graphify installs machine-specific hooks per clone.
 /.husky/post-commit
 /.husky/post-checkout
+
+# Persisted local Firebase emulator state (pnpm emulator:dev)
+.emulator-data/

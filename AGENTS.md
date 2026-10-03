@@ -22,7 +22,7 @@ Preserve marked tool-generated blocks verbatim.
 - Keep this file routing-oriented. Target <= 12,000 characters; hard maximum
   16,000 UTF-8 bytes.
 - Ownership rules (one fact, one canonical owner): `.agents/skills/context-manager/SKILL.md`.
-- All documentation, specs, and execution plans MUST be written in English unless explicitly requested otherwise by the user (`CONTRIBUTING.md`).
+- Documentation, specs, and execution plans MUST be in English unless the user requests otherwise (`CONTRIBUTING.md`).
 
 ## Context routing
 
@@ -46,7 +46,7 @@ Read only the owner relevant to the task:
 | Contribution, Git, and PR workflow | `CONTRIBUTING.md` |
 | Tool catalog & capabilities | `TOOLING.md` |
 | Search, discovery, and navigation hierarchy | `.agents/rules/search-and-discovery.md` |
-| Lead Orchestrator & subagent execution | `.agents/rules/orchestration.md` |
+| Lead Orchestrator, squads & graph-driven task graph | `.agents/rules/orchestration.md`, `.agents/rules/squads.md` |
 | ADR implementation & planning guard | `.agents/rules/adr-implementation-guard.md` |
 | Emoji prohibition & icon standards | `.agents/rules/no-emojis.md` |
 
@@ -82,37 +82,29 @@ token savings.
 
 ### Command execution invariant
 
-Detailed command, search, and tool invariants are canonical in `.agents/rules/command-invariants.md`, `.agents/rules/search-and-discovery.md`, and `.agents/rules/documentation-sync.md`.
-
-- **RTK**: Mandatory for all shell commands; exceptions and fallback conditions are documented in `RTK.md`.
-- **Graphify**: `graphify-out/` MUST be queried before manually tracing cross-file architecture or call graphs (see `.agents/skills/graphify/skill.md`).
-- **Repomix**: `repomix.config.json` MUST be used for broad repository snapshots.
-- **Context7**: `ctx7 library` → `ctx7 docs` MUST be used before writing code against third-party library APIs (see `.agents/skills/context7-cli/SKILL.md`).
+The Tool routing table above is mandatory (RTK exceptions in `RTK.md`). Details: `.agents/rules/command-invariants.md`, `.agents/rules/search-and-discovery.md`, `.agents/rules/documentation-sync.md`.
 
 When an agent exposes a configured MCP, use it. Bypassing requires stating the reason and using the narrowest fallback.
 
 ## Skill routing
 
-Project skills live under `.agents/skills/`. Load the most specific skill whose
-documented trigger matches the task; do not preload vaguely related skills.
-Before invoking or applying a skill, read its SKILL.md instructions. Never infer
-skill behavior from its name alone.
+Project skills live under `.agents/skills/`. Load the most specific skill whose trigger matches the task, and read its SKILL.md first; never infer behavior from its name.
 
 | Trigger | Skill |
 | --- | --- |
-| Any codebase question; cross-file architecture when `graphify-out/` exists | `graphify` |
-| Biome, lint, format, `biome check`, import sort, lint rule config | `biome` |
-| shadcn component add / search / style / debug; `components.json` | `shadcn` |
-| Search community shadcn registry items via Shoogle | `search-registry-items` |
-| UI component story / Ladle dev / accessibility / visual preview | `ladle` |
-| Module boundary violation; circular dependency; `dependency-cruiser` | `dependency-cruiser` |
-| Security scan; bug pattern; Semgrep rule; "find vulnerabilities" | `semgrep` |
+| Codebase question; cross-file architecture (`graphify-out/`) | `graphify` |
+| Biome, lint, format, import sort, lint config | `biome` |
+| shadcn add / search / style / debug; `components.json` | `shadcn` |
+| Search community shadcn registry (Shoogle) | `search-registry-items` |
+| Component story / Ladle dev / visual preview | `ladle` |
+| Module boundary violation; circular dependency | `dependency-cruiser` |
+| Security scan; bug pattern; Semgrep rule | `semgrep` |
 | Library API docs; unfamiliar SDK; version migration | `context7-cli` |
 | AST structural search; pattern matching across files | `ast-grep` |
 | Structural map of a file or directory before editing | `ast-grep-outline` |
 | Control doc create / audit / sync | `context-manager` |
 | Verify markdown docs: links, paths, routing | `verify-docs` |
-| React composition patterns; compound components; render props | `vercel-composition-patterns` |
+| React composition; compound components; render props | `vercel-composition-patterns` |
 | React / Next.js performance; bundle; data fetching | `vercel-react-best-practices` |
 | RTK setup / troubleshoot; `RTK.md` integration | `rtk-cli` |
 | MCP config/runtime issues; `agents` CLI | `mcp-troubleshooting` |
@@ -121,23 +113,23 @@ skill behavior from its name alone.
 | Implement work from a spec or tickets | `implement` |
 | Stress-test a plan interactively | `grilling` |
 | Code review since a branch/commit | `code-review` |
-| Broad repository snapshot; repomix packing; `repomix.config.json` | `repomix` |
-| Unit and component testing; Vitest test runner; mocking; coverage | `vitest` |
+| Broad repository snapshot; `repomix.config.json` | `repomix` |
+| Unit / component tests; Vitest; mocking; coverage | `vitest` |
 | Git workflow, branching, release tagging | `git-workflow-and-versioning` |
 | Conventional commit messages and staging | `git-commit` |
-| Persist rule, decision, term, or procedure before creating a skill | `save-info` |
-| Scout prior art in historical worktrees (`.worktrees/old-*`) | `find-worktrees` |
+| Persist a rule, decision, term, or procedure | `save-info` |
+| Scout prior art in `.worktrees/old-*` | `find-worktrees` |
 | Guide through engineering skill workflows | `ask-matt` |
 | Scaffold repo configuration for engineering skills | `setup-matt-pocock-skills` |
 | Manage multi-agent config via `agents` CLI | `agents-dev-cli` |
-| Gather official docs into a concise implementation checklist | `docs-research` |
-| Scaffold a shadcn/Base UI component with story, test, and checks | `new-component` |
+| Official docs into an implementation checklist | `docs-research` |
+| Scaffold a shadcn/Base UI component with story and test | `new-component` |
 | Create and maintain agent skills | `skill-guide` |
 | Agent eval runs and report comparison | `eval-harness` |
-| Firebase Auth emulator, seeds, and auth test environment | `firebase-setup` |
+| Firebase Auth emulator, seeds, auth test env | `firebase-setup` |
 | Firestore rules or schema change; `firestore.rules` | `firestore-rules-change` |
-| Health check for quality, tests, context, and token savings | `verify-health` |
-| Verify code against `CONVENTIONS.md` and `CONSTRAINTS.md`; run the quality gates and the review-only rules | `verify-code` |
+| Health check: quality, tests, context, token savings | `verify-health` |
+| Verify code against `CONVENTIONS.md` / `CONSTRAINTS.md`; quality gates | `verify-code` |
 
 Treat project-owned skills and `skills-lock.json` as controlled configuration.
 Do not edit, add, refresh, replace, or remove remote skills unless requested by the user.
@@ -147,27 +139,24 @@ Follow the applicable skill-management workflow for lifecycle and lock updates.
 
 Before changing code:
 
-1. Inspect the working state and relevant files; read only task-relevant owners/skills.
+1. Inspect the working state and relevant files; read only task-relevant owners/skills. For non-trivial multi-file work, partition it with Graphify and dispatch squads per `.agents/rules/orchestration.md`.
 2. For Next.js work, follow the generated Next.js instructions at the top of this file.
-3. For third-party behavior, use the applicable documentation skill before relying on
-   memory.
-4. **shadcn-first for UI**: Always prefer existing shadcn/ui components (`src/components/ui/`) before writing custom markup or ad-hoc wrappers. Application components stay simple and domain-named; they may compose any appropriate primitive internally without mirroring its filename. Use Base UI `render` for behavioral element composition instead of custom `renderX`/`asChild` APIs, and search registries (`rtk pnpm dlx shadcn@latest search`) before building from scratch.
-5. **No ADR implementation without an active plan**: When turning an ADR into code, always create an execution plan (`docs/exec-plans/active/`) or decompose it via `/to-spec` -> `/to-tickets` before modifying `src/` (see `.agents/rules/adr-implementation-guard.md`).
+3. For third-party behavior, use the documentation skill before relying on memory.
+4. **shadcn-first for UI**: Prefer existing shadcn/ui components (`src/components/ui/`) over custom markup or ad-hoc wrappers. Application components stay simple and domain-named. Use Base UI `render` for behavioral composition instead of custom `renderX`/`asChild` APIs, and search registries (`rtk pnpm dlx shadcn@latest search`) before building from scratch.
+5. **No ADR implementation without an active plan**: before modifying `src/` for an ADR, create an execution plan (`docs/exec-plans/active/`) or decompose via `/to-spec` -> `/to-tickets` (see `.agents/rules/adr-implementation-guard.md`).
 
 While changing code:
 
-- For project-owned application UI, follow `.agents/rules/component-composition.md` in addition to `CONVENTIONS.md`.
-
+- For project-owned application UI, also follow `.agents/rules/component-composition.md`.
 - Follow existing patterns and the canonical owner for the affected context.
-- Dedicated component hooks own stateful behavior: if `Component` has `useComponent`, keep its component-owned state/effects/refs/transitions/navigation and derived handlers in that hook; keep the component focused on rendering and composition.
+- Dedicated hooks own stateful behavior: if `Component` has `useComponent`, keep its state, effects, refs, transitions, navigation, and derived handlers there; the component only renders and composes.
 - Prefer focused edits; do not edit generated outputs directly.
 - Keep affected canonical documentation aligned with the implementation.
 - When an execution plan is active, follow the lifecycle in `.agents/skills/implement/SKILL.md`.
 
 ## Decision boundaries
 
-Agents may inspect the repository, make requested local edits, run relevant local
-checks, and fix failures introduced by their own changes without repeated approval.
+Agents may inspect the repository, make requested local edits, run relevant local checks, and fix failures from their own changes without repeated approval.
 
 Never write hardcoded absolute machine paths into committed files, docs, or scripts.
 Use repository-relative paths only (see `.agents/rules/path-portability.md`).
@@ -177,12 +166,9 @@ other external side effects require explicit user intent.
 
 ## Verification routing
 
-Use `CONSTRAINTS.md` for blocking floors, `TESTING.md` for verification strategy,
-and `CONTRIBUTING.md` for pre-PR checks. Run the smallest risk-appropriate set.
-Do not duplicate command matrices here.
+Use `CONSTRAINTS.md` for blocking floors, `TESTING.md` for strategy, and `CONTRIBUTING.md` for pre-PR checks. Run the smallest risk-appropriate set.
 
-Do not weaken quality controls or bypass hooks/checks (`--no-verify`, lowered
-thresholds, removed tests, new suppressions) merely to obtain a pass.
+Do not weaken quality controls or bypass hooks/checks (`--no-verify`, lowered thresholds, removed tests, new suppressions) merely to obtain a pass.
 
 ## Definition of done
 
@@ -211,8 +197,6 @@ See `docs/agents/domain.md` (glossary, context map, DER, ADRs).
 
 ## Maintenance
 
-Remove obsolete instructions instead of accumulating them. Move detailed procedures
-to their owning Skill/doc and leave only routing here. Prefer nested `AGENTS.md`
-files for subtree-specific rules.
+Remove obsolete instructions; move detailed procedures to their owning skill/doc and keep only routing here. Prefer nested `AGENTS.md` files for subtree rules.
 
 @RTK.md

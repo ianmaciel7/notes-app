@@ -79,7 +79,7 @@ numeric thresholds are owned by `CONSTRAINTS.md` and `CONTRIBUTING.md`.
 
 - Unit tests are colocated under `src/` as `*.test.ts` or `*.test.tsx`, with scoped coverage enforced on `src/lib/**/*.ts` and `src/hooks/**/*.ts`.
 - End-to-end test specifications are located under `e2e/` as `*.spec.ts`.
-- Component stories are colocated under `src/components/ui/` as `*.stories.tsx`.
+- Component stories for `src/components/ui/` primitives are colocated as `*.stories.tsx`. Stories for application components live under `src/stories/` because the component guards require one component per file under `src/components/`, and Ladle discovers `src/**/*.stories.tsx`.
 - The current unit-test foundation includes `src/lib/utils.test.ts`, `src/hooks/use-auth.test.ts`, `src/hooks/use-require-auth.test.tsx`, `src/lib/firebase/auth-emulator.test.ts`, and `src/app/(auth)/login/page.test.tsx`.
 - Declarative UI primitives under `src/components/ui/` should add or update a Ladle story when visual or interaction behavior needs verification.
 
@@ -93,7 +93,7 @@ The repository employs a multi-layered testing strategy for Firebase Authenticat
   - `useRequireAuth` hook (`src/hooks/use-require-auth.test.tsx`) verifies route protection behavior, triggering navigation redirects for unauthenticated sessions while allowing access to authenticated users.
 
 - **Local Emulator Integration**:
-  - Integration suites (`src/lib/firebase/auth-emulator.test.ts` and `src/lib/firebase/firestore-emulator.test.ts`) exercise real Firebase SDK behavior against the Auth (`127.0.0.1:9099`) and Firestore (`127.0.0.1:8080`) emulators.
+  - Integration suites (`src/lib/firebase/auth-emulator.test.ts` and `src/lib/firebase/firestore-emulator.test.ts`) and the exam dual-write suite (`src/lib/firebase/attempts-emulator.test.ts`, which checks that an Attempt append and its Card FSRS update commit atomically under `firestore.rules`) exercise real Firebase SDK behavior against the Auth (`127.0.0.1:9099`) and Firestore (`127.0.0.1:8080`) emulators.
 - `pnpm run test:firebase-emulator` owns deterministic emulator lifecycle through a pinned `firebase-tools` version and is part of `check:ci`; ordinary unit runs may remain emulator-independent.
   - Verifies anonymous authentication (`signInAnonymously`), user account creation (`createUserWithEmailAndPassword`), credential authentication (`signInWithEmailAndPassword`), and session cleanup (`signOut`).
   - Includes a pre-check ping to gracefully skip execution when the emulator daemon is unreachable in isolated unit environments.

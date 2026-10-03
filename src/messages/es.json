@@ -101,5 +101,25 @@
     "description": "No se puede contactar al servidor. Estás trabajando sin conexión y los cambios se sincronizarán cuando vuelva la conexión.",
     "retry": "Reintentar",
     "retrying": "Reconectando..."
+  },
+  "exam": {
+    "feedLabel": "Preguntas del examen",
+    "questionIndex": "Pregunta {current} de {total}",
+    "multipleHint": "Selecciona todas las que correspondan",
+    "optionAria": "Opción {key}: {text}",
+    "correct": "Correcta",
+    "incorrect": "Incorrecta",
+    "correctOptionAria": "La opción {key} es correcta",
+    "incorrectOptionAria": "La opción {key} es incorrecta",
+    "explanation": "Explicación",
+    "references": "Referencias",
+    "scrollToTop": "Volver arriba",
+    "loading": "Cargando preguntas del examen...",
+    "empty": "No se encontraron preguntas para este examen.",
+    "saveFailed": "No se pudo guardar tu respuesta. Inténtalo de nuevo.",
+    "showAnswer": "Mostrar respuesta",
+    "navLabel": "Exámenes",
+    "navEmpty": "Aún no hay exámenes en este espacio.",
+    "navError": "No se pudieron cargar los exámenes."
   }
 }
