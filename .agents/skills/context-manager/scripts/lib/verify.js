@@ -63,9 +63,15 @@ function findComponentCountMentions(text) {
   while ((m = keywordRe.exec(text)) !== null) {
     const windowStart = Math.max(0, m.index - 40);
     const window = text.slice(windowStart, m.index);
+    if (
+      /ADR\s+\d+/i.test(window) ||
+      /\/\d+/i.test(window) ||
+      /\d+[-_]/i.test(window)
+    )
+      continue;
     const numMatch =
       window.match(/(?:~|of\s+)?(\d+)\s*(?:UI\s+)?$/i) ||
-      window.match(/(\d+)[^\d]*$/);
+      window.match(/(\d+)\s+(?:total\s+|shared\s+|reusable\s+)?$/i);
     if (!numMatch) continue;
     const number = parseInt(numMatch[1], 10);
     const lineStart = text.lastIndexOf("\n", m.index) + 1;

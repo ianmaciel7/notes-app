@@ -17,6 +17,7 @@ contributor workflow to `CONTRIBUTING.md`.
   in `ARCHITECTURE.md`.
 - Fix findings at the source. Suppression and non-regression policy is owned by
   `CONSTRAINTS.md`.
+- **Documentation synchronization** (`doc-sync`): Code and configuration modifications must be accompanied by documentation updates in the same change (enforced by `check:doc-sync`). Pure refactors or internal changes that genuinely require no documentation updates may be bypassed explicitly with `--allow-no-doc` or commit flag `[skip-doc-sync]`.
 
 ## 2. Naming & File Shape
 
@@ -429,4 +430,5 @@ row here in the same change that adds or changes a rule; prefer promoting a
 | `name-matches-surface` | `check:conventions` |
 | `testid-starts-with-component` | `check:conventions` |
 | `no-emojis` | `check:emojis` |
+| `doc-sync` | `check:doc-sync` |
 | `performance-patterns` | review-only |

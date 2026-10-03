@@ -84,7 +84,7 @@ Versions are owned by `package.json`. Tools without a package entry are run thro
 | **dependency-cruiser** | Enforce module boundaries and forbid circular imports. | `rtk pnpm deps:check` | [.dependency-cruiser.cjs](./.dependency-cruiser.cjs), [.agents/skills/dependency-cruiser/SKILL.md](./.agents/skills/dependency-cruiser/SKILL.md) |
 | **jscpd** | Detect copy-pasted code. | `rtk pnpm check:duplication` | [.jscpd.json](./.jscpd.json) |
 | **Knip** | Find unused files, exports, and dependencies. | `rtk pnpm knip` | [knip.json](./knip.json) |
-| **Project guards** | Enforce repository-specific policy that standard tools cannot express, including notes-app composition and dedicated-hook ownership (see [section 5](#5-script-architecture)). | `rtk pnpm check:floor`<br/>`rtk pnpm check:rsc`<br/>`rtk pnpm check:props`<br/>`rtk pnpm check:naming`<br/>`rtk pnpm check:ui-pattern`<br/>`rtk pnpm check:conventions`<br/>`rtk pnpm check:emojis`<br/>`rtk pnpm check:i18n` | [CONSTRAINTS.md](./CONSTRAINTS.md), [CONVENTIONS.md](./CONVENTIONS.md) |
+| **Project guards** | Enforce repository-specific policy that standard tools cannot express, including notes-app composition and dedicated-hook ownership (see [section 5](#5-script-architecture)). | `rtk pnpm check:floor`<br/>`rtk pnpm check:doc-sync`<br/>`rtk pnpm check:rsc`<br/>`rtk pnpm check:props`<br/>`rtk pnpm check:naming`<br/>`rtk pnpm check:ui-pattern`<br/>`rtk pnpm check:conventions`<br/>`rtk pnpm check:emojis`<br/>`rtk pnpm check:i18n` | [CONSTRAINTS.md](./CONSTRAINTS.md), [CONVENTIONS.md](./CONVENTIONS.md) |
 | **Docs verifiers** | Check control docs, links, paths, and routing for drift. | `rtk pnpm verify:docs`<br/>`rtk pnpm check:docs` | [.agents/skills/verify-docs/SKILL.md](./.agents/skills/verify-docs/SKILL.md) |
 | **Health check** | Run the consolidated quality, test, context, and RTK savings check. | `rtk pnpm verify:health` | [.agents/skills/verify-health/SKILL.md](./.agents/skills/verify-health/SKILL.md) |
 
@@ -169,6 +169,7 @@ delegation hooks still use the same repository adapters:
 | `PreToolUse` on `Bash` (Claude Code only; the script itself selects `git` and `rtk git` segments, so `rtk git ...` and chained commands are covered) | `scripts/hooks/hook-guard-bash.mjs` | Deny git commands that skip the gates: `--no-verify`, `--no-gpg-sign`, and `--force` without `--force-with-lease` |
 | `PostToolUse` on file writes (Claude Code only) | `scripts/hooks/hook-firestore-rules.mjs` | After `firestore.rules` changes, run `test:firebase-emulator` and block only when the Vitest output shows failing tests. A missing Java install, port clash, or timeout is logged as `skipped` and never blocks |
 | `Stop` (Claude Code only) | `scripts/hooks/hook-typecheck-on-stop.mjs` | When the working tree has TypeScript changes, run `check:types` and block only on real `error TS####` output. It skips when `stop_hook_active` is set, so a failing check cannot loop |
+| `Stop` (Claude Code only) | `scripts/hooks/hook-doc-sync-on-stop.mjs` | Verifies that documentation was updated in the same session whenever code or configuration files are modified |
 
 Claude-only hooks are registered in the local, gitignored `.claude/settings.json`; the scripts and
 their tests are the versioned part. Both new hooks run their check through `rtk proxy` so the raw
@@ -204,8 +205,8 @@ entry (`<name>.mjs`), pure logic in `<name>-lib.mjs`, and `node:test` tests in
 
 | Directory | Responsibility | Entry points |
 | :--- | :--- | :--- |
-| `scripts/guards/` | Deterministic policy and architecture checks that fail on violations. | `scripts/guards/floor-guard.mjs`, `scripts/guards/guard-component-naming.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/guards/guard-conventions.mjs`, `scripts/guards/guard-i18n-strings.mjs`, `scripts/guards/guard-no-emojis.mjs`, `scripts/guards/guard-rsc-boundaries.mjs` |
-| `scripts/hooks/` | Agent and editor hook adapters plus shared payload and path logic. | `scripts/hooks/hook-biome-on-edit.mjs`, `scripts/hooks/hook-firestore-rules.mjs`, `scripts/hooks/hook-guard-agent-delegation.mjs`, `scripts/hooks/hook-guard-bash.mjs`, `scripts/hooks/hook-guard-paths.mjs`, `scripts/hooks/hook-typecheck-on-stop.mjs` |
+| `scripts/guards/` | Deterministic policy and architecture checks that fail on violations. | `scripts/guards/floor-guard.mjs`, `scripts/guards/guard-component-naming.mjs`, `scripts/guards/guard-component-props.mjs`, `scripts/guards/guard-conventions.mjs`, `scripts/guards/guard-doc-sync.mjs`, `scripts/guards/guard-i18n-strings.mjs`, `scripts/guards/guard-no-emojis.mjs`, `scripts/guards/guard-rsc-boundaries.mjs` |
+| `scripts/hooks/` | Agent and editor hook adapters plus shared payload and path logic. | `scripts/hooks/hook-biome-on-edit.mjs`, `scripts/hooks/hook-doc-sync-on-stop.mjs`, `scripts/hooks/hook-firestore-rules.mjs`, `scripts/hooks/hook-guard-agent-delegation.mjs`, `scripts/hooks/hook-guard-bash.mjs`, `scripts/hooks/hook-guard-paths.mjs`, `scripts/hooks/hook-typecheck-on-stop.mjs` |
 | `scripts/verify/` | Repository-wide verification and health orchestration. | `scripts/verify/verify-ai-tooling.mjs`, `scripts/verify/verify-code.mjs`, `scripts/verify/verify-control-docs.mjs`, `scripts/verify/verify-docs.mjs`, `scripts/verify/verify-health.mjs` |
 | `scripts/tooling/` | Adapters around external development CLIs. | `scripts/tooling/run-agents-cli.mjs` |
 
