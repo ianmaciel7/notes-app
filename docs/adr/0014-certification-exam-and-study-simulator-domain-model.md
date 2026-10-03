@@ -1,8 +1,10 @@
 # 0014. Certification Exam and Study Simulator Domain Model and RBAC
 
-- **Status:** Proposed
+- **Status:** Superseded by `docs/adr/0017-lean-exam-topics-domain-model-and-typedashboard.md`
 - **Date:** 2026-09-29
 - **Canonical Owner:** `ARCHITECTURE.md`
+
+> **Superseded Notice:** The entity model (separate root collections for `Exam`, `Question`, `Option`, `ExamSession`, `UserAnswer`) defined in Section 2 is superseded by the unified polymorphic `Object` model (`DER.md` schemaVersion 4) and append-only `attempts` model in [ADR 0017](./0017-lean-exam-topics-domain-model-and-typedashboard.md).
 
 ## Context and Problem Statement
 

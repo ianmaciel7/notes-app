@@ -228,8 +228,9 @@ The central polymorphic entity of the knowledge graph.
   - `createdAt` (`timestamp`), `updatedAt` (`timestamp`).
 
 #### Specialized Object Extensions
+- **Exam** (`objectTypeId: "exam"`): Top-level certification assessment object. Stores `provider` (authority/vendor), `code` (e.g. `GCP-PCA`), `totalQuestionsCount`, `passingScorePercentage`, `timeLimitMinutes`, and an in-document `questionIds` array for deterministic sequential navigation ([ADR 0017](./docs/adr/0017-lean-exam-topics-domain-model-and-typedashboard.md)).
+- **Question** (`objectTypeId: "question"`): Assessment item object. Stores `statement` (scenario Markdown), `options` (array of `QuestionOption` with `id` and `text`), `correctOptionIds` (`string[]`), `groundedExplanation` (`text` and `referenceUrls`), `examId` (parent Exam object ID), `orderIndex`, and `format` (`single_choice` or `multiple_choice`). Free-form learner reflections and notes are stored in `content` AST ([ADR 0017](./docs/adr/0017-lean-exam-topics-domain-model-and-typedashboard.md)).
 - **Concept**: Stores `prefLabel`, `altLabels` (synonyms), `broaderConceptIds` (parents), `narrowerConceptIds` (children), and `status` (`not_started`, `learning`, `mastered`).
-- **Question**: Stores `format` (`qa`, `cloze`, `multipleChoice`), `promptText`, `choices` (array of `AnswerChoice` with provenance), and `provenByHighlightIds` (`INV-4`, `INV-9`).
 - **Source**: Stores source media metadata (`pdfUrl`, `weblinkUrl`, `durationSeconds`, `localSnapshotUrl`).
 - **Highlight**: Stores `sourceObjectId` (`Dependent` on Source), W3C selector locator, color tone, and excerpt text.
 

@@ -3,6 +3,7 @@
 - **Status:** Accepted
 - **Date:** 2026-10-03
 - **Canonical Owner:** `ARCHITECTURE.md`
+- **Supersedes:** `docs/adr/0014-certification-exam-and-study-simulator-domain-model.md`
 
 ## Context and Problem Statement
 
@@ -73,28 +74,33 @@ Submissions in study or simulation modes are recorded directly into the space's 
 - `schemaVersion`: `4`
 - `spaceId`: Tenant space ID.
 - `questionId`: References the `Question` object.
-- `cardId`: Optional reference to a spaced-repetition card if scheduled via FSRS.
-- `rating`: Binary/numeric score (e.g., `1` for incorrect, `3` or `4` for correct).
+- `cardId`: References the companion `Card` (`/users/{uid}/spaces/{spaceId}/cards/{cardId}`). Every Question provisions a companion Card in the same transaction or batch when imported or initialized.
+- `rating`: Rating integer `1..4` (`1` = Incorrect / Forgot, `3` = Correct / Good, `4` = Correct / Easy) conforming to `firestore.rules` and FSRS v5.
 - `reviewMode`: `"review" | "mockExam"`.
-- `elapsedMilliseconds`: Time spent on the question.
+- `elapsedMilliseconds`: Active time spent answering (non-negative integer).
+- `userConfidence`: Optional confidence level (`"guessed" | "uncertain" | "confident"`).
+- `fsrsSnapshot`: Pre-review Card scheduling state map (`{ state, due, stability, difficulty, reps, lapses, lastReview }`).
 - `reviewedAt`: `serverTimestamp()` (immutable submission time).
 
-This adheres strictly to `firestore.rules`, which permits create and delete-on-cascade operations while rejecting update mutations on attempts.
+This adheres strictly to `firestore.rules`, which permits create and delete-on-cascade operations while rejecting update mutations on attempts, ensuring that failing a Question during exam practice accelerates its spaced repetition scheduling without weakening security rules.
 
-### 4. Presentation and Navigation Roadmap (Phased Approach)
+### 4. Presentation, Navigation Roadmap, and Visual Design & Semantic Tokens Invariant (`DESIGN.md`)
 
 Following explicit user direction to defer complex multi-column management for a future phase ("not for now, leave this for the future"), the navigation and interface architecture follows a phased rollout:
 
-#### Phase 1 (Immediate / Active): ExamTopics Question Feed
+#### Phase 1 (Immediate / Active): Continuous Question Feed & Visual Design & Semantic Tokens Invariant (`DESIGN.md`)
 
-The active implementation priority focuses entirely on a high-velocity, clean, and distraction-free study experience modeled directly on ExamTopics:
-- **Single-Column Continuous Feed**: Questions are rendered inside the space workspace canvas as a continuous vertical stream of Question Cards (`Question #1`, `Question #2`, etc.) for seamless sequential reading and practice.
-- **ExamTopics Card Visual Anatomy**:
-  - **Prominent Blue Header Banner**: Displays `Question #N (Topic: <Exam Name>)` on the left and a topic badge on the right.
-  - **Scenario Statement**: Formatted in Markdown with high-contrast typography and syntax-highlighted technical snippets.
-  - **Clean Multiple-Choice Options**: Selectable choices (`A.`, `B.`, `C.`, `D.`) supporting single-choice or multiple-choice formats.
-  - **`Reveal Solution` Action Button**: Reveals the correct answer key and the authoritative Grounded Explanation (with deep links to official vendor documentation and architectural rationale), deliberately omitting forum, discussion, or voting buttons.
-  - **Floating Scroll-to-Top Button**: Unobtrusive floating action button providing immediate return to the top of long question feeds.
+The active implementation priority focuses entirely on a high-velocity, clean, and distraction-free study experience:
+- **Strictly Functional Reference (ExamTopics Pattern)**: The reference to ExamTopics provided by the user is **strictly a functional reference** for displaying questions on the screen: a continuous vertical stream of question cards, statement prompt, answer choices, reveal solution interaction, grounded explanation, and a floating scroll-to-top button.
+- **Visual Design & Semantic Tokens Invariant (`DESIGN.md`)**:
+  - The visual appearance, typography, spacing, borders, shadows, and colors **NEVER copy external styles verbatim**.
+  - All visual styling **MUST ALWAYS be 100% derived from the semantic design tokens in `DESIGN.md`** (using shadcn/ui `base-nova` style, Base UI primitives, and Tailwind CSS v4 variables: `bg-card`, `border-border`, `bg-primary`, `text-primary-foreground`, `text-foreground`, `rounded-xl`, etc.) with full first-class support for both light and dark modes.
+- **Card Functional Anatomy & Semantic Styling**:
+  - **Semantic Card Header**: The card header uses semantic tokens (`bg-muted/50 border-b border-border` or `text-foreground font-semibold` with badge primitives), **never an ad-hoc blue banner** or external brand color. It displays `Question #N` alongside parent exam/topic metadata and status badges.
+  - **Scenario Statement**: Formatted in Markdown with high-contrast typography (`text-foreground`, `font-sans`) and syntax-highlighted code snippets (`font-mono`) respecting dark and light theme tokens.
+  - **Clean Multiple-Choice Options**: Selectable choices (`A.`, `B.`, `C.`, `D.`) using semantic border, hover, and selection states (`border-border`, `hover:bg-muted/50`, `data-[state=checked]:bg-primary`, `data-[state=checked]:text-primary-foreground`) supporting single-choice or multiple-choice formats.
+  - **`Reveal Solution` Action Button**: Semantic button (`variant="default"` or `variant="outline"` conforming to `DESIGN.md`) that reveals the correct answer key and the authoritative Grounded Explanation (with deep links to official vendor documentation and architectural rationale), deliberately omitting forum, discussion, or voting buttons.
+  - **Floating Scroll-to-Top Button**: Unobtrusive floating action button (`rounded-full shadow-md bg-background border border-border text-foreground hover:bg-muted`) providing immediate return to the top of long question feeds.
 
 #### Phase 2 (Future / Deferred): Complex Multi-Column TypeDashboard
 
@@ -119,6 +125,16 @@ To reconcile human-readable navigation with polymorphic persistence, the system 
   - **Zero-Migration Renaming & Type Conversions**: Converting an object from one `objectTypeId` to another or updating `objectTypeSlug` definitions does not require physically moving or migrating documents across collections.
   - **Unified Graph Relations**: Keeps graph edges under `/users/{uid}/spaces/{spaceId}/relations/{relationId}` unified and simple, where `sourceObjectId` and `targetObjectId` reference identifiers in the single `objects` collection regardless of domain type.
   - **Centralized Security Enforcement**: Strictly adheres to the centralized tenant security rules in `firestore.rules`, avoiding fragmented security policies across arbitrary domain-specific root or subcollections.
+
+### 6. Firestore Indexing Specifications
+
+To serve continuous question feeds ordered by sequence within an Exam without client-side sorting overhead, the following composite index will be defined in `firestore.indexes.json` alongside `firebase.json`:
+- `collectionGroup`: `"objects"`
+- `queryScope`: `"COLLECTION"`
+- `fields`:
+  - `objectTypeId`: `ASCENDING`
+  - `properties.examId`: `ASCENDING`
+  - `properties.orderIndex`: `ASCENDING`
 
 
 ## Consequences
