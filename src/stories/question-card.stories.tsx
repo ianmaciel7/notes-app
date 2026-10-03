@@ -21,7 +21,8 @@ function buildQuestion(
     createdAt: timestamp,
     updatedAt: timestamp,
     properties: {
-      statement:
+      type: "single-choice",
+      prompt:
         "A company wants to run stateless containers without managing servers. Which Google Cloud service fits best?",
       options: [
         { id: "a", text: "Cloud Run" },
@@ -29,12 +30,11 @@ function buildQuestion(
         { id: "c", text: "Cloud SQL" },
         { id: "d", text: "Cloud Storage" },
       ],
-      correctOptionIds: ["a"],
+      correctAnswer: "a",
       examId: "exam-1",
       orderIndex: 0,
-      format: "single_choice",
       ...properties,
-    },
+    } as any,
   };
 }
 
@@ -72,7 +72,7 @@ export const Unanswered = () => <Story question={buildQuestion()} />;
 export const WithGroundedExplanation = () => (
   <Story
     question={buildQuestion({
-      groundedExplanation: {
+      explanation: {
         text: "Cloud Run runs stateless containers on a fully managed platform and scales to zero.",
         referenceUrls: [
           "https://cloud.google.com/run/docs/overview/what-is-cloud-run",
@@ -87,9 +87,9 @@ export const WithGroundedExplanation = () => (
 export const MultipleChoice = () => (
   <Story
     question={buildQuestion({
-      statement: "Which two services are serverless? (Choose two.)",
-      format: "multiple_choice",
-      correctOptionIds: ["a", "c"],
+      type: "multiple-choice",
+      prompt: "Which two services are serverless? (Choose two.)",
+      correctAnswer: ["a", "c"],
       options: [
         { id: "a", text: "Cloud Run" },
         { id: "b", text: "Compute Engine" },

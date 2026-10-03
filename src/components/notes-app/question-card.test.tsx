@@ -57,17 +57,17 @@ function buildQuestion(
     createdAt: now,
     updatedAt: now,
     properties: {
-      statement: "Which service?",
+      type: "single-choice",
+      prompt: "Which service?",
       options: [
         { id: "a", text: "Cloud Run" },
         { id: "b", text: "Compute Engine" },
       ],
-      correctOptionIds: ["a"],
+      correctAnswer: "a",
       examId: "e1",
       orderIndex: 0,
-      format: "single_choice",
       ...overrides,
-    },
+    } as any,
   };
 }
 
@@ -167,7 +167,7 @@ describe("QuestionCard", () => {
   it("expands the grounded explanation with reference links after answering", async () => {
     renderCard(
       buildQuestion({
-        groundedExplanation: {
+        explanation: {
           text: "Serverless containers.",
           referenceUrls: ["https://cloud.google.com/run/docs"],
           answerProvenance: "official",
@@ -189,7 +189,7 @@ describe("QuestionCard", () => {
   it("omits the references list when the explanation has no URLs", async () => {
     renderCard(
       buildQuestion({
-        groundedExplanation: {
+        explanation: {
           text: "Because.",
           referenceUrls: [],
           answerProvenance: "ai",
@@ -213,7 +213,10 @@ describe("QuestionCard", () => {
   it("shows the multiple-choice hint and shows a save error when persisting fails", async () => {
     mockSubmitAttempt.mockRejectedValue(new Error("offline"));
     renderCard(
-      buildQuestion({ format: "multiple_choice", correctOptionIds: ["a"] }),
+      buildQuestion({
+        type: "multiple-choice",
+        correctAnswer: ["a"],
+      }),
     );
     expect(screen.getByText("multipleHint")).toBeTruthy();
 

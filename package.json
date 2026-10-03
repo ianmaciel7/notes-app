@@ -64,7 +64,7 @@
   },
   "lint-staged": {
     "*.{cjs,css,json,jsonc,js,mjs,ts,tsx}": [
-      "biome check --write",
+      "biome check --write --no-errors-on-unmatched",
       "node scripts/guards/guard-conventions.mjs"
     ]
   },

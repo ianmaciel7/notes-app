@@ -113,6 +113,8 @@ The visual language is deliberately restrained:
 - light/dark themes driven by CSS variables;
 - modest depth, usually rings or restrained shadows;
 - accessible focus and interaction states.
+- interactive buttons use a pointer cursor by default; disabled buttons retain
+  their disabled interaction state.
 
 Not yet established: a product-specific grid/container system, custom breakpoint
 scale, or formal elevation hierarchy.

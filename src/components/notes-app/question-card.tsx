@@ -25,6 +25,62 @@ type QuestionCardProps = Omit<ComponentProps<typeof CardRoot>, "children"> & {
   total: number;
 };
 
+interface QuestionOptionProps {
+  optionIndex: number;
+  selected: boolean;
+  isCorrect: boolean;
+  wrongPick: boolean;
+  rightKey: boolean;
+  text: string;
+}
+
+function QuestionOptionButton({
+  optionIndex,
+  selected,
+  isCorrect: _isCorrect,
+  wrongPick,
+  rightKey,
+  text,
+  onSelect,
+}: QuestionOptionProps & { onSelect: () => void }) {
+  const t = useTranslations("exam");
+  const key = String.fromCharCode(65 + optionIndex);
+
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      data-slot="question-option"
+      aria-pressed={selected}
+      aria-disabled={wrongPick}
+      onClick={onSelect}
+      className={cn(
+        "h-auto min-h-9 justify-start gap-2 whitespace-normal py-2 text-left font-normal hover:bg-muted/50",
+        rightKey &&
+          "border-primary bg-primary/10 font-medium text-foreground hover:bg-primary/10 dark:border-primary dark:bg-primary/15 dark:hover:bg-primary/15",
+        wrongPick &&
+          "border-destructive bg-destructive/10 text-destructive hover:bg-destructive/10 hover:text-destructive dark:border-destructive dark:bg-destructive/15 dark:hover:bg-destructive/15",
+        !wrongPick && selected && "border-primary dark:border-primary",
+      )}
+    >
+      <span className="font-semibold">{key}.</span>
+      <span className="flex-1">{text}</span>
+      {rightKey ? (
+        <>
+          <CheckIcon aria-hidden="true" />
+          <span className="sr-only">{t("correctOptionAria", { key })}</span>
+        </>
+      ) : null}
+      {wrongPick ? (
+        <>
+          <XIcon aria-hidden="true" />
+          <span className="sr-only">{t("incorrectOptionAria", { key })}</span>
+        </>
+      ) : null}
+    </Button>
+  );
+}
+
 function QuestionCard({
   spaceId,
   question,
@@ -44,8 +100,27 @@ function QuestionCard({
     selectOption,
     showAnswer,
   } = useQuestionCard({ spaceId, question, card });
-  const { statement, options, correctOptionIds, groundedExplanation, format } =
-    question.properties;
+
+  const { properties } = question;
+
+  // Type guard for choice-based questions
+  const isChoiceQuestion =
+    properties.type === "single-choice" ||
+    properties.type === "multiple-choice" ||
+    properties.type === "true-false";
+
+  if (!isChoiceQuestion || !("options" in properties)) {
+    return null;
+  }
+
+  const { prompt, options, explanation } = properties;
+  const isMultipleChoice = properties.type === "multiple-choice";
+  const correctOptionIds =
+    properties.type === "single-choice"
+      ? [properties.correctAnswer]
+      : properties.type === "multiple-choice"
+        ? properties.correctAnswer
+        : [properties.correctAnswer];
 
   return (
     <CardRoot
@@ -73,61 +148,32 @@ function QuestionCard({
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <p className="whitespace-pre-wrap font-sans text-foreground">
-          {statement}
+          {prompt}
         </p>
-        {format === "multiple_choice" ? (
+        {isMultipleChoice ? (
           <p className="text-xs text-muted-foreground">{t("multipleHint")}</p>
         ) : null}
         <fieldset className="m-0 flex min-w-0 flex-col gap-2 border-0 p-0">
-          <legend className="sr-only">{statement}</legend>
+          <legend className="sr-only">{prompt}</legend>
           {options.map((option, optionIndex) => {
-            const key = String.fromCharCode(65 + optionIndex);
             const selected = selectedOptionIds.includes(option.id);
-            const isCorrectOption = correctOptionIds.includes(option.id);
-            const wrongPick = isResolved && selected && !isCorrectOption;
-            const rightKey = isResolved && isCorrectOption;
+            const isCorrect = (correctOptionIds as string[]).includes(
+              option.id,
+            );
+            const wrongPick = isResolved && selected && !isCorrect;
+            const rightKey = isResolved && isCorrect;
 
             return (
-              <Button
+              <QuestionOptionButton
                 key={option.id}
-                type="button"
-                variant="outline"
-                data-slot="question-option"
-                aria-pressed={selected}
-                aria-disabled={isResolved}
-                onClick={() => selectOption(option.id)}
-                className={cn(
-                  "h-auto min-h-9 justify-start gap-2 whitespace-normal py-2 text-left font-normal hover:bg-muted/50",
-                  // The outline variant sets `dark:border-input dark:bg-input/30`,
-                  // so each state repeats its colors under `dark:` to win there.
-                  rightKey &&
-                    "border-primary bg-primary/10 font-medium text-foreground hover:bg-primary/10 dark:border-primary dark:bg-primary/15 dark:hover:bg-primary/15",
-                  wrongPick &&
-                    "border-destructive bg-destructive/10 text-destructive hover:bg-destructive/10 hover:text-destructive dark:border-destructive dark:bg-destructive/15 dark:hover:bg-destructive/15",
-                  !isResolved &&
-                    selected &&
-                    "border-primary dark:border-primary",
-                )}
-              >
-                <span className="font-semibold">{key}.</span>
-                <span className="flex-1">{option.text}</span>
-                {rightKey ? (
-                  <>
-                    <CheckIcon aria-hidden="true" />
-                    <span className="sr-only">
-                      {t("correctOptionAria", { key })}
-                    </span>
-                  </>
-                ) : null}
-                {wrongPick ? (
-                  <>
-                    <XIcon aria-hidden="true" />
-                    <span className="sr-only">
-                      {t("incorrectOptionAria", { key })}
-                    </span>
-                  </>
-                ) : null}
-              </Button>
+                optionIndex={optionIndex}
+                selected={selected}
+                isCorrect={isCorrect}
+                wrongPick={wrongPick}
+                rightKey={rightKey}
+                text={option.text}
+                onSelect={() => selectOption(option.id)}
+              />
             );
           })}
         </fieldset>
@@ -136,7 +182,7 @@ function QuestionCard({
             {t("saveFailed")}
           </p>
         ) : null}
-        {showExplanation && groundedExplanation ? (
+        {showExplanation && explanation ? (
           <section
             data-slot="question-explanation"
             aria-label={t("explanation")}
@@ -146,15 +192,15 @@ function QuestionCard({
               {t("explanation")}
             </h3>
             <p className="whitespace-pre-wrap text-sm text-foreground">
-              {groundedExplanation.text}
+              {explanation.text}
             </p>
-            {groundedExplanation.referenceUrls.length > 0 ? (
+            {explanation.referenceUrls.length > 0 ? (
               <div className="flex flex-col gap-1">
                 <h4 className="text-xs font-semibold text-muted-foreground">
                   {t("references")}
                 </h4>
                 <ul className="flex flex-col gap-1 text-xs">
-                  {groundedExplanation.referenceUrls.map((url) => (
+                  {explanation.referenceUrls.map((url) => (
                     <li key={url}>
                       <a
                         href={url}

@@ -48,18 +48,18 @@ function buildQuestion(
     createdAt: now,
     updatedAt: now,
     properties: {
-      statement: "Which?",
+      type: "single-choice",
+      prompt: "Which?",
       options: [
         { id: "a", text: "A" },
         { id: "b", text: "B" },
         { id: "c", text: "C" },
       ],
-      correctOptionIds: ["a"],
+      correctAnswer: "a",
       examId: "e1",
       orderIndex: 0,
-      format: "single_choice",
       ...overrides,
-    },
+    } as any,
   };
 }
 
@@ -152,8 +152,8 @@ describe("useQuestionCard", () => {
 
   it("toggles multiple-choice options and submits at the required count", async () => {
     const question = buildQuestion({
-      format: "multiple_choice",
-      correctOptionIds: ["a", "b"],
+      type: "multiple-choice",
+      correctAnswer: ["a", "b"],
     });
     const { result } = renderHook(
       () => useQuestionCard({ spaceId: "s1", question, card }),
@@ -183,7 +183,7 @@ describe("useQuestionCard", () => {
 
   it("shows the explanation only after resolution and only when present", async () => {
     const question = buildQuestion({
-      groundedExplanation: {
+      explanation: {
         text: "Because",
         referenceUrls: [],
         answerProvenance: "official",

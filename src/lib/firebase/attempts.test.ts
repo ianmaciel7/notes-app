@@ -40,13 +40,16 @@ const card: Card = {
   stateVersion: 3,
   updatedAt: now,
 };
-const input = {
+const input: any = {
   questionId: "q1",
   cardId: "c1",
   rating: 3,
   reviewMode: "review",
   elapsedMilliseconds: 900,
-} as const;
+  questionType: "multiple-choice",
+  submittedAnswer: { type: "multiple-choice", value: ["a", "c"] },
+  isCorrect: true,
+};
 
 describe("submitAttempt", () => {
   beforeEach(() => {
@@ -75,6 +78,9 @@ describe("submitAttempt", () => {
       questionId: "q1",
       cardId: "c1",
       rating: 3,
+      questionType: "multiple-choice",
+      submittedAnswer: { type: "multiple-choice", value: ["a", "c"] },
+      isCorrect: true,
       reviewedAt: "SERVER_TIMESTAMP",
       fsrsSnapshot: { state: 0, reps: 0, lapses: 0, lastReview: null },
     });
