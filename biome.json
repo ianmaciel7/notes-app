@@ -16,6 +16,7 @@
       "!!**/build",
       "!!**/.stryker-tmp",
       "!!**/coverage",
+      "!!**/.firebase",
       "!!src/components/ui"
     ]
   },
