@@ -51,7 +51,7 @@ Implement the active recall certification study engine and continuous question f
 ## Decision Log
 
 - 2026-10-03 — Adopted direct click-to-validate feedback on options with automatic grounded explanation expansion (when available) for zero-friction active recall, replacing multi-step button interactions.
-- 2026-10-03 — Adopted `ExamList` (`useExamList`) in `src/components/notes-app/exam-list.tsx` to comply with `guard-component-naming.mjs` and `guard-notes-app-pattern.mjs` archetype suffixes.
+- 2026-10-03 — Adopted `ExamList` (`useExamList`) in component directory to comply with `guard-component-naming.mjs` and `guard-notes-app-pattern.mjs` archetype suffixes.
 
 ## Verification
 
