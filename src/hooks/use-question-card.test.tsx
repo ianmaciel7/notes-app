@@ -89,7 +89,7 @@ describe("useQuestionCard", () => {
       { wrapper: wrapperFor({ uid: "u1" }) },
     );
     expect(result.current.status).toBe("unanswered");
-    expect(result.current.selectedOptionIds).toEqual([]);
+    expect(result.current.answer).toBe(null);
     expect(result.current.isResolved).toBe(false);
   });
 
@@ -100,7 +100,7 @@ describe("useQuestionCard", () => {
     );
 
     await act(async () => {
-      result.current.selectOption("a");
+      result.current.setAnswer({ type: "single-choice", value: "a" });
     });
 
     expect(result.current.status).toBe("answeredCorrect");
@@ -126,7 +126,7 @@ describe("useQuestionCard", () => {
     );
 
     await act(async () => {
-      result.current.selectOption("b");
+      result.current.setAnswer({ type: "single-choice", value: "b" });
     });
 
     expect(result.current.status).toBe("answeredIncorrect");
@@ -140,13 +140,16 @@ describe("useQuestionCard", () => {
     );
 
     await act(async () => {
-      result.current.selectOption("b");
+      result.current.setAnswer({ type: "single-choice", value: "b" });
     });
     await act(async () => {
-      result.current.selectOption("a");
+      result.current.setAnswer({ type: "single-choice", value: "a" });
     });
 
-    expect(result.current.selectedOptionIds).toEqual(["b"]);
+    expect(result.current.answer).toEqual({
+      type: "single-choice",
+      value: "b",
+    });
     expect(mockSubmitAttempt).toHaveBeenCalledTimes(1);
   });
 
@@ -161,20 +164,20 @@ describe("useQuestionCard", () => {
     );
 
     await act(async () => {
-      result.current.selectOption("a");
+      result.current.setAnswer({ type: "multiple-choice", value: ["a"] });
     });
     expect(result.current.status).toBe("unanswered");
 
     await act(async () => {
-      result.current.selectOption("a");
+      result.current.setAnswer({ type: "multiple-choice", value: [] });
     });
-    expect(result.current.selectedOptionIds).toEqual([]);
+    expect(result.current.answer).toEqual({
+      type: "multiple-choice",
+      value: [],
+    });
 
     await act(async () => {
-      result.current.selectOption("a");
-    });
-    await act(async () => {
-      result.current.selectOption("b");
+      result.current.setAnswer({ type: "multiple-choice", value: ["a", "b"] });
     });
 
     expect(result.current.status).toBe("answeredCorrect");
@@ -196,7 +199,7 @@ describe("useQuestionCard", () => {
     expect(result.current.showExplanation).toBe(false);
 
     await act(async () => {
-      result.current.selectOption("a");
+      result.current.setAnswer({ type: "single-choice", value: "a" });
     });
     expect(result.current.showExplanation).toBe(true);
 
@@ -205,7 +208,7 @@ describe("useQuestionCard", () => {
       { wrapper: wrapperFor({ uid: "u1" }) },
     );
     await act(async () => {
-      bare.result.current.selectOption("a");
+      bare.result.current.setAnswer({ type: "single-choice", value: "a" });
     });
     expect(bare.result.current.showExplanation).toBe(false);
   });
@@ -239,7 +242,7 @@ describe("useQuestionCard", () => {
       { wrapper: wrapperFor({ uid: "u1" }) },
     );
     await act(async () => {
-      noCard.result.current.selectOption("a");
+      noCard.result.current.setAnswer({ type: "single-choice", value: "a" });
     });
     expect(noCard.result.current.status).toBe("answeredCorrect");
 
@@ -248,7 +251,7 @@ describe("useQuestionCard", () => {
       { wrapper: wrapperFor(null) },
     );
     await act(async () => {
-      noUser.result.current.selectOption("b");
+      noUser.result.current.setAnswer({ type: "single-choice", value: "b" });
     });
     expect(noUser.result.current.status).toBe("answeredIncorrect");
     expect(mockSubmitAttempt).not.toHaveBeenCalled();
@@ -262,12 +265,12 @@ describe("useQuestionCard", () => {
     );
 
     await act(async () => {
-      result.current.selectOption("a");
+      result.current.setAnswer({ type: "single-choice", value: "a" });
     });
 
     await waitFor(() => expect(result.current.hasSaveError).toBe(true));
     expect(result.current.status).toBe("unanswered");
-    expect(result.current.selectedOptionIds).toEqual([]);
+    expect(result.current.answer).toBe(null);
     expect(result.current.isSubmitting).toBe(false);
   });
 });
