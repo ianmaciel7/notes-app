@@ -6,7 +6,7 @@ import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { QuestionDropdownField as QuestionDropdownFieldType } from "@/types/question";
 
-type QuestionDropdownFieldSetProps = Omit<
+type QuestionDropdownFieldGroupProps = Omit<
   ComponentProps<typeof FieldGroup>,
   "children" | "onChange"
 > & {
@@ -20,7 +20,7 @@ type QuestionDropdownFieldSetProps = Omit<
   onValueChange: (next: Record<string, string>) => void;
 };
 
-function QuestionDropdownFieldSet({
+function QuestionDropdownFieldGroup({
   legend,
   dropdowns,
   value,
@@ -29,12 +29,12 @@ function QuestionDropdownFieldSet({
   onValueChange,
   className,
   ...props
-}: QuestionDropdownFieldSetProps) {
+}: QuestionDropdownFieldGroupProps) {
   const groupId = useId();
 
   return (
     <FieldGroup
-      data-slot="question-dropdown-field-set"
+      data-slot="question-dropdown-field-group"
       aria-label={legend}
       {...props}
       className={cn("min-w-0 gap-3", className)}
@@ -60,4 +60,4 @@ function QuestionDropdownFieldSet({
   );
 }
 
-export { QuestionDropdownFieldSet, type QuestionDropdownFieldSetProps };
+export { QuestionDropdownFieldGroup, type QuestionDropdownFieldGroupProps };

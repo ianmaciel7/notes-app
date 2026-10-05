@@ -4,7 +4,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { QuestionCaseStudyTabs } from "@/components/notes-app/question-case-study-tabs";
 import { QuestionChoiceFieldSet } from "@/components/notes-app/question-choice-field-set";
 import { QuestionDraggableItemGroup } from "@/components/notes-app/question-draggable-item-group";
-import { QuestionDropdownFieldSet } from "@/components/notes-app/question-dropdown-field-set";
+import { QuestionDropdownFieldGroup } from "@/components/notes-app/question-dropdown-field-group";
 import { QuestionFillBlankField } from "@/components/notes-app/question-fill-blank-field";
 import { QuestionHotspotFigure } from "@/components/notes-app/question-hotspot-figure";
 import { QuestionMatchingFieldSet } from "@/components/notes-app/question-matching-field-set";
@@ -152,7 +152,7 @@ function dropdownAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionDropdownFieldSet
+    <QuestionDropdownFieldGroup
       legend={question.prompt}
       dropdowns={question.dropdowns}
       value={answer?.type === "dropdown" ? answer.value : {}}

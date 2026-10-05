@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { QuestionChoiceFieldSet } from "@/components/notes-app/question-choice-field-set";
-import { QuestionDropdownFieldSet } from "@/components/notes-app/question-dropdown-field-set";
+import { QuestionDropdownFieldGroup } from "@/components/notes-app/question-dropdown-field-group";
 import { QuestionFillBlankField } from "@/components/notes-app/question-fill-blank-field";
 import { FieldDescription, FieldLegend, FieldSet } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
@@ -54,7 +54,7 @@ function renderPartControl({
 
   if (item.type === "dropdown") {
     return (
-      <QuestionDropdownFieldSet
+      <QuestionDropdownFieldGroup
         legend={item.prompt}
         dropdowns={item.dropdowns}
         value={asMapping(value)}
