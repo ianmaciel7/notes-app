@@ -44,4 +44,12 @@ if (process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATOR === "true") {
   - Auth Emulator: `9099` (UI on `4000`).
   - Firestore Emulator: `8080`.
 - **Seed Data Path**: `.firebase/seeds/` (version-controlled test account exports).
-- **Npm Emulator Command**: `pnpm run emulator` (`firebase emulators:start --only auth --import=./.firebase/seeds --export-on-exit=./.firebase/seeds`).
+- **Npm Emulator Commands**:
+  - `pnpm emulator` (`emulators:start --only auth,firestore --import=./.firebase/seeds --export-on-exit=./.firebase/seeds`).
+  - `pnpm emulator:dev` (`emulators:start --only auth,firestore --import=.emulator-data --export-on-exit=.emulator-data`).
+  - `pnpm seed:emulator` (`node scripts/tooling/seed-emulator.mjs`): seeds a Google-linked account (`demo@notesapp.dev`), space `demo-space`, and exam `gcp-cdl` with 12 questions and cards.
+- **Emulator Reset Endpoint (REST)**:
+  - Auth: `DELETE http://127.0.0.1:9099/emulator/v1/projects/{projectId}/accounts`
+  - Firestore: `DELETE http://127.0.0.1:8080/emulator/v1/projects/{projectId}/databases/(default)/documents`
+- **Google Sign-In Account Selection Invariant**:
+  - The Auth Emulator's Google sign-in popup widget (`http://127.0.0.1:9099/emulator/auth/handler?...`) only lists existing accounts that have the `google.com` provider ID attached (created via `signInWithIdp` with mock Google token, as performed by `seed:emulator`). Accounts created via password or anonymous sign-in do not appear in the Google account picker list.
