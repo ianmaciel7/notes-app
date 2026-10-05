@@ -62,3 +62,6 @@ opencode.json
 .claude/skills
 .junie/skills
 .kilo/skills
+
+.worktrees/
+.worktress/
