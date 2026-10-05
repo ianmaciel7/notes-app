@@ -11,7 +11,7 @@ import { QuestionMatchingFieldSet } from "@/components/notes-app/question-matchi
 import { QuestionMatrixFieldSet } from "@/components/notes-app/question-matrix-field-set";
 import { QuestionOrderingFieldSet } from "@/components/notes-app/question-ordering-field-set";
 import { QuestionSimulationFieldSet } from "@/components/notes-app/question-simulation-field-set";
-import { FieldGroup } from "@/components/ui/field";
+import { FieldSet } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type {
   QuestionProperties,
@@ -21,7 +21,7 @@ import type {
 } from "@/types/question";
 
 type QuestionAnswerFieldSetProps = Omit<
-  ComponentProps<"div">,
+  ComponentProps<typeof FieldSet>,
   "children" | "onChange"
 > & {
   question: QuestionProperties;
@@ -273,14 +273,14 @@ function QuestionAnswerFieldSet({
   ...props
 }: QuestionAnswerFieldSetProps) {
   return (
-    <FieldGroup
+    <FieldSet
       data-slot="question-answer-set"
       data-type={question.type}
       {...props}
       className={cn("min-w-0 gap-4", className)}
     >
       {answerControl(question, { answer, resolved, onAnswerChange })}
-    </FieldGroup>
+    </FieldSet>
   );
 }
 
