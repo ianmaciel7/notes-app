@@ -7,6 +7,8 @@ This directory documents key architectural decisions made throughout the lifecyc
 | ADR | Title | Status | Date |
 | --- | --- | --- | --- |
 | [0001](./0001-bootstrap-next-app.md) | [Bootstrap Project with Next.js, TypeScript, Tailwind CSS, Biome, and React Compiler](./0001-bootstrap-next-app.md) | Accepted | 2026-10-05 |
+| [0002](./0002-adopt-shadcn-base-nova-component-system.md) | [Adopt shadcn Base Nova UI Component System with Pointer Cursors](./0002-adopt-shadcn-base-nova-component-system.md) | Accepted | 2026-10-05 |
+| [0003](./0003-install-shadcn-typeset.md) | [Install shadcn/typeset Markdown Typography System](./0003-install-shadcn-typeset.md) | Accepted | 2026-10-05 |
 
 ## Format Guidelines
 
