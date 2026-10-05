@@ -388,6 +388,8 @@ function checkFile(filePath, content) {
   violations.push(...checkSpaceShellContract(filePath, fileName, content));
   violations.push(...checkRawLayoutWrappers(filePath, fileName, content));
   violations.push(...checkNativeSelectUsage(filePath, fileName, content));
+  violations.push(...checkFieldDescriptionNesting(filePath, fileName, content));
+  violations.push(...checkPrimitiveRoleAlignment(filePath, fileName, content));
   violations.push(...checkComponentRoleNames(filePath, fileName, content));
   violations.push(...checkComponentSlots(filePath, fileName, content));
 
@@ -423,6 +425,8 @@ export {
   checkDedicatedHookOwnsState,
   checkSpaceShellContract,
   checkNativeSelectUsage,
+  checkFieldDescriptionNesting,
+  checkPrimitiveRoleAlignment,
   checkComponentRoleNames,
   checkComponentSlots,
   checkFile,

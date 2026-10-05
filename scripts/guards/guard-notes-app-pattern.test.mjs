@@ -266,3 +266,60 @@ test("allows NativeSelect when used as accessible sr-only alternative", () => {
     [],
   );
 });
+
+test("rejects block elements (<div|ul|ol|p>) inside FieldDescription to prevent hydration error", () => {
+  const source = `
+    import { FieldDescription } from "@/components/ui/field";
+    function TestFieldDescription() {
+      return (
+        <FieldDescription data-slot="test-field-description">
+          <div className="text-sm">Cannot be inside p</div>
+        </FieldDescription>
+      );
+    }
+  `;
+
+  const violations = checkFile("test-field-description.tsx", source);
+  assert.ok(
+    violations.some(
+      (item) => item.rule === "notes-app-no-block-in-field-description",
+    ),
+  );
+});
+
+test("enforces primitive role alignment for FieldContent and Toggle", () => {
+  const fieldContentMismatch = `
+    import { FieldContent } from "@/components/ui/field";
+    function QuestionExplanationFieldDescription() {
+      return (
+        <FieldContent data-slot="question-explanation-field-description">
+          <div>Explanation</div>
+        </FieldContent>
+      );
+    }
+  `;
+
+  const violations1 = checkFile(
+    "question-explanation-field-description.tsx",
+    fieldContentMismatch,
+  );
+  assert.ok(
+    violations1.some(
+      (item) => item.rule === "notes-app-primitive-role-alignment",
+    ),
+  );
+
+  const toggleMismatch = `
+    import { Toggle } from "@/components/ui/toggle";
+    function QuestionHotspotButton() {
+      return <Toggle data-slot="question-hotspot-button" />;
+    }
+  `;
+
+  const violations2 = checkFile("question-hotspot-button.tsx", toggleMismatch);
+  assert.ok(
+    violations2.some(
+      (item) => item.rule === "notes-app-primitive-role-alignment",
+    ),
+  );
+});
