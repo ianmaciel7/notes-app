@@ -30,7 +30,7 @@ not be weakened merely to make a change pass.
 | Emojis | Zero emoji literals in project-owned source under `src/`; registry-managed `src/components/ui/` is excluded | `pnpm run check:emojis` | task end |
 | i18n Strings | Zero hardcoded user-facing strings or forbidden copy in UI components | `pnpm run check:i18n` | task end |
 | Duplication | At most 10% by configured jscpd threshold | `pnpm run check:duplication` | task end |
-| Code health | Fallow health score, complexity findings (cyclomatic or cognitive above 10, CRAP above 30), and functions above 60 lines never regress past `scripts/guards/code-health-floor.json`; Biome also caps parameters at 5 and cognitive complexity at 15 | `pnpm run check:health` | task end |
+| Code health | Fallow health score, complexity findings (cyclomatic or cognitive above 10, CRAP above 30), and functions above 60 lines never regress past `scripts/guards/code-health-floor.json`; Biome also caps parameters at 5, cognitive complexity at 15, and function body length at 60 lines (the same limit Fallow tracks as a floor), and rejects nested ternaries, unbraced `if`/`else`, non-null assertions, enums, barrel files, `export *`, unused imports/variables, and `console` calls | `pnpm run check:health` | task end |
 | Code health, new code | Zero Fallow complexity, size, dead-code, or duplication findings introduced since `origin/main` | `pnpm run check:health:changed` | push |
 | Dependency audit | No high/critical package-manager advisories | `pnpm run check:security` | dependency/security review |
 | Dependency vulnerability regression | No newly introduced known vulnerability | OSV-Scanner differential workflow | PR |
@@ -57,3 +57,5 @@ Behavioral agent success rates are measured by live eval runs but are not yet a 
 | Exception | Scope | Owner | Reason | Added | Expires |
 | --- | --- | --- | --- | --- | --- |
 | Biome `suspicious/noDocumentCookie` off | `src/lib/i18n/locale-sync.ts` and its test | Repository owner | The locale cookie is written on the client so next-intl can read it on the server, and the Cookie Store API is outside the supported browser baseline. | 2026-10-01 | 2027-04-01 |
+| Biome `suspicious/noConsole` off | `scripts/**`, `.agents/**`, tests, stories, `e2e/**`, and `src/lib/error-capture/**` | Repository owner | CLI scripts and guards report through stdout/stderr, and the error-capture module deliberately forwards to the console. | 2026-10-05 | 2027-04-05 |
+| Biome `complexity/noExcessiveLinesPerFunction` off | Tests, stories, and `e2e/**` | Repository owner | `describe` and story blocks group many cases and are not logic units. | 2026-10-05 | 2027-04-05 |

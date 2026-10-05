@@ -153,6 +153,8 @@ Override whether a fix is treated as safe or unsafe per-rule:
 - **Domains**: `next: recommended`, `react: recommended`
 - **Assist**: `organizeImports: on`
 - **Recommended rules**: enabled globally
+- **Readability and size rules** (errors): `noExcessiveCognitiveComplexity` (15), `useMaxParams` (5), `noExcessiveLinesPerFunction` (60), `noNestedTernary`, `useBlockStatements`, `noUselessElse`, `useCollapsedElseIf`, `noParameterAssign`, `noNonNullAssertion`, `noEnum`, `useConsistentArrayType`, `noBarrelFile`, `noReExportAll`, `noConsole`, `noUnusedImports`, `noUnusedVariables`
+- **Overrides**: `noConsole` is off for scripts, tests, and `src/lib/error-capture/`; `noExcessiveLinesPerFunction` is off for tests and stories
 
 ---
 

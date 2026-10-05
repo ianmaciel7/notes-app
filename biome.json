@@ -24,7 +24,18 @@
     "enabled": true,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineEnding": "lf"
+    "lineEnding": "lf",
+    "lineWidth": 80
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "jsxQuoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "es5",
+      "bracketSpacing": true,
+      "arrowParentheses": "always"
+    }
   },
   "css": {
     "parser": {
@@ -38,15 +49,29 @@
       "complexity": {
         "noExcessiveCognitiveComplexity": {
           "level": "error",
-          "options": { "maxAllowedComplexity": 15 }
+          "options": {
+            "maxAllowedComplexity": 15
+          }
         },
         "useMaxParams": {
           "level": "error",
-          "options": { "max": 5 }
+          "options": {
+            "max": 5
+          }
+        },
+        "noExcessiveLinesPerFunction": {
+          "level": "error",
+          "options": {
+            "maxLines": 60,
+            "skipBlankLines": true,
+            "skipIifes": true
+          }
         }
       },
       "correctness": {
-        "noNestedComponentDefinitions": "error"
+        "noNestedComponentDefinitions": "error",
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
       },
       "style": {
         "useNamingConvention": {
@@ -55,16 +80,40 @@
             "strictCase": false,
             "conventions": [
               {
-                "selector": { "kind": "objectLiteralProperty" },
+                "selector": {
+                  "kind": "objectLiteralProperty"
+                },
                 "formats": ["camelCase", "PascalCase", "CONSTANT_CASE"]
               },
               {
-                "selector": { "kind": "typeProperty" },
+                "selector": {
+                  "kind": "typeProperty"
+                },
                 "formats": ["camelCase", "PascalCase", "CONSTANT_CASE"]
               }
             ]
           }
+        },
+        "noNestedTernary": "error",
+        "noUselessElse": "error",
+        "useCollapsedElseIf": "error",
+        "noParameterAssign": "error",
+        "noNonNullAssertion": "error",
+        "useBlockStatements": "error",
+        "noEnum": "error",
+        "useConsistentArrayType": {
+          "level": "error",
+          "options": {
+            "syntax": "shorthand"
+          }
         }
+      },
+      "suspicious": {
+        "noConsole": "error"
+      },
+      "performance": {
+        "noBarrelFile": "error",
+        "noReExportAll": "error"
       }
     },
     "domains": {
@@ -87,15 +136,45 @@
       ],
       "linter": {
         "rules": {
-          "suspicious": { "noDocumentCookie": "off" }
+          "suspicious": {
+            "noDocumentCookie": "off"
+          }
         }
       }
     },
     {
-      "includes": ["**/*.test.*", "**/*.spec.*"],
+      "includes": ["**/*.test.*", "**/*.spec.*", "**/*.stories.*", "e2e/**"],
       "linter": {
         "rules": {
-          "style": { "useNamingConvention": "off" }
+          "style": {
+            "useNamingConvention": "off"
+          },
+          "complexity": {
+            "noExcessiveLinesPerFunction": "off"
+          },
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["scripts/**", ".agents/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/lib/error-capture/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
         }
       }
     },
