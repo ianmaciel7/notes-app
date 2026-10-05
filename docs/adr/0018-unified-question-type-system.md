@@ -63,6 +63,10 @@ A pure converter (`migrate-legacy-question`) is the single implementation; a mig
 
 `@dnd-kit/core` provides pointer, keyboard, and screen-reader announcement support for `drag-and-drop`. The same question also offers a select-then-place interaction that does not need dragging.
 
+### 7. Full-card single-click interaction for choice questions
+
+`QuestionChoiceItem` delegates clicks across the full card container to its underlying control (`RadioGroupItem` or `Checkbox`) on a single click without requiring precision targeting of the text label or radio circle, while preserving native keyboard and direct input events.
+
 ## Consequences
 
 ### Positive

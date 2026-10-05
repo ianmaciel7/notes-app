@@ -51,6 +51,24 @@ function QuestionChoiceItem({
       orientation="horizontal"
       data-slot="question-choice-item"
       data-result={result}
+      onClick={(e) => {
+        if (disabled) return;
+        // If user directly clicked an interactive element or the label itself, let default behavior run
+        const target = e.target as HTMLElement | null;
+        if (
+          target?.closest("button") ||
+          target?.closest("input") ||
+          target?.closest("label") ||
+          target?.closest("a")
+        ) {
+          return;
+        }
+
+        const input = document.getElementById(inputId);
+        if (input) {
+          input.click();
+        }
+      }}
       {...props}
       className={cn(
         "rounded-lg border border-border p-3 font-normal transition-colors",

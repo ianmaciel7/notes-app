@@ -223,6 +223,28 @@ describe("question atomic components", () => {
       expect(item).toBeTruthy();
       expect(screen.getByText("A.")).toBeTruthy();
     });
+
+    it("triggers selection when clicking the item container", () => {
+      render(
+        <QuestionChoiceItem
+          option={{ id: "opt-1", text: "Cloud Storage" }}
+          marker="A"
+          mode="single"
+          inputId="choice-1"
+          selected={false}
+        />,
+      );
+      const item = screen
+        .getByText("Cloud Storage")
+        .closest('[data-slot="question-choice-item"]') as HTMLElement;
+      expect(item).toBeTruthy();
+
+      const radio = document.getElementById("choice-1") as HTMLElement;
+      const clickSpy = vi.spyOn(radio, "click");
+
+      item.click();
+      expect(clickSpy).toHaveBeenCalled();
+    });
   });
 
   describe("QuestionChoiceFieldSet", () => {
