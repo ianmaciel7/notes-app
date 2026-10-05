@@ -6,6 +6,7 @@ import {
   dropdownFixture,
   makeQuestionObject,
   matrixFixture,
+  multipleChoiceFixture,
   orderingFixture,
   simulationFixture,
   singleChoiceFixture,
@@ -387,6 +388,39 @@ describe("question atomic components", () => {
         </Wrapper>,
       );
       expect(screen.getByText("Commit Code")).toBeTruthy();
+    });
+
+    it("auto-checks multiple-choice after the expected selections", () => {
+      render(
+        <Wrapper>
+          <QuestionCard
+            spaceId="space-1"
+            question={makeQuestionObject(multipleChoiceFixture, "q2")}
+            card={null}
+            index={1}
+            total={12}
+          />
+        </Wrapper>,
+      );
+
+      expect(screen.queryByText("checkAnswer")).toBeNull();
+      fireEvent.click(
+        screen
+          .getByText("Cloud Run")
+          .closest('[data-slot="question-choice-item"]') as HTMLElement,
+      );
+      fireEvent.click(
+        screen
+          .getByText("Cloud Functions")
+          .closest('[data-slot="question-choice-item"]') as HTMLElement,
+      );
+
+      expect(
+        screen
+          .getAllByText("Select every serverless product.")[0]
+          .closest('[data-slot="question-card"]')
+          ?.getAttribute("data-status"),
+      ).toBe("answeredCorrect");
     });
 
     it("checks the corrected ordering answer", () => {

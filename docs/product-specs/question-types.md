@@ -21,17 +21,17 @@ One question model with twelve explicit types, per-type answering controls, imme
 | Type | Control | Submission | Correct when |
 | --- | --- | --- | --- |
 | `single-choice` | radio group | on selection | the selected option is the key |
-| `multiple-choice` | checkboxes | confirm | the selected set equals the key set |
+| `multiple-choice` | checkboxes | when the expected number of options is selected | the selected set equals the key set |
 | `true-false` | radio group (`true`, `false`; optional `yes-no` labels) | on selection | the selection is the key |
 | `fill-blank` | text input or textarea | confirm | the normalized text equals an accepted answer |
-| `dropdown` | one select per dropdown field | confirm | every dropdown holds its key option |
-| `matching` | one select per left item | confirm | every left item maps to its key item |
+| `dropdown` | one select per dropdown field | when every field is selected | every dropdown holds its key option |
+| `matching` | one select per left item | when every left item is paired | every left item maps to its key item |
 | `ordering` | reorderable item list (keyboard accessible) | confirm | the items are in the exact key order |
-| `drag-and-drop` | draggable items and slots (keyboard accessible) | confirm | every slot holds its key item |
-| `hotspot` | image with clickable areas | confirm | the selected areas equal the key areas |
-| `matrix` | one choice per row across shared columns | confirm | every row maps to its key column |
+| `drag-and-drop` | draggable items and slots (keyboard accessible) | when every slot is filled | every slot holds its key item |
+| `hotspot` | image with clickable areas | when the expected number of areas is selected | the selected areas equal the key areas |
+| `matrix` | one choice per row across shared columns | when every row is answered | every row maps to its key column |
 | `simulation` | simulated terminal accepting typed commands | confirm | every normalized key command was executed |
-| `case-study` | tabs for context sections plus answerable parts | confirm | every part is correct (reveal-only when it has no parts) |
+| `case-study` | tabs for context sections plus answerable parts | when every part is answered | every part is correct (reveal-only when it has no parts) |
 
 ## User Stories
 

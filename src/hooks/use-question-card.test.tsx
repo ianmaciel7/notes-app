@@ -163,9 +163,9 @@ describe("useQuestionCard", () => {
     expect(mockSubmitAttempt).toHaveBeenCalledTimes(1);
   });
 
-  it("waits for confirmation before grading multiple-choice", async () => {
+  it("grades multiple-choice automatically after enough options are selected", async () => {
     const { result } = renderCard(multipleChoiceFixture);
-    expect(result.current.needsConfirmation).toBe(true);
+    expect(result.current.needsConfirmation).toBe(false);
     expect(result.current.canSubmit).toBe(false);
 
     act(() => {
@@ -178,11 +178,8 @@ describe("useQuestionCard", () => {
     act(() => {
       result.current.setAnswer({ type: "multiple-choice", value: ["a", "c"] });
     });
-    await act(async () => {
-      result.current.submit();
-    });
+    await waitFor(() => expect(result.current.status).toBe("answeredCorrect"));
 
-    expect(result.current.status).toBe("answeredCorrect");
     expect(mockSubmitAttempt.mock.calls[0][0].input.submittedAnswer).toEqual({
       type: "multiple-choice",
       value: ["a", "c"],
@@ -191,30 +188,9 @@ describe("useQuestionCard", () => {
 
   it.each([
     [
-      "dropdown",
-      dropdownFixture,
-      { type: "dropdown", value: { dd1: "cs", dd2: "csql" } },
-    ],
-    [
-      "matching",
-      matchingFixture,
-      { type: "matching", value: { l1: "r1", l2: "r2" } },
-    ],
-    [
       "ordering",
       orderingFixture,
       { type: "ordering", value: ["step1", "step2", "step3"] },
-    ],
-    [
-      "drag-and-drop",
-      dragAndDropFixture,
-      { type: "drag-and-drop", value: { s1: "i1", s2: "i2" } },
-    ],
-    ["hotspot", hotspotFixture, { type: "hotspot", value: ["lb"] }],
-    [
-      "matrix",
-      matrixFixture,
-      { type: "matrix", value: { r1: "col_true", r2: "col_false" } },
     ],
     [
       "simulation",
@@ -224,11 +200,6 @@ describe("useQuestionCard", () => {
         value: ["gcloud run deploy my-app --image gcr.io/demo/app"],
       },
     ],
-    [
-      "case-study",
-      caseStudyFixture,
-      { type: "case-study", value: { p1: "a", p2: "pay per use" } },
-    ],
   ] as const)("grades %s after confirmation", async (_type, properties, answer) => {
     const { result } = renderCard(properties);
 
@@ -236,7 +207,7 @@ describe("useQuestionCard", () => {
     expect(result.current.canSubmit).toBe(false);
 
     act(() => {
-      result.current.setAnswer(answer as SubmittedAnswer);
+      result.current.setAnswer(answer as unknown as SubmittedAnswer);
     });
     expect(result.current.canSubmit).toBe(true);
     expect(result.current.status).toBe("unanswered");
@@ -255,6 +226,100 @@ describe("useQuestionCard", () => {
         }),
       }),
     );
+  });
+
+  it("grades matching automatically after every pair is selected", async () => {
+    const { result } = renderCard(matchingFixture);
+
+    expect(result.current.needsConfirmation).toBe(false);
+
+    act(() => {
+      result.current.setAnswer({ type: "matching", value: { l1: "r1" } });
+    });
+    expect(result.current.status).toBe("unanswered");
+    expect(mockSubmitAttempt).not.toHaveBeenCalled();
+
+    act(() => {
+      result.current.setAnswer({
+        type: "matching",
+        value: { l1: "r1", l2: "r2" },
+      });
+    });
+
+    await waitFor(() => expect(result.current.status).toBe("answeredCorrect"));
+    expect(mockSubmitAttempt).toHaveBeenCalledTimes(1);
+  });
+
+  it("grades drag-and-drop automatically after every slot is filled", async () => {
+    const { result } = renderCard(dragAndDropFixture);
+
+    expect(result.current.needsConfirmation).toBe(false);
+    act(() => {
+      result.current.setAnswer({
+        type: "drag-and-drop",
+        value: { s1: "i1", s2: "i2" },
+      });
+    });
+
+    await waitFor(() => expect(result.current.status).toBe("answeredCorrect"));
+    expect(mockSubmitAttempt).toHaveBeenCalledTimes(1);
+  });
+
+  it("grades hotspot automatically after the expected area is selected", async () => {
+    const { result } = renderCard(hotspotFixture);
+
+    expect(result.current.needsConfirmation).toBe(false);
+    act(() => {
+      result.current.setAnswer({ type: "hotspot", value: ["lb"] });
+    });
+
+    await waitFor(() => expect(result.current.status).toBe("answeredCorrect"));
+    expect(mockSubmitAttempt).toHaveBeenCalledTimes(1);
+  });
+
+  it("grades dropdown automatically after every menu is filled", async () => {
+    const { result } = renderCard(dropdownFixture);
+
+    expect(result.current.needsConfirmation).toBe(false);
+    act(() => {
+      result.current.setAnswer({
+        type: "dropdown",
+        value: { dd1: "cs", dd2: "csql" },
+      });
+    });
+
+    await waitFor(() => expect(result.current.status).toBe("answeredCorrect"));
+    expect(mockSubmitAttempt).toHaveBeenCalledTimes(1);
+  });
+
+  it("grades a case study automatically after every part is answered", async () => {
+    const { result } = renderCard(caseStudyFixture);
+
+    expect(result.current.needsConfirmation).toBe(false);
+    act(() => {
+      result.current.setAnswer({
+        type: "case-study",
+        value: { p1: "a", p2: "pay per use" },
+      });
+    });
+
+    await waitFor(() => expect(result.current.status).toBe("answeredCorrect"));
+    expect(mockSubmitAttempt).toHaveBeenCalledTimes(1);
+  });
+
+  it("grades matrix automatically after every row is answered", async () => {
+    const { result } = renderCard(matrixFixture);
+
+    expect(result.current.needsConfirmation).toBe(false);
+    act(() => {
+      result.current.setAnswer({
+        type: "matrix",
+        value: { r1: "col_true", r2: "col_false" },
+      });
+    });
+
+    await waitFor(() => expect(result.current.status).toBe("answeredCorrect"));
+    expect(mockSubmitAttempt).toHaveBeenCalledTimes(1);
   });
 
   it("does not submit an incomplete answer", async () => {

@@ -32,7 +32,7 @@ export type UseQuestionCardResult = {
   isResolved: boolean;
   /** False for a case study without parts: there is nothing to answer or grade. */
   isGradable: boolean;
-  /** Types other than `single-choice` and `true-false` are sent with a confirm action. */
+  /** Structured types are sent with a confirm action, except multiple-choice. */
   needsConfirmation: boolean;
   canSubmit: boolean;
   /** The general explanation is only surfaced after resolution and when present. */
@@ -64,7 +64,16 @@ export function useQuestionCard({
     properties.type !== "case-study" || properties.parts.length > 0;
   const isInstant =
     properties.type === "single-choice" || properties.type === "true-false";
-  const needsConfirmation = isGradable && !isInstant;
+  const needsConfirmation =
+    isGradable &&
+    !isInstant &&
+    properties.type !== "multiple-choice" &&
+    properties.type !== "matching" &&
+    properties.type !== "drag-and-drop" &&
+    properties.type !== "hotspot" &&
+    properties.type !== "dropdown" &&
+    properties.type !== "case-study" &&
+    properties.type !== "matrix";
   const canSubmit =
     !isResolved && !isSubmitting && isAnswerComplete(properties, answer);
 
@@ -104,7 +113,33 @@ export function useQuestionCard({
   const setAnswer = (next: SubmittedAnswer) => {
     if (!isGradable || isResolved || isSubmitting) return;
     setAnswerState(next);
-    if (isInstant) void submitAnswer(next);
+    const autoSubmitMultipleChoice =
+      properties.type === "multiple-choice" &&
+      next.type === "multiple-choice" &&
+      next.value.length >= properties.correctAnswer.length;
+    const autoSubmitMatching =
+      properties.type === "matching" && isAnswerComplete(properties, next);
+    const autoSubmitDragAndDrop =
+      properties.type === "drag-and-drop" && isAnswerComplete(properties, next);
+    const autoSubmitHotspot =
+      properties.type === "hotspot" &&
+      next.type === "hotspot" &&
+      next.value.length >= properties.correctAnswer.length;
+    const autoSubmitWhenComplete =
+      (properties.type === "dropdown" ||
+        properties.type === "case-study" ||
+        properties.type === "matrix") &&
+      isAnswerComplete(properties, next);
+    if (
+      isInstant ||
+      autoSubmitMultipleChoice ||
+      autoSubmitMatching ||
+      autoSubmitDragAndDrop ||
+      autoSubmitHotspot ||
+      autoSubmitWhenComplete
+    ) {
+      void submitAnswer(next);
+    }
   };
 
   const submit = () => {

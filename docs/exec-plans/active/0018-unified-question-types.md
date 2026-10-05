@@ -59,7 +59,7 @@ Implement the unified question type system from [ADR 0018](../../adr/0018-unifie
 - 2026-10-03 — Drag and drop uses `@dnd-kit` for keyboard and screen-reader support instead of a hand-written implementation.
 - 2026-10-03 — Drag and drop presents a symmetric 2-column layout (Available items / Answer area) matching certification exams, with full-width action tiles and practical select controls visible upon focus without duplicating placed cards.
 - 2026-10-03 — The hotspot answer is built from toggle buttons placed over the image (not an interactive SVG) so each area is a native button with `aria-pressed`; `@dnd-kit/core` is the only new dependency (sortable and utilities are not needed).
-- 2026-10-03 — Multiple choice no longer auto-submits when the number of selections reaches the number of correct options, because that leaked how many options are correct; it uses an explicit confirm action.
+- 2026-10-05 — Completed selection-based question types auto-submit when their required selections are complete; ordering and simulation retain explicit confirmation because their controls have a separate completion action.
 - 2026-10-05 — Choice cards delegate outer card clicks to the target input control via `onClick` handler, guarding interactive sub-targets (button, input, label, link) to prevent double clicks and ensure 1-click selection across the entire card.
 
 ## Verification
