@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { AuthContext } from "@/lib/auth-context";
@@ -52,6 +52,16 @@ const dummyCard: Card = {
   lastReview: null,
   stateVersion: 1,
   updatedAt: new Date(),
+};
+
+const question10OrderingFixture = {
+  ...orderingFixture,
+  prompt: "Place the Cloud Build steps in the correct sequence.",
+  items: [
+    orderingFixture.items[1],
+    orderingFixture.items[0],
+    ...orderingFixture.items.slice(2),
+  ],
 };
 
 function Wrapper({ children }: { children: ReactNode }) {
@@ -377,6 +387,27 @@ describe("question atomic components", () => {
         </Wrapper>,
       );
       expect(screen.getByText("Commit Code")).toBeTruthy();
+    });
+
+    it("checks the corrected ordering answer", () => {
+      render(
+        <Wrapper>
+          <QuestionCard
+            spaceId="space-1"
+            question={makeQuestionObject(question10OrderingFixture, "q10")}
+            card={null}
+            index={9}
+            total={12}
+          />
+        </Wrapper>,
+      );
+
+      fireEvent.click(
+        screen.getByRole("button", { name: "Move Run Tests up" }),
+      );
+      fireEvent.click(screen.getByRole("button", { name: "checkAnswer" }));
+
+      expect(screen.getByText("correct")).toBeTruthy();
     });
 
     it("renders matrix question card", () => {

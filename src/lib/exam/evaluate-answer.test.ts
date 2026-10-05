@@ -2,10 +2,14 @@ import { describe, expect, it } from "vitest";
 import {
   caseStudyFixture,
   dragAndDropFixture,
+  dropdownFixture,
   fillBlankFixture,
   hotspotFixture,
   matchingFixture,
+  matrixFixture,
   multipleChoiceFixture,
+  orderingFixture,
+  simulationFixture,
   singleChoiceFixture,
   trueFalseFixture,
 } from "@/lib/exam/question-fixtures";
@@ -105,6 +109,53 @@ describe("evaluateAnswer: matching and drag-and-drop", () => {
     expect(grade({ s1: "i2", s2: "i1" })).toBe(false);
     expect(grade({ s1: "i1" })).toBe(false);
     expect(grade({})).toBe(false);
+  });
+});
+
+describe("evaluateAnswer: structured mappings and commands", () => {
+  it("grades dropdown and matrix mappings", () => {
+    expect(
+      evaluateAnswer(dropdownFixture, {
+        type: "dropdown",
+        value: { dd1: "cs", dd2: "csql" },
+      }).correct,
+    ).toBe(true);
+    expect(
+      evaluateAnswer(matrixFixture, {
+        type: "matrix",
+        value: { r1: "col_true", r2: "col_false" },
+      }).correct,
+    ).toBe(true);
+  });
+
+  it("requires ordering to match exactly", () => {
+    expect(
+      evaluateAnswer(orderingFixture, {
+        type: "ordering",
+        value: ["step1", "step2", "step3"],
+      }).correct,
+    ).toBe(true);
+    expect(
+      evaluateAnswer(orderingFixture, {
+        type: "ordering",
+        value: ["step2", "step1", "step3"],
+      }).correct,
+    ).toBe(false);
+  });
+
+  it("accepts the required simulation command", () => {
+    expect(
+      evaluateAnswer(simulationFixture, {
+        type: "simulation",
+        value: ["GCLOUD RUN DEPLOY MY-APP --IMAGE GCR.IO/DEMO/APP"],
+      }).correct,
+    ).toBe(true);
+    expect(
+      evaluateAnswer(simulationFixture, {
+        type: "simulation",
+        value: ["gcloud run deploy other-app --image gcr.io/demo/app"],
+      }).correct,
+    ).toBe(false);
   });
 });
 

@@ -5,15 +5,21 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthContext } from "@/lib/auth-context";
 import {
   caseStudyFixture,
+  dragAndDropFixture,
+  dropdownFixture,
   fillBlankFixture,
   hotspotFixture,
   makeQuestionObject,
+  matchingFixture,
+  matrixFixture,
   multipleChoiceFixture,
+  orderingFixture,
+  simulationFixture,
   singleChoiceFixture,
   trueFalseFixture,
 } from "@/lib/exam/question-fixtures";
 import type { Card } from "@/types/card";
-import type { QuestionProperties } from "@/types/question";
+import type { QuestionProperties, SubmittedAnswer } from "@/types/question";
 import { useQuestionCard } from "./use-question-card";
 
 const mockSubmitAttempt = vi.fn();
@@ -181,6 +187,74 @@ describe("useQuestionCard", () => {
       type: "multiple-choice",
       value: ["a", "c"],
     });
+  });
+
+  it.each([
+    [
+      "dropdown",
+      dropdownFixture,
+      { type: "dropdown", value: { dd1: "cs", dd2: "csql" } },
+    ],
+    [
+      "matching",
+      matchingFixture,
+      { type: "matching", value: { l1: "r1", l2: "r2" } },
+    ],
+    [
+      "ordering",
+      orderingFixture,
+      { type: "ordering", value: ["step1", "step2", "step3"] },
+    ],
+    [
+      "drag-and-drop",
+      dragAndDropFixture,
+      { type: "drag-and-drop", value: { s1: "i1", s2: "i2" } },
+    ],
+    ["hotspot", hotspotFixture, { type: "hotspot", value: ["lb"] }],
+    [
+      "matrix",
+      matrixFixture,
+      { type: "matrix", value: { r1: "col_true", r2: "col_false" } },
+    ],
+    [
+      "simulation",
+      simulationFixture,
+      {
+        type: "simulation",
+        value: ["gcloud run deploy my-app --image gcr.io/demo/app"],
+      },
+    ],
+    [
+      "case-study",
+      caseStudyFixture,
+      { type: "case-study", value: { p1: "a", p2: "pay per use" } },
+    ],
+  ] as const)("grades %s after confirmation", async (_type, properties, answer) => {
+    const { result } = renderCard(properties);
+
+    expect(result.current.needsConfirmation).toBe(true);
+    expect(result.current.canSubmit).toBe(false);
+
+    act(() => {
+      result.current.setAnswer(answer as SubmittedAnswer);
+    });
+    expect(result.current.canSubmit).toBe(true);
+    expect(result.current.status).toBe("unanswered");
+
+    await act(async () => {
+      result.current.submit();
+    });
+
+    expect(result.current.status).toBe("answeredCorrect");
+    expect(mockSubmitAttempt).toHaveBeenCalledWith(
+      expect.objectContaining({
+        input: expect.objectContaining({
+          questionType: properties.type,
+          submittedAnswer: answer,
+          isCorrect: true,
+        }),
+      }),
+    );
   });
 
   it("does not submit an incomplete answer", async () => {

@@ -185,9 +185,13 @@ service cloud.firestore {
             'multiple-choice',
             'true-false',
             'fill-blank',
+            'dropdown',
             'matching',
+            'ordering',
             'drag-and-drop',
             'hotspot',
+            'matrix',
+            'simulation',
             'case-study'
           ]
           && ('submittedAnswer' in data)

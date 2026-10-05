@@ -315,6 +315,22 @@ describe("Firebase Firestore Emulator Integration", () => {
       ),
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await setDoc(attemptRef, buildAttemptData(spaceId));
+
+    for (const [suffix, questionType, value] of [
+      ["dropdown", "dropdown", { dd1: "cs", dd2: "csql" }],
+      ["ordering", "ordering", ["step1", "step2"]],
+      ["matrix", "matrix", { r1: "col_true" }],
+      ["simulation", "simulation", ["gcloud run deploy app"]],
+    ] as const) {
+      await setDoc(
+        nested("attempts", `a-${suffix}`),
+        buildAttemptData(spaceId, {
+          questionType,
+          submittedAnswer: { type: questionType, value },
+        }),
+      );
+    }
+
     await expect(updateDoc(attemptRef, { rating: 1 })).rejects.toMatchObject(
       PERMISSION_DENIED,
     );

@@ -40,9 +40,13 @@ export function parseSubmittedAnswer(input: unknown): SubmittedAnswer | null {
       return value === "true" || value === "false" ? { type, value } : null;
     case "multiple-choice":
     case "hotspot":
+    case "ordering":
+    case "simulation":
       return isStringList(value) && value.length > 0 && !hasDuplicates(value)
         ? { type, value }
         : null;
+    case "dropdown":
+    case "matrix":
     case "matching":
     case "drag-and-drop":
       return isIdMap(value) ? { type, value } : null;

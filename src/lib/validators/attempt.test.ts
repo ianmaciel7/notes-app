@@ -74,9 +74,13 @@ describe("validateCreateAttemptInput", () => {
     ["multiple-choice", ["a", "b"]],
     ["true-false", "false"],
     ["fill-blank", "run"],
+    ["dropdown", { dd1: "cs", dd2: "csql" }],
     ["matching", { l1: "r1" }],
+    ["ordering", ["step1", "step2"]],
     ["drag-and-drop", { s1: "i1" }],
     ["hotspot", ["lb"]],
+    ["matrix", { r1: "col_true" }],
+    ["simulation", ["gcloud run deploy app"]],
     ["case-study", { p1: "a", p2: ["x"] }],
   ])("accepts a %s answer", (type, value) => {
     const result = validateCreateAttemptInput({
