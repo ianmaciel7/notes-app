@@ -84,6 +84,7 @@ Versions are owned by `package.json`. Tools without a package entry are run thro
 | **dependency-cruiser** | Enforce module boundaries and forbid circular imports. | `rtk pnpm deps:check` | [.dependency-cruiser.cjs](./.dependency-cruiser.cjs), [.agents/skills/dependency-cruiser/SKILL.md](./.agents/skills/dependency-cruiser/SKILL.md) |
 | **jscpd** | Detect copy-pasted code. | `rtk pnpm check:duplication` | [.jscpd.json](./.jscpd.json) |
 | **Knip** | Find unused files, exports, and dependencies. | `rtk pnpm knip` | [knip.json](./knip.json) |
+| **Fallow** | Measure code health: cyclomatic and cognitive complexity, CRAP, function size, maintainability, and hotspots. `check:health` ratchets the project against `scripts/guards/code-health-floor.json` (it may only improve; `-- --tighten` locks a gain); `check:health:changed` fails only on findings introduced since `origin/main`. Test files, `src/components/ui/`, and registry skills are excluded from the health scope. | `rtk pnpm check:health`<br/>`rtk pnpm check:health:changed`<br/>`rtk pnpm exec fallow health --complexity` | [.fallowrc.json](./.fallowrc.json), [CONSTRAINTS.md](./CONSTRAINTS.md) |
 | **Project guards** | Enforce repository-specific policy that standard tools cannot express, including notes-app composition and dedicated-hook ownership (see [section 5](#5-script-architecture)). | `rtk pnpm check:floor`<br/>`rtk pnpm check:doc-sync`<br/>`rtk pnpm check:rsc`<br/>`rtk pnpm check:props`<br/>`rtk pnpm check:naming`<br/>`rtk pnpm check:ui-pattern`<br/>`rtk pnpm check:conventions`<br/>`rtk pnpm check:emojis`<br/>`rtk pnpm check:i18n` | [CONSTRAINTS.md](./CONSTRAINTS.md), [CONVENTIONS.md](./CONVENTIONS.md) |
 | **Docs verifiers** | Check control docs, links, paths, and routing for drift. | `rtk pnpm verify:docs`<br/>`rtk pnpm check:docs` | [.agents/skills/verify-docs/SKILL.md](./.agents/skills/verify-docs/SKILL.md) |
 | **Health check** | Run the consolidated quality, test, context, and RTK savings check. | `rtk pnpm verify:health` | [.agents/skills/verify-health/SKILL.md](./.agents/skills/verify-health/SKILL.md) |
@@ -128,8 +129,8 @@ internal script paths. Numeric thresholds and what blocks a change are owned by
 
 | Aggregate | Runs | Wired to |
 | :--- | :--- | :--- |
-| `check:push` | types, Biome on committed changes since `origin/main`, RSC/naming/props/UI-pattern/convention/i18n/emoji guards, dependency-cruiser, floor guard, Vitest affected tests | `pre-push` hook |
-| `check:fast` | full types, full Biome CI, RSC, naming, conventions, props, UI-pattern, emojis, i18n, dependency-cruiser, floor guard, full Vitest, jscpd | task-end / handoff |
+| `check:push` | types, Biome on committed changes since `origin/main`, RSC/naming/props/UI-pattern/convention/i18n/emoji guards, dependency-cruiser, code-health ratchet and new-findings gate, floor guard, Vitest affected tests | `pre-push` hook |
+| `check:fast` | full types, full Biome CI, RSC, naming, conventions, props, UI-pattern, emojis, i18n, dependency-cruiser, code-health ratchet, floor guard, full Vitest, jscpd | task-end / handoff |
 | `check:ci` | `check:fast`, docs verifier, harness tests, guard tests, Firebase emulator tests, coverage, agents sync check, production build | `Quality` workflow |
 | `harness:health` | `check:ci`, Knip, mutation tests, dependency audit | `Harness Health` workflow |
 | `verify:health` | consolidated health report | on demand |

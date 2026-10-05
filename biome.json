@@ -39,6 +39,10 @@
         "noExcessiveCognitiveComplexity": {
           "level": "error",
           "options": { "maxAllowedComplexity": 15 }
+        },
+        "useMaxParams": {
+          "level": "error",
+          "options": { "max": 5 }
         }
       },
       "correctness": {

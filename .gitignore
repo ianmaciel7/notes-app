@@ -92,3 +92,6 @@ RTK.md.bak
 
 # Persisted local Firebase emulator state (pnpm emulator:dev)
 .emulator-data/
+
+# fallow cache and snapshots
+/.fallow/

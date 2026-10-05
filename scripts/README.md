@@ -11,6 +11,12 @@ The `guards/guard-question-types.mjs` check keeps the canonical question type
 list synchronized with submitted-answer parsing and the Firestore persistence
 rules. It runs through `check:fast` and `test:guards`.
 
+The `scripts/guards/guard-code-health.mjs` check ratchets the Fallow health score,
+complexity findings, and large-function count against
+`guards/code-health-floor.json`. Metrics may only improve; run
+`pnpm run check:health -- --tighten` to lock a gain. It runs through
+`check:fast` and `test:guards`.
+
 Keep tests and helper modules beside the entry point they support. Prefer stable `pnpm` commands over direct script paths in contributor-facing documentation. Scripts must use repository-relative paths, avoid secrets, remain non-interactive in CI, and avoid product-domain behavior.
 
 ## Compatibility entry points

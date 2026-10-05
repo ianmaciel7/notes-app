@@ -30,6 +30,8 @@ not be weakened merely to make a change pass.
 | Emojis | Zero emoji literals in project-owned source under `src/`; registry-managed `src/components/ui/` is excluded | `pnpm run check:emojis` | task end |
 | i18n Strings | Zero hardcoded user-facing strings or forbidden copy in UI components | `pnpm run check:i18n` | task end |
 | Duplication | At most 10% by configured jscpd threshold | `pnpm run check:duplication` | task end |
+| Code health | Fallow health score, complexity findings (cyclomatic or cognitive above 10, CRAP above 30), and functions above 60 lines never regress past `scripts/guards/code-health-floor.json`; Biome also caps parameters at 5 and cognitive complexity at 15 | `pnpm run check:health` | task end |
+| Code health, new code | Zero Fallow complexity, size, dead-code, or duplication findings introduced since `origin/main` | `pnpm run check:health:changed` | push |
 | Dependency audit | No high/critical package-manager advisories | `pnpm run check:security` | dependency/security review |
 | Dependency vulnerability regression | No newly introduced known vulnerability | OSV-Scanner differential workflow | PR |
 | Accessibility | Lighthouse accessibility score at least 0.90 | `pnpm run lighthouse` | relevant UI changes |
