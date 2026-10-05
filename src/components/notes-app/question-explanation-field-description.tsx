@@ -1,12 +1,11 @@
 "use client";
 
 import type { ComponentProps } from "react";
-import { FieldDescription } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { GroundedExplanation } from "@/types/question";
 
 type QuestionExplanationFieldDescriptionProps = Omit<
-  ComponentProps<typeof FieldDescription>,
+  ComponentProps<"div">,
   "children"
 > & {
   explanation: GroundedExplanation;
@@ -18,14 +17,18 @@ function QuestionExplanationFieldDescription({
   ...props
 }: QuestionExplanationFieldDescriptionProps) {
   return (
-    <FieldDescription
+    <div
       data-slot="question-explanation-field-description"
       {...props}
-      className={cn("flex flex-col gap-2", className)}
+      className={cn(
+        "flex flex-col gap-2 text-left text-sm leading-normal font-normal text-muted-foreground",
+        "[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary",
+        className,
+      )}
     >
-      <p className="whitespace-pre-wrap text-sm text-foreground">
+      <div className="whitespace-pre-wrap text-sm text-foreground">
         {explanation.text}
-      </p>
+      </div>
       {explanation.referenceUrls.length > 0 ? (
         <ul className="flex flex-col gap-1">
           {explanation.referenceUrls.map((url) => (
@@ -42,7 +45,7 @@ function QuestionExplanationFieldDescription({
           ))}
         </ul>
       ) : null}
-    </FieldDescription>
+    </div>
   );
 }
 
