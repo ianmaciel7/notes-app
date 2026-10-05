@@ -27,7 +27,7 @@ function sameSet(a: readonly string[], b: readonly string[]): boolean {
 
 function sameMapping(
   submitted: Readonly<Record<string, string>>,
-  key: Readonly<Record<string, string>>,
+  key: Readonly<Record<string, string>>
 ): boolean {
   const keyIds = Object.keys(key);
   return (
@@ -39,7 +39,7 @@ function sameMapping(
 /** True when `value` equals an accepted answer after normalization. */
 export function matchesAcceptedAnswer(
   value: string,
-  accepted: readonly string[],
+  accepted: readonly string[]
 ): boolean {
   const normalized = normalizeText(value);
   return (
@@ -52,9 +52,11 @@ export function matchesAcceptedAnswer(
 function evaluatePartAnswer(
   part: CaseStudyPart,
   key: CaseStudyPartAnswer | undefined,
-  value: CaseStudyPartAnswer | undefined,
+  value: CaseStudyPartAnswer | undefined
 ): boolean {
-  if (key === undefined || value === undefined) return false;
+  if (key === undefined || value === undefined) {
+    return false;
+  }
 
   switch (part.type) {
     case "fill-blank":
@@ -73,7 +75,7 @@ function evaluatePartAnswer(
         !Array.isArray(key) &&
         sameMapping(
           value as Record<string, string>,
-          key as Record<string, string>,
+          key as Record<string, string>
         )
       );
     case "multiple-choice":
@@ -86,7 +88,7 @@ function evaluatePartAnswer(
 
 function isCorrect(
   question: QuestionProperties,
-  answer: SubmittedAnswer,
+  answer: SubmittedAnswer
 ): boolean {
   switch (question.type) {
     case "single-choice":
@@ -125,8 +127,9 @@ function isCorrect(
         sameSet(answer.value, question.correctAnswer)
       );
     case "simulation": {
-      if (answer.type !== "simulation" || !Array.isArray(answer.value))
+      if (answer.type !== "simulation" || !Array.isArray(answer.value)) {
         return false;
+      }
       const executed = answer.value.map(normalizeText);
       const target = question.correctAnswer.map(normalizeText);
       return target.every((expected) => executed.includes(expected));
@@ -139,8 +142,8 @@ function isCorrect(
           evaluatePartAnswer(
             part,
             question.correctAnswer[part.id],
-            submitted[part.id],
-          ),
+            submitted[part.id]
+          )
         )
       );
     }
@@ -153,7 +156,7 @@ function isCorrect(
  */
 export function evaluateAnswer(
   question: QuestionProperties,
-  answer: SubmittedAnswer,
+  answer: SubmittedAnswer
 ): AnswerEvaluation {
   const correct = isCorrect(question, answer);
   return { correct, rating: correct ? 3 : 1 };

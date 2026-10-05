@@ -7,17 +7,11 @@ import {
   signInWithPopup,
   signInWithRedirect,
 } from "firebase/auth";
-import { AlertCircle, ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Suspense, useEffect, useState } from "react";
 import { GoogleSignInButton } from "@/components/notes-app/google-sign-in-button";
-import { LoginCard } from "@/components/notes-app/login-card";
-import { RequireGuest } from "@/components/notes-app/require-guest";
-import { SignUpCard } from "@/components/notes-app/sign-up-card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { LoginShell } from "@/components/notes-app/login-shell";
 import { captureError } from "@/lib/error-capture/capture";
 import { auth } from "@/lib/firebase/client";
 import { getSafeNextUrl } from "@/lib/navigation/safe-next-url";
@@ -42,7 +36,9 @@ function getErrorCode(err: unknown): string | undefined {
 
 function shouldFallBackToRedirect(err: unknown): boolean {
   const code = getErrorCode(err);
-  if (code !== undefined && REDIRECT_FALLBACK_CODES.has(code)) return true;
+  if (code !== undefined && REDIRECT_FALLBACK_CODES.has(code)) {
+    return true;
+  }
   return (
     err instanceof Error && err.message.includes(NO_MATCHING_FRAME_MESSAGE)
   );
@@ -82,7 +78,9 @@ function LoginContent() {
         router.replace(nextUrl);
       }
     } catch (err: unknown) {
-      if (getErrorCode(err) === "auth/cancelled-popup-request") return;
+      if (getErrorCode(err) === "auth/cancelled-popup-request") {
+        return;
+      }
 
       if (shouldFallBackToRedirect(err)) {
         try {
@@ -116,69 +114,19 @@ function LoginContent() {
   }
 
   return (
-    <RequireGuest redirectTo={nextUrl}>
-      <div className="relative min-h-[90vh] flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden">
-        {/* Background decoration: subtle ambient light gradients */}
-        <div className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none">
-          <div className="size-125 bg-primary/[0.03] dark:bg-primary/[0.05] rounded-full blur-3xl transform -translate-y-12" />
-          <div className="size-75 bg-primary/[0.02] dark:bg-primary/[0.04] rounded-full blur-2xl transform translate-x-32 translate-y-24" />
-        </div>
-
-        {/* Main Authentication Card */}
-        <div className="w-full max-w-sm space-y-4">
-          {authError ? (
-            <Alert variant="destructive" data-testid="auth-error">
-              <AlertCircle className="size-4" />
-              <AlertDescription>{authError}</AlertDescription>
-            </Alert>
-          ) : null}
-          {mode === "signIn" ? (
-            <LoginCard
-              onSignIn={() => router.replace(nextUrl)}
-              onSignUpClick={() => setMode("signUp")}
-            >
-              <GoogleSignInButton onClick={handleGoogleLogin} />
-              <Button
-                data-testid="anonymous-sign-in-btn"
-                type="button"
-                variant="ghost"
-                className="w-full text-muted-foreground hover:text-foreground"
-                onClick={handleAnonymousLogin}
-              >
-                {t("continueAsGuest")}
-              </Button>
-            </LoginCard>
-          ) : (
-            <SignUpCard
-              onSignUp={() => router.replace(nextUrl)}
-              onSignInClick={() => setMode("signIn")}
-            >
-              <GoogleSignInButton onClick={handleGoogleLogin} />
-              <Button
-                data-testid="anonymous-sign-up-btn"
-                type="button"
-                variant="ghost"
-                className="w-full text-muted-foreground hover:text-foreground"
-                onClick={handleAnonymousLogin}
-              >
-                {t("continueAsGuest")}
-              </Button>
-            </SignUpCard>
-          )}
-        </div>
-
-        {/* Footer subtle help link */}
-        <div className="mt-8 text-center text-xs text-muted-foreground">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1 hover:text-foreground underline-offset-4 hover:underline transition-colors"
-          >
-            <ArrowLeft className="size-3.5" aria-hidden="true" />
-            {t("backToHome")}
-          </Link>
-        </div>
-      </div>
-    </RequireGuest>
+    <LoginShell
+      nextUrl={nextUrl}
+      mode={mode}
+      authError={authError}
+      backToHome={t("backToHome")}
+      continueAsGuest={t("continueAsGuest")}
+      googleSignIn={<GoogleSignInButton onClick={handleGoogleLogin} />}
+      onSignIn={() => router.replace(nextUrl)}
+      onSignUp={() => router.replace(nextUrl)}
+      onSignInClick={() => setMode("signIn")}
+      onSignUpClick={() => setMode("signUp")}
+      onAnonymousLogin={handleAnonymousLogin}
+    />
   );
 }
 

@@ -117,7 +117,7 @@ describe("submitAttempt against the Firestore emulator", () => {
           submittedAnswer: { type: "matching", value: { l1: "r1", l2: "r2" } },
           isCorrect: true,
         },
-      }),
+      })
     ).rejects.toMatchObject({ code: "permission-denied" });
     expect((await getDocs(collection(spaceRef, "attempts"))).size).toBe(1);
 

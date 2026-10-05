@@ -34,7 +34,7 @@ describe("isAnswerComplete", () => {
   it("is false without a draft or with another type", () => {
     expect(isAnswerComplete(singleChoiceFixture, null)).toBe(false);
     expect(
-      isAnswerComplete(singleChoiceFixture, { type: "hotspot", value: ["a"] }),
+      isAnswerComplete(singleChoiceFixture, { type: "hotspot", value: ["a"] })
     ).toBe(false);
   });
 
@@ -43,7 +43,7 @@ describe("isAnswerComplete", () => {
       isAnswerComplete(singleChoiceFixture, {
         type: "single-choice",
         value: "a",
-      }),
+      })
     ).toBe(true);
   });
 
@@ -52,19 +52,19 @@ describe("isAnswerComplete", () => {
       isAnswerComplete(multipleChoiceFixture, {
         type: "multiple-choice",
         value: ["a"],
-      }),
+      })
     ).toBe(true);
     expect(
-      isAnswerComplete(hotspotFixture, { type: "hotspot", value: [] }),
+      isAnswerComplete(hotspotFixture, { type: "hotspot", value: [] })
     ).toBe(false);
   });
 
   it("needs non-blank text for fill-blank", () => {
     expect(
-      isAnswerComplete(fillBlankFixture, { type: "fill-blank", value: "  " }),
+      isAnswerComplete(fillBlankFixture, { type: "fill-blank", value: "  " })
     ).toBe(false);
     expect(
-      isAnswerComplete(fillBlankFixture, { type: "fill-blank", value: "x" }),
+      isAnswerComplete(fillBlankFixture, { type: "fill-blank", value: "x" })
     ).toBe(true);
   });
 
@@ -73,25 +73,25 @@ describe("isAnswerComplete", () => {
       isAnswerComplete(matchingFixture, {
         type: "matching",
         value: { l1: "r1" },
-      }),
+      })
     ).toBe(false);
     expect(
       isAnswerComplete(matchingFixture, {
         type: "matching",
         value: { l1: "r1", l2: "r1" },
-      }),
+      })
     ).toBe(true);
     expect(
       isAnswerComplete(dragAndDropFixture, {
         type: "drag-and-drop",
         value: { s1: "i1" },
-      }),
+      })
     ).toBe(false);
     expect(
       isAnswerComplete(dragAndDropFixture, {
         type: "drag-and-drop",
         value: { s1: "i1", s2: "i2" },
-      }),
+      })
     ).toBe(true);
   });
 
@@ -104,8 +104,8 @@ describe("isAnswerComplete", () => {
     expect(
       isAnswerComplete(
         { ...caseStudyFixture, parts: [], correctAnswer: {} },
-        { type: "case-study", value: {} },
-      ),
+        { type: "case-study", value: {} }
+      )
     ).toBe(false);
   });
 });

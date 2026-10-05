@@ -29,13 +29,19 @@ function checkItems(value: unknown, minimum: number): ItemsResult {
 }
 
 function parseSlots(value: unknown): QuestionDropField[] | null {
-  if (!Array.isArray(value)) return null;
+  if (!Array.isArray(value)) {
+    return null;
+  }
   const slots: QuestionDropField[] = [];
   for (const entry of value) {
-    if (!isRecord(entry)) return null;
+    if (!isRecord(entry)) {
+      return null;
+    }
     const id = readText(entry.id);
     const label = readText(entry.label);
-    if (!id || !label) return null;
+    if (!id || !label) {
+      return null;
+    }
     slots.push({ id, label });
   }
   return slots;
@@ -49,39 +55,57 @@ function readMapping(
   answer: unknown,
   keys: readonly string[],
   values: readonly string[],
-  injective: boolean,
+  injective: boolean
 ): Record<string, string> | null {
-  if (!isRecord(answer)) return null;
+  if (!isRecord(answer)) {
+    return null;
+  }
   const entries = Object.entries(answer);
-  if (entries.length !== keys.length) return null;
+  if (entries.length !== keys.length) {
+    return null;
+  }
 
   const mapping: Record<string, string> = {};
   for (const [key, value] of entries) {
-    if (!keys.includes(key)) return null;
-    if (typeof value !== "string" || !values.includes(value)) return null;
+    if (!keys.includes(key)) {
+      return null;
+    }
+    if (typeof value !== "string" || !values.includes(value)) {
+      return null;
+    }
     mapping[key] = value;
   }
-  if (injective && hasDuplicates(Object.values(mapping))) return null;
+  if (injective && hasDuplicates(Object.values(mapping))) {
+    return null;
+  }
   return mapping;
 }
 
 export function validateMatchingBody(
   raw: Record<string, unknown>,
-  errors: QuestionFieldErrors,
+  errors: QuestionFieldErrors
 ): QuestionBody | undefined {
   const left = checkItems(raw.leftItems, 2);
   const right = checkItems(raw.rightItems, 2);
-  if (left.error) errors.leftItems = left.error;
-  if (right.error) errors.rightItems = right.error;
+  if (left.error) {
+    errors.leftItems = left.error;
+  }
+  if (right.error) {
+    errors.rightItems = right.error;
+  }
 
   const mapping = readMapping(
     raw.correctAnswer,
     left.items.map((item) => item.id),
     right.items.map((item) => item.id),
-    false,
+    false
   );
-  if (!mapping) errors.correctAnswer = "invalidCorrectAnswer";
-  if (left.error || right.error || !mapping) return undefined;
+  if (!mapping) {
+    errors.correctAnswer = "invalidCorrectAnswer";
+  }
+  if (left.error || right.error || !mapping) {
+    return undefined;
+  }
 
   return {
     type: "matching",
@@ -93,10 +117,12 @@ export function validateMatchingBody(
 
 export function validateDragAndDropBody(
   raw: Record<string, unknown>,
-  errors: QuestionFieldErrors,
+  errors: QuestionFieldErrors
 ): QuestionBody | undefined {
   const items = checkItems(raw.items, 1);
-  if (items.error) errors.items = items.error;
+  if (items.error) {
+    errors.items = items.error;
+  }
 
   const slots = parseSlots(raw.slots);
   if (!slots || slots.length === 0) {
@@ -110,11 +136,15 @@ export function validateDragAndDropBody(
         raw.correctAnswer,
         slots.map((slot) => slot.id),
         items.items.map((item) => item.id),
-        true,
+        true
       )
     : null;
-  if (!mapping) errors.correctAnswer = "invalidCorrectAnswer";
-  if (items.error || errors.slots || !slots || !mapping) return undefined;
+  if (!mapping) {
+    errors.correctAnswer = "invalidCorrectAnswer";
+  }
+  if (items.error || errors.slots || !slots || !mapping) {
+    return undefined;
+  }
 
   return {
     type: "drag-and-drop",
@@ -126,17 +156,19 @@ export function validateDragAndDropBody(
 
 export function validateOrderingBody(
   raw: Record<string, unknown>,
-  errors: QuestionFieldErrors,
+  errors: QuestionFieldErrors
 ): QuestionBody | undefined {
   const items = checkItems(raw.items, 2);
-  if (items.error) errors.items = items.error;
+  if (items.error) {
+    errors.items = items.error;
+  }
 
   const valid =
     Array.isArray(raw.correctAnswer) &&
     raw.correctAnswer.length === items.items.length &&
     raw.correctAnswer.every(
       (id) =>
-        typeof id === "string" && items.items.some((item) => item.id === id),
+        typeof id === "string" && items.items.some((item) => item.id === id)
     ) &&
     !hasDuplicates(raw.correctAnswer as string[]);
 
@@ -144,7 +176,9 @@ export function validateOrderingBody(
     errors.correctAnswer = "invalidCorrectAnswer";
   }
 
-  if (items.error || !valid) return undefined;
+  if (items.error || !valid) {
+    return undefined;
+  }
 
   return {
     type: "ordering",
@@ -154,15 +188,21 @@ export function validateOrderingBody(
 }
 
 function parseDropdownOptions(
-  optionsRaw: unknown,
+  optionsRaw: unknown
 ): Array<{ id: string; text: string }> | null {
-  if (!Array.isArray(optionsRaw) || optionsRaw.length < 2) return null;
+  if (!Array.isArray(optionsRaw) || optionsRaw.length < 2) {
+    return null;
+  }
   const options = [];
   for (const opt of optionsRaw) {
-    if (!isRecord(opt)) return null;
+    if (!isRecord(opt)) {
+      return null;
+    }
     const optId = readText(opt.id);
     const text = readText(opt.text);
-    if (!optId || !text) return null;
+    if (!optId || !text) {
+      return null;
+    }
     options.push({ id: optId, text });
   }
   return hasDuplicates(options.map((o) => o.id)) ? null : options;
@@ -176,14 +216,20 @@ export function parseDropdownsList(list: unknown):
     }>
   | "invalidDropdowns"
   | "duplicateId" {
-  if (!Array.isArray(list) || list.length === 0) return "invalidDropdowns";
+  if (!Array.isArray(list) || list.length === 0) {
+    return "invalidDropdowns";
+  }
   const parsed = [];
   for (const dd of list) {
-    if (!isRecord(dd)) return "invalidDropdowns";
+    if (!isRecord(dd)) {
+      return "invalidDropdowns";
+    }
     const id = readText(dd.id);
     const label = dd.label !== undefined ? readText(dd.label) : undefined;
     const options = parseDropdownOptions(dd.options);
-    if (!id || !options) return "invalidDropdowns";
+    if (!id || !options) {
+      return "invalidDropdowns";
+    }
     parsed.push({ id, ...(label ? { label } : {}), options });
   }
   return hasDuplicates(parsed.map((p) => p.id)) ? "duplicateId" : parsed;
@@ -191,7 +237,7 @@ export function parseDropdownsList(list: unknown):
 
 export function validateDropdownBody(
   raw: Record<string, unknown>,
-  errors: QuestionFieldErrors,
+  errors: QuestionFieldErrors
 ): QuestionBody | undefined {
   const dropdownsResult = parseDropdownsList(raw.dropdowns);
   if (typeof dropdownsResult === "string") {
@@ -225,7 +271,7 @@ export function validateDropdownBody(
 
 export function validateMatrixBody(
   raw: Record<string, unknown>,
-  errors: QuestionFieldErrors,
+  errors: QuestionFieldErrors
 ): QuestionBody | undefined {
   if (!Array.isArray(raw.columns) || raw.columns.length < 2) {
     errors.columns = "invalidColumns";
@@ -233,17 +279,23 @@ export function validateMatrixBody(
   if (!Array.isArray(raw.rows) || raw.rows.length < 1) {
     errors.rows = "invalidRows";
   }
-  if (errors.columns || errors.rows) return undefined;
+  if (errors.columns || errors.rows) {
+    return undefined;
+  }
 
   const columns = (raw.columns as unknown[]).map((col) => {
-    if (!isRecord(col)) return null;
+    if (!isRecord(col)) {
+      return null;
+    }
     const id = readText(col.id);
     const label = readText(col.label);
     return id && label ? { id, label } : null;
   });
 
   const rows = (raw.rows as unknown[]).map((row) => {
-    if (!isRecord(row)) return null;
+    if (!isRecord(row)) {
+      return null;
+    }
     const id = readText(row.id);
     const prompt = readText(row.prompt);
     return id && prompt ? { id, prompt } : null;
@@ -297,7 +349,7 @@ export function validateMatrixBody(
 
 export function validateSimulationBody(
   raw: Record<string, unknown>,
-  errors: QuestionFieldErrors,
+  errors: QuestionFieldErrors
 ): QuestionBody | undefined {
   const scenarioDescription = readText(raw.scenarioDescription);
   if (!scenarioDescription) {

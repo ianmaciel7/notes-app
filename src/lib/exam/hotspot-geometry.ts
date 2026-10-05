@@ -45,11 +45,13 @@ export function areaBox(shape: HotspotShape): AreaBox {
 
 /** CSS `clip-path` (relative to the bounding box) that cuts a polygon out of its box. */
 export function areaClipPath(shape: HotspotShape): string | undefined {
-  if (shape.kind !== "polygon") return undefined;
+  if (shape.kind !== "polygon") {
+    return undefined;
+  }
   const { left, top, width, height } = polygonBounds(shape.points);
   const points = shape.points.map(
     ({ x, y }) =>
-      `${((x - left) / width) * 100}% ${((y - top) / height) * 100}%`,
+      `${((x - left) / width) * 100}% ${((y - top) / height) * 100}%`
   );
   return `polygon(${points.join(", ")})`;
 }

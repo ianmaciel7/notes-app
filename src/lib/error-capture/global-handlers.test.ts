@@ -40,7 +40,7 @@ describe("installGlobalErrorCapture", () => {
       expect.objectContaining({
         message: "uncaught",
         context: { filename: "app.js", lineno: 3, colno: 9 },
-      }),
+      })
     );
   });
 
@@ -49,7 +49,7 @@ describe("installGlobalErrorCapture", () => {
 
     expect(console.error).toHaveBeenCalledWith(
       "[error-capture:window-error]",
-      expect.objectContaining({ message: "Script error." }),
+      expect.objectContaining({ message: "Script error." })
     );
   });
 
@@ -66,7 +66,7 @@ describe("installGlobalErrorCapture", () => {
 
     expect(console.error).toHaveBeenCalledWith(
       "[error-capture:unhandled-rejection]",
-      expect.objectContaining({ message: "rejected" }),
+      expect.objectContaining({ message: "rejected" })
     );
   });
 

@@ -16,19 +16,23 @@ export function isValidLocale(locale: unknown): locale is SupportedLocale {
 }
 
 export function getClientCookieLocale(): SupportedLocale | null {
-  if (typeof document === "undefined") return null;
+  if (typeof document === "undefined") {
+    return null;
+  }
   const match = document.cookie.match(
-    new RegExp(`(?:^|; )${LOCALE_COOKIE_NAME}=([^;]*)`),
+    new RegExp(`(?:^|; )${LOCALE_COOKIE_NAME}=([^;]*)`)
   );
   const value = match ? decodeURIComponent(match[1]) : null;
   return isValidLocale(value) ? value : null;
 }
 
 export function setClientCookieLocale(locale: SupportedLocale): void {
-  if (typeof document === "undefined") return;
+  if (typeof document === "undefined") {
+    return;
+  }
   const maxAge = 60 * 60 * 24 * 365; // 1 year
   document.cookie = `${LOCALE_COOKIE_NAME}=${encodeURIComponent(
-    locale,
+    locale
   )}; path=/; max-age=${maxAge}; SameSite=Lax`;
   try {
     localStorage.setItem(LOCALE_COOKIE_NAME, locale);
@@ -39,7 +43,7 @@ export function setClientCookieLocale(locale: SupportedLocale): void {
 
 export function syncFirebaseLocale(
   authInstance: Auth,
-  locale: SupportedLocale,
+  locale: SupportedLocale
 ): void {
   authInstance.languageCode = locale;
   setClientCookieLocale(locale);

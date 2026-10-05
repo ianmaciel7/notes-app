@@ -41,7 +41,7 @@ export default async function RootLayout({
         "antialiased",
         geist.variable,
         geistMono.variable,
-        "font-sans",
+        "font-sans"
       )}
     >
       <body className="min-h-full flex flex-col">

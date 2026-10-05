@@ -5,18 +5,18 @@ function isIdMap(value: unknown): value is Record<string, string> {
   return (
     isRecord(value) &&
     Object.values(value).every(
-      (entry) => typeof entry === "string" && entry.trim() !== "",
+      (entry) => typeof entry === "string" && entry.trim() !== ""
     )
   );
 }
 
 function isPartAnswerMap(
-  value: unknown,
+  value: unknown
 ): value is Record<string, string | string[]> {
   return (
     isRecord(value) &&
     Object.values(value).every(
-      (entry) => typeof entry === "string" || isStringList(entry),
+      (entry) => typeof entry === "string" || isStringList(entry)
     )
   );
 }
@@ -29,7 +29,9 @@ function isNonEmptyText(value: unknown): value is string {
 
 /** Narrows an untrusted value to a well-formed `SubmittedAnswer`, or null. */
 export function parseSubmittedAnswer(input: unknown): SubmittedAnswer | null {
-  if (!isRecord(input)) return null;
+  if (!isRecord(input)) {
+    return null;
+  }
   const { type, value } = input;
 
   switch (type) {

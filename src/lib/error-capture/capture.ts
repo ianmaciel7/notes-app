@@ -38,7 +38,7 @@ function readDigest(error: unknown): string | undefined {
 }
 
 export function normalizeError(
-  error: unknown,
+  error: unknown
 ): Pick<CapturedError, "name" | "message" | "stack" | "digest"> {
   if (error instanceof Error) {
     return {
@@ -65,9 +65,13 @@ export function normalizeError(
 // duplicates inside a short window are dropped regardless of source.
 function isDuplicate(key: string, now: number): boolean {
   for (const [seenKey, seenAt] of recentlyReported) {
-    if (now - seenAt > DEDUPE_WINDOW_MS) recentlyReported.delete(seenKey);
+    if (now - seenAt > DEDUPE_WINDOW_MS) {
+      recentlyReported.delete(seenKey);
+    }
   }
-  if (recentlyReported.has(key)) return true;
+  if (recentlyReported.has(key)) {
+    return true;
+  }
   recentlyReported.set(key, now);
   return false;
 }
@@ -78,12 +82,14 @@ function isDuplicate(key: string, now: number): boolean {
  */
 export function captureError(
   error: unknown,
-  { source, context, severity = "error" }: CaptureErrorOptions,
+  { source, context, severity = "error" }: CaptureErrorOptions
 ): CapturedError | null {
   const normalized = normalizeError(error);
   const now = Date.now();
   const key = `${normalized.name}|${normalized.message}|${normalized.digest ?? ""}`;
-  if (isDuplicate(key, now)) return null;
+  if (isDuplicate(key, now)) {
+    return null;
+  }
 
   const captured: CapturedError = {
     ...normalized,

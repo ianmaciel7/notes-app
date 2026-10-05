@@ -24,7 +24,7 @@ describe("useQuestionOrderingFieldSet", () => {
         value: [],
         resolved: false,
         onValueChange,
-      }),
+      })
     );
 
     expect(onValueChange).toHaveBeenCalledWith(["i1", "i2", "i3"]);
@@ -38,7 +38,7 @@ describe("useQuestionOrderingFieldSet", () => {
         value: ["i1", "i2", "i3"],
         resolved: false,
         onValueChange,
-      }),
+      })
     );
 
     act(() => {
@@ -56,7 +56,7 @@ describe("useQuestionOrderingFieldSet", () => {
         value: ["i1", "i2", "i3"],
         resolved: true,
         onValueChange,
-      }),
+      })
     );
 
     act(() => {
@@ -70,7 +70,7 @@ describe("useQuestionOrderingFieldSet", () => {
         value: ["i1", "i2", "i3"],
         resolved: false,
         onValueChange,
-      }),
+      })
     );
 
     act(() => {
@@ -88,7 +88,7 @@ describe("useQuestionOrderingFieldSet", () => {
         value: ["i1", "i2", "i3"],
         resolved: false,
         onValueChange,
-      }),
+      })
     );
 
     act(() => {
@@ -112,7 +112,7 @@ describe("useQuestionOrderingFieldSet", () => {
         value: ["i1", "i2", "i3"],
         resolved: false,
         onValueChange,
-      }),
+      })
     );
 
     expect(result.current.activeId).toBeNull();
@@ -143,7 +143,7 @@ describe("useQuestionOrderingFieldSet", () => {
         value: ["i1", "i2", "i3"],
         resolved: false,
         onValueChange,
-      }),
+      })
     );
 
     const { announcements } = result.current.accessibility;

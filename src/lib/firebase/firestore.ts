@@ -43,7 +43,7 @@ export async function reconnectFirestore(): Promise<void> {
 const FIRESTORE_EMULATOR_HOST =
   process.env.NEXT_PUBLIC_FIREBASE_FIRESTORE_EMULATOR_HOST || "127.0.0.1";
 const FIRESTORE_EMULATOR_PORT = Number(
-  process.env.NEXT_PUBLIC_FIREBASE_FIRESTORE_EMULATOR_PORT || 8080,
+  process.env.NEXT_PUBLIC_FIREBASE_FIRESTORE_EMULATOR_PORT || 8080
 );
 
 const shouldUseEmulator =
@@ -58,9 +58,11 @@ const globalForFirestore = globalThis as unknown as {
 
 export function connectToFirestoreEmulator(
   host = FIRESTORE_EMULATOR_HOST,
-  port = FIRESTORE_EMULATOR_PORT,
+  port = FIRESTORE_EMULATOR_PORT
 ): void {
-  if (globalForFirestore.FIREBASE_FIRESTORE_EMULATOR_CONNECTED) return;
+  if (globalForFirestore.FIREBASE_FIRESTORE_EMULATOR_CONNECTED) {
+    return;
+  }
   try {
     connectFirestoreEmulator(db, host, port);
     globalForFirestore.FIREBASE_FIRESTORE_EMULATOR_CONNECTED = true;

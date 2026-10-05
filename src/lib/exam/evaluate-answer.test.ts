@@ -32,24 +32,24 @@ describe("evaluateAnswer: choice", () => {
       evaluateAnswer(singleChoiceFixture, {
         type: "single-choice",
         value: "b",
-      }),
+      })
     ).toEqual({ correct: true, rating: 3 });
     expect(
       evaluateAnswer(singleChoiceFixture, {
         type: "single-choice",
         value: "a",
-      }),
+      })
     ).toEqual({ correct: false, rating: 1 });
   });
 
   it("grades true-false by the key", () => {
     expect(
       evaluateAnswer(trueFalseFixture, { type: "true-false", value: "true" })
-        .correct,
+        .correct
     ).toBe(true);
     expect(
       evaluateAnswer(trueFalseFixture, { type: "true-false", value: "false" })
-        .correct,
+        .correct
     ).toBe(false);
   });
 
@@ -68,7 +68,7 @@ describe("evaluateAnswer: choice", () => {
   it("rejects an answer of another type", () => {
     expect(
       evaluateAnswer(singleChoiceFixture, { type: "true-false", value: "true" })
-        .correct,
+        .correct
     ).toBe(false);
   });
 });
@@ -118,13 +118,13 @@ describe("evaluateAnswer: structured mappings and commands", () => {
       evaluateAnswer(dropdownFixture, {
         type: "dropdown",
         value: { dd1: "cs", dd2: "csql" },
-      }).correct,
+      }).correct
     ).toBe(true);
     expect(
       evaluateAnswer(matrixFixture, {
         type: "matrix",
         value: { r1: "col_true", r2: "col_false" },
-      }).correct,
+      }).correct
     ).toBe(true);
   });
 
@@ -133,13 +133,13 @@ describe("evaluateAnswer: structured mappings and commands", () => {
       evaluateAnswer(orderingFixture, {
         type: "ordering",
         value: ["step1", "step2", "step3"],
-      }).correct,
+      }).correct
     ).toBe(true);
     expect(
       evaluateAnswer(orderingFixture, {
         type: "ordering",
         value: ["step2", "step1", "step3"],
-      }).correct,
+      }).correct
     ).toBe(false);
   });
 
@@ -148,13 +148,13 @@ describe("evaluateAnswer: structured mappings and commands", () => {
       evaluateAnswer(simulationFixture, {
         type: "simulation",
         value: ["GCLOUD RUN DEPLOY MY-APP --IMAGE GCR.IO/DEMO/APP"],
-      }).correct,
+      }).correct
     ).toBe(true);
     expect(
       evaluateAnswer(simulationFixture, {
         type: "simulation",
         value: ["gcloud run deploy other-app --image gcr.io/demo/app"],
-      }).correct,
+      }).correct
     ).toBe(false);
   });
 });
@@ -171,11 +171,10 @@ describe("evaluateAnswer: hotspot", () => {
   it("supports several correct areas", () => {
     const question = { ...hotspotFixture, correctAnswer: ["lb", "db"] };
     expect(
-      evaluateAnswer(question, { type: "hotspot", value: ["db", "lb"] })
-        .correct,
+      evaluateAnswer(question, { type: "hotspot", value: ["db", "lb"] }).correct
     ).toBe(true);
     expect(
-      evaluateAnswer(question, { type: "hotspot", value: ["lb"] }).correct,
+      evaluateAnswer(question, { type: "hotspot", value: ["lb"] }).correct
     ).toBe(false);
   });
 });
@@ -218,13 +217,13 @@ describe("evaluateAnswer: case-study", () => {
     };
     const value = { m: ["b", "a"], t: "false" };
     expect(
-      evaluateAnswer(question, { type: "case-study", value }).correct,
+      evaluateAnswer(question, { type: "case-study", value }).correct
     ).toBe(true);
     expect(
       evaluateAnswer(question, {
         type: "case-study",
         value: { ...value, m: ["a"] },
-      }).correct,
+      }).correct
     ).toBe(false);
   });
 });

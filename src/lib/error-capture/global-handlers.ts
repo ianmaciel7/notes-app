@@ -14,10 +14,14 @@ function isIgnoredMessage(message: string): boolean {
  * rejections. Idempotent; returns a function that removes the listeners.
  */
 export function installGlobalErrorCapture(target: Window = window): () => void {
-  if (uninstall) return uninstall;
+  if (uninstall) {
+    return uninstall;
+  }
 
   const onError = (event: ErrorEvent) => {
-    if (isIgnoredMessage(event.message)) return;
+    if (isIgnoredMessage(event.message)) {
+      return;
+    }
     captureError(event.error ?? event.message, {
       source: "window-error",
       context: {

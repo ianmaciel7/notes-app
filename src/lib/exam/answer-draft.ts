@@ -12,7 +12,7 @@ import type {
  * also submits.
  */
 export function createEmptyAnswer(
-  question: QuestionProperties,
+  question: QuestionProperties
 ): SubmittedAnswer | null {
   switch (question.type) {
     case "single-choice":
@@ -36,10 +36,14 @@ export function createEmptyAnswer(
 
 function isPartAnswered(
   part: CaseStudyPart,
-  value: CaseStudyPartAnswer | undefined,
+  value: CaseStudyPartAnswer | undefined
 ): boolean {
-  if (value === undefined) return false;
-  if (Array.isArray(value)) return value.length > 0;
+  if (value === undefined) {
+    return false;
+  }
+  if (Array.isArray(value)) {
+    return value.length > 0;
+  }
   if (typeof value === "object") {
     return Object.keys(value).length > 0 && Object.values(value).every(Boolean);
   }
@@ -48,78 +52,110 @@ function isPartAnswered(
     : value !== "";
 }
 
+function isTextAnswerComplete(
+  answer: Extract<SubmittedAnswer, { type: "fill-blank" }>
+): boolean {
+  return normalizeText(answer.value) !== "";
+}
+
+function isCollectionAnswerComplete(
+  answer: Extract<
+    SubmittedAnswer,
+    { type: "multiple-choice" | "hotspot" | "simulation" }
+  >
+): boolean {
+  return answer.value.length > 0;
+}
+
+function isOrderingAnswerComplete(
+  question: Extract<QuestionProperties, { type: "ordering" }>,
+  answer: Extract<SubmittedAnswer, { type: "ordering" }>
+): boolean {
+  return answer.value.length === question.items.length;
+}
+
+function isMappedAnswerComplete(
+  values: Record<string, unknown>,
+  ids: readonly string[]
+): boolean {
+  return ids.every((id) => Object.hasOwn(values, id) && Boolean(values[id]));
+}
+
+function isCaseStudyAnswerComplete(
+  question: Extract<QuestionProperties, { type: "case-study" }>,
+  answer: Extract<SubmittedAnswer, { type: "case-study" }>
+): boolean {
+  return (
+    question.parts.length > 0 &&
+    question.parts.every(
+      (part) =>
+        Object.hasOwn(answer.value, part.id) &&
+        isPartAnswered(part, answer.value[part.id])
+    )
+  );
+}
+
 /**
  * True once every part of the answer is filled in, which is when it may be
  * submitted. Completeness is separate from correctness and never reveals the key.
  */
 export function isAnswerComplete(
   question: QuestionProperties,
-  answer: SubmittedAnswer | null,
+  answer: SubmittedAnswer | null
 ): boolean {
-  if (answer === null || answer.type !== question.type) return false;
+  if (answer === null || answer.type !== question.type) {
+    return false;
+  }
 
   switch (question.type) {
     case "single-choice":
     case "true-false":
       return true;
     case "fill-blank":
-      return (
-        answer.type === question.type && normalizeText(answer.value) !== ""
+      return isTextAnswerComplete(
+        answer as Extract<SubmittedAnswer, { type: "fill-blank" }>
       );
     case "multiple-choice":
     case "hotspot":
-      return answer.type === question.type && answer.value.length > 0;
+      return isCollectionAnswerComplete(
+        answer as Extract<
+          SubmittedAnswer,
+          { type: "multiple-choice" | "hotspot" }
+        >
+      );
     case "ordering":
-      return (
-        answer.type === question.type &&
-        answer.value.length === question.items.length
+      return isOrderingAnswerComplete(
+        question,
+        answer as Extract<SubmittedAnswer, { type: "ordering" }>
       );
     case "simulation":
-      return answer.type === question.type && answer.value.length > 0;
+      return isCollectionAnswerComplete(
+        answer as Extract<SubmittedAnswer, { type: "simulation" }>
+      );
     case "dropdown":
-      return (
-        answer.type === question.type &&
-        question.dropdowns.every(
-          (dd) =>
-            Object.hasOwn(answer.value, dd.id) && Boolean(answer.value[dd.id]),
-        )
+      return isMappedAnswerComplete(
+        answer.value as Record<string, unknown>,
+        question.dropdowns.map((dropdown) => dropdown.id)
       );
     case "matrix":
-      return (
-        answer.type === question.type &&
-        question.rows.every(
-          (row) =>
-            Object.hasOwn(answer.value, row.id) &&
-            Boolean(answer.value[row.id]),
-        )
+      return isMappedAnswerComplete(
+        answer.value as Record<string, unknown>,
+        question.rows.map((row) => row.id)
       );
     case "matching":
-      return (
-        answer.type === question.type &&
-        question.leftItems.every(
-          (item) =>
-            Object.hasOwn(answer.value, item.id) &&
-            Boolean(answer.value[item.id]),
-        )
+      return isMappedAnswerComplete(
+        answer.value as Record<string, unknown>,
+        question.leftItems.map((item) => item.id)
       );
     case "drag-and-drop":
-      return (
-        answer.type === question.type &&
-        question.slots.every(
-          (slot) =>
-            Object.hasOwn(answer.value, slot.id) &&
-            Boolean(answer.value[slot.id]),
-        )
+      return isMappedAnswerComplete(
+        answer.value as Record<string, unknown>,
+        question.slots.map((slot) => slot.id)
       );
     case "case-study":
-      return (
-        answer.type === question.type &&
-        question.parts.length > 0 &&
-        question.parts.every(
-          (part) =>
-            Object.hasOwn(answer.value, part.id) &&
-            isPartAnswered(part, answer.value[part.id]),
-        )
+      return isCaseStudyAnswerComplete(
+        question,
+        answer as Extract<SubmittedAnswer, { type: "case-study" }>
       );
   }
 }

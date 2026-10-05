@@ -53,7 +53,7 @@ describe("scheduleCard", () => {
     const next = scheduleCard(
       { ...newCard, due: now.toISOString(), lastReview: now.toISOString() },
       3,
-      now,
+      now
     );
     expect(next.reps).toBe(1);
   });

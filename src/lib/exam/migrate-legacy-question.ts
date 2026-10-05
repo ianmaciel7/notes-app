@@ -40,7 +40,9 @@ function readText(value: unknown): string {
 }
 
 function readStrings(value: unknown): string[] {
-  if (!Array.isArray(value)) return [];
+  if (!Array.isArray(value)) {
+    return [];
+  }
   return value
     .filter((entry): entry is string => typeof entry === "string")
     .map((entry) => entry.trim())
@@ -48,13 +50,19 @@ function readStrings(value: unknown): string[] {
 }
 
 function readOptions(value: unknown): QuestionOption[] {
-  if (!Array.isArray(value)) return [];
+  if (!Array.isArray(value)) {
+    return [];
+  }
   const options: QuestionOption[] = [];
   for (const entry of value) {
-    if (!isRecord(entry)) continue;
+    if (!isRecord(entry)) {
+      continue;
+    }
     const id = readText(entry.id);
     const text = readText(entry.text);
-    if (id && text) options.push({ id, text });
+    if (id && text) {
+      options.push({ id, text });
+    }
   }
   return options;
 }
@@ -69,7 +77,9 @@ export function isLegacyQuestion(properties: unknown): boolean {
 }
 
 function readExplanation(value: unknown): GroundedExplanation | undefined {
-  if (!isRecord(value) || !readText(value.text)) return undefined;
+  if (!isRecord(value) || !readText(value.text)) {
+    return undefined;
+  }
   return {
     text: readText(value.text),
     referenceUrls: readStrings(value.referenceUrls),
@@ -80,7 +90,7 @@ function readExplanation(value: unknown): GroundedExplanation | undefined {
 }
 
 function isProvenance(
-  value: unknown,
+  value: unknown
 ): value is GroundedExplanation["answerProvenance"] {
   return (
     value === "official" ||
@@ -94,10 +104,12 @@ function isProvenance(
 function convertChoice(
   raw: Record<string, unknown>,
   options: QuestionOption[],
-  notes: LegacyMigrationNote[],
+  notes: LegacyMigrationNote[]
 ): QuestionBody | LegacyMigrationFailure {
   const correct = readStrings(raw.correctOptionIds);
-  if (correct.length === 0) return "noCorrectOption";
+  if (correct.length === 0) {
+    return "noCorrectOption";
+  }
   if (correct.some((id) => !options.some((option) => option.id === id))) {
     return "unknownCorrectOption";
   }
@@ -115,7 +127,7 @@ function convertChoice(
 function convertWithoutOptions(
   raw: Record<string, unknown>,
   statement: string,
-  notes: LegacyMigrationNote[],
+  notes: LegacyMigrationNote[]
 ): QuestionBody {
   const accepted = readStrings(raw.correctAnswers);
   if (accepted.length > 0) {
@@ -135,11 +147,15 @@ function convertWithoutOptions(
 function readBody(
   raw: Record<string, unknown>,
   statement: string,
-  notes: LegacyMigrationNote[],
+  notes: LegacyMigrationNote[]
 ): QuestionBody | LegacyMigrationFailure {
   const options = readOptions(raw.options);
-  if (options.length >= 2) return convertChoice(raw, options, notes);
-  if (options.length === 1) return "tooFewOptions";
+  if (options.length >= 2) {
+    return convertChoice(raw, options, notes);
+  }
+  if (options.length === 1) {
+    return "tooFewOptions";
+  }
   return convertWithoutOptions(raw, statement, notes);
 }
 
@@ -167,7 +183,9 @@ export function migrateLegacyQuestion(input: unknown): LegacyMigrationResult {
 
   const notes: LegacyMigrationNote[] = [];
   const body = readBody(input, statement, notes);
-  if (typeof body === "string") return { ok: false, reason: body };
+  if (typeof body === "string") {
+    return { ok: false, reason: body };
+  }
 
   const explanation = readExplanation(input.groundedExplanation);
   const base: QuestionBase = {

@@ -22,7 +22,7 @@ vi.mock("firebase/firestore", () => ({
   onSnapshot: (
     ref: { path: string },
     next: Handlers["next"],
-    error: Handlers["error"],
+    error: Handlers["error"]
   ) => {
     const unsubscribe = vi.fn();
     subscriptions.push({ next, error, unsubscribe, path: ref.path });
@@ -76,7 +76,7 @@ describe("useExamNavigation", () => {
           { id: "e2", data: () => ({ title: "Zeta" }) },
           { id: "e1", data: () => ({ title: "Alpha" }) },
         ],
-      }),
+      })
     );
 
     expect(result.current.loading).toBe(false);
@@ -89,7 +89,7 @@ describe("useExamNavigation", () => {
   it("exposes subscription errors and unsubscribes on unmount", () => {
     const { result, unmount } = renderHook(
       () => useExamNavigation({ spaceId: "s1" }),
-      { wrapper: wrapperFor("u1") },
+      { wrapper: wrapperFor("u1") }
     );
 
     const failure = new Error("permission-denied");

@@ -30,7 +30,7 @@ describe("firebase log capture", () => {
       expect.objectContaining({
         message: "Could not reach Cloud Firestore backend.",
         context: { level: "error", type: "@firebase/firestore" },
-      }),
+      })
     );
   });
 

@@ -33,7 +33,7 @@ export function useQuestionDraggableItemGroup({
   const t = useTranslations("exam");
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(KeyboardSensor),
+    useSensor(KeyboardSensor)
   );
 
   const placedIds = new Set(Object.values(value));
@@ -50,9 +50,13 @@ export function useQuestionDraggableItemGroup({
   const placeItem = (itemId: string, slotId: string | null) => {
     const next: Record<string, string> = {};
     for (const [slot, placed] of Object.entries(value)) {
-      if (placed !== itemId && slot !== slotId) next[slot] = placed;
+      if (placed !== itemId && slot !== slotId) {
+        next[slot] = placed;
+      }
     }
-    if (slotId !== null && itemId !== "") next[slotId] = itemId;
+    if (slotId !== null && itemId !== "") {
+      next[slotId] = itemId;
+    }
     onValueChange(next);
   };
 
@@ -62,7 +66,9 @@ export function useQuestionDraggableItemGroup({
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     setActiveId(null);
-    if (!over) return;
+    if (!over) {
+      return;
+    }
     const itemId = String(active.id);
     placeItem(itemId, over.id === DRAG_POOL_ID ? null : String(over.id));
   };

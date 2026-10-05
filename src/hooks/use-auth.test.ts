@@ -9,7 +9,7 @@ describe("useAuth", () => {
     console.error = () => {};
 
     expect(() => renderHook(() => useAuth())).toThrow(
-      "useAuth must be used within an AuthProvider",
+      "useAuth must be used within an AuthProvider"
     );
 
     console.error = consoleError;

@@ -59,7 +59,7 @@ describe("validateExamProperties", () => {
       passingScorePercentage: "70",
     });
     expect(result.fieldErrors?.passingScorePercentage).toBe(
-      "invalidPassingScore",
+      "invalidPassingScore"
     );
   });
 });

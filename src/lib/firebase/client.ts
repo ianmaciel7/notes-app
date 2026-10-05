@@ -37,7 +37,9 @@ const globalForAuth = globalThis as unknown as {
 };
 
 export function connectToAuthEmulator(host = EMULATOR_HOST): void {
-  if (globalForAuth.FIREBASE_AUTH_EMULATOR_CONNECTED) return;
+  if (globalForAuth.FIREBASE_AUTH_EMULATOR_CONNECTED) {
+    return;
+  }
 
   const emulatorUrl = host.startsWith("http") ? host : `http://${host}`;
   try {

@@ -40,8 +40,12 @@ export function validateExamProperties(input: unknown): ExamValidationResult {
     : [];
   const fieldErrors: NonNullable<ExamValidationResult["fieldErrors"]> = {};
 
-  if (!provider) fieldErrors.provider = "providerRequired";
-  if (!code) fieldErrors.code = "codeRequired";
+  if (!provider) {
+    fieldErrors.provider = "providerRequired";
+  }
+  if (!code) {
+    fieldErrors.code = "codeRequired";
+  }
   if (!isPositiveInteger(raw.totalQuestionsCount)) {
     fieldErrors.totalQuestionsCount = "invalidQuestionsCount";
   }

@@ -24,7 +24,7 @@ vi.mock("firebase/firestore", () => ({
   onSnapshot: (
     ref: { path: string },
     next: SnapshotHandlers["next"],
-    error: SnapshotHandlers["error"],
+    error: SnapshotHandlers["error"]
   ) => {
     const unsubscribe = vi.fn();
     subscriptions.push({ next, error, unsubscribe, path: ref.path });
@@ -61,7 +61,7 @@ describe("useExamList", () => {
   it("does not subscribe without a user", () => {
     const { result } = renderHook(
       () => useExamList({ spaceId: "s1", examId: "e1" }),
-      { wrapper: wrapperFor(null) },
+      { wrapper: wrapperFor(null) }
     );
     expect(subscriptions).toHaveLength(0);
     expect(result.current.loading).toBe(false);
@@ -71,7 +71,7 @@ describe("useExamList", () => {
   it("queries ordered questions of the exam and maps cards by question", () => {
     const { result } = renderHook(
       () => useExamList({ spaceId: "s1", examId: "e1" }),
-      { wrapper: wrapperFor("u1") },
+      { wrapper: wrapperFor("u1") }
     );
 
     expect(result.current.loading).toBe(true);
@@ -99,7 +99,7 @@ describe("useExamList", () => {
   it("converts legacy-shaped questions on read and skips unconvertible ones", () => {
     const { result } = renderHook(
       () => useExamList({ spaceId: "s1", examId: "e1" }),
-      { wrapper: wrapperFor("u1") },
+      { wrapper: wrapperFor("u1") }
     );
     const legacy = {
       statement: "Which one?",
@@ -139,7 +139,7 @@ describe("useExamList", () => {
   it("skips invalid non-legacy questions", () => {
     const { result } = renderHook(
       () => useExamList({ spaceId: "s1", examId: "e1" }),
-      { wrapper: wrapperFor("u1") },
+      { wrapper: wrapperFor("u1") }
     );
 
     act(() => {
@@ -165,7 +165,7 @@ describe("useExamList", () => {
   it("surfaces snapshot errors from either subscription", () => {
     const { result } = renderHook(
       () => useExamList({ spaceId: "s1", examId: "e1" }),
-      { wrapper: wrapperFor("u1") },
+      { wrapper: wrapperFor("u1") }
     );
 
     act(() => bySuffix("/objects").error(new Error("denied")));
@@ -179,10 +179,12 @@ describe("useExamList", () => {
   it("unsubscribes on unmount", () => {
     const { unmount } = renderHook(
       () => useExamList({ spaceId: "s1", examId: "e1" }),
-      { wrapper: wrapperFor("u1") },
+      { wrapper: wrapperFor("u1") }
     );
     unmount();
-    for (const s of subscriptions) expect(s.unsubscribe).toHaveBeenCalled();
+    for (const s of subscriptions) {
+      expect(s.unsubscribe).toHaveBeenCalled();
+    }
   });
 
   it("toggles the scroll-to-top button past the threshold and scrolls up", () => {
@@ -190,7 +192,7 @@ describe("useExamList", () => {
     window.scrollTo = scrollTo as unknown as typeof window.scrollTo;
     const { result } = renderHook(
       () => useExamList({ spaceId: "s1", examId: "e1" }),
-      { wrapper: wrapperFor("u1") },
+      { wrapper: wrapperFor("u1") }
     );
     expect(result.current.showScrollToTop).toBe(false);
 

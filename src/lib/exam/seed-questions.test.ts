@@ -15,13 +15,13 @@ describe("emulator seed questions", () => {
 
   it("covers every question type", () => {
     const types = questions.map(
-      (doc) => (doc.data.properties as { type: string }).type,
+      (doc) => (doc.data.properties as { type: string }).type
     );
     expect(new Set(types)).toEqual(new Set(QUESTION_TYPES));
   });
 
   it.each(
-    questions.map((doc) => [doc.path, doc.data.properties] as const),
+    questions.map((doc) => [doc.path, doc.data.properties] as const)
   )("%s passes runtime validation", (_path, properties) => {
     const result = validateQuestionProperties(properties);
     expect(result.fieldErrors).toBeUndefined();

@@ -10,10 +10,12 @@ let rulesLoaded = false;
 // firestore.rules last changed, so load the repo's rules for the project this
 // client talks to. Without this the rules assertions test stale rules.
 async function loadRepoRulesIntoEmulator(): Promise<void> {
-  if (rulesLoaded) return;
+  if (rulesLoaded) {
+    return;
+  }
   const content = await readFile(
     resolve(process.cwd(), "firestore.rules"),
-    "utf8",
+    "utf8"
   );
   const response = await fetch(
     `http://127.0.0.1:8080/emulator/v1/projects/${db.app.options.projectId}:securityRules`,
@@ -23,7 +25,7 @@ async function loadRepoRulesIntoEmulator(): Promise<void> {
       body: JSON.stringify({
         rules: { files: [{ name: "firestore.rules", content }] },
       }),
-    },
+    }
   );
   if (!response.ok) {
     throw new Error(`Failed to load firestore.rules: ${response.status}`);
@@ -60,7 +62,7 @@ export async function createEmulatorUser(prefix: string) {
   const credential = await createUserWithEmailAndPassword(
     auth,
     email,
-    password,
+    password
   );
   return { uid: credential.user.uid, email, password };
 }

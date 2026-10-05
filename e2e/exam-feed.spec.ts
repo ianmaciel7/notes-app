@@ -19,15 +19,23 @@ const ADMIN_HEADERS = {
 type RestValue = Record<string, unknown>;
 
 function toRestValue(value: unknown): RestValue {
-  if (value === null) return { nullValue: null };
-  if (typeof value === "string") return { stringValue: value };
-  if (typeof value === "boolean") return { booleanValue: value };
+  if (value === null) {
+    return { nullValue: null };
+  }
+  if (typeof value === "string") {
+    return { stringValue: value };
+  }
+  if (typeof value === "boolean") {
+    return { booleanValue: value };
+  }
   if (typeof value === "number") {
     return Number.isInteger(value)
       ? { integerValue: String(value) }
       : { doubleValue: value };
   }
-  if (value instanceof Date) return { timestampValue: value.toISOString() };
+  if (value instanceof Date) {
+    return { timestampValue: value.toISOString() };
+  }
   if (Array.isArray(value)) {
     return { arrayValue: { values: value.map(toRestValue) } };
   }
@@ -37,10 +45,10 @@ function toRestValue(value: unknown): RestValue {
 }
 
 function toRestFields(
-  data: Record<string, unknown>,
+  data: Record<string, unknown>
 ): Record<string, RestValue> {
   return Object.fromEntries(
-    Object.entries(data).map(([key, value]) => [key, toRestValue(value)]),
+    Object.entries(data).map(([key, value]) => [key, toRestValue(value)])
   );
 }
 
@@ -75,7 +83,7 @@ async function createUser(email: string, password: string): Promise<string> {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password, returnSecureToken: true }),
-    },
+    }
   );
   expect(response.ok, `create user: ${response.status}`).toBe(true);
   return (await response.json()).localId;
@@ -87,7 +95,7 @@ async function seedExam(
   uid: string,
   spaceId: string,
   examId: string,
-  questions: SeedQuestion[],
+  questions: SeedQuestion[]
 ) {
   const now = new Date();
   const spacePath = `users/${uid}/spaces/${spaceId}`;
@@ -156,7 +164,7 @@ async function signInThroughLogin(
   page: Page,
   email: string,
   password: string,
-  next: string,
+  next: string
 ) {
   await page.goto(`/login?next=${encodeURIComponent(next)}`);
   await page.locator("#email").fill(email);
@@ -223,10 +231,10 @@ test.describe("Exam feed", () => {
     await first.getByRole("radio", { name: /Cloud Run/ }).click();
     await expect(first).toHaveAttribute("data-status", "answeredCorrect");
     await expect(
-      first.getByText("Correct", { exact: true }).first(),
+      first.getByText("Correct", { exact: true }).first()
     ).toBeVisible();
     await expect(
-      first.locator('[data-slot="question-explanation-description"]'),
+      first.locator('[data-slot="question-explanation-description"]')
     ).toBeVisible();
 
     // Incorrect answer flags the pick and reveals the right option.
@@ -234,12 +242,12 @@ test.describe("Exam feed", () => {
     await second.getByRole("radio", { name: /Cloud SQL/ }).click();
     await expect(second).toHaveAttribute("data-status", "answeredIncorrect");
     await expect(
-      second.getByText("Incorrect", { exact: true }).first(),
+      second.getByText("Incorrect", { exact: true }).first()
     ).toBeVisible();
     await expect(
       second.locator(
-        '[data-slot="question-choice-item"][data-result="correct"]',
-      ),
+        '[data-slot="question-choice-item"][data-result="correct"]'
+      )
     ).toContainText("Cloud Storage");
 
     // Atomic dual-write: two immutable attempts and both cards advanced.
@@ -346,7 +354,7 @@ test.describe("Exam feed", () => {
       };
     }[];
     expect(
-      attempts.map((attempt) => attempt.fields.questionType.stringValue).sort(),
+      attempts.map((attempt) => attempt.fields.questionType.stringValue).sort()
     ).toEqual([
       "fill-blank",
       "hotspot",
@@ -355,7 +363,7 @@ test.describe("Exam feed", () => {
       "single-choice",
     ]);
     expect(
-      attempts.filter((attempt) => !attempt.fields.isCorrect.booleanValue),
+      attempts.filter((attempt) => !attempt.fields.isCorrect.booleanValue)
     ).toHaveLength(1);
   });
 });

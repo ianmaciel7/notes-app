@@ -4,7 +4,7 @@ import { getSafeNextUrl } from "./safe-next-url";
 describe("getSafeNextUrl", () => {
   it("keeps internal application paths", () => {
     expect(getSafeNextUrl("/dashboard?tab=progress#today")).toBe(
-      "/dashboard?tab=progress#today",
+      "/dashboard?tab=progress#today"
     );
   });
 

@@ -44,13 +44,23 @@ type AnswerFields = Pick<
   "questionType" | "submittedAnswer" | "isCorrect"
 >;
 
+function trimmedString(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function isNonNegativeInteger(value: unknown): value is number {
+  return typeof value === "number" && Number.isInteger(value) && value >= 0;
+}
+
 /** Validates the type, submitted answer, and correctness flag recorded with an attempt. */
 function readAnswerFields(
   raw: Record<string, unknown>,
-  fieldErrors: NonNullable<AttemptValidationResult["fieldErrors"]>,
+  fieldErrors: NonNullable<AttemptValidationResult["fieldErrors"]>
 ): AnswerFields | null {
   const questionType = QUESTION_TYPES.find((type) => type === raw.questionType);
-  if (!questionType) fieldErrors.questionType = "invalidQuestionType";
+  if (!questionType) {
+    fieldErrors.questionType = "invalidQuestionType";
+  }
 
   const submittedAnswer = parseSubmittedAnswer(raw.submittedAnswer);
   if (!submittedAnswer || submittedAnswer.type !== questionType) {
@@ -58,8 +68,9 @@ function readAnswerFields(
   }
 
   const isCorrect = raw.isCorrect;
-  if (typeof isCorrect !== "boolean")
+  if (typeof isCorrect !== "boolean") {
     fieldErrors.isCorrect = "invalidIsCorrect";
+  }
 
   if (!questionType || !submittedAnswer || typeof isCorrect !== "boolean") {
     return null;
@@ -68,20 +79,23 @@ function readAnswerFields(
 }
 
 export function validateCreateAttemptInput(
-  input: unknown,
+  input: unknown
 ): AttemptValidationResult {
   if (!input || typeof input !== "object") {
     return { success: false, error: "invalidInput" };
   }
 
   const raw = input as Record<string, unknown>;
-  const questionId =
-    typeof raw.questionId === "string" ? raw.questionId.trim() : "";
-  const cardId = typeof raw.cardId === "string" ? raw.cardId.trim() : "";
+  const questionId = trimmedString(raw.questionId);
+  const cardId = trimmedString(raw.cardId);
   const fieldErrors: NonNullable<AttemptValidationResult["fieldErrors"]> = {};
 
-  if (!questionId) fieldErrors.questionId = "questionIdRequired";
-  if (!cardId) fieldErrors.cardId = "cardIdRequired";
+  if (!questionId) {
+    fieldErrors.questionId = "questionIdRequired";
+  }
+  if (!cardId) {
+    fieldErrors.cardId = "cardIdRequired";
+  }
   if (!RATINGS.includes(raw.rating as (typeof RATINGS)[number])) {
     fieldErrors.rating = "invalidRating";
   }
@@ -89,11 +103,7 @@ export function validateCreateAttemptInput(
     fieldErrors.reviewMode = "invalidReviewMode";
   }
   const elapsed = raw.elapsedMilliseconds;
-  if (
-    typeof elapsed !== "number" ||
-    !Number.isInteger(elapsed) ||
-    elapsed < 0
-  ) {
+  if (!isNonNegativeInteger(elapsed)) {
     fieldErrors.elapsedMilliseconds = "invalidElapsed";
   }
   if (

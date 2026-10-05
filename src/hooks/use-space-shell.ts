@@ -28,12 +28,16 @@ function useSpaceShell({
   const notFound = Boolean(currentSpaceId && !activeSpace);
 
   useEffect(() => {
-    if (authLoading || currentSpaceId) return;
+    if (authLoading || currentSpaceId) {
+      return;
+    }
     if (!user) {
       router.replace("/login");
       return;
     }
-    if (!loading && !error && firstSpaceId) router.replace(`/${firstSpaceId}`);
+    if (!loading && !error && firstSpaceId) {
+      router.replace(`/${firstSpaceId}`);
+    }
   }, [authLoading, currentSpaceId, error, firstSpaceId, loading, router, user]);
 
   const selectSpace = (spaceId: string) => {
@@ -80,4 +84,6 @@ function useSpaceShell({
   };
 }
 
-export { useSpaceShell, type UseSpaceShellOptions };
+type SpaceShellState = ReturnType<typeof useSpaceShell>;
+
+export { useSpaceShell, type SpaceShellState, type UseSpaceShellOptions };

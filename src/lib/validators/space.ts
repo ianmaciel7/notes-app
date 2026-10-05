@@ -33,7 +33,7 @@ export const ALLOWED_SPACE_ICONS = [
 export type AllowedSpaceIcon = (typeof ALLOWED_SPACE_ICONS)[number];
 
 export function validateCreateSpaceInput(
-  input: unknown,
+  input: unknown
 ): ValidationResult<CreateSpaceInput> {
   if (!input || typeof input !== "object") {
     return {

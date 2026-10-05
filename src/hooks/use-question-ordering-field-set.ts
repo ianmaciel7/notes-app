@@ -21,6 +21,41 @@ export type UseQuestionOrderingFieldSetOptions = {
   onValueChange: (value: string[]) => void;
 };
 
+function createAnnouncements(
+  t: ReturnType<typeof useTranslations>,
+  items: QuestionItem[],
+  orderedIds: string[]
+): Announcements {
+  const itemText = (id: string | number) =>
+    items.find((item) => item.id === id)?.text ?? String(id);
+  const getPosition = (id: string | number | undefined) => {
+    const idx = orderedIds.indexOf(String(id));
+    return idx === -1 ? 1 : idx + 1;
+  };
+  return {
+    onDragStart: ({ active }) =>
+      t("orderingAnnouncePickup", {
+        item: itemText(active.id),
+        position: getPosition(active.id),
+        total: orderedIds.length,
+      }),
+    onDragOver: ({ active, over }) =>
+      t("orderingAnnounceOver", {
+        item: itemText(active.id),
+        position: getPosition(over?.id ?? active.id),
+        total: orderedIds.length,
+      }),
+    onDragEnd: ({ active, over }) =>
+      t("orderingAnnounceDrop", {
+        item: itemText(active.id),
+        position: getPosition(over?.id ?? active.id),
+        total: orderedIds.length,
+      }),
+    onDragCancel: ({ active }) =>
+      t("orderingAnnounceCancel", { item: itemText(active.id) }),
+  };
+}
+
 export function useQuestionOrderingFieldSet({
   items,
   value,
@@ -46,11 +81,13 @@ export function useQuestionOrderingFieldSet({
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
+    })
   );
 
   const move = (fromIndex: number, toIndex: number) => {
-    if (resolved || toIndex < 0 || toIndex >= orderedIds.length) return;
+    if (resolved || toIndex < 0 || toIndex >= orderedIds.length) {
+      return;
+    }
     const next = arrayMove(orderedIds, fromIndex, toIndex);
     onValueChange(next);
   };
@@ -61,7 +98,9 @@ export function useQuestionOrderingFieldSet({
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     setActiveId(null);
-    if (!over || active.id === over.id || resolved) return;
+    if (!over || active.id === over.id || resolved) {
+      return;
+    }
 
     const oldIndex = orderedIds.indexOf(String(active.id));
     const newIndex = orderedIds.indexOf(String(over.id));
@@ -77,38 +116,7 @@ export function useQuestionOrderingFieldSet({
 
   const activeItem = items.find((item) => item.id === activeId) ?? null;
 
-  const itemText = (id: string | number) =>
-    items.find((item) => item.id === id)?.text ?? String(id);
-
-  const getPosition = (id: string | number | undefined) => {
-    const idx = orderedIds.indexOf(String(id));
-    return idx === -1 ? 1 : idx + 1;
-  };
-
-  const announcements: Announcements = {
-    onDragStart: ({ active }) =>
-      t("orderingAnnouncePickup", {
-        item: itemText(active.id),
-        position: getPosition(active.id),
-        total: orderedIds.length,
-      }),
-    onDragOver: ({ active, over }) =>
-      t("orderingAnnounceOver", {
-        item: itemText(active.id),
-        position: getPosition(over?.id ?? active.id),
-        total: orderedIds.length,
-      }),
-    onDragEnd: ({ active, over }) =>
-      t("orderingAnnounceDrop", {
-        item: itemText(active.id),
-        position: getPosition(over?.id ?? active.id),
-        total: orderedIds.length,
-      }),
-    onDragCancel: ({ active }) =>
-      t("orderingAnnounceCancel", {
-        item: itemText(active.id),
-      }),
-  };
+  const announcements = createAnnouncements(t, items, orderedIds);
 
   return {
     orderedIds,

@@ -43,7 +43,7 @@ describe("Firebase Auth Emulator Integration", () => {
     const createdCredential = await createUserWithEmailAndPassword(
       auth,
       testEmail,
-      testPassword,
+      testPassword
     );
     expect(createdCredential.user.email).toBe(testEmail);
     expect(auth.currentUser?.email).toBe(testEmail);
@@ -56,7 +56,7 @@ describe("Firebase Auth Emulator Integration", () => {
     const signInCredential = await signInWithEmailAndPassword(
       auth,
       testEmail,
-      testPassword,
+      testPassword
     );
     expect(signInCredential.user.email).toBe(testEmail);
     expect(auth.currentUser?.uid).toBe(createdCredential.user.uid);

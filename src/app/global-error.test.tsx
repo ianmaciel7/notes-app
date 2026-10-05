@@ -24,7 +24,7 @@ describe("Global Error Boundary (src/app/global-error.tsx)", () => {
     expect(screen.getByText("Something went wrong")).toBeDefined();
     expect(console.error).toHaveBeenCalledWith(
       "[error-capture:global-error]",
-      expect.objectContaining({ message: "root crash" }),
+      expect.objectContaining({ message: "root crash" })
     );
 
     fireEvent.click(screen.getByTestId("global-error-retry-btn"));

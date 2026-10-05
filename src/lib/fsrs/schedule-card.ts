@@ -32,8 +32,12 @@ export type CardTransition = Pick<
 >;
 
 export function toDate(value: FirestoreTime): Date {
-  if (value instanceof Date) return value;
-  if (typeof value === "string") return new Date(value);
+  if (value instanceof Date) {
+    return value;
+  }
+  if (typeof value === "string") {
+    return new Date(value);
+  }
   return value.toDate();
 }
 
@@ -54,7 +58,7 @@ export function snapshotCard(card: Card): FsrsSnapshot {
 export function scheduleCard(
   card: Card,
   rating: AttemptRating,
-  now: Date,
+  now: Date
 ): CardTransition {
   // A New card has no memory state yet. `firestore.rules` requires
   // `difficulty` in 1..10 on every stored card, while ts-fsrs only accepts

@@ -79,7 +79,7 @@ describe("LoginPage", () => {
         <AuthProvider>
           <LoginPage />
         </AuthProvider>
-      </NextIntlClientProvider>,
+      </NextIntlClientProvider>
     );
   }
 
@@ -87,23 +87,33 @@ describe("LoginPage", () => {
     renderLoginPage();
 
     // Default signIn mode renders anonymous sign-in button
-    expect(screen.getByTestId("anonymous-sign-in-btn")).toBeDefined();
-    expect(screen.queryByTestId("anonymous-sign-up-btn")).toBeNull();
+    expect(
+      screen.getByTestId("login-shell-anonymous-sign-in-btn")
+    ).toBeDefined();
+    expect(
+      screen.queryByTestId("login-shell-anonymous-sign-up-btn")
+    ).toBeNull();
 
     // Find and click the toggle to sign up mode
     const signUpToggleBtn = screen.getByText(/don't have an account/i);
     fireEvent.click(signUpToggleBtn);
 
     // View should switch to signUp mode
-    expect(screen.getByTestId("anonymous-sign-up-btn")).toBeDefined();
-    expect(screen.queryByTestId("anonymous-sign-in-btn")).toBeNull();
+    expect(
+      screen.getByTestId("login-shell-anonymous-sign-up-btn")
+    ).toBeDefined();
+    expect(
+      screen.queryByTestId("login-shell-anonymous-sign-in-btn")
+    ).toBeNull();
 
     // Find and click the toggle back to sign in mode
     const signInToggleBtn = screen.getByText(/already have an account/i);
     fireEvent.click(signInToggleBtn);
 
     // View should switch back to signIn mode
-    expect(screen.getByTestId("anonymous-sign-in-btn")).toBeDefined();
+    expect(
+      screen.getByTestId("login-shell-anonymous-sign-in-btn")
+    ).toBeDefined();
   });
 
   it("processes getRedirectResult on mount and redirects if user exists", async () => {
@@ -132,7 +142,7 @@ describe("LoginPage", () => {
     await waitFor(() => {
       expect(signInWithPopup).toHaveBeenCalledWith(
         expect.anything(),
-        expect.any(MockGoogleAuthProvider),
+        expect.any(MockGoogleAuthProvider)
       );
       expect(mockReplace).toHaveBeenCalledWith("/");
     });
@@ -140,10 +150,10 @@ describe("LoginPage", () => {
 
   it("falls back to signInWithRedirect when Google popup encounters popup-blocked error", async () => {
     vi.mocked(signInWithPopup).mockRejectedValueOnce(
-      new FirebaseError("auth/popup-blocked", "popup was blocked by browser"),
+      new FirebaseError("auth/popup-blocked", "popup was blocked by browser")
     );
     vi.mocked(signInWithRedirect).mockImplementationOnce(
-      () => Promise.resolve() as never,
+      () => Promise.resolve() as never
     );
 
     renderLoginPage();
@@ -155,18 +165,18 @@ describe("LoginPage", () => {
       expect(signInWithPopup).toHaveBeenCalled();
       expect(signInWithRedirect).toHaveBeenCalledWith(
         expect.anything(),
-        expect.any(MockGoogleAuthProvider),
+        expect.any(MockGoogleAuthProvider)
       );
     });
-    expect(screen.queryByTestId("auth-error")).toBeNull();
+    expect(screen.queryByTestId("login-shell-auth-error")).toBeNull();
   });
 
   it("does not depend on error message text to choose the redirect fallback", async () => {
     vi.mocked(signInWithPopup).mockRejectedValueOnce(
-      new FirebaseError("auth/popup-blocked", "mensagem localizada"),
+      new FirebaseError("auth/popup-blocked", "mensagem localizada")
     );
     vi.mocked(signInWithRedirect).mockImplementationOnce(
-      () => Promise.resolve() as never,
+      () => Promise.resolve() as never
     );
 
     renderLoginPage();
@@ -180,14 +190,14 @@ describe("LoginPage", () => {
 
   it("shows an error when Google sign-in fails for a non-fallback reason", async () => {
     vi.mocked(signInWithPopup).mockRejectedValueOnce(
-      new FirebaseError("auth/network-request-failed", "network down"),
+      new FirebaseError("auth/network-request-failed", "network down")
     );
 
     renderLoginPage();
 
     fireEvent.click(screen.getByTestId("google-sign-in-button"));
 
-    const alert = await screen.findByTestId("auth-error");
+    const alert = await screen.findByTestId("login-shell-auth-error");
     expect(alert.textContent).toContain(messages.auth.googleSignInFailed);
     expect(signInWithRedirect).not.toHaveBeenCalled();
     expect(mockReplace).not.toHaveBeenCalled();
@@ -195,23 +205,23 @@ describe("LoginPage", () => {
 
   it("shows an error when the redirect fallback itself fails", async () => {
     vi.mocked(signInWithPopup).mockRejectedValueOnce(
-      new FirebaseError("auth/popup-blocked", "blocked"),
+      new FirebaseError("auth/popup-blocked", "blocked")
     );
     vi.mocked(signInWithRedirect).mockRejectedValueOnce(
-      new FirebaseError("auth/internal-error", "redirect failed"),
+      new FirebaseError("auth/internal-error", "redirect failed")
     );
 
     renderLoginPage();
 
     fireEvent.click(screen.getByTestId("google-sign-in-button"));
 
-    const alert = await screen.findByTestId("auth-error");
+    const alert = await screen.findByTestId("login-shell-auth-error");
     expect(alert.textContent).toContain(messages.auth.googleSignInFailed);
   });
 
   it("stays silent when a newer popup request cancels the previous one", async () => {
     vi.mocked(signInWithPopup).mockRejectedValueOnce(
-      new FirebaseError("auth/cancelled-popup-request", "cancelled"),
+      new FirebaseError("auth/cancelled-popup-request", "cancelled")
     );
 
     renderLoginPage();
@@ -221,41 +231,41 @@ describe("LoginPage", () => {
     await waitFor(() => {
       expect(signInWithPopup).toHaveBeenCalled();
     });
-    expect(screen.queryByTestId("auth-error")).toBeNull();
+    expect(screen.queryByTestId("login-shell-auth-error")).toBeNull();
     expect(signInWithRedirect).not.toHaveBeenCalled();
   });
 
   it("shows an error when the redirect result rejects", async () => {
     vi.mocked(getRedirectResult).mockRejectedValueOnce(
-      new FirebaseError("auth/account-exists-with-different-credential", "x"),
+      new FirebaseError("auth/account-exists-with-different-credential", "x")
     );
 
     renderLoginPage();
 
-    const alert = await screen.findByTestId("auth-error");
+    const alert = await screen.findByTestId("login-shell-auth-error");
     expect(alert.textContent).toContain(messages.auth.googleSignInFailed);
   });
 
   it("shows an error when anonymous sign-in fails", async () => {
     vi.mocked(signInAnonymously).mockRejectedValueOnce(
-      new FirebaseError("auth/admin-restricted-operation", "disabled"),
+      new FirebaseError("auth/admin-restricted-operation", "disabled")
     );
 
     renderLoginPage();
 
-    fireEvent.click(screen.getByTestId("anonymous-sign-in-btn"));
+    fireEvent.click(screen.getByTestId("login-shell-anonymous-sign-in-btn"));
 
-    const alert = await screen.findByTestId("auth-error");
+    const alert = await screen.findByTestId("login-shell-auth-error");
     expect(alert.textContent).toContain(messages.auth.guestSignInFailed);
     expect(mockReplace).not.toHaveBeenCalled();
   });
 
   it("falls back to signInWithRedirect when Google popup encounters 'No matching frame' error", async () => {
     vi.mocked(signInWithPopup).mockRejectedValueOnce(
-      new Error("No matching frame for popup"),
+      new Error("No matching frame for popup")
     );
     vi.mocked(signInWithRedirect).mockImplementationOnce(
-      () => Promise.resolve() as never,
+      () => Promise.resolve() as never
     );
 
     renderLoginPage();
@@ -275,7 +285,7 @@ describe("LoginPage", () => {
 
     renderLoginPage();
 
-    const anonBtn = screen.getByTestId("anonymous-sign-in-btn");
+    const anonBtn = screen.getByTestId("login-shell-anonymous-sign-in-btn");
     fireEvent.click(anonBtn);
 
     await waitFor(() => {
@@ -286,7 +296,7 @@ describe("LoginPage", () => {
 
   it("respects query param 'next' for redirection after login", async () => {
     mockSearchParamsGet.mockImplementation((key: string) =>
-      key === "next" ? "/dashboard" : null,
+      key === "next" ? "/dashboard" : null
     );
     vi.mocked(signInAnonymously).mockResolvedValueOnce({
       user: { uid: "anon-user-456" },
@@ -294,7 +304,7 @@ describe("LoginPage", () => {
 
     renderLoginPage();
 
-    const anonBtn = screen.getByTestId("anonymous-sign-in-btn");
+    const anonBtn = screen.getByTestId("login-shell-anonymous-sign-in-btn");
     fireEvent.click(anonBtn);
 
     await waitFor(() => {
@@ -303,7 +313,7 @@ describe("LoginPage", () => {
   });
   it("rejects unsafe next URLs and falls back to the home route", async () => {
     mockSearchParamsGet.mockImplementation((key: string) =>
-      key === "next" ? "javascript:alert(document.domain)" : null,
+      key === "next" ? "javascript:alert(document.domain)" : null
     );
     vi.mocked(signInAnonymously).mockResolvedValueOnce({
       user: { uid: "anon-user-unsafe-next" },
@@ -311,7 +321,7 @@ describe("LoginPage", () => {
 
     renderLoginPage();
 
-    fireEvent.click(screen.getByTestId("anonymous-sign-in-btn"));
+    fireEvent.click(screen.getByTestId("login-shell-anonymous-sign-in-btn"));
 
     await waitFor(() => {
       expect(mockReplace).toHaveBeenCalledWith("/");

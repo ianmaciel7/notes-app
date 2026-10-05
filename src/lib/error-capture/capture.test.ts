@@ -60,16 +60,16 @@ describe("captureError", () => {
     });
     expect(console.error).toHaveBeenCalledWith(
       "[error-capture:error-boundary]",
-      captured,
+      captured
     );
   });
 
   it("drops the same error reported through another channel within the window", () => {
     expect(
-      captureError(new Error("boom"), { source: "error-boundary" }),
+      captureError(new Error("boom"), { source: "error-boundary" })
     ).not.toBeNull();
     expect(
-      captureError(new Error("boom"), { source: "window-error" }),
+      captureError(new Error("boom"), { source: "window-error" })
     ).toBeNull();
     expect(console.error).toHaveBeenCalledTimes(1);
   });
@@ -79,7 +79,7 @@ describe("captureError", () => {
     vi.advanceTimersByTime(1500);
 
     expect(
-      captureError(new Error("boom"), { source: "window-error" }),
+      captureError(new Error("boom"), { source: "window-error" })
     ).not.toBeNull();
     expect(console.error).toHaveBeenCalledTimes(2);
   });

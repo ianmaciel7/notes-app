@@ -65,7 +65,7 @@ function wrapperFor(user: Pick<User, "uid"> | null) {
 
 function renderCard(
   properties: QuestionProperties = singleChoiceFixture,
-  options: { user?: Pick<User, "uid"> | null; card?: Card | null } = {},
+  options: { user?: Pick<User, "uid"> | null; card?: Card | null } = {}
 ) {
   const { user = { uid: "u1" }, card: companion = card } = options;
   return renderHook(
@@ -75,7 +75,7 @@ function renderCard(
         question: makeQuestionObject(properties),
         card: companion,
       }),
-    { wrapper: wrapperFor(user) },
+    { wrapper: wrapperFor(user) }
   );
 }
 
@@ -224,7 +224,7 @@ describe("useQuestionCard", () => {
           submittedAnswer: answer,
           isCorrect: true,
         }),
-      }),
+      })
     );
   });
 
@@ -461,7 +461,7 @@ describe("useQuestionCard", () => {
     expect(result.current.status).toBe("answeredCorrect");
     expect(mockSubmitAttempt).toHaveBeenCalledTimes(2);
     expect(
-      mockSubmitAttempt.mock.calls.map((call) => call[0].input.submittedAnswer),
+      mockSubmitAttempt.mock.calls.map((call) => call[0].input.submittedAnswer)
     ).toEqual([
       { type: "single-choice", value: "a" },
       { type: "single-choice", value: "b" },

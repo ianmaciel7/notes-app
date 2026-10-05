@@ -44,45 +44,79 @@ export type UseQuestionCardResult = {
   retry: () => void;
 };
 
-export function useQuestionCard({
+type QuestionProperties = QuestionObject["properties"];
+
+/** Types that are graded as soon as the answer is ready, without a confirm action. */
+const AUTO_CHECKED_TYPES: ReadonlySet<QuestionProperties["type"]> = new Set([
+  "single-choice",
+  "true-false",
+  "multiple-choice",
+  "matching",
+  "drag-and-drop",
+  "hotspot",
+  "dropdown",
+  "case-study",
+  "matrix",
+]);
+
+function getAnswerFlags(properties: QuestionProperties) {
+  const isGradable =
+    properties.type !== "case-study" || properties.parts.length > 0;
+  const needsConfirmation =
+    isGradable && !AUTO_CHECKED_TYPES.has(properties.type);
+  return { isGradable, needsConfirmation };
+}
+
+/** Types graded as soon as every part of the draft is filled in. */
+const GRADED_WHEN_COMPLETE: ReadonlySet<QuestionProperties["type"]> = new Set([
+  "matching",
+  "drag-and-drop",
+  "dropdown",
+  "case-study",
+  "matrix",
+]);
+
+/** Whether a new draft is ready to be graded without a confirm action. */
+function shouldAutoSubmit(
+  properties: QuestionProperties,
+  next: SubmittedAnswer
+): boolean {
+  if (properties.type === "single-choice" || properties.type === "true-false") {
+    return true;
+  }
+  if (properties.type === "multiple-choice" || properties.type === "hotspot") {
+    return (
+      next.type === properties.type &&
+      next.value.length >= properties.correctAnswer.length
+    );
+  }
+  return (
+    GRADED_WHEN_COMPLETE.has(properties.type) &&
+    isAnswerComplete(properties, next)
+  );
+}
+
+/** Tracks the status of one attempt and persists it once graded. */
+function useQuestionAttempt({
   spaceId,
   question,
   card,
-}: UseQuestionCardOptions): UseQuestionCardResult {
+}: UseQuestionCardOptions) {
   const { user } = useAuth();
   const { properties } = question;
   const [status, setStatus] = useState<QuestionCardStatus>("unanswered");
-  const [answer, setAnswerState] = useState<SubmittedAnswer | null>(() =>
-    createEmptyAnswer(properties),
-  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSaveError, setHasSaveError] = useState(false);
   const startedAt = useRef(Date.now());
-
-  const isResolved = status !== "unanswered";
-  const isGradable =
-    properties.type !== "case-study" || properties.parts.length > 0;
-  const isInstant =
-    properties.type === "single-choice" || properties.type === "true-false";
-  const needsConfirmation =
-    isGradable &&
-    !isInstant &&
-    properties.type !== "multiple-choice" &&
-    properties.type !== "matching" &&
-    properties.type !== "drag-and-drop" &&
-    properties.type !== "hotspot" &&
-    properties.type !== "dropdown" &&
-    properties.type !== "case-study" &&
-    properties.type !== "matrix";
-  const canSubmit =
-    !isResolved && !isSubmitting && isAnswerComplete(properties, answer);
 
   const submitAnswer = async (submission: SubmittedAnswer) => {
     const evaluation = evaluateAnswer(properties, submission);
     setStatus(evaluation.correct ? "answeredCorrect" : "answeredIncorrect");
     setHasSaveError(false);
 
-    if (!user || !card) return;
+    if (!user || !card) {
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -110,62 +144,76 @@ export function useQuestionCard({
     }
   };
 
-  const setAnswer = (next: SubmittedAnswer) => {
-    if (!isGradable || isResolved || isSubmitting) return;
-    setAnswerState(next);
-    const autoSubmitMultipleChoice =
-      properties.type === "multiple-choice" &&
-      next.type === "multiple-choice" &&
-      next.value.length >= properties.correctAnswer.length;
-    const autoSubmitMatching =
-      properties.type === "matching" && isAnswerComplete(properties, next);
-    const autoSubmitDragAndDrop =
-      properties.type === "drag-and-drop" && isAnswerComplete(properties, next);
-    const autoSubmitHotspot =
-      properties.type === "hotspot" &&
-      next.type === "hotspot" &&
-      next.value.length >= properties.correctAnswer.length;
-    const autoSubmitWhenComplete =
-      (properties.type === "dropdown" ||
-        properties.type === "case-study" ||
-        properties.type === "matrix") &&
-      isAnswerComplete(properties, next);
-    if (
-      isInstant ||
-      autoSubmitMultipleChoice ||
-      autoSubmitMatching ||
-      autoSubmitDragAndDrop ||
-      autoSubmitHotspot ||
-      autoSubmitWhenComplete
-    ) {
-      void submitAnswer(next);
-    }
-  };
+  const reveal = () => setStatus("revealed");
 
-  const submit = () => {
-    if (!canSubmit || answer === null) return;
-    void submitAnswer(answer);
-  };
-
-  /** Secondary action: reveal the key without logging an active recall score. */
-  const showAnswer = () => {
-    if (isResolved) return;
-    setStatus("revealed");
-  };
-
-  const retry = () => {
-    if (!isResolved || isSubmitting) return;
+  const restart = () => {
     setStatus("unanswered");
-    setAnswerState(createEmptyAnswer(properties));
     setHasSaveError(false);
     startedAt.current = Date.now();
   };
 
   return {
     status,
-    answer,
     isSubmitting,
     hasSaveError,
+    submitAnswer,
+    reveal,
+    restart,
+  };
+}
+
+export function useQuestionCard({
+  spaceId,
+  question,
+  card,
+}: UseQuestionCardOptions): UseQuestionCardResult {
+  const { properties } = question;
+  const attempt = useQuestionAttempt({ spaceId, question, card });
+  const { status, isSubmitting } = attempt;
+  const [answer, setAnswerState] = useState<SubmittedAnswer | null>(() =>
+    createEmptyAnswer(properties)
+  );
+
+  const isResolved = status !== "unanswered";
+  const { isGradable, needsConfirmation } = getAnswerFlags(properties);
+  const canSubmit =
+    !isResolved && !isSubmitting && isAnswerComplete(properties, answer);
+
+  const setAnswer = (next: SubmittedAnswer) => {
+    if (!isGradable || isResolved || isSubmitting) {
+      return;
+    }
+    setAnswerState(next);
+    if (shouldAutoSubmit(properties, next)) {
+      void attempt.submitAnswer(next);
+    }
+  };
+
+  const submit = () => {
+    if (canSubmit && answer !== null) {
+      void attempt.submitAnswer(answer);
+    }
+  };
+
+  /** Secondary action: reveal the key without logging an active recall score. */
+  const showAnswer = () => {
+    if (!isResolved) {
+      attempt.reveal();
+    }
+  };
+
+  const retry = () => {
+    if (isResolved && !isSubmitting) {
+      attempt.restart();
+      setAnswerState(createEmptyAnswer(properties));
+    }
+  };
+
+  return {
+    status,
+    answer,
+    isSubmitting,
+    hasSaveError: attempt.hasSaveError,
     isResolved,
     isGradable,
     needsConfirmation,

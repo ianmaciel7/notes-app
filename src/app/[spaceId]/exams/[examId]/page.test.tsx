@@ -44,10 +44,10 @@ describe("ExamPage", () => {
     render(ui);
 
     expect(
-      screen.getByTestId("require-auth").getAttribute("data-redirect-to"),
+      screen.getByTestId("require-auth").getAttribute("data-redirect-to")
     ).toBe(`/login?next=${encodeURIComponent("/space-1/exams/exam-9")}`);
     expect(
-      screen.getByTestId("space-shell").getAttribute("data-space-id"),
+      screen.getByTestId("space-shell").getAttribute("data-space-id")
     ).toBe("space-1");
     expect(screen.getByTestId("exam-list").textContent).toBe("space-1/exam-9");
   });

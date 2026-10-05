@@ -100,7 +100,7 @@ describe("submitAttempt", () => {
         spaceId: "s1",
         card,
         input: { ...input, rating: 9 as never },
-      }),
+      })
     ).rejects.toThrow("validationFailed");
     expect(mockCommit).not.toHaveBeenCalled();
   });
@@ -108,7 +108,7 @@ describe("submitAttempt", () => {
   it("propagates commit failures", async () => {
     mockCommit.mockRejectedValue(new Error("offline"));
     await expect(
-      submitAttempt({ userId: "u1", spaceId: "s1", card, input, now }),
+      submitAttempt({ userId: "u1", spaceId: "s1", card, input, now })
     ).rejects.toThrow("offline");
   });
 

@@ -23,7 +23,7 @@ test.describe("Authentication Flow", () => {
     await expect(submitButton).toBeVisible();
 
     // Verify guest authentication button exists
-    const guestButton = page.getByTestId("anonymous-sign-in-btn");
+    const guestButton = page.getByTestId("login-shell-anonymous-sign-in-btn");
     await expect(guestButton).toBeVisible();
   });
 
@@ -43,7 +43,7 @@ test.describe("Authentication Flow", () => {
     await page.goto("/login");
 
     // Click guest authentication button
-    const guestButton = page.getByTestId("anonymous-sign-in-btn");
+    const guestButton = page.getByTestId("login-shell-anonymous-sign-in-btn");
     await expect(guestButton).toBeVisible();
     await guestButton.click();
 

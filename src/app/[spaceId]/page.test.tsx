@@ -19,7 +19,7 @@ vi.mock("next-intl/server", () => ({
       const template = translations[namespace]?.[key] ?? key;
       return Object.entries(values ?? {}).reduce(
         (value, [name, replacement]) => value.replace(`{${name}}`, replacement),
-        template,
+        template
       );
     };
   }),
@@ -71,7 +71,7 @@ describe("SpacePage", () => {
     expect(screen.getByTestId("mock-space-shell")).toBeDefined();
     expect(screen.getByText("SpaceShell for test-space-456")).toBeDefined();
     expect(
-      screen.getByTestId("mock-require-auth").getAttribute("data-redirect-to"),
+      screen.getByTestId("mock-require-auth").getAttribute("data-redirect-to")
     ).toBe("/login?next=%2Ftest-space-456");
   });
 });

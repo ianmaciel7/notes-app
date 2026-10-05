@@ -147,7 +147,7 @@ describe("useSpaces", () => {
         ownerId: "user-abc",
         stateVersion: 1,
         schemaVersion: 1,
-      }),
+      })
     );
   });
 
@@ -199,7 +199,7 @@ describe("useSpaces", () => {
     const { result } = renderHook(() => useSpaces(), { wrapper });
 
     await expect(
-      result.current.createSpace({ name: "Test Space" }),
+      result.current.createSpace({ name: "Test Space" })
     ).rejects.toThrow("Must be authenticated to create a space");
   });
 

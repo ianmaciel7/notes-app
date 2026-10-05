@@ -21,7 +21,7 @@ interface CookieStoreStub {
 }
 
 const mockedCookies = vi.mocked(
-  cookies as unknown as () => Promise<CookieStoreStub>,
+  cookies as unknown as () => Promise<CookieStoreStub>
 );
 
 describe("next-intl request config", () => {
@@ -46,7 +46,7 @@ describe("next-intl request config", () => {
 
     expect(config.locale).toBe("pt-BR");
     expect(config.messages.app.subtitle).toBe(
-      "Espaço de conhecimento pessoal e aprendizado",
+      "Espaço de conhecimento pessoal e aprendizado"
     );
   });
 

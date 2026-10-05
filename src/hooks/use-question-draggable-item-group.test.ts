@@ -32,7 +32,7 @@ describe("useQuestionDraggableItemGroup", () => {
         slots,
         value: { s1: "i1" },
         onValueChange,
-      }),
+      })
     );
 
     expect(result.current.poolItems).toEqual([items[1], items[2]]);
@@ -46,7 +46,7 @@ describe("useQuestionDraggableItemGroup", () => {
         slots,
         value: {},
         onValueChange,
-      }),
+      })
     );
 
     act(() => {
@@ -64,7 +64,7 @@ describe("useQuestionDraggableItemGroup", () => {
         slots,
         value: { s1: "i1", s2: "i2" },
         onValueChange,
-      }),
+      })
     );
 
     act(() => {
@@ -82,7 +82,7 @@ describe("useQuestionDraggableItemGroup", () => {
         slots,
         value: { s1: "i1", s2: "i2" },
         onValueChange,
-      }),
+      })
     );
 
     act(() => {
@@ -100,7 +100,7 @@ describe("useQuestionDraggableItemGroup", () => {
         slots,
         value: {},
         onValueChange,
-      }),
+      })
     );
 
     act(() => {
@@ -124,7 +124,7 @@ describe("useQuestionDraggableItemGroup", () => {
         slots,
         value: { s1: "i1" },
         onValueChange,
-      }),
+      })
     );
 
     act(() => {
@@ -148,7 +148,7 @@ describe("useQuestionDraggableItemGroup", () => {
         slots,
         value: { s1: "i1" },
         onValueChange,
-      }),
+      })
     );
 
     act(() => {
@@ -172,7 +172,7 @@ describe("useQuestionDraggableItemGroup", () => {
         slots,
         value: {},
         onValueChange,
-      }),
+      })
     );
 
     const { announcements, screenReaderInstructions } =
@@ -213,7 +213,7 @@ describe("useQuestionDraggableItemGroup", () => {
         slots,
         value: {},
         onValueChange,
-      }),
+      })
     );
 
     expect(result.current.activeId).toBeNull();

@@ -18,14 +18,20 @@ export type ChoiceType = "single-choice" | "multiple-choice" | "true-false";
 const TRUE_FALSE_IDS = ["true", "false"] as const;
 
 function parseOptions(value: unknown): QuestionOption[] | null {
-  if (!Array.isArray(value)) return null;
+  if (!Array.isArray(value)) {
+    return null;
+  }
   const options: QuestionOption[] = [];
   for (const entry of value) {
-    if (!isRecord(entry)) return null;
+    if (!isRecord(entry)) {
+      return null;
+    }
     const id = readText(entry.id);
     const text = readText(entry.text);
     const image = parseOptionalImage(entry);
-    if (!id || !text || !image) return null;
+    if (!id || !text || !image) {
+      return null;
+    }
     if (entry.explanation !== undefined && !readText(entry.explanation)) {
       return null;
     }
@@ -43,10 +49,12 @@ function parseOptions(value: unknown): QuestionOption[] | null {
 /** Validates the option list for a choice type; `error` is set when it is invalid. */
 export function checkOptions(
   type: ChoiceType,
-  value: unknown,
+  value: unknown
 ): { options: QuestionOption[]; error?: QuestionValidationErrorCode } {
   const options = parseOptions(value);
-  if (!options) return { options: [], error: "invalidOptions" };
+  if (!options) {
+    return { options: [], error: "invalidOptions" };
+  }
 
   const ids = options.map((option) => option.id);
   if (type === "true-false") {
@@ -55,8 +63,12 @@ export function checkOptions(
       TRUE_FALSE_IDS.every((id) => ids.includes(id));
     return { options, ...(exact ? {} : { error: "trueFalseOptionsInvalid" }) };
   }
-  if (options.length < 2) return { options, error: "minOptionsRequired" };
-  if (hasDuplicates(ids)) return { options, error: "duplicateId" };
+  if (options.length < 2) {
+    return { options, error: "minOptionsRequired" };
+  }
+  if (hasDuplicates(ids)) {
+    return { options, error: "duplicateId" };
+  }
   return { options };
 }
 
@@ -68,7 +80,7 @@ function isTrueFalse(value: unknown): value is TrueFalseValue {
 export function checkChoiceAnswer(
   type: ChoiceType,
   options: readonly QuestionOption[],
-  answer: unknown,
+  answer: unknown
 ): QuestionValidationErrorCode | undefined {
   const ids = options.map((option) => option.id);
   if (type === "multiple-choice") {
@@ -89,7 +101,7 @@ export function checkChoiceAnswer(
 
 /** Fill-blank keys are one or more accepted answers; blank strings are rejected. */
 export function checkFillBlankAnswer(
-  answer: unknown,
+  answer: unknown
 ): QuestionValidationErrorCode | undefined {
   return isStringList(answer) && answer.length > 0
     ? undefined
@@ -99,7 +111,7 @@ export function checkFillBlankAnswer(
 function formatChoiceBody(
   type: ChoiceType,
   options: QuestionOption[],
-  raw: Record<string, unknown>,
+  raw: Record<string, unknown>
 ): QuestionBody | undefined {
   const answer = raw.correctAnswer;
   if (type === "multiple-choice" && isStringList(answer)) {
@@ -126,21 +138,27 @@ function formatChoiceBody(
 export function validateChoiceBody(
   type: ChoiceType,
   raw: Record<string, unknown>,
-  errors: QuestionFieldErrors,
+  errors: QuestionFieldErrors
 ): QuestionBody | undefined {
   const { options, error } = checkOptions(type, raw.options);
-  if (error) errors.options = error;
+  if (error) {
+    errors.options = error;
+  }
 
   const answerError = checkChoiceAnswer(type, options, raw.correctAnswer);
-  if (answerError) errors.correctAnswer = answerError;
-  if (error || answerError) return undefined;
+  if (answerError) {
+    errors.correctAnswer = answerError;
+  }
+  if (error || answerError) {
+    return undefined;
+  }
 
   return formatChoiceBody(type, options, raw);
 }
 
 export function validateFillBlankBody(
   raw: Record<string, unknown>,
-  errors: QuestionFieldErrors,
+  errors: QuestionFieldErrors
 ): QuestionBody | undefined {
   const answer = raw.correctAnswer;
   const answerError = checkFillBlankAnswer(answer);

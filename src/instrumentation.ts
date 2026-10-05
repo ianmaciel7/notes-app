@@ -4,7 +4,7 @@ import { captureError } from "@/lib/error-capture/capture";
 export const onRequestError: Instrumentation.onRequestError = async (
   error,
   request,
-  context,
+  context
 ) => {
   captureError(error, {
     source: "server-request",

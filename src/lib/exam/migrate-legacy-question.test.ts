@@ -19,7 +19,9 @@ const legacy = {
 
 function migrated(input: unknown) {
   const result = migrateLegacyQuestion(input);
-  if (!result.ok) throw new Error(`expected a migration, got ${result.reason}`);
+  if (!result.ok) {
+    throw new Error(`expected a migration, got ${result.reason}`);
+  }
   return result;
 }
 
@@ -99,10 +101,10 @@ describe("migrateLegacyQuestion", () => {
       migrated({
         ...legacy,
         groundedExplanation: { text: "x", answerProvenance: "?" },
-      }).properties.explanation?.answerProvenance,
+      }).properties.explanation?.answerProvenance
     ).toBe("user");
     expect(
-      migrated({ ...legacy, groundedExplanation: { text: " " } }).properties,
+      migrated({ ...legacy, groundedExplanation: { text: " " } }).properties
     ).not.toHaveProperty("explanation");
   });
 
@@ -145,7 +147,7 @@ describe("migrateLegacyQuestion", () => {
       orderIndex: 0,
     });
     expect(properties.type === "case-study" && properties.title).toHaveLength(
-      80,
+      80
     );
   });
 
@@ -160,10 +162,10 @@ describe("migrateLegacyQuestion", () => {
     expect(reason({ ...legacy, orderIndex: -1 })).toBe("invalidLegacy");
     expect(reason({ ...legacy, correctOptionIds: [] })).toBe("noCorrectOption");
     expect(reason({ ...legacy, correctOptionIds: ["zzz"] })).toBe(
-      "unknownCorrectOption",
+      "unknownCorrectOption"
     );
     expect(reason({ ...legacy, options: [{ id: "a", text: "Only" }] })).toBe(
-      "tooFewOptions",
+      "tooFewOptions"
     );
   });
 

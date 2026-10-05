@@ -41,7 +41,7 @@ export function useExamNavigation({
     const examsQuery = query(
       collection(db, "users", uid, "spaces", spaceId, "objects"),
       where("objectTypeId", "==", "exam"),
-      where("lifecycleState", "==", "active"),
+      where("lifecycleState", "==", "active")
     );
 
     return onSnapshot(
@@ -53,7 +53,7 @@ export function useExamNavigation({
               id: docSnap.id,
               title: String(docSnap.data().title ?? ""),
             }))
-            .sort((a, b) => a.title.localeCompare(b.title)),
+            .sort((a, b) => a.title.localeCompare(b.title))
         );
         setLoading(false);
         setError(null);
@@ -61,7 +61,7 @@ export function useExamNavigation({
       (err) => {
         setError(err);
         setLoading(false);
-      },
+      }
     );
   }, [uid, spaceId]);
 

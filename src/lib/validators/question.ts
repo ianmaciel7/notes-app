@@ -88,12 +88,16 @@ function parseExplanation(value: unknown): {
   value?: GroundedExplanation;
   error?: QuestionValidationErrorCode;
 } {
-  if (value === undefined) return {};
+  if (value === undefined) {
+    return {};
+  }
   if (!isRecord(value) || !readText(value.text)) {
     return { error: "invalidExplanation" };
   }
   const provenance = PROVENANCES.find((p) => p === value.answerProvenance);
-  if (!provenance) return { error: "invalidProvenance" };
+  if (!provenance) {
+    return { error: "invalidProvenance" };
+  }
 
   const urls = value.referenceUrls ?? [];
   if (!Array.isArray(urls) || !urls.every(isHttpsUrl)) {
@@ -109,55 +113,81 @@ function parseExplanation(value: unknown): {
 }
 
 function parseSource(value: unknown): QuestionSource | null {
-  if (!isRecord(value)) return null;
+  if (!isRecord(value)) {
+    return null;
+  }
   const label = readText(value.label);
-  if (!label) return null;
-  if (value.url === undefined) return { label };
+  if (!label) {
+    return null;
+  }
+  if (value.url === undefined) {
+    return { label };
+  }
   return isHttpsUrl(value.url) ? { label, url: value.url } : null;
 }
 
 function readOptionalFields(
   raw: Record<string, unknown>,
-  errors: QuestionFieldErrors,
+  errors: QuestionFieldErrors
 ): Partial<QuestionBase> {
   const optional: Partial<QuestionBase> = {};
 
   if (raw.promptImage !== undefined) {
     const image = parseImage(raw.promptImage);
-    if (image) optional.promptImage = image;
-    else errors.promptImage = "invalidImage";
+    if (image) {
+      optional.promptImage = image;
+    } else {
+      errors.promptImage = "invalidImage";
+    }
   }
 
   const explanation = parseExplanation(raw.explanation);
-  if (explanation.error) errors.explanation = explanation.error;
-  if (explanation.value) optional.explanation = explanation.value;
+  if (explanation.error) {
+    errors.explanation = explanation.error;
+  }
+  if (explanation.value) {
+    optional.explanation = explanation.value;
+  }
 
   if (raw.source !== undefined) {
     const source = parseSource(raw.source);
-    if (source) optional.source = source;
-    else errors.source = "invalidSource";
+    if (source) {
+      optional.source = source;
+    } else {
+      errors.source = "invalidSource";
+    }
   }
 
   const difficulty = DIFFICULTIES.find((d) => d === raw.difficulty);
-  if (difficulty) optional.difficulty = difficulty;
-  else if (raw.difficulty !== undefined) errors.difficulty = "invalidMetadata";
+  if (difficulty) {
+    optional.difficulty = difficulty;
+  } else if (raw.difficulty !== undefined) {
+    errors.difficulty = "invalidMetadata";
+  }
 
-  if (isStringList(raw.tags)) optional.tags = raw.tags;
-  else if (raw.tags !== undefined) errors.tags = "invalidMetadata";
+  if (isStringList(raw.tags)) {
+    optional.tags = raw.tags;
+  } else if (raw.tags !== undefined) {
+    errors.tags = "invalidMetadata";
+  }
 
   return optional;
 }
 
 function readCommonFields(
   raw: Record<string, unknown>,
-  errors: QuestionFieldErrors,
+  errors: QuestionFieldErrors
 ): QuestionBase | undefined {
   const prompt = readText(raw.prompt);
   const examId = readText(raw.examId);
   const orderIndex = raw.orderIndex;
 
-  if (!prompt) errors.prompt = "promptRequired";
-  if (!examId) errors.examId = "examIdRequired";
+  if (!prompt) {
+    errors.prompt = "promptRequired";
+  }
+  if (!examId) {
+    errors.examId = "examIdRequired";
+  }
   if (
     typeof orderIndex !== "number" ||
     !Number.isInteger(orderIndex) ||
@@ -167,15 +197,19 @@ function readCommonFields(
   }
 
   const optional = readOptionalFields(raw, errors);
-  if (errors.prompt || errors.examId || errors.orderIndex) return undefined;
-  if (typeof orderIndex !== "number") return undefined;
+  if (errors.prompt || errors.examId || errors.orderIndex) {
+    return undefined;
+  }
+  if (typeof orderIndex !== "number") {
+    return undefined;
+  }
   return { prompt, examId, orderIndex, ...optional };
 }
 
 function readBody(
   type: QuestionType,
   raw: Record<string, unknown>,
-  errors: QuestionFieldErrors,
+  errors: QuestionFieldErrors
 ): QuestionBody | undefined {
   switch (type) {
     case "single-choice":
@@ -205,9 +239,11 @@ function readBody(
 
 /** Validates `Question.properties`, rejecting fields that do not belong to its `type`. */
 export function validateQuestionProperties(
-  input: unknown,
+  input: unknown
 ): QuestionValidationResult {
-  if (!isRecord(input)) return { success: false, error: "invalidInput" };
+  if (!isRecord(input)) {
+    return { success: false, error: "invalidInput" };
+  }
 
   const type = input.type;
   if (!isQuestionType(type)) {

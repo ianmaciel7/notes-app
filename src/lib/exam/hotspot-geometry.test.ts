@@ -4,7 +4,7 @@ import { areaBox, areaClipPath } from "./hotspot-geometry";
 describe("areaBox", () => {
   it("returns the rect as is", () => {
     expect(
-      areaBox({ kind: "rect", x: 10, y: 20, width: 30, height: 40 }),
+      areaBox({ kind: "rect", x: 10, y: 20, width: 30, height: 40 })
     ).toEqual({ left: 10, top: 20, width: 30, height: 40 });
   });
 
@@ -26,7 +26,7 @@ describe("areaBox", () => {
           { x: 50, y: 20 },
           { x: 30, y: 60 },
         ],
-      }),
+      })
     ).toEqual({ left: 10, top: 20, width: 40, height: 40 });
   });
 });
@@ -41,16 +41,16 @@ describe("areaClipPath", () => {
           { x: 50, y: 20 },
           { x: 30, y: 60 },
         ],
-      }),
+      })
     ).toBe("polygon(0% 0%, 100% 0%, 50% 100%)");
   });
 
   it("does not clip rects and circles", () => {
     expect(
-      areaClipPath({ kind: "rect", x: 0, y: 0, width: 10, height: 10 }),
+      areaClipPath({ kind: "rect", x: 0, y: 0, width: 10, height: 10 })
     ).toBeUndefined();
     expect(
-      areaClipPath({ kind: "circle", cx: 50, cy: 50, r: 5 }),
+      areaClipPath({ kind: "circle", cx: 50, cy: 50, r: 5 })
     ).toBeUndefined();
   });
 });

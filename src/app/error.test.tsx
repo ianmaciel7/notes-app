@@ -31,8 +31,8 @@ describe("Root Error Boundary (src/app/error.tsx)", () => {
     expect(screen.queryByText("Firebase connection timeout")).toBeNull();
     expect(
       screen.getByText(
-        "An unexpected error occurred while communicating with application services.",
-      ),
+        "An unexpected error occurred while communicating with application services."
+      )
     ).toBeDefined();
 
     const retryBtn = screen.getByTestId("error-boundary-retry-btn");
@@ -52,8 +52,8 @@ describe("Root Error Boundary (src/app/error.tsx)", () => {
 
     expect(
       screen.getByText(
-        "An unexpected error occurred while communicating with application services.",
-      ),
+        "An unexpected error occurred while communicating with application services."
+      )
     ).toBeDefined();
   });
 });

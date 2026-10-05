@@ -213,7 +213,7 @@ export const QUESTION_FIXTURES: Record<QuestionType, QuestionProperties> = {
 
 export function makeQuestionObject(
   properties: QuestionProperties,
-  id = "q1",
+  id = "q1"
 ): QuestionObject {
   return {
     id,

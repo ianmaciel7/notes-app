@@ -43,7 +43,9 @@ function parseCircle(value: Record<string, unknown>): HotspotShape | null {
 }
 
 function parsePolygon(value: Record<string, unknown>): HotspotShape | null {
-  if (!Array.isArray(value.points) || value.points.length < 3) return null;
+  if (!Array.isArray(value.points) || value.points.length < 3) {
+    return null;
+  }
   const points: { x: number; y: number }[] = [];
   for (const point of value.points) {
     if (!isRecord(point) || !isPercent(point.x) || !isPercent(point.y)) {
@@ -56,22 +58,36 @@ function parsePolygon(value: Record<string, unknown>): HotspotShape | null {
 }
 
 function parseShape(value: unknown): HotspotShape | null {
-  if (!isRecord(value)) return null;
-  if (value.kind === "rect") return parseRect(value);
-  if (value.kind === "circle") return parseCircle(value);
-  if (value.kind === "polygon") return parsePolygon(value);
+  if (!isRecord(value)) {
+    return null;
+  }
+  if (value.kind === "rect") {
+    return parseRect(value);
+  }
+  if (value.kind === "circle") {
+    return parseCircle(value);
+  }
+  if (value.kind === "polygon") {
+    return parsePolygon(value);
+  }
   return null;
 }
 
 function parseAreas(value: unknown): HotspotArea[] | null {
-  if (!Array.isArray(value) || value.length === 0) return null;
+  if (!Array.isArray(value) || value.length === 0) {
+    return null;
+  }
   const areas: HotspotArea[] = [];
   for (const entry of value) {
-    if (!isRecord(entry)) return null;
+    if (!isRecord(entry)) {
+      return null;
+    }
     const id = readText(entry.id);
     const label = readText(entry.label);
     const shape = parseShape(entry.shape);
-    if (!id || !label || !shape) return null;
+    if (!id || !label || !shape) {
+      return null;
+    }
     if (entry.explanation !== undefined && !readText(entry.explanation)) {
       return null;
     }
@@ -83,7 +99,7 @@ function parseAreas(value: unknown): HotspotArea[] | null {
 
 export function validateHotspotBody(
   raw: Record<string, unknown>,
-  errors: QuestionFieldErrors,
+  errors: QuestionFieldErrors
 ): QuestionBody | undefined {
   const image = parseImage(raw.image);
   if (!image) {
@@ -104,8 +120,12 @@ export function validateHotspotBody(
     answer.length > 0 &&
     !hasDuplicates(answer) &&
     answer.every((id) => knownIds.includes(id));
-  if (!validAnswer) errors.correctAnswer = "invalidCorrectAnswer";
+  if (!validAnswer) {
+    errors.correctAnswer = "invalidCorrectAnswer";
+  }
 
-  if (!image || !areas || errors.areas || !validAnswer) return undefined;
+  if (!image || !areas || errors.areas || !validAnswer) {
+    return undefined;
+  }
   return { type: "hotspot", image, areas, correctAnswer: answer };
 }

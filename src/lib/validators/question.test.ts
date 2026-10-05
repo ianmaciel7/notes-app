@@ -117,10 +117,10 @@ describe("validateQuestionProperties: invalid input", () => {
 
   it("rejects a negative or fractional order index", () => {
     expect(
-      fieldErrorsOf({ ...fillBlankFixture, orderIndex: -1 })?.orderIndex,
+      fieldErrorsOf({ ...fillBlankFixture, orderIndex: -1 })?.orderIndex
     ).toBe("invalidOrderIndex");
     expect(
-      fieldErrorsOf({ ...fillBlankFixture, orderIndex: 1.5 })?.orderIndex,
+      fieldErrorsOf({ ...fillBlankFixture, orderIndex: 1.5 })?.orderIndex
     ).toBe("invalidOrderIndex");
   });
 
@@ -147,7 +147,7 @@ describe("validateQuestionProperties: invalid input", () => {
       fieldErrorsOf({
         ...fillBlankFixture,
         explanation: { text: "x", referenceUrls: [], answerProvenance: "?" },
-      })?.explanation,
+      })?.explanation
     ).toBe("invalidProvenance");
     expect(
       fieldErrorsOf({
@@ -157,7 +157,7 @@ describe("validateQuestionProperties: invalid input", () => {
           referenceUrls: ["http://insecure.example"],
           answerProvenance: "user",
         },
-      })?.explanation,
+      })?.explanation
     ).toBe("invalidExplanation");
   });
 
@@ -176,13 +176,13 @@ describe("validateQuestionProperties: invalid input", () => {
       fieldErrorsOf({
         ...fillBlankFixture,
         promptImage: { url: "data:image/png;base64,AAAA", alt: "x" },
-      })?.promptImage,
+      })?.promptImage
     ).toBe("invalidImage");
     expect(
       fieldErrorsOf({
         ...fillBlankFixture,
         promptImage: { url: "https://example.com/a.png" },
-      })?.promptImage,
+      })?.promptImage
     ).toBe("invalidImage");
   });
 });
@@ -190,13 +190,13 @@ describe("validateQuestionProperties: invalid input", () => {
 describe("validateQuestionProperties: fields incompatible with the type", () => {
   it("rejects choice fields on fill-blank", () => {
     expect(
-      fieldErrorsOf({ ...fillBlankFixture, options: [{ id: "a", text: "A" }] }),
+      fieldErrorsOf({ ...fillBlankFixture, options: [{ id: "a", text: "A" }] })
     ).toEqual({ options: "incompatibleField" });
   });
 
   it("rejects areas on a single-choice question", () => {
     expect(
-      fieldErrorsOf({ ...singleChoiceFixture, areas: hotspotFixture.areas }),
+      fieldErrorsOf({ ...singleChoiceFixture, areas: hotspotFixture.areas })
     ).toEqual({ areas: "incompatibleField" });
   });
 
@@ -222,14 +222,14 @@ describe("validateQuestionProperties: choice questions", () => {
         ...singleChoiceFixture,
         options: [{ id: "a", text: "A" }],
         correctAnswer: "a",
-      })?.options,
+      })?.options
     ).toBe("minOptionsRequired");
   });
 
   it("rejects malformed options", () => {
     for (const options of ["x", [null], [{ id: "", text: "A" }]]) {
       expect(fieldErrorsOf({ ...singleChoiceFixture, options })?.options).toBe(
-        "invalidOptions",
+        "invalidOptions"
       );
     }
   });
@@ -243,36 +243,36 @@ describe("validateQuestionProperties: choice questions", () => {
           { id: "a", text: "B" },
         ],
         correctAnswer: "a",
-      })?.options,
+      })?.options
     ).toBe("duplicateId");
   });
 
   it("rejects a correct answer that references no option", () => {
     expect(
       fieldErrorsOf({ ...singleChoiceFixture, correctAnswer: "zzz" })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
     expect(
       fieldErrorsOf({ ...singleChoiceFixture, correctAnswer: ["a", "b"] })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
   });
 
   it("allows several correct answers only in multiple-choice", () => {
     expect(
-      validateQuestionProperties(multipleChoiceFixture).data?.correctAnswer,
+      validateQuestionProperties(multipleChoiceFixture).data?.correctAnswer
     ).toEqual(["a", "c"]);
     expect(
       fieldErrorsOf({ ...multipleChoiceFixture, correctAnswer: [] })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
     expect(
       fieldErrorsOf({ ...multipleChoiceFixture, correctAnswer: ["a", "a"] })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
     expect(
       fieldErrorsOf({ ...multipleChoiceFixture, correctAnswer: ["a", "zzz"] })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
   });
 
@@ -290,7 +290,7 @@ describe("validateQuestionProperties: choice questions", () => {
       ],
     ]) {
       expect(fieldErrorsOf({ ...trueFalseFixture, options })?.options).toBe(
-        "trueFalseOptionsInvalid",
+        "trueFalseOptionsInvalid"
       );
     }
   });
@@ -298,25 +298,25 @@ describe("validateQuestionProperties: choice questions", () => {
   it("requires true-false to have exactly one correct value", () => {
     expect(
       fieldErrorsOf({ ...trueFalseFixture, correctAnswer: "maybe" })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
     expect(
       fieldErrorsOf({ ...trueFalseFixture, correctAnswer: ["true", "false"] })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
   });
 
   it("requires at least one accepted answer for fill-blank", () => {
     expect(
-      fieldErrorsOf({ ...fillBlankFixture, correctAnswer: [] })?.correctAnswer,
+      fieldErrorsOf({ ...fillBlankFixture, correctAnswer: [] })?.correctAnswer
     ).toBe("invalidCorrectAnswer");
     expect(
       fieldErrorsOf({ ...fillBlankFixture, correctAnswer: ["  "] })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
     expect(
       fieldErrorsOf({ ...fillBlankFixture, correctAnswer: "Run" })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
   });
 });
@@ -325,19 +325,19 @@ describe("validateQuestionProperties: matching and drag-and-drop", () => {
   it("requires every left item to be mapped to an existing right item", () => {
     expect(
       fieldErrorsOf({ ...matchingFixture, correctAnswer: { l1: "r1" } })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
     expect(
       fieldErrorsOf({
         ...matchingFixture,
         correctAnswer: { l1: "r1", l2: "zzz" },
-      })?.correctAnswer,
+      })?.correctAnswer
     ).toBe("invalidCorrectAnswer");
     expect(
       fieldErrorsOf({
         ...matchingFixture,
         correctAnswer: { l1: "r1", l2: "r2", l3: "r3" },
-      })?.correctAnswer,
+      })?.correctAnswer
     ).toBe("invalidCorrectAnswer");
   });
 
@@ -349,32 +349,32 @@ describe("validateQuestionProperties: matching and drag-and-drop", () => {
           { id: "l1", text: "A" },
           { id: "l1", text: "B" },
         ],
-      })?.leftItems,
+      })?.leftItems
     ).toBe("duplicateId");
     expect(
       fieldErrorsOf({
         ...matchingFixture,
         rightItems: [{ id: "r1", text: "A" }],
-      })?.rightItems,
+      })?.rightItems
     ).toBe("invalidItems");
   });
 
   it("requires every slot to hold a distinct existing item", () => {
     expect(
       fieldErrorsOf({ ...dragAndDropFixture, correctAnswer: { s1: "i1" } })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
     expect(
       fieldErrorsOf({
         ...dragAndDropFixture,
         correctAnswer: { s1: "i1", s2: "i1" },
-      })?.correctAnswer,
+      })?.correctAnswer
     ).toBe("invalidCorrectAnswer");
     expect(
       fieldErrorsOf({
         ...dragAndDropFixture,
         correctAnswer: { s1: "i1", s2: "zzz" },
-      })?.correctAnswer,
+      })?.correctAnswer
     ).toBe("invalidCorrectAnswer");
   });
 
@@ -386,10 +386,10 @@ describe("validateQuestionProperties: matching and drag-and-drop", () => {
           { id: "s1", label: "A" },
           { id: "s1", label: "B" },
         ],
-      })?.slots,
+      })?.slots
     ).toBe("duplicateId");
     expect(fieldErrorsOf({ ...dragAndDropFixture, slots: [] })?.slots).toBe(
-      "invalidSlots",
+      "invalidSlots"
     );
     expect(
       fieldErrorsOf({
@@ -398,7 +398,7 @@ describe("validateQuestionProperties: matching and drag-and-drop", () => {
           { id: "i1", text: "A" },
           { id: "i1", text: "B" },
         ],
-      })?.items,
+      })?.items
     ).toBe("duplicateId");
   });
 });
@@ -408,20 +408,20 @@ describe("validateQuestionProperties: hotspot", () => {
     const { image: _image, ...withoutImage } = hotspotFixture;
     expect(fieldErrorsOf(withoutImage)?.image).toBe("imageRequired");
     expect(
-      fieldErrorsOf({ ...hotspotFixture, image: { url: "", alt: "" } })?.image,
+      fieldErrorsOf({ ...hotspotFixture, image: { url: "", alt: "" } })?.image
     ).toBe("invalidImage");
   });
 
   it("requires at least one area and a correct area that exists", () => {
     expect(fieldErrorsOf({ ...hotspotFixture, areas: [] })?.areas).toBe(
-      "invalidAreas",
+      "invalidAreas"
     );
     expect(
       fieldErrorsOf({ ...hotspotFixture, correctAnswer: ["zzz"] })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
     expect(
-      fieldErrorsOf({ ...hotspotFixture, correctAnswer: [] })?.correctAnswer,
+      fieldErrorsOf({ ...hotspotFixture, correctAnswer: [] })?.correctAnswer
     ).toBe("invalidCorrectAnswer");
   });
 
@@ -430,14 +430,14 @@ describe("validateQuestionProperties: hotspot", () => {
       validateQuestionProperties({
         ...hotspotFixture,
         correctAnswer: ["lb", "db"],
-      }).success,
+      }).success
     ).toBe(true);
   });
 
   it("rejects duplicate area ids and out-of-range geometry", () => {
     const area = hotspotFixture.areas[0];
     expect(
-      fieldErrorsOf({ ...hotspotFixture, areas: [area, area] })?.areas,
+      fieldErrorsOf({ ...hotspotFixture, areas: [area, area] })?.areas
     ).toBe("duplicateId");
     for (const shape of [
       { kind: "rect", x: 90, y: 0, width: 20, height: 10 },
@@ -459,7 +459,7 @@ describe("validateQuestionProperties: hotspot", () => {
           ...hotspotFixture,
           areas: [{ id: "lb", label: "LB", shape }],
           correctAnswer: ["lb"],
-        })?.areas,
+        })?.areas
       ).toBe("invalidAreas");
     }
   });
@@ -473,7 +473,7 @@ describe("validateQuestionProperties: case study", () => {
         title: "",
         context: "",
         sections: [],
-      }),
+      })
     ).toEqual({
       title: "invalidTitle",
       context: "invalidContext",
@@ -489,7 +489,7 @@ describe("validateQuestionProperties: case study", () => {
           { id: "s", title: "A", content: "a" },
           { id: "s", title: "B", content: "b" },
         ],
-      })?.sections,
+      })?.sections
     ).toBe("duplicateId");
     const [first] = caseStudyFixture.parts;
     expect(
@@ -497,20 +497,20 @@ describe("validateQuestionProperties: case study", () => {
         ...caseStudyFixture,
         parts: [first, first],
         correctAnswer: { p1: "a" },
-      })?.parts,
+      })?.parts
     ).toBe("invalidParts");
   });
 
   it("requires a valid answer for every part", () => {
     expect(
       fieldErrorsOf({ ...caseStudyFixture, correctAnswer: { p1: "a" } })
-        ?.correctAnswer,
+        ?.correctAnswer
     ).toBe("invalidCorrectAnswer");
     expect(
       fieldErrorsOf({
         ...caseStudyFixture,
         correctAnswer: { p1: "zzz", p2: ["x"] },
-      })?.correctAnswer,
+      })?.correctAnswer
     ).toBe("invalidCorrectAnswer");
   });
 
@@ -527,14 +527,14 @@ describe("validateQuestionProperties: case study", () => {
           },
         ],
         correctAnswer: { p2: ["x"] },
-      })?.parts,
+      })?.parts
     ).toBe("invalidParts");
     expect(
       fieldErrorsOf({
         ...caseStudyFixture,
         parts: [{ id: "p1", type: "case-study", prompt: "x" }],
         correctAnswer: { p1: "a" },
-      })?.parts,
+      })?.parts
     ).toBe("invalidParts");
   });
 });

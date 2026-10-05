@@ -106,13 +106,13 @@ describe("Firebase Firestore Emulator Integration", () => {
     const ownerCredential = await createUserWithEmailAndPassword(
       auth,
       ownerEmail,
-      ownerPassword,
+      ownerPassword
     );
     const ownerUid = ownerCredential.user.uid;
     const testId = `integration-doc-${Date.now()}`;
     await setDoc(
       doc(db, "users", ownerUid, "spaces", "integration-space"),
-      buildSpaceData(ownerUid, "integration-space"),
+      buildSpaceData(ownerUid, "integration-space")
     );
     const testDocRef = doc(
       db,
@@ -121,7 +121,7 @@ describe("Firebase Firestore Emulator Integration", () => {
       "spaces",
       "integration-space",
       "objects",
-      testId,
+      testId
     );
 
     await setDoc(testDocRef, buildObjectData("integration-space"));
@@ -154,7 +154,7 @@ describe("Firebase Firestore Emulator Integration", () => {
       ownerUid,
       "spaces",
       "integration-space",
-      "objects",
+      "objects"
     );
     const colSnap = await getDocs(colRef);
     expect(colSnap.docs.some((item) => item.id === testId)).toBe(true);
@@ -192,27 +192,27 @@ describe("Firebase Firestore Emulator Integration", () => {
       "users",
       owner.uid,
       "spaces",
-      `${spaceId}-forged`,
+      `${spaceId}-forged`
     );
     await expect(
       setDoc(forgedRef, {
         ...buildSpaceData(owner.uid, `${spaceId}-forged`),
         ownerId: "someone-else",
-      }),
+      })
     ).rejects.toMatchObject({ code: "permission-denied" });
     await expect(
       setDoc(forgedRef, {
         ...buildSpaceData(owner.uid, `${spaceId}-forged`),
         stateVersion: 5,
-      }),
+      })
     ).rejects.toMatchObject({ code: "permission-denied" });
 
     // Updates must bump stateVersion by exactly one and keep immutable fields.
     await expect(
-      updateDoc(spaceRef, { name: "Skipped", stateVersion: 3 }),
+      updateDoc(spaceRef, { name: "Skipped", stateVersion: 3 })
     ).rejects.toMatchObject({ code: "permission-denied" });
     await expect(
-      updateDoc(spaceRef, { ownerId: "someone-else", stateVersion: 2 }),
+      updateDoc(spaceRef, { ownerId: "someone-else", stateVersion: 2 })
     ).rejects.toMatchObject({ code: "permission-denied" });
     await updateDoc(spaceRef, {
       name: "Renamed",
@@ -229,10 +229,10 @@ describe("Firebase Firestore Emulator Integration", () => {
       "spaces",
       `${spaceId}-missing`,
       "objects",
-      "orphan",
+      "orphan"
     );
     await expect(
-      setDoc(orphanRef, buildObjectData(`${spaceId}-missing`)),
+      setDoc(orphanRef, buildObjectData(`${spaceId}-missing`))
     ).rejects.toMatchObject(PERMISSION_DENIED);
 
     // Objects: required fields, enums, spaceId and optimistic concurrency.
@@ -251,15 +251,15 @@ describe("Firebase Firestore Emulator Integration", () => {
       buildObjectData(spaceId, { properties: "not-a-map" }),
     ]) {
       await expect(setDoc(badObjectRef, invalid)).rejects.toMatchObject(
-        PERMISSION_DENIED,
+        PERMISSION_DENIED
       );
     }
     await setDoc(objectRef, buildObjectData(spaceId));
     await expect(
-      updateDoc(objectRef, { title: "Skipped", stateVersion: 3 }),
+      updateDoc(objectRef, { title: "Skipped", stateVersion: 3 })
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await expect(
-      updateDoc(objectRef, { spaceId: "other-space", stateVersion: 2 }),
+      updateDoc(objectRef, { spaceId: "other-space", stateVersion: 2 })
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await updateDoc(objectRef, {
       title: "Edited",
@@ -279,40 +279,40 @@ describe("Firebase Firestore Emulator Integration", () => {
       updatedAt: serverTimestamp(),
     };
     await expect(
-      setDoc(relationRef, { ...relation, relationType: "" }),
+      setDoc(relationRef, { ...relation, relationType: "" })
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await setDoc(relationRef, relation);
 
     const cardRef = nested("cards", "c1");
     await expect(
-      setDoc(cardRef, buildCardData(spaceId, { state: 4 })),
+      setDoc(cardRef, buildCardData(spaceId, { state: 4 }))
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await expect(
-      setDoc(cardRef, buildCardData(spaceId, { difficulty: 11 })),
+      setDoc(cardRef, buildCardData(spaceId, { difficulty: 11 }))
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await setDoc(cardRef, buildCardData(spaceId));
 
     // Attempts are append-only (INV-11) and validate rating and mode.
     const attemptRef = nested("attempts", "a1");
     await expect(
-      setDoc(attemptRef, buildAttemptData(spaceId, { rating: 5 })),
+      setDoc(attemptRef, buildAttemptData(spaceId, { rating: 5 }))
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await expect(
-      setDoc(attemptRef, buildAttemptData(spaceId, { reviewMode: "other" })),
+      setDoc(attemptRef, buildAttemptData(spaceId, { reviewMode: "other" }))
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await expect(
-      setDoc(attemptRef, buildAttemptData(spaceId, { questionType: "essay" })),
+      setDoc(attemptRef, buildAttemptData(spaceId, { questionType: "essay" }))
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await expect(
-      setDoc(attemptRef, buildAttemptData(spaceId, { isCorrect: "yes" })),
+      setDoc(attemptRef, buildAttemptData(spaceId, { isCorrect: "yes" }))
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await expect(
       setDoc(
         attemptRef,
         buildAttemptData(spaceId, {
           submittedAnswer: { type: "matching", value: { l1: "r1" } },
-        }),
-      ),
+        })
+      )
     ).rejects.toMatchObject(PERMISSION_DENIED);
     await setDoc(attemptRef, buildAttemptData(spaceId));
 
@@ -327,17 +327,17 @@ describe("Firebase Firestore Emulator Integration", () => {
         buildAttemptData(spaceId, {
           questionType,
           submittedAnswer: { type: questionType, value },
-        }),
+        })
       );
     }
 
     await expect(updateDoc(attemptRef, { rating: 1 })).rejects.toMatchObject(
-      PERMISSION_DENIED,
+      PERMISSION_DENIED
     );
 
     // Collections without a documented schema are not writable.
     await expect(
-      setDoc(nested("scratch", "s1"), { anything: "goes" }),
+      setDoc(nested("scratch", "s1"), { anything: "goes" })
     ).rejects.toMatchObject(PERMISSION_DENIED);
 
     // A different signed-in user can neither read nor write the owner's space.
@@ -347,16 +347,16 @@ describe("Firebase Firestore Emulator Integration", () => {
       code: "permission-denied",
     });
     await expect(
-      updateDoc(spaceRef, { name: "Hijacked", stateVersion: 3 }),
+      updateDoc(spaceRef, { name: "Hijacked", stateVersion: 3 })
     ).rejects.toMatchObject({ code: "permission-denied" });
     await expect(deleteDoc(spaceRef)).rejects.toMatchObject({
       code: "permission-denied",
     });
     await expect(getDocFromServer(objectRef)).rejects.toMatchObject(
-      PERMISSION_DENIED,
+      PERMISSION_DENIED
     );
     await expect(
-      updateDoc(objectRef, { title: "Hijacked", stateVersion: 3 }),
+      updateDoc(objectRef, { title: "Hijacked", stateVersion: 3 })
     ).rejects.toMatchObject(PERMISSION_DENIED);
 
     // Cleanup as the owner.

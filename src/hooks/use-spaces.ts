@@ -9,6 +9,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
+import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "@/lib/firebase/firestore";
@@ -28,6 +29,74 @@ export interface UseSpacesResult {
   createSpace: (input: CreateSpaceInput) => Promise<string>;
 }
 
+function useNetworkStatus(
+  setIsOffline: Dispatch<SetStateAction<boolean>>,
+  setError: Dispatch<SetStateAction<Error | null>>,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setRetryKey: Dispatch<SetStateAction<number>>
+) {
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const handleOnline = () => {
+      setIsOffline(false);
+      setError(null);
+      setLoading(true);
+      setRetryKey((prev) => prev + 1);
+    };
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, [setError, setIsOffline, setLoading, setRetryKey]);
+}
+
+function useSpacesSubscription(
+  user: ReturnType<typeof useAuth>["user"],
+  retryKey: number,
+  setSpaces: Dispatch<SetStateAction<Space[]>>,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setError: Dispatch<SetStateAction<Error | null>>
+) {
+  useEffect(() => {
+    if (retryKey < 0) {
+      return;
+    }
+    if (!user) {
+      setSpaces([]);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+    setLoading(true);
+    const spacesQuery = query(
+      collection(db, "users", user.uid, "spaces"),
+      orderBy("createdAt", "asc")
+    );
+    const unsubscribe = onSnapshot(
+      spacesQuery,
+      (snapshot) => {
+        setSpaces(
+          snapshot.docs.map(
+            (docSnap) => ({ ...docSnap.data(), id: docSnap.id }) as Space
+          )
+        );
+        setLoading(false);
+        setError(null);
+      },
+      (err) => {
+        setError(err);
+        setLoading(false);
+      }
+    );
+    return () => unsubscribe();
+  }, [retryKey, user, setError, setLoading, setSpaces]);
+}
+
 export function useSpaces(): UseSpacesResult {
   const { user } = useAuth();
   const [spaces, setSpaces] = useState<Space[]>([]);
@@ -44,69 +113,8 @@ export function useSpaces(): UseSpacesResult {
     setRetryKey((prev) => prev + 1);
   };
 
-  // W3C Network Information / HTML5 Online Status handling
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const handleOnline = () => {
-      setIsOffline(false);
-      setError(null);
-      setLoading(true);
-      setRetryKey((prev) => prev + 1);
-    };
-
-    const handleOffline = () => {
-      setIsOffline(true);
-    };
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, []);
-
-  useEffect(() => {
-    // Reference retryKey to re-subscribe on manual retry
-    if (retryKey < 0) return;
-
-    if (!user) {
-      setSpaces([]);
-      setLoading(false);
-      setError(null);
-      return;
-    }
-
-    setLoading(true);
-    const spacesRef = collection(db, "users", user.uid, "spaces");
-    const spacesQuery = query(spacesRef, orderBy("createdAt", "asc"));
-
-    const unsubscribe = onSnapshot(
-      spacesQuery,
-      (snapshot) => {
-        const loadedSpaces: Space[] = snapshot.docs.map((docSnap) => {
-          const data = docSnap.data() as Space;
-          return {
-            ...data,
-            id: docSnap.id,
-          };
-        });
-        setSpaces(loadedSpaces);
-        setLoading(false);
-        setError(null);
-      },
-      (err) => {
-        setError(err);
-        setLoading(false);
-      },
-    );
-
-    return () => {
-      unsubscribe();
-    };
-  }, [user, retryKey]);
+  useNetworkStatus(setIsOffline, setError, setLoading, setRetryKey);
+  useSpacesSubscription(user, retryKey, setSpaces, setLoading, setError);
 
   const createSpace = async (input: CreateSpaceInput): Promise<string> => {
     if (!user) {
