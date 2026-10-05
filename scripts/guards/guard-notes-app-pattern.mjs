@@ -200,6 +200,84 @@ function checkSpaceShellContract(filePath, fileName, content) {
   ];
 }
 
+function checkNativeSelectUsage(filePath, fileName, content) {
+  if (!content.includes("NativeSelect")) return [];
+
+  // NativeSelect is only allowed as an accessible screen-reader alternative
+  // (e.g. sr-only focus:not-sr-only in drag-drop slots), not as a visible primary control.
+  const nativeSelectPattern = /<NativeSelect\b[^>]*>/g;
+  for (const match of content.matchAll(nativeSelectPattern)) {
+    const tag = match[0];
+    if (!tag.includes("sr-only")) {
+      return [
+        violation(
+          filePath,
+          "notes-app-no-visible-native-select",
+          `${fileName} uses NativeSelect without 'sr-only'. Use the shared 'Select' primitive for visible selection controls per CONVENTIONS.md.`,
+        ),
+      ];
+    }
+  }
+
+  return [];
+}
+
+function checkFieldDescriptionNesting(filePath, fileName, content) {
+  // FieldDescription renders a <p>. In HTML, <div>, <ul>, <ol>, <p> cannot be nested inside <p>.
+  // Such components must compose FieldContent (<div data-slot="field-content">) instead.
+  const fieldDescBlockPattern =
+    /<FieldDescription\b[^>]*>([\s\S]*?)<\/FieldDescription>/g;
+
+  for (const match of content.matchAll(fieldDescBlockPattern)) {
+    const children = match[1];
+    if (/<(div|ul|ol|p)\b/.test(children)) {
+      return [
+        violation(
+          filePath,
+          "notes-app-no-block-in-field-description",
+          `${fileName} nests block elements (<div|ul|ol|p>) inside <FieldDescription>. FieldDescription renders a <p>, causing HTML hydration errors. Compose 'FieldContent' instead.`,
+        ),
+      ];
+    }
+  }
+
+  return [];
+}
+
+function checkPrimitiveRoleAlignment(filePath, fileName, content) {
+  // Enforces that specialized components align their naming suffix with the composed primitive:
+  // - Composing <FieldSet> -> suffix must be FieldSet (or *Form for form flows)
+  // - Composing <FieldContent> -> suffix must be FieldContent
+  // - Composing <Toggle> -> suffix must be Toggle
+  const componentName = toPascalCase(fileName);
+
+  if (
+    /<FieldContent\b/.test(content) &&
+    fileName.includes("-field-") &&
+    !fileName.endsWith("-field-content.tsx")
+  ) {
+    return [
+      violation(
+        filePath,
+        "notes-app-primitive-role-alignment",
+        `${fileName} (${componentName}) composes FieldContent and should end with 'FieldContent'.`,
+      ),
+    ];
+  }
+
+  if (/<Toggle\b/.test(content) && !componentName.endsWith("Toggle")) {
+    return [
+      violation(
+        filePath,
+        "notes-app-primitive-role-alignment",
+        `${fileName} (${componentName}) composes Toggle and should end with 'Toggle'.`,
+      ),
+    ];
+  }
+
+  return [];
+}
+
 function checkRawLayoutWrappers(filePath, fileName, content) {
   if (fileName === "phone-auth-form.tsx" || fileName.startsWith("sms-mfa-")) {
     return [];
@@ -309,6 +387,7 @@ function checkFile(filePath, content) {
   violations.push(...checkDedicatedHookOwnsState(filePath, fileName, content));
   violations.push(...checkSpaceShellContract(filePath, fileName, content));
   violations.push(...checkRawLayoutWrappers(filePath, fileName, content));
+  violations.push(...checkNativeSelectUsage(filePath, fileName, content));
   violations.push(...checkComponentRoleNames(filePath, fileName, content));
   violations.push(...checkComponentSlots(filePath, fileName, content));
 
@@ -343,6 +422,7 @@ export {
   CANONICAL_COMPONENT_EXEMPT_FILES,
   checkDedicatedHookOwnsState,
   checkSpaceShellContract,
+  checkNativeSelectUsage,
   checkComponentRoleNames,
   checkComponentSlots,
   checkFile,

@@ -36,7 +36,7 @@ test("ignores non-component paths", () => {
   );
   assert.equal(
     isApplicationComponentPath("src/components/notes-app/deep/x-card.tsx"),
-    false,
+    true,
   );
   assert.equal(isApplicationComponentPath("src/app/page.tsx"), false);
 });

@@ -12,9 +12,12 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { QuestionItem } from "@/types/question";
 
 type QuestionMatchingFieldProps = Omit<
@@ -68,24 +71,29 @@ function QuestionMatchingField({
         ) : null}
       </FieldContent>
       <div className="flex items-center gap-2">
-        <NativeSelect
-          id={selectId}
-          value={chosenId}
+        <Select
           disabled={resolved}
-          aria-label={t("matchLabel", { item: item.text })}
-          aria-invalid={resolved && !isCorrect}
-          aria-describedby={resolved && !isCorrect ? descId : undefined}
-          onChange={(event) => onChosenChange(event.target.value)}
+          value={chosenId}
+          onValueChange={(next) => onChosenChange(String(next))}
         >
-          <NativeSelectOption value="">
-            {t("matchPlaceholder")}
-          </NativeSelectOption>
-          {rightItems.map((right) => (
-            <NativeSelectOption key={right.id} value={right.id}>
-              {right.text}
-            </NativeSelectOption>
-          ))}
-        </NativeSelect>
+          <SelectTrigger
+            id={selectId}
+            aria-label={t("matchLabel", { item: item.text })}
+            aria-invalid={resolved && !isCorrect}
+            aria-describedby={resolved && !isCorrect ? descId : undefined}
+            className="w-48 sm:w-60"
+            data-slot="question-matching-trigger"
+          >
+            <SelectValue placeholder={t("matchPlaceholder")} />
+          </SelectTrigger>
+          <SelectContent>
+            {rightItems.map((right) => (
+              <SelectItem key={right.id} value={right.id}>
+                {right.text}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         {resolved ? (
           <QuestionResultBadge state={isCorrect ? "correct" : "incorrect"} />
         ) : null}

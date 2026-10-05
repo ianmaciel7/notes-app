@@ -223,3 +223,46 @@ test("enforces the SpaceShell wrapper contract", () => {
     violations.some((item) => item.rule === "notes-app-space-shell-contract"),
   );
 });
+
+test("rejects visible NativeSelect without sr-only", () => {
+  const source = `
+    import { NativeSelect } from "@/components/ui/native-select";
+    function CustomSelect() {
+      return (
+        <NativeSelect data-slot="custom-select" className="w-full">
+          <option value="1">1</option>
+        </NativeSelect>
+      );
+    }
+  `;
+
+  const violations = checkFile("custom-select.tsx", source);
+  assert.ok(
+    violations.some(
+      (item) => item.rule === "notes-app-no-visible-native-select",
+    ),
+  );
+});
+
+test("allows NativeSelect when used as accessible sr-only alternative", () => {
+  const source = `
+    import { NativeSelect } from "@/components/ui/native-select";
+    function DropSlotSelect() {
+      return (
+        <NativeSelect
+          data-slot="drop-slot-select"
+          className="sr-only focus:not-sr-only focus:h-7"
+        >
+          <option value="1">1</option>
+        </NativeSelect>
+      );
+    }
+  `;
+
+  assert.deepEqual(
+    checkFile("drop-slot-select.tsx", source).filter(
+      (item) => item.rule === "notes-app-no-visible-native-select",
+    ),
+    [],
+  );
+});
