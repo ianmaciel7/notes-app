@@ -4,7 +4,7 @@ import { RotateCcwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { QuestionAnswerGroup } from "@/components/notes-app/question-answer-group";
-import { QuestionExplanationFieldDescription } from "@/components/notes-app/question-explanation-field-description";
+import { QuestionExplanationFieldContent } from "@/components/notes-app/question-explanation-field-content";
 import { QuestionImageFigure } from "@/components/notes-app/question-image-figure";
 import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
 import { Button } from "@/components/ui/button";
@@ -105,7 +105,7 @@ function QuestionCard({
           </p>
         ) : null}
         {showExplanation && properties.explanation ? (
-          <QuestionExplanationFieldDescription
+          <QuestionExplanationFieldContent
             explanation={properties.explanation}
           />
         ) : null}

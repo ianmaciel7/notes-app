@@ -5,21 +5,21 @@ import { FieldContent } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { GroundedExplanation } from "@/types/question";
 
-type QuestionExplanationFieldDescriptionProps = Omit<
+type QuestionExplanationFieldContentProps = Omit<
   ComponentProps<typeof FieldContent>,
   "children"
 > & {
   explanation: GroundedExplanation;
 };
 
-function QuestionExplanationFieldDescription({
+function QuestionExplanationFieldContent({
   explanation,
   className,
   ...props
-}: QuestionExplanationFieldDescriptionProps) {
+}: QuestionExplanationFieldContentProps) {
   return (
     <FieldContent
-      data-slot="question-explanation-field-description"
+      data-slot="question-explanation-field-content"
       {...props}
       className={cn(
         "flex flex-col gap-2 text-left text-sm leading-normal font-normal text-muted-foreground",
@@ -51,6 +51,6 @@ function QuestionExplanationFieldDescription({
 }
 
 export {
-  QuestionExplanationFieldDescription,
-  type QuestionExplanationFieldDescriptionProps,
+  QuestionExplanationFieldContent,
+  type QuestionExplanationFieldContentProps,
 };
