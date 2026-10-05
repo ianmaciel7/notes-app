@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { useId } from "react";
-import { QuestionImageFigure } from "@/components/notes-app/question-image-figure";
-import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
+import { QuestionImageFigure } from "@/components/notes-app/question/question-image-figure";
+import { QuestionResultBadge } from "@/components/notes-app/question/question-result-badge";
 import {
   Field,
   FieldContent,

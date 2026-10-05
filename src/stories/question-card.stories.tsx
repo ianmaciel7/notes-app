@@ -1,6 +1,6 @@
 import { NextIntlClientProvider } from "next-intl";
 import type { ReactNode } from "react";
-import { QuestionCard } from "@/components/notes-app/question-card";
+import { QuestionCard } from "@/components/notes-app/question/question-card";
 import { AuthContext } from "@/lib/auth-context";
 import {
   caseStudyFixture,

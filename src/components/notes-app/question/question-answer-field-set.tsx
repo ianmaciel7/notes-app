@@ -1,19 +1,22 @@
 "use client";
 
 import type { ComponentProps, ReactNode } from "react";
-import { QuestionCaseStudyTabs } from "@/components/notes-app/question-case-study-tabs";
-import { QuestionChoiceFieldSet } from "@/components/notes-app/question-choice-field-set";
-import { QuestionDraggableFieldSet } from "@/components/notes-app/question-draggable-field-set";
-import { QuestionDropdownFieldGroup } from "@/components/notes-app/question-dropdown-field-group";
-import { QuestionFillBlankField } from "@/components/notes-app/question-fill-blank-field";
-import { QuestionHotspotFieldSet } from "@/components/notes-app/question-hotspot-field-set";
-import { QuestionMatchingFieldSet } from "@/components/notes-app/question-matching-field-set";
-import { QuestionMatrixFieldSet } from "@/components/notes-app/question-matrix-field-set";
-import { QuestionOrderingFieldSet } from "@/components/notes-app/question-ordering-field-set";
-import { QuestionSimulationFieldSet } from "@/components/notes-app/question-simulation-field-set";
+import { QuestionCaseStudyFieldSet } from "@/components/notes-app/question/question-case-study-field-set";
+import { QuestionCaseStudyTabs } from "@/components/notes-app/question/question-case-study-tabs";
+import { QuestionChoiceFieldSet } from "@/components/notes-app/question/question-choice-field-set";
+import { QuestionDraggableFieldSet } from "@/components/notes-app/question/question-draggable-field-set";
+import { QuestionDropdownFieldGroup } from "@/components/notes-app/question/question-dropdown-field-group";
+import { QuestionFillBlankField } from "@/components/notes-app/question/question-fill-blank-field";
+import { QuestionHotspotFieldSet } from "@/components/notes-app/question/question-hotspot-field-set";
+import { QuestionMatchingFieldSet } from "@/components/notes-app/question/question-matching-field-set";
+import { QuestionMatrixFieldSet } from "@/components/notes-app/question/question-matrix-field-set";
+import { QuestionOrderingFieldSet } from "@/components/notes-app/question/question-ordering-field-set";
+import { QuestionSimulationFieldSet } from "@/components/notes-app/question/question-simulation-field-set";
 import { FieldSet } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type {
+  CaseStudyPart,
+  CaseStudyPartAnswer,
   QuestionProperties,
   QuestionPropertiesOf,
   SubmittedAnswer,
@@ -214,21 +217,103 @@ function simulationAnswer(
   );
 }
 
+function asList(value: CaseStudyPartAnswer | undefined): string[] {
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (typeof value === "string") {
+    return [value];
+  }
+  return [];
+}
+
+function asMapping(value: unknown): Record<string, string> {
+  return typeof value === "object" && !Array.isArray(value) && value !== null
+    ? (value as Record<string, string>)
+    : {};
+}
+
+function casePartControl(
+  part: CaseStudyPart,
+  value: CaseStudyPartAnswer | undefined,
+  correct: CaseStudyPartAnswer | undefined,
+  resolved: boolean,
+  onChange: (next: CaseStudyPartAnswer) => void
+): ReactNode {
+  if (part.type === "fill-blank") {
+    return (
+      <QuestionFillBlankField
+        value={typeof value === "string" ? value : ""}
+        acceptedAnswers={asList(correct)}
+        resolved={resolved}
+        onValueChange={onChange}
+      />
+    );
+  }
+
+  if (part.type === "dropdown") {
+    return (
+      <QuestionDropdownFieldGroup
+        legend={part.prompt}
+        dropdowns={part.dropdowns}
+        value={asMapping(value)}
+        correctAnswer={asMapping(correct)}
+        resolved={resolved}
+        onValueChange={onChange}
+      />
+    );
+  }
+
+  return (
+    <QuestionChoiceFieldSet
+      legend={part.prompt}
+      mode={part.type === "multiple-choice" ? "multiple" : "single"}
+      options={part.options}
+      value={asList(value)}
+      correctIds={asList(correct)}
+      resolved={resolved}
+      onValueChange={(ids: string[]) =>
+        onChange(part.type === "multiple-choice" ? ids : (ids[0] ?? ""))
+      }
+    />
+  );
+}
+
 function caseStudyAnswer(
   question: QuestionPropertiesOf<"case-study">,
   { answer, resolved, onAnswerChange }: Context
 ): ReactNode {
+  const value = answer?.type === "case-study" ? answer.value : {};
+
   return (
     <QuestionCaseStudyTabs
       title={question.title}
       context={question.context}
       sections={question.sections}
-      parts={question.parts}
-      value={answer?.type === "case-study" ? answer.value : {}}
-      correctAnswer={question.correctAnswer}
-      resolved={resolved}
-      onValueChange={(value) => onAnswerChange({ type: question.type, value })}
-    />
+    >
+      {question.parts.length === 0
+        ? null
+        : question.parts.map((part, index) => (
+            <QuestionCaseStudyFieldSet
+              key={part.id}
+              item={part}
+              position={index + 1}
+              resolved={resolved}
+            >
+              {casePartControl(
+                part,
+                value[part.id],
+                question.correctAnswer[part.id],
+                resolved,
+                (next) =>
+                  onAnswerChange({
+                    type: question.type,
+                    value: { ...value, [part.id]: next },
+                  })
+              )}
+            </QuestionCaseStudyFieldSet>
+          ))}
+    </QuestionCaseStudyTabs>
   );
 }
 

@@ -1,25 +1,23 @@
 "use client";
 
+import { useDroppable } from "@dnd-kit/core";
 import { useTranslations } from "next-intl";
-import type { ComponentProps } from "react";
-import { QuestionDraggableItem } from "@/components/notes-app/question-draggable-item";
-import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
-import { QuestionSlotSelect } from "@/components/notes-app/question-slot-select";
+import { type ComponentProps, useId } from "react";
+import { QuestionDraggableItem } from "@/components/notes-app/question/question-draggable-item";
+import { QuestionResultBadge } from "@/components/notes-app/question/question-result-badge";
+import { QuestionSlotSelect } from "@/components/notes-app/question/question-slot-select";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { QuestionDropField, QuestionItem } from "@/types/question";
 
 type QuestionSlotFieldProps = Omit<ComponentProps<typeof Field>, "children"> & {
-  field?: QuestionDropField;
+  field: QuestionDropField;
   items: QuestionItem[];
   placedId: string;
   correctId: string;
   resolved: boolean;
-  isOver: boolean;
   onPlace?: (itemId: string) => void;
-  selectId: string;
-  setNodeRef: (element: HTMLElement | null) => void;
 };
 
 function QuestionSlotField({
@@ -28,14 +26,13 @@ function QuestionSlotField({
   placedId,
   correctId,
   resolved,
-  isOver,
   onPlace,
-  selectId,
-  setNodeRef,
   className,
   ...props
 }: QuestionSlotFieldProps) {
   const t = useTranslations("exam");
+  const selectId = useId();
+  const { setNodeRef, isOver } = useDroppable({ id: field.id });
   const descId = `${selectId}-desc`;
   const placed = items.find((item) => item.id === placedId);
   const isCorrect = placedId === correctId;
@@ -52,7 +49,7 @@ function QuestionSlotField({
           htmlFor={selectId}
           className="text-xs font-semibold tracking-wide text-muted-foreground"
         >
-          {field?.label}
+          {field.label}
         </FieldLabel>
         <div className="flex items-center gap-2">
           {resolved ? (
@@ -74,7 +71,7 @@ function QuestionSlotField({
             describedById={descId}
             disabled={resolved}
             items={items}
-            label={field?.label}
+            label={field.label}
             onPlace={onPlace}
             placedId={placedId}
             showError={resolved && !isCorrect}

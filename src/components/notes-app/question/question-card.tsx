@@ -2,15 +2,17 @@
 
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionAnswerFieldSet } from "@/components/notes-app/question-answer-field-set";
-import { QuestionAnswerFooter } from "@/components/notes-app/question-answer-footer";
-import { QuestionCardContent } from "@/components/notes-app/question-card-content";
-import { QuestionCardHeader } from "@/components/notes-app/question-card-header";
-import { QuestionCardTitle } from "@/components/notes-app/question-card-title";
-import { QuestionExplanationFieldContent } from "@/components/notes-app/question-explanation-field-content";
-import { QuestionImageFigure } from "@/components/notes-app/question-image-figure";
-import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
-import { Card as CardRoot } from "@/components/ui/card";
+import { QuestionAnswerFieldSet } from "@/components/notes-app/question/question-answer-field-set";
+import { QuestionAnswerFooter } from "@/components/notes-app/question/question-answer-footer";
+import { QuestionExplanationFieldContent } from "@/components/notes-app/question/question-explanation-field-content";
+import { QuestionImageFigure } from "@/components/notes-app/question/question-image-figure";
+import { QuestionResultBadge } from "@/components/notes-app/question/question-result-badge";
+import {
+  CardContent,
+  CardHeader,
+  Card as CardRoot,
+  CardTitle,
+} from "@/components/ui/card";
 import { useQuestionCard } from "@/hooks/use-question-card";
 import { cn } from "@/lib/utils";
 import type { Card } from "@/types/card";
@@ -46,8 +48,8 @@ function QuestionCard({
       {...props}
       className={cn("w-full pt-0", className)}
     >
-      <QuestionCardHeader>
-        <QuestionCardTitle>
+      <CardHeader className="border-b border-border bg-muted/50 pt-(--card-spacing)">
+        <CardTitle className="flex items-center justify-between gap-2 text-sm font-semibold text-foreground">
           <span>{t("questionIndex", { current: index + 1, total })}</span>
           <span aria-live="polite">
             {status === "answeredCorrect" ? (
@@ -57,9 +59,9 @@ function QuestionCard({
               <QuestionResultBadge state="incorrect" />
             ) : null}
           </span>
-        </QuestionCardTitle>
-      </QuestionCardHeader>
-      <QuestionCardContent>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-4">
         <p className="whitespace-pre-wrap font-sans text-foreground">
           {properties.prompt}
         </p>
@@ -92,7 +94,7 @@ function QuestionCard({
             explanation={properties.explanation}
           />
         ) : null}
-      </QuestionCardContent>
+      </CardContent>
       <QuestionAnswerFooter
         canSubmit={state.canSubmit}
         isResolved={isResolved}

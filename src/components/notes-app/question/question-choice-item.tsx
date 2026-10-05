@@ -1,8 +1,8 @@
 "use client";
 
 import type { ComponentProps } from "react";
-import { QuestionImageFigure } from "@/components/notes-app/question-image-figure";
-import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
+import { QuestionImageFigure } from "@/components/notes-app/question/question-image-figure";
+import { QuestionResultBadge } from "@/components/notes-app/question/question-result-badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,

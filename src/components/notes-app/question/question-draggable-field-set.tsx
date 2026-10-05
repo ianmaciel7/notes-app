@@ -3,8 +3,9 @@
 import { DndContext } from "@dnd-kit/core";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionDragOverlay } from "@/components/notes-app/question-drag-overlay";
-import { QuestionDroppableField } from "@/components/notes-app/question-droppable-field";
+import { QuestionDragOverlay } from "@/components/notes-app/question/question-drag-overlay";
+import { QuestionPoolField } from "@/components/notes-app/question/question-pool-field";
+import { QuestionSlotField } from "@/components/notes-app/question/question-slot-field";
 import { FieldLegend, FieldSet, FieldTitle } from "@/components/ui/field";
 import { useQuestionDraggableItemGroup } from "@/hooks/use-question-draggable-item-group";
 import { cn } from "@/lib/utils";
@@ -69,11 +70,7 @@ function QuestionDraggableFieldSet({
         <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
           <div className="flex flex-col gap-2">
             <FieldTitle>{t("dragPool")}</FieldTitle>
-            <QuestionDroppableField
-              isPool
-              items={poolItems}
-              resolved={resolved}
-            />
+            <QuestionPoolField items={poolItems} resolved={resolved} />
           </div>
           <div className="flex flex-col gap-2">
             <FieldTitle>{t("dragAnswerArea")}</FieldTitle>
@@ -82,7 +79,7 @@ function QuestionDraggableFieldSet({
               className="flex min-h-40 flex-col gap-3 rounded-lg border border-border bg-muted/20 p-3"
             >
               {slots.map((slot) => (
-                <QuestionDroppableField
+                <QuestionSlotField
                   key={slot.id}
                   field={slot}
                   items={items}

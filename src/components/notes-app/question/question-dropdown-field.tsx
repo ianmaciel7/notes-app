@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { type ComponentProps, useId } from "react";
-import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
+import { QuestionResultBadge } from "@/components/notes-app/question/question-result-badge";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
 import {
   Select,

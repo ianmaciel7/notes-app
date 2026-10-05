@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { AuthContext } from "@/lib/auth-context";
 import {
+  caseStudyFixture,
   dropdownFixture,
   makeQuestionObject,
   matrixFixture,
@@ -14,16 +15,10 @@ import {
 import type { Card } from "@/types/card";
 import { QuestionAnswerFooter } from "./question-answer-footer";
 import { QuestionCard } from "./question-card";
-import { QuestionCardContent } from "./question-card-content";
-import { QuestionCardDescription } from "./question-card-description";
-import { QuestionCardFooter } from "./question-card-footer";
-import { QuestionCardHeader } from "./question-card-header";
-import { QuestionCardTitle } from "./question-card-title";
 import { QuestionChoiceFieldSet } from "./question-choice-field-set";
 import { QuestionChoiceItem } from "./question-choice-item";
 import { QuestionDropdownField } from "./question-dropdown-field";
 import { QuestionFillBlankField } from "./question-fill-blank-field";
-import { QuestionFillBlankInput } from "./question-fill-blank-input";
 import { QuestionImageFigure } from "./question-image-figure";
 import { QuestionResultBadge } from "./question-result-badge";
 
@@ -84,22 +79,6 @@ describe("question atomic components", () => {
     cleanup();
   });
 
-  describe("QuestionCardTitle", () => {
-    it("renders title content and data-slot", () => {
-      render(
-        <QuestionCardTitle className="custom-title-class">
-          <span>Question 1 of 10</span>
-        </QuestionCardTitle>
-      );
-
-      const title = screen
-        .getByText("Question 1 of 10")
-        .closest('[data-slot="question-card-title"]');
-      expect(title).toBeTruthy();
-      expect(title?.className).toContain("custom-title-class");
-    });
-  });
-
   describe("QuestionImageFigure", () => {
     it("renders fixed ratio container with image and data-slot", () => {
       const { container } = render(
@@ -139,51 +118,6 @@ describe("question atomic components", () => {
     });
   });
 
-  describe("QuestionCardHeader", () => {
-    it("renders card header container with data-slot", () => {
-      render(
-        <QuestionCardHeader className="custom-header">
-          <span>Header Content</span>
-        </QuestionCardHeader>
-      );
-      const header = screen
-        .getByText("Header Content")
-        .closest('[data-slot="question-card-header"]');
-      expect(header).toBeTruthy();
-      expect(header?.className).toContain("custom-header");
-    });
-  });
-
-  describe("QuestionCardDescription", () => {
-    it("renders description text with data-slot", () => {
-      render(
-        <QuestionCardDescription className="custom-desc">
-          Multiple choice hint
-        </QuestionCardDescription>
-      );
-      const desc = screen
-        .getByText("Multiple choice hint")
-        .closest('[data-slot="question-card-description"]');
-      expect(desc).toBeTruthy();
-      expect(desc?.className).toContain("custom-desc");
-    });
-  });
-
-  describe("QuestionCardContent", () => {
-    it("renders card content with data-slot", () => {
-      render(
-        <QuestionCardContent className="custom-content">
-          <span>Body Content</span>
-        </QuestionCardContent>
-      );
-      const content = screen
-        .getByText("Body Content")
-        .closest('[data-slot="question-card-content"]');
-      expect(content).toBeTruthy();
-      expect(content?.className).toContain("custom-content");
-    });
-  });
-
   describe("QuestionAnswerFooter", () => {
     it("renders action buttons when resolved or unconfirmed", () => {
       const { rerender } = render(
@@ -216,21 +150,6 @@ describe("question atomic components", () => {
           .closest("[data-slot]")
           ?.getAttribute("data-slot")
       ).toBe("question-answer-footer");
-    });
-  });
-
-  describe("QuestionCardFooter", () => {
-    it("renders footer container with data-slot", () => {
-      render(
-        <QuestionCardFooter className="custom-footer">
-          <span>Footer Actions</span>
-        </QuestionCardFooter>
-      );
-      const footer = screen
-        .getByText("Footer Actions")
-        .closest('[data-slot="question-card-footer"]');
-      expect(footer).toBeTruthy();
-      expect(footer?.className).toContain("custom-footer");
     });
   });
 
@@ -298,20 +217,6 @@ describe("question atomic components", () => {
       ).toBeTruthy();
       expect(screen.getByText("Option A")).toBeTruthy();
       expect(screen.getByText("Option B")).toBeTruthy();
-    });
-  });
-
-  describe("QuestionFillBlankInput", () => {
-    it("renders input control with data-slot and value", () => {
-      render(
-        <QuestionFillBlankInput
-          value="my answer"
-          resolved={false}
-          onValueChange={() => {}}
-        />
-      );
-      const input = screen.getByDisplayValue("my answer");
-      expect(input.getAttribute("data-slot")).toBe("question-fill-blank-input");
     });
   });
 
@@ -491,6 +396,32 @@ describe("question atomic components", () => {
         </Wrapper>
       );
       expect(screen.getByText("simulationTitle")).toBeTruthy();
+    });
+
+    it("renders the case-study questions heading only when it has parts", () => {
+      const renderCaseStudy = (parts: typeof caseStudyFixture.parts) =>
+        render(
+          <Wrapper>
+            <QuestionCard
+              spaceId="space-1"
+              question={makeQuestionObject(
+                { ...caseStudyFixture, parts, correctAnswer: {} },
+                "q-cs"
+              )}
+              card={dummyCard}
+              index={5}
+              total={6}
+            />
+          </Wrapper>
+        );
+
+      const withParts = renderCaseStudy(caseStudyFixture.parts);
+      expect(screen.getByText("caseStudyQuestions")).toBeTruthy();
+      withParts.unmount();
+
+      renderCaseStudy([]);
+      expect(screen.getByText("Acme migration")).toBeTruthy();
+      expect(screen.queryByText("caseStudyQuestions")).toBeNull();
     });
   });
 });

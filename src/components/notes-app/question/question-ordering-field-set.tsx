@@ -14,7 +14,7 @@ import {
 import { GripVerticalIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionOrderingItem } from "@/components/notes-app/question-ordering-item";
+import { QuestionOrderingItem } from "@/components/notes-app/question/question-ordering-item";
 import { FieldLegend, FieldSet } from "@/components/ui/field";
 import { Item } from "@/components/ui/item";
 import { useQuestionOrderingFieldSet } from "@/hooks/use-question-ordering-field-set";

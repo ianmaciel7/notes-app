@@ -91,7 +91,7 @@ This section implements [ADR 0016](./docs/adr/0016-prefer-simple-domain-componen
 - **Read the primitive before styling it.** Open `src/components/ui/<primitive>.tsx` and use its `variant`/`size` axes (e.g. `Button` `icon-xs`, `icon-sm`, `sm`) before reaching for `className`. Overriding a size with `size-*`/`h-*` on `Button` is a violation (`button-size-variant`); add or reuse a variant instead.
 - **`Select` vs. `NativeSelect` rule:**
   - **Use `Select` (`src/components/ui/select.tsx`):** For all visible, primary UI selection controls across the app (forms, question fields, filter bars, locale/theme pickers). It provides consistent design token styling, popovers, grouped items, rich contents, and full dark/light theme alignment.
-  - **Use `NativeSelect` (`src/components/ui/native-select.tsx`):** Reserved for screen-reader fallbacks and keyboard-accessible alternatives (e.g. `sr-only focus:not-sr-only` pairs in drag-and-drop slots such as `QuestionDroppableField`), or lightweight mobile-optimized utility pickers where native browser/OS wheels are explicitly preferred. Do not use `NativeSelect` as a visible primary control in place of `Select`.
+  - **Use `NativeSelect` (`src/components/ui/native-select.tsx`):** Reserved for screen-reader fallbacks and keyboard-accessible alternatives (e.g. `sr-only focus:not-sr-only` pairs in drag-and-drop slots such as `QuestionSlotField`), or lightweight mobile-optimized utility pickers where native browser/OS wheels are explicitly preferred. Do not use `NativeSelect` as a visible primary control in place of `Select`.
 - Use semantic HTML and accessible names. Loading, selected, disabled, and error
   states must not rely on color alone.
 - Application wrappers around shared shadcn primitives follow the primitive

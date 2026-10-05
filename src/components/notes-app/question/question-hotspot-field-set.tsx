@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionHotspotToggle } from "@/components/notes-app/question-hotspot-toggle";
-import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
+import { QuestionHotspotToggle } from "@/components/notes-app/question/question-hotspot-toggle";
+import { QuestionResultBadge } from "@/components/notes-app/question/question-result-badge";
 import { Badge } from "@/components/ui/badge";
 import { FieldLegend, FieldSet } from "@/components/ui/field";
 import { cn } from "@/lib/utils";

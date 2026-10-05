@@ -1,7 +1,7 @@
 "use client";
 
 import { type ComponentProps, useId } from "react";
-import { QuestionChoiceItem } from "@/components/notes-app/question-choice-item";
+import { QuestionChoiceItem } from "@/components/notes-app/question/question-choice-item";
 import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";

@@ -2,14 +2,14 @@
 
 import { useTranslations } from "next-intl";
 import { type ComponentProps, useId } from "react";
-import { QuestionFillBlankInput } from "@/components/notes-app/question-fill-blank-input";
-import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
+import { QuestionResultBadge } from "@/components/notes-app/question/question-result-badge";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldLabel,
 } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { matchesAcceptedAnswer } from "@/lib/exam/evaluate-answer";
 import { cn } from "@/lib/utils";
 
@@ -46,11 +46,14 @@ function QuestionFillBlankField({
       <FieldLabel htmlFor={inputId}>{t("fillBlankLabel")}</FieldLabel>
       <FieldContent className="gap-2">
         <div className="flex items-center gap-2">
-          <QuestionFillBlankInput
+          <Input
             id={inputId}
+            data-slot="question-fill-blank-input"
+            type="text"
+            className="flex-1"
             value={value}
-            resolved={resolved}
-            onValueChange={onValueChange}
+            disabled={resolved}
+            onChange={(e) => onValueChange(e.currentTarget.value)}
             aria-invalid={resolved && !matches}
             aria-describedby={resolved && !matches ? descId : undefined}
           />

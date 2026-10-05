@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionMatchingField } from "@/components/notes-app/question-matching-field";
+import { QuestionMatchingField } from "@/components/notes-app/question/question-matching-field";
 import { FieldLegend, FieldSet } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { QuestionItem } from "@/types/question";

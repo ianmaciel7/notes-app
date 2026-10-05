@@ -1,7 +1,7 @@
 "use client";
 
 import { type ComponentProps, useId } from "react";
-import { QuestionDropdownField } from "@/components/notes-app/question-dropdown-field";
+import { QuestionDropdownField } from "@/components/notes-app/question/question-dropdown-field";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { QuestionDropdownField as QuestionDropdownFieldType } from "@/types/question";

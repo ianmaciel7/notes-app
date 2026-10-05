@@ -9,7 +9,7 @@ const mockUseExamList = vi.fn<() => UseExamListResult>();
 vi.mock("@/hooks/use-exam-list", () => ({
   useExamList: () => mockUseExamList(),
 }));
-vi.mock("@/components/notes-app/question-card", () => ({
+vi.mock("@/components/notes-app/question/question-card", () => ({
   QuestionCard: ({
     question,
     index,

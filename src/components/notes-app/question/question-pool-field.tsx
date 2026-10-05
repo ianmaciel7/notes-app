@@ -1,28 +1,27 @@
 "use client";
 
+import { useDroppable } from "@dnd-kit/core";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionDraggableItem } from "@/components/notes-app/question-draggable-item";
+import { QuestionDraggableItem } from "@/components/notes-app/question/question-draggable-item";
 import { Field } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { QuestionItem } from "@/types/question";
 
 type QuestionPoolFieldProps = Omit<ComponentProps<typeof Field>, "children"> & {
   items: QuestionItem[];
-  isOver: boolean;
   resolved: boolean;
-  setNodeRef: (element: HTMLElement | null) => void;
 };
 
 function QuestionPoolField({
   items,
-  isOver,
   resolved,
-  setNodeRef,
   className,
   ...props
 }: QuestionPoolFieldProps) {
   const t = useTranslations("exam");
+  const { setNodeRef, isOver } = useDroppable({ id: "pool" });
+
   return (
     <Field
       data-slot="question-pool-field"

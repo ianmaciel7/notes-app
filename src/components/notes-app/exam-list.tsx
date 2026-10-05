@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionCard } from "@/components/notes-app/question-card";
+import { QuestionCard } from "@/components/notes-app/question/question-card";
 import { ScrollToTopButton } from "@/components/notes-app/scroll-to-top-button";
 import { Empty, EmptyDescription } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";

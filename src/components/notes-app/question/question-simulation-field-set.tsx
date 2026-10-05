@@ -4,7 +4,7 @@ import { PlayIcon, TerminalIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { useState } from "react";
-import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
+import { QuestionResultBadge } from "@/components/notes-app/question/question-result-badge";
 import { Button } from "@/components/ui/button";
 import { FieldLegend, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";

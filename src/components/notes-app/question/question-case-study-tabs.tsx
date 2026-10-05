@@ -2,41 +2,25 @@
 
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionCaseStudyFieldSet } from "@/components/notes-app/question-case-study-field-set";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import type {
-  CaseStudyPart,
-  CaseStudyPartAnswer,
-  CaseStudySection,
-} from "@/types/question";
+import type { CaseStudySection } from "@/types/question";
 
-type QuestionCaseStudyTabsProps = Omit<
-  ComponentProps<"section">,
-  "children" | "onChange"
-> & {
+type QuestionCaseStudyTabsProps = ComponentProps<"section"> & {
   title: string;
   context: string;
   sections: CaseStudySection[];
-  parts: CaseStudyPart[];
-  /** partId -> answer given so far. */
-  value: Readonly<Record<string, CaseStudyPartAnswer>>;
-  /** partId -> key, used to mark parts once `resolved`. */
-  correctAnswer: Readonly<Record<string, CaseStudyPartAnswer>>;
-  resolved: boolean;
-  onValueChange: (next: Record<string, CaseStudyPartAnswer>) => void;
 };
 
-/** Case-study material in tabs, followed by the questions about it. */
+/**
+ * Case-study material in tabs. The children are the questions about it and
+ * are rendered below the material.
+ */
 function QuestionCaseStudyTabs({
   title,
   context,
   sections,
-  parts,
-  value,
-  correctAnswer,
-  resolved,
-  onValueChange,
+  children,
   className,
   ...props
 }: QuestionCaseStudyTabsProps) {
@@ -70,24 +54,12 @@ function QuestionCaseStudyTabs({
           </TabsContent>
         ))}
       </Tabs>
-      {parts.length > 0 ? (
+      {children ? (
         <div className="flex flex-col gap-3">
           <h4 className="text-sm font-semibold text-foreground">
             {t("caseStudyQuestions")}
           </h4>
-          {parts.map((part, index) => (
-            <QuestionCaseStudyFieldSet
-              key={part.id}
-              item={part}
-              position={index + 1}
-              value={value[part.id]}
-              correctAnswer={correctAnswer[part.id]}
-              resolved={resolved}
-              onValueChange={(next) =>
-                onValueChange({ ...value, [part.id]: next })
-              }
-            />
-          ))}
+          {children}
         </div>
       ) : null}
     </section>

@@ -4,7 +4,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { ArrowDownIcon, ArrowUpIcon, GripVerticalIcon } from "lucide-react";
 import type { ComponentProps } from "react";
-import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
+import { QuestionResultBadge } from "@/components/notes-app/question/question-result-badge";
 import { Button } from "@/components/ui/button";
 import { Item } from "@/components/ui/item";
 import { cn } from "@/lib/utils";

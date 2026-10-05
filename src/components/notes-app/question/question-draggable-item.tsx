@@ -3,7 +3,7 @@
 import { useDraggable } from "@dnd-kit/core";
 import { GripVerticalIcon } from "lucide-react";
 import type { ComponentProps } from "react";
-import { QuestionImageFigure } from "@/components/notes-app/question-image-figure";
+import { QuestionImageFigure } from "@/components/notes-app/question/question-image-figure";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { QuestionItem } from "@/types/question";

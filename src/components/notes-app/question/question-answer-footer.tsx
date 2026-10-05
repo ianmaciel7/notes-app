@@ -2,11 +2,12 @@
 
 import { RotateCcwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import type { ComponentProps } from "react";
-import { QuestionCardFooter } from "@/components/notes-app/question-card-footer";
+import type { ComponentProps, ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { CardFooter } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
-type QuestionAnswerFooterProps = ComponentProps<typeof QuestionCardFooter> & {
+type QuestionAnswerFooterProps = ComponentProps<typeof CardFooter> & {
   canSubmit?: boolean;
   isResolved?: boolean;
   isSubmitting?: boolean;
@@ -29,45 +30,45 @@ function QuestionAnswerFooter({
   onRetry,
   onShowAnswer,
   onSubmit,
+  className,
   ...props
 }: QuestionAnswerFooterProps) {
   const t = useTranslations("exam");
 
-  if (children) {
-    return (
-      <QuestionCardFooter data-slot="question-answer-footer" {...props}>
-        {children}
-      </QuestionCardFooter>
-    );
-  }
-
-  if (isResolved) {
-    return (
-      <QuestionCardFooter data-slot="question-answer-footer" {...props}>
-        <Button type="button" variant="outline" size="sm" onClick={onRetry}>
-          <RotateCcwIcon aria-hidden="true" data-icon="inline-start" />
-          {t("tryAgain")}
+  let actions: ReactNode = children;
+  if (!children) {
+    actions = isResolved ? (
+      <Button type="button" variant="outline" size="sm" onClick={onRetry}>
+        <RotateCcwIcon aria-hidden="true" data-icon="inline-start" />
+        {t("tryAgain")}
+      </Button>
+    ) : (
+      <>
+        {needsConfirmation ? (
+          <Button
+            type="button"
+            size="sm"
+            disabled={!canSubmit || isSubmitting}
+            onClick={onSubmit}
+          >
+            {t("checkAnswer")}
+          </Button>
+        ) : null}
+        <Button type="button" variant="ghost" size="sm" onClick={onShowAnswer}>
+          {t("showAnswer")}
         </Button>
-      </QuestionCardFooter>
+      </>
     );
   }
 
   return (
-    <QuestionCardFooter data-slot="question-answer-footer" {...props}>
-      {needsConfirmation ? (
-        <Button
-          type="button"
-          size="sm"
-          disabled={!canSubmit || isSubmitting}
-          onClick={onSubmit}
-        >
-          {t("checkAnswer")}
-        </Button>
-      ) : null}
-      <Button type="button" variant="ghost" size="sm" onClick={onShowAnswer}>
-        {t("showAnswer")}
-      </Button>
-    </QuestionCardFooter>
+    <CardFooter
+      data-slot="question-answer-footer"
+      {...props}
+      className={cn("gap-2", className)}
+    >
+      {actions}
+    </CardFooter>
   );
 }
 
