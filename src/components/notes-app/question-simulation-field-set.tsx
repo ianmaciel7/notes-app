@@ -22,7 +22,7 @@ interface QuestionSimulationCardProps
   onValueChange: (value: string[]) => void;
 }
 
-function QuestionSimulationCard({
+function QuestionSimulationFieldSet({
   legend,
   scenarioDescription,
   terminalPrompt = "cloudshell:~$",
@@ -130,4 +130,5 @@ function QuestionSimulationCard({
   );
 }
 
-export { QuestionSimulationCard, type QuestionSimulationCardProps };
+export { QuestionSimulationFieldSet };
+export type { QuestionSimulationCardProps };

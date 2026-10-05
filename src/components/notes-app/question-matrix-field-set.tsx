@@ -27,7 +27,7 @@ interface QuestionMatrixTableProps
   onValueChange: (value: Record<string, string>) => void;
 }
 
-function QuestionMatrixTable({
+function QuestionMatrixFieldSet({
   legend,
   columns,
   rows,
@@ -131,4 +131,5 @@ function QuestionMatrixTable({
   );
 }
 
-export { QuestionMatrixTable, type QuestionMatrixTableProps };
+export { QuestionMatrixFieldSet };
+export type { QuestionMatrixTableProps };

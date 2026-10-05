@@ -45,7 +45,7 @@ const dropAnimationConfig: DropAnimation = {
   }),
 };
 
-function QuestionOrderingItemGroup({
+function QuestionOrderingFieldSet({
   legend,
   items,
   value,
@@ -140,4 +140,5 @@ function QuestionOrderingItemGroup({
   );
 }
 
-export { QuestionOrderingItemGroup, type QuestionOrderingItemGroupProps };
+export { QuestionOrderingFieldSet };
+export type { QuestionOrderingFieldSetProps };

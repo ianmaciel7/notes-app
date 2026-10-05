@@ -6,11 +6,11 @@ import { QuestionChoiceFieldSet } from "@/components/notes-app/question-choice-f
 import { QuestionDraggableFieldSet } from "@/components/notes-app/question-draggable-field-set";
 import { QuestionDropdownFieldGroup } from "@/components/notes-app/question-dropdown-field-group";
 import { QuestionFillBlankField } from "@/components/notes-app/question-fill-blank-field";
-import { QuestionHotspotFieldSet } from "@/components/notes-app/question-hotspot-field-set";
+import { QuestionHotspotFigure } from "@/components/notes-app/question-hotspot-field-set";
 import { QuestionMatchingFieldSet } from "@/components/notes-app/question-matching-field-set";
-import { QuestionMatrixFieldSet } from "@/components/notes-app/question-matrix-field-set";
-import { QuestionOrderingFieldSet } from "@/components/notes-app/question-ordering-field-set";
-import { QuestionSimulationFieldSet } from "@/components/notes-app/question-simulation-field-set";
+import { QuestionMatrixTable } from "@/components/notes-app/question-matrix-field-set";
+import { QuestionOrderingItemGroup } from "@/components/notes-app/question-ordering-field-set";
+import { QuestionSimulationCard } from "@/components/notes-app/question-simulation-field-set";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type {
@@ -135,7 +135,7 @@ function hotspotAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionHotspotFigure
+    <QuestionHotspotFieldSet
       legend={question.prompt}
       image={question.image}
       areas={question.areas}
@@ -168,7 +168,7 @@ function matrixAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionMatrixTable
+    <QuestionMatrixFieldSet
       legend={question.prompt}
       columns={question.columns}
       rows={question.rows}
@@ -185,7 +185,7 @@ function orderingAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionOrderingItemGroup
+    <QuestionOrderingFieldSet
       legend={question.prompt}
       items={question.items}
       value={answer?.type === "ordering" ? answer.value : []}
@@ -201,7 +201,7 @@ function simulationAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionSimulationCard
+    <QuestionSimulationFieldSet
       legend={question.prompt}
       scenarioDescription={question.scenarioDescription}
       terminalPrompt={question.terminalPrompt}

@@ -37,7 +37,7 @@ function areaResult(
   return isKey ? "missed" : undefined;
 }
 
-function QuestionHotspotFigure({
+function QuestionHotspotFieldSet({
   legend,
   image,
   areas,
@@ -121,4 +121,5 @@ function QuestionHotspotFigure({
   );
 }
 
-export { QuestionHotspotFigure, type QuestionHotspotFigureProps };
+export { QuestionHotspotFieldSet };
+export type { QuestionHotspotFigureProps };
