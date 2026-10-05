@@ -6,11 +6,11 @@ import { QuestionChoiceFieldSet } from "@/components/notes-app/question-choice-f
 import { QuestionDraggableFieldSet } from "@/components/notes-app/question-draggable-field-set";
 import { QuestionDropdownFieldGroup } from "@/components/notes-app/question-dropdown-field-group";
 import { QuestionFillBlankField } from "@/components/notes-app/question-fill-blank-field";
-import { QuestionHotspotFigure } from "@/components/notes-app/question-hotspot-field-set";
+import { QuestionHotspotFieldSet } from "@/components/notes-app/question-hotspot-field-set";
 import { QuestionMatchingFieldSet } from "@/components/notes-app/question-matching-field-set";
-import { QuestionMatrixTable } from "@/components/notes-app/question-matrix-field-set";
-import { QuestionOrderingItemGroup } from "@/components/notes-app/question-ordering-field-set";
-import { QuestionSimulationCard } from "@/components/notes-app/question-simulation-field-set";
+import { QuestionMatrixFieldSet } from "@/components/notes-app/question-matrix-field-set";
+import { QuestionOrderingFieldSet } from "@/components/notes-app/question-ordering-field-set";
+import { QuestionSimulationFieldSet } from "@/components/notes-app/question-simulation-field-set";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type {
@@ -20,7 +20,7 @@ import type {
   TrueFalseValue,
 } from "@/types/question";
 
-type QuestionAnswerGroupProps = Omit<
+type QuestionAnswerFieldSetProps = Omit<
   ComponentProps<"div">,
   "children" | "onChange"
 > & {
@@ -37,7 +37,7 @@ function isTrueFalse(value: string | undefined): value is TrueFalseValue {
 }
 
 type Context = Pick<
-  QuestionAnswerGroupProps,
+  QuestionAnswerFieldSetProps,
   "answer" | "resolved" | "onAnswerChange"
 >;
 
@@ -264,17 +264,17 @@ function answerControl(
 }
 
 /** Picks the answering control that fits the question type. */
-function QuestionAnswerGroup({
+function QuestionAnswerFieldSet({
   question,
   answer,
   resolved,
   onAnswerChange,
   className,
   ...props
-}: QuestionAnswerGroupProps) {
+}: QuestionAnswerFieldSetProps) {
   return (
     <FieldGroup
-      data-slot="question-answer-group"
+      data-slot="question-answer-set"
       data-type={question.type}
       {...props}
       className={cn("min-w-0 gap-4", className)}
@@ -284,4 +284,5 @@ function QuestionAnswerGroup({
   );
 }
 
-export { QuestionAnswerGroup, type QuestionAnswerGroupProps };
+export { QuestionAnswerFieldSet };
+export type { QuestionAnswerFieldSetProps };

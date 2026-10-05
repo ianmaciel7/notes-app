@@ -3,7 +3,7 @@
 import { RotateCcwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionAnswerFieldGroup } from "@/components/notes-app/question-answer-field-group";
+import { QuestionAnswerFieldSet } from "@/components/notes-app/question-answer-field-set";
 import { QuestionExplanationFieldContent } from "@/components/notes-app/question-explanation-field-content";
 import { QuestionImageFigure } from "@/components/notes-app/question-image-figure";
 import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
@@ -93,7 +93,7 @@ function QuestionCard({
         {isGradable ? null : (
           <p className="text-xs text-muted-foreground">{t("revealOnly")}</p>
         )}
-        <QuestionAnswerFieldGroup
+        <QuestionAnswerFieldSet
           question={properties}
           answer={answer}
           resolved={isResolved}
