@@ -1,11 +1,12 @@
 "use client";
 
 import type { ComponentProps } from "react";
+import { FieldContent } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { GroundedExplanation } from "@/types/question";
 
 type QuestionExplanationFieldDescriptionProps = Omit<
-  ComponentProps<"div">,
+  ComponentProps<typeof FieldContent>,
   "children"
 > & {
   explanation: GroundedExplanation;
@@ -17,7 +18,7 @@ function QuestionExplanationFieldDescription({
   ...props
 }: QuestionExplanationFieldDescriptionProps) {
   return (
-    <div
+    <FieldContent
       data-slot="question-explanation-field-description"
       {...props}
       className={cn(
@@ -45,7 +46,7 @@ function QuestionExplanationFieldDescription({
           ))}
         </ul>
       ) : null}
-    </div>
+    </FieldContent>
   );
 }
 
