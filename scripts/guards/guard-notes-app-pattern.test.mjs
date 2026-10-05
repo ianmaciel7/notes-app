@@ -287,7 +287,7 @@ test("rejects block elements (<div|ul|ol|p>) inside FieldDescription to prevent 
   );
 });
 
-test("enforces primitive role alignment for FieldContent and Toggle", () => {
+test("enforces primitive role alignment for FieldContent, Toggle, FieldSet, FieldGroup, and Field", () => {
   const fieldContentMismatch = `
     import { FieldContent } from "@/components/ui/field";
     function QuestionExplanationFieldDescription() {
@@ -319,6 +319,54 @@ test("enforces primitive role alignment for FieldContent and Toggle", () => {
   const violations2 = checkFile("question-hotspot-button.tsx", toggleMismatch);
   assert.ok(
     violations2.some(
+      (item) => item.rule === "notes-app-primitive-role-alignment",
+    ),
+  );
+
+  const fieldSetMismatch = `
+    import { FieldSet } from "@/components/ui/field";
+    function QuestionCaseStudyItem() {
+      return <FieldSet data-slot="question-case-study-item" />;
+    }
+  `;
+
+  const violations3 = checkFile(
+    "question-case-study-field-item.tsx",
+    fieldSetMismatch,
+  );
+  assert.ok(
+    violations3.some(
+      (item) => item.rule === "notes-app-primitive-role-alignment",
+    ),
+  );
+
+  const fieldGroupMismatch = `
+    import { FieldGroup } from "@/components/ui/field";
+    function QuestionDropdownFieldSet() {
+      return <FieldGroup data-slot="question-dropdown-field-set" />;
+    }
+  `;
+
+  const violations4 = checkFile(
+    "question-dropdown-field-set.tsx",
+    fieldGroupMismatch,
+  );
+  assert.ok(
+    violations4.some(
+      (item) => item.rule === "notes-app-primitive-role-alignment",
+    ),
+  );
+
+  const fieldMismatch = `
+    import { Field } from "@/components/ui/field";
+    function QuestionMatchingButton() {
+      return <Field data-slot="question-matching-button" />;
+    }
+  `;
+
+  const violations5 = checkFile("question-matching-button.tsx", fieldMismatch);
+  assert.ok(
+    violations5.some(
       (item) => item.rule === "notes-app-primitive-role-alignment",
     ),
   );

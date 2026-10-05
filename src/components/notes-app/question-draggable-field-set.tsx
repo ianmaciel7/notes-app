@@ -3,6 +3,7 @@
 import { DndContext } from "@dnd-kit/core";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
+import { QuestionDragOverlay } from "@/components/notes-app/question-drag-overlay";
 import { QuestionDroppableField } from "@/components/notes-app/question-droppable-field";
 import { FieldLegend, FieldSet, FieldTitle } from "@/components/ui/field";
 import { useQuestionDraggableItemGroup } from "@/hooks/use-question-draggable-item-group";
@@ -39,8 +40,16 @@ function QuestionDraggableFieldSet({
   ...props
 }: QuestionDraggableFieldSetProps) {
   const t = useTranslations("exam");
-  const { sensors, accessibility, poolItems, placeItem, handleDragEnd } =
-    useQuestionDraggableItemGroup({ items, slots, value, onValueChange });
+  const {
+    sensors,
+    accessibility,
+    poolItems,
+    activeItem,
+    placeItem,
+    handleDragStart,
+    handleDragEnd,
+    handleDragCancel,
+  } = useQuestionDraggableItemGroup({ items, slots, value, onValueChange });
 
   return (
     <FieldSet
@@ -53,7 +62,9 @@ function QuestionDraggableFieldSet({
       <DndContext
         sensors={sensors}
         accessibility={accessibility}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
       >
         <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
           <div className="flex flex-col gap-2">
@@ -84,6 +95,7 @@ function QuestionDraggableFieldSet({
             </div>
           </div>
         </div>
+        <QuestionDragOverlay item={activeItem} />
       </DndContext>
     </FieldSet>
   );

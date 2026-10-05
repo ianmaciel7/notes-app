@@ -204,4 +204,35 @@ describe("useQuestionDraggableItemGroup", () => {
     });
     expect(cancelMsg).toContain("dragAnnounceCancel");
   });
+
+  it("manages activeItem state across drag start, end and cancel", () => {
+    const onValueChange = vi.fn();
+    const { result } = renderHook(() =>
+      useQuestionDraggableItemGroup({
+        items,
+        slots,
+        value: {},
+        onValueChange,
+      }),
+    );
+
+    expect(result.current.activeId).toBeNull();
+    expect(result.current.activeItem).toBeNull();
+
+    act(() => {
+      result.current.handleDragStart({
+        active: { id: "i2" } as Active,
+      } as Parameters<typeof result.current.handleDragStart>[0]);
+    });
+
+    expect(result.current.activeId).toBe("i2");
+    expect(result.current.activeItem).toEqual(items[1]);
+
+    act(() => {
+      result.current.handleDragCancel();
+    });
+
+    expect(result.current.activeId).toBeNull();
+    expect(result.current.activeItem).toBeNull();
+  });
 });

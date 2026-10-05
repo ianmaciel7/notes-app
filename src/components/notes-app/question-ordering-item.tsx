@@ -1,6 +1,8 @@
 "use client";
 
-import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { ArrowDownIcon, ArrowUpIcon, GripVerticalIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
 import { Button } from "@/components/ui/button";
@@ -34,20 +36,54 @@ function QuestionOrderingItem({
 }: QuestionOrderingItemProps) {
   const status = resolved ? (isCorrect ? "correct" : "incorrect") : undefined;
 
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: item.id,
+    disabled: resolved,
+  });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+  };
+
   return (
     <Item
+      ref={setNodeRef}
+      style={style}
       data-slot="question-ordering-item"
       data-status={status}
+      data-dragging={isDragging || undefined}
       variant="outline"
       {...props}
       className={cn(
         "flex items-center justify-between gap-3 rounded-lg border-border bg-card p-3 shadow-xs transition-colors",
         status === "correct" && "border-primary bg-primary/10",
         status === "incorrect" && "border-destructive bg-destructive/10",
+        isDragging && "z-10 opacity-30 shadow-md",
         className,
       )}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
+        {!resolved ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-xs"
+            className="cursor-grab touch-none p-1 text-muted-foreground transition-colors hover:text-foreground active:cursor-grabbing"
+            aria-label={`Drag ${item.text}`}
+            {...attributes}
+            {...listeners}
+          >
+            <GripVerticalIcon className="size-4" aria-hidden="true" />
+          </Button>
+        ) : null}
         <span className="flex size-7 items-center justify-center rounded-md bg-muted text-xs font-bold text-muted-foreground">
           {index + 1}
         </span>

@@ -3,12 +3,14 @@
 import {
   type Announcements,
   type DragEndEvent,
+  type DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import type { QuestionDropField, QuestionItem } from "@/types/question";
 
 /** Droppable id of the list of items that are not in a slot. */
@@ -37,6 +39,8 @@ export function useQuestionDraggableItemGroup({
   const placedIds = new Set(Object.values(value));
   const poolItems = items.filter((item) => !placedIds.has(item.id));
 
+  const [activeId, setActiveId] = useState<string | null>(null);
+
   const itemText = (id: string | number) =>
     items.find((item) => item.id === id)?.text ?? String(id);
   const targetText = (id: string | number | undefined) =>
@@ -52,11 +56,22 @@ export function useQuestionDraggableItemGroup({
     onValueChange(next);
   };
 
+  const handleDragStart = ({ active }: DragStartEvent) => {
+    setActiveId(String(active.id));
+  };
+
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    setActiveId(null);
     if (!over) return;
     const itemId = String(active.id);
     placeItem(itemId, over.id === DRAG_POOL_ID ? null : String(over.id));
   };
+
+  const handleDragCancel = () => {
+    setActiveId(null);
+  };
+
+  const activeItem = items.find((item) => item.id === activeId) ?? null;
 
   const announcements: Announcements = {
     onDragStart: ({ active }) =>
@@ -82,7 +97,11 @@ export function useQuestionDraggableItemGroup({
       screenReaderInstructions: { draggable: t("dragInstructions") },
     },
     poolItems,
+    activeId,
+    activeItem,
     placeItem,
+    handleDragStart,
     handleDragEnd,
+    handleDragCancel,
   };
 }

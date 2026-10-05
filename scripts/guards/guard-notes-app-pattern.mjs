@@ -245,37 +245,116 @@ function checkFieldDescriptionNesting(filePath, fileName, content) {
 }
 
 function checkPrimitiveRoleAlignment(filePath, fileName, content) {
-  // Enforces that specialized components align their naming suffix with the composed primitive:
-  // - Composing <FieldSet> -> suffix must be FieldSet (or *Form for form flows)
-  // - Composing <FieldContent> -> suffix must be FieldContent
+  // Enforces that specialized components align their naming suffix with their primary composed primitive:
+  // - Root/specialized FieldSet component -> suffix must be FieldSet (or Form / Table / Figure / Card)
+  // - Root/specialized FieldGroup component -> suffix must be FieldGroup (or Form / Card / Group)
+  // - Composing <FieldContent> as root surface -> suffix must be FieldContent
   // - Composing <Toggle> -> suffix must be Toggle
+  // - Composing <Field> as root item surface -> suffix must be Field
   const componentName = toPascalCase(fileName);
+  const violations = [];
 
-  if (
-    /<FieldContent\b/.test(content) &&
-    fileName.includes("-field-") &&
-    !fileName.endsWith("-field-content.tsx")
-  ) {
-    return [
-      violation(
-        filePath,
-        "notes-app-primitive-role-alignment",
-        `${fileName} (${componentName}) composes FieldContent and should end with 'FieldContent'.`,
-      ),
-    ];
-  }
-
+  // 1. Root Toggle composition
   if (/<Toggle\b/.test(content) && !componentName.endsWith("Toggle")) {
-    return [
+    violations.push(
       violation(
         filePath,
         "notes-app-primitive-role-alignment",
         `${fileName} (${componentName}) composes Toggle and should end with 'Toggle'.`,
       ),
-    ];
+    );
   }
 
-  return [];
+  // 2. FieldContent root/dedicated role alignment
+  // If a component's primary purpose is a field description/explanation/content container,
+  // it must use the FieldContent suffix (e.g. QuestionExplanationFieldContent).
+  if (
+    /<FieldContent\b/.test(content) &&
+    /(-field-content\.tsx|-field-description\.tsx)/.test(fileName) &&
+    !fileName.endsWith("-field-content.tsx")
+  ) {
+    violations.push(
+      violation(
+        filePath,
+        "notes-app-primitive-role-alignment",
+        `${fileName} (${componentName}) composes FieldContent and should end with 'FieldContent'.`,
+      ),
+    );
+  }
+
+  // 3. FieldSet component naming
+  // Specialized field group sets (e.g., question-draggable-field-set, question-case-study-field-set)
+  // should end in FieldSet unless they represent a domain Form, Table, Figure, or Card.
+  if (
+    /<FieldSet\b/.test(content) &&
+    fileName.includes("-field-") &&
+    !fileName.endsWith("-field-set.tsx") &&
+    !componentName.endsWith("Form") &&
+    !componentName.endsWith("Card") &&
+    !componentName.endsWith("Table") &&
+    !componentName.endsWith("Figure")
+  ) {
+    violations.push(
+      violation(
+        filePath,
+        "notes-app-primitive-role-alignment",
+        `${fileName} (${componentName}) composes FieldSet and should end with 'FieldSet'.`,
+      ),
+    );
+  }
+
+  // 4. FieldGroup component naming
+  // Specialized field groups (e.g. question-dropdown-field-group) must end with FieldGroup
+  // unless they represent a Form, Card, Group, or compose a FieldSet container.
+  if (
+    /<FieldGroup\b/.test(content) &&
+    fileName.includes("-field-") &&
+    !fileName.endsWith("-field-group.tsx") &&
+    !componentName.endsWith("Form") &&
+    !componentName.endsWith("Card") &&
+    !componentName.endsWith("Group") &&
+    !(
+      /<FieldSet\b/.test(content) &&
+      (fileName.endsWith("-field-set.tsx") ||
+        componentName.endsWith("FieldSet"))
+    )
+  ) {
+    violations.push(
+      violation(
+        filePath,
+        "notes-app-primitive-role-alignment",
+        `${fileName} (${componentName}) composes FieldGroup and should end with 'FieldGroup'.`,
+      ),
+    );
+  }
+
+  // 5. Single Field item surface naming
+  // Dedicated question field components (e.g. QuestionMatchingField, QuestionDropdownField)
+  // that wrap a single Field input surface must end in 'Field'.
+  if (
+    /<Field\b/.test(content) &&
+    fileName.startsWith("question-") &&
+    !fileName.endsWith("-field.tsx") &&
+    !fileName.endsWith("-field-set.tsx") &&
+    !fileName.endsWith("-field-group.tsx") &&
+    !fileName.endsWith("-field-content.tsx") &&
+    !componentName.endsWith("Input") &&
+    !componentName.endsWith("Form") &&
+    !componentName.endsWith("Card") &&
+    !componentName.endsWith("Header") &&
+    !componentName.endsWith("Description") &&
+    !componentName.endsWith("Item")
+  ) {
+    violations.push(
+      violation(
+        filePath,
+        "notes-app-primitive-role-alignment",
+        `${fileName} (${componentName}) composes Field and should end with 'Field'.`,
+      ),
+    );
+  }
+
+  return violations;
 }
 
 function checkRawLayoutWrappers(filePath, fileName, content) {
