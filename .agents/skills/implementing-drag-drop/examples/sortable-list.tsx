@@ -144,7 +144,7 @@ export function SortableList() {
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
+    })
   );
 
   // Handle drag end
@@ -170,7 +170,7 @@ export function SortableList() {
   function announceReorder(
     item: TodoItem,
     fromPosition: number,
-    toPosition: number,
+    toPosition: number
   ) {
     const announcement = `${item.text} moved from position ${fromPosition} to position ${toPosition}`;
     const liveRegion = document.getElementById("drag-drop-announcements");

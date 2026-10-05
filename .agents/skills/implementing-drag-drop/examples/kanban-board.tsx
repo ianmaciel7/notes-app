@@ -242,7 +242,7 @@ export function KanbanBoard() {
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
+    })
   );
 
   // Find container for task
@@ -292,7 +292,7 @@ export function KanbanBoard() {
 
       // Move task to new column
       return prev.map((task) =>
-        task.id === activeTask.id ? { ...task, columnId: overContainer } : task,
+        task.id === activeTask.id ? { ...task, columnId: overContainer } : task
       );
     });
   }

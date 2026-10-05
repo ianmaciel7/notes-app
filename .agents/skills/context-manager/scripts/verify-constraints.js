@@ -59,19 +59,19 @@ function verifyStructure(text) {
   const results = REQUIRED_SECTIONS.map((heading) =>
     text.includes(heading)
       ? ok("required-section", `${heading} is present.`)
-      : fail("required-section", `${heading} is missing.`),
+      : fail("required-section", `${heading} is missing.`)
   );
 
   if (/\[[^\]]+\]|<[^>]+>/.test(text)) {
     results.push(
       fail(
         "placeholders",
-        "CONSTRAINTS.md contains unresolved placeholder markers.",
-      ),
+        "CONSTRAINTS.md contains unresolved placeholder markers."
+      )
     );
   } else {
     results.push(
-      ok("placeholders", "No unresolved placeholder markers found."),
+      ok("placeholders", "No unresolved placeholder markers found.")
     );
   }
 
@@ -82,10 +82,7 @@ function verifyFloor(text) {
   return FLOOR_MARKERS.map((marker) =>
     marker.test(text)
       ? ok("floor-rule", `Floor rule matching ${marker} is present.`)
-      : fail(
-          "floor-rule",
-          `Required floor rule matching ${marker} is missing.`,
-        ),
+      : fail("floor-rule", `Required floor rule matching ${marker} is missing.`)
   );
 }
 
@@ -109,13 +106,13 @@ function verifyEnforcedRows(text) {
     ? [
         ok(
           "enforced-rows",
-          `All ${rows.length - 1} enforced row(s) name a rule, checker, and run stage.`,
+          `All ${rows.length - 1} enforced row(s) name a rule, checker, and run stage.`
         ),
       ]
     : [
         fail(
           "enforced-rows",
-          `${malformed.length} enforced row(s) lack a rule, checker, or run stage.`,
+          `${malformed.length} enforced row(s) lack a rule, checker, or run stage.`
         ),
       ];
 }
@@ -131,7 +128,7 @@ function verifyExceptions(text) {
     return [
       fail(
         "exceptions",
-        "Exceptions section must say None or contain an exception table.",
+        "Exceptions section must say None or contain an exception table."
       ),
     ];
   const malformed = rows.slice(1).filter(
@@ -139,20 +136,19 @@ function verifyExceptions(text) {
       row
         .split("|")
         .slice(1, -1)
-        .map((cell) => cell.trim()).length < 6 ||
-      !/\d{4}-\d{2}-\d{2}/.test(row),
+        .map((cell) => cell.trim()).length < 6 || !/\d{4}-\d{2}-\d{2}/.test(row)
   );
   return malformed.length === 0
     ? [
         ok(
           "exceptions",
-          `All ${rows.length - 1} exception row(s) include an expiry date.`,
+          `All ${rows.length - 1} exception row(s) include an expiry date.`
         ),
       ]
     : [
         fail(
           "exceptions",
-          `${malformed.length} exception row(s) lack the required fields or an expiry date.`,
+          `${malformed.length} exception row(s) lack the required fields or an expiry date.`
         ),
       ];
 }
@@ -163,7 +159,7 @@ function verifyConstraintCommands(repoRoot, text) {
     return [
       skip(
         "constraint-commands",
-        "No package.json; package commands cannot be cross-checked.",
+        "No package.json; package commands cannot be cross-checked."
       ),
     ];
   const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8"));
@@ -175,7 +171,7 @@ function verifyConstraintCommands(repoRoot, text) {
     const script = match[1];
     if (
       ["install", "i", "add", "remove", "exec", "dlx", "update", "up"].includes(
-        script,
+        script
       )
     )
       continue;
@@ -183,12 +179,12 @@ function verifyConstraintCommands(repoRoot, text) {
       scripts.has(script)
         ? ok(
             "constraint-commands",
-            `"${script}" exists in package.json scripts.`,
+            `"${script}" exists in package.json scripts.`
           )
         : fail(
             "constraint-commands",
-            `"${script}" is cited by CONSTRAINTS.md but not in package.json scripts.`,
-          ),
+            `"${script}" is cited by CONSTRAINTS.md but not in package.json scripts.`
+          )
     );
   }
   return results.length

@@ -99,22 +99,22 @@ function verifyComponentCountMentions(repoRoot, text, docLabel) {
     return [
       skip(
         "component-count",
-        "src/components/ui/ not found — skipping count checks.",
+        "src/components/ui/ not found — skipping count checks."
       ),
     ];
   const mentions = findComponentCountMentions(text).filter(
-    (m) => !(m.number < real.count - 5 && m.number < 10),
+    (m) => !(m.number < real.count - 5 && m.number < 10)
   ); // drop unrelated small numbers, e.g. "6 variants"
   return mentions.map((m) =>
     m.number === real.count || m.number === real.totalTsxFiles
       ? ok(
           "component-count",
-          `${docLabel} cites "${m.number}" — matches real count (${real.count}).`,
+          `${docLabel} cites "${m.number}" — matches real count (${real.count}).`
         )
       : fail(
           "component-count",
-          `${docLabel} cites "${m.number}" but real count is ${real.count}: "${m.line}"`,
-        ),
+          `${docLabel} cites "${m.number}" but real count is ${real.count}: "${m.line}"`
+        )
   );
 }
 
@@ -138,20 +138,20 @@ function verifyNOfMClaim(repoRoot, text, { label, keyword, countRealFn }) {
     real.total === claimedM
       ? ok(
           label,
-          `Denominator "${claimedM}" matches real total (${real.total}).`,
+          `Denominator "${claimedM}" matches real total (${real.total}).`
         )
       : fail(
           label,
-          `Denominator claims ${claimedM} but real total is ${real.total}.`,
+          `Denominator claims ${claimedM} but real total is ${real.total}.`
         ),
     real.matching === claimedN
       ? ok(
           label,
-          `Numerator "${claimedN}" matches real count (${real.matching}).`,
+          `Numerator "${claimedN}" matches real count (${real.matching}).`
         )
       : fail(
           label,
-          `Numerator claims ${claimedN} but real count is ${real.matching}.`,
+          `Numerator claims ${claimedN} but real count is ${real.matching}.`
         ),
   ];
 }
@@ -163,7 +163,7 @@ function getUseClientFileCount(repoRoot) {
     .readdirSync(uiDir)
     .filter((f) => f.endsWith(".tsx") && !f.endsWith(".stories.tsx"));
   const matching = files.filter((f) =>
-    fs.readFileSync(path.join(uiDir, f), "utf8").includes('"use client"'),
+    fs.readFileSync(path.join(uiDir, f), "utf8").includes('"use client"')
   ).length;
   return { total: files.length, matching };
 }
@@ -192,8 +192,8 @@ function verifyLocalMdLinks(repoRoot, filePath, text) {
         ? ok("doc-links", `Link to ${cleanTarget} resolves.`)
         : fail(
             "doc-links",
-            `Link to ${cleanTarget} ("${m[1]}") does not resolve — looked for ${resolved}`,
-          ),
+            `Link to ${cleanTarget} ("${m[1]}") does not resolve — looked for ${resolved}`
+          )
     );
   }
   if (results.length === 0)
@@ -280,21 +280,21 @@ function verifyCitedPackageScripts(repoRoot, text) {
       .trim();
     if (scripts.has(word))
       results.push(
-        ok("package-scripts", `"${word}" is a real package.json script.`),
+        ok("package-scripts", `"${word}" is a real package.json script.`)
       );
     else if (NEGATION_RE.test(line))
       results.push(
         ok(
           "package-scripts",
-          `"${word}" correctly documented as absent: "${line}"`,
-        ),
+          `"${word}" correctly documented as absent: "${line}"`
+        )
       );
     else
       results.push(
         fail(
           "package-scripts",
-          `"${word}" cited but not in package.json scripts: "${line}"`,
-        ),
+          `"${word}" cited but not in package.json scripts: "${line}"`
+        )
       );
   }
   if (results.length === 0)
@@ -330,14 +330,14 @@ function verifyReadmeBoilerplate(text) {
     return [
       ok(
         "scaffold-boilerplate",
-        "No known scaffold boilerplate signatures found.",
+        "No known scaffold boilerplate signatures found."
       ),
     ];
   return found.map((f) =>
     fail(
       "scaffold-boilerplate",
-      `Still contains [${f.scaffold}] signature: "${f.phrase}"`,
-    ),
+      `Still contains [${f.scaffold}] signature: "${f.phrase}"`
+    )
   );
 }
 
@@ -387,16 +387,13 @@ function verifyDesignMdStructure(text) {
       results.push(
         fail(
           "design-section-order",
-          `"${f.canonical}" appears out of the spec's canonical order (via heading "${f.heading}").`,
-        ),
+          `"${f.canonical}" appears out of the spec's canonical order (via heading "${f.heading}").`
+        )
       );
     else {
       lastPos = pos;
       results.push(
-        ok(
-          "design-section-order",
-          `"${f.canonical}" is in canonical position.`,
-        ),
+        ok("design-section-order", `"${f.canonical}" is in canonical position.`)
       );
     }
   }
@@ -406,12 +403,12 @@ function verifyDesignMdStructure(text) {
     results.push(
       skip(
         "design-section-order",
-        `Canonical sections omitted (allowed by spec, verify intentional): ${missing.join(", ")}`,
-      ),
+        `Canonical sections omitted (allowed by spec, verify intentional): ${missing.join(", ")}`
+      )
     );
   if (found.length === 0)
     results.push(
-      skip("design-section-order", "No canonical design.md H2 sections found."),
+      skip("design-section-order", "No canonical design.md H2 sections found.")
     );
   return results;
 }
@@ -430,7 +427,7 @@ function verifyDesignTopLevelKeys(text) {
     return [
       fail(
         "design-frontmatter",
-        "DESIGN.md is missing valid YAML frontmatter fences.",
+        "DESIGN.md is missing valid YAML frontmatter fences."
       ),
     ];
   const allowed = new Set([
@@ -454,13 +451,13 @@ function verifyDesignTopLevelKeys(text) {
     ? [
         ok(
           "design-frontmatter",
-          "DESIGN.md uses only documented top-level frontmatter groups.",
+          "DESIGN.md uses only documented top-level frontmatter groups."
         ),
       ]
     : [
         fail(
           "design-frontmatter",
-          `Unknown top-level DESIGN.md key(s): ${unknown.join(", ")}.`,
+          `Unknown top-level DESIGN.md key(s): ${unknown.join(", ")}.`
         ),
       ];
 }
@@ -489,13 +486,13 @@ function verifyDesignDimensionValues(text) {
     ? [
         ok(
           "design-dimensions",
-          "Rounded/spacing frontmatter values use schema-compatible dimensions/numbers.",
+          "Rounded/spacing frontmatter values use schema-compatible dimensions/numbers."
         ),
       ]
     : [
         fail(
           "design-dimensions",
-          `Invalid DESIGN.md dimension token(s): ${invalid.join(", ")}.`,
+          `Invalid DESIGN.md dimension token(s): ${invalid.join(", ")}.`
         ),
       ];
 }
@@ -517,7 +514,7 @@ function verifyAgentsGeneratedBlock(repoRoot) {
     "dist",
     "server",
     "lib",
-    "generate-agent-files.js",
+    "generate-agent-files.js"
   );
   let generator;
   try {
@@ -526,7 +523,7 @@ function verifyAgentsGeneratedBlock(repoRoot) {
     return [
       skip(
         "generated-block",
-        `Next.js generator module not found at ${generatorPath} — not a Next.js repo, or 'next' isn't hoisted here.`,
+        `Next.js generator module not found at ${generatorPath} — not a Next.js repo, or 'next' isn't hoisted here.`
       ),
     ];
   }
@@ -534,7 +531,7 @@ function verifyAgentsGeneratedBlock(repoRoot) {
     return [
       skip(
         "generated-block",
-        "Generator module found but hasCurrentAgentRules() is missing — installed Next.js version may have changed its shape.",
+        "Generator module found but hasCurrentAgentRules() is missing — installed Next.js version may have changed its shape."
       ),
     ];
   }
@@ -543,11 +540,11 @@ function verifyAgentsGeneratedBlock(repoRoot) {
     current
       ? ok(
           "generated-block",
-          "AGENTS.md's tool-generated block matches what next dev would currently write.",
+          "AGENTS.md's tool-generated block matches what next dev would currently write."
         )
       : fail(
           "generated-block",
-          "AGENTS.md's tool-generated block does NOT match current generator output — hand-edited, or Next.js version changed (next dev will re-sync).",
+          "AGENTS.md's tool-generated block does NOT match current generator output — hand-edited, or Next.js version changed (next dev will re-sync)."
         ),
   ];
 }
@@ -559,7 +556,7 @@ function verifyAgentsGeneratedBlock(repoRoot) {
 function verifyAgentsInstructionBudget(
   text,
   targetChars = 12000,
-  maxBytes = 16000,
+  maxBytes = 16000
 ) {
   const chars = Array.from(text).length;
   const bytes = Buffer.byteLength(text, "utf8");
@@ -567,7 +564,7 @@ function verifyAgentsInstructionBudget(
     return [
       fail(
         "agents-budget",
-        `AGENTS.md is ${bytes} UTF-8 bytes (hard maximum: ${maxBytes}; target: <= ${targetChars} characters).`,
+        `AGENTS.md is ${bytes} UTF-8 bytes (hard maximum: ${maxBytes}; target: <= ${targetChars} characters).`
       ),
     ];
   }
@@ -575,14 +572,14 @@ function verifyAgentsInstructionBudget(
     return [
       skip(
         "agents-budget",
-        `AGENTS.md is ${chars} characters / ${bytes} bytes: within the hard maximum but above the ${targetChars}-character target; split task-specific guidance.`,
+        `AGENTS.md is ${chars} characters / ${bytes} bytes: within the hard maximum but above the ${targetChars}-character target; split task-specific guidance.`
       ),
     ];
   }
   return [
     ok(
       "agents-budget",
-      `AGENTS.md is ${chars} characters / ${bytes} bytes, within the ${targetChars}-character target and ${maxBytes}-byte hard maximum.`,
+      `AGENTS.md is ${chars} characters / ${bytes} bytes, within the ${targetChars}-character target and ${maxBytes}-byte hard maximum.`
     ),
   ];
 }
@@ -602,8 +599,8 @@ function verifyAgentsCitedPaths(repoRoot, text) {
         ? ok("agents-paths", `${cited} exists.`)
         : fail(
             "agents-paths",
-            `${cited} is cited by AGENTS.md but does not exist at repository root-relative path ${resolved}.`,
-          ),
+            `${cited} is cited by AGENTS.md but does not exist at repository root-relative path ${resolved}.`
+          )
     );
   }
   if (results.length === 0)
@@ -651,20 +648,20 @@ function verifyEnvHandling(repoRoot) {
     return [
       skip(
         "env-files",
-        `${envFiles.length} .env* file(s) present but \`git check-ignore\` failed to run — not a git repo, or git unavailable. Cannot verify coverage.`,
+        `${envFiles.length} .env* file(s) present but \`git check-ignore\` failed to run — not a git repo, or git unavailable. Cannot verify coverage.`
       ),
     ];
   if (uncovered.length === 0)
     return [
       ok(
         "env-files",
-        `${envFiles.length} .env* file(s) present, all confirmed ignored by git: ${envFiles.join(", ")}`,
+        `${envFiles.length} .env* file(s) present, all confirmed ignored by git: ${envFiles.join(", ")}`
       ),
     ];
   return [
     fail(
       "env-files",
-      `.env* file(s) present and NOT covered by .gitignore (per \`git check-ignore\`) — real secret-leak risk: ${uncovered.join(", ")}`,
+      `.env* file(s) present and NOT covered by .gitignore (per \`git check-ignore\`) — real secret-leak risk: ${uncovered.join(", ")}`
     ),
   ];
 }
@@ -687,7 +684,7 @@ function verifyCiExistence(repoRoot, expectNoCi) {
     return [
       fail(
         "ci",
-        "Doc claims no CI, but .github/workflows/ now has workflow file(s) — doc is stale.",
+        "Doc claims no CI, but .github/workflows/ now has workflow file(s) — doc is stale."
       ),
     ];
   if (!expectNoCi && !exists)
@@ -705,7 +702,7 @@ function verifyCiClaims(repoRoot, text) {
   const exists = workflows.length > 0;
   const claimsNoCi =
     /\b(?:there (?:is|are)|there's|repository has)\s+no\s+(?:general\s+|test\s+)?(?:ci|github actions|workflows?)\b/i.test(
-      text,
+      text
     );
   const claimsCi =
     /\bGitHub Actions exists\b/i.test(text) ||
@@ -715,7 +712,7 @@ function verifyCiClaims(repoRoot, text) {
     return [
       fail(
         "ci-claim",
-        `Document claims CI/workflows are absent, but found: ${workflows.join(", ")}.`,
+        `Document claims CI/workflows are absent, but found: ${workflows.join(", ")}.`
       ),
     ];
   }
@@ -723,14 +720,14 @@ function verifyCiClaims(repoRoot, text) {
     return [
       fail(
         "ci-claim",
-        "Document claims CI/workflow automation exists, but .github/workflows/ is empty or absent.",
+        "Document claims CI/workflow automation exists, but .github/workflows/ is empty or absent."
       ),
     ];
   }
   return [
     ok(
       "ci-claim",
-      `CI claim is compatible with repository state (${workflows.length} workflow file(s)).`,
+      `CI claim is compatible with repository state (${workflows.length} workflow file(s)).`
     ),
   ];
 }
@@ -755,7 +752,7 @@ function verifyTestPresenceClaims(repoRoot, text) {
   const tests = listSourceTests(repoRoot);
   const claimsNoTests =
     /\b(?:there (?:is|are)|there's|repository has)\s+no\s+(?:automated\s+)?(?:test suite|tests?)\b/i.test(
-      text,
+      text
     );
   const claimsTests =
     /\b(?:unit-test foundation|unit tests?|test suite)\b/i.test(text);
@@ -764,7 +761,7 @@ function verifyTestPresenceClaims(repoRoot, text) {
     return [
       fail(
         "test-presence",
-        `Document claims tests are absent, but found: ${tests.join(", ")}.`,
+        `Document claims tests are absent, but found: ${tests.join(", ")}.`
       ),
     ];
   }
@@ -772,14 +769,14 @@ function verifyTestPresenceClaims(repoRoot, text) {
     return [
       fail(
         "test-presence",
-        "Document describes an existing test suite/foundation, but no src/**/*.test|spec files were found.",
+        "Document describes an existing test suite/foundation, but no src/**/*.test|spec files were found."
       ),
     ];
   }
   return [
     ok(
       "test-presence",
-      `Test-presence claim is compatible with repository state (${tests.length} source test file(s)).`,
+      `Test-presence claim is compatible with repository state (${tests.length} source test file(s)).`
     ),
   ];
 }
@@ -799,13 +796,13 @@ function verifyCitedRepoPaths(repoRoot, text) {
         ? ok("repo-paths", `${cited} exists.`)
         : fail(
             "repo-paths",
-            `${cited} is cited but does not exist at ${resolved}.`,
-          ),
+            `${cited} is cited but does not exist at ${resolved}.`
+          )
     );
   }
   if (results.length === 0)
     results.push(
-      skip("repo-paths", "No concrete repository file paths cited."),
+      skip("repo-paths", "No concrete repository file paths cited.")
     );
   return results;
 }
@@ -821,7 +818,7 @@ function verifyJscpdThreshold(repoRoot, text) {
     return [
       skip(
         "jscpd-threshold",
-        "No duplication percentage claim found in CONSTRAINTS.md.",
+        "No duplication percentage claim found in CONSTRAINTS.md."
       ),
     ];
   const documented = Number(claim[1]);
@@ -829,11 +826,11 @@ function verifyJscpdThreshold(repoRoot, text) {
     documented === actual
       ? ok(
           "jscpd-threshold",
-          `Documented duplication threshold (${documented}%) matches .jscpd.json.`,
+          `Documented duplication threshold (${documented}%) matches .jscpd.json.`
         )
       : fail(
           "jscpd-threshold",
-          `Documented duplication threshold is ${documented}% but .jscpd.json is ${actual}%.`,
+          `Documented duplication threshold is ${documented}% but .jscpd.json is ${actual}%.`
         ),
   ];
 }
@@ -844,16 +841,16 @@ function verifyLighthouseAccessibilityThreshold(repoRoot, text) {
     return [skip("lighthouse-accessibility", "No lighthouserc.cjs found.")];
   const config = fs.readFileSync(configPath, "utf8");
   const actualMatch = config.match(
-    /["']categories:accessibility["']\s*:\s*\[\s*["']error["']\s*,\s*\{\s*minScore:\s*([0-9.]+)/,
+    /["']categories:accessibility["']\s*:\s*\[\s*["']error["']\s*,\s*\{\s*minScore:\s*([0-9.]+)/
   );
   const docMatch = text.match(
-    /Accessibility\s*\|\s*Lighthouse accessibility score at least\s*([0-9.]+)/i,
+    /Accessibility\s*\|\s*Lighthouse accessibility score at least\s*([0-9.]+)/i
   );
   if (!actualMatch || !docMatch)
     return [
       skip(
         "lighthouse-accessibility",
-        "Could not compare an enforced accessibility minScore claim.",
+        "Could not compare an enforced accessibility minScore claim."
       ),
     ];
   const actual = Number(actualMatch[1]);
@@ -862,11 +859,11 @@ function verifyLighthouseAccessibilityThreshold(repoRoot, text) {
     documented === actual
       ? ok(
           "lighthouse-accessibility",
-          `Documented accessibility floor (${documented}) matches lighthouserc.cjs.`,
+          `Documented accessibility floor (${documented}) matches lighthouserc.cjs.`
         )
       : fail(
           "lighthouse-accessibility",
-          `Documented accessibility floor is ${documented} but lighthouserc.cjs is ${actual}.`,
+          `Documented accessibility floor is ${documented} but lighthouserc.cjs is ${actual}.`
         ),
   ];
 }
@@ -893,7 +890,7 @@ function verifyVersionClaims(repoRoot, text) {
     // collisions sneak through.
     const nameRe = new RegExp(
       `(?<![\\w/@-])${escapedName}(?![\\w/-])[^\\n]{0,20}?(\\d+\\.\\d+\\.\\d+)`,
-      "i",
+      "i"
     );
     const m = text.match(nameRe);
     if (!m) continue; // doc doesn't cite an exact version for this dep — nothing to check
@@ -901,20 +898,20 @@ function verifyVersionClaims(repoRoot, text) {
       m[1] === versionInRange
         ? ok(
             "version-claims",
-            `${depName} cited as ${m[1]} — matches package.json range (${range}).`,
+            `${depName} cited as ${m[1]} — matches package.json range (${range}).`
           )
         : fail(
             "version-claims",
-            `${depName} cited as ${m[1]} but package.json says ${range}.`,
-          ),
+            `${depName} cited as ${m[1]} but package.json says ${range}.`
+          )
     );
   }
   if (results.length === 0)
     results.push(
       skip(
         "version-claims",
-        "No exact dependency versions cited in text to check.",
-      ),
+        "No exact dependency versions cited in text to check."
+      )
     );
   return results;
 }
@@ -936,7 +933,7 @@ function verifyAvoidSynonymLeakage(contextText, otherDocsByPath) {
       if (syn.length < 4) continue; // skip too-short words prone to false positives
       const synRe = new RegExp(
         `\\b${syn.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`,
-        "i",
+        "i"
       );
       const leaks = Object.entries(otherDocsByPath)
         .filter(([, docText]) => synRe.test(docText))
@@ -945,18 +942,18 @@ function verifyAvoidSynonymLeakage(contextText, otherDocsByPath) {
         leaks.length === 0
           ? ok(
               "avoid-leakage",
-              `"${syn}" (rejected synonym) does not appear in other root docs.`,
+              `"${syn}" (rejected synonym) does not appear in other root docs.`
             )
           : fail(
               "avoid-leakage",
-              `"${syn}" is listed as a rejected synonym but appears in: ${leaks.join(", ")} (verify it's actually being used in the rejected sense, not a different meaning — this is a whole-word match, not semantic)`,
-            ),
+              `"${syn}" is listed as a rejected synonym but appears in: ${leaks.join(", ")} (verify it's actually being used in the rejected sense, not a different meaning — this is a whole-word match, not semantic)`
+            )
       );
     }
   }
   if (results.length === 0)
     results.push(
-      skip("avoid-leakage", "No _Avoid_ lists found in CONTEXT.md."),
+      skip("avoid-leakage", "No _Avoid_ lists found in CONTEXT.md.")
     );
   return results;
 }
@@ -985,12 +982,12 @@ function verifyCitedFilesExist(repoRoot, text) {
     results.push(
       found
         ? ok("cited-files", `${cited} exists.`)
-        : fail("cited-files", `${cited} is cited but not found.`),
+        : fail("cited-files", `${cited} is cited but not found.`)
     );
   }
   if (results.length === 0)
     results.push(
-      skip("cited-files", "No .tsx/.ts paths cited in backticks to check."),
+      skip("cited-files", "No .tsx/.ts paths cited in backticks to check.")
     );
   return results;
 }
@@ -1015,7 +1012,7 @@ function verifyConventionalCommits(repoRoot, n = 10) {
     return [
       skip(
         "conventional-commits",
-        "Could not read git log (not a git repo, or git unavailable).",
+        "Could not read git log (not a git repo, or git unavailable)."
       ),
     ];
   }
@@ -1027,19 +1024,19 @@ function verifyConventionalCommits(repoRoot, n = 10) {
     /^(feat|fix|docs|style|refactor|perf|test|chore|build|ci|revert)(\([\w.-]+\))?!?:\s.+/;
   const nonConforming = subjects.filter(
     (s) =>
-      !ccRe.test(s) && !COMMIT_MESSAGE_EXEMPTIONS.has(s.trim().toLowerCase()),
+      !ccRe.test(s) && !COMMIT_MESSAGE_EXEMPTIONS.has(s.trim().toLowerCase())
   );
   if (nonConforming.length === 0)
     return [
       ok(
         "conventional-commits",
-        `All ${subjects.length} recent commit(s) follow Conventional Commits (or are exempt genesis commits).`,
+        `All ${subjects.length} recent commit(s) follow Conventional Commits (or are exempt genesis commits).`
       ),
     ];
   return [
     fail(
       "conventional-commits",
-      `${nonConforming.length} of ${subjects.length} recent commit(s) don't follow Conventional Commits: ${nonConforming.map((s) => `"${s}"`).join(", ")}`,
+      `${nonConforming.length} of ${subjects.length} recent commit(s) don't follow Conventional Commits: ${nonConforming.map((s) => `"${s}"`).join(", ")}`
     ),
   ];
 }
@@ -1058,7 +1055,7 @@ function verifyPackageManagerPin(repoRoot, text) {
     return [
       ok(
         "package-manager-pin",
-        "No packageManager field pinned in package.json — nothing to cross-check.",
+        "No packageManager field pinned in package.json — nothing to cross-check."
       ),
     ];
   const [, version] = pin.split("@");
@@ -1067,7 +1064,7 @@ function verifyPackageManagerPin(repoRoot, text) {
       ? ok("package-manager-pin", `Cited pin "${pin}" matches package.json.`)
       : fail(
           "package-manager-pin",
-          `package.json pins "${pin}" but that exact version isn't mentioned in the doc.`,
+          `package.json pins "${pin}" but that exact version isn't mentioned in the doc.`
         ),
   ];
 }

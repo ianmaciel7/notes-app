@@ -27,7 +27,7 @@ export function FileDropzone() {
             : undefined,
           progress: 0,
           status: "pending" as const,
-        }) as FileWithMeta,
+        }) as FileWithMeta
     );
 
     setFiles((prev) => [...prev, ...newFiles]);
@@ -97,17 +97,17 @@ export function FileDropzone() {
   const updateFileStatus = (
     id: string,
     status: FileWithMeta["status"],
-    error?: string,
+    error?: string
   ) => {
     setFiles((prev) =>
-      prev.map((file) => (file.id === id ? { ...file, status, error } : file)),
+      prev.map((file) => (file.id === id ? { ...file, status, error } : file))
     );
   };
 
   // Update file progress
   const updateFileProgress = (id: string, progress: number) => {
     setFiles((prev) =>
-      prev.map((file) => (file.id === id ? { ...file, progress } : file)),
+      prev.map((file) => (file.id === id ? { ...file, progress } : file))
     );
   };
 

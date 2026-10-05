@@ -58,7 +58,7 @@ function calculateDropZone(cursor, containers) {
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       const distance = Math.sqrt(
-        Math.pow(cursor.x - centerX, 2) + Math.pow(cursor.y - centerY, 2),
+        Math.pow(cursor.x - centerX, 2) + Math.pow(cursor.y - centerY, 2)
       );
 
       zones.push({
@@ -88,7 +88,7 @@ function calculateGridPosition(cursor, gridContainer, columns) {
   const column = Math.floor(relativeX / columnWidth);
   const row = Math.floor(
     relativeY /
-      (rect.height / Math.ceil(gridContainer.children.length / columns)),
+      (rect.height / Math.ceil(gridContainer.children.length / columns))
   );
 
   const index = row * columns + column;
@@ -177,7 +177,7 @@ function findNearestDropTarget(cursor, dropTargets, maxDistance = 100) {
     const centerY = rect.top + rect.height / 2;
 
     const distance = Math.sqrt(
-      Math.pow(cursor.x - centerX, 2) + Math.pow(cursor.y - centerY, 2),
+      Math.pow(cursor.x - centerX, 2) + Math.pow(cursor.y - centerY, 2)
     );
 
     if (distance < minDistance) {
@@ -204,7 +204,7 @@ function handleDropEdgeCases(dropPosition, container, item) {
   // Ensure index is within bounds
   adjustedPosition.index = Math.max(
     0,
-    Math.min(adjustedPosition.index, container.children.length),
+    Math.min(adjustedPosition.index, container.children.length)
   );
 
   return adjustedPosition;
@@ -250,8 +250,8 @@ Options:
             distance: 15.5,
           },
           null,
-          2,
-        ),
+          2
+        )
       );
       break;
 
@@ -263,8 +263,8 @@ Options:
             reason: null,
           },
           null,
-          2,
-        ),
+          2
+        )
       );
       break;
 
@@ -276,8 +276,8 @@ Options:
             y: 10,
           },
           null,
-          2,
-        ),
+          2
+        )
       );
       break;
 

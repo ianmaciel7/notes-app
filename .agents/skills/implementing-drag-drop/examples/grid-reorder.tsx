@@ -194,7 +194,7 @@ export function GridReorder() {
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
+    })
   );
 
   function handleDragStart(event: DragStartEvent) {

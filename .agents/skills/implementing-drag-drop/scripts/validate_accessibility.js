@@ -14,7 +14,7 @@ function checkKeyboardSupport(element) {
   const tabIndex = element.getAttribute("tabIndex") || element.tabIndex;
   if (tabIndex === undefined || tabIndex === -1) {
     issues.push(
-      "Element is not keyboard focusable (missing tabIndex or tabIndex=-1)",
+      "Element is not keyboard focusable (missing tabIndex or tabIndex=-1)"
     );
   }
 
@@ -55,7 +55,7 @@ function checkAriaAttributes(element, isDragging = false) {
   const ariaRoleDescription = element.getAttribute("aria-roledescription");
   if (!ariaRoleDescription) {
     recommendations.push(
-      'Consider adding aria-roledescription="sortable" for sortable items',
+      'Consider adding aria-roledescription="sortable" for sortable items'
     );
   }
 
@@ -79,7 +79,7 @@ function checkAriaAttributes(element, isDragging = false) {
   if (element.parentElement?.getAttribute("role") === "list") {
     if (!ariaPosInSet) {
       recommendations.push(
-        "Consider adding aria-posinset for position in list",
+        "Consider adding aria-posinset for position in list"
       );
     }
     if (!ariaSetSize) {
@@ -110,7 +110,7 @@ function checkScreenReaderSupport(container) {
       const ariaAtomic = region.getAttribute("aria-atomic");
       if (ariaAtomic !== "true") {
         recommendations.push(
-          'Consider setting aria-atomic="true" on live regions',
+          'Consider setting aria-atomic="true" on live regions'
         );
       }
     });
@@ -123,11 +123,11 @@ function checkScreenReaderSupport(container) {
   } else {
     // Check if instructions are referenced
     const describedByElements = container.querySelectorAll(
-      '[aria-describedby*="instructions"]',
+      '[aria-describedby*="instructions"]'
     );
     if (describedByElements.length === 0) {
       warnings.push(
-        "Instructions exist but are not referenced by any draggable elements",
+        "Instructions exist but are not referenced by any draggable elements"
       );
     }
   }
@@ -158,7 +158,7 @@ function checkAlternativeControls(element) {
 
   // Look for move buttons
   const moveButtons = parent.querySelectorAll(
-    'button[aria-label*="move" i], button[aria-label*="reorder" i]',
+    'button[aria-label*="move" i], button[aria-label*="reorder" i]'
   );
   if (moveButtons.length === 0) {
     warnings.push("No alternative move buttons found for non-drag interaction");
@@ -178,11 +178,11 @@ function checkAlternativeControls(element) {
 
   // Look for position selector
   const positionSelector = parent.querySelector(
-    'select[aria-label*="position" i], select[aria-label*="move" i]',
+    'select[aria-label*="position" i], select[aria-label*="move" i]'
   );
   if (!positionSelector && moveButtons.length === 0) {
     recommendations.push(
-      "Consider adding position selector as alternative to drag-and-drop",
+      "Consider adding position selector as alternative to drag-and-drop"
     );
   }
 
@@ -196,7 +196,7 @@ function checkFocusManagement(container) {
 
   // Check for focus trap potential
   const focusableElements = container.querySelectorAll(
-    'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
   );
 
   if (focusableElements.length === 0) {
@@ -212,7 +212,7 @@ function checkFocusManagement(container) {
 
   if (positiveTabIndex.length > 0) {
     warnings.push(
-      `Found ${positiveTabIndex.length} elements with positive tabindex (avoid for proper tab order)`,
+      `Found ${positiveTabIndex.length} elements with positive tabindex (avoid for proper tab order)`
     );
   }
 
@@ -237,7 +237,7 @@ function validateAccessibility(rootElement) {
 
   // Find all draggable elements
   const draggables = rootElement.querySelectorAll(
-    '[draggable="true"], [role="button"][aria-roledescription*="sortable"], .draggable',
+    '[draggable="true"], [role="button"][aria-roledescription*="sortable"], .draggable'
   );
 
   if (draggables.length === 0) {
@@ -252,39 +252,39 @@ function validateAccessibility(rootElement) {
       const keyboardCheck = checkKeyboardSupport(element);
       if (!keyboardCheck.passed) {
         report.issues.push(
-          ...keyboardCheck.issues.map((issue) => `${elementId}: ${issue}`),
+          ...keyboardCheck.issues.map((issue) => `${elementId}: ${issue}`)
         );
       }
       report.warnings.push(
-        ...keyboardCheck.warnings.map((warning) => `${elementId}: ${warning}`),
+        ...keyboardCheck.warnings.map((warning) => `${elementId}: ${warning}`)
       );
 
       // ARIA attributes
       const ariaCheck = checkAriaAttributes(element);
       if (!ariaCheck.passed) {
         report.issues.push(
-          ...ariaCheck.issues.map((issue) => `${elementId}: ${issue}`),
+          ...ariaCheck.issues.map((issue) => `${elementId}: ${issue}`)
         );
       }
       report.warnings.push(
-        ...ariaCheck.warnings.map((warning) => `${elementId}: ${warning}`),
+        ...ariaCheck.warnings.map((warning) => `${elementId}: ${warning}`)
       );
       report.recommendations.push(
-        ...ariaCheck.recommendations.map((rec) => `${elementId}: ${rec}`),
+        ...ariaCheck.recommendations.map((rec) => `${elementId}: ${rec}`)
       );
 
       // Alternative controls
       const altCheck = checkAlternativeControls(element);
       if (!altCheck.passed) {
         report.issues.push(
-          ...altCheck.issues.map((issue) => `${elementId}: ${issue}`),
+          ...altCheck.issues.map((issue) => `${elementId}: ${issue}`)
         );
       }
       report.warnings.push(
-        ...altCheck.warnings.map((warning) => `${elementId}: ${warning}`),
+        ...altCheck.warnings.map((warning) => `${elementId}: ${warning}`)
       );
       report.recommendations.push(
-        ...altCheck.recommendations.map((rec) => `${elementId}: ${rec}`),
+        ...altCheck.recommendations.map((rec) => `${elementId}: ${rec}`)
       );
     });
   }
@@ -329,7 +329,7 @@ function calculateAccessibilityScore(report) {
     0,
     baseScore -
       report.issues.length * issuePenalty -
-      report.warnings.length * warningPenalty,
+      report.warnings.length * warningPenalty
   );
 
   return {

@@ -31,7 +31,7 @@ function parseArgs(argv, { valueFlags = {}, boolFlags = {} } = {}) {
     if (a in valueFlags) {
       if (i + 1 >= argv.length) {
         errorExit(
-          `Error: ${a} requires a value.\n       Received nothing after ${a}.\nRun with --help for usage.`,
+          `Error: ${a} requires a value.\n       Received nothing after ${a}.\nRun with --help for usage.`
         );
       }
       result[valueFlags[a]] = argv[++i];
@@ -105,8 +105,8 @@ function report(args, docLabel, results) {
           total: results.length,
         },
         null,
-        2,
-      ) + "\n",
+        2
+      ) + "\n"
     );
   } else {
     process.stdout.write(`Verifying ${docLabel}\n\n`);
@@ -117,7 +117,7 @@ function report(args, docLabel, results) {
       process.stdout.write(
         results.length === 0
           ? "No checks applicable.\n"
-          : `All ${results.length} check(s) passed. (--quiet: OK lines suppressed)\n`,
+          : `All ${results.length} check(s) passed. (--quiet: OK lines suppressed)\n`
       );
     } else {
       for (const r of toShow) {
@@ -128,7 +128,7 @@ function report(args, docLabel, results) {
     }
     if (failed.length > 0)
       process.stderr.write(
-        `\n${failed.length} of ${results.length} check(s) failed.\n`,
+        `\n${failed.length} of ${results.length} check(s) failed.\n`
       );
   }
 
@@ -168,7 +168,7 @@ function runVerify(argv, { docFile, help, requireDoc = true, buildResults }) {
     : findRepoRoot(process.cwd(), ["package.json"]);
   if (!repoRoot) {
     errorExit(
-      `Error: could not find a repo root containing package.json.\n       Searched from: ${rootArg ? path.resolve(rootArg) : process.cwd()}\nPass ROOT_DIR explicitly.`,
+      `Error: could not find a repo root containing package.json.\n       Searched from: ${rootArg ? path.resolve(rootArg) : process.cwd()}\nPass ROOT_DIR explicitly.`
     );
   }
 
