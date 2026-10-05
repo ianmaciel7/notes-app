@@ -9,7 +9,7 @@ import { FieldDescription, FieldLegend, FieldSet } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { CaseStudyPart, CaseStudyPartAnswer } from "@/types/question";
 
-type QuestionCaseStudyItemProps = Omit<
+type QuestionCaseStudyFieldSetProps = Omit<
   ComponentProps<typeof FieldSet>,
   "children" | "onChange"
 > & {
@@ -40,7 +40,7 @@ function renderPartControl({
   correctAnswer,
   resolved,
   onValueChange,
-}: Omit<QuestionCaseStudyItemProps, "position" | "className">) {
+}: Omit<QuestionCaseStudyFieldSetProps, "position" | "className">) {
   if (item.type === "fill-blank") {
     return (
       <QuestionFillBlankField
@@ -81,7 +81,7 @@ function renderPartControl({
 }
 
 /** One answerable sub-question of a case study. */
-function QuestionCaseStudyItem({
+function QuestionCaseStudyFieldSet({
   item,
   position,
   value,
@@ -90,12 +90,12 @@ function QuestionCaseStudyItem({
   onValueChange,
   className,
   ...props
-}: QuestionCaseStudyItemProps) {
+}: QuestionCaseStudyFieldSetProps) {
   const t = useTranslations("exam");
 
   return (
     <FieldSet
-      data-slot="question-part-item"
+      data-slot="question-case-study-field-set"
       {...props}
       className={cn(
         "min-w-0 gap-2 rounded-lg border border-border p-3",
@@ -122,4 +122,4 @@ function QuestionCaseStudyItem({
   );
 }
 
-export { QuestionCaseStudyItem, type QuestionCaseStudyItemProps };
+export { QuestionCaseStudyFieldSet, type QuestionCaseStudyFieldSetProps };

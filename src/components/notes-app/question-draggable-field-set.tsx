@@ -12,7 +12,7 @@ import type {
   QuestionItem,
 } from "@/types/question";
 
-type QuestionDraggableItemGroupProps = Omit<
+type QuestionDraggableFieldSetProps = Omit<
   ComponentProps<typeof FieldSet>,
   "children" | "onChange"
 > & {
@@ -27,7 +27,7 @@ type QuestionDraggableItemGroupProps = Omit<
   onValueChange: (next: Record<string, string>) => void;
 };
 
-function QuestionDraggableItemGroup({
+function QuestionDraggableFieldSet({
   legend,
   items,
   slots,
@@ -37,14 +37,14 @@ function QuestionDraggableItemGroup({
   onValueChange,
   className,
   ...props
-}: QuestionDraggableItemGroupProps) {
+}: QuestionDraggableFieldSetProps) {
   const t = useTranslations("exam");
   const { sensors, accessibility, poolItems, placeItem, handleDragEnd } =
     useQuestionDraggableItemGroup({ items, slots, value, onValueChange });
 
   return (
     <FieldSet
-      data-slot="question-draggable-item-group"
+      data-slot="question-draggable-field-set"
       {...props}
       className={cn("min-w-0 gap-3", className)}
     >
@@ -89,4 +89,4 @@ function QuestionDraggableItemGroup({
   );
 }
 
-export { QuestionDraggableItemGroup, type QuestionDraggableItemGroupProps };
+export { QuestionDraggableFieldSet, type QuestionDraggableFieldSetProps };

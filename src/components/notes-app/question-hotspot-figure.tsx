@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionHotspotButton } from "@/components/notes-app/question-hotspot-button";
+import { QuestionHotspotToggle } from "@/components/notes-app/question-hotspot-toggle";
 import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
 import { Badge } from "@/components/ui/badge";
 import { FieldLegend, FieldSet } from "@/components/ui/field";
@@ -85,7 +85,7 @@ function QuestionHotspotFigure({
           className="h-auto w-full"
         />
         {states.map(({ area, selected, result }) => (
-          <QuestionHotspotButton
+          <QuestionHotspotToggle
             key={area.id}
             area={area}
             pressed={selected}

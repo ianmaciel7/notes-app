@@ -3,7 +3,7 @@
 import type { ComponentProps, ReactNode } from "react";
 import { QuestionCaseStudyTabs } from "@/components/notes-app/question-case-study-tabs";
 import { QuestionChoiceFieldSet } from "@/components/notes-app/question-choice-field-set";
-import { QuestionDraggableItemGroup } from "@/components/notes-app/question-draggable-item-group";
+import { QuestionDraggableFieldSet } from "@/components/notes-app/question-draggable-field-set";
 import { QuestionDropdownFieldGroup } from "@/components/notes-app/question-dropdown-field-group";
 import { QuestionFillBlankField } from "@/components/notes-app/question-fill-blank-field";
 import { QuestionHotspotFigure } from "@/components/notes-app/question-hotspot-figure";
@@ -118,7 +118,7 @@ function dragAndDropAnswer(
   { answer, resolved, onAnswerChange }: Context,
 ): ReactNode {
   return (
-    <QuestionDraggableItemGroup
+    <QuestionDraggableFieldSet
       legend={question.prompt}
       items={question.items}
       slots={question.slots}

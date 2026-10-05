@@ -6,7 +6,7 @@ import { areaBox, areaClipPath } from "@/lib/exam/hotspot-geometry";
 import { cn } from "@/lib/utils";
 import type { HotspotArea } from "@/types/question";
 
-type QuestionHotspotButtonProps = Omit<
+type QuestionHotspotToggleProps = Omit<
   ComponentProps<typeof Toggle>,
   "children" | "aria-label" | "render" | "style"
 > & {
@@ -20,17 +20,17 @@ type QuestionHotspotButtonProps = Omit<
  * to its shape. It is a toggle button, so it is focusable and announced as
  * pressed or not without any extra ARIA.
  */
-function QuestionHotspotButton({
+function QuestionHotspotToggle({
   area,
   result,
   className,
   ...props
-}: QuestionHotspotButtonProps) {
+}: QuestionHotspotToggleProps) {
   const box = areaBox(area.shape);
 
   return (
     <Toggle
-      data-slot="question-hotspot-button"
+      data-slot="question-hotspot-toggle"
       data-result={result}
       data-shape={area.shape.kind}
       {...props}
@@ -58,4 +58,4 @@ function QuestionHotspotButton({
   );
 }
 
-export { QuestionHotspotButton, type QuestionHotspotButtonProps };
+export { QuestionHotspotToggle, type QuestionHotspotToggleProps };
