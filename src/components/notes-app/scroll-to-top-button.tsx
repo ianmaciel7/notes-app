@@ -24,7 +24,7 @@ function ScrollToTopButton({ className, ...props }: ScrollToTopButtonProps) {
       aria-label={t("scrollToTop")}
       className={cn(
         "fixed right-4 bottom-4 rounded-full border border-border bg-background text-foreground shadow-md hover:bg-muted sm:right-6 sm:bottom-6",
-        className,
+        className
       )}
     >
       <ArrowUpIcon aria-hidden="true" />

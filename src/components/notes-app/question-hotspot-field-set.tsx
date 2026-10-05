@@ -30,10 +30,14 @@ type AreaResult = "correct" | "incorrect" | "missed" | undefined;
 function areaResult(
   resolved: boolean,
   selected: boolean,
-  isKey: boolean,
+  isKey: boolean
 ): AreaResult {
-  if (!resolved) return undefined;
-  if (selected) return isKey ? "correct" : "incorrect";
+  if (!resolved) {
+    return undefined;
+  }
+  if (selected) {
+    return isKey ? "correct" : "incorrect";
+  }
   return isKey ? "missed" : undefined;
 }
 
@@ -60,9 +64,11 @@ function QuestionHotspotFieldSet({
   });
 
   const toggle = (areaId: string, pressed: boolean) => {
-    if (resolved) return;
+    if (resolved) {
+      return;
+    }
     onValueChange(
-      pressed ? [...value, areaId] : value.filter((id) => id !== areaId),
+      pressed ? [...value, areaId] : value.filter((id) => id !== areaId)
     );
   };
 

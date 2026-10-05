@@ -49,7 +49,7 @@ function SpaceSwitcher({
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const visibleSpaces = spaces.filter((space) =>
-    space.name.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()),
+    space.name.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())
   );
 
   return (
@@ -62,7 +62,9 @@ function SpaceSwitcher({
                 open={open}
                 onOpenChange={(nextOpen) => {
                   setOpen(nextOpen);
-                  if (!nextOpen) setQuery("");
+                  if (!nextOpen) {
+                    setQuery("");
+                  }
                 }}
               >
                 <DropdownMenuTrigger

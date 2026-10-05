@@ -17,7 +17,7 @@ function renderNavigation() {
   return render(
     <SidebarProvider>
       <ExamNavigation spaceId="space-1" />
-    </SidebarProvider>,
+    </SidebarProvider>
   );
 }
 
@@ -49,7 +49,7 @@ describe("ExamNavigation", () => {
     const link = screen.getByRole("link", { name: "Cloud Fundamentals" });
     expect(link.getAttribute("href")).toBe("/space-1/exams/exam-1");
     expect(
-      screen.getByRole("link", { name: "Security" }).getAttribute("href"),
+      screen.getByRole("link", { name: "Security" }).getAttribute("href")
     ).toBe("/space-1/exams/exam-2");
   });
 

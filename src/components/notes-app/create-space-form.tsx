@@ -1,24 +1,12 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import type { ComponentProps, FormEvent } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/spinner";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useCreateSpaceFormState } from "@/hooks/use-create-space-form-state";
-import { SPACE_ICON_MAP } from "@/lib/space-icons";
+import type { ComponentProps } from "react";
+import { CreateSpaceFormFooter } from "@/components/notes-app/create-space-form-footer";
+import { CreateSpaceIconField } from "@/components/notes-app/create-space-icon-field";
+import { CreateSpaceNameField } from "@/components/notes-app/create-space-name-field";
+import { FieldGroup } from "@/components/ui/field";
+import { useCreateSpaceForm } from "@/hooks/use-create-space-form";
 import { cn } from "@/lib/utils";
-import {
-  type AllowedSpaceIcon,
-  validateCreateSpaceInput,
-} from "@/lib/validators/space";
 
 type CreateSpaceFormProps = Omit<ComponentProps<"form">, "onSubmit"> & {
   onSubmitSpace: (name: string, icon: string) => Promise<void>;
@@ -33,129 +21,34 @@ function CreateSpaceForm({
   className,
   ...props
 }: CreateSpaceFormProps) {
-  const t = useTranslations("spaces");
-  const { name, setName, selectedIcon, setSelectedIcon, error, setError } =
-    useCreateSpaceFormState();
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const validation = validateCreateSpaceInput({
-      name,
-      icon: selectedIcon,
-    });
-
-    if (!validation.success || !validation.data) {
-      const code =
-        validation.fieldErrors?.name ||
-        validation.fieldErrors?.description ||
-        validation.fieldErrors?.icon ||
-        validation.error ||
-        "nameRequired";
-      setError(t(`validation.${code}`));
-      return;
-    }
-
-    try {
-      setError(null);
-      await onSubmitSpace(
-        validation.data.name,
-        validation.data.icon || "folder",
-      );
-      setName("");
-      setSelectedIcon("folder");
-    } catch {
-      setError(t("failedToCreate"));
-    }
-  };
+  const form = useCreateSpaceForm({ onSubmitSpace });
 
   return (
     <form
       data-slot="create-space-form"
       data-testid="create-space-form"
-      onSubmit={handleSubmit}
+      onSubmit={form.handleSubmit}
       {...props}
       className={cn("flex flex-col gap-4", className)}
     >
       <FieldGroup>
-        <Field data-invalid={Boolean(error) || undefined}>
-          <FieldLabel htmlFor="create-space-form-name-input">
-            {t("spaceName")}
-          </FieldLabel>
-          <Input
-            id="create-space-form-name-input"
-            placeholder={t("spaceNamePlaceholder")}
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-              if (error) setError(null);
-            }}
-            autoFocus
-            data-testid="create-space-form-name-input"
-            aria-invalid={Boolean(error) || undefined}
-            disabled={isLoading}
-          />
-          {error && (
-            <FieldError data-testid="create-space-form-error">
-              {error}
-            </FieldError>
-          )}
-        </Field>
-
-        <Field>
-          <FieldLabel>{t("icon")}</FieldLabel>
-          <ToggleGroup
-            value={[selectedIcon]}
-            onValueChange={(val) => {
-              if (val.length > 0) {
-                setSelectedIcon(val[0] as AllowedSpaceIcon);
-              }
-            }}
-            disabled={isLoading}
-            variant="outline"
-            className="flex items-center gap-2 pt-1"
-            data-testid="create-space-form-icon-selector"
-          >
-            {(["folder", "book", "briefcase", "code"] as const).map(
-              (iconKey) => {
-                const IconComp = SPACE_ICON_MAP[iconKey];
-                return (
-                  <ToggleGroupItem
-                    key={iconKey}
-                    value={iconKey}
-                    size="sm"
-                    aria-label={t("selectIconAria", { icon: iconKey })}
-                    data-testid={`create-space-form-icon-btn-${iconKey}`}
-                  >
-                    <IconComp />
-                  </ToggleGroupItem>
-                );
-              },
-            )}
-          </ToggleGroup>
-        </Field>
+        <CreateSpaceNameField
+          error={form.error}
+          isLoading={isLoading}
+          name={form.name}
+          onNameChange={form.onNameChange}
+        />
+        <CreateSpaceIconField
+          isLoading={isLoading}
+          onIconChange={form.onIconChange}
+          selectedIcon={form.selectedIcon}
+        />
       </FieldGroup>
-
-      <Field orientation="horizontal" className="justify-end pt-2">
-        {onCancel && (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onCancel}
-            disabled={isLoading}
-            data-testid="create-space-form-cancel"
-          >
-            {t("cancel")}
-          </Button>
-        )}
-        <Button
-          type="submit"
-          disabled={isLoading || !name.trim()}
-          data-testid="create-space-form-submit"
-        >
-          {isLoading && <Spinner data-icon="inline-start" />}
-          {isLoading ? t("creating") : t("createSpace")}
-        </Button>
-      </Field>
+      <CreateSpaceFormFooter
+        isLoading={isLoading}
+        name={form.name}
+        onCancel={onCancel}
+      />
     </form>
   );
 }

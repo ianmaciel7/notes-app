@@ -1,20 +1,16 @@
 "use client";
 
-import { RotateCcwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { QuestionAnswerFieldSet } from "@/components/notes-app/question-answer-field-set";
+import { QuestionAnswerFooter } from "@/components/notes-app/question-answer-footer";
+import { QuestionCardContent } from "@/components/notes-app/question-card-content";
+import { QuestionCardHeader } from "@/components/notes-app/question-card-header";
+import { QuestionCardTitle } from "@/components/notes-app/question-card-title";
 import { QuestionExplanationFieldContent } from "@/components/notes-app/question-explanation-field-content";
 import { QuestionImageFigure } from "@/components/notes-app/question-image-figure";
 import { QuestionResultBadge } from "@/components/notes-app/question-result-badge";
-import { Button } from "@/components/ui/button";
-import {
-  CardContent,
-  CardFooter,
-  CardHeader,
-  Card as CardRoot,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card as CardRoot } from "@/components/ui/card";
 import { useQuestionCard } from "@/hooks/use-question-card";
 import { cn } from "@/lib/utils";
 import type { Card } from "@/types/card";
@@ -38,21 +34,8 @@ function QuestionCard({
   ...props
 }: QuestionCardProps) {
   const t = useTranslations("exam");
-  const {
-    status,
-    answer,
-    isSubmitting,
-    isResolved,
-    isGradable,
-    needsConfirmation,
-    canSubmit,
-    showExplanation,
-    hasSaveError,
-    setAnswer,
-    submit,
-    showAnswer,
-    retry,
-  } = useQuestionCard({ spaceId, question, card });
+  const state = useQuestionCard({ spaceId, question, card });
+  const { status, isResolved } = state;
   const { properties } = question;
 
   return (
@@ -63,8 +46,8 @@ function QuestionCard({
       {...props}
       className={cn("w-full pt-0", className)}
     >
-      <CardHeader className="border-b border-border bg-muted/50 pt-(--card-spacing)">
-        <CardTitle className="flex items-center justify-between gap-2 text-sm font-semibold text-foreground">
+      <QuestionCardHeader>
+        <QuestionCardTitle>
           <span>{t("questionIndex", { current: index + 1, total })}</span>
           <span aria-live="polite">
             {status === "answeredCorrect" ? (
@@ -74,9 +57,9 @@ function QuestionCard({
               <QuestionResultBadge state="incorrect" />
             ) : null}
           </span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+        </QuestionCardTitle>
+      </QuestionCardHeader>
+      <QuestionCardContent>
         <p className="whitespace-pre-wrap font-sans text-foreground">
           {properties.prompt}
         </p>
@@ -90,55 +73,35 @@ function QuestionCard({
         {properties.type === "multiple-choice" ? (
           <p className="text-xs text-muted-foreground">{t("multipleHint")}</p>
         ) : null}
-        {isGradable ? null : (
+        {state.isGradable ? null : (
           <p className="text-xs text-muted-foreground">{t("revealOnly")}</p>
         )}
         <QuestionAnswerFieldSet
           question={properties}
-          answer={answer}
+          answer={state.answer}
           resolved={isResolved}
-          onAnswerChange={setAnswer}
+          onAnswerChange={state.setAnswer}
         />
-        {hasSaveError ? (
+        {state.hasSaveError ? (
           <p role="alert" className="text-xs text-destructive">
             {t("saveFailed")}
           </p>
         ) : null}
-        {showExplanation && properties.explanation ? (
+        {state.showExplanation && properties.explanation ? (
           <QuestionExplanationFieldContent
             explanation={properties.explanation}
           />
         ) : null}
-      </CardContent>
-      <CardFooter className="gap-2">
-        {isResolved ? (
-          <Button type="button" variant="outline" size="sm" onClick={retry}>
-            <RotateCcwIcon aria-hidden="true" data-icon="inline-start" />
-            {t("tryAgain")}
-          </Button>
-        ) : (
-          <>
-            {needsConfirmation ? (
-              <Button
-                type="button"
-                size="sm"
-                disabled={!canSubmit || isSubmitting}
-                onClick={submit}
-              >
-                {t("checkAnswer")}
-              </Button>
-            ) : null}
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={showAnswer}
-            >
-              {t("showAnswer")}
-            </Button>
-          </>
-        )}
-      </CardFooter>
+      </QuestionCardContent>
+      <QuestionAnswerFooter
+        canSubmit={state.canSubmit}
+        isResolved={isResolved}
+        isSubmitting={state.isSubmitting}
+        needsConfirmation={state.needsConfirmation}
+        onRetry={state.retry}
+        onShowAnswer={state.showAnswer}
+        onSubmit={state.submit}
+      />
     </CardRoot>
   );
 }

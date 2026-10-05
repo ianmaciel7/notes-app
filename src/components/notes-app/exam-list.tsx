@@ -32,7 +32,7 @@ function ExamList({ spaceId, examId, className, ...props }: ExamListProps) {
       {...props}
       className={cn(
         "mx-auto flex w-full max-w-3xl flex-col gap-4 p-4",
-        className,
+        className
       )}
     >
       {loading ? (

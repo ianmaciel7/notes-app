@@ -12,7 +12,7 @@ function renderDialog(open = true, onOpenChange = vi.fn()) {
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
       <SettingsDialog open={open} onOpenChange={onOpenChange} />
-    </NextIntlClientProvider>,
+    </NextIntlClientProvider>
   );
 
   return onOpenChange;
@@ -36,7 +36,7 @@ describe("SettingsDialog", () => {
     expect(screen.getByTestId("settings-dialog")).toBeDefined();
     expect(screen.getByRole("heading", { name: "Settings" })).toBeDefined();
     expect(
-      screen.getByText("Manage your language and appearance preferences."),
+      screen.getByText("Manage your language and appearance preferences.")
     ).toBeDefined();
     expect(screen.getByTestId("settings-form")).toBeDefined();
   });

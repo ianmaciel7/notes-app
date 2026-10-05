@@ -31,7 +31,7 @@ function MfaAssertionForm({
   const mfaAssertionFactorPrompt = getTranslation(
     ui,
     "prompts",
-    "mfaAssertionFactorPrompt",
+    "mfaAssertionFactorPrompt"
   );
 
   useMultiFactorAssertionCleanup();
@@ -42,7 +42,7 @@ function MfaAssertionForm({
 
   // If only a single hint is provided, select it by default to improve UX.
   const [hint, setHint] = useState<MultiFactorInfo | undefined>(
-    resolver.hints.length === 1 ? resolver.hints[0] : undefined,
+    resolver.hints.length === 1 ? resolver.hints[0] : undefined
   );
 
   if (hint) {

@@ -35,10 +35,12 @@ function CountrySelect({ ref }: CountrySelectProps) {
       getCountry: () => selected,
       setCountry: (code: CountryCode) => {
         const foundCountry = countries.find((country) => country.code === code);
-        if (foundCountry) setSelected(foundCountry);
+        if (foundCountry) {
+          setSelected(foundCountry);
+        }
       },
     }),
-    [countries, selected],
+    [countries, selected]
   );
 
   return (
@@ -51,9 +53,11 @@ function CountrySelect({ ref }: CountrySelectProps) {
       onValueChange={(code) => {
         if (code) {
           const foundCountry = countries.find(
-            (country) => country.code === code,
+            (country) => country.code === code
           );
-          if (foundCountry) setSelected(foundCountry);
+          if (foundCountry) {
+            setSelected(foundCountry);
+          }
         }
       }}
     >

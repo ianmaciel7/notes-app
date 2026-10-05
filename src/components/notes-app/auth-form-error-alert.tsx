@@ -16,7 +16,9 @@ function AuthFormErrorAlert({
   className,
   ...props
 }: AuthFormErrorAlertProps) {
-  if (!message) return null;
+  if (!message) {
+    return null;
+  }
 
   return (
     <Alert

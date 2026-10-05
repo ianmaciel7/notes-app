@@ -17,7 +17,7 @@ function SpaceLoading({ className, ...props }: SpaceLoadingProps) {
       {...props}
       className={cn(
         "flex min-h-svh w-full items-center justify-center",
-        className,
+        className
       )}
       data-testid="space-loading"
     >

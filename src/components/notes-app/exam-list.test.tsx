@@ -66,7 +66,7 @@ describe("ExamList", () => {
     mockUseExamList.mockReturnValue(
       state({
         questions: [{ id: "q1" }, { id: "q2" }] as QuestionObject[],
-      }),
+      })
     );
     render(<ExamList spaceId="s1" examId="e1" />);
     const cards = screen.getAllByTestId("question-card");

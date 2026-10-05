@@ -61,7 +61,7 @@ function UserMenu({ className, ...props }: UserMenuProps) {
       {...props}
       className={cn(
         "flex items-center gap-3 text-sm text-foreground",
-        className,
+        className
       )}
     >
       <LanguageSelect />

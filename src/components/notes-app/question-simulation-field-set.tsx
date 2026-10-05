@@ -40,7 +40,9 @@ function QuestionSimulationFieldSet({
   const handleExecute = (e?: React.FormEvent) => {
     e?.preventDefault();
     const cmd = currentInput.trim();
-    if (!cmd || resolved) return;
+    if (!cmd || resolved) {
+      return;
+    }
 
     onValueChange([...value, cmd]);
     setCurrentInput("");
@@ -51,10 +53,11 @@ function QuestionSimulationFieldSet({
     correctAnswer.every((exp) =>
       value
         .map((v) => v.toLowerCase().trim())
-        .includes(exp.toLowerCase().trim()),
+        .includes(exp.toLowerCase().trim())
     );
 
-  const status = resolved ? (isCompleted ? "correct" : "incorrect") : undefined;
+  const resolvedStatus = isCompleted ? "correct" : "incorrect";
+  const status = resolved ? resolvedStatus : undefined;
 
   return (
     <FieldSet

@@ -29,7 +29,7 @@ function QuestionImageFigure({
       {...props}
       className={cn(
         "relative w-full overflow-hidden rounded-lg border border-border bg-muted/30",
-        className,
+        className
       )}
     >
       <Image

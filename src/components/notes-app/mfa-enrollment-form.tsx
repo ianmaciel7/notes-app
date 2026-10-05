@@ -36,7 +36,7 @@ function MfaEnrollmentForm({
 
   // If only a single hint is provided, select it by default to improve UX.
   const [hint, setHint] = useState<Hint | undefined>(
-    hints.length === 1 ? hints[0] : undefined,
+    hints.length === 1 ? hints[0] : undefined
   );
 
   if (hint) {

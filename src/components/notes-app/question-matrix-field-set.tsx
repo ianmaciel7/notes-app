@@ -72,11 +72,8 @@ function QuestionMatrixFieldSet({
               const selected = value[row.id] ?? "";
               const isCorrect = resolved && selected === correctAnswer[row.id];
               const isIncorrect = resolved && selected !== "" && !isCorrect;
-              const status = isCorrect
-                ? "correct"
-                : isIncorrect
-                  ? "incorrect"
-                  : undefined;
+              const incorrectStatus = isIncorrect ? "incorrect" : undefined;
+              const status = isCorrect ? "correct" : incorrectStatus;
 
               return (
                 <TableRow
@@ -85,7 +82,7 @@ function QuestionMatrixFieldSet({
                   data-status={status}
                   className={cn(
                     status === "correct" && "bg-primary/5",
-                    status === "incorrect" && "bg-destructive/5",
+                    status === "incorrect" && "bg-destructive/5"
                   )}
                 >
                   <TableCell className="font-medium">{row.prompt}</TableCell>

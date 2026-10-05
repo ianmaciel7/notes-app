@@ -17,8 +17,12 @@ function SpacesList({
   showEmptyState,
   status,
 }: SpacesListProps) {
-  if (notFound) return status;
-  if (showEmptyState) return <SpacesEmpty onCreate={onCreate} />;
+  if (notFound) {
+    return status;
+  }
+  if (showEmptyState) {
+    return <SpacesEmpty onCreate={onCreate} />;
+  }
   return children;
 }
 

@@ -52,7 +52,9 @@ function QuestionChoiceItem({
       data-slot="question-choice-item"
       data-result={result}
       onClick={(e) => {
-        if (disabled) return;
+        if (disabled) {
+          return;
+        }
         // If user directly clicked an interactive element or the label itself, let default behavior run
         const target = e.target as HTMLElement | null;
         if (
@@ -78,7 +80,7 @@ function QuestionChoiceItem({
         "data-[result=correct]:border-primary data-[result=correct]:bg-primary/10",
         "data-[result=incorrect]:border-destructive data-[result=incorrect]:bg-destructive/10",
         "[&_[data-slot=checkbox]:not([data-checked])]:bg-background [&_[data-slot=radio-group-item]:not([data-checked])]:bg-background",
-        className,
+        className
       )}
     >
       {mode === "single" ? (
@@ -97,7 +99,7 @@ function QuestionChoiceItem({
             htmlFor={inputId}
             className={cn(
               "font-normal",
-              disabled ? "cursor-default" : "cursor-pointer",
+              disabled ? "cursor-default" : "cursor-pointer"
             )}
           >
             <span className="font-semibold">{marker}.</span>

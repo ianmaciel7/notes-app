@@ -19,18 +19,15 @@ import { AuthSubmitButton } from "@/components/notes-app/auth-submit-button";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-type TotpMultiFactorSecretGenerationFormProps = Omit<
-  ComponentProps<"form">,
-  "onSubmit"
-> & {
+type TotpMfaSecretFormProps = Omit<ComponentProps<"form">, "onSubmit"> & {
   onSubmit: (secret: TotpSecret, displayName: string) => void;
 };
 
-function TotpMultiFactorSecretGenerationForm({
+function TotpMfaSecretForm({
   onSubmit: onSubmitProp,
   className,
   ...props
-}: TotpMultiFactorSecretGenerationFormProps) {
+}: TotpMfaSecretFormProps) {
   const ui = useUI();
   const schema = useMultiFactorTotpAuthNumberFormSchema();
 
@@ -56,7 +53,7 @@ function TotpMultiFactorSecretGenerationForm({
   return (
     <FormProvider {...form}>
       <form
-        data-slot="totp-multi-factor-secret-generation-form"
+        data-slot="totp-mfa-secret-form"
         onSubmit={form.handleSubmit(onSubmit)}
         {...props}
         className={cn("flex flex-col gap-4", className)}
@@ -77,7 +74,4 @@ function TotpMultiFactorSecretGenerationForm({
   );
 }
 
-export {
-  TotpMultiFactorSecretGenerationForm,
-  type TotpMultiFactorSecretGenerationFormProps,
-};
+export { TotpMfaSecretForm, type TotpMfaSecretFormProps };

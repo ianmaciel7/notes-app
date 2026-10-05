@@ -43,7 +43,7 @@ describe("LoginForm", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("alert").textContent).toContain(
-        "Unable to sign in.",
+        "Unable to sign in."
       );
     });
   });

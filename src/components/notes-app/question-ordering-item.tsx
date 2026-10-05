@@ -34,7 +34,8 @@ function QuestionOrderingItem({
   className,
   ...props
 }: QuestionOrderingItemProps) {
-  const status = resolved ? (isCorrect ? "correct" : "incorrect") : undefined;
+  const resolvedStatus = isCorrect ? "correct" : "incorrect";
+  const status = resolved ? resolvedStatus : undefined;
 
   const {
     attributes,
@@ -68,7 +69,7 @@ function QuestionOrderingItem({
         status === "incorrect" && "border-destructive bg-destructive/10",
         isDragging &&
           "border-dashed border-primary/40 bg-muted/20 opacity-30 shadow-none",
-        className,
+        className
       )}
     >
       <div className="flex items-center gap-2">

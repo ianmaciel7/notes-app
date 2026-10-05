@@ -15,7 +15,7 @@ function renderWithIntl(ui: React.ReactNode, locale = "en") {
   return render(
     <NextIntlClientProvider locale={locale} messages={messages}>
       {ui}
-    </NextIntlClientProvider>,
+    </NextIntlClientProvider>
   );
 }
 

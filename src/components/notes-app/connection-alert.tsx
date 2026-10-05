@@ -20,7 +20,9 @@ function ConnectionAlert({ className, ...props }: ConnectionAlertProps) {
   const t = useTranslations("connection");
   const { visible, reconnecting, handleReconnect } = useConnectionAlert();
 
-  if (!visible) return null;
+  if (!visible) {
+    return null;
+  }
 
   return (
     <Alert

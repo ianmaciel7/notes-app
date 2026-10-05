@@ -4,8 +4,8 @@ import { useUI } from "@firebase-oss/ui-react";
 import type { TotpSecret } from "firebase/auth";
 import type { ComponentProps } from "react";
 import { useState } from "react";
-import { MultiFactorEnrollmentVerifyTotpForm } from "@/components/notes-app/multi-factor-enrollment-verify-totp-form";
-import { TotpMultiFactorSecretGenerationForm } from "@/components/notes-app/totp-multi-factor-secret-generation-form";
+import { TotpMfaSecretForm } from "@/components/notes-app/totp-mfa-secret-form";
+import { TotpMfaVerifyForm } from "@/components/notes-app/totp-mfa-verify-form";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
@@ -27,7 +27,7 @@ function TotpMfaEnrollmentForm({
 
   if (!ui.auth.currentUser) {
     throw new Error(
-      "User must be authenticated to enroll with multi-factor authentication",
+      "User must be authenticated to enroll with multi-factor authentication"
     );
   }
 
@@ -38,13 +38,13 @@ function TotpMfaEnrollmentForm({
       className={cn(className)}
     >
       {!enrollment ? (
-        <TotpMultiFactorSecretGenerationForm
+        <TotpMfaSecretForm
           onSubmit={(secret, displayName) =>
             setEnrollment({ secret, displayName })
           }
         />
       ) : (
-        <MultiFactorEnrollmentVerifyTotpForm
+        <TotpMfaVerifyForm
           {...enrollment}
           onSuccess={() => {
             onSuccess?.();

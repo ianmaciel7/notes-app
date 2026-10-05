@@ -22,7 +22,7 @@ function SpacesLoadingStatus({
       data-testid="spaces-loading-status"
       className={cn(
         "flex items-center justify-center p-4 text-xs text-muted-foreground",
-        className,
+        className
       )}
     >
       <EmptyMedia variant="icon">

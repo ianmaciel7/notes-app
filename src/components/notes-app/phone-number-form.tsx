@@ -72,7 +72,7 @@ function PhoneNumberForm({
       }
       const formatted = formatPhoneNumber(
         values.phoneNumber,
-        countrySelectorInstance.getCountry(),
+        countrySelectorInstance.getCountry()
       );
       const verificationId = await action({
         phoneNumber: formatted,

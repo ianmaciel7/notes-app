@@ -22,7 +22,7 @@ function renderForm() {
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
       <SettingsForm />
-    </NextIntlClientProvider>,
+    </NextIntlClientProvider>
   );
 }
 

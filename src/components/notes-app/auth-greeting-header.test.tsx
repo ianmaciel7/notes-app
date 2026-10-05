@@ -15,7 +15,7 @@ function renderWithIntl(ui: React.ReactNode, locale = "en") {
   return render(
     <NextIntlClientProvider locale={locale} messages={messages}>
       {ui}
-    </NextIntlClientProvider>,
+    </NextIntlClientProvider>
   );
 }
 
@@ -51,7 +51,7 @@ describe("AuthGreetingHeader", () => {
     renderWithIntl(<AuthGreetingHeader />);
     expect(screen.getByText("Hello, Ian Maciel!")).toBeDefined();
     expect(
-      screen.getByText("You are successfully connected to Firebase."),
+      screen.getByText("You are successfully connected to Firebase.")
     ).toBeDefined();
   });
 
@@ -83,7 +83,7 @@ describe("AuthGreetingHeader", () => {
         data-testid="auth-greeting-container"
         className="custom-greeting-class"
         aria-label="auth-greeting"
-      />,
+      />
     );
     const element = screen.getByTestId("auth-greeting-container");
     expect(element.getAttribute("aria-label")).toBe("auth-greeting");

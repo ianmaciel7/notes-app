@@ -52,7 +52,7 @@ function QuestionHotspotToggle({
         "data-[result=correct]:border-solid data-[result=correct]:border-primary data-[result=correct]:bg-primary/30",
         "data-[result=incorrect]:border-solid data-[result=incorrect]:border-destructive data-[result=incorrect]:bg-destructive/30",
         "data-[result=missed]:border-primary data-[result=missed]:bg-primary/15",
-        className,
+        className
       )}
     />
   );

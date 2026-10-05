@@ -46,7 +46,7 @@ function QuestionDraggableItem({
         "relative h-auto min-h-8 touch-none justify-start gap-2 whitespace-normal py-1.5 text-left font-normal transition-all",
         isDragging &&
           "pointer-events-none border-dashed border-primary/40 bg-muted/20 opacity-35 shadow-none",
-        className,
+        className
       )}
     >
       {disabled ? null : <GripVerticalIcon aria-hidden="true" />}

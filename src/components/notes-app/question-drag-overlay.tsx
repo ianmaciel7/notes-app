@@ -47,7 +47,7 @@ function QuestionDragOverlay({
           {...props}
           className={cn(
             "relative h-auto min-h-8 cursor-grabbing touch-none justify-start gap-2 whitespace-normal bg-card py-1.5 text-left font-normal shadow-xl ring-2 ring-primary/40 scale-[1.02] rotate-[0.5deg]",
-            className,
+            className
           )}
         >
           <GripVerticalIcon aria-hidden="true" />

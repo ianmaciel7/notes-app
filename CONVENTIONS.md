@@ -21,7 +21,7 @@ contributor workflow to `CONTRIBUTING.md`.
 
 ## 2. Naming & File Shape
 
-- Files and folders use `kebab-case`.
+- Files and folders use `kebab-case`. File names (excluding file extension) must not exceed 45 characters to preserve readability, avoid redundant prefixes, and keep import specifiers concise (enforced by `max-filename-length`).
 - React components and types use `PascalCase`.
 - Functions and variables use `camelCase`; hooks start with `use`.
 - Shared UI files use named exports. Next.js route/layout entrypoints may use the
@@ -395,6 +395,7 @@ row here in the same change that adds or changes a rule; prefer promoting a
 | `import-order` | `check:lint` |
 | `module-boundaries` | `deps:check` |
 | `kebab-case-filename` | `check:conventions` |
+| `max-filename-length` | `check:conventions` |
 | `no-default-export` | `check:conventions` |
 | `component-role-suffix` | `check:naming` |
 | `subcomponent-role-suffix` | `check:ui-pattern` |

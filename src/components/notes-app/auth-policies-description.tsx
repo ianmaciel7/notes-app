@@ -7,6 +7,11 @@ import { cn } from "@/lib/utils";
 
 type AuthPoliciesDescriptionProps = ComponentProps<"div">;
 
+const PLACEHOLDER_TYPES = new Map([
+  ["{tos}", "tos"],
+  ["{privacy}", "privacy"],
+]);
+
 function AuthPoliciesDescription({
   className,
   ...props
@@ -24,8 +29,7 @@ function AuthPoliciesDescription({
 
   const partCounts = new Map<string, number>();
   const keyedParts = parts.map((part) => {
-    const type =
-      part === "{tos}" ? "tos" : part === "{privacy}" ? "privacy" : "text";
+    const type = PLACEHOLDER_TYPES.get(part) ?? "text";
     const occurrence = (partCounts.get(type) ?? 0) + 1;
     partCounts.set(type, occurrence);
     return { key: `${type}-${occurrence}`, part };

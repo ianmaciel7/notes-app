@@ -26,10 +26,14 @@ type QuestionChoiceFieldSetProps = Omit<
 function resultFor(
   resolved: boolean,
   selected: boolean,
-  isKey: boolean,
+  isKey: boolean
 ): "correct" | "incorrect" | undefined {
-  if (!resolved) return undefined;
-  if (isKey) return "correct";
+  if (!resolved) {
+    return undefined;
+  }
+  if (isKey) {
+    return "correct";
+  }
   return selected ? "incorrect" : undefined;
 }
 
@@ -62,7 +66,7 @@ function QuestionChoiceFieldSet({
           onValueChange(
             checked
               ? [...value, option.id]
-              : value.filter((id) => id !== option.id),
+              : value.filter((id) => id !== option.id)
           )
         }
       />

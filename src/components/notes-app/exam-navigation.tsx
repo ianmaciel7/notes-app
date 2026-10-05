@@ -25,21 +25,27 @@ function ExamNavigation({ spaceId, ...props }: ExamNavigationProps) {
   const t = useTranslations("exam");
   const { exams, loading, error } = useExamNavigation({ spaceId });
 
+  const showSkeleton = !error && loading;
+  const settled = !error && !loading;
+  const showEmpty = settled && exams.length === 0;
+  const showList = settled && exams.length > 0;
+
   return (
     <SidebarGroup data-slot="exam-navigation" {...props}>
       <SidebarGroupLabel>{t("navLabel")}</SidebarGroupLabel>
       <SidebarGroupContent>
-        {error ? (
+        {error && (
           <p role="alert" className="px-2 text-xs text-destructive">
             {t("navError")}
           </p>
-        ) : loading ? (
-          <SidebarMenuSkeleton />
-        ) : exams.length === 0 ? (
+        )}
+        {showSkeleton && <SidebarMenuSkeleton />}
+        {showEmpty && (
           <p className="px-2 text-xs text-sidebar-foreground/70">
             {t("navEmpty")}
           </p>
-        ) : (
+        )}
+        {showList && (
           <SidebarMenu>
             {exams.map((exam) => (
               <SidebarMenuItem key={exam.id}>

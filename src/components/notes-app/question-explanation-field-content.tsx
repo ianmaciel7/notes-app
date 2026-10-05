@@ -24,7 +24,7 @@ function QuestionExplanationFieldContent({
       className={cn(
         "flex flex-col gap-2 text-left text-sm leading-normal font-normal text-muted-foreground",
         "[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary",
-        className,
+        className
       )}
     >
       <div className="whitespace-pre-wrap text-sm text-foreground">

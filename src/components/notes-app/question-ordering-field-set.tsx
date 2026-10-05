@@ -97,7 +97,9 @@ function QuestionOrderingFieldSet({
           <div className="flex flex-col gap-2">
             {orderedIds.map((id, index) => {
               const item = itemMap.get(id);
-              if (!item) return null;
+              if (!item) {
+                return null;
+              }
 
               const isCorrect = resolved && id === correctAnswer[index];
 

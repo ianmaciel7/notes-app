@@ -3,8 +3,8 @@
 import { useUI } from "@firebase-oss/ui-react";
 import type { ComponentProps } from "react";
 import { useState } from "react";
-import { MultiFactorEnrollmentPhoneNumberForm } from "@/components/notes-app/multi-factor-enrollment-phone-number-form";
-import { MultiFactorEnrollmentVerifyPhoneNumberForm } from "@/components/notes-app/multi-factor-enrollment-verify-phone-number-form";
+import { SmsMfaPhoneForm } from "@/components/notes-app/sms-mfa-phone-form";
+import { SmsMfaVerifyForm } from "@/components/notes-app/sms-mfa-verify-form";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +26,7 @@ function SmsMfaEnrollmentForm({
 
   if (!ui.auth.currentUser) {
     throw new Error(
-      "User must be authenticated to enroll with multi-factor authentication",
+      "User must be authenticated to enroll with multi-factor authentication"
     );
   }
 
@@ -37,13 +37,13 @@ function SmsMfaEnrollmentForm({
       className={cn(className)}
     >
       {!verification ? (
-        <MultiFactorEnrollmentPhoneNumberForm
+        <SmsMfaPhoneForm
           onSubmit={(verificationId, displayName) =>
             setVerification({ verificationId, displayName })
           }
         />
       ) : (
-        <MultiFactorEnrollmentVerifyPhoneNumberForm
+        <SmsMfaVerifyForm
           {...verification}
           onSuccess={() => {
             onSuccess?.();

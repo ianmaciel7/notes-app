@@ -30,22 +30,19 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
-type MultiFactorEnrollmentVerifyPhoneNumberFormProps = Omit<
-  ComponentProps<"form">,
-  "onSubmit"
-> & {
+type SmsMfaVerifyFormProps = Omit<ComponentProps<"form">, "onSubmit"> & {
   verificationId: string;
   displayName?: string;
   onSuccess: () => void;
 };
 
-function MultiFactorEnrollmentVerifyPhoneNumberForm({
+function SmsMfaVerifyForm({
   verificationId,
   displayName,
   onSuccess,
   className,
   ...props
-}: MultiFactorEnrollmentVerifyPhoneNumberFormProps) {
+}: SmsMfaVerifyFormProps) {
   const ui = useUI();
   const schema = useMultiFactorPhoneAuthVerifyFormSchema();
 
@@ -65,7 +62,7 @@ function MultiFactorEnrollmentVerifyPhoneNumberForm({
     try {
       const credential = PhoneAuthProvider.credential(
         values.verificationId,
-        values.verificationCode,
+        values.verificationCode
       );
       const assertion = PhoneMultiFactorGenerator.assertion(credential);
       await enrollWithMultiFactorAssertion(ui, assertion, displayName);
@@ -80,7 +77,7 @@ function MultiFactorEnrollmentVerifyPhoneNumberForm({
   return (
     <FormProvider {...form}>
       <form
-        data-slot="multi-factor-enrollment-verify-phone-number-form"
+        data-slot="sms-mfa-verify-form"
         onSubmit={form.handleSubmit(onSubmit)}
         {...props}
         className={cn("flex flex-col gap-4", className)}
@@ -135,7 +132,4 @@ function MultiFactorEnrollmentVerifyPhoneNumberForm({
   );
 }
 
-export {
-  MultiFactorEnrollmentVerifyPhoneNumberForm,
-  type MultiFactorEnrollmentVerifyPhoneNumberFormProps,
-};
+export { SmsMfaVerifyForm, type SmsMfaVerifyFormProps };

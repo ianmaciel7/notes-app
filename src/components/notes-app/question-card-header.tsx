@@ -15,7 +15,7 @@ function QuestionCardHeader({
       {...props}
       className={cn(
         "border-b border-border bg-muted/50 pt-(--card-spacing)",
-        className,
+        className
       )}
     >
       {children}

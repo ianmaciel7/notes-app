@@ -28,7 +28,7 @@ describe("RedirectErrorAlert", () => {
         data-testid="redirect-error-msg"
         className="custom-error-class"
         role="alert"
-      />,
+      />
     );
 
     const element = screen.getByTestId("redirect-error-msg");

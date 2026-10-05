@@ -9,7 +9,7 @@ function renderWithIntl(ui: ReactNode) {
   return render(
     <NextIntlClientProvider locale="en" messages={messages}>
       {ui}
-    </NextIntlClientProvider>,
+    </NextIntlClientProvider>
   );
 }
 
@@ -24,16 +24,18 @@ describe("CreateSpaceForm", () => {
     const onCancel = vi.fn();
 
     renderWithIntl(
-      <CreateSpaceForm onSubmitSpace={onSubmitSpace} onCancel={onCancel} />,
+      <CreateSpaceForm onSubmitSpace={onSubmitSpace} onCancel={onCancel} />
     );
 
     expect(screen.getByTestId("create-space-form")).toBeDefined();
     expect(screen.getByLabelText("Space Name")).toBeDefined();
-    expect(screen.getByTestId("create-space-form-icon-selector")).toBeDefined();
+    expect(
+      screen.getByTestId("create-space-icon-field-selector")
+    ).toBeDefined();
 
-    const nameInput = screen.getByTestId("create-space-form-name-input");
-    const bookIconBtn = screen.getByTestId("create-space-form-icon-btn-book");
-    const submitBtn = screen.getByTestId("create-space-form-submit");
+    const nameInput = screen.getByTestId("create-space-name-field-input");
+    const bookIconBtn = screen.getByTestId("create-space-icon-field-btn-book");
+    const submitBtn = screen.getByTestId("create-space-form-footer-submit");
 
     fireEvent.change(nameInput, { target: { value: "Engineering Notes" } });
     fireEvent.click(bookIconBtn);
@@ -47,10 +49,10 @@ describe("CreateSpaceForm", () => {
     const onCancel = vi.fn();
 
     renderWithIntl(
-      <CreateSpaceForm onSubmitSpace={onSubmitSpace} onCancel={onCancel} />,
+      <CreateSpaceForm onSubmitSpace={onSubmitSpace} onCancel={onCancel} />
     );
 
-    const cancelBtn = screen.getByTestId("create-space-form-cancel");
+    const cancelBtn = screen.getByTestId("create-space-form-footer-cancel");
     fireEvent.click(cancelBtn);
 
     expect(onCancel).toHaveBeenCalled();
@@ -61,8 +63,8 @@ describe("CreateSpaceForm", () => {
 
     renderWithIntl(<CreateSpaceForm onSubmitSpace={onSubmitSpace} />);
 
-    const nameInput = screen.getByTestId("create-space-form-name-input");
-    const submitBtn = screen.getByTestId("create-space-form-submit");
+    const nameInput = screen.getByTestId("create-space-name-field-input");
+    const submitBtn = screen.getByTestId("create-space-form-footer-submit");
 
     fireEvent.change(nameInput, { target: { value: "   " } });
     fireEvent.click(submitBtn);

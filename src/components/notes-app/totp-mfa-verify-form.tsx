@@ -23,21 +23,19 @@ import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { InputGroup, InputGroupInput } from "@/components/ui/input-group";
 import { cn } from "@/lib/utils";
 
-type MultiFactorEnrollmentVerifyTotpFormProps = ComponentProps<
-  typeof FieldGroup
-> & {
+type TotpMfaVerifyFormProps = ComponentProps<typeof FieldGroup> & {
   secret: TotpSecret;
   displayName: string;
   onSuccess: () => void;
 };
 
-function MultiFactorEnrollmentVerifyTotpForm({
+function TotpMfaVerifyForm({
   secret,
   displayName,
   onSuccess,
   className,
   ...props
-}: MultiFactorEnrollmentVerifyTotpFormProps) {
+}: TotpMfaVerifyFormProps) {
   const ui = useUI();
   const t = useTranslations("auth");
   const schema = useMultiFactorTotpAuthVerifyFormSchema();
@@ -54,12 +52,12 @@ function MultiFactorEnrollmentVerifyTotpForm({
     try {
       const assertion = TotpMultiFactorGenerator.assertionForEnrollment(
         secret,
-        values.verificationCode,
+        values.verificationCode
       );
       await enrollWithMultiFactorAssertion(
         ui,
         assertion,
-        values.verificationCode,
+        values.verificationCode
       );
       onSuccess();
     } catch (error) {
@@ -74,7 +72,7 @@ function MultiFactorEnrollmentVerifyTotpForm({
   return (
     <FieldGroup
       {...props}
-      data-slot="multi-factor-enrollment-verify-totp-form"
+      data-slot="totp-mfa-verify-form"
       className={cn("gap-4", className)}
     >
       <Field className="items-center justify-center">
@@ -117,7 +115,4 @@ function MultiFactorEnrollmentVerifyTotpForm({
   );
 }
 
-export {
-  MultiFactorEnrollmentVerifyTotpForm,
-  type MultiFactorEnrollmentVerifyTotpFormProps,
-};
+export { TotpMfaVerifyForm, type TotpMfaVerifyFormProps };

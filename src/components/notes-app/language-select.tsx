@@ -47,7 +47,7 @@ function LanguageSelect({ className, ...props }: LanguageSelectProps) {
       {...props}
       className={cn(
         "flex items-center gap-1 text-xs text-muted-foreground",
-        className,
+        className
       )}
     >
       <Select
@@ -85,7 +85,9 @@ function useLanguageSelect(currentLocale: string) {
   const [isPending, startTransition] = useTransition();
 
   function handleLocaleChange(newLocale: string | null) {
-    if (!newLocale || newLocale === currentLocale) return;
+    if (!newLocale || newLocale === currentLocale) {
+      return;
+    }
     syncFirebaseLocale(auth, newLocale as SupportedLocale);
     startTransition(() => router.refresh());
   }

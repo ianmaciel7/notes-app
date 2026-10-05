@@ -52,7 +52,8 @@ function QuestionDropdownField({
     value !== "" &&
     correctAnswer !== undefined &&
     value !== correctAnswer;
-  const status = isCorrect ? "correct" : isIncorrect ? "incorrect" : undefined;
+  const incorrectStatus = isIncorrect ? "incorrect" : undefined;
+  const status = isCorrect ? "correct" : incorrectStatus;
 
   const label =
     dropdown.label || (index !== undefined ? `${index + 1}` : dropdown.id);
@@ -66,7 +67,7 @@ function QuestionDropdownField({
         "rounded-lg border border-border p-3 transition-colors",
         status === "correct" && "border-primary bg-primary/10",
         status === "incorrect" && "border-destructive bg-destructive/10",
-        className,
+        className
       )}
     >
       <div className="flex items-center justify-between gap-2">

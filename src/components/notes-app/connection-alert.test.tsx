@@ -55,7 +55,7 @@ describe("ConnectionAlert", () => {
     expect(screen.queryByText("connection.title")).not.toBeNull();
     expect(screen.queryByText("connection.description")).not.toBeNull();
     expect(
-      screen.queryByRole("button", { name: "connection.retry" }),
+      screen.queryByRole("button", { name: "connection.retry" })
     ).not.toBeNull();
   });
 
@@ -116,7 +116,7 @@ describe("ConnectionAlert", () => {
     expect(
       screen
         .getByRole("button", { name: "connection.retry" })
-        .getAttribute("disabled"),
+        .getAttribute("disabled")
     ).toBeNull();
   });
 
@@ -142,7 +142,7 @@ describe("ConnectionAlert", () => {
 
     expect(removeSpy).toHaveBeenCalledWith(
       BACKEND_UNREACHABLE_EVENT,
-      expect.any(Function),
+      expect.any(Function)
     );
     expect(removeSpy).toHaveBeenCalledWith("online", expect.any(Function));
   });

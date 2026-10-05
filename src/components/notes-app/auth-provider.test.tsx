@@ -45,7 +45,7 @@ function renderWithIntl(ui: React.ReactNode) {
   return render(
     <NextIntlClientProvider locale="en" messages={messages}>
       {ui}
-    </NextIntlClientProvider>,
+    </NextIntlClientProvider>
   );
 }
 
@@ -62,7 +62,7 @@ describe("AuthProvider and Auth components", () => {
     const { unmount } = render(
       <AuthProvider>
         <div>Provider Child</div>
-      </AuthProvider>,
+      </AuthProvider>
     );
 
     expect(onAuthStateChanged).toHaveBeenCalledWith(auth, expect.any(Function));
@@ -99,7 +99,7 @@ describe("AuthProvider and Auth components", () => {
     render(
       <AuthProvider>
         <TestConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     );
 
     expect(screen.getByTestId("user-state").textContent).toBe("No user");
@@ -113,7 +113,7 @@ describe("AuthProvider and Auth components", () => {
     });
 
     expect(screen.getByTestId("user-state").textContent).toBe(
-      "auth-user@notesapp.dev",
+      "auth-user@notesapp.dev"
     );
     expect(screen.getByTestId("loading-state").textContent).toBe("ready");
   });
@@ -137,7 +137,7 @@ describe("AuthProvider and Auth components", () => {
     render(
       <AuthProvider>
         <TestConsumer />
-      </AuthProvider>,
+      </AuthProvider>
     );
 
     const button = screen.getByTestId("trigger-sign-out");
@@ -152,7 +152,7 @@ describe("AuthProvider and Auth components", () => {
     render(
       <AuthProvider>
         <div data-testid="child-element">Child Content</div>
-      </AuthProvider>,
+      </AuthProvider>
     );
 
     expect(screen.getByTestId("child-element")).toBeDefined();
@@ -169,7 +169,7 @@ describe("AuthProvider and Auth components", () => {
         }}
       >
         <UserMenu />
-      </AuthContext>,
+      </AuthContext>
     );
 
     expect(screen.getByTestId("user-menu-login-link")).toBeDefined();
@@ -193,7 +193,7 @@ describe("AuthProvider and Auth components", () => {
         }}
       >
         <UserMenu />
-      </AuthContext>,
+      </AuthContext>
     );
 
     expect(screen.getByTestId("user-menu")).toBeDefined();
@@ -215,7 +215,7 @@ describe("AuthProvider and Auth components", () => {
         >
           <div>Conteúdo Protegido</div>
         </RequireAuth>
-      </AuthContext>,
+      </AuthContext>
     );
 
     expect(screen.getByTestId("custom-loading")).toBeDefined();
@@ -239,7 +239,7 @@ describe("AuthProvider and Auth components", () => {
         <RequireAuth>
           <div data-testid="protected-content">Conteúdo Protegido</div>
         </RequireAuth>
-      </AuthContext>,
+      </AuthContext>
     );
 
     expect(screen.getByTestId("protected-content")).toBeDefined();
@@ -260,7 +260,7 @@ describe("AuthProvider and Auth components", () => {
           className="custom-unauth-class"
           aria-label="User Navigation"
         />
-      </AuthContext>,
+      </AuthContext>
     );
 
     const element = screen.getByTestId("custom-login-container");
@@ -285,7 +285,7 @@ describe("AuthProvider and Auth components", () => {
         }}
       >
         <UserMenu className="custom-auth-class" aria-label="User Controls" />
-      </AuthContext>,
+      </AuthContext>
     );
 
     const element = screen.getByTestId("user-menu");

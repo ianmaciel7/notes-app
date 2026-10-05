@@ -9,7 +9,7 @@ function renderWithIntl(ui: React.ReactNode) {
   return render(
     <NextIntlClientProvider locale="en" messages={messages}>
       {ui}
-    </NextIntlClientProvider>,
+    </NextIntlClientProvider>
   );
 }
 
@@ -108,7 +108,7 @@ describe("SpaceShell", () => {
     expect(mockReplace).not.toHaveBeenCalled();
     expect(screen.getByTestId("space-loading")).toBeDefined();
     expect(screen.getByRole("status").getAttribute("aria-label")).toBe(
-      "Loading spaces...",
+      "Loading spaces..."
     );
   });
 
@@ -302,7 +302,7 @@ describe("SpaceShell", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open user menu" }));
 
     expect(screen.getAllByText("Ian Maciel Carvalho").length).toBeGreaterThan(
-      1,
+      1
     );
     expect(screen.getByText("ianmaciel76@gmail.com")).toBeDefined();
     expect(screen.getByRole("menuitem", { name: "Sign out" })).toBeDefined();

@@ -43,7 +43,7 @@ type Context = Pick<
 
 function choiceAnswer(
   question: QuestionPropertiesOf<"single-choice" | "true-false">,
-  { answer, resolved, onAnswerChange }: Context,
+  { answer, resolved, onAnswerChange }: Context
 ): ReactNode {
   const current = answer?.type === question.type ? answer.value : "";
   return (
@@ -67,7 +67,7 @@ function choiceAnswer(
 
 function multipleChoiceAnswer(
   question: QuestionPropertiesOf<"multiple-choice">,
-  { answer, resolved, onAnswerChange }: Context,
+  { answer, resolved, onAnswerChange }: Context
 ): ReactNode {
   return (
     <QuestionChoiceFieldSet
@@ -84,7 +84,7 @@ function multipleChoiceAnswer(
 
 function fillBlankAnswer(
   question: QuestionPropertiesOf<"fill-blank">,
-  { answer, resolved, onAnswerChange }: Context,
+  { answer, resolved, onAnswerChange }: Context
 ): ReactNode {
   return (
     <QuestionFillBlankField
@@ -98,7 +98,7 @@ function fillBlankAnswer(
 
 function matchingAnswer(
   question: QuestionPropertiesOf<"matching">,
-  { answer, resolved, onAnswerChange }: Context,
+  { answer, resolved, onAnswerChange }: Context
 ): ReactNode {
   return (
     <QuestionMatchingFieldSet
@@ -115,7 +115,7 @@ function matchingAnswer(
 
 function dragAndDropAnswer(
   question: QuestionPropertiesOf<"drag-and-drop">,
-  { answer, resolved, onAnswerChange }: Context,
+  { answer, resolved, onAnswerChange }: Context
 ): ReactNode {
   return (
     <QuestionDraggableFieldSet
@@ -132,7 +132,7 @@ function dragAndDropAnswer(
 
 function hotspotAnswer(
   question: QuestionPropertiesOf<"hotspot">,
-  { answer, resolved, onAnswerChange }: Context,
+  { answer, resolved, onAnswerChange }: Context
 ): ReactNode {
   return (
     <QuestionHotspotFieldSet
@@ -149,7 +149,7 @@ function hotspotAnswer(
 
 function dropdownAnswer(
   question: QuestionPropertiesOf<"dropdown">,
-  { answer, resolved, onAnswerChange }: Context,
+  { answer, resolved, onAnswerChange }: Context
 ): ReactNode {
   return (
     <QuestionDropdownFieldGroup
@@ -165,7 +165,7 @@ function dropdownAnswer(
 
 function matrixAnswer(
   question: QuestionPropertiesOf<"matrix">,
-  { answer, resolved, onAnswerChange }: Context,
+  { answer, resolved, onAnswerChange }: Context
 ): ReactNode {
   return (
     <QuestionMatrixFieldSet
@@ -182,7 +182,7 @@ function matrixAnswer(
 
 function orderingAnswer(
   question: QuestionPropertiesOf<"ordering">,
-  { answer, resolved, onAnswerChange }: Context,
+  { answer, resolved, onAnswerChange }: Context
 ): ReactNode {
   return (
     <QuestionOrderingFieldSet
@@ -198,7 +198,7 @@ function orderingAnswer(
 
 function simulationAnswer(
   question: QuestionPropertiesOf<"simulation">,
-  { answer, resolved, onAnswerChange }: Context,
+  { answer, resolved, onAnswerChange }: Context
 ): ReactNode {
   return (
     <QuestionSimulationFieldSet
@@ -216,7 +216,7 @@ function simulationAnswer(
 
 function caseStudyAnswer(
   question: QuestionPropertiesOf<"case-study">,
-  { answer, resolved, onAnswerChange }: Context,
+  { answer, resolved, onAnswerChange }: Context
 ): ReactNode {
   return (
     <QuestionCaseStudyTabs
@@ -234,7 +234,7 @@ function caseStudyAnswer(
 
 function answerControl(
   question: QuestionProperties,
-  context: Context,
+  context: Context
 ): ReactNode {
   switch (question.type) {
     case "single-choice":

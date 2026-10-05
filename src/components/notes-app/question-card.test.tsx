@@ -12,7 +12,7 @@ import {
   singleChoiceFixture,
 } from "@/lib/exam/question-fixtures";
 import type { Card } from "@/types/card";
-import { QuestionButtonGroup } from "./question-button-group";
+import { QuestionAnswerFooter } from "./question-answer-footer";
 import { QuestionCard } from "./question-card";
 import { QuestionCardContent } from "./question-card-content";
 import { QuestionCardDescription } from "./question-card-description";
@@ -89,7 +89,7 @@ describe("question atomic components", () => {
       render(
         <QuestionCardTitle className="custom-title-class">
           <span>Question 1 of 10</span>
-        </QuestionCardTitle>,
+        </QuestionCardTitle>
       );
 
       const title = screen
@@ -106,11 +106,11 @@ describe("question atomic components", () => {
         <QuestionImageFigure
           url="https://example.com/diag.png"
           alt="Architecture diagram"
-        />,
+        />
       );
 
       const figure = container.querySelector(
-        '[data-slot="question-image-figure"]',
+        '[data-slot="question-image-figure"]'
       );
       expect(figure).toBeTruthy();
       const img = screen.getByRole("img", { name: "Architecture diagram" });
@@ -144,7 +144,7 @@ describe("question atomic components", () => {
       render(
         <QuestionCardHeader className="custom-header">
           <span>Header Content</span>
-        </QuestionCardHeader>,
+        </QuestionCardHeader>
       );
       const header = screen
         .getByText("Header Content")
@@ -159,7 +159,7 @@ describe("question atomic components", () => {
       render(
         <QuestionCardDescription className="custom-desc">
           Multiple choice hint
-        </QuestionCardDescription>,
+        </QuestionCardDescription>
       );
       const desc = screen
         .getByText("Multiple choice hint")
@@ -174,7 +174,7 @@ describe("question atomic components", () => {
       render(
         <QuestionCardContent className="custom-content">
           <span>Body Content</span>
-        </QuestionCardContent>,
+        </QuestionCardContent>
       );
       const content = screen
         .getByText("Body Content")
@@ -184,21 +184,38 @@ describe("question atomic components", () => {
     });
   });
 
-  describe("QuestionButtonGroup", () => {
+  describe("QuestionAnswerFooter", () => {
     it("renders action buttons when resolved or unconfirmed", () => {
       const { rerender } = render(
-        <QuestionButtonGroup
+        <QuestionAnswerFooter
           needsConfirmation={true}
           canSubmit={true}
-          submit={() => {}}
-          showAnswer={() => {}}
-        />,
+          onSubmit={() => {}}
+          onShowAnswer={() => {}}
+        />
       );
       expect(screen.getByText("checkAnswer")).toBeTruthy();
       expect(screen.getByText("showAnswer")).toBeTruthy();
 
-      rerender(<QuestionButtonGroup resolved={true} retry={() => {}} />);
+      rerender(<QuestionAnswerFooter isResolved={true} onRetry={() => {}} />);
       expect(screen.getByText("tryAgain")).toBeTruthy();
+    });
+
+    it("renders children instead of the default actions", () => {
+      render(
+        <QuestionAnswerFooter needsConfirmation={true}>
+          <button type="button">custom action</button>
+        </QuestionAnswerFooter>
+      );
+      expect(screen.getByText("custom action")).toBeTruthy();
+      expect(screen.queryByText("showAnswer")).toBeNull();
+      expect(screen.queryByText("checkAnswer")).toBeNull();
+      expect(
+        screen
+          .getByText("custom action")
+          .closest("[data-slot]")
+          ?.getAttribute("data-slot")
+      ).toBe("question-answer-footer");
     });
   });
 
@@ -207,7 +224,7 @@ describe("question atomic components", () => {
       render(
         <QuestionCardFooter className="custom-footer">
           <span>Footer Actions</span>
-        </QuestionCardFooter>,
+        </QuestionCardFooter>
       );
       const footer = screen
         .getByText("Footer Actions")
@@ -226,7 +243,7 @@ describe("question atomic components", () => {
           mode="single"
           inputId="choice-1"
           selected={false}
-        />,
+        />
       );
       const item = screen
         .getByText("Cloud Storage")
@@ -243,7 +260,7 @@ describe("question atomic components", () => {
           mode="single"
           inputId="choice-1"
           selected={false}
-        />,
+        />
       );
       const item = screen
         .getByText("Cloud Storage")
@@ -272,12 +289,12 @@ describe("question atomic components", () => {
           correctIds={["opt-a"]}
           resolved={false}
           onValueChange={() => {}}
-        />,
+        />
       );
       expect(
         screen
           .getByText("Select an option")
-          .closest('[data-slot="question-choice-field-set"]'),
+          .closest('[data-slot="question-choice-field-set"]')
       ).toBeTruthy();
       expect(screen.getByText("Option A")).toBeTruthy();
       expect(screen.getByText("Option B")).toBeTruthy();
@@ -291,7 +308,7 @@ describe("question atomic components", () => {
           value="my answer"
           resolved={false}
           onValueChange={() => {}}
-        />,
+        />
       );
       const input = screen.getByDisplayValue("my answer");
       expect(input.getAttribute("data-slot")).toBe("question-fill-blank-input");
@@ -306,7 +323,7 @@ describe("question atomic components", () => {
           acceptedAnswers={["correct answer"]}
           resolved={false}
           onValueChange={() => {}}
-        />,
+        />
       );
       expect(screen.getByText("fillBlankLabel")).toBeTruthy();
       expect(screen.getByDisplayValue("my answer")).toBeTruthy();
@@ -328,12 +345,12 @@ describe("question atomic components", () => {
           value="us-central1"
           resolved={false}
           onValueChange={() => {}}
-        />,
+        />
       );
       expect(
         screen
           .getByText("Select Region")
-          .closest('[data-slot="question-dropdown-field"]'),
+          .closest('[data-slot="question-dropdown-field"]')
       ).toBeTruthy();
     });
   });
@@ -349,12 +366,12 @@ describe("question atomic components", () => {
             index={0}
             total={5}
           />
-        </Wrapper>,
+        </Wrapper>
       );
       expect(
         screen.getAllByText(
-          "Which service runs stateless containers without servers?",
-        ).length,
+          "Which service runs stateless containers without servers?"
+        ).length
       ).toBeGreaterThan(0);
     });
 
@@ -368,10 +385,10 @@ describe("question atomic components", () => {
             index={1}
             total={5}
           />
-        </Wrapper>,
+        </Wrapper>
       );
       expect(screen.getAllByText("dropdownPlaceholder").length).toBeGreaterThan(
-        0,
+        0
       );
     });
 
@@ -385,7 +402,7 @@ describe("question atomic components", () => {
             index={2}
             total={5}
           />
-        </Wrapper>,
+        </Wrapper>
       );
       expect(screen.getByText("Commit Code")).toBeTruthy();
     });
@@ -400,26 +417,26 @@ describe("question atomic components", () => {
             index={1}
             total={12}
           />
-        </Wrapper>,
+        </Wrapper>
       );
 
       expect(screen.queryByText("checkAnswer")).toBeNull();
       fireEvent.click(
         screen
           .getByText("Cloud Run")
-          .closest('[data-slot="question-choice-item"]') as HTMLElement,
+          .closest('[data-slot="question-choice-item"]') as HTMLElement
       );
       fireEvent.click(
         screen
           .getByText("Cloud Functions")
-          .closest('[data-slot="question-choice-item"]') as HTMLElement,
+          .closest('[data-slot="question-choice-item"]') as HTMLElement
       );
 
       expect(
         screen
           .getAllByText("Select every serverless product.")[0]
           .closest('[data-slot="question-card"]')
-          ?.getAttribute("data-status"),
+          ?.getAttribute("data-status")
       ).toBe("answeredCorrect");
     });
 
@@ -433,11 +450,11 @@ describe("question atomic components", () => {
             index={9}
             total={12}
           />
-        </Wrapper>,
+        </Wrapper>
       );
 
       fireEvent.click(
-        screen.getByRole("button", { name: "Move Run Tests up" }),
+        screen.getByRole("button", { name: "Move Run Tests up" })
       );
       fireEvent.click(screen.getByRole("button", { name: "checkAnswer" }));
 
@@ -454,10 +471,10 @@ describe("question atomic components", () => {
             index={3}
             total={5}
           />
-        </Wrapper>,
+        </Wrapper>
       );
       expect(
-        screen.getByText("Cloud Run can scale to zero instances."),
+        screen.getByText("Cloud Run can scale to zero instances.")
       ).toBeTruthy();
     });
 
@@ -471,7 +488,7 @@ describe("question atomic components", () => {
             index={4}
             total={5}
           />
-        </Wrapper>,
+        </Wrapper>
       );
       expect(screen.getByText("simulationTitle")).toBeTruthy();
     });

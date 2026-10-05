@@ -23,8 +23,12 @@ type QuestionCaseStudyFieldSetProps = Omit<
 };
 
 function asList(value: CaseStudyPartAnswer | undefined): string[] {
-  if (Array.isArray(value)) return value;
-  if (typeof value === "string") return [value];
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (typeof value === "string") {
+    return [value];
+  }
   return [];
 }
 
@@ -99,7 +103,7 @@ function QuestionCaseStudyFieldSet({
       {...props}
       className={cn(
         "min-w-0 gap-2 rounded-lg border border-border p-3",
-        className,
+        className
       )}
     >
       <FieldLegend variant="label">
