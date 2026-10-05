@@ -8,7 +8,9 @@ import {
 } from "./hooks-lib.mjs";
 
 const raw = await readStdin();
-if (isStopHookActive(raw)) process.exit(0);
+if (isStopHookActive(raw)) {
+  process.exit(0);
+}
 
 const root = findRepoRoot();
 const run = (command, args) =>
@@ -21,11 +23,15 @@ const run = (command, args) =>
 
 // Skip the type check when the working tree holds no TypeScript changes.
 const status = run("git", ["status", "--porcelain"]);
-if (status.error || status.status !== 0) process.exit(0);
+if (status.error || status.status !== 0) {
+  process.exit(0);
+}
 const touchesTypeScript = status.stdout
   .split("\n")
   .some((line) => /\.(ts|tsx|mts|cts)\s*$/.test(line));
-if (!touchesTypeScript) process.exit(0);
+if (!touchesTypeScript) {
+  process.exit(0);
+}
 
 const types = run("rtk", ["proxy", "pnpm", "run", "check:types"]);
 // Only real tsc errors block; a crashed `next typegen` or a spawn error means
@@ -35,9 +41,11 @@ const verdict = classifyTypecheckRun({
   status: types.status,
   output: `${types.stdout ?? ""}${types.stderr ?? ""}`,
 });
-if (verdict !== "fail") process.exit(0);
+if (verdict !== "fail") {
+  process.exit(0);
+}
 
 process.stderr.write(
-  `check:types failed. Fix the type errors before finishing:\n${types.stdout ?? ""}${types.stderr ?? ""}`,
+  `check:types failed. Fix the type errors before finishing:\n${types.stdout ?? ""}${types.stderr ?? ""}`
 );
 process.exit(2);

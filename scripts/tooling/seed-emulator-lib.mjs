@@ -16,15 +16,23 @@ export const ADMIN_HEADERS = {
 };
 
 export function toRestValue(value) {
-  if (value === null) return { nullValue: null };
-  if (typeof value === "string") return { stringValue: value };
-  if (typeof value === "boolean") return { booleanValue: value };
+  if (value === null) {
+    return { nullValue: null };
+  }
+  if (typeof value === "string") {
+    return { stringValue: value };
+  }
+  if (typeof value === "boolean") {
+    return { booleanValue: value };
+  }
   if (typeof value === "number") {
     return Number.isInteger(value)
       ? { integerValue: String(value) }
       : { doubleValue: value };
   }
-  if (value instanceof Date) return { timestampValue: value.toISOString() };
+  if (value instanceof Date) {
+    return { timestampValue: value.toISOString() };
+  }
   if (Array.isArray(value)) {
     return { arrayValue: { values: value.map(toRestValue) } };
   }
@@ -33,7 +41,7 @@ export function toRestValue(value) {
 
 export function toRestFields(data) {
   return Object.fromEntries(
-    Object.entries(data).map(([key, value]) => [key, toRestValue(value)]),
+    Object.entries(data).map(([key, value]) => [key, toRestValue(value)])
   );
 }
 
@@ -537,7 +545,7 @@ export function buildExamSeed({ uid, now }) {
           stateVersion: 1,
           updatedAt: now,
         },
-      },
+      }
     );
   }
 
@@ -547,7 +555,7 @@ export function buildExamSeed({ uid, now }) {
 async function ensureOk(response, label) {
   if (!response.ok) {
     throw new Error(
-      `${label} failed: ${response.status} ${await response.text()}`,
+      `${label} failed: ${response.status} ${await response.text()}`
     );
   }
   return response;
@@ -571,9 +579,9 @@ export async function ensureGoogleUser({ fetchFn, user }) {
           returnIdpCredential: true,
           postBody: googleIdpPostBody(user),
         }),
-      },
+      }
     ),
-    `signInWithIdp(${user.email})`,
+    `signInWithIdp(${user.email})`
   );
   return (await response.json()).localId;
 }
@@ -586,7 +594,7 @@ export async function writeDocument({ fetchFn, projectId, path, data }) {
       headers: ADMIN_HEADERS,
       body: JSON.stringify({ fields: toRestFields(data) }),
     }),
-    `write ${path}`,
+    `write ${path}`
   );
 }
 

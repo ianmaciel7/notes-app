@@ -14,7 +14,7 @@ test("findI18nViolationsInSource detects forbidden phrases like 'Retry Connectio
   assert.ok(violations.length >= 1);
   assert.ok(
     violations.some((v) => v.snippet.includes("Retry Connection")),
-    "Should identify 'Retry Connection'",
+    "Should identify 'Retry Connection'"
   );
 });
 
@@ -26,7 +26,7 @@ test("findI18nViolationsInSource detects forbidden phrases inside string literal
   assert.ok(violations.length >= 1);
   assert.ok(
     violations.some((v) => v.snippet.includes("Retry Connection")),
-    "Should flag literal phrase",
+    "Should flag literal phrase"
   );
 });
 
@@ -39,12 +39,12 @@ test("findI18nViolationsInSource detects raw hardcoded text inside interactive e
   `;
   const violations = findI18nViolationsInSource(
     rawButtonContent,
-    "submit-box.tsx",
+    "submit-box.tsx"
   );
   assert.ok(violations.length >= 1);
   assert.ok(
     violations.some((v) => v.snippet === "Save Note"),
-    "Should flag hardcoded 'Save Note' button label",
+    "Should flag hardcoded 'Save Note' button label"
   );
 });
 
@@ -80,7 +80,7 @@ test("findI18nViolationsInSource permits proper i18n usage", () => {
   `;
   const violations = findI18nViolationsInSource(
     validContent,
-    "localized-box.tsx",
+    "localized-box.tsx"
   );
   assert.equal(violations.length, 0);
 });
@@ -89,10 +89,10 @@ test("guard-i18n-strings script passes on current repository codebase", () => {
   const output = execFileSync(
     "node",
     ["scripts/guards/guard-i18n-strings.mjs"],
-    { encoding: "utf8" },
+    { encoding: "utf8" }
   );
   assert.match(
     output,
-    /Zero hardcoded i18n violations found in application UI/,
+    /Zero hardcoded i18n violations found in application UI/
   );
 });

@@ -63,7 +63,7 @@ function runGate(step) {
     error: pass
       ? null
       : tailOf(
-          stripAnsi(proc.error?.message ?? (proc.stderr || proc.stdout || "")),
+          stripAnsi(proc.error?.message ?? (proc.stderr || proc.stdout || ""))
         ),
   };
 }
@@ -95,10 +95,12 @@ function runGates(steps, { json, failFast }) {
     results.push(result);
     if (!json) {
       console.log(
-        `${result.pass ? "PASS" : "FAIL"}  ${step.script} (${result.seconds}s)`,
+        `${result.pass ? "PASS" : "FAIL"}  ${step.script} (${result.seconds}s)`
       );
     }
-    if (!result.pass && failFast) break;
+    if (!result.pass && failFast) {
+      break;
+    }
   }
   return results;
 }
@@ -116,13 +118,15 @@ export function runVerifyCode(argv) {
 
   if (plan.errors.length > 0) {
     console.error("[verify-code] documents and package.json disagree:\n");
-    for (const error of plan.errors) console.error(`  - ${error}`);
+    for (const error of plan.errors) {
+      console.error(`  - ${error}`);
+    }
     console.error(`\nScopes: ${SCOPE_NAMES.join(", ")}`);
     return 2;
   }
   if (options.list) {
     console.log(
-      options.json ? JSON.stringify(plan, null, 2) : formatPlan(plan),
+      options.json ? JSON.stringify(plan, null, 2) : formatPlan(plan)
     );
     return 0;
   }
@@ -133,7 +137,7 @@ export function runVerifyCode(argv) {
     console.log(JSON.stringify({ ...plan, results, pass }, null, 2));
   } else {
     console.log(
-      `\n${formatReport({ plan, results, checklistPath: CHECKLIST_PATH })}`,
+      `\n${formatReport({ plan, results, checklistPath: CHECKLIST_PATH })}`
     );
   }
   return pass ? 0 : 1;

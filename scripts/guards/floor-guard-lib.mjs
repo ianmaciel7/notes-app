@@ -1,5 +1,7 @@
 export function normalizePatchPath(value) {
-  if (!value || value === "/dev/null") return "";
+  if (!value || value === "/dev/null") {
+    return "";
+  }
   return value.replace(/^[ab]\//, "").replaceAll("\\", "/");
 }
 
@@ -9,14 +11,15 @@ export function parsePatch(diff) {
   let oldFile = "";
   let newFile = "";
   for (const line of diff.split("\n")) {
-    if (line.startsWith("--- "))
+    if (line.startsWith("--- ")) {
       oldFile = normalizePatchPath(line.slice(4).trim());
-    else if (line.startsWith("+++ "))
+    } else if (line.startsWith("+++ ")) {
       newFile = normalizePatchPath(line.slice(4).trim());
-    else if (line.startsWith("+"))
+    } else if (line.startsWith("+")) {
       added.push({ file: newFile, text: line.slice(1) });
-    else if (line.startsWith("-"))
+    } else if (line.startsWith("-")) {
       removed.push({ file: oldFile, text: line.slice(1) });
+    }
   }
   return { added, removed };
 }
@@ -40,9 +43,11 @@ function numericFields(text, names) {
   const result = new Map();
   for (const name of names) {
     const match = text.match(
-      new RegExp(`\\b${name}\\s*:\\s*([0-9]+(?:\\.[0-9]+)?)`),
+      new RegExp(`\\b${name}\\s*:\\s*([0-9]+(?:\\.[0-9]+)?)`)
     );
-    if (match) result.set(name, Number(match[1]));
+    if (match) {
+      result.set(name, Number(match[1]));
+    }
   }
   return result;
 }
@@ -51,8 +56,9 @@ function lighthouseAssertions(text) {
   const result = new Map();
   const regex =
     /"categories:([^"]+)"\s*:\s*\["(error|warn)",\s*\{\s*minScore:\s*([0-9.]+)/g;
-  for (const match of text.matchAll(regex))
+  for (const match of text.matchAll(regex)) {
     result.set(match[1], { severity: match[2], score: Number(match[3]) });
+  }
   return result;
 }
 
@@ -64,7 +70,7 @@ function checkVitestRegressions(baseline, current) {
   for (const [name, value] of before) {
     if (!after.has(name) || after.get(name) < value) {
       findings.push(
-        `coverage ${name}: ${value} -> ${after.get(name) ?? "missing"}`,
+        `coverage ${name}: ${value} -> ${after.get(name) ?? "missing"}`
       );
     }
   }
@@ -100,7 +106,7 @@ function checkLighthouseRegressions(baseline, current) {
       (rank[next.severity] ?? 0) < (rank[rule.severity] ?? 0)
     ) {
       findings.push(
-        `Lighthouse ${name}: ${rule.severity}/${rule.score} -> ${next ? `${next.severity}/${next.score}` : "missing"}`,
+        `Lighthouse ${name}: ${rule.severity}/${rule.score} -> ${next ? `${next.severity}/${next.score}` : "missing"}`
       );
     }
   }
@@ -114,7 +120,9 @@ function checkDepCruiserRegressions(baseline, current) {
   const before = names(baseline);
   const after = names(current);
   for (const name of before) {
-    if (!after.has(name)) findings.push(`dependency rule removed: ${name}`);
+    if (!after.has(name)) {
+      findings.push(`dependency rule removed: ${name}`);
+    }
   }
   return findings;
 }
@@ -126,7 +134,9 @@ export function baselineRegressions(path, current, readBaseline, refs) {
   const findings = new Set();
   for (const ref of new Set(refs)) {
     const baseline = readBaseline(ref, path);
-    if (baseline === null) continue;
+    if (baseline === null) {
+      continue;
+    }
     for (const detail of qualityRegressions(path, baseline, current)) {
       findings.add(detail);
     }

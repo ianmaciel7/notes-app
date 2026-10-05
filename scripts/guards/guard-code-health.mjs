@@ -25,11 +25,11 @@ const run = spawnSync(
     "--quiet",
     "--report-only",
   ],
-  { cwd: rootDir, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
+  { cwd: rootDir, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 }
 );
 if (run.error || run.status !== 0) {
   console.error(
-    `guard-code-health: fallow failed: ${run.error?.message ?? run.stderr}`,
+    `guard-code-health: fallow failed: ${run.error?.message ?? run.stderr}`
   );
   process.exit(2);
 }
@@ -41,17 +41,17 @@ const { failures, canTighten } = evaluateHealth(metrics, floor);
 console.log(
   `guard-code-health: score ${metrics.score} (floor ${floor.minScore}), ` +
     `complexity findings ${metrics.complexityFindings} (max ${floor.maxComplexityFindings}), ` +
-    `large functions ${metrics.largeFunctions} (max ${floor.maxLargeFunctions})`,
+    `large functions ${metrics.largeFunctions} (max ${floor.maxLargeFunctions})`
 );
 
 if (failures.length > 0) {
   for (const f of failures) {
     console.error(
-      `guard-code-health: ${f.metric} regressed: ${f.actual} vs limit ${f.limit}`,
+      `guard-code-health: ${f.metric} regressed: ${f.actual} vs limit ${f.limit}`
     );
   }
   console.error(
-    "Refactor the new or changed code (run `pnpm exec fallow health --complexity` to locate it); do not raise the floor. See CONSTRAINTS.md.",
+    "Refactor the new or changed code (run `pnpm exec fallow health --complexity` to locate it); do not raise the floor. See CONSTRAINTS.md."
   );
   process.exit(1);
 }
@@ -62,6 +62,6 @@ if (canTighten && tighten) {
   console.log("guard-code-health: floor tightened in code-health-floor.json");
 } else if (canTighten) {
   console.log(
-    "guard-code-health: metrics improved; run `pnpm run check:health -- --tighten` to lock the gain.",
+    "guard-code-health: metrics improved; run `pnpm run check:health -- --tighten` to lock the gain."
   );
 }

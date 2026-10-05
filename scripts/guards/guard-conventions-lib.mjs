@@ -25,13 +25,14 @@ const PALETTE =
 const COLOR_UTILITY =
   "bg|text|border|ring|fill|stroke|from|via|to|outline|divide|shadow|accent|caret|decoration|placeholder";
 const PALETTE_CLASS = new RegExp(
-  `\\b(?:${COLOR_UTILITY})-(?:${PALETTE})(?:-\\d{2,3})?(?:/\\d+)?(?![\\w-])|\\b(?:${COLOR_UTILITY})-\\[#[0-9a-fA-F]{3,8}\\]`,
+  `\\b(?:${COLOR_UTILITY})-(?:${PALETTE})(?:-\\d{2,3})?(?:/\\d+)?(?![\\w-])|\\b(?:${COLOR_UTILITY})-\\[#[0-9a-fA-F]{3,8}\\]`
 );
 const KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const ROUTE_SEGMENT = /^(?:\[{1,2}(?:\.{3})?\w+\]{1,2}|\((.+)\))$/;
+const MAX_FILENAME_LENGTH = 45;
 const directive = (name) =>
   new RegExp(
-    `^(?:\\s*(?:\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/))*\\s*["']${name}["']`,
+    `^(?:\\s*(?:\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/))*\\s*["']${name}["']`
   );
 const USE_CLIENT = directive("use client");
 const USE_SERVER = directive("use server");
@@ -41,7 +42,9 @@ function lineHits(regex, code) {
   const hits = [];
   const lines = code.split("\n");
   for (let i = 0; i < lines.length; i++) {
-    if (regex.test(lines[i])) hits.push({ line: i + 1 });
+    if (regex.test(lines[i])) {
+      hits.push({ line: i + 1 });
+    }
   }
   return hits;
 }
@@ -84,9 +87,13 @@ function tagEnd(code, from) {
   token.lastIndex = from;
   let depth = 0;
   for (let hit = token.exec(code); hit; hit = token.exec(code)) {
-    if (hit[0] === "{") depth++;
-    else if (hit[0] === "}") depth--;
-    else if (hit[0] === ">" && depth === 0) return hit.index;
+    if (hit[0] === "{") {
+      depth++;
+    } else if (hit[0] === "}") {
+      depth--;
+    } else if (hit[0] === ">" && depth === 0) {
+      return hit.index;
+    }
   }
   return code.length;
 }
@@ -101,7 +108,9 @@ function openingTags(code, name) {
 
 function isKebabSegment(segment) {
   const route = segment.match(ROUTE_SEGMENT);
-  if (!route) return KEBAB.test(segment);
+  if (!route) {
+    return KEBAB.test(segment);
+  }
   return route[1] === undefined || KEBAB.test(route[1]);
 }
 
@@ -109,45 +118,45 @@ export const CONVENTION_RULES = [
   patternRule(
     "no-forward-ref",
     "React 19 passes `ref` as a normal prop; do not use `forwardRef`.",
-    /\bforwardRef\b/,
+    /\bforwardRef\b/
   ),
   patternRule(
     "no-use-context",
     "Use `use(Context)` for new context access instead of `useContext`.",
-    /\buseContext\s*\(/,
+    /\buseContext\s*\(/
   ),
   patternRule(
     "no-preemptive-memo",
     "React Compiler is enabled; do not add `useMemo`/`useCallback`/`memo` without a measured need.",
-    /\b(?:useMemo|useCallback|memo)\s*\(/,
+    /\b(?:useMemo|useCallback|memo)\s*\(/
   ),
   patternRule(
     "no-window-location",
     "Do not mutate `window.location`; use `useRouter()`, `redirect()` or `<Link>`.",
-    /\bwindow\.location(?:\.href)?\s*=(?!=)|\bwindow\.location\.(?:assign|replace|reload)\s*\(/,
+    /\bwindow\.location(?:\.href)?\s*=(?!=)|\bwindow\.location\.(?:assign|replace|reload)\s*\(/
   ),
   patternRule(
     "no-hardcoded-color",
     "Use semantic design tokens (e.g. `bg-background`, `text-foreground`) instead of palette colors or hex values.",
-    PALETTE_CLASS,
+    PALETTE_CLASS
   ),
   patternRule(
     "no-important",
     "Avoid `!important`; fix specificity at the source.",
     /!important/,
-    { extensions: STYLE_EXTENSIONS },
+    { extensions: STYLE_EXTENSIONS }
   ),
   patternRule(
     "use-cn-for-class-merge",
     "Merge classes with `cn()`, not template literals or string concatenation.",
     /className=\{\s*`[^`]*\$\{|className=\{\s*["'][^"']*["']\s*\+/,
-    { extensions: TSX_ONLY },
+    { extensions: TSX_ONLY }
   ),
   patternRule(
     "prefer-standard-scale",
     "Use the Tailwind scale instead of arbitrary px/rem values (`text-[13px]` -> `text-sm`, `w-[500px]` -> `w-125`).",
     ARBITRARY_SCALE_VALUE,
-    { extensions: TSX_ONLY },
+    { extensions: TSX_ONLY }
   ),
   {
     id: "button-size-variant",
@@ -160,7 +169,7 @@ export const CONVENTION_RULES = [
     check: ({ code }) =>
       openingTags(code, "Button")
         .filter(({ text }) =>
-          SIZE_OVERRIDE.test(text.match(CLASS_NAME_ATTRIBUTE)?.[0] ?? ""),
+          SIZE_OVERRIDE.test(text.match(CLASS_NAME_ATTRIBUTE)?.[0] ?? "")
         )
         .map(({ line }) => ({ line })),
   },
@@ -197,7 +206,9 @@ export const CONVENTION_RULES = [
       const hits = [];
       for (const match of code.matchAll(TESTID_ATTRIBUTE)) {
         const id = match[1] ?? match[2];
-        if (id === stem || id.startsWith(`${stem}-`)) continue;
+        if (id === stem || id.startsWith(`${stem}-`)) {
+          continue;
+        }
         hits.push({
           line: code.slice(0, match.index).split("\n").length,
           detail: `("${id}" in "${stem}")`,
@@ -225,24 +236,24 @@ export const CONVENTION_RULES = [
     "no-render-props-api",
     "Use Base UI's standard `render` prop for element composition; do not invent `renderX` APIs.",
     /\brender[A-Z]\w*\??\s*:/,
-    { extensions: TSX_ONLY },
+    { extensions: TSX_ONLY }
   ),
   patternRule(
     "no-as-child",
     "Base UI composes custom elements with the `render` prop; do not introduce Radix-style `asChild`.",
     /\basChild\b/,
-    { extensions: TSX_ONLY },
+    { extensions: TSX_ONLY }
   ),
   patternRule(
     "no-classic-form-api",
     "Build new forms with `Field`/`FieldGroup`; the classic shadcn `Form*` API is compatibility-only.",
-    /from\s+["']@\/components\/ui\/form["']/,
+    /from\s+["']@\/components\/ui\/form["']/
   ),
   patternRule(
     "named-default-export",
     "Components must have explicit identifiers; anonymous default exports break Fast Refresh.",
     /^\s*export\s+default\s+(?:async\s+)?(?:function\s*\*?\s*\(|class\s*\{|\()/,
-    { allowed: STORIES },
+    { allowed: STORIES }
   ),
   {
     id: "no-default-export",
@@ -255,7 +266,7 @@ export const CONVENTION_RULES = [
     check: ({ code }) =>
       lineHits(
         /^\s*export\s+default\b|^\s*export\s*\{[^}]*\bas\s+default\b/,
-        code,
+        code
       ),
   },
   {
@@ -307,6 +318,26 @@ export const CONVENTION_RULES = [
       return bad === undefined ? [] : [{ line: 1, detail: `"${bad}"` }];
     },
   },
+  {
+    id: "max-filename-length",
+    message: `File names must not exceed ${MAX_FILENAME_LENGTH} characters (excluding extension); keep names concise and avoid redundant prefixes.`,
+    extensions: STYLE_EXTENSIONS,
+    includeTests: true,
+    uiOnly: false,
+    allowed: [],
+    check({ relPath }) {
+      const file = relPath.split("/").pop() ?? "";
+      const stem = file.split(".")[0];
+      return stem.length > MAX_FILENAME_LENGTH
+        ? [
+            {
+              line: 1,
+              detail: `("${stem}" is ${stem.length} chars, limit is ${MAX_FILENAME_LENGTH})`,
+            },
+          ]
+        : [];
+    },
+  },
 ];
 
 export function normalizeRelative(root, file) {
@@ -323,9 +354,12 @@ export function isUiPrimitive(relPath) {
 }
 
 export function isInScope(relPath) {
-  if (!relPath.startsWith("src/")) return false;
-  if (EXCLUDED_PREFIXES.some((prefix) => relPath.startsWith(prefix)))
+  if (!relPath.startsWith("src/")) {
     return false;
+  }
+  if (EXCLUDED_PREFIXES.some((prefix) => relPath.startsWith(prefix))) {
+    return false;
+  }
   return STYLE_EXTENSIONS.has(path.posix.extname(relPath));
 }
 
@@ -336,15 +370,25 @@ export function stripComments(content) {
 }
 
 function ruleApplies(rule, relPath) {
-  if (rule.uiOnly !== isUiPrimitive(relPath)) return false;
-  if (!rule.extensions.has(path.posix.extname(relPath))) return false;
-  if (isTestFile(relPath) && !rule.includeTests) return false;
-  if (rule.appliesTo && !rule.appliesTo(relPath)) return false;
+  if (rule.uiOnly !== isUiPrimitive(relPath)) {
+    return false;
+  }
+  if (!rule.extensions.has(path.posix.extname(relPath))) {
+    return false;
+  }
+  if (isTestFile(relPath) && !rule.includeTests) {
+    return false;
+  }
+  if (rule.appliesTo && !rule.appliesTo(relPath)) {
+    return false;
+  }
   return !rule.allowed.some((allow) => allow.test(relPath));
 }
 
 export function checkFile(relPath, content) {
-  if (!isInScope(relPath)) return [];
+  if (!isInScope(relPath)) {
+    return [];
+  }
   const code = stripComments(content);
   const lines = content.split("\n");
   const violations = [];
@@ -368,14 +412,17 @@ export function listSourceFiles(root, dir = "src") {
     withFileTypes: true,
   })) {
     const relPath = `${dir}/${entry.name}`;
-    if (entry.isDirectory()) files.push(...listSourceFiles(root, relPath));
-    else if (isInScope(relPath)) files.push(relPath);
+    if (entry.isDirectory()) {
+      files.push(...listSourceFiles(root, relPath));
+    } else if (isInScope(relPath)) {
+      files.push(relPath);
+    }
   }
   return files;
 }
 
 export function runChecks(root, files = listSourceFiles(root)) {
   return files.flatMap((relPath) =>
-    checkFile(relPath, readFileSync(path.join(root, relPath), "utf8")),
+    checkFile(relPath, readFileSync(path.join(root, relPath), "utf8"))
   );
 }

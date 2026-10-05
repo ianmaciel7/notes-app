@@ -12,7 +12,9 @@ const failFast = flags.has("--fail-fast");
 const STEP_TIMEOUT_MS = 15 * 60 * 1000;
 
 const log = (...parts) => {
-  if (!asJson) console.log(...parts);
+  if (!asJson) {
+    console.log(...parts);
+  }
 };
 
 log("=== Verifying Full Project Health & Quality (Context & Harness) ===\n");
@@ -32,7 +34,9 @@ function finish() {
     log(`Passed: ${passed}/${total}`);
     if (failed.length > 0) {
       console.error("\nFailures detected:");
-      for (const f of failed) console.error(`- ${f.name}:\n${f.error}`);
+      for (const f of failed) {
+        console.error(`- ${f.name}:\n${f.error}`);
+      }
     } else {
       log("All Quality, Context & Harness checks PASSED successfully!");
     }
@@ -44,7 +48,7 @@ function runStep(
   name,
   cmd,
   args,
-  { allowFail = false, parseGain = false } = {},
+  { allowFail = false, parseGain = false } = {}
 ) {
   const start = Date.now();
   const proc = spawnSync(cmd, args, {
@@ -75,16 +79,19 @@ function runStep(
     error: pass
       ? null
       : stripAnsi(
-          proc.error?.message ?? (proc.stderr || proc.stdout || "").trim(),
+          proc.error?.message ?? (proc.stderr || proc.stdout || "").trim()
         )
           .split("\n")
           .slice(-15)
           .join("\n"),
   });
 
-  const icon = pass ? "✓" : allowFail ? "⚠" : "✗";
+  const failIcon = allowFail ? "⚠" : "✗";
+  const icon = pass ? "✓" : failIcon;
   log(`${icon} [${name.padEnd(26)}] ${metric}`);
-  if (!pass && failFast) finish();
+  if (!pass && failFast) {
+    finish();
+  }
 }
 
 // 1. Static Quality & Types

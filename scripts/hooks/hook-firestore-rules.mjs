@@ -18,11 +18,15 @@ const filePath = parseHookFilePath(raw);
 const relative = filePath && repoRelativePath(root, filePath);
 
 function finish(code) {
-  if (agentType === "antigravity") process.stdout.write(JSON.stringify({}));
+  if (agentType === "antigravity") {
+    process.stdout.write(JSON.stringify({}));
+  }
   process.exit(code);
 }
 
-if (!relative || !isFirestoreRules(relative)) finish(0);
+if (!relative || !isFirestoreRules(relative)) {
+  finish(0);
+}
 
 // `rtk proxy` keeps the raw output so the Vitest failure markers survive.
 // The timeout stays below the hook timeout in .claude/settings.json.
@@ -34,7 +38,7 @@ const result = spawnSync(
     encoding: "utf8",
     shell: process.platform === "win32",
     timeout: 170_000,
-  },
+  }
 );
 
 const verdict = classifyEmulatorRun({
@@ -57,9 +61,11 @@ if (verdict !== "fail") {
 }
 
 // Antigravity cannot block on hook output, so it always exits cleanly.
-if (agentType === "antigravity") finish(0);
+if (agentType === "antigravity") {
+  finish(0);
+}
 
 process.stderr.write(
-  `Firestore emulator tests failed after editing ${relative}:\n${result.stdout ?? ""}${result.stderr ?? ""}`,
+  `Firestore emulator tests failed after editing ${relative}:\n${result.stdout ?? ""}${result.stderr ?? ""}`
 );
 process.exit(2);

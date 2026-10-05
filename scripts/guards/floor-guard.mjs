@@ -41,8 +41,7 @@ const untracked = (git(["ls-files", "--others", "--exclude-standard"]) ?? "")
   .split("\n")
   .filter(Boolean)
   .map(
-    (file) =>
-      git(["diff", "--no-index", "--unified=0", nullDevice, file]) ?? "",
+    (file) => git(["diff", "--no-index", "--unified=0", nullDevice, file]) ?? ""
   )
   .join("\n");
 const { added, removed } = parsePatch(`${tracked}\n${untracked}`);
@@ -78,27 +77,32 @@ const skips =
   /\.(skip|todo)\b|\bxit\(|\bxdescribe\(|@pytest\.mark\.skip|t\.Skip\(/;
 
 for (const entry of added) {
-  if (projectCodeFile(entry.file) && suppressions.test(entry.text))
+  if (projectCodeFile(entry.file) && suppressions.test(entry.text)) {
     flag("silenced-checker", entry);
-  if (projectCodeFile(entry.file) && stubs.test(entry.text))
+  }
+  if (projectCodeFile(entry.file) && stubs.test(entry.text)) {
     flag("unfinished-work", entry);
-  if (projectCodeFile(entry.file) && skips.test(entry.text))
+  }
+  if (projectCodeFile(entry.file) && skips.test(entry.text)) {
     flag("test-made-easier", entry);
+  }
   if (
     /CONSTRAINTS\.md$/.test(entry.file) &&
     /^\|\s*(W|E)\d+\s*\|/.test(entry.text)
-  )
+  ) {
     flag("new-exception", entry);
+  }
 }
 for (const entry of removed) {
   if (
     /\.(test|spec)\.|_test\.|test_/.test(entry.file) &&
     /\b(expect|assert|should)\b/.test(entry.text)
-  )
+  ) {
     flag("assertion-removed", entry);
+  }
 }
 for (const file of deletedTestFiles(
-  git(["diff", "--name-status", mergeBase, "--"]) ?? "",
+  git(["diff", "--name-status", mergeBase, "--"]) ?? ""
 )) {
   flag("test-file-deleted", { file, text: "test file deleted" });
 }
@@ -110,7 +114,9 @@ for (const path of [
   ".dependency-cruiser.cjs",
 ]) {
   const current = existsSync(path) ? readFileSync(path, "utf8") : null;
-  if (current === null) continue;
+  if (current === null) {
+    continue;
+  }
   for (const detail of baselineRegressions(path, current, gitShow, [
     mergeBase,
     "HEAD",
@@ -126,7 +132,7 @@ if (!findings.length) {
 console.error(`floor-guard: ${findings.length} violation(s):`);
 for (const finding of findings) {
   console.error(
-    `  [${finding.rule}] ${finding.file}: ${finding.text.trim().slice(0, 120)}`,
+    `  [${finding.rule}] ${finding.file}: ${finding.text.trim().slice(0, 120)}`
   );
   console.error(`    remediation: ${remediation[finding.rule]}`);
 }

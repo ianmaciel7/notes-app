@@ -52,32 +52,32 @@ test("flags window.location mutation but not reads", () => {
   ]);
   assert.deepEqual(
     ruleIds("src/lib/x.ts", `const o = window.location.origin;`),
-    [],
+    []
   );
 });
 
 test("flags palette and hex colors, allows semantic tokens", () => {
   assert.deepEqual(
     ruleIds("src/app/x.tsx", `<div className="bg-zinc-50 dark:bg-black" />`),
-    ["no-hardcoded-color"],
+    ["no-hardcoded-color"]
   );
   assert.deepEqual(
     ruleIds("src/app/x.tsx", `<div className="text-[#fff]" />`),
-    ["no-hardcoded-color"],
+    ["no-hardcoded-color"]
   );
   assert.deepEqual(
     ruleIds(
       "src/app/x.tsx",
-      `<div className="bg-background text-foreground border-destructive/20" />`,
+      `<div className="bg-background text-foreground border-destructive/20" />`
     ),
-    [],
+    []
   );
 });
 
 test("flags !important in css", () => {
   assert.deepEqual(
     ruleIds("src/app/globals.css", `a { color: red !important; }`),
-    ["no-important"],
+    ["no-important"]
   );
 });
 
@@ -85,30 +85,30 @@ test("default exports are allowed only for Next.js entrypoints", () => {
   const content = `export default function Thing() { return null; }`;
   assert.deepEqual(
     ruleIds("src/components/notes-app/thing-card.tsx", content),
-    ["no-default-export"],
+    ["no-default-export"]
   );
   assert.deepEqual(ruleIds("src/app/(auth)/login/page.tsx", content), []);
   assert.deepEqual(
     ruleIds("src/app/error.tsx", `"use client";\n${content}`),
-    [],
+    []
   );
   assert.deepEqual(
     ruleIds("src/lib/x.ts", `const x = 1;\nexport { x as default };`),
-    ["no-default-export"],
+    ["no-default-export"]
   );
 });
 
 test("error boundaries must declare use client", () => {
   assert.deepEqual(
     ruleIds("src/app/error.tsx", `export default function E() {}`),
-    ["error-boundary-use-client"],
+    ["error-boundary-use-client"]
   );
   assert.deepEqual(
     ruleIds(
       "src/app/global-error.tsx",
-      `// c\n"use client";\nexport default function E() {}`,
+      `// c\n"use client";\nexport default function E() {}`
     ),
-    [],
+    []
   );
 });
 
@@ -124,7 +124,19 @@ test("file and folder names must be kebab-case", () => {
   ]);
   assert.deepEqual(
     ruleIds("src/app/[spaceId]/(auth)/my-page.test.tsx", `export const x = 1;`),
-    [],
+    []
+  );
+});
+
+test("file names must not exceed MAX_FILENAME_LENGTH", () => {
+  const longName =
+    "this-is-an-extremely-long-file-name-that-definitely-exceeds-the-maximum-limit.ts";
+  assert.deepEqual(ruleIds(`src/lib/${longName}`, `export const x = 1;`), [
+    "max-filename-length",
+  ]);
+  assert.deepEqual(
+    ruleIds("src/lib/concise-file-name.ts", `export const x = 1;`),
+    []
   );
 });
 
@@ -134,9 +146,9 @@ test("test files, vendor trees and non-src paths are exempt", () => {
   assert.deepEqual(
     ruleIds(
       "src/components/ui/button.tsx",
-      bad.replace("export default", "export"),
+      bad.replace("export default", "export")
     ),
-    [],
+    []
   );
   assert.deepEqual(ruleIds("src/components/firebase/Foo.tsx", bad), []);
   assert.deepEqual(ruleIds("scripts/Foo.mjs", bad), []);
@@ -146,23 +158,23 @@ test("flags template-literal and concatenated classNames", () => {
   assert.deepEqual(
     ruleIds(
       "src/components/notes-app/x-card.tsx",
-      ["<div className={`", "$", "{A} p-2`} />"].join(""),
+      ["<div className={`", "$", "{A} p-2`} />"].join("")
     ),
-    ["use-cn-for-class-merge"],
+    ["use-cn-for-class-merge"]
   );
   assert.deepEqual(
     ruleIds(
       "src/components/notes-app/x-card.tsx",
-      `<div className={"a " + b} />`,
+      `<div className={"a " + b} />`
     ),
-    ["use-cn-for-class-merge"],
+    ["use-cn-for-class-merge"]
   );
   assert.deepEqual(
     ruleIds(
       "src/components/notes-app/x-card.tsx",
-      `<div className={cn(A, "p-2")} />`,
+      `<div className={cn(A, "p-2")} />`
     ),
-    [],
+    []
   );
 });
 
@@ -170,13 +182,13 @@ test("flags renderX props in tsx but not in ts", () => {
   assert.deepEqual(
     ruleIds(
       "src/components/notes-app/x-card.tsx",
-      "type P = { renderRow?: () => null };",
+      "type P = { renderRow?: () => null };"
     ),
-    ["no-render-props-api"],
+    ["no-render-props-api"]
   );
   assert.deepEqual(
     ruleIds("src/instrumentation.ts", "const a = { renderSource: 1 };"),
-    [],
+    []
   );
 });
 
@@ -184,9 +196,9 @@ test("flags the classic shadcn Form import", () => {
   assert.deepEqual(
     ruleIds(
       "src/components/notes-app/x-form.tsx",
-      `import { Form } from "@/components/ui/form";`,
+      `import { Form } from "@/components/ui/form";`
     ),
-    ["no-classic-form-api"],
+    ["no-classic-form-api"]
   );
 });
 
@@ -196,7 +208,7 @@ test("anonymous default exports are flagged even on Next.js entrypoints", () => 
   ]);
   assert.deepEqual(
     ruleIds("src/app/page.tsx", "export default async function () {}"),
-    ["named-default-export"],
+    ["named-default-export"]
   );
 });
 
@@ -205,26 +217,26 @@ test("server action modules need use server and a zod import", () => {
     ruleIds(
       "src/app/actions.ts",
       `import { z } from "zod";
-export async function a() {}`,
+export async function a() {}`
     ),
-    ["server-action-use-server"],
+    ["server-action-use-server"]
   );
   assert.deepEqual(
     ruleIds(
       "src/lib/save.ts",
       `"use server";
-export async function a() {}`,
+export async function a() {}`
     ),
-    ["server-action-validates-input"],
+    ["server-action-validates-input"]
   );
   assert.deepEqual(
     ruleIds(
       "src/lib/save.ts",
       `"use server";
 import { z } from "zod";
-export async function a() {}`,
+export async function a() {}`
     ),
-    [],
+    []
   );
 });
 
@@ -235,7 +247,7 @@ test("registry primitives are exempt from the project guard", () => {
   assert.deepEqual(ui("export function Thing() {}\nexport { Thing };"), []);
   assert.deepEqual(
     ui("interface P {}\nfunction Thing() {}\nexport { Thing };"),
-    [],
+    []
   );
   assert.deepEqual(ui("export default function Thing() {}"), []);
 });
@@ -244,7 +256,7 @@ test("flags arbitrary px/rem values that the Tailwind scale covers", () => {
   const card = (className) =>
     ruleIds(
       "src/components/notes-app/x-card.tsx",
-      `<span className="${className}" />`,
+      `<span className="${className}" />`
     );
   assert.deepEqual(card("text-[13px] truncate"), ["prefer-standard-scale"]);
   assert.deepEqual(card("w-[500px]"), ["prefer-standard-scale"]);
@@ -255,21 +267,21 @@ test("Button must use a size variant instead of a size-*/h-* override", () => {
   const card = (jsx) => ruleIds("src/components/notes-app/x-card.tsx", jsx);
   assert.deepEqual(
     card(
-      `<Button\n  size="icon"\n  onClick={() => run()}\n  className="size-6 shrink-0"\n/>`,
+      `<Button\n  size="icon"\n  onClick={() => run()}\n  className="size-6 shrink-0"\n/>`
     ),
-    ["button-size-variant"],
+    ["button-size-variant"]
   );
   assert.deepEqual(
     card(`<Button size="sm" className={cn("h-9", className)} />`),
-    ["button-size-variant"],
+    ["button-size-variant"]
   );
   assert.deepEqual(
     card(`<Button size="icon-xs" className="shrink-0 w-full" />`),
-    [],
+    []
   );
   assert.deepEqual(
     card(`<Spinner className="size-8" /><Button>Go</Button>`),
-    [],
+    []
   );
 });
 
@@ -278,7 +290,7 @@ test("overlay content is not restricted to a dedicated file", () => {
   assert.deepEqual(ruleIds("src/components/notes-app/x-card.tsx", content), []);
   assert.deepEqual(
     ruleIds("src/components/notes-app/settings-dialog.tsx", content),
-    [],
+    []
   );
 });
 
@@ -300,29 +312,29 @@ test("data-testid must start with the component file name", () => {
     ruleIds(`src/components/notes-app/${name}.tsx`, jsx);
   assert.deepEqual(
     app("spaces-empty", `<div data-testid="space-switcher-empty" />`),
-    ["testid-starts-with-component"],
+    ["testid-starts-with-component"]
   );
   assert.deepEqual(
     app(
       "space-sidebar",
-      ["<li data-testid={`space-item-", "$", "{id}`} />"].join(""),
+      ["<li data-testid={`space-item-", "$", "{id}`} />"].join("")
     ),
-    ["testid-starts-with-component"],
+    ["testid-starts-with-component"]
   );
   assert.deepEqual(
     app("spaces-empty", `<div data-testid="spaces-empty" />`),
-    [],
+    []
   );
   assert.deepEqual(
     app("spaces-empty", `<b data-testid="spaces-empty-create-btn" />`),
-    [],
+    []
   );
   assert.deepEqual(
     app(
       "space-sidebar",
-      ["<li data-testid={`space-sidebar-item-", "$", "{id}`} />"].join(""),
+      ["<li data-testid={`space-sidebar-item-", "$", "{id}`} />"].join("")
     ),
-    [],
+    []
   );
   assert.deepEqual(app("spaces-empty", `<b data-testid="spaces-emptyish" />`), [
     "testid-starts-with-component",
@@ -336,7 +348,7 @@ test("application components stay under the line limit", () => {
   ]);
   assert.deepEqual(
     ruleIds("src/components/notes-app/x-card.tsx", "const a = 1;\n"),
-    [],
+    []
   );
   assert.deepEqual(ruleIds("src/app/page.tsx", big), []);
 });
@@ -347,7 +359,7 @@ test("guard-conventions passes on the current src/ directory", () => {
     ["scripts/guards/guard-conventions.mjs"],
     {
       encoding: "utf8",
-    },
+    }
   );
   assert.match(output, /comply with the mechanical CONVENTIONS\.md rules/);
 });

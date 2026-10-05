@@ -36,7 +36,7 @@ test("coverage floors cannot be lowered", () => {
 test("dependency rules cannot silently disappear", () => {
   assert.deepEqual(
     qualityRegressions(".dependency-cruiser.cjs", 'name: "no-circular"', ""),
-    ["dependency rule removed: no-circular"],
+    ["dependency rule removed: no-circular"]
   );
 });
 
@@ -45,7 +45,7 @@ test("a floor added on the branch is compared against HEAD", () => {
   const read = (ref) => refs[ref] ?? null;
   assert.deepEqual(
     baselineRegressions("vitest.config.ts", floor(70), read, ["base", "HEAD"]),
-    ["coverage lines: 80 -> 70"],
+    ["coverage lines: 80 -> 70"]
   );
 });
 
@@ -55,7 +55,7 @@ test("a floor with no baseline anywhere is skipped, not an error", () => {
       "base",
       "HEAD",
     ]),
-    [],
+    []
   );
 });
 
@@ -63,6 +63,6 @@ test("the same regression against two refs is reported once", () => {
   const read = () => floor(80);
   assert.deepEqual(
     baselineRegressions("vitest.config.ts", floor(70), read, ["a", "b"]),
-    ["coverage lines: 80 -> 70"],
+    ["coverage lines: 80 -> 70"]
   );
 });

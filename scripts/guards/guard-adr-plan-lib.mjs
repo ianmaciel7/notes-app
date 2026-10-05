@@ -21,7 +21,9 @@ function safeReadFile(filePath) {
 }
 
 function readDiskPlans(activePlansDir) {
-  if (!fs.existsSync(activePlansDir)) return [];
+  if (!fs.existsSync(activePlansDir)) {
+    return [];
+  }
   const entries = fs.readdirSync(activePlansDir);
   const result = [];
   for (const f of entries) {
@@ -34,7 +36,9 @@ function readDiskPlans(activePlansDir) {
 }
 
 function readDiskSpecs(specsDir) {
-  if (!fs.existsSync(specsDir)) return [];
+  if (!fs.existsSync(specsDir)) {
+    return [];
+  }
   const entries = fs.readdirSync(specsDir);
   const result = [];
   for (const f of entries) {
@@ -48,7 +52,7 @@ function readDiskSpecs(specsDir) {
 
 function readCandidateArtifacts(root, normalized) {
   const diskPlans = readDiskPlans(
-    path.join(root, "docs", "exec-plans", "active"),
+    path.join(root, "docs", "exec-plans", "active")
   );
   const diskSpecs = readDiskSpecs(path.join(root, "docs", "product-specs"));
 
@@ -109,9 +113,7 @@ export function checkAdrPlanGuard(changedFiles = [], options = {}) {
 
   const adrFiles = normalized.filter(
     (f) =>
-      f.startsWith("docs/adr/") &&
-      f.endsWith(".md") &&
-      !f.endsWith("README.md"),
+      f.startsWith("docs/adr/") && f.endsWith(".md") && !f.endsWith("README.md")
   );
 
   if (adrFiles.length === 0) {
@@ -147,8 +149,12 @@ export function checkAdrPlanGuard(changedFiles = [], options = {}) {
     const hasSpec = specs.some((s) => matchesArtifact(s, num, baseSlug));
     const hasPlan = plans.some((p) => matchesArtifact(p, num, baseSlug));
 
-    if (!hasSpec) missingSpecs.push(adrFile);
-    if (!hasPlan) missingPlans.push(adrFile);
+    if (!hasSpec) {
+      missingSpecs.push(adrFile);
+    }
+    if (!hasPlan) {
+      missingPlans.push(adrFile);
+    }
   }
 
   if (missingSpecs.length > 0 || missingPlans.length > 0) {
@@ -185,11 +191,11 @@ export function formatAdrPlanFindings(result) {
   if (result.missingSpecs.length > 0) {
     lines.push(
       "",
-      "Missing Product Specification (User Stories & Test Seams):",
+      "Missing Product Specification (User Stories & Test Seams):"
     );
     for (const f of result.missingSpecs) {
       lines.push(
-        `  • ${f} -> Needs docs/product-specs/<name>.md (or run /to-spec)`,
+        `  • ${f} -> Needs docs/product-specs/<name>.md (or run /to-spec)`
       );
     }
   }
@@ -198,7 +204,7 @@ export function formatAdrPlanFindings(result) {
     lines.push("", "Missing Execution Plan or Tracer-Bullet Tickets:");
     for (const f of result.missingPlans) {
       lines.push(
-        `  • ${f} -> Needs docs/exec-plans/active/<name>.md or .scratch/<name>/issues/ (or run /to-tickets)`,
+        `  • ${f} -> Needs docs/exec-plans/active/<name>.md or .scratch/<name>/issues/ (or run /to-tickets)`
       );
     }
   }
@@ -208,7 +214,7 @@ export function formatAdrPlanFindings(result) {
     "Remediation:",
     "  1. Run /to-spec targeting the ADR to create docs/product-specs/<feature>.md with User Stories.",
     "  2. Run /to-tickets or initialize docs/exec-plans/active/<name>.md with atomic tracer-bullets.",
-    "  3. Bypass only for editorial typos via --allow-no-plan or [skip-plan] commit message.",
+    "  3. Bypass only for editorial typos via --allow-no-plan or [skip-plan] commit message."
   );
 
   return lines.join("\n");

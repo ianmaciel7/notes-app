@@ -38,8 +38,12 @@ const CONTROLLED = [
 export function detectAgentType(raw) {
   try {
     const data = JSON.parse(raw);
-    if (data?.toolCall || data?.conversationId) return "antigravity";
-    if (data?.tool_input || data?.hookSpecificOutput) return "claude";
+    if (data?.toolCall || data?.conversationId) {
+      return "antigravity";
+    }
+    if (data?.tool_input || data?.hookSpecificOutput) {
+      return "claude";
+    }
     return "generic";
   } catch {
     return "unknown";
@@ -49,9 +53,13 @@ export function detectAgentType(raw) {
 export function findRepoRoot(startDir = process.cwd()) {
   let curr = path.resolve(startDir);
   while (true) {
-    if (fs.existsSync(path.join(curr, "package.json"))) return curr;
+    if (fs.existsSync(path.join(curr, "package.json"))) {
+      return curr;
+    }
     const parent = path.dirname(curr);
-    if (parent === curr) return path.resolve(startDir);
+    if (parent === curr) {
+      return path.resolve(startDir);
+    }
     curr = parent;
   }
 }
@@ -72,8 +80,13 @@ export function parseHookFilePath(raw) {
 
 export function repoRelativePath(root, filePath) {
   const relative = path.relative(root, path.resolve(root, filePath));
-  if (relative === "" || relative.startsWith("..") || path.isAbsolute(relative))
+  if (
+    relative === "" ||
+    relative.startsWith("..") ||
+    path.isAbsolute(relative)
+  ) {
     return null;
+  }
   return relative.split(path.sep).join("/");
 }
 
@@ -87,13 +100,17 @@ export function classifyDelegation(raw) {
     return null;
   }
   const input = data?.tool_input;
-  if (!input || typeof input !== "object") return null;
+  if (!input || typeof input !== "object") {
+    return null;
+  }
   // An omitted subagent_type falls back to the native general-purpose agent.
   const type =
     typeof input.subagent_type === "string" && input.subagent_type !== ""
       ? input.subagent_type
       : "general-purpose";
-  if (type === ALLOWED_SUBAGENT) return null;
+  if (type === ALLOWED_SUBAGENT) {
+    return null;
+  }
   return {
     action: "deny",
     reason: `Native Agent subagent "${type}" is blocked in this project. Delegate through the Codex plugin: use the ${ALLOWED_SUBAGENT} agent or the /codex:* commands. Do exploration and reads inline (Read, Grep, Serena, graphify).`,
@@ -161,12 +178,14 @@ export function classifyBashCommand(raw) {
     return null;
   }
   const command = data?.tool_input?.command;
-  if (typeof command !== "string") return null;
+  if (typeof command !== "string") {
+    return null;
+  }
   // Judge only segments that start with git, so quoted text or heredoc bodies
   // that merely mention a flag are not mistaken for a command.
   const withoutHeredocs = command.replace(
     /<<-?\s*(['"]?)(\w+)\1[^\n]*\n[\s\S]*?\n\s*\2(?=\n|$)/g,
-    "",
+    ""
   );
   const segments = withoutHeredocs
     .split(/&&|\|\||[;|\n]/)
@@ -174,7 +193,9 @@ export function classifyBashCommand(raw) {
     .filter((segment) => /^(rtk\s+)?git\s/.test(segment))
     .map(parseGitInvocation);
   const rule = BASH_BYPASS_RULES.find((r) => segments.some((s) => r.test(s)));
-  if (!rule) return null;
+  if (!rule) {
+    return null;
+  }
   return {
     action: "deny",
     reason: `Command ${rule.reason}. Fix the failing check instead, or ask the user to run it explicitly.`,
@@ -199,7 +220,7 @@ export function logHookEvent(root, event) {
     fs.mkdirSync(dir, { recursive: true });
     fs.appendFileSync(
       path.join(dir, "hook-events.jsonl"),
-      `${JSON.stringify({ ts: new Date().toISOString(), ...event })}\n`,
+      `${JSON.stringify({ ts: new Date().toISOString(), ...event })}\n`
     );
   } catch {
     // Telemetry must never break an edit.
@@ -218,8 +239,12 @@ export function isFirestoreRules(relative) {
 // problems; safe to block on) or "environment" (it could not run properly, for
 // example no Java for the Firestore emulator; never block on this).
 function classifyRun({ error, status, output }, failurePattern) {
-  if (error) return "environment";
-  if (status === 0) return "pass";
+  if (error) {
+    return "environment";
+  }
+  if (status === 0) {
+    return "pass";
+  }
   // biome-ignore lint/suspicious/noControlCharactersInRegex: strips ANSI colors
   const plain = (output ?? "").replace(/\u001b\[[0-9;]*m/g, "");
   return failurePattern.test(plain) ? "fail" : "environment";
@@ -269,6 +294,8 @@ export function classifyPath(relative) {
 
 export async function readStdin() {
   const chunks = [];
-  for await (const chunk of process.stdin) chunks.push(chunk);
+  for await (const chunk of process.stdin) {
+    chunks.push(chunk);
+  }
   return Buffer.concat(chunks).toString("utf8");
 }

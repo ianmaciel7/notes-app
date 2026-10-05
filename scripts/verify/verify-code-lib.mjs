@@ -14,7 +14,9 @@ export const SCOPE_NAMES = Object.keys(SCOPES);
 
 function sectionBody(markdown, heading) {
   const start = markdown.match(heading);
-  if (!start) return null;
+  if (!start) {
+    return null;
+  }
   const rest = markdown.slice(start.index + start[0].length);
   const next = rest.search(/^##\s/m);
   return next === -1 ? rest : rest.slice(0, next);
@@ -29,7 +31,7 @@ function tableRows(body) {
       line
         .replace(/^\||\|$/g, "")
         .split("|")
-        .map((cell) => cell.trim()),
+        .map((cell) => cell.trim())
     )
     .filter((cells) => !cells.every((cell) => /^:?-{3,}:?$/.test(cell)))
     .slice(1);
@@ -37,14 +39,20 @@ function tableRows(body) {
 
 export function classifyTier(runsAt) {
   const text = runsAt.toLowerCase();
-  if (/task end/.test(text)) return "task";
-  if (text === "ci") return "ci";
+  if (/task end/.test(text)) {
+    return "task";
+  }
+  if (text === "ci") {
+    return "ci";
+  }
   return "on-demand";
 }
 
 export function parseConstraintGates(markdown) {
   const body = sectionBody(markdown, CONSTRAINTS_HEADING);
-  if (body === null) return null;
+  if (body === null) {
+    return null;
+  }
   return tableRows(body).map(([dimension, rule, checkedBy, runsAt]) => ({
     dimension,
     rule,
@@ -86,7 +94,7 @@ function collectSteps(gates, index, scripts, errors) {
       });
     } else if (!(gate.script in scripts)) {
       errors.push(
-        `CONSTRAINTS.md: "${gate.dimension}" runs \`${gate.script}\`, which is not in package.json`,
+        `CONSTRAINTS.md: "${gate.dimension}" runs \`${gate.script}\`, which is not in package.json`
       );
     } else {
       step(gate.script, gate.tier).dimensions.push(gate.dimension);
@@ -96,10 +104,11 @@ function collectSteps(gates, index, scripts, errors) {
   // CONSTRAINTS.md does not name them.
   for (const row of index.filter((candidate) => !candidate.reviewOnly)) {
     for (const script of row.scripts) {
-      if (script in scripts) step(script, "task").rules.push(row.id);
-      else {
+      if (script in scripts) {
+        step(script, "task").rules.push(row.id);
+      } else {
         errors.push(
-          `CONVENTIONS.md: rule \`${row.id}\` names \`${script}\`, which is not in package.json`,
+          `CONVENTIONS.md: rule \`${row.id}\` names \`${script}\`, which is not in package.json`
         );
       }
     }
@@ -141,7 +150,7 @@ export function buildPlan({
   if (checklist !== null) {
     for (const id of reviewChecklistGaps(reviewOnly, checklist)) {
       errors.push(
-        `review-only rule \`${id}\` has no entry in the review checklist`,
+        `review-only rule \`${id}\` has no entry in the review checklist`
       );
     }
   }
@@ -152,7 +161,7 @@ export function buildPlan({
     for (const name of only) {
       if (!collected.steps.some((step) => step.script === name)) {
         errors.push(
-          `--only \`${name}\` is not a gate in CONSTRAINTS.md or the Enforcement Index`,
+          `--only \`${name}\` is not a gate in CONSTRAINTS.md or the Enforcement Index`
         );
       }
     }
@@ -206,19 +215,19 @@ export function formatReport({ plan, results, checklistPath }) {
   for (const result of results) {
     const mark = result.pass ? "PASS" : "FAIL";
     lines.push(
-      `${mark}  ${result.script.padEnd(22)} ${String(result.seconds).padStart(7)}s  ${result.dimensions.join(", ")}`,
+      `${mark}  ${result.script.padEnd(22)} ${String(result.seconds).padStart(7)}s  ${result.dimensions.join(", ")}`
     );
   }
   lines.push(
     "",
-    `Passed ${results.length - failed.length}/${results.length} gates.`,
+    `Passed ${results.length - failed.length}/${results.length} gates.`
   );
 
   for (const result of failed) {
     lines.push("", `--- ${result.script} failed ---`);
     if (result.rules.length > 0) {
       lines.push(
-        `Convention rules behind this gate: ${result.rules.join(", ")}`,
+        `Convention rules behind this gate: ${result.rules.join(", ")}`
       );
     }
     lines.push(result.error);
@@ -231,7 +240,7 @@ export function formatReport({ plan, results, checklistPath }) {
       "",
       "Review-only rules (no tool decides these; review the diff by hand):",
       `  ${plan.reviewOnly.join(", ")}`,
-      `  Checklist: ${checklistPath}`,
+      `  Checklist: ${checklistPath}`
     );
   }
   return lines.join("\n");

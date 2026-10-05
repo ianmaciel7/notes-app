@@ -26,7 +26,7 @@ test("checkAdrPlanGuard passes when ADR has both Spec and Plan in changed files"
 
 test("checkAdrPlanGuard fails when ADR has Plan but lacks Spec", () => {
   const tempDir = fs.mkdtempSync(
-    path.join(os.tmpdir(), "adr-guard-spec-test-"),
+    path.join(os.tmpdir(), "adr-guard-spec-test-")
   );
   try {
     const plansDir = path.join(tempDir, "docs", "exec-plans", "active");
@@ -54,7 +54,7 @@ test("checkAdrPlanGuard passes when bypassed with allowNoPlan", () => {
 
 test("checkAdrPlanGuard checks disk for active plans and specs matching ADR", () => {
   const tempDir = fs.mkdtempSync(
-    path.join(os.tmpdir(), "adr-guard-disk-test-"),
+    path.join(os.tmpdir(), "adr-guard-disk-test-")
   );
   try {
     const plansDir = path.join(tempDir, "docs", "exec-plans", "active");
@@ -64,11 +64,11 @@ test("checkAdrPlanGuard checks disk for active plans and specs matching ADR", ()
 
     fs.writeFileSync(
       path.join(plansDir, "0018-active-plan.md"),
-      "# Plan for ADR 0018",
+      "# Plan for ADR 0018"
     );
     fs.writeFileSync(
       path.join(specsDir, "0018-exam-spec.md"),
-      "# Spec for ADR 0018",
+      "# Spec for ADR 0018"
     );
 
     const passResult = checkAdrPlanGuard(["docs/adr/0018-test.md"], {

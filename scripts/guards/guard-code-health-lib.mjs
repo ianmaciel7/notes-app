@@ -55,11 +55,11 @@ export function tightenFloor(metrics, floor) {
     minScore: Math.max(floor.minScore, metrics.score),
     maxComplexityFindings: Math.min(
       floor.maxComplexityFindings,
-      metrics.complexityFindings,
+      metrics.complexityFindings
     ),
     maxLargeFunctions: Math.min(
       floor.maxLargeFunctions,
-      metrics.largeFunctions,
+      metrics.largeFunctions
     ),
   };
 }

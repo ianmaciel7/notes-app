@@ -51,7 +51,7 @@ export function scanDirectoryForEmojis(dir, baseDir = dir) {
       const relPath = path.relative(baseDir, fullPath).replaceAll("\\", "/");
       const content = readFileSync(fullPath, "utf8");
       violations = violations.concat(
-        findEmojiViolationsInContent(content, relPath),
+        findEmojiViolationsInContent(content, relPath)
       );
     }
   }
@@ -62,17 +62,17 @@ export function runGuard() {
   const violations = scanDirectoryForEmojis(srcDir);
   if (violations.length === 0) {
     console.log(
-      "[guard-no-emojis] ✓ Zero emojis found in project source outside src/components/ui/.",
+      "[guard-no-emojis] ✓ Zero emojis found in project source outside src/components/ui/."
     );
     return true;
   }
 
   console.error(
-    `[guard-no-emojis] ✗ ${violations.length} emoji violation(s) found in src/:\n`,
+    `[guard-no-emojis] ✗ ${violations.length} emoji violation(s) found in src/:\n`
   );
   for (const v of violations) {
     console.error(
-      `  • ${v.file}:${v.line} - contains emoji '${v.match}' in line: "${v.snippet}"`,
+      `  • ${v.file}:${v.line} - contains emoji '${v.match}' in line: "${v.snippet}"`
     );
   }
   console.error(`

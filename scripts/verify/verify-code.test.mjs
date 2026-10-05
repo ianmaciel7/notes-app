@@ -75,7 +75,7 @@ test("parseConstraintGates reads only the enforced table", () => {
       ["Coverage", "test:coverage", "ci"],
       ["Lighthouse", "lighthouse", "on-demand"],
       ["OSV", null, "on-demand"],
-    ],
+    ]
   );
   assert.equal(parseConstraintGates("# nothing"), null);
 });
@@ -85,7 +85,7 @@ test("task scope runs task-end gates and the convention enforcers", () => {
   assert.deepEqual(result.errors, []);
   assert.deepEqual(
     result.steps.map((step) => step.script),
-    ["check:types", "check:floor", "check:lint"],
+    ["check:types", "check:floor", "check:lint"]
   );
   const types = result.steps.find((step) => step.script === "check:types");
   assert.deepEqual(types.dimensions, ["Types"]);
@@ -96,10 +96,10 @@ test("task scope runs task-end gates and the convention enforcers", () => {
 
 test("ci scope adds CI gates; all scope adds on-demand gates and skips", () => {
   assert.ok(
-    plan({ scope: "ci" }).steps.some((s) => s.script === "test:coverage"),
+    plan({ scope: "ci" }).steps.some((s) => s.script === "test:coverage")
   );
   assert.ok(
-    !plan({ scope: "ci" }).steps.some((s) => s.script === "lighthouse"),
+    !plan({ scope: "ci" }).steps.some((s) => s.script === "lighthouse")
   );
   const all = plan({ scope: "all" });
   assert.ok(all.steps.some((step) => step.script === "lighthouse"));
@@ -109,7 +109,7 @@ test("ci scope adds CI gates; all scope adds on-demand gates and skips", () => {
 test("--only narrows the plan and rejects unknown gates", () => {
   assert.deepEqual(
     plan({ only: ["check:lint"] }).steps.map((step) => step.script),
-    ["check:lint"],
+    ["check:lint"]
   );
   assert.match(plan({ only: ["check:nope"] }).errors[0], /check:nope/);
 });
@@ -124,11 +124,11 @@ test("drift between the documents and package.json is reported", () => {
 test("missing sections and unknown scopes are reported", () => {
   assert.match(
     plan({ constraints: "# nothing" }).errors.join("\n"),
-    /no "Enforced with numbers" table/,
+    /no "Enforced with numbers" table/
   );
   assert.match(
     plan({ conventions: "# nothing" }).errors[0],
-    /no Enforcement Index/,
+    /no Enforcement Index/
   );
   assert.match(plan({ scope: "everything" }).errors[0], /unknown scope/);
 });
@@ -137,7 +137,7 @@ test("a review-only rule without a checklist entry is reported", () => {
   assert.deepEqual(reviewChecklistGaps(["a", "b"], "- `a`: x"), ["b"]);
   assert.match(
     plan({ checklist: "" }).errors[0],
-    /`reuse-primitives`.*checklist/,
+    /`reuse-primitives`.*checklist/
   );
 });
 
@@ -168,7 +168,7 @@ test("a leading -- from pnpm run is dropped before flags are parsed", () => {
   const output = execFileSync(
     "node",
     ["scripts/verify/verify-code.mjs", "--", "--list", "--scope", "ci"],
-    { encoding: "utf8" },
+    { encoding: "utf8" }
   );
   assert.match(output, /scope: ci/);
 });
@@ -177,7 +177,7 @@ test("verify-code plans cleanly against the repository documents", () => {
   const output = execFileSync(
     "node",
     ["scripts/verify/verify-code.mjs", "--list", "--json"],
-    { encoding: "utf8" },
+    { encoding: "utf8" }
   );
   const repoPlan = JSON.parse(output);
   assert.deepEqual(repoPlan.errors, []);

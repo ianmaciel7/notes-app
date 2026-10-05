@@ -24,7 +24,7 @@ describe("seed-emulator-lib", () => {
         e: { nullValue: null },
         f: { timestampValue: now.toISOString() },
         g: { arrayValue: { values: [{ integerValue: "1" }] } },
-      },
+      }
     );
   });
 
@@ -43,7 +43,7 @@ describe("seed-emulator-lib", () => {
     assert.ok(paths.includes(`users/u1/spaces/${SPACE_ID}/objects/${EXAM_ID}`));
 
     const questions = docs.filter(
-      (doc) => doc.data.objectTypeId === "question",
+      (doc) => doc.data.objectTypeId === "question"
     );
     assert.equal(questions.length, 12);
     assert.deepEqual(
@@ -61,7 +61,7 @@ describe("seed-emulator-lib", () => {
         "ordering",
         "matrix",
         "simulation",
-      ],
+      ]
     );
     for (const question of questions) {
       assert.equal(question.data.properties.statement, undefined);
@@ -69,7 +69,7 @@ describe("seed-emulator-lib", () => {
       assert.equal(question.data.properties.examId, EXAM_ID);
       const questionId = question.path.split("/").pop();
       assert.ok(
-        paths.includes(`users/u1/spaces/${SPACE_ID}/cards/card-${questionId}`),
+        paths.includes(`users/u1/spaces/${SPACE_ID}/cards/card-${questionId}`)
       );
     }
     for (const doc of docs.filter((item) => item.path.includes("/cards/"))) {
@@ -80,13 +80,13 @@ describe("seed-emulator-lib", () => {
   it("parses repeated --email flags and defaults to the demo user", () => {
     assert.deepEqual(
       parseUsers([]).map((user) => user.email),
-      ["demo@notesapp.dev"],
+      ["demo@notesapp.dev"]
     );
     assert.deepEqual(
       parseUsers(["--email", "a@b.dev", "--email", "c@d.dev"]).map(
-        (user) => user.email,
+        (user) => user.email
       ),
-      ["a@b.dev", "c@d.dev"],
+      ["a@b.dev", "c@d.dev"]
     );
   });
 
@@ -136,7 +136,7 @@ describe("seed-emulator-lib", () => {
         projectId: "p",
         users: [{ email: "a@b.dev", name: "A" }],
       }),
-      /signInWithIdp\(a@b\.dev\) failed: 500 boom/,
+      /signInWithIdp\(a@b\.dev\) failed: 500 boom/
     );
   });
 });

@@ -14,8 +14,8 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import ts from "typescript";
 import { listApplicationComponentDirs } from "./component-scope-lib.mjs";
+import { inspectI18nSource } from "./guard-i18n-strings-lib.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const configuredScanRoots = [
@@ -24,7 +24,7 @@ const configuredScanRoots = [
   ...listApplicationComponentDirs(root),
 ];
 const scanRoots = configuredScanRoots.filter((scanRoot) =>
-  existsSync(scanRoot),
+  existsSync(scanRoot)
 );
 
 // Known user-facing action/status phrases that must never be hardcoded
@@ -49,104 +49,16 @@ const TRANSLATED_ATTRIBUTES = new Set([
  * Checks if a JSX text node contains suspicious hardcoded natural language text.
  * Ignores empty whitespace, symbols, punctuation, or single character delimiters.
  */
-function isSignificantNaturalText(rawText) {
-  const text = rawText.trim();
-  if (!text) return false;
-  // Ignore single punctuation, numbers, or technical delimiters like "/", "•", "-", "&", etc.
-  if (/^[0-9\s•\-—/\\|:;,.*+!?()[\]{}<>]+$/.test(text)) return false;
-  // If it contains letters and is 2+ chars, treat as user-facing text
-  return /[a-zA-Z]{2,}/.test(text);
-}
-
 /**
  * Analyze a TypeScript AST SourceFile for hardcoded strings and forbidden phrases.
  */
 export function findI18nViolationsInSource(sourceText, filePath) {
-  const sf = ts.createSourceFile(
-    filePath,
+  return inspectI18nSource(
     sourceText,
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TSX,
+    filePath,
+    FORBIDDEN_PHRASES,
+    TRANSLATED_ATTRIBUTES
   );
-
-  const violations = [];
-
-  function checkStringForForbiddenPhrases(text, node) {
-    for (const regex of FORBIDDEN_PHRASES) {
-      if (regex.test(text)) {
-        const { line } = sf.getLineAndCharacterOfPosition(node.getStart(sf));
-        violations.push({
-          file: filePath,
-          line: line + 1,
-          snippet: text,
-          reason: `Contains forbidden hardcoded phrase matching ${regex}. Use i18n translation key instead.`,
-        });
-      }
-    }
-  }
-
-  function inspectJsxText(element) {
-    const tagName = element.openingElement.tagName.getText(sf);
-
-    for (const child of element.children) {
-      if (!ts.isJsxText(child)) continue;
-      const raw = child.getText(sf);
-      if (!isSignificantNaturalText(raw)) continue;
-
-      const trimmed = raw.trim();
-      const { line } = sf.getLineAndCharacterOfPosition(child.getStart(sf));
-      violations.push({
-        file: filePath,
-        line: line + 1,
-        snippet: trimmed,
-        reason: `Hardcoded text "${trimmed}" inside <${tagName}>. Must use i18n translations (e.g. t(...) or getTranslation(ui, ...)).`,
-      });
-    }
-  }
-
-  function inspectJsxAttributes(openingElement) {
-    const tagName = openingElement.tagName.getText(sf);
-
-    for (const attribute of openingElement.attributes.properties) {
-      if (!ts.isJsxAttribute(attribute)) continue;
-      const attributeName = attribute.name.getText(sf);
-      if (!TRANSLATED_ATTRIBUTES.has(attributeName)) continue;
-      if (
-        !attribute.initializer ||
-        !ts.isStringLiteral(attribute.initializer)
-      ) {
-        continue;
-      }
-
-      const value = attribute.initializer.text;
-      if (!isSignificantNaturalText(value)) continue;
-
-      const { line } = sf.getLineAndCharacterOfPosition(attribute.getStart(sf));
-      violations.push({
-        file: filePath,
-        line: line + 1,
-        snippet: value,
-        reason: `Hardcoded user-facing ${attributeName} on <${tagName}>. Must use an i18n translation.`,
-      });
-    }
-  }
-
-  function visit(node) {
-    if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
-      checkStringForForbiddenPhrases(node.text, node);
-    } else if (ts.isJsxElement(node)) {
-      inspectJsxText(node);
-      inspectJsxAttributes(node.openingElement);
-    } else if (ts.isJsxSelfClosingElement(node)) {
-      inspectJsxAttributes(node);
-    }
-
-    ts.forEachChild(node, visit);
-  }
-
-  visit(sf);
-  return violations;
 }
 
 export function scanDirectoryForI18nViolations(dir, baseDir = dir) {
@@ -157,13 +69,13 @@ export function scanDirectoryForI18nViolations(dir, baseDir = dir) {
     const stat = statSync(fullPath);
     if (stat.isDirectory()) {
       violations = violations.concat(
-        scanDirectoryForI18nViolations(fullPath, baseDir),
+        scanDirectoryForI18nViolations(fullPath, baseDir)
       );
     } else if (/\.(tsx)$/.test(entry) && !entry.endsWith(".test.tsx")) {
       const relPath = path.relative(baseDir, fullPath).replaceAll("\\", "/");
       const content = readFileSync(fullPath, "utf8");
       violations = violations.concat(
-        findI18nViolationsInSource(content, relPath),
+        findI18nViolationsInSource(content, relPath)
       );
     }
   }
@@ -172,17 +84,17 @@ export function scanDirectoryForI18nViolations(dir, baseDir = dir) {
 
 export function runGuard() {
   const violations = scanRoots.flatMap((scanRoot) =>
-    scanDirectoryForI18nViolations(scanRoot, root),
+    scanDirectoryForI18nViolations(scanRoot, root)
   );
   if (violations.length === 0) {
     console.log(
-      "[guard-i18n-strings] ✓ Zero hardcoded i18n violations found in application UI.",
+      "[guard-i18n-strings] ✓ Zero hardcoded i18n violations found in application UI."
     );
     return true;
   }
 
   console.error(
-    `[guard-i18n-strings] ✗ ${violations.length} i18n violation(s) found:\n`,
+    `[guard-i18n-strings] ✗ ${violations.length} i18n violation(s) found:\n`
   );
   for (const v of violations) {
     console.error(`  • ${v.file}:${v.line} - "${v.snippet}": ${v.reason}`);

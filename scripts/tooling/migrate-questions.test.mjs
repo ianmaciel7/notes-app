@@ -75,7 +75,7 @@ describe("migrate-questions-lib", () => {
     assert.deepEqual(fromRestFields(toRestFields(data)), data);
     assert.equal(
       fromRestFields(toRestFields({ at: now })).at.toISOString(),
-      now.toISOString(),
+      now.toISOString()
     );
   });
 
@@ -98,7 +98,7 @@ describe("migrate-questions-lib", () => {
     });
     await assert.rejects(
       listQuestionDocuments({ fetchFn, projectId: PROJECT }),
-      /list questions failed: 500 boom/,
+      /list questions failed: 500 boom/
     );
   });
 
@@ -113,12 +113,12 @@ describe("migrate-questions-lib", () => {
     ]);
     assert.deepEqual(
       plan.migrate.map((doc) => doc.path),
-      ["p/1"],
+      ["p/1"]
     );
     assert.equal(plan.migrate[0].properties.type, "single-choice");
     assert.deepEqual(
       plan.current.map((doc) => doc.path),
-      ["p/2"],
+      ["p/2"]
     );
     assert.deepEqual(plan.failed, [{ path: "p/3", reason: "noCorrectOption" }]);
   });
@@ -163,7 +163,7 @@ describe("migrate-questions-lib", () => {
     ]);
     assert.equal(
       query.get("currentDocument.updateTime"),
-      "2026-10-03T10:00:03Z",
+      "2026-10-03T10:00:03Z"
     );
     const written = fromRestFields(body.fields);
     assert.equal(written.properties.type, "single-choice");
@@ -204,7 +204,7 @@ describe("migrate-questions-lib", () => {
     const { fetchFn } = fakeFirestore([row("q1", legacy)], { failPatch: true });
     await assert.rejects(
       migrateQuestions({ fetchFn, projectId: PROJECT, now }),
-      /rewrite users\/u1\/spaces\/s1\/objects\/q1 failed: 409 stale/,
+      /rewrite users\/u1\/spaces\/s1\/objects\/q1 failed: 409 stale/
     );
   });
 
@@ -215,7 +215,7 @@ describe("migrate-questions-lib", () => {
     });
     assert.deepEqual(
       parseMigrationArgs(["--dry-run", "--project", "other"], "fallback"),
-      { dryRun: true, projectId: "other" },
+      { dryRun: true, projectId: "other" }
     );
   });
 });

@@ -19,11 +19,13 @@ function isApplicationComponentPath(relPath) {
 
 function listApplicationComponentDirs(root) {
   const componentsDir = path.join(root, COMPONENTS_ROOT);
-  if (!existsSync(componentsDir)) return [];
+  if (!existsSync(componentsDir)) {
+    return [];
+  }
 
   return readdirSync(componentsDir, { withFileTypes: true })
     .filter(
-      (entry) => entry.isDirectory() && !EXEMPT_COMPONENT_DIRS.has(entry.name),
+      (entry) => entry.isDirectory() && !EXEMPT_COMPONENT_DIRS.has(entry.name)
     )
     .map((entry) => path.join(componentsDir, entry.name));
 }
@@ -46,7 +48,7 @@ function collectTsxFilesRecursively(dir) {
 // Test and story files are returned too; callers filter them as they need.
 function listApplicationComponentFiles(root) {
   return listApplicationComponentDirs(root).flatMap((dir) =>
-    collectTsxFilesRecursively(dir),
+    collectTsxFilesRecursively(dir)
   );
 }
 

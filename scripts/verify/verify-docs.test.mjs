@@ -42,7 +42,7 @@ test("scope keeps project docs and drops remote skills and generated output", ()
   assert.equal(isDocInScope(".agents/skills/mine/SKILL.md", remote), true);
   assert.equal(
     isDocInScope(".agents/skills/mine/references/t.md", remote),
-    false,
+    false
   );
   assert.equal(isDocInScope(".agents/skills/shadcn/SKILL.md", remote), false);
   assert.equal(isDocInScope("node_modules/x/README.md", remote), false);
@@ -84,7 +84,7 @@ test("backticked repo paths must exist unless illustrative or placeholders", () 
         "```bash\nnode scripts/missing-in-fence.mjs\n```",
       ].join("\n"),
     },
-    { existing: ["scripts/real.mjs"] },
+    { existing: ["scripts/real.mjs"] }
   );
   const messages = checkCodePaths(ctx).map((f) => f.message);
   assert.deepEqual(messages, [
@@ -102,7 +102,7 @@ test("pnpm commands must be scripts, builtins, or installed bins", () => {
         "```bash\nrtk pnpm test\nrtk pnpm run phantom\n```",
       ].join("\n"),
     },
-    { existing: ["node_modules/.bin/biome"] },
+    { existing: ["node_modules/.bin/biome"] }
   );
   const names = checkCommands(ctx).map((f) => f.message);
   assert.deepEqual(names, [
@@ -120,7 +120,7 @@ test("real absolute machine paths fail but ellipsis examples pass", () => {
   const found = checkAbsolutePaths(ctx);
   assert.deepEqual(
     found.map((f) => f.file),
-    ["A.md"],
+    ["A.md"]
   );
 });
 
@@ -139,7 +139,7 @@ test("AGENTS.md size limits: target warns, hard maximum fails", () => {
   const warn = checkAgentsSize(makeCtx({ "AGENTS.md": "x".repeat(12001) }));
   assert.equal(warn[0].severity, "warn");
   const fail = checkAgentsSize(
-    makeCtx({ "AGENTS.md": "x".repeat(AGENTS_MAX_BYTES + 1) }),
+    makeCtx({ "AGENTS.md": "x".repeat(AGENTS_MAX_BYTES + 1) })
   );
   assert.equal(fail[0].severity, "error");
   assert.deepEqual(checkAgentsSize(makeCtx({ "AGENTS.md": "small" })), []);
@@ -166,7 +166,7 @@ test("skill frontmatter and routing are cross-checked", () => {
     {
       allSkills: ["alpha", "beta", "gamma"],
       projectSkills: ["alpha", "beta", "gamma"],
-    },
+    }
   );
   const found = checkSkills(ctx);
   assert.deepEqual(
@@ -178,7 +178,7 @@ test("skill frontmatter and routing are cross-checked", () => {
       'skill-frontmatter:name "wrong" must equal directory "beta"',
       'unrouted-skill:project skill "beta" is missing from the Skill routing table',
       'unrouted-skill:project skill "gamma" is missing from the Skill routing table',
-    ].sort(),
+    ].sort()
   );
 });
 
@@ -239,7 +239,7 @@ test("docs that nothing links to are orphans", () => {
   const orphans = checkDocsTree(ctx).filter((f) => f.rule === "orphan-doc");
   assert.deepEqual(
     orphans.map((f) => f.file),
-    ["docs/guide/lonely.md"],
+    ["docs/guide/lonely.md"]
   );
 });
 
@@ -266,11 +266,11 @@ test("entry scripts must be documented; libs and tests are exempt", () => {
         "known-lib.mjs",
         "known.test.mjs",
       ],
-    },
+    }
   );
   assert.deepEqual(
     checkScriptDocs(ctx).map((f) => f.file),
-    ["scripts/secret.mjs"],
+    ["scripts/secret.mjs"]
   );
 });
 
@@ -281,6 +281,6 @@ test("summarize counts errors and warnings separately", () => {
       { severity: "warn" },
       { severity: "warn" },
     ]),
-    { errors: 1, warnings: 2 },
+    { errors: 1, warnings: 2 }
   );
 });

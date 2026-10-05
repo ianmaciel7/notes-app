@@ -11,21 +11,33 @@ import {
 const DOCUMENTS_PREFIX = "/documents/";
 
 export function fromRestValue(value) {
-  if ("stringValue" in value) return value.stringValue;
-  if ("integerValue" in value) return Number(value.integerValue);
-  if ("doubleValue" in value) return value.doubleValue;
-  if ("booleanValue" in value) return value.booleanValue;
-  if ("timestampValue" in value) return new Date(value.timestampValue);
+  if ("stringValue" in value) {
+    return value.stringValue;
+  }
+  if ("integerValue" in value) {
+    return Number(value.integerValue);
+  }
+  if ("doubleValue" in value) {
+    return value.doubleValue;
+  }
+  if ("booleanValue" in value) {
+    return value.booleanValue;
+  }
+  if ("timestampValue" in value) {
+    return new Date(value.timestampValue);
+  }
   if ("arrayValue" in value) {
     return (value.arrayValue.values ?? []).map(fromRestValue);
   }
-  if ("mapValue" in value) return fromRestFields(value.mapValue.fields ?? {});
+  if ("mapValue" in value) {
+    return fromRestFields(value.mapValue.fields ?? {});
+  }
   return null;
 }
 
 export function fromRestFields(fields) {
   return Object.fromEntries(
-    Object.entries(fields).map(([key, value]) => [key, fromRestValue(value)]),
+    Object.entries(fields).map(([key, value]) => [key, fromRestValue(value)])
   );
 }
 
@@ -52,11 +64,11 @@ export async function listQuestionDocuments({ fetchFn, projectId }) {
           },
         },
       }),
-    },
+    }
   );
   if (!response.ok) {
     throw new Error(
-      `list questions failed: ${response.status} ${await response.text()}`,
+      `list questions failed: ${response.status} ${await response.text()}`
     );
   }
   const rows = await response.json();
@@ -114,7 +126,7 @@ export async function rewriteQuestion({ fetchFn, projectId, document, now }) {
   });
   if (!response.ok) {
     throw new Error(
-      `rewrite ${document.path} failed: ${response.status} ${await response.text()}`,
+      `rewrite ${document.path} failed: ${response.status} ${await response.text()}`
     );
   }
 }

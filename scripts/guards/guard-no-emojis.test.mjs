@@ -10,7 +10,7 @@ export function Space() {}
 `;
   const violations = findEmojiViolationsInContent(
     contentWithEmoji,
-    "test-file.ts",
+    "test-file.ts"
   );
   assert.equal(violations.length, 1);
   assert.equal(violations[0].line, 2);
@@ -25,7 +25,7 @@ export function Space() { return <Folder />; }
 `;
   const violations = findEmojiViolationsInContent(
     cleanContent,
-    "clean-file.tsx",
+    "clean-file.tsx"
   );
   assert.equal(violations.length, 0);
 });
@@ -36,6 +36,6 @@ test("guard-no-emojis script passes on current src/ directory", () => {
   });
   assert.match(
     output,
-    /Zero emojis found in project source outside src\/components\/ui\//,
+    /Zero emojis found in project source outside src\/components\/ui\//
   );
 });

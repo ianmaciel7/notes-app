@@ -27,14 +27,14 @@ ${rows}
 
 test("parseIndex reads rule ids and enforcers", () => {
   const rows = parseIndex(
-    doc("| `no-x` | `check:conventions` |\n| `be-nice` | review-only |"),
+    doc("| `no-x` | `check:conventions` |\n| `be-nice` | review-only |")
   );
   assert.deepEqual(
     rows.map((r) => [r.id, r.reviewOnly, r.scripts]),
     [
       ["no-x", false, ["check:conventions"]],
       ["be-nice", true, []],
-    ],
+    ]
   );
 });
 
@@ -49,7 +49,7 @@ test("reachableScripts follows pnpm run chains", () => {
 test("verifyIndex accepts a consistent index", () => {
   const result = verifyIndex({
     markdown: doc(
-      "| `no-x` | `check:conventions` |\n| `be-nice` | review-only |",
+      "| `no-x` | `check:conventions` |\n| `be-nice` | review-only |"
     ),
     scripts,
     ruleIds: ["no-x"],
@@ -62,7 +62,7 @@ test("verifyIndex accepts a consistent index", () => {
 test("verifyIndex rejects unknown, ungated and missing enforcers", () => {
   const result = verifyIndex({
     markdown: doc(
-      "| `a` | `check:missing` |\n| `b` | `check:orphan` |\n| `c` | tbd |\n| `a` | review-only |",
+      "| `a` | `check:missing` |\n| `b` | `check:orphan` |\n| `c` | tbd |\n| `a` | review-only |"
     ),
     scripts,
     ruleIds: ["no-x"],
@@ -93,7 +93,7 @@ test("verify-conventions-index passes on the repository", () => {
   const output = execFileSync(
     "node",
     ["scripts/verify/verify-conventions-index.mjs"],
-    { encoding: "utf8" },
+    { encoding: "utf8" }
   );
   assert.match(output, /review-only/);
 });

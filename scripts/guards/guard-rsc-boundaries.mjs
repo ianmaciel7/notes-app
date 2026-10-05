@@ -9,7 +9,9 @@ const violations = [];
 
 for (const relPath of serverRouteFiles) {
   const fullPath = path.join(root, relPath);
-  if (!existsSync(fullPath)) continue;
+  if (!existsSync(fullPath)) {
+    continue;
+  }
 
   const content = readFileSync(fullPath, "utf8");
   if (/^(\s*['"]use client['"];?)/m.test(content)) {
@@ -23,7 +25,7 @@ for (const relPath of serverRouteFiles) {
 
 if (violations.length > 0) {
   console.error(
-    `\x1b[31mrsc-boundaries-guard: ${violations.length} violation(s) found:\x1b[0m`,
+    `\x1b[31mrsc-boundaries-guard: ${violations.length} violation(s) found:\x1b[0m`
   );
   for (const violation of violations) {
     console.error(`  \x1b[33m${violation.file}\x1b[0m: ${violation.message}`);
@@ -32,5 +34,5 @@ if (violations.length > 0) {
 }
 
 console.log(
-  "rsc-boundaries-guard: top-level App Router server boundaries passed.",
+  "rsc-boundaries-guard: top-level App Router server boundaries passed."
 );

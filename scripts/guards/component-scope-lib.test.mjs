@@ -12,19 +12,19 @@ import {
 test("treats every folder except ui and firebase as application components", () => {
   assert.equal(
     isApplicationComponentPath("src/components/notes-app/x-card.tsx"),
-    true,
+    true
   );
   assert.equal(
     isApplicationComponentPath("src/components/billing/plan-card.tsx"),
-    true,
+    true
   );
   assert.equal(
     isApplicationComponentPath("src/components/ui/button.tsx"),
-    false,
+    false
   );
   assert.equal(
     isApplicationComponentPath("src/components/firebase/sign-in-form.tsx"),
-    false,
+    false
   );
 });
 
@@ -32,11 +32,11 @@ test("ignores non-component paths", () => {
   assert.equal(isApplicationComponentPath("src/components/x-card.tsx"), false);
   assert.equal(
     isApplicationComponentPath("src/components/notes-app/x-card.ts"),
-    false,
+    false
   );
   assert.equal(
     isApplicationComponentPath("src/components/notes-app/deep/x-card.tsx"),
-    true,
+    true
   );
   assert.equal(isApplicationComponentPath("src/app/page.tsx"), false);
 });
@@ -51,12 +51,12 @@ test("lists files from application folders only", () => {
     writeFileSync(path.join(root, "src/components/notes-app/x.ts"), "");
 
     const dirs = listApplicationComponentDirs(root).map((dir) =>
-      path.basename(dir),
+      path.basename(dir)
     );
     assert.deepEqual(dirs.sort(), ["billing", "notes-app"]);
 
     const files = listApplicationComponentFiles(root).map((file) =>
-      path.relative(root, file).replaceAll("\\", "/"),
+      path.relative(root, file).replaceAll("\\", "/")
     );
     assert.deepEqual(files.sort(), [
       "src/components/billing/x-card.tsx",

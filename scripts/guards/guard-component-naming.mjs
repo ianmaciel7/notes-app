@@ -132,16 +132,24 @@ function getSuffix(basename) {
 }
 
 function isCompliant(filename) {
-  if (!filename.endsWith(".tsx")) return true;
+  if (!filename.endsWith(".tsx")) {
+    return true;
+  }
   if (filename.endsWith(".test.tsx") || filename.endsWith(".spec.tsx")) {
     return true;
   }
-  if (filename.endsWith(".stories.tsx")) return true;
+  if (filename.endsWith(".stories.tsx")) {
+    return true;
+  }
 
   const basename = getBasename(filename);
 
-  if (ALLOWED_BASENAMES.has(basename)) return true;
-  if (NEXTJS_RESERVED.has(basename)) return true;
+  if (ALLOWED_BASENAMES.has(basename)) {
+    return true;
+  }
+  if (NEXTJS_RESERVED.has(basename)) {
+    return true;
+  }
 
   return SHADCN_SUFFIXES.has(getSuffix(basename));
 }
@@ -151,19 +159,19 @@ function isCompliant(filename) {
 // ---------------------------------------------------------------------------
 
 const files = listApplicationComponentFiles(root).map((file) =>
-  path.relative(path.join(root, "src/components"), file).replaceAll("\\", "/"),
+  path.relative(path.join(root, "src/components"), file).replaceAll("\\", "/")
 );
 
 const violations = files.filter((f) => !isCompliant(path.posix.basename(f)));
 
 if (violations.length === 0) {
   console.log(
-    `[guard-component-naming] ✓ All ${files.filter((f) => f.endsWith(".tsx") && !f.endsWith(".test.tsx") && !f.endsWith(".stories.tsx")).length} application component files in src/components/ (outside ui/ and firebase/) have a valid shadcn-style suffix.`,
+    `[guard-component-naming] ✓ All ${files.filter((f) => f.endsWith(".tsx") && !f.endsWith(".test.tsx") && !f.endsWith(".stories.tsx")).length} application component files in src/components/ (outside ui/ and firebase/) have a valid shadcn-style suffix.`
   );
   process.exit(0);
 } else {
   console.error(
-    `[guard-component-naming] ✗ ${violations.length} file(s) violate the shadcn naming convention:\n`,
+    `[guard-component-naming] ✗ ${violations.length} file(s) violate the shadcn naming convention:\n`
   );
   for (const v of violations) {
     console.error(`  • ${v}`);

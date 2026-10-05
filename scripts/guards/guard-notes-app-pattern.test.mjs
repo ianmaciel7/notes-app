@@ -16,7 +16,7 @@ test("accepts a simple visual component composed from ui", () => {
 test("rejects visual components without a ui primitive", () => {
   const violations = checkFile(
     "example-card.tsx",
-    'function ExampleCard() { return <div data-slot="example-card" />; }',
+    'function ExampleCard() { return <div data-slot="example-card" />; }'
   );
 
   assert.ok(violations.some((item) => item.rule === "notes-app-requires-ui"));
@@ -26,11 +26,11 @@ test("rejects raw interactive controls", () => {
   const violations = checkFile(
     "example-form.tsx",
     `import { Field } from "@/components/ui/field";
-     function ExampleForm() { return <form data-slot="example-form"><input /></form>; }`,
+     function ExampleForm() { return <form data-slot="example-form"><input /></form>; }`
   );
 
   assert.ok(
-    violations.some((item) => item.rule === "notes-app-no-raw-controls"),
+    violations.some((item) => item.rule === "notes-app-no-raw-controls")
   );
 });
 
@@ -66,18 +66,18 @@ test("rejects className before props spread", () => {
     `import { Card } from "@/components/ui/card";
      function ExampleCard({ className, ...props }) {
        return <Card data-slot="example-card" className={className} {...props} />;
-     }`,
+     }`
   );
 
   assert.ok(
-    violations.some((item) => item.rule === "notes-app-props-before-layout"),
+    violations.some((item) => item.rule === "notes-app-props-before-layout")
   );
 });
 
 test("allows explicitly non-visual infrastructure files", () => {
   assert.deepEqual(
     checkFile("auth-provider.tsx", "function AuthProvider() { return null; }"),
-    [],
+    []
   );
 });
 
@@ -87,11 +87,11 @@ test("rejects raw forwarded layout wrappers", () => {
     `import { FieldGroup } from "@/components/ui/field";
      function ExampleForm({ ...props }) {
        return <div {...props} className={cn(className)} />;
-     }`,
+     }`
   );
 
   assert.ok(
-    violations.some((item) => item.rule === "notes-app-no-raw-layout-wrapper"),
+    violations.some((item) => item.rule === "notes-app-no-raw-layout-wrapper")
   );
 });
 
@@ -104,11 +104,11 @@ test("rejects subcomponents without a role suffix", () => {
      }
      function ExamplePart() {
        return <DialogContent data-slot="example-part" />;
-     }`,
+     }`
   );
 
   assert.ok(
-    violations.some((item) => item.rule === "notes-app-component-role-suffix"),
+    violations.some((item) => item.rule === "notes-app-component-role-suffix")
   );
 });
 
@@ -116,13 +116,13 @@ test("requires the canonical component name to match the file", () => {
   const violations = checkFile(
     "space-switcher.tsx",
     `import { Select } from "@/components/ui/select";
-     function SpaceSwitcherMenu() { return <Select data-slot="space-switcher" />; }`,
+     function SpaceSwitcherMenu() { return <Select data-slot="space-switcher" />; }`
   );
 
   assert.ok(
     violations.some(
-      (item) => item.rule === "notes-app-canonical-component-name",
-    ),
+      (item) => item.rule === "notes-app-canonical-component-name"
+    )
   );
 });
 
@@ -143,11 +143,11 @@ test("requires data-slot on visual components", () => {
     `import { Dialog, DialogContent } from "@/components/ui/dialog";
      function ExampleDialog({ children }) {
        return <Dialog><DialogContent>{children}</DialogContent></Dialog>;
-     }`,
+     }`
   );
 
   assert.ok(
-    violations.some((item) => item.rule === "notes-app-component-data-slot"),
+    violations.some((item) => item.rule === "notes-app-component-data-slot")
   );
 });
 
@@ -161,13 +161,13 @@ test("dedicated component hooks own React state and effects", () => {
        useSpaceShell({});
        const [open] = useState(false);
        return <SidebarProvider data-slot="space-shell" className={cn("x")}>{children}{open}</SidebarProvider>;
-     }`,
+     }`
   );
 
   assert.ok(
     violations.some(
-      (item) => item.rule === "notes-app-dedicated-hook-owns-state",
-    ),
+      (item) => item.rule === "notes-app-dedicated-hook-owns-state"
+    )
   );
 });
 
@@ -187,8 +187,8 @@ test("allows stateful primitives inside the co-located dedicated hook", () => {
 
   assert.ok(
     !checkFile("language-select.tsx", source).some(
-      (item) => item.rule === "notes-app-dedicated-hook-owns-state",
-    ),
+      (item) => item.rule === "notes-app-dedicated-hook-owns-state"
+    )
   );
 });
 
@@ -204,8 +204,8 @@ test("allows a component to render from its dedicated hook without local state",
 
   assert.ok(
     !checkFile("space-shell.tsx", source).some(
-      (item) => item.rule === "notes-app-dedicated-hook-owns-state",
-    ),
+      (item) => item.rule === "notes-app-dedicated-hook-owns-state"
+    )
   );
 });
 
@@ -216,11 +216,11 @@ test("enforces the SpaceShell wrapper contract", () => {
      type Props = { children?: ReactNode };
      function SpaceShell({ children }: Props) {
        return <SidebarProvider>{children}</SidebarProvider>;
-     }`,
+     }`
   );
 
   assert.ok(
-    violations.some((item) => item.rule === "notes-app-space-shell-contract"),
+    violations.some((item) => item.rule === "notes-app-space-shell-contract")
   );
 });
 
@@ -239,8 +239,8 @@ test("rejects visible NativeSelect without sr-only", () => {
   const violations = checkFile("custom-select.tsx", source);
   assert.ok(
     violations.some(
-      (item) => item.rule === "notes-app-no-visible-native-select",
-    ),
+      (item) => item.rule === "notes-app-no-visible-native-select"
+    )
   );
 });
 
@@ -261,9 +261,9 @@ test("allows NativeSelect when used as accessible sr-only alternative", () => {
 
   assert.deepEqual(
     checkFile("drop-slot-select.tsx", source).filter(
-      (item) => item.rule === "notes-app-no-visible-native-select",
+      (item) => item.rule === "notes-app-no-visible-native-select"
     ),
-    [],
+    []
   );
 });
 
@@ -282,8 +282,8 @@ test("rejects block elements (<div|ul|ol|p>) inside FieldDescription to prevent 
   const violations = checkFile("test-field-description.tsx", source);
   assert.ok(
     violations.some(
-      (item) => item.rule === "notes-app-no-block-in-field-description",
-    ),
+      (item) => item.rule === "notes-app-no-block-in-field-description"
+    )
   );
 });
 
@@ -301,12 +301,12 @@ test("enforces primitive role alignment for FieldContent, Toggle, FieldSet, Fiel
 
   const violations1 = checkFile(
     "question-explanation-field-description.tsx",
-    fieldContentMismatch,
+    fieldContentMismatch
   );
   assert.ok(
     violations1.some(
-      (item) => item.rule === "notes-app-primitive-role-alignment",
-    ),
+      (item) => item.rule === "notes-app-primitive-role-alignment"
+    )
   );
 
   const toggleMismatch = `
@@ -319,8 +319,8 @@ test("enforces primitive role alignment for FieldContent, Toggle, FieldSet, Fiel
   const violations2 = checkFile("question-hotspot-button.tsx", toggleMismatch);
   assert.ok(
     violations2.some(
-      (item) => item.rule === "notes-app-primitive-role-alignment",
-    ),
+      (item) => item.rule === "notes-app-primitive-role-alignment"
+    )
   );
 
   const fieldSetMismatch = `
@@ -332,12 +332,12 @@ test("enforces primitive role alignment for FieldContent, Toggle, FieldSet, Fiel
 
   const violations3 = checkFile(
     "question-case-study-field-item.tsx",
-    fieldSetMismatch,
+    fieldSetMismatch
   );
   assert.ok(
     violations3.some(
-      (item) => item.rule === "notes-app-primitive-role-alignment",
-    ),
+      (item) => item.rule === "notes-app-primitive-role-alignment"
+    )
   );
 
   const fieldGroupMismatch = `
@@ -349,12 +349,12 @@ test("enforces primitive role alignment for FieldContent, Toggle, FieldSet, Fiel
 
   const violations4 = checkFile(
     "question-dropdown-field-set.tsx",
-    fieldGroupMismatch,
+    fieldGroupMismatch
   );
   assert.ok(
     violations4.some(
-      (item) => item.rule === "notes-app-primitive-role-alignment",
-    ),
+      (item) => item.rule === "notes-app-primitive-role-alignment"
+    )
   );
 
   const fieldMismatch = `
@@ -367,7 +367,7 @@ test("enforces primitive role alignment for FieldContent, Toggle, FieldSet, Fiel
   const violations5 = checkFile("question-matching-button.tsx", fieldMismatch);
   assert.ok(
     violations5.some(
-      (item) => item.rule === "notes-app-primitive-role-alignment",
-    ),
+      (item) => item.rule === "notes-app-primitive-role-alignment"
+    )
   );
 });

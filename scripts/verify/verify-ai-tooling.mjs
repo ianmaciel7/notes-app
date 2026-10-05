@@ -26,7 +26,7 @@ try {
   record(
     "rtk-binary",
     pass,
-    pass ? rtkVersion.stdout.trim() : "Failed to run rtk --version",
+    pass ? rtkVersion.stdout.trim() : "Failed to run rtk --version"
   );
 } catch (e) {
   record("rtk-binary", false, e.message);
@@ -40,14 +40,14 @@ try {
     {
       encoding: "utf8",
       shell: true,
-    },
+    }
   );
   const pass =
     rtkExec.status === 0 && rtkExec.stdout.includes("RTK_WRAPPING_PASSED");
   record(
     "rtk-execution-wrapping",
     pass,
-    pass ? "rtk successfully executed sub-process" : "rtk wrapping failed",
+    pass ? "rtk successfully executed sub-process" : "rtk wrapping failed"
   );
 } catch (e) {
   record("rtk-execution-wrapping", false, e.message);
@@ -74,12 +74,12 @@ try {
     hasAgentsMandate && hasRtkPrefixEnforcement,
     hasAgentsMandate && hasRtkPrefixEnforcement
       ? "Found RTK mandatory policy in AGENTS.md & RTK.md"
-      : "Missing RTK policy",
+      : "Missing RTK policy"
   );
   record(
     "agents-md-tool-routing",
     hasToolRouting,
-    hasToolRouting ? "Tool routing table intact" : "Missing tool routing rules",
+    hasToolRouting ? "Tool routing table intact" : "Missing tool routing rules"
   );
 } catch (e) {
   record("agents-md-rules", false, e.message);
@@ -89,18 +89,18 @@ try {
 try {
   const scenariosRaw = await readFile(
     path.join(root, ".agents", "evals", "scenarios.json"),
-    "utf8",
+    "utf8"
   );
   const scenarios = JSON.parse(scenariosRaw);
   const hasRtkScenario = scenarios.scenarios.some(
-    (s) => s.id === "tooling-rtk-compliance",
+    (s) => s.id === "tooling-rtk-compliance"
   );
   record(
     "eval-scenarios-rtk",
     hasRtkScenario,
     hasRtkScenario
       ? "Scenario 'tooling-rtk-compliance' configured"
-      : "Missing tooling-rtk-compliance scenario",
+      : "Missing tooling-rtk-compliance scenario"
   );
 } catch (e) {
   record("eval-scenarios-rtk", false, e.message);

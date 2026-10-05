@@ -32,7 +32,7 @@ test("rejects a report without a score", () => {
 test("passes when metrics equal the floor", () => {
   const result = evaluateHealth(
     { score: 72.7, complexityFindings: 124, largeFunctions: 46 },
-    floor,
+    floor
   );
   assert.deepEqual(result, { failures: [], canTighten: false });
 });
@@ -40,11 +40,11 @@ test("passes when metrics equal the floor", () => {
 test("reports every regressed metric", () => {
   const result = evaluateHealth(
     { score: 70, complexityFindings: 125, largeFunctions: 47 },
-    floor,
+    floor
   );
   assert.deepEqual(
     result.failures.map((f) => f.metric),
-    ["score", "complexityFindings", "largeFunctions"],
+    ["score", "complexityFindings", "largeFunctions"]
   );
 });
 

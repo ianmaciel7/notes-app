@@ -52,7 +52,9 @@ const ROOT_CONFIG_FILES = new Set([
 ]);
 
 export function normalizePath(filePath) {
-  if (!filePath) return "";
+  if (!filePath) {
+    return "";
+  }
   return filePath.replaceAll("\\", "/").replace(/^\.\//, "").trim();
 }
 
@@ -62,13 +64,17 @@ function hasAnyPrefix(file, prefixes) {
 
 function getExtension(file) {
   const lastDot = file.lastIndexOf(".");
-  if (lastDot === -1) return "";
+  if (lastDot === -1) {
+    return "";
+  }
   return file.slice(lastDot).toLowerCase();
 }
 
 export function isDocFile(filePath) {
   const file = normalizePath(filePath);
-  if (!file) return false;
+  if (!file) {
+    return false;
+  }
 
   if (
     hasAnyPrefix(file, [
@@ -83,10 +89,14 @@ export function isDocFile(filePath) {
   }
 
   const ext = getExtension(file);
-  if (!DOC_EXTENSIONS.has(ext)) return false;
+  if (!DOC_EXTENSIONS.has(ext)) {
+    return false;
+  }
 
   // Root control documentation files
-  if (!file.includes("/")) return true;
+  if (!file.includes("/")) {
+    return true;
+  }
 
   // Documentation trees
   if (
@@ -105,25 +115,41 @@ export function isDocFile(filePath) {
 
 export function isCodeFile(filePath) {
   const file = normalizePath(filePath);
-  if (!file) return false;
+  if (!file) {
+    return false;
+  }
 
   // Doc files are handled separately and do not count as code files.
-  if (isDocFile(file)) return false;
+  if (isDocFile(file)) {
+    return false;
+  }
 
-  if (hasAnyPrefix(file, EXCLUDED_PREFIXES)) return false;
-  if (EXCLUDED_EXACT.has(file)) return false;
+  if (hasAnyPrefix(file, EXCLUDED_PREFIXES)) {
+    return false;
+  }
+  if (EXCLUDED_EXACT.has(file)) {
+    return false;
+  }
 
   const ext = getExtension(file);
-  if (ASSET_EXTENSIONS.has(ext)) return false;
+  if (ASSET_EXTENSIONS.has(ext)) {
+    return false;
+  }
 
   // Application source code
-  if (file.startsWith("src/")) return true;
+  if (file.startsWith("src/")) {
+    return true;
+  }
 
   // Repository scripts and automation
-  if (file.startsWith("scripts/")) return true;
+  if (file.startsWith("scripts/")) {
+    return true;
+  }
 
   // Project configuration and schemas
-  if (ROOT_CONFIG_FILES.has(file)) return true;
+  if (ROOT_CONFIG_FILES.has(file)) {
+    return true;
+  }
 
   return false;
 }

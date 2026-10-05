@@ -15,12 +15,12 @@ const arg = (name, fallback) => {
 const provider = arg("--provider");
 if (!["codex", "antigravity"].includes(provider)) {
   console.error(
-    "Usage: run.mjs --provider <codex|antigravity> [--trials N] [--scenario ID]",
+    "Usage: run.mjs --provider <codex|antigravity> [--trials N] [--scenario ID]"
   );
   process.exit(2);
 }
 const config = JSON.parse(
-  await readFile(path.join(here, "scenarios.json"), "utf8"),
+  await readFile(path.join(here, "scenarios.json"), "utf8")
 );
 const trials = Number(arg("--trials", String(config.defaultTrials ?? 3)));
 if (!Number.isInteger(trials) || trials < 1) {
@@ -50,7 +50,7 @@ function runProvider(workspace, prompt) {
     const r = spawnSync(
       winCmd("codex"),
       ["exec", "--json", "--full-auto", "--skip-git-repo-check", prompt],
-      { cwd: workspace, encoding: "utf8", maxBuffer: 16 * 1024 * 1024 },
+      { cwd: workspace, encoding: "utf8", maxBuffer: 16 * 1024 * 1024 }
     );
     const events = parseJsonl(r.stdout ?? "");
     const finalEvent = [...events]
@@ -78,7 +78,7 @@ function runProvider(workspace, prompt) {
       "--prompt",
       prompt,
     ],
-    { cwd: workspace, encoding: "utf8", maxBuffer: 16 * 1024 * 1024 },
+    { cwd: workspace, encoding: "utf8", maxBuffer: 16 * 1024 * 1024 }
   );
   let payload = {};
   try {
@@ -109,7 +109,7 @@ for (const scenario of selected) {
   const results = [];
   for (let trial = 1; trial <= trials; trial++) {
     const workspace = await mkdtemp(
-      path.join(os.tmpdir(), `notes-harness-${scenario.id}-`),
+      path.join(os.tmpdir(), `notes-harness-${scenario.id}-`)
     );
     await cp(path.join(here, "fixtures", "base"), workspace, {
       recursive: true,
@@ -181,11 +181,11 @@ console.log(
           passRate,
           passAtK,
           passAll,
-        }),
+        })
       ),
     },
     null,
-    2,
-  ),
+    2
+  )
 );
 process.exit(report.scenarios.every((s) => s.passAll) ? 0 : 1);

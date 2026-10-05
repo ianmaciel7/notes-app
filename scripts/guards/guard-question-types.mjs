@@ -17,5 +17,5 @@ if (result.failures.length > 0) {
 }
 
 console.log(
-  "[guard-question-types] ✓ QUESTION_TYPES, submitted-answer parser, and Firestore rules are synchronized.",
+  "[guard-question-types] ✓ QUESTION_TYPES, submitted-answer parser, and Firestore rules are synchronized."
 );

@@ -16,11 +16,15 @@ const filePath = parseHookFilePath(raw);
 const relative = filePath && repoRelativePath(root, filePath);
 
 function finish(code) {
-  if (agentType === "antigravity") process.stdout.write(JSON.stringify({}));
+  if (agentType === "antigravity") {
+    process.stdout.write(JSON.stringify({}));
+  }
   process.exit(code);
 }
 
-if (!relative || !isBiomeChecked(relative)) finish(0);
+if (!relative || !isBiomeChecked(relative)) {
+  finish(0);
+}
 
 const run = (command, args) =>
   spawnSync(command, args, {
@@ -42,7 +46,7 @@ const biome = run("rtk", [
 ]);
 if (!biome.error && biome.status !== 0) {
   problems.push(
-    `Biome found issues in ${relative} that could not be auto-fixed:\n${biome.stdout ?? ""}${biome.stderr ?? ""}`,
+    `Biome found issues in ${relative} that could not be auto-fixed:\n${biome.stdout ?? ""}${biome.stderr ?? ""}`
   );
 }
 
@@ -57,7 +61,9 @@ if (conventions.status === 1) {
 }
 
 // Antigravity cannot block on hook output, so it always exits cleanly.
-if (problems.length === 0 || agentType === "antigravity") finish(0);
+if (problems.length === 0 || agentType === "antigravity") {
+  finish(0);
+}
 
 process.stderr.write(problems.join("\n"));
 process.exit(2);

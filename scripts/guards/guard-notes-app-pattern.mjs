@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { listApplicationComponentFiles } from "./component-scope-lib.mjs";
+import { checkPrimitiveRoleAlignment as checkPrimitiveRoleAlignmentLib } from "./guard-notes-app-pattern-lib.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 
@@ -104,7 +105,7 @@ function toPascalCase(fileName) {
     .map(
       (part) =>
         PASCAL_SEGMENTS.get(part) ??
-        `${part.charAt(0).toUpperCase()}${part.slice(1)}`,
+        `${part.charAt(0).toUpperCase()}${part.slice(1)}`
     )
     .join("");
 }
@@ -118,14 +119,14 @@ function getComponentFunctionEntries(content) {
     .filter((match) => /^[A-Z]/.test(match[1]))
     .map((match) => {
       const nextFunction = allFunctions.find(
-        (candidate) => candidate.index > match.index,
+        (candidate) => candidate.index > match.index
       );
 
       return {
         name: match[1],
         source: content.slice(
           match.index,
-          nextFunction?.index ?? content.length,
+          nextFunction?.index ?? content.length
         ),
       };
     });
@@ -138,14 +139,18 @@ function hasComponentRoleSuffix(name) {
 function checkDedicatedHookOwnsState(filePath, fileName, content) {
   const componentName = toPascalCase(fileName);
   const component = getComponentFunctionEntries(content).find(
-    ({ name }) => name === componentName,
+    ({ name }) => name === componentName
   );
-  if (!component) return [];
+  if (!component) {
+    return [];
+  }
 
   const hookName = `use${componentName}`;
   const hookCall = new RegExp(`\\b${hookName}\\s*\\(`);
 
-  if (!hookCall.test(component.source)) return [];
+  if (!hookCall.test(component.source)) {
+    return [];
+  }
 
   const statefulHooks = [
     "useState",
@@ -162,22 +167,26 @@ function checkDedicatedHookOwnsState(filePath, fileName, content) {
     "useImperativeHandle",
   ];
   const directCalls = statefulHooks.filter((hook) =>
-    new RegExp(`\\b${hook}\\s*\\(`).test(component.source),
+    new RegExp(`\\b${hook}\\s*\\(`).test(component.source)
   );
 
-  if (directCalls.length === 0) return [];
+  if (directCalls.length === 0) {
+    return [];
+  }
 
   return [
     violation(
       filePath,
       "notes-app-dedicated-hook-owns-state",
-      `${fileName} delegates behavior to ${hookName}; move component-owned ${directCalls.join(", ")} calls into that dedicated hook.`,
+      `${fileName} delegates behavior to ${hookName}; move component-owned ${directCalls.join(", ")} calls into that dedicated hook.`
     ),
   ];
 }
 
 function checkSpaceShellContract(filePath, fileName, content) {
-  if (fileName !== "space-shell.tsx") return [];
+  if (fileName !== "space-shell.tsx") {
+    return [];
+  }
 
   const requirements = [
     ["children", /children\??\s*:/],
@@ -189,19 +198,23 @@ function checkSpaceShellContract(filePath, fileName, content) {
     .filter(([, pattern]) => !pattern.test(content))
     .map(([name]) => name);
 
-  if (missing.length === 0) return [];
+  if (missing.length === 0) {
+    return [];
+  }
 
   return [
     violation(
       filePath,
       "notes-app-space-shell-contract",
-      `space-shell.tsx must preserve the SidebarProvider wrapper contract; missing ${missing.join(", ")}.`,
+      `space-shell.tsx must preserve the SidebarProvider wrapper contract; missing ${missing.join(", ")}.`
     ),
   ];
 }
 
 function checkNativeSelectUsage(filePath, fileName, content) {
-  if (!content.includes("NativeSelect")) return [];
+  if (!content.includes("NativeSelect")) {
+    return [];
+  }
 
   // NativeSelect is only allowed as an accessible screen-reader alternative
   // (e.g. sr-only focus:not-sr-only in drag-drop slots), not as a visible primary control.
@@ -213,7 +226,7 @@ function checkNativeSelectUsage(filePath, fileName, content) {
         violation(
           filePath,
           "notes-app-no-visible-native-select",
-          `${fileName} uses NativeSelect without 'sr-only'. Use the shared 'Select' primitive for visible selection controls per CONVENTIONS.md.`,
+          `${fileName} uses NativeSelect without 'sr-only'. Use the shared 'Select' primitive for visible selection controls per CONVENTIONS.md.`
         ),
       ];
     }
@@ -235,7 +248,7 @@ function checkFieldDescriptionNesting(filePath, fileName, content) {
         violation(
           filePath,
           "notes-app-no-block-in-field-description",
-          `${fileName} nests block elements (<div|ul|ol|p>) inside <FieldDescription>. FieldDescription renders a <p>, causing HTML hydration errors. Compose 'FieldContent' instead.`,
+          `${fileName} nests block elements (<div|ul|ol|p>) inside <FieldDescription>. FieldDescription renders a <p>, causing HTML hydration errors. Compose 'FieldContent' instead.`
         ),
       ];
     }
@@ -245,116 +258,13 @@ function checkFieldDescriptionNesting(filePath, fileName, content) {
 }
 
 function checkPrimitiveRoleAlignment(filePath, fileName, content) {
-  // Enforces that specialized components align their naming suffix with their primary composed primitive:
-  // - Root/specialized FieldSet component -> suffix must be FieldSet (or Form / Table / Figure / Card)
-  // - Root/specialized FieldGroup component -> suffix must be FieldGroup (or Form / Card / Group)
-  // - Composing <FieldContent> as root surface -> suffix must be FieldContent
-  // - Composing <Toggle> -> suffix must be Toggle
-  // - Composing <Field> as root item surface -> suffix must be Field
-  const componentName = toPascalCase(fileName);
-  const violations = [];
-
-  // 1. Root Toggle composition
-  if (/<Toggle\b/.test(content) && !componentName.endsWith("Toggle")) {
-    violations.push(
-      violation(
-        filePath,
-        "notes-app-primitive-role-alignment",
-        `${fileName} (${componentName}) composes Toggle and should end with 'Toggle'.`,
-      ),
-    );
-  }
-
-  // 2. FieldContent root/dedicated role alignment
-  // If a component's primary purpose is a field description/explanation/content container,
-  // it must use the FieldContent suffix (e.g. QuestionExplanationFieldContent).
-  if (
-    /<FieldContent\b/.test(content) &&
-    /(-field-content\.tsx|-field-description\.tsx)/.test(fileName) &&
-    !fileName.endsWith("-field-content.tsx")
-  ) {
-    violations.push(
-      violation(
-        filePath,
-        "notes-app-primitive-role-alignment",
-        `${fileName} (${componentName}) composes FieldContent and should end with 'FieldContent'.`,
-      ),
-    );
-  }
-
-  // 3. FieldSet component naming
-  // Specialized field group sets (e.g., question-draggable-field-set, question-case-study-field-set)
-  // should end in FieldSet unless they represent a domain Form, Table, Figure, or Card.
-  if (
-    /<FieldSet\b/.test(content) &&
-    fileName.includes("-field-") &&
-    !fileName.endsWith("-field-set.tsx") &&
-    !componentName.endsWith("Form") &&
-    !componentName.endsWith("Card") &&
-    !componentName.endsWith("Table") &&
-    !componentName.endsWith("Figure")
-  ) {
-    violations.push(
-      violation(
-        filePath,
-        "notes-app-primitive-role-alignment",
-        `${fileName} (${componentName}) composes FieldSet and should end with 'FieldSet'.`,
-      ),
-    );
-  }
-
-  // 4. FieldGroup component naming
-  // Specialized field groups (e.g. question-dropdown-field-group) must end with FieldGroup
-  // unless they represent a Form, Card, Group, or compose a FieldSet container.
-  if (
-    /<FieldGroup\b/.test(content) &&
-    fileName.includes("-field-") &&
-    !fileName.endsWith("-field-group.tsx") &&
-    !componentName.endsWith("Form") &&
-    !componentName.endsWith("Card") &&
-    !componentName.endsWith("Group") &&
-    !(
-      /<FieldSet\b/.test(content) &&
-      (fileName.endsWith("-field-set.tsx") ||
-        componentName.endsWith("FieldSet"))
-    )
-  ) {
-    violations.push(
-      violation(
-        filePath,
-        "notes-app-primitive-role-alignment",
-        `${fileName} (${componentName}) composes FieldGroup and should end with 'FieldGroup'.`,
-      ),
-    );
-  }
-
-  // 5. Single Field item surface naming
-  // Dedicated question field components (e.g. QuestionMatchingField, QuestionDropdownField)
-  // that wrap a single Field input surface must end in 'Field'.
-  if (
-    /<Field\b/.test(content) &&
-    fileName.startsWith("question-") &&
-    !fileName.endsWith("-field.tsx") &&
-    !fileName.endsWith("-field-set.tsx") &&
-    !fileName.endsWith("-field-group.tsx") &&
-    !fileName.endsWith("-field-content.tsx") &&
-    !componentName.endsWith("Input") &&
-    !componentName.endsWith("Form") &&
-    !componentName.endsWith("Card") &&
-    !componentName.endsWith("Header") &&
-    !componentName.endsWith("Description") &&
-    !componentName.endsWith("Item")
-  ) {
-    violations.push(
-      violation(
-        filePath,
-        "notes-app-primitive-role-alignment",
-        `${fileName} (${componentName}) composes Field and should end with 'Field'.`,
-      ),
-    );
-  }
-
-  return violations;
+  return checkPrimitiveRoleAlignmentLib(
+    filePath,
+    fileName,
+    content,
+    toPascalCase,
+    violation
+  );
 }
 
 function checkRawLayoutWrappers(filePath, fileName, content) {
@@ -367,7 +277,7 @@ function checkRawLayoutWrappers(filePath, fileName, content) {
       violation(
         filePath,
         "notes-app-no-raw-layout-wrapper",
-        `${fileName} must compose a role-specific ui primitive instead of forwarding layout props through a raw div.`,
+        `${fileName} must compose a role-specific ui primitive instead of forwarding layout props through a raw div.`
       ),
     ];
   }
@@ -381,7 +291,7 @@ function checkComponentRoleNames(filePath, fileName, content) {
     .map(({ name }) => name)
     .filter(
       (name) =>
-        !COMPONENT_NAME_EXEMPTIONS.has(name) && !hasComponentRoleSuffix(name),
+        !COMPONENT_NAME_EXEMPTIONS.has(name) && !hasComponentRoleSuffix(name)
     );
 
   const violations = [];
@@ -390,8 +300,8 @@ function checkComponentRoleNames(filePath, fileName, content) {
       violation(
         filePath,
         "notes-app-component-role-suffix",
-        `${fileName} has component names without a recognized UI role suffix: ${invalid.join(", ")}.`,
-      ),
+        `${fileName} has component names without a recognized UI role suffix: ${invalid.join(", ")}.`
+      )
     );
   }
 
@@ -402,8 +312,8 @@ function checkComponentRoleNames(filePath, fileName, content) {
         violation(
           filePath,
           "notes-app-canonical-component-name",
-          `${fileName} must declare its canonical component as ${canonicalName}.`,
-        ),
+          `${fileName} must declare its canonical component as ${canonicalName}.`
+        )
       );
     }
   }
@@ -412,19 +322,23 @@ function checkComponentRoleNames(filePath, fileName, content) {
 }
 
 function checkComponentSlots(filePath, fileName, content) {
-  if (NON_VISUAL_FILES.has(fileName)) return [];
+  if (NON_VISUAL_FILES.has(fileName)) {
+    return [];
+  }
 
   const missing = getComponentFunctionEntries(content)
     .filter(({ source }) => !/data-slot=["'][^"']+["']/.test(source))
     .map(({ name }) => name);
 
-  if (missing.length === 0) return [];
+  if (missing.length === 0) {
+    return [];
+  }
 
   return [
     violation(
       filePath,
       "notes-app-component-data-slot",
-      `${fileName} must give every visual component a data-slot; missing: ${missing.join(", ")}.`,
+      `${fileName} must give every visual component a data-slot; missing: ${missing.join(", ")}.`
     ),
   ];
 }
@@ -443,22 +357,22 @@ function checkFile(filePath, content) {
       violation(
         filePath,
         "notes-app-requires-ui",
-        "Visual notes-app components must compose a primitive from src/components/ui.",
-      ),
+        "Visual notes-app components must compose a primitive from src/components/ui."
+      )
     );
   }
 
   if (!isNonVisual) {
     const rawInteractiveElement = content.match(
-      /<(button|input|select|textarea|label)(?:\s|>)/,
+      /<(button|input|select|textarea|label)(?:\s|>)/
     );
     if (rawInteractiveElement) {
       violations.push(
         violation(
           filePath,
           "notes-app-no-raw-controls",
-          `Use the matching shadcn/Base UI primitive instead of raw <${rawInteractiveElement[1]}> markup.`,
-        ),
+          `Use the matching shadcn/Base UI primitive instead of raw <${rawInteractiveElement[1]}> markup.`
+        )
       );
     }
   }
@@ -486,8 +400,8 @@ function checkFile(filePath, content) {
         violation(
           filePath,
           "notes-app-props-before-layout",
-          "Spread component props before the wrapper className so the canonical layout cannot be overwritten.",
-        ),
+          "Spread component props before the wrapper className so the canonical layout cannot be overwritten."
+        )
       );
       break;
     }
@@ -525,7 +439,7 @@ if (isMain) {
   const violations = runGuard();
   if (violations.length > 0) {
     console.error(
-      `guard-notes-app-pattern: ${violations.length} violation(s) found:`,
+      `guard-notes-app-pattern: ${violations.length} violation(s) found:`
     );
     for (const item of violations) {
       console.error(`  ${item.file} [${item.rule}] ${item.message}`);
@@ -534,6 +448,6 @@ if (isMain) {
   }
 
   console.log(
-    "guard-notes-app-pattern: application components use simple domain surfaces over shared UI primitives.",
+    "guard-notes-app-pattern: application components use simple domain surfaces over shared UI primitives."
   );
 }

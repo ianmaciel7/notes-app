@@ -14,7 +14,7 @@ const candidatePath = argValue("--candidate");
 
 if (!baselinePath || !candidatePath) {
   console.error(
-    "Usage: compare.mjs --baseline <report.json> --candidate <report.json>",
+    "Usage: compare.mjs --baseline <report.json> --candidate <report.json>"
   );
   process.exit(2);
 }

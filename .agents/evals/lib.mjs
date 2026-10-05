@@ -15,11 +15,15 @@ async function filesUnder(root, current = root) {
   const entries = await readdir(current, { withFileTypes: true });
   const files = [];
   for (const entry of entries) {
-    if (entry.isDirectory() && ignoredDirectories.has(entry.name)) continue;
+    if (entry.isDirectory() && ignoredDirectories.has(entry.name)) {
+      continue;
+    }
     const absolute = path.join(current, entry.name);
-    if (entry.isDirectory()) files.push(...(await filesUnder(root, absolute)));
-    else if (entry.isFile())
+    if (entry.isDirectory()) {
+      files.push(...(await filesUnder(root, absolute)));
+    } else if (entry.isFile()) {
       files.push(path.relative(root, absolute).replaceAll("\\", "/"));
+    }
   }
   return files.sort();
 }
@@ -53,13 +57,19 @@ export function parseJsonl(text) {
 }
 
 function deepFindNumber(value, keys) {
-  if (!value || typeof value !== "object") return undefined;
+  if (!value || typeof value !== "object") {
+    return undefined;
+  }
   for (const [key, child] of Object.entries(value)) {
-    if (keys.has(key) && typeof child === "number") return child;
+    if (keys.has(key) && typeof child === "number") {
+      return child;
+    }
   }
   for (const child of Object.values(value)) {
     const found = deepFindNumber(child, keys);
-    if (found !== undefined) return found;
+    if (found !== undefined) {
+      return found;
+    }
   }
 }
 
@@ -68,25 +78,25 @@ export function traceMetrics(events, durationMs) {
   const lastWithUsage = [...events]
     .reverse()
     .find((event) =>
-      /input_tokens|output_tokens|total_tokens/i.test(JSON.stringify(event)),
+      /input_tokens|output_tokens|total_tokens/i.test(JSON.stringify(event))
     );
   return {
     durationMs,
     eventCount: events.length,
     toolCallEvents: serialized.filter((line) =>
-      /tool_call|command_execution|function_call|run_command/i.test(line),
+      /tool_call|command_execution|function_call|run_command/i.test(line)
     ).length,
     inputTokens: deepFindNumber(
       lastWithUsage,
-      new Set(["input_tokens", "inputTokens"]),
+      new Set(["input_tokens", "inputTokens"])
     ),
     outputTokens: deepFindNumber(
       lastWithUsage,
-      new Set(["output_tokens", "outputTokens"]),
+      new Set(["output_tokens", "outputTokens"])
     ),
     totalTokens: deepFindNumber(
       lastWithUsage,
-      new Set(["total_tokens", "totalTokens"]),
+      new Set(["total_tokens", "totalTokens"])
     ),
   };
 }
@@ -124,7 +134,7 @@ export async function gradeScenario({
     checks.push({
       name: "final-includes-any",
       pass: scenario.finalIncludesAny.some((n) =>
-        finalLower.includes(n.toLowerCase()),
+        finalLower.includes(n.toLowerCase())
       ),
       detail: scenario.finalIncludesAny.join(" | "),
     });
@@ -133,7 +143,7 @@ export async function gradeScenario({
     checks.push({
       name: "final-forbids",
       pass: !scenario.finalForbidsAny.some((n) =>
-        finalLower.includes(n.toLowerCase()),
+        finalLower.includes(n.toLowerCase())
       ),
       detail: scenario.finalForbidsAny.join(" | "),
     });
@@ -150,12 +160,13 @@ export async function gradeScenario({
       detail: expectation.text,
     });
   }
-  if (outcome)
+  if (outcome) {
     checks.push({
       name: "outcome-command",
       pass: outcome.status === 0,
       detail: `exit=${outcome.status}`,
     });
+  }
 
   return { pass: checks.every((c) => c.pass), changedFiles: changed, checks };
 }
@@ -164,7 +175,9 @@ function averageMetric(results, key) {
   const values = (results ?? [])
     .map((result) => result?.metrics?.[key])
     .filter((value) => typeof value === "number" && Number.isFinite(value));
-  if (values.length === 0) return null;
+  if (values.length === 0) {
+    return null;
+  }
   return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
 
@@ -180,7 +193,7 @@ function compareScenario(mode, baselineById, current) {
       averageTotalTokensBaseline: null,
       averageTotalTokensCandidate: averageMetric(
         current.results,
-        "totalTokens",
+        "totalTokens"
       ),
     };
   }
@@ -220,7 +233,7 @@ function compareScenario(mode, baselineById, current) {
 export function compareReports(baseline, candidate) {
   if (baseline?.suite !== candidate?.suite) {
     throw new Error(
-      `Eval suites differ: ${baseline?.suite ?? "unknown"} vs ${candidate?.suite ?? "unknown"}`,
+      `Eval suites differ: ${baseline?.suite ?? "unknown"} vs ${candidate?.suite ?? "unknown"}`
     );
   }
 
@@ -229,13 +242,13 @@ export function compareReports(baseline, candidate) {
       ? "regression"
       : "cross-provider";
   const baselineById = new Map(
-    (baseline?.scenarios ?? []).map((scenario) => [scenario.id, scenario]),
+    (baseline?.scenarios ?? []).map((scenario) => [scenario.id, scenario])
   );
   const scenarios = (candidate?.scenarios ?? []).map((current) =>
-    compareScenario(mode, baselineById, current),
+    compareScenario(mode, baselineById, current)
   );
   const regressions = scenarios.filter(
-    (scenario) => scenario.status === "regression",
+    (scenario) => scenario.status === "regression"
   );
 
   return {

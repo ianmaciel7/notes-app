@@ -21,14 +21,14 @@ function gitFiles() {
     const out = execFileSync(
       "git",
       ["ls-files", "-z", "--cached", "--others", "--exclude-standard"],
-      { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
+      { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 }
     );
     return [...new Set(out.split("\0").filter(Boolean))].map((f) =>
-      f.replaceAll("\\", "/"),
+      f.replaceAll("\\", "/")
     );
   } catch (error) {
     console.error(
-      `verify-docs: cannot list repository files (${error.message})`,
+      `verify-docs: cannot list repository files (${error.message})`
     );
     process.exit(2);
   }
@@ -45,25 +45,29 @@ function readJson(rel) {
 function remoteSkillDirs() {
   const dirs = new Set();
   for (const [key, entry] of Object.entries(
-    readJson("skills-lock.json").skills ?? {},
+    readJson("skills-lock.json").skills ?? {}
   )) {
     dirs.add(key.toLowerCase().replaceAll(" ", "-"));
     const parts = String(entry.skillPath ?? "").split("/");
-    if (parts.length >= 2) dirs.add(parts.at(-2));
+    if (parts.length >= 2) {
+      dirs.add(parts.at(-2));
+    }
   }
   return dirs;
 }
 
 function skillDirs() {
   const base = path.join(root, ".agents/skills");
-  if (!existsSync(base)) return [];
+  if (!existsSync(base)) {
+    return [];
+  }
   return readdirSync(base, { withFileTypes: true })
     .filter(
       (d) =>
         d.isDirectory() &&
         ["SKILL.md", "skill.md"].some((entry) =>
-          existsSync(path.join(base, d.name, entry)),
-        ),
+          existsSync(path.join(base, d.name, entry))
+        )
     )
     .map((d) => d.name);
 }
@@ -82,9 +86,11 @@ function controlDocsFinding() {
   const result = spawnSync(
     process.execPath,
     [path.join(root, "scripts/verify/verify-control-docs.mjs")],
-    { cwd: root, encoding: "utf8" },
+    { cwd: root, encoding: "utf8" }
   );
-  if (result.status === 0) return [];
+  if (result.status === 0) {
+    return [];
+  }
   const detail = `${result.stderr}${result.stdout}`
     .trim()
     .split(/\r?\n/)
@@ -129,9 +135,11 @@ const { errors, warnings } = summarize(findings);
 if (asJson) {
   console.log(JSON.stringify({ errors, warnings, findings }, null, 2));
 } else {
-  if (findings.length) console.log(formatFindings(findings));
+  if (findings.length) {
+    console.log(formatFindings(findings));
+  }
   console.log(
-    `docs: ${errors} error(s), ${warnings} warning(s) across ${files.size} markdown files`,
+    `docs: ${errors} error(s), ${warnings} warning(s) across ${files.size} markdown files`
   );
 }
 process.exit(errors > 0 || (strict && warnings > 0) ? 1 : 0);

@@ -15,7 +15,9 @@ import {
 import { findRepoRoot, isStopHookActive, readStdin } from "./hooks-lib.mjs";
 
 const raw = await readStdin();
-if (isStopHookActive(raw)) process.exit(0);
+if (isStopHookActive(raw)) {
+  process.exit(0);
+}
 
 const root = findRepoRoot();
 const run = (command, args) =>
@@ -27,7 +29,9 @@ const run = (command, args) =>
   });
 
 const status = run("git", ["status", "--porcelain"]);
-if (status.error || status.status !== 0) process.exit(0);
+if (status.error || status.status !== 0) {
+  process.exit(0);
+}
 
 const files = status.stdout
   .split(/\r?\n/)

@@ -64,9 +64,13 @@ function parseCliArgs(argv) {
 }
 
 function addOutputFiles(fileSet, output) {
-  if (!output) return;
+  if (!output) {
+    return;
+  }
   for (const f of output.split(/\r?\n/)) {
-    if (f.trim()) fileSet.add(normalizePath(f));
+    if (f.trim()) {
+      fileSet.add(normalizePath(f));
+    }
   }
 }
 

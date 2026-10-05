@@ -18,7 +18,7 @@ const verifiers = [
 
 const base = new URL(
   "../../.agents/skills/context-manager/scripts/",
-  import.meta.url,
+  import.meta.url
 );
 const failures = [];
 for (const verifier of verifiers) {
@@ -26,11 +26,13 @@ for (const verifier of verifiers) {
   const result = spawnSync(process.execPath, [script, ".", "--quiet"], {
     stdio: "inherit",
   });
-  if (result.error || result.status !== 0) failures.push(verifier);
+  if (result.error || result.status !== 0) {
+    failures.push(verifier);
+  }
 }
 if (failures.length) {
   console.error(
-    `control-docs: ${failures.length} verifier(s) failed: ${failures.join(", ")}`,
+    `control-docs: ${failures.length} verifier(s) failed: ${failures.join(", ")}`
   );
   process.exit(1);
 }

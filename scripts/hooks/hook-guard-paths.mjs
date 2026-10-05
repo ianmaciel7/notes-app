@@ -26,7 +26,7 @@ if (verdict) {
   process.stdout.write(
     agentType === "antigravity"
       ? JSON.stringify({ decision: verdict.action, reason: verdict.reason })
-      : preToolUseDecision(verdict.action, verdict.reason),
+      : preToolUseDecision(verdict.action, verdict.reason)
   );
   process.exit(0);
 }

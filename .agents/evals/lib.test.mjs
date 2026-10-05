@@ -55,7 +55,7 @@ test("trace metrics expose run telemetry", () => {
       { type: "command_execution" },
       { usage: { input_tokens: 10, output_tokens: 4, total_tokens: 14 } },
     ],
-    123,
+    123
   );
   assert.equal(m.durationMs, 123);
   assert.equal(m.eventCount, 2);

@@ -49,7 +49,7 @@ test("isDocFile rejects non-docs, fixtures, logs, and external packages", () => 
     assert.equal(
       isDocFile(nonDoc),
       false,
-      `expected ${nonDoc} NOT to be doc file`,
+      `expected ${nonDoc} NOT to be doc file`
     );
   }
 });
@@ -92,7 +92,7 @@ test("isCodeFile rejects docs, assets, lockfiles, and generated paths", () => {
     assert.equal(
       isCodeFile(file),
       false,
-      `expected ${file} NOT to be code file`,
+      `expected ${file} NOT to be code file`
     );
   }
 });
@@ -102,7 +102,7 @@ test("checkDocSync passes when no files or only doc files are changed", () => {
   assert.equal(checkDocSync(["README.md", "docs/adr/0001.md"]).pass, true);
   assert.equal(
     checkDocSync(["pnpm-lock.yaml", "src/app/favicon.ico"]).pass,
-    true,
+    true
   );
 });
 

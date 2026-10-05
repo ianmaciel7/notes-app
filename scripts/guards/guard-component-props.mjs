@@ -43,7 +43,9 @@ const ALLOWED_PROP_PATTERNS = [
 ];
 
 function isAllowedTypeReference(typeNode, sf) {
-  if (!typeNode) return false;
+  if (!typeNode) {
+    return false;
+  }
   const text = typeNode.getText(sf);
   return ALLOWED_PROP_PATTERNS.some((pattern) => text.includes(pattern));
 }
@@ -61,7 +63,7 @@ function checkInterfaceDeclaration(node, filePath, sf) {
   }
 
   const hasValidHeritage = heritageClauses.some((clause) =>
-    clause.types.some((typeExpr) => isAllowedTypeReference(typeExpr, sf)),
+    clause.types.some((typeExpr) => isAllowedTypeReference(typeExpr, sf))
   );
 
   if (!hasValidHeritage) {
@@ -104,9 +106,11 @@ function toPascalCase(str) {
 
 function addExportedDeclarationNames(node, exportedNames) {
   const hasExportModifier = node.modifiers?.some(
-    (m) => m.kind === ts.SyntaxKind.ExportKeyword,
+    (m) => m.kind === ts.SyntaxKind.ExportKeyword
   );
-  if (!hasExportModifier) return;
+  if (!hasExportModifier) {
+    return;
+  }
 
   if (node.name?.text) {
     exportedNames.add(node.name.text);
@@ -157,7 +161,7 @@ export function checkCardExports(sf, filePath) {
   const exportedNames = collectExportedNames(sf);
 
   const hasMatchingExport = Array.from(exportedNames).some(
-    (name) => name.toLowerCase() === normalizedExpected,
+    (name) => name.toLowerCase() === normalizedExpected
   );
 
   if (!hasMatchingExport) {
@@ -202,9 +206,11 @@ export function checkPrimaryExportMatchesFilename(sf, filePath) {
   const primaryExportedFnNames = [];
   ts.forEachChild(sf, (node) => {
     const hasExportModifier = node.modifiers?.some(
-      (m) => m.kind === ts.SyntaxKind.ExportKeyword,
+      (m) => m.kind === ts.SyntaxKind.ExportKeyword
     );
-    if (!hasExportModifier) return;
+    if (!hasExportModifier) {
+      return;
+    }
 
     if (
       (ts.isFunctionDeclaration(node) || ts.isClassDeclaration(node)) &&
@@ -218,13 +224,17 @@ export function checkPrimaryExportMatchesFilename(sf, filePath) {
     }
   });
 
-  if (primaryExportedFnNames.length === 0) return null;
+  if (primaryExportedFnNames.length === 0) {
+    return null;
+  }
 
   // If any primary declaration already carries the canonical name, we're fine.
   const hasCanonical = primaryExportedFnNames.some(
-    (name) => name.toLowerCase() === normalizedExpected,
+    (name) => name.toLowerCase() === normalizedExpected
   );
-  if (hasCanonical) return null;
+  if (hasCanonical) {
+    return null;
+  }
 
   // Find the "main" component — the one most likely to be the primary export.
   // Heuristic: first exported PascalCase function.
@@ -381,7 +391,9 @@ function getComponentFunction(node) {
     return { name: node.name.text, fn: node };
   }
 
-  if (!ts.isVariableStatement(node)) return null;
+  if (!ts.isVariableStatement(node)) {
+    return null;
+  }
 
   for (const decl of node.declarationList.declarations) {
     const init = decl.initializer;
@@ -408,7 +420,9 @@ export function checkInlinePropsTypes(sf, filePath) {
 
   ts.forEachChild(sf, (node) => {
     const component = getComponentFunction(node);
-    if (!component || !/^[A-Z]/.test(component.name)) return;
+    if (!component || !/^[A-Z]/.test(component.name)) {
+      return;
+    }
 
     const typeNode = component.fn.parameters[0]?.type;
     if (typeNode && ts.isTypeLiteralNode(typeNode)) {
@@ -452,10 +466,12 @@ export function checkStandaloneSurfaceComponents(sf, filePath) {
 
   ts.forEachChild(sf, (node) => {
     const component = getComponentFunction(node);
-    if (!component || !/^[A-Z]/.test(component.name)) return;
+    if (!component || !/^[A-Z]/.test(component.name)) {
+      return;
+    }
 
     const suffix = STANDALONE_SURFACE_SUFFIXES.find((s) =>
-      component.name.endsWith(s),
+      component.name.endsWith(s)
     );
     if (
       !suffix ||
@@ -483,25 +499,33 @@ export function checkPropsInFile(filePath, content) {
     content,
     ts.ScriptTarget.Latest,
     true,
-    ts.ScriptKind.TSX,
+    ts.ScriptKind.TSX
   );
 
   const violations = [];
 
   const cardViolation = checkCardExports(sf, filePath);
-  if (cardViolation) violations.push(cardViolation);
+  if (cardViolation) {
+    violations.push(cardViolation);
+  }
 
   const primaryExportViolation = checkPrimaryExportMatchesFilename(
     sf,
-    filePath,
+    filePath
   );
-  if (primaryExportViolation) violations.push(primaryExportViolation);
+  if (primaryExportViolation) {
+    violations.push(primaryExportViolation);
+  }
 
   const loginCardPropsViolation = checkLoginCardProps(sf, filePath);
-  if (loginCardPropsViolation) violations.push(loginCardPropsViolation);
+  if (loginCardPropsViolation) {
+    violations.push(loginCardPropsViolation);
+  }
 
   const alertPropsViolation = checkAlertProps(sf, filePath);
-  if (alertPropsViolation) violations.push(alertPropsViolation);
+  if (alertPropsViolation) {
+    violations.push(alertPropsViolation);
+  }
 
   violations.push(...checkSingleComponentFile(sf, filePath));
   violations.push(...checkInlinePropsTypes(sf, filePath));
@@ -510,13 +534,17 @@ export function checkPropsInFile(filePath, content) {
   ts.forEachChild(sf, (node) => {
     if (ts.isInterfaceDeclaration(node) && node.name.text.endsWith("Props")) {
       const violation = checkInterfaceDeclaration(node, filePath, sf);
-      if (violation) violations.push(violation);
+      if (violation) {
+        violations.push(violation);
+      }
     } else if (
       ts.isTypeAliasDeclaration(node) &&
       node.name.text.endsWith("Props")
     ) {
       const violation = checkTypeAliasDeclaration(node, filePath, sf);
-      if (violation) violations.push(violation);
+      if (violation) {
+        violations.push(violation);
+      }
     }
   });
 
@@ -525,7 +553,7 @@ export function checkPropsInFile(filePath, content) {
 
 export function runGuard() {
   const files = listApplicationComponentFiles(root).filter(
-    (f) => !f.endsWith(".test.tsx"),
+    (f) => !f.endsWith(".test.tsx")
   );
 
   const allViolations = [];
@@ -548,7 +576,7 @@ if (isMain) {
   const violations = runGuard();
   if (violations.length > 0) {
     console.error(
-      `\x1b[31mguard-component-props: ${violations.length} violation(s) found:\x1b[0m`,
+      `\x1b[31mguard-component-props: ${violations.length} violation(s) found:\x1b[0m`
     );
     for (const v of violations) {
       console.error(`  \x1b[33m${v.file}\x1b[0m [${v.propName}]: ${v.message}`);
@@ -557,7 +585,7 @@ if (isMain) {
   }
 
   console.log(
-    "guard-component-props: all application component props in src/components/ (outside ui/ and firebase/) adhere to standard inheritance.",
+    "guard-component-props: all application component props in src/components/ (outside ui/ and firebase/) adhere to standard inheritance."
   );
   process.exit(0);
 }

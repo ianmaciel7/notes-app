@@ -2,30 +2,33 @@ import fs from "node:fs";
 
 function readQuestionTypes(source) {
   const match = source.match(
-    /export const QUESTION_TYPES = \[(?<body>[\s\S]*?)\] as const;/,
+    /export const QUESTION_TYPES = \[(?<body>[\s\S]*?)\] as const;/
   );
-  if (!match?.groups?.body)
+  if (!match?.groups?.body) {
     throw new Error("QUESTION_TYPES declaration not found");
+  }
   return [...match.groups.body.matchAll(/"([^"]+)"/g)].map(([, type]) => type);
 }
 
 function readParserTypes(source) {
   const match = source.match(
-    /export function parseSubmittedAnswer[\s\S]*?switch \(type\) \{(?<body>[\s\S]*?)\n\s*default:/,
+    /export function parseSubmittedAnswer[\s\S]*?switch \(type\) \{(?<body>[\s\S]*?)\n\s*default:/
   );
-  if (!match?.groups?.body)
+  if (!match?.groups?.body) {
     throw new Error("parseSubmittedAnswer switch not found");
+  }
   return [...match.groups.body.matchAll(/case "([^"]+)":/g)].map(
-    ([, type]) => type,
+    ([, type]) => type
   );
 }
 
 function readRuleTypes(source) {
   const match = source.match(
-    /data\.questionType in \[(?<body>[\s\S]*?)\n\s*\]/,
+    /data\.questionType in \[(?<body>[\s\S]*?)\n\s*\]/
   );
-  if (!match?.groups?.body)
+  if (!match?.groups?.body) {
     throw new Error("Firestore questionType rule list not found");
+  }
   return [...match.groups.body.matchAll(/'([^']+)'/g)].map(([, type]) => type);
 }
 
@@ -43,8 +46,9 @@ export function inspectQuestionTypeCoverage({ questionTypes, parser, rules }) {
   const failures = [];
   for (const [surface, actual] of Object.entries(surfaces)) {
     const { missing, extra } = differences(questionTypes, actual);
-    if (missing.length || extra.length)
+    if (missing.length || extra.length) {
       failures.push({ surface, missing, extra });
+    }
   }
   return { failures };
 }
@@ -53,7 +57,7 @@ export function inspectRepository(root) {
   const read = (relativePath) =>
     fs.readFileSync(
       new URL(relativePath, `${root.endsWith("/") ? root : `${root}/`}`),
-      "utf8",
+      "utf8"
     );
   const questionTypes = readQuestionTypes(read("src/types/question.ts"));
   return inspectQuestionTypeCoverage({

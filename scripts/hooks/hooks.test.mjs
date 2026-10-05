@@ -23,19 +23,19 @@ const root = path.resolve("repo-root");
 test("hook payload yields the edited file path", () => {
   assert.equal(
     parseHookFilePath('{"tool_input":{"file_path":"src/a.ts"}}'),
-    "src/a.ts",
+    "src/a.ts"
   );
   assert.equal(
     parseHookFilePath(
-      '{"toolCall":{"name":"write_to_file","args":{"TargetFile":"src/b.ts"}}}',
+      '{"toolCall":{"name":"write_to_file","args":{"TargetFile":"src/b.ts"}}}'
     ),
-    "src/b.ts",
+    "src/b.ts"
   );
   assert.equal(
     parseHookFilePath(
-      '{"toolCall":{"name":"write_file","args":{"path":"src/c.ts"}}}',
+      '{"toolCall":{"name":"write_file","args":{"path":"src/c.ts"}}}'
     ),
-    "src/c.ts",
+    "src/c.ts"
   );
 });
 
@@ -49,7 +49,7 @@ test("paths resolve to repo-relative POSIX form", () => {
   assert.equal(repoRelativePath(root, "src/a.ts"), "src/a.ts");
   assert.equal(
     repoRelativePath(root, path.join(root, "src", "a.ts")),
-    "src/a.ts",
+    "src/a.ts"
   );
 });
 
@@ -92,7 +92,7 @@ test("controlled files ask for confirmation", () => {
 test("native Agent subagents are denied", () => {
   for (const type of ["Explore", "general-purpose", "Plan", "code-reviewer"]) {
     const verdict = classifyDelegation(
-      JSON.stringify({ tool_input: { subagent_type: type } }),
+      JSON.stringify({ tool_input: { subagent_type: type } })
     );
     assert.equal(verdict?.action, "deny", type);
     assert.match(verdict.reason, /codex:codex-rescue/, type);
@@ -110,9 +110,9 @@ test("an omitted or empty subagent_type counts as general-purpose", () => {
 test("the Codex rescue agent is allowed", () => {
   assert.equal(
     classifyDelegation(
-      JSON.stringify({ tool_input: { subagent_type: "codex:codex-rescue" } }),
+      JSON.stringify({ tool_input: { subagent_type: "codex:codex-rescue" } })
     ),
-    null,
+    null
   );
 });
 
@@ -122,7 +122,7 @@ test("payloads without tool input are not judged", () => {
   assert.equal(classifyDelegation('{"tool_input":"x"}'), null);
   assert.equal(
     classifyDelegation('{"toolCall":{"name":"write_file","args":{}}}'),
-    null,
+    null
   );
 });
 
@@ -199,7 +199,7 @@ test("emulator runs block only on failing tests", () => {
   assert.equal(run(0, "Tests  4 passed (4)"), "pass");
   assert.equal(
     run(1, " FAIL  src/lib/firebase/firestore-emulator.test.ts"),
-    "fail",
+    "fail"
   );
   assert.equal(run(1, "Test Files  1 failed | 1 passed (2)"), "fail");
   assert.equal(run(1, "\u001b[31m FAIL \u001b[39m rules denies read"), "fail");

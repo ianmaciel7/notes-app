@@ -91,13 +91,25 @@ const PNPM_BUILTINS = new Set([
 const EXTERNAL_TARGET = /^([a-z][a-z0-9+.-]*:|\/\/)/i;
 
 export function isDocInScope(rel, remoteSkills = new Set()) {
-  if (!rel.endsWith(".md")) return false;
+  if (!rel.endsWith(".md")) {
+    return false;
+  }
   const parts = rel.split("/");
-  if (parts.some((part) => EXCLUDED_SEGMENTS.has(part))) return false;
-  if (parts.length === 1 || parts[0] === "docs") return true;
-  if (parts[0] !== ".agents") return false;
-  if (parts[1] !== "skills") return true;
-  if (parts.length === 3) return parts[2] === "README.md";
+  if (parts.some((part) => EXCLUDED_SEGMENTS.has(part))) {
+    return false;
+  }
+  if (parts.length === 1 || parts[0] === "docs") {
+    return true;
+  }
+  if (parts[0] !== ".agents") {
+    return false;
+  }
+  if (parts[1] !== "skills") {
+    return true;
+  }
+  if (parts.length === 3) {
+    return parts[2] === "README.md";
+  }
   const [, , skill, ...rest] = parts;
   return (
     !remoteSkills.has(skill) && rest.length === 1 && rest[0] === "SKILL.md"
@@ -120,8 +132,11 @@ function scanLines(text) {
     const opens = marker !== null && fence === null;
     const closes = marker !== null && fence === marker;
     const fenced = fence !== null || opens;
-    if (opens) fence = marker;
-    else if (closes) fence = null;
+    if (opens) {
+      fence = marker;
+    } else if (closes) {
+      fence = null;
+    }
     lines.push({ n: index + 1, text: raw, fenced });
   });
   return lines;
@@ -148,7 +163,9 @@ export function headingSlugs(text) {
     const match = line.fenced
       ? null
       : line.text.match(/^#{1,6}\s+(.*?)\s*#*\s*$/);
-    if (!match) continue;
+    if (!match) {
+      continue;
+    }
     const base = slugify(match[1]);
     const count = seen.get(base) ?? 0;
     seen.set(base, count + 1);
@@ -159,7 +176,7 @@ export function headingSlugs(text) {
 
 function resolveFrom(file, target) {
   const joined = path.posix.normalize(
-    path.posix.join(path.posix.dirname(file), target),
+    path.posix.join(path.posix.dirname(file), target)
   );
   return joined.startsWith("../") || joined === ".." ? null : joined;
 }
@@ -175,10 +192,12 @@ function safeDecode(value) {
 function linkTargets(text) {
   const found = [];
   for (const line of scanLines(text)) {
-    if (line.fenced) continue;
+    if (line.fenced) {
+      continue;
+    }
     const bare = line.text.replace(/`[^`\n]*`/g, "");
     for (const match of bare.matchAll(
-      /\[[^\]]*\]\(<?([^)\s>]+)>?(?:\s+"[^"]*")?\)/g,
+      /\[[^\]]*\]\(<?([^)\s>]+)>?(?:\s+"[^"]*")?\)/g
     )) {
       found.push({ n: line.n, target: match[1] });
     }
@@ -187,7 +206,9 @@ function linkTargets(text) {
 }
 
 function checkLinkTarget(ctx, file, { n, target }, slugsOf) {
-  if (EXTERNAL_TARGET.test(target)) return [];
+  if (EXTERNAL_TARGET.test(target)) {
+    return [];
+  }
   const [rawPath, rawAnchor] = target.split("#");
   const pathPart = safeDecode(rawPath.split("?")[0]);
   const resolved = pathPart === "" ? file : resolveFrom(file, pathPart);
@@ -198,19 +219,23 @@ function checkLinkTarget(ctx, file, { n, target }, slugsOf) {
         "broken-link",
         file,
         n,
-        `link target not found: ${target}`,
+        `link target not found: ${target}`
       ),
     ];
   }
-  if (!rawAnchor || !ctx.files.has(resolved)) return [];
-  if (slugsOf(resolved).has(safeDecode(rawAnchor).toLowerCase())) return [];
+  if (!rawAnchor || !ctx.files.has(resolved)) {
+    return [];
+  }
+  if (slugsOf(resolved).has(safeDecode(rawAnchor).toLowerCase())) {
+    return [];
+  }
   return [
     finding(
       "error",
       "broken-anchor",
       file,
       n,
-      `anchor not found in ${resolved}: #${rawAnchor}`,
+      `anchor not found in ${resolved}: #${rawAnchor}`
     ),
   ];
 }
@@ -225,8 +250,8 @@ export function checkLinks(ctx) {
   };
   return [...ctx.files].flatMap(([file, text]) =>
     linkTargets(text).flatMap((link) =>
-      checkLinkTarget(ctx, file, link, slugsOf),
-    ),
+      checkLinkTarget(ctx, file, link, slugsOf)
+    )
   );
 }
 
@@ -255,26 +280,32 @@ function isIgnoredPath(normalized) {
 
 function resolvesAnywhere(ctx, file, token, normalized) {
   return [normalized, resolveFrom(file, token)].some(
-    (candidate) => candidate && ctx.exists(candidate),
+    (candidate) => candidate && ctx.exists(candidate)
   );
 }
 
 // Returns the token when it names a repo path that does not exist.
 function missingInlinePath(ctx, file, raw) {
   const token = cleanToken(raw);
-  if (!isPlainPath(token)) return null;
+  if (!isPlainPath(token)) {
+    return null;
+  }
   const normalized = token.replace(/^\.\//, "");
-  if (!normalized.includes("/")) return null;
+  if (!normalized.includes("/")) {
+    return null;
+  }
   const first = normalized.split("/")[0];
   const knownRoot = ctx.topLevel.has(first) || KNOWN_ROOTS.has(first);
-  if (!knownRoot || isIgnoredPath(normalized)) return null;
+  if (!knownRoot || isIgnoredPath(normalized)) {
+    return null;
+  }
   return resolvesAnywhere(ctx, file, token, normalized) ? null : token;
 }
 
 function fencedPathTokens(text) {
   return [
     ...text.matchAll(
-      /(?<![\w/.-])((?:scripts|\.agents)\/[\w./-]+\.(?:mjs|cjs|js|ts|json|md))/g,
+      /(?<![\w/.-])((?:scripts|\.agents)\/[\w./-]+\.(?:mjs|cjs|js|ts|json|md))/g
     ),
   ]
     .map((match) => match[1])
@@ -285,7 +316,9 @@ function missingPathsInLine(ctx, file, line) {
   if (line.fenced) {
     return fencedPathTokens(line.text).filter((token) => !ctx.exists(token));
   }
-  if (ILLUSTRATIVE_LINE.test(line.text)) return [];
+  if (ILLUSTRATIVE_LINE.test(line.text)) {
+    return [];
+  }
   return inlineCodeTokens(line.text)
     .map((raw) => missingInlinePath(ctx, file, raw))
     .filter(Boolean);
@@ -296,7 +329,9 @@ function missingPathFindings(ctx, file, text) {
   const findings = [];
   for (const line of scanLines(text)) {
     for (const token of missingPathsInLine(ctx, file, line)) {
-      if (seen.has(token)) continue;
+      if (seen.has(token)) {
+        continue;
+      }
       seen.add(token);
       findings.push(
         finding(
@@ -304,8 +339,8 @@ function missingPathFindings(ctx, file, text) {
           "missing-path",
           file,
           line.n,
-          `path not found: ${token}`,
-        ),
+          `path not found: ${token}`
+        )
       );
     }
   }
@@ -314,7 +349,7 @@ function missingPathFindings(ctx, file, text) {
 
 export function checkCodePaths(ctx) {
   return [...ctx.files].flatMap(([file, text]) =>
-    missingPathFindings(ctx, file, text),
+    missingPathFindings(ctx, file, text)
   );
 }
 
@@ -331,7 +366,9 @@ function pnpmInvocations(chunk) {
 
 // `pnpm <name>` falls back to an installed bin when no script matches.
 function isResolvable(ctx, { name, explicitRun }) {
-  if (ctx.packageScripts.has(name)) return true;
+  if (ctx.packageScripts.has(name)) {
+    return true;
+  }
   return !explicitRun && ctx.exists(`node_modules/.bin/${name}`);
 }
 
@@ -342,7 +379,9 @@ function commandFindings(ctx, file, text) {
     const chunks = line.fenced ? [line.text] : inlineCodeTokens(line.text);
     for (const invocation of chunks.flatMap(pnpmInvocations)) {
       const { name } = invocation;
-      if (isResolvable(ctx, invocation) || seen.has(name)) continue;
+      if (isResolvable(ctx, invocation) || seen.has(name)) {
+        continue;
+      }
       seen.add(name);
       findings.push(
         finding(
@@ -350,8 +389,8 @@ function commandFindings(ctx, file, text) {
           "missing-script",
           file,
           line.n,
-          `package.json has no script "${name}"`,
-        ),
+          `package.json has no script "${name}"`
+        )
       );
     }
   }
@@ -360,7 +399,7 @@ function commandFindings(ctx, file, text) {
 
 export function checkCommands(ctx) {
   return [...ctx.files].flatMap(([file, text]) =>
-    commandFindings(ctx, file, text),
+    commandFindings(ctx, file, text)
   );
 }
 
@@ -374,15 +413,17 @@ export function checkAbsolutePaths(ctx) {
   const findings = [];
   for (const [file, text] of ctx.files) {
     for (const line of scanLines(text)) {
-      if (!ABSOLUTE_PATH_PATTERNS.some((p) => p.test(line.text))) continue;
+      if (!ABSOLUTE_PATH_PATTERNS.some((p) => p.test(line.text))) {
+        continue;
+      }
       findings.push(
         finding(
           "error",
           "absolute-path",
           file,
           line.n,
-          "hardcoded absolute machine path (use repo-relative paths)",
-        ),
+          "hardcoded absolute machine path (use repo-relative paths)"
+        )
       );
     }
   }
@@ -401,15 +442,17 @@ export function checkLanguage(ctx) {
     const hits = scanLines(text)
       .map((line) => ({ n: line.n, ch: firstNonAsciiLetter(line.text) }))
       .filter((hit) => hit.ch);
-    if (hits.length === 0) continue;
+    if (hits.length === 0) {
+      continue;
+    }
     findings.push(
       finding(
         "warn",
         "non-english",
         file,
         hits[0].n,
-        `${hits.length} line(s) with non-ASCII letters, first "${hits[0].ch}" (docs must be English unless requested; confirm these are intentional product terms)`,
-      ),
+        `${hits.length} line(s) with non-ASCII letters, first "${hits[0].ch}" (docs must be English unless requested; confirm these are intentional product terms)`
+      )
     );
   }
   return findings;
@@ -418,7 +461,9 @@ export function checkLanguage(ctx) {
 export function checkAgentsSize(ctx) {
   const findings = [];
   for (const [file, text] of ctx.files) {
-    if (path.posix.basename(file) !== "AGENTS.md") continue;
+    if (path.posix.basename(file) !== "AGENTS.md") {
+      continue;
+    }
     const bytes = Buffer.byteLength(text, "utf8");
     if (bytes > AGENTS_MAX_BYTES) {
       findings.push(
@@ -427,8 +472,8 @@ export function checkAgentsSize(ctx) {
           "agents-size",
           file,
           1,
-          `${bytes} bytes exceeds the ${AGENTS_MAX_BYTES}-byte hard maximum`,
-        ),
+          `${bytes} bytes exceeds the ${AGENTS_MAX_BYTES}-byte hard maximum`
+        )
       );
     } else if (text.length > AGENTS_TARGET_CHARS) {
       findings.push(
@@ -437,8 +482,8 @@ export function checkAgentsSize(ctx) {
           "agents-size",
           file,
           1,
-          `${text.length} chars exceeds the ${AGENTS_TARGET_CHARS}-char target`,
-        ),
+          `${text.length} chars exceeds the ${AGENTS_TARGET_CHARS}-char target`
+        )
       );
     }
   }
@@ -459,7 +504,7 @@ function skillFrontmatterFindings(dir, text) {
         "skill-frontmatter",
         file,
         1,
-        "missing YAML frontmatter",
+        "missing YAML frontmatter"
       ),
     ];
   }
@@ -472,8 +517,8 @@ function skillFrontmatterFindings(dir, text) {
         "skill-frontmatter",
         file,
         2,
-        `name "${name ?? ""}" must equal directory "${dir}"`,
-      ),
+        `name "${name ?? ""}" must equal directory "${dir}"`
+      )
     );
   }
   const description = fm.match(/^description:\s*(.*)$/m)?.[1]?.trim() ?? "";
@@ -484,8 +529,8 @@ function skillFrontmatterFindings(dir, text) {
         "skill-frontmatter",
         file,
         2,
-        "description is missing or empty",
-      ),
+        "description is missing or empty"
+      )
     );
   }
   return findings;
@@ -495,15 +540,19 @@ function routedSkills(agentsText) {
   const routed = new Set();
   let inSection = false;
   for (const line of agentsText.split(/\r?\n/)) {
-    if (/^##\s+Skill routing/i.test(line)) inSection = true;
-    else if (inSection && /^##\s/.test(line)) break;
-    else if (inSection && line.startsWith("|")) {
+    if (/^##\s+Skill routing/i.test(line)) {
+      inSection = true;
+    } else if (inSection && /^##\s/.test(line)) {
+      break;
+    } else if (inSection && line.startsWith("|")) {
       const last = line
         .split("|")
         .map((c) => c.trim())
         .filter(Boolean)
         .at(-1);
-      for (const name of inlineCodeTokens(last ?? "")) routed.add(name);
+      for (const name of inlineCodeTokens(last ?? "")) {
+        routed.add(name);
+      }
     }
   }
   return routed;
@@ -511,31 +560,37 @@ function routedSkills(agentsText) {
 
 function skillRoutingFindings(ctx, agentsText) {
   const routed = routedSkills(agentsText);
-  if (routed.size === 0) return [];
+  if (routed.size === 0) {
+    return [];
+  }
   const all = new Set(ctx.allSkills);
   const findings = [];
   for (const name of routed) {
-    if (all.has(name)) continue;
+    if (all.has(name)) {
+      continue;
+    }
     findings.push(
       finding(
         "error",
         "missing-skill",
         "AGENTS.md",
         1,
-        `routed skill "${name}" has no .agents/skills/${name}/SKILL.md`,
-      ),
+        `routed skill "${name}" has no .agents/skills/${name}/SKILL.md`
+      )
     );
   }
   for (const dir of ctx.projectSkills) {
-    if (routed.has(dir)) continue;
+    if (routed.has(dir)) {
+      continue;
+    }
     findings.push(
       finding(
         "warn",
         "unrouted-skill",
         "AGENTS.md",
         1,
-        `project skill "${dir}" is missing from the Skill routing table`,
-      ),
+        `project skill "${dir}" is missing from the Skill routing table`
+      )
     );
   }
   return findings;
@@ -564,8 +619,8 @@ function adrFileFindings(file, text) {
         "adr-naming",
         file,
         1,
-        "ADR filename must be NNNN-kebab-case.md",
-      ),
+        "ADR filename must be NNNN-kebab-case.md"
+      )
     );
   }
   if (
@@ -575,13 +630,7 @@ function adrFileFindings(file, text) {
       ?.startsWith("# ")
   ) {
     findings.push(
-      finding(
-        "error",
-        "adr-title",
-        file,
-        1,
-        "ADR must start with a `# ` title",
-      ),
+      finding("error", "adr-title", file, 1, "ADR must start with a `# ` title")
     );
   }
   return { findings, number: match ? Number(match[1]) : null };
@@ -590,7 +639,7 @@ function adrFileFindings(file, text) {
 function checkAdrs(ctx) {
   const adrs = [...ctx.files.keys()]
     .filter(
-      (f) => /^docs\/adr\/[^/]+\.md$/.test(f) && !f.endsWith("/README.md"),
+      (f) => /^docs\/adr\/[^/]+\.md$/.test(f) && !f.endsWith("/README.md")
     )
     .sort();
   const findings = [];
@@ -598,7 +647,9 @@ function checkAdrs(ctx) {
   for (const file of adrs) {
     const result = adrFileFindings(file, ctx.files.get(file));
     findings.push(...result.findings);
-    if (result.number !== null) numbers.push(result.number);
+    if (result.number !== null) {
+      numbers.push(result.number);
+    }
   }
   const gap = numbers.findIndex((num, index) => num !== index + 1);
   if (gap >= 0) {
@@ -608,8 +659,8 @@ function checkAdrs(ctx) {
         "adr-sequence",
         "docs/adr",
         1,
-        `ADR numbers must be unique and contiguous from 0001 (found ${String(numbers[gap]).padStart(4, "0")} at position ${gap + 1})`,
-      ),
+        `ADR numbers must be unique and contiguous from 0001 (found ${String(numbers[gap]).padStart(4, "0")} at position ${gap + 1})`
+      )
     );
   }
   return findings;
@@ -620,7 +671,7 @@ function h2Set(text) {
     scanLines(text)
       .filter((l) => !l.fenced)
       .map((l) => l.text.match(/^##\s+(.*?)\s*$/)?.[1])
-      .filter(Boolean),
+      .filter(Boolean)
   );
 }
 
@@ -634,7 +685,7 @@ function planStatusFindings(file, state, text) {
         "plan-status",
         file,
         1,
-        `plan is in completed/ but Status is "${status || "missing"}"`,
+        `plan is in completed/ but Status is "${status || "missing"}"`
       ),
     ];
   }
@@ -645,7 +696,7 @@ function planStatusFindings(file, state, text) {
         "plan-status",
         file,
         1,
-        "plan Status is Completed but it is still in active/",
+        "plan Status is Completed but it is still in active/"
       ),
     ];
   }
@@ -661,8 +712,8 @@ function planHygieneFindings(file, state, text) {
         "plan-placeholder",
         file,
         1,
-        "template placeholder text left in plan",
-      ),
+        "template placeholder text left in plan"
+      )
     );
   }
   if (state === "completed" && /^\s*- \[ \]/m.test(text)) {
@@ -672,8 +723,8 @@ function planHygieneFindings(file, state, text) {
         "plan-open-items",
         file,
         1,
-        "completed plan still has unchecked items",
-      ),
+        "completed plan still has unchecked items"
+      )
     );
   }
   return findings;
@@ -689,8 +740,8 @@ function planFindings(file, state, text, required) {
         "plan-sections",
         file,
         1,
-        `missing template section "## ${section}"`,
-      ),
+        `missing template section "## ${section}"`
+      )
     );
   return [
     ...missing,
@@ -705,9 +756,11 @@ function checkPlans(ctx) {
   const findings = [];
   for (const [file, text] of ctx.files) {
     const match = file.match(
-      /^docs\/exec-plans\/(active|completed)\/([^/]+)\.md$/,
+      /^docs\/exec-plans\/(active|completed)\/([^/]+)\.md$/
     );
-    if (!match || match[2] === "README") continue;
+    if (!match || match[2] === "README") {
+      continue;
+    }
     findings.push(...planFindings(file, match[1], text, required));
   }
   return findings;
@@ -716,7 +769,9 @@ function checkPlans(ctx) {
 function checkSpecIndex(ctx) {
   const indexFile = "docs/product-specs/index.md";
   const index = ctx.files.get(indexFile);
-  if (index === undefined) return [];
+  if (index === undefined) {
+    return [];
+  }
   const unreferenced = [...ctx.files.keys()]
     .map((file) => file.match(/^docs\/product-specs\/([^/]+\.md)$/)?.[1])
     .filter((name) => name && name !== "index.md" && !index.includes(name))
@@ -726,8 +781,8 @@ function checkSpecIndex(ctx) {
         "spec-index",
         indexFile,
         1,
-        `index does not reference ${name}`,
-      ),
+        `index does not reference ${name}`
+      )
     );
   const dangling = scanLines(index)
     .filter((line) => !line.fenced)
@@ -741,9 +796,9 @@ function checkSpecIndex(ctx) {
             "spec-index",
             indexFile,
             line.n,
-            `index references missing file ${token}`,
-          ),
-        ),
+            `index references missing file ${token}`
+          )
+        )
     );
   return [...unreferenced, ...dangling];
 }
@@ -752,10 +807,16 @@ function linkedFiles(ctx) {
   const linked = new Map();
   for (const [file, text] of ctx.files) {
     for (const { target } of linkTargets(text)) {
-      if (target.startsWith("#") || EXTERNAL_TARGET.test(target)) continue;
+      if (target.startsWith("#") || EXTERNAL_TARGET.test(target)) {
+        continue;
+      }
       const resolved = resolveFrom(file, safeDecode(target.split(/[#?]/)[0]));
-      if (!resolved || resolved === file) continue;
-      if (!linked.has(resolved)) linked.set(resolved, new Set());
+      if (!resolved || resolved === file) {
+        continue;
+      }
+      if (!linked.has(resolved)) {
+        linked.set(resolved, new Set());
+      }
       linked.get(resolved).add(file);
     }
   }
@@ -769,7 +830,7 @@ function isMentioned(ctx, file) {
     ([other, text]) =>
       other !== file &&
       (text.includes(file) ||
-        (path.posix.dirname(other) === dir && text.includes(base))),
+        (path.posix.dirname(other) === dir && text.includes(base)))
   );
 }
 
@@ -794,8 +855,8 @@ function checkOrphans(ctx) {
         "orphan-doc",
         file,
         1,
-        "no other doc links to or mentions this file",
-      ),
+        "no other doc links to or mentions this file"
+      )
     );
 }
 
@@ -834,9 +895,13 @@ function duplicateCandidates(text) {
 export function checkDuplicates(ctx) {
   const groups = new Map();
   for (const [file, text] of ctx.files) {
-    if (!isDuplicateScope(file)) continue;
+    if (!isDuplicateScope(file)) {
+      continue;
+    }
     for (const { n, key } of duplicateCandidates(text)) {
-      if (!groups.has(key)) groups.set(key, []);
+      if (!groups.has(key)) {
+        groups.set(key, []);
+      }
       groups.get(key).push({ file, n });
     }
   }
@@ -848,8 +913,8 @@ export function checkDuplicates(ctx) {
         "duplicate-rule",
         first.file,
         first.n,
-        `line repeated verbatim in ${rest.map((p) => `${p.file}:${p.n}`).join(", ")} (keep one canonical owner, point from the others)`,
-      ),
+        `line repeated verbatim in ${rest.map((p) => `${p.file}:${p.n}`).join(", ")} (keep one canonical owner, point from the others)`
+      )
     );
 }
 
@@ -865,8 +930,8 @@ export function checkScriptDocs(ctx) {
         "undocumented-script",
         `scripts/${name}`,
         1,
-        "entry script is not mentioned in any documentation",
-      ),
+        "entry script is not mentioned in any documentation"
+      )
     );
 }
 
@@ -886,7 +951,7 @@ export function runChecks(ctx) {
     (a, b) =>
       a.file.localeCompare(b.file) ||
       a.line - b.line ||
-      a.rule.localeCompare(b.rule),
+      a.rule.localeCompare(b.rule)
   );
 }
 
@@ -901,7 +966,7 @@ export function formatFindings(findings) {
   return findings
     .map(
       (f) =>
-        `${f.severity === "error" ? "error" : "warn "} ${f.rule.padEnd(18)} ${f.file}:${f.line}  ${f.message}`,
+        `${f.severity === "error" ? "error" : "warn "} ${f.rule.padEnd(18)} ${f.file}:${f.line}  ${f.message}`
     )
     .join("\n");
 }

@@ -18,7 +18,7 @@ function parseTsx(code, filename = "dummy.tsx") {
     code,
     ts.ScriptTarget.Latest,
     true,
-    ts.ScriptKind.TSX,
+    ts.ScriptKind.TSX
   );
 }
 
@@ -28,11 +28,11 @@ test("guard-component-props passes on current clean codebase", () => {
     ["scripts/guards/guard-component-props.mjs"],
     {
       encoding: "utf8",
-    },
+    }
   );
   assert.match(
     output,
-    /all application component props in src\/components\/ \(outside ui\/ and firebase\/\) adhere to standard inheritance/,
+    /all application component props in src\/components\/ \(outside ui\/ and firebase\/\) adhere to standard inheritance/
   );
 });
 
@@ -84,17 +84,17 @@ test("checkPropsInFile allows canonical library props", () => {
 test("checkAlertProps accepts a canonical props type alias", () => {
   const typeAlias = checkAlertProps(
     parseTsx(
-      'import type * as React from "react"; type ConnectionAlertProps = React.ComponentProps<"div">; function ConnectionAlert() { return null; }; export { ConnectionAlert, type ConnectionAlertProps };',
+      'import type * as React from "react"; type ConnectionAlertProps = React.ComponentProps<"div">; function ConnectionAlert() { return null; }; export { ConnectionAlert, type ConnectionAlertProps };'
     ),
-    "connection-alert.tsx",
+    "connection-alert.tsx"
   );
   assert.equal(typeAlias, null);
 
   const notExported = checkAlertProps(
     parseTsx(
-      'import type * as React from "react"; type ConnectionAlertProps = React.ComponentProps<"div">; function ConnectionAlert() { return null; }; export { ConnectionAlert };',
+      'import type * as React from "react"; type ConnectionAlertProps = React.ComponentProps<"div">; function ConnectionAlert() { return null; }; export { ConnectionAlert };'
     ),
-    "connection-alert.tsx",
+    "connection-alert.tsx"
   );
   assert.ok(notExported !== null);
   assert.match(notExported.message, /canonical props type/);
@@ -103,7 +103,7 @@ test("checkAlertProps accepts a canonical props type alias", () => {
 test("checkAlertProps requires the canonical alert props type", () => {
   const missing = checkAlertProps(
     parseTsx("export function ConnectionAlert() { return null; }"),
-    "connection-alert.tsx",
+    "connection-alert.tsx"
   );
   assert.ok(missing !== null);
   assert.equal(missing.propName, "ConnectionAlertProps");
@@ -111,17 +111,17 @@ test("checkAlertProps requires the canonical alert props type", () => {
 
   const notExported = checkAlertProps(
     parseTsx(
-      'import type { ComponentProps } from "react"; interface ConnectionAlertProps extends ComponentProps<"div"> {}',
+      'import type { ComponentProps } from "react"; interface ConnectionAlertProps extends ComponentProps<"div"> {}'
     ),
-    "connection-alert.tsx",
+    "connection-alert.tsx"
   );
   assert.ok(notExported !== null);
 
   const valid = checkAlertProps(
     parseTsx(
-      'import type * as React from "react"; interface ConnectionAlertProps extends React.ComponentProps<"div"> {}; function ConnectionAlert() { return null; }; export { ConnectionAlert, type ConnectionAlertProps };',
+      'import type * as React from "react"; interface ConnectionAlertProps extends React.ComponentProps<"div"> {}; function ConnectionAlert() { return null; }; export { ConnectionAlert, type ConnectionAlertProps };'
     ),
-    "connection-alert.tsx",
+    "connection-alert.tsx"
   );
   assert.equal(valid, null);
 });
@@ -135,7 +135,7 @@ test("checkSingleComponentFile rejects compound components in one file", () => {
   `;
   const violations = checkSingleComponentFile(
     parseTsx(compound, "connection-alert.tsx"),
-    "connection-alert.tsx",
+    "connection-alert.tsx"
   );
   assert.equal(violations.length, 1);
   assert.match(violations[0].message, /declares 3 components/);
@@ -149,7 +149,7 @@ test("checkSingleComponentFile counts arrow components and ignores hooks and hel
   assert.equal(
     checkSingleComponentFile(parseTsx(arrows, "a-card.tsx"), "a-card.tsx")
       .length,
-    1,
+    1
   );
 
   const single = `
@@ -160,9 +160,9 @@ test("checkSingleComponentFile counts arrow components and ignores hooks and hel
   assert.deepEqual(
     checkSingleComponentFile(
       parseTsx(single, "thing-card.tsx"),
-      "thing-card.tsx",
+      "thing-card.tsx"
     ),
-    [],
+    []
   );
 });
 
@@ -174,7 +174,7 @@ test("checkSingleComponentFile rejects createContext and Object.assign parts", (
   `;
   const contextViolations = checkSingleComponentFile(
     parseTsx(context, "thing-card.tsx"),
-    "thing-card.tsx",
+    "thing-card.tsx"
   );
   assert.equal(contextViolations.length, 1);
   assert.match(contextViolations[0].message, /createContext/);
@@ -185,7 +185,7 @@ test("checkSingleComponentFile rejects createContext and Object.assign parts", (
   `;
   const assignViolations = checkSingleComponentFile(
     parseTsx(assign, "thing-card.tsx"),
-    "thing-card.tsx",
+    "thing-card.tsx"
   );
   assert.equal(assignViolations.length, 1);
   assert.match(assignViolations[0].message, /Object\.assign/);
@@ -197,9 +197,9 @@ test("checkSingleComponentFile skips test files", () => {
   assert.deepEqual(
     checkSingleComponentFile(
       parseTsx(two, "a-card.test.tsx"),
-      "a-card.test.tsx",
+      "a-card.test.tsx"
     ),
-    [],
+    []
   );
 });
 
@@ -211,10 +211,10 @@ test("checkPropsInFile detects missing card component export in -card.tsx", () =
   // Two violations: card-export check + primary-export-matches-filename check
   assert.equal(violations.length, 2);
   const cardViolation = violations.find((v) =>
-    v.message.includes("must export 'DummyCard'"),
+    v.message.includes("must export 'DummyCard'")
   );
   const primaryViolation = violations.find((v) =>
-    v.message.includes("Primary export"),
+    v.message.includes("Primary export")
   );
   assert.ok(cardViolation, "expected card export violation");
   assert.equal(cardViolation.propName, "DummyCard");
@@ -250,7 +250,7 @@ test("checkPrimaryExportMatchesFilename fails when fn name does not match filena
   assert.equal(result.propName, "LoginCard");
   assert.match(
     result.message,
-    /Primary export in 'login-card.tsx' is 'SignInAuthScreen'/,
+    /Primary export in 'login-card.tsx' is 'SignInAuthScreen'/
   );
 });
 
@@ -287,7 +287,7 @@ test("checkPropsInFile catches primary export mismatch via integration", () => {
   `;
   const violations = checkPropsInFile("login-card.tsx", sample);
   const exportViolation = violations.find((v) =>
-    v.message.includes("Primary export"),
+    v.message.includes("Primary export")
   );
   assert.ok(exportViolation, "expected a primary-export violation");
   assert.match(exportViolation.message, /SignInAuthScreen/);
@@ -318,7 +318,7 @@ test("checkLoginCardProps fails when SignInAuthScreenProps is declared instead o
   assert.equal(result.propName, "SignInAuthScreenProps");
   assert.match(
     result.message,
-    /must declare 'LoginCardProps' as its canonical props type/,
+    /must declare 'LoginCardProps' as its canonical props type/
   );
 });
 
@@ -390,7 +390,7 @@ test("checkStandaloneSurfaceComponents flags a dialog declared in another compon
   `;
   const violations = checkStandaloneSurfaceComponents(
     parseTsx(sample, "space-sidebar.tsx"),
-    "space-sidebar.tsx",
+    "space-sidebar.tsx"
   );
   assert.equal(violations.length, 1);
   assert.equal(violations[0].propName, "CreateSpaceDialog");
@@ -402,7 +402,7 @@ test("checkStandaloneSurfaceComponents flags arrow-function surfaces", () => {
   const sample = `const RenameSpaceSheet = () => null;`;
   const violations = checkStandaloneSurfaceComponents(
     parseTsx(sample, "space-sidebar.tsx"),
-    "space-sidebar.tsx",
+    "space-sidebar.tsx"
   );
   assert.equal(violations.length, 1);
   assert.equal(violations[0].propName, "RenameSpaceSheet");
@@ -416,9 +416,9 @@ test("checkStandaloneSurfaceComponents allows the file's own component and compo
   assert.deepEqual(
     checkStandaloneSurfaceComponents(
       parseTsx(sample, "create-space-dialog.tsx"),
-      "create-space-dialog.tsx",
+      "create-space-dialog.tsx"
     ),
-    [],
+    []
   );
 });
 
@@ -430,16 +430,16 @@ test("checkStandaloneSurfaceComponents ignores non-surface components and tests"
   assert.deepEqual(
     checkStandaloneSurfaceComponents(
       parseTsx(sample, "space-sidebar.tsx"),
-      "space-sidebar.tsx",
+      "space-sidebar.tsx"
     ).map((v) => v.propName),
-    ["CreateSpaceDialog"],
+    ["CreateSpaceDialog"]
   );
   assert.deepEqual(
     checkStandaloneSurfaceComponents(
       parseTsx(sample, "space-sidebar.test.tsx"),
-      "space-sidebar.test.tsx",
+      "space-sidebar.test.tsx"
     ),
-    [],
+    []
   );
 });
 

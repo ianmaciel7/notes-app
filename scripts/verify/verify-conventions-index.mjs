@@ -18,7 +18,7 @@ const root = fileURLToPath(new URL("../../", import.meta.url));
 export function runVerify() {
   const markdown = readFileSync(path.join(root, "CONVENTIONS.md"), "utf8");
   const { scripts } = JSON.parse(
-    readFileSync(path.join(root, "package.json"), "utf8"),
+    readFileSync(path.join(root, "package.json"), "utf8")
   );
   const result = verifyIndex({
     markdown,
@@ -27,12 +27,14 @@ export function runVerify() {
   });
   if (result.errors.length === 0) {
     console.log(
-      `[verify-conventions-index] ✓ ${result.enforced} rule(s) enforced by a gate, ${result.reviewOnly} review-only.`,
+      `[verify-conventions-index] ✓ ${result.enforced} rule(s) enforced by a gate, ${result.reviewOnly} review-only.`
     );
     return true;
   }
   console.error("[verify-conventions-index] ✗ Enforcement Index problems:\n");
-  for (const error of result.errors) console.error(`  • ${error}`);
+  for (const error of result.errors) {
+    console.error(`  • ${error}`);
+  }
   return false;
 }
 
@@ -40,5 +42,7 @@ if (
   process.argv[1] &&
   fileURLToPath(import.meta.url) === path.resolve(process.argv[1])
 ) {
-  if (!runVerify()) process.exit(1);
+  if (!runVerify()) {
+    process.exit(1);
+  }
 }

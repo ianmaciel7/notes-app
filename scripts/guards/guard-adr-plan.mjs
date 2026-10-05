@@ -62,7 +62,9 @@ function parseCliArgs(argv) {
 }
 
 function getChangedFiles({ staged, base, explicitFiles }) {
-  if (explicitFiles.length > 0) return explicitFiles;
+  if (explicitFiles.length > 0) {
+    return explicitFiles;
+  }
 
   if (staged) {
     const out = git(["diff", "--cached", "--name-only", "--diff-filter=ACMR"]);
@@ -73,7 +75,9 @@ function getChangedFiles({ staged, base, explicitFiles }) {
   if (out) {
     const lines = out.split(/\r?\n/).filter(Boolean);
     const files = lines.map((l) => l.slice(3).trim()).filter(Boolean);
-    if (files.length > 0) return files;
+    if (files.length > 0) {
+      return files;
+    }
   }
 
   out = git(["diff", "--name-only", `${base}...HEAD`]);
@@ -85,7 +89,7 @@ function getChangedFiles({ staged, base, explicitFiles }) {
 
 function main() {
   const { allowNoPlan, staged, base, explicitFiles } = parseCliArgs(
-    process.argv.slice(2),
+    process.argv.slice(2)
   );
 
   const commitMsg = getCommitMessage();
