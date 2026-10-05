@@ -6,11 +6,11 @@ import { QuestionChoiceFieldSet } from "@/components/notes-app/question-choice-f
 import { QuestionDraggableFieldSet } from "@/components/notes-app/question-draggable-field-set";
 import { QuestionDropdownFieldGroup } from "@/components/notes-app/question-dropdown-field-group";
 import { QuestionFillBlankField } from "@/components/notes-app/question-fill-blank-field";
-import { QuestionHotspotFigure } from "@/components/notes-app/question-hotspot-figure";
+import { QuestionHotspotFieldSet } from "@/components/notes-app/question-hotspot-field-set";
 import { QuestionMatchingFieldSet } from "@/components/notes-app/question-matching-field-set";
-import { QuestionMatrixTable } from "@/components/notes-app/question-matrix-table";
-import { QuestionOrderingItemGroup } from "@/components/notes-app/question-ordering-item-group";
-import { QuestionSimulationCard } from "@/components/notes-app/question-simulation-card";
+import { QuestionMatrixFieldSet } from "@/components/notes-app/question-matrix-field-set";
+import { QuestionOrderingFieldSet } from "@/components/notes-app/question-ordering-field-set";
+import { QuestionSimulationFieldSet } from "@/components/notes-app/question-simulation-field-set";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type {

@@ -1,6 +1,12 @@
 "use client";
 
-import { closestCenter, DndContext, DragOverlay } from "@dnd-kit/core";
+import {
+  closestCenter,
+  DndContext,
+  DragOverlay,
+  type DropAnimation,
+  defaultDropAnimationSideEffects,
+} from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -11,11 +17,11 @@ import type { ComponentProps } from "react";
 import { QuestionOrderingItem } from "@/components/notes-app/question-ordering-item";
 import { FieldLegend, FieldSet } from "@/components/ui/field";
 import { Item } from "@/components/ui/item";
-import { useQuestionOrderingItemGroup } from "@/hooks/use-question-ordering-item-group";
+import { useQuestionOrderingFieldSet } from "@/hooks/use-question-ordering-field-set";
 import { cn } from "@/lib/utils";
 import type { QuestionItem } from "@/types/question";
 
-type QuestionOrderingItemGroupProps = Omit<
+type QuestionOrderingFieldSetProps = Omit<
   ComponentProps<typeof FieldSet>,
   "children" | "onChange"
 > & {
@@ -27,6 +33,18 @@ type QuestionOrderingItemGroupProps = Omit<
   onValueChange: (value: string[]) => void;
 };
 
+const dropAnimationConfig: DropAnimation = {
+  duration: 200,
+  easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
+  sideEffects: defaultDropAnimationSideEffects({
+    styles: {
+      active: {
+        opacity: "0",
+      },
+    },
+  }),
+};
+
 function QuestionOrderingItemGroup({
   legend,
   items,
@@ -36,7 +54,7 @@ function QuestionOrderingItemGroup({
   onValueChange,
   className,
   ...props
-}: QuestionOrderingItemGroupProps) {
+}: QuestionOrderingFieldSetProps) {
   const t = useTranslations("exam");
   const {
     orderedIds,
@@ -48,7 +66,7 @@ function QuestionOrderingItemGroup({
     handleDragStart,
     handleDragEnd,
     handleDragCancel,
-  } = useQuestionOrderingItemGroup({
+  } = useQuestionOrderingFieldSet({
     items,
     value,
     resolved,
@@ -57,7 +75,7 @@ function QuestionOrderingItemGroup({
 
   return (
     <FieldSet
-      data-slot="question-ordering-item-group"
+      data-slot="question-ordering-field-set"
       {...props}
       className={cn("min-w-0 gap-3", className)}
     >
@@ -99,15 +117,15 @@ function QuestionOrderingItemGroup({
           </div>
         </SortableContext>
 
-        <DragOverlay>
+        <DragOverlay dropAnimation={dropAnimationConfig} zIndex={1000}>
           {activeItem ? (
             <Item
               data-slot="question-ordering-drag-overlay"
               variant="outline"
-              className="flex items-center justify-between gap-3 rounded-lg border-border bg-card p-3 shadow-lg ring-2 ring-primary/20"
+              className="flex cursor-grabbing items-center justify-between gap-3 rounded-lg border-primary/40 bg-card p-3 shadow-xl ring-2 ring-primary/40 scale-[1.02] rotate-[0.5deg]"
             >
               <div className="flex items-center gap-2">
-                <span className="cursor-grabbing p-1 text-muted-foreground">
+                <span className="p-1 text-muted-foreground">
                   <GripVerticalIcon className="size-4" aria-hidden="true" />
                 </span>
                 <span className="text-sm font-medium text-foreground">

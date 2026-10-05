@@ -57,7 +57,7 @@ function QuestionDroppableField({
         ref={setNodeRef}
         {...props}
         className={cn(
-          "flex min-h-40 flex-col gap-2 rounded-lg border border-border bg-muted/20 p-3 data-[over]:border-primary data-[over]:bg-primary/5",
+          "flex min-h-40 flex-col gap-2 rounded-lg border border-border bg-muted/20 p-3 transition-colors data-[over]:border-primary data-[over]:bg-primary/5 data-[over]:ring-2 data-[over]:ring-primary/20",
           className,
         )}
       >
@@ -143,8 +143,8 @@ function QuestionDroppableField({
         className={cn(
           "flex min-h-11 items-center justify-center rounded-md border border-dashed transition-all",
           placed
-            ? "border-transparent bg-background shadow-xs"
-            : "border-border/80 bg-background/40 px-3 py-2 text-xs text-muted-foreground data-[over]:border-primary data-[over]:bg-primary/10",
+            ? "border-transparent bg-background shadow-xs data-[over]:border-primary data-[over]:ring-2 data-[over]:ring-primary/30"
+            : "border-border/80 bg-background/40 px-3 py-2 text-xs text-muted-foreground data-[over]:border-primary data-[over]:bg-primary/10 data-[over]:ring-2 data-[over]:ring-primary/20",
         )}
       >
         {placed ? (
@@ -154,7 +154,12 @@ function QuestionDroppableField({
             className="w-full justify-start shadow-xs hover:border-primary/50"
           />
         ) : (
-          <span className="text-xs text-muted-foreground/70">
+          <span
+            className={cn(
+              "select-none text-xs text-muted-foreground/70 transition-opacity",
+              isOver && "opacity-0",
+            )}
+          >
             {t("dragSlotEmpty")}
           </span>
         )}

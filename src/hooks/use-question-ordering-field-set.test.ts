@@ -2,7 +2,7 @@ import type { Active, Over } from "@dnd-kit/core";
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import type { QuestionItem } from "@/types/question";
-import { useQuestionOrderingItemGroup } from "./use-question-ordering-item-group";
+import { useQuestionOrderingFieldSet } from "./use-question-ordering-field-set";
 
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string, values?: Record<string, unknown>) =>
@@ -15,11 +15,11 @@ const items: QuestionItem[] = [
   { id: "i3", text: "Step 3" },
 ];
 
-describe("useQuestionOrderingItemGroup", () => {
+describe("useQuestionOrderingFieldSet", () => {
   it("initializes value if empty on mount", () => {
     const onValueChange = vi.fn();
     renderHook(() =>
-      useQuestionOrderingItemGroup({
+      useQuestionOrderingFieldSet({
         items,
         value: [],
         resolved: false,
@@ -33,7 +33,7 @@ describe("useQuestionOrderingItemGroup", () => {
   it("moves an item using button move helpers", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionOrderingItemGroup({
+      useQuestionOrderingFieldSet({
         items,
         value: ["i1", "i2", "i3"],
         resolved: false,
@@ -51,7 +51,7 @@ describe("useQuestionOrderingItemGroup", () => {
   it("does not move when resolved or index is out of bounds", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionOrderingItemGroup({
+      useQuestionOrderingFieldSet({
         items,
         value: ["i1", "i2", "i3"],
         resolved: true,
@@ -65,7 +65,7 @@ describe("useQuestionOrderingItemGroup", () => {
     expect(onValueChange).not.toHaveBeenCalled();
 
     const { result: activeResult } = renderHook(() =>
-      useQuestionOrderingItemGroup({
+      useQuestionOrderingFieldSet({
         items,
         value: ["i1", "i2", "i3"],
         resolved: false,
@@ -83,7 +83,7 @@ describe("useQuestionOrderingItemGroup", () => {
   it("reorders on drag end", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionOrderingItemGroup({
+      useQuestionOrderingFieldSet({
         items,
         value: ["i1", "i2", "i3"],
         resolved: false,
@@ -107,7 +107,7 @@ describe("useQuestionOrderingItemGroup", () => {
   it("tracks activeItem across drag start, cancel, and end", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionOrderingItemGroup({
+      useQuestionOrderingFieldSet({
         items,
         value: ["i1", "i2", "i3"],
         resolved: false,
@@ -138,7 +138,7 @@ describe("useQuestionOrderingItemGroup", () => {
   it("provides screen reader announcements for ordering", () => {
     const onValueChange = vi.fn();
     const { result } = renderHook(() =>
-      useQuestionOrderingItemGroup({
+      useQuestionOrderingFieldSet({
         items,
         value: ["i1", "i2", "i3"],
         resolved: false,

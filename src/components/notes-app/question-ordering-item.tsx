@@ -66,7 +66,8 @@ function QuestionOrderingItem({
         "flex items-center justify-between gap-3 rounded-lg border-border bg-card p-3 shadow-xs transition-colors",
         status === "correct" && "border-primary bg-primary/10",
         status === "incorrect" && "border-destructive bg-destructive/10",
-        isDragging && "z-10 opacity-30 shadow-md",
+        isDragging &&
+          "border-dashed border-primary/40 bg-muted/20 opacity-30 shadow-none",
         className,
       )}
     >

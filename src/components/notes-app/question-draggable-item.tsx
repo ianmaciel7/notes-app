@@ -38,12 +38,14 @@ function QuestionDraggableItem({
       ref={setNodeRef}
       aria-disabled={disabled || undefined}
       style={
-        transform
+        !isDragging && transform
           ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` }
           : undefined
       }
       className={cn(
-        "relative h-auto min-h-8 touch-none justify-start gap-2 whitespace-normal py-1.5 text-left font-normal transition-opacity data-[dragging]:z-10 data-[dragging]:opacity-30 data-[dragging]:shadow-md",
+        "relative h-auto min-h-8 touch-none justify-start gap-2 whitespace-normal py-1.5 text-left font-normal transition-all",
+        isDragging &&
+          "pointer-events-none border-dashed border-primary/40 bg-muted/20 opacity-35 shadow-none",
         className,
       )}
     >

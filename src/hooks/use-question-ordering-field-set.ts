@@ -14,19 +14,19 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import type { QuestionItem } from "@/types/question";
 
-export type UseQuestionOrderingItemGroupOptions = {
+export type UseQuestionOrderingFieldSetOptions = {
   items: QuestionItem[];
   value: string[];
   resolved: boolean;
   onValueChange: (value: string[]) => void;
 };
 
-export function useQuestionOrderingItemGroup({
+export function useQuestionOrderingFieldSet({
   items,
   value,
   resolved,
   onValueChange,
-}: UseQuestionOrderingItemGroupOptions) {
+}: UseQuestionOrderingFieldSetOptions) {
   const t = useTranslations("exam");
   const [activeId, setActiveId] = useState<string | null>(null);
 
