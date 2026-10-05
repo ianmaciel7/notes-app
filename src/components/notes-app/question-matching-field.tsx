@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/native-select";
 import type { QuestionItem } from "@/types/question";
 
-type QuestionMatchingItemProps = Omit<
+type QuestionMatchingFieldProps = Omit<
   ComponentProps<typeof Field>,
   "children" | "onChange"
 > & {
@@ -30,7 +30,7 @@ type QuestionMatchingItemProps = Omit<
   onChosenChange: (rightId: string) => void;
 };
 
-function QuestionMatchingItem({
+function QuestionMatchingField({
   item,
   rightItems,
   chosenId,
@@ -38,7 +38,7 @@ function QuestionMatchingItem({
   resolved,
   onChosenChange,
   ...props
-}: QuestionMatchingItemProps) {
+}: QuestionMatchingFieldProps) {
   const t = useTranslations("exam");
   const selectId = useId();
   const isCorrect = chosenId === correctId;
@@ -48,7 +48,7 @@ function QuestionMatchingItem({
 
   return (
     <Field
-      data-slot="question-matching-item"
+      data-slot="question-matching-field"
       orientation="responsive"
       {...props}
     >
@@ -94,4 +94,4 @@ function QuestionMatchingItem({
   );
 }
 
-export { QuestionMatchingItem, type QuestionMatchingItemProps };
+export { QuestionMatchingField, type QuestionMatchingFieldProps };

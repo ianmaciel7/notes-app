@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { QuestionMatchingItem } from "@/components/notes-app/question-matching-item";
+import { QuestionMatchingField } from "@/components/notes-app/question-matching-field";
 import { FieldLegend, FieldSet } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import type { QuestionItem } from "@/types/question";
@@ -46,7 +46,7 @@ function QuestionMatchingFieldSet({
       <div className="divide-y divide-border rounded-lg border border-border bg-card">
         {leftItems.map((item) => (
           <div key={item.id} className="p-3">
-            <QuestionMatchingItem
+            <QuestionMatchingField
               item={item}
               rightItems={rightItems}
               chosenId={value[item.id] ?? ""}
