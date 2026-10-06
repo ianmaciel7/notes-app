@@ -1,0 +1,11 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsDirective() as $directive where {
+  $program <: contains `"use client"`,
+  $directive <: r".*use (?:server|cache(?:: (?:private|remote))?).*",
+  register_diagnostic(
+    span=$directive,
+    message="Do not mix client and server/cache directives in the same module. Keep the client boundary small and move server or cache work to a separate server module."
+  )
+}

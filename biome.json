@@ -36,7 +36,7 @@
       "recommended": true
     },
     "domains": {
-      "next": "recommended",
+      "next": "all",
       "react": "recommended",
       "test": "recommended",
       "playwright": "recommended",
@@ -45,6 +45,12 @@
     }
   },
   "plugins": [
+    "./grit/nextjs/app-router-legacy-imports.grit",
+    "./grit/nextjs/app-router-legacy-data-apis.grit",
+    "./grit/nextjs/client-server-import-boundary.grit",
+    "./grit/nextjs/client-server-directive-boundary.grit",
+    "./grit/nextjs/client-private-env.grit",
+    "./grit/nextjs/cache-runtime-apis.grit",
     "./grit/shadcn/base-ui-no-as-child.grit",
     "./grit/shadcn/base-ui-api.grit",
     "./grit/shadcn/required-accessible-parts.grit",

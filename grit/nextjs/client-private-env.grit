@@ -1,0 +1,23 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  JsStaticMemberExpression(object=$env, member=$member) as $access where {
+    $env <: `process.env`,
+    $program <: contains `"use client"`,
+    not $member <: r"NEXT_PUBLIC_.*",
+    register_diagnostic(
+      span=$access,
+      message="Private environment variables must not be read from a Client Component entry module. Keep secrets server-only; only NEXT_PUBLIC_* values are intentionally exposed to the browser."
+    )
+  },
+  JsComputedMemberExpression(object=$env, member=$member) as $access where {
+    $env <: `process.env`,
+    $program <: contains `"use client"`,
+    not $member <: r".*NEXT_PUBLIC_.*",
+    register_diagnostic(
+      span=$access,
+      message="Dynamic or private environment-variable access is not allowed in a Client Component entry module. Keep secrets server-only."
+    )
+  }
+}

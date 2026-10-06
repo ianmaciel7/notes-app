@@ -1,0 +1,11 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsModuleSource(value=$source) as $module_source where {
+  $module_source <: within JsImport() as $import,
+  $source <: r".*(?:next/head|next/router|next/document|next/legacy/image).*",
+  register_diagnostic(
+    span=$import,
+    message="This repository uses the App Router. Replace Pages Router or legacy imports with the App Router equivalents: Metadata API, next/navigation, App Router file conventions, or next/image."
+  )
+}

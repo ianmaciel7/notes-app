@@ -1,0 +1,33 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsCallExpression(callee=$callee) as $call where {
+  $callee <: r"(?:cookies|headers)",
+  $program <: contains JsModuleSource(value=$source) where {
+    $source <: r".*next/headers.*"
+  },
+  or {
+    $call <: within JsFunctionDeclaration(body=$body1) where {
+      $body1 <: contains `"use cache"`
+    },
+    $call <: within JsFunctionExportDefaultDeclaration(body=$body2) where {
+      $body2 <: contains `"use cache"`
+    },
+    $call <: within JsFunctionExpression(body=$body3) where {
+      $body3 <: contains `"use cache"`
+    },
+    $call <: within JsArrowFunctionExpression(body=$body4) where {
+      $body4 <: contains `"use cache"`
+    },
+    $call <: within JsMethodObjectMember(body=$body5) where {
+      $body5 <: contains `"use cache"`
+    },
+    $call <: within JsMethodClassMember(body=$body6) where {
+      $body6 <: contains `"use cache"`
+    }
+  },
+  register_diagnostic(
+    span=$call,
+    message="cookies() and headers() cannot be read inside a plain 'use cache' scope. Read request-time values outside the cached scope and pass the needed values as arguments, or deliberately use the appropriate private-cache model."
+  )
+}

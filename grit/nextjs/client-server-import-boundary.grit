@@ -1,0 +1,12 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsModuleSource(value=$source) as $module_source where {
+  $program <: contains `"use client"`,
+  $module_source <: within JsImport() as $import,
+  $source <: r".*(?:next/headers|next/cache|server-only).*",
+  register_diagnostic(
+    span=$import,
+    message="Client entry modules must not import server-only modules. Move request/cache/server-only logic behind a Server Component, Server Function, Route Handler, or server-only data layer."
+  )
+}
