@@ -1,0 +1,12 @@
+{
+  "threshold": 2,
+  "reporters": ["console"],
+  "ignore": [
+    "**/node_modules/**",
+    "**/.next/**",
+    "src/components/ui/**",
+    "**/*.d.ts",
+    "**/*.css"
+  ],
+  "format": ["javascript", "typescript"]
+}

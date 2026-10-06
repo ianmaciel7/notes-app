@@ -20,7 +20,9 @@
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "indentWidth": 2
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 80
   },
   "css": {
     "parser": {
@@ -34,9 +36,13 @@
     },
     "domains": {
       "next": "recommended",
-      "react": "recommended"
+      "react": "recommended",
+      "test": "recommended",
+      "playwright": "recommended",
+      "types": "recommended"
     }
   },
+  "plugins": [],
   "assist": {
     "actions": {
       "source": {

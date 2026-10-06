@@ -1,0 +1,26 @@
+{
+  "config": {
+    "default": true,
+    "line-length": false,
+    "no-inline-html": false,
+    "blanks-around-headings": false,
+    "blanks-around-lists": false,
+    "blanks-around-fences": false,
+    "blanks-around-tables": false,
+    "no-bare-urls": false,
+    "fenced-code-language": false,
+    "first-line-heading": false,
+    "no-multiple-blanks": false
+  },
+  "ignores": [
+    "node_modules",
+    ".next",
+    ".worktrees",
+    ".worktress",
+    ".agents",
+    ".gemini",
+    ".claude",
+    ".cursor",
+    ".vscode"
+  ]
+}

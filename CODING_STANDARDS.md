@@ -310,7 +310,6 @@ The project utilizes **shadcn UI** (configured with `@base-ui/react` primitives 
   - Feature components and route views (`src/app/`, `src/features/`, etc.) import primitives directly via `@/components/ui/*`.
   - While `src/components/ui/` primitives remain in their native registry format, all consuming application code must strictly obey Biome linting, React 19 Compiler rules, domain glossaries (`GLOSSARY.md`), and semantic accessibility standards.
 
-
 ---
 
 ## 6. Biome Linting & Formatting Standards

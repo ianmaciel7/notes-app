@@ -122,6 +122,108 @@
           "goose"
         ],
         "enabled": true
+      },
+      "github": {
+        "label": "GitHub",
+        "description": "Official GitHub MCP Server",
+        "transport": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-github"
+        ],
+        "targets": [
+          "codex",
+          "claude",
+          "antigravity",
+          "cursor"
+        ],
+        "enabled": true
+      },
+      "serena": {
+        "label": "Serena",
+        "description": "Serena code navigation and symbolic editing MCP server",
+        "transport": "stdio",
+        "command": "serena",
+        "args": [
+          "start-mcp-server"
+        ],
+        "targets": [
+          "antigravity",
+          "cursor",
+          "claude"
+        ],
+        "enabled": true
+      },
+      "graphify": {
+        "label": "Graphify",
+        "description": "Codebase knowledge graph querying MCP server",
+        "transport": "stdio",
+        "command": "graphify-mcp",
+        "args": [],
+        "targets": [
+          "antigravity",
+          "cursor",
+          "claude"
+        ],
+        "enabled": true
+      },
+      "shoogle": {
+        "label": "Shoogle",
+        "description": "Remote Google Workspace HTTP MCP server",
+        "transport": "http",
+        "url": "http://127.0.0.1:8765/mcp",
+        "targets": [
+          "antigravity"
+        ],
+        "enabled": true
+      },
+      "playwright": {
+        "label": "Playwright",
+        "description": "Playwright browser automation MCP server",
+        "transport": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@playwright/mcp"
+        ],
+        "targets": [
+          "antigravity",
+          "cursor"
+        ],
+        "enabled": true
+      },
+      "firebase": {
+        "label": "Firebase",
+        "description": "Firebase CLI local emulator and project MCP server",
+        "transport": "stdio",
+        "command": "pnpm",
+        "args": [
+          "dlx",
+          "firebase-tools",
+          "mcp"
+        ],
+        "targets": [
+          "antigravity",
+          "cursor"
+        ],
+        "enabled": true
+      },
+      "nextjs": {
+        "label": "Next.js",
+        "description": "Next.js DevTools and agent MCP server",
+        "transport": "stdio",
+        "command": "pnpm",
+        "args": [
+          "exec",
+          "next",
+          "experimental-mcp"
+        ],
+        "targets": [
+          "antigravity",
+          "cursor"
+        ],
+        "enabled": true
       }
     }
   },
