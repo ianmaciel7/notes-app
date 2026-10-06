@@ -1,0 +1,60 @@
+engine biome(1.0)
+language js(typescript,jsx)
+
+or {
+  or {
+    JsxSelfClosingElement(name = $item_name) as $item,
+    JsxOpeningElement(name = $item_name) as $item
+  } where {
+    $item_name <: r"(SelectItem|SelectLabel)",
+    not $item <: within JsxElement(
+      opening_element = JsxOpeningElement(name = $group_name)
+    ),
+    $group_name <: r"SelectGroup"
+  },
+  or {
+    JsxSelfClosingElement(name = $item_name) as $item,
+    JsxOpeningElement(name = $item_name) as $item
+  } where {
+    $item_name <: r"(DropdownMenuItem|DropdownMenuLabel|DropdownMenuSub)",
+    not $item <: within JsxElement(
+      opening_element = JsxOpeningElement(name = $group_name)
+    ),
+    $group_name <: r"DropdownMenuGroup"
+  },
+  or {
+    JsxSelfClosingElement(name = $item_name) as $item,
+    JsxOpeningElement(name = $item_name) as $item
+  } where {
+    $item_name <: r"MenubarItem",
+    not $item <: within JsxElement(
+      opening_element = JsxOpeningElement(name = $group_name)
+    ),
+    $group_name <: r"MenubarGroup"
+  },
+  or {
+    JsxSelfClosingElement(name = $item_name) as $item,
+    JsxOpeningElement(name = $item_name) as $item
+  } where {
+    $item_name <: r"ContextMenuItem",
+    not $item <: within JsxElement(
+      opening_element = JsxOpeningElement(name = $group_name)
+    ),
+    $group_name <: r"ContextMenuGroup"
+  },
+  or {
+    JsxSelfClosingElement(name = $item_name) as $item,
+    JsxOpeningElement(name = $item_name) as $item
+  } where {
+    $item_name <: r"CommandItem",
+    not $item <: within JsxElement(
+      opening_element = JsxOpeningElement(name = $group_name)
+    ),
+    $group_name <: r"CommandGroup"
+  }
+} where {
+  register_diagnostic(
+    span = $item,
+    message = "This shadcn item must be nested inside its corresponding Group component."
+  )
+}

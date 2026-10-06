@@ -1,0 +1,15 @@
+engine biome(1.0)
+language js(typescript,jsx)
+
+or {
+  JsxSelfClosingElement(name = $component, attributes = $attributes) as $button,
+  JsxOpeningElement(name = $component, attributes = $attributes) as $button
+} where {
+  $component <: r"Button",
+  $attributes <: contains JsxAttribute() as $attribute,
+  $attribute <: r"(isLoading|isPending)(\s*=.*)?",
+  register_diagnostic(
+    span = $attribute,
+    message = "Button does not expose isLoading/isPending. Compose loading state with disabled + Spinner + data-icon."
+  )
+}
