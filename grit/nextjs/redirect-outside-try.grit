@@ -5,6 +5,6 @@ or {
   `redirect($target)` as $call,
   `permanentRedirect($target)` as $call
 } where {
-  $call <: within JsTryStatement(),
+  $call <: within JsTryStatement() ,
   register_diagnostic(span=$call, message="Next.js redirect APIs throw framework-controlled errors. In this repository, call redirect/permanentRedirect outside try blocks so catch handlers cannot swallow navigation.")
 }
