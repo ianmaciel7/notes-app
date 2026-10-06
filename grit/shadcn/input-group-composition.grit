@@ -1,17 +1,12 @@
 engine biome(1.0)
-language js(typescript,jsx)
+language js(typescript, jsx)
 
 or {
-  JsxSelfClosingElement(name = $control_name) as $control,
-  JsxOpeningElement(name = $control_name) as $control
+  JsxSelfClosingElement(name=$control_name) as $control,
+  JsxOpeningElement(name=$control_name) as $control
 } where {
   $control_name <: r"(Input|Textarea)",
-  $control <: within JsxElement(
-    opening_element = JsxOpeningElement(name = $group_name)
-  ),
+  $control <: within JsxElement(opening_element=JsxOpeningElement(name=$group_name)) ,
   $group_name <: r"InputGroup",
-  register_diagnostic(
-    span = $control,
-    message = "Use InputGroupInput or InputGroupTextarea inside InputGroup instead of raw Input or Textarea."
-  )
+  register_diagnostic(span=$control, message="Use InputGroupInput or InputGroupTextarea inside InputGroup instead of raw Input or Textarea.")
 }

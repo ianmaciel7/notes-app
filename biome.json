@@ -46,59 +46,31 @@
   "plugins": [
     {
       "path": "./grit/shadcn/base-ui-no-as-child.grit",
-      "includes": [
-        "src/**/*.ts",
-        "src/**/*.tsx",
-        "!src/components/ui/**"
-      ]
+      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
     },
     {
       "path": "./grit/shadcn/base-ui-api.grit",
-      "includes": [
-        "src/**/*.ts",
-        "src/**/*.tsx",
-        "!src/components/ui/**"
-      ]
+      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
     },
     {
       "path": "./grit/shadcn/required-accessible-parts.grit",
-      "includes": [
-        "src/**/*.ts",
-        "src/**/*.tsx",
-        "!src/components/ui/**"
-      ]
+      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
     },
     {
       "path": "./grit/shadcn/group-composition.grit",
-      "includes": [
-        "src/**/*.ts",
-        "src/**/*.tsx",
-        "!src/components/ui/**"
-      ]
+      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
     },
     {
       "path": "./grit/shadcn/input-group-composition.grit",
-      "includes": [
-        "src/**/*.ts",
-        "src/**/*.tsx",
-        "!src/components/ui/**"
-      ]
+      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
     },
     {
       "path": "./grit/shadcn/button-state.grit",
-      "includes": [
-        "src/**/*.ts",
-        "src/**/*.tsx",
-        "!src/components/ui/**"
-      ]
+      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
     },
     {
       "path": "./grit/shadcn/tabs-composition.grit",
-      "includes": [
-        "src/**/*.ts",
-        "src/**/*.tsx",
-        "!src/components/ui/**"
-      ]
+      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
     }
   ],
   "assist": {

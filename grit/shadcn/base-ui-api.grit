@@ -1,42 +1,39 @@
 engine biome(1.0)
-language js(typescript,jsx)
+language js(typescript, jsx)
 
 or {
   or {
-    JsxSelfClosingElement(name = $component, attributes = $attributes) as $element,
-    JsxOpeningElement(name = $component, attributes = $attributes) as $element
+    JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
+    JsxOpeningElement(name=$component, attributes=$attributes) as $element
   } where {
     $component <: r"(ToggleGroup|Accordion)",
     $attributes <: contains JsxAttribute() as $attribute,
     $attribute <: r"type(\s*=.*)?"
   },
   or {
-    JsxSelfClosingElement(name = $component, attributes = $attributes) as $element,
-    JsxOpeningElement(name = $component, attributes = $attributes) as $element
+    JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
+    JsxOpeningElement(name=$component, attributes=$attributes) as $element
   } where {
     $component <: r"Accordion",
     $attributes <: contains JsxAttribute() as $attribute,
     $attribute <: r"collapsible(\s*=.*)?"
   },
   or {
-    JsxSelfClosingElement(name = $component, attributes = $attributes) as $element,
-    JsxOpeningElement(name = $component, attributes = $attributes) as $element
+    JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
+    JsxOpeningElement(name=$component, attributes=$attributes) as $element
   } where {
     $component <: r"SelectContent",
     $attributes <: contains JsxAttribute() as $attribute,
     $attribute <: r"position(\s*=.*)?"
   },
   or {
-    JsxSelfClosingElement(name = $component, attributes = $attributes) as $element,
-    JsxOpeningElement(name = $component, attributes = $attributes) as $element
+    JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
+    JsxOpeningElement(name=$component, attributes=$attributes) as $element
   } where {
     $component <: r"SelectValue",
     $attributes <: contains JsxAttribute() as $attribute,
     $attribute <: r"placeholder(\s*=.*)?"
   }
 } where {
-  register_diagnostic(
-    span = $attribute,
-    message = "Radix-style API detected in a shadcn Base UI component. Use the Base UI API documented by the project shadcn skill."
-  )
+  register_diagnostic(span=$attribute, message="Radix-style API detected in a shadcn Base UI component. Use the Base UI API documented by the project shadcn skill.")
 }

@@ -1,15 +1,12 @@
 engine biome(1.0)
-language js(typescript,jsx)
+language js(typescript, jsx)
 
 or {
-  JsxSelfClosingElement(name = $component, attributes = $attributes) as $element,
-  JsxOpeningElement(name = $component, attributes = $attributes) as $element
+  JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
+  JsxOpeningElement(name=$component, attributes=$attributes) as $element
 } where {
   $component <: r"(Button|DialogTrigger|DialogClose|SheetTrigger|SheetClose|AlertDialogTrigger|DropdownMenuTrigger|PopoverTrigger|TooltipTrigger|CollapsibleTrigger|NavigationMenuLink|BreadcrumbLink|SidebarMenuButton|Badge|Item)",
   $attributes <: contains JsxAttribute() as $attribute,
   $attribute <: r"asChild(\s*=.*)?",
-  register_diagnostic(
-    span = $attribute,
-    message = "This project uses shadcn Base UI. Use the Base UI render prop instead of Radix asChild."
-  )
+  register_diagnostic(span=$attribute, message="This project uses shadcn Base UI. Use the Base UI render prop instead of Radix asChild.")
 }
