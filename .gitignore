@@ -68,3 +68,4 @@ opencode.json
 # agent caches & artifacts
 .serena/
 graphify-out/
+.firebase/logs/vsce-debug.log

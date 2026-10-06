@@ -11,13 +11,13 @@
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/in-progress/chief-of-staff/SKILL.md",
-      "computedHash": "47935c458289f1ae1b7b02afaed0278dcc50317ae0e9835ff741b66fb80a4990"
+      "computedHash": "f071b64619ecda4e800697487c0a84e5b2580bc7b1ce3ed23764e5d16cc28a1c"
     },
     "claude-handoff": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/in-progress/claude-handoff/SKILL.md",
-      "computedHash": "c0fa5d0eede556bc7809c8461a25ec2c7db5726f338970458aa7bbf702b8ea8c"
+      "computedHash": "7286edfcb9237c72b3bd96cdab1d6a515f529b25380923569924b96d2d265701"
     },
     "code-review": {
       "source": "mattpocock/skills",
@@ -77,13 +77,13 @@
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/productivity/handoff/SKILL.md",
-      "computedHash": "9ea2a5de5ca2d717f913356de982fdc4fe27d28a300c16598cd43a4865491008"
+      "computedHash": "00e2d31992d62490083ed2fa2fc2a4418362f765875a59e7a3dc52836f826ab2"
     },
     "implement": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/implement/SKILL.md",
-      "computedHash": "130cac2d72bfde8cd526bf3b754211e2fe00e84bc4d9f9c56f749b9541a3afad"
+      "computedHash": "057512282695d357e3f84d21f2a38abc18f5df36bd4591bcde31bdf61fdf6fd6"
     },
     "implement-spec": {
       "source": "mattpocock/skills",
@@ -113,31 +113,31 @@
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-cache-components-adoption/SKILL.md",
-      "computedHash": "38eb3cb9e625b46b54493459a106ac410bc0fe59b124903d55f5090c959d292f"
+      "computedHash": "825774334f00624aac9836ec4f29b8d62f1a6d5e31f81133bde0b4db17a3fa67"
     },
     "next-cache-components-optimizer": {
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-cache-components-optimizer/SKILL.md",
-      "computedHash": "c62f6c13119c4e9027268edaa07291c33d74a676e1bd93583349c07efd990f6b"
+      "computedHash": "60f603cd578249e5bfc6e192032b20bf7e74764554bdd319fdc543be0b563052"
     },
     "next-dev-loop": {
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-dev-loop/SKILL.md",
-      "computedHash": "c305c83b726212e0284930c65cded2c4a4ab85f9bfccfa83b62274247fe3580e"
+      "computedHash": "8ea79dc762e3915e411a33ab3ec74ee25fdce52bc458be4dbfc43cf9616542da"
     },
     "next-partial-prefetching-adoption": {
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-partial-prefetching-adoption/SKILL.md",
-      "computedHash": "a38d97149035862560496ec063dc2559444c5140b05acc3059c70ed990c67c76"
+      "computedHash": "8b5621a5e6a2c66fc43a37755361d75eb902bdd72a474f715248ad754bdb9607"
     },
     "next-partial-prefetching-optimizer": {
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-partial-prefetching-optimizer/SKILL.md",
-      "computedHash": "ff92c959ba4d384ceb45b727c639f7ca1a3d819ef2b799b3416e859fe85fe8da"
+      "computedHash": "a0f0952bf734a1b7ea4fe547a7693adbed016b988f24566b6c8f0d2835f57ec3"
     },
     "pr": {
       "source": "mattpocock/skills",
@@ -173,7 +173,7 @@
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
-      "computedHash": "a3da0aad329e835ea00a8d8f2a94278ca163b9b8f6fb10d24fca8bc113027bb0"
+      "computedHash": "aa67ecb216ba84bb3271a52c420601b90189ab405b59f9f3aa1da2ebd6f710d1"
     },
     "setup-pre-commit": {
       "source": "mattpocock/skills",
@@ -221,7 +221,7 @@
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/to-tickets/SKILL.md",
-      "computedHash": "4aba8639f46b55ede011866f83e9e87ae10482b72c14848389e5801eba0b37bf"
+      "computedHash": "f7d1bca83f85e4880eec5ed4fe0bff5b8ad1ba14f1e0b17dd0f6d9235a461ec4"
     },
     "triage": {
       "source": "mattpocock/skills",

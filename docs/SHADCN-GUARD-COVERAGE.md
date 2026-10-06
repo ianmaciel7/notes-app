@@ -15,7 +15,7 @@ consumption to avoid rewriting registry-owned implementation details.
 | Guard | Enforces |
 | --- | --- |
 | `base-ui-no-as-child.grit` | no Radix-only `asChild` |
-| `base-ui-api.grit` | Base UI API compatibility |
+| `base-ui-api.grit` | Base UI API compatibility and toast ownership |
 | `required-accessible-parts.grit` | required accessible compound parts |
 | `group-composition.grit` | grouped primitive ownership |
 | `input-group-composition.grit` | InputGroup anatomy |
@@ -24,7 +24,7 @@ consumption to avoid rewriting registry-owned implementation details.
 | `card-composition.grit` | Card composition |
 | `input-group-addon.grit` | InputGroup addon ownership |
 | `tabs-composition.grit` | Tabs anatomy |
-| `compound-component-anatomy.grit` | broad compound-component ownership |
+| `compound-component-anatomy.grit` | broad compound and chat component ownership |
 | `overlay-composition.grit` | trigger/content/overlay composition |
 | `sidebar-composition.grit` | Sidebar/provider ownership |
 | `button-state.grit` | Button loading/state shape |
@@ -36,11 +36,12 @@ consumption to avoid rewriting registry-owned implementation details.
 | `controlled-uncontrolled-state.grit` | controlled vs uncontrolled exclusivity |
 | `semantic-color-tokens.grit` | semantic token usage |
 | `no-manual-dark-colors.grit` | theme token ownership |
-| `tailwind-composition.grit` | preferred Tailwind composition |
+| `tailwind-composition.grit` | preferred Tailwind composition and Skeleton placeholder |
 | `logical-properties.grit` | logical direction utilities |
 | `conditional-classname-cn.grit` | `cn()` conditional composition |
-| `prefer-shadcn-primitives.grit` | owned primitives over raw interactive controls |
+| `prefer-shadcn-primitives.grit` | owned primitives over raw controls and hr |
 | `overlay-stacking.grit` | no manual overlay z-index ownership |
+| `canonical-import-aliases.grit` | canonical import aliases (@/components/ui, @/lib/utils, @/hooks) |
 
 ## `components.json` ownership
 

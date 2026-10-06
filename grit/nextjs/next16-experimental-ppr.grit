@@ -1,0 +1,7 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsLiteralMemberName() as $name where {
+  $name <: r"^ppr$",
+  register_diagnostic(span=$name, message="Next.js 16 replaced experimental.ppr with Cache Components (cacheComponents). Adopt the Cache Components model deliberately instead of carrying over experimental.ppr.")
+}

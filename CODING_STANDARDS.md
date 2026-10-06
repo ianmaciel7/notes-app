@@ -103,10 +103,18 @@ For UI naming, prefer vocabulary from:
 
 Application code should:
 
-- reuse owned primitives before creating equivalents;
+- reuse owned primitives before creating equivalents (such as `Separator`
+  over `<hr>`);
+- use `Skeleton` for loading placeholders rather than custom `animate-pulse`
+  markup;
+- use the Base UI `toast` primitive (`@/components/ui/toast`) rather than
+  `sonner`;
 - use Base UI `render` rather than Radix-only `asChild`;
-- keep required compound parts under their correct owner;
+- keep required compound parts under their correct owner (including chat and
+  messaging primitives);
 - preserve Button vs Link semantics;
+- let components own icon sizing rather than manual sizing classes on nested
+  icons;
 - provide accessible names for icon-only controls;
 - use semantic color tokens;
 - avoid manual dark-mode colors;
@@ -122,6 +130,7 @@ Application consumption rules are enforced by the GritQL pack documented in
 - Tailwind CSS v4 is CSS-first.
 - Prefer semantic tokens over raw palette colors in application code.
 - Prefer `gap-*` over `space-x-*` / `space-y-*`.
+- Prefer `size-*` when width and height are equal (`size-10` over `w-10 h-10`).
 - Prefer `truncate` over manually composing overflow/ellipsis/nowrap.
 - Keep direction-sensitive styling logical (`start/end`, `ms/me`,
   `ps/pe`, `text-start/text-end`).

@@ -55,6 +55,7 @@
     "./grit/nextjs/next16-removed-cache-experiments.grit",
     "./grit/nextjs/next16-removed-dev-indicators.grit",
     "./grit/nextjs/next16-removed-eslint-config.grit",
+    "./grit/nextjs/next16-experimental-ppr.grit",
     "./grit/nextjs/no-ignore-build-errors.grit",
     "./grit/nextjs/revalidate-tag-profile.grit",
     "./grit/nextjs/async-cookies-access.grit",
@@ -88,7 +89,8 @@
     "./grit/shadcn/logical-properties.grit",
     "./grit/shadcn/conditional-classname-cn.grit",
     "./grit/shadcn/prefer-shadcn-primitives.grit",
-    "./grit/shadcn/overlay-stacking.grit"
+    "./grit/shadcn/overlay-stacking.grit",
+    "./grit/shadcn/canonical-import-aliases.grit"
   ],
   "assist": {
     "actions": {

@@ -199,6 +199,51 @@ or {
     not $part <: within JsxElement() as $parent where {
       $parent <: r"(?s)^<ToggleGroup(?:\s|>)"
     }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:MessageContent|MessageHeader|MessageFooter|MessageAvatar)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Message(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:BubbleContent|BubbleReactions)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Bubble(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:AttachmentMedia|AttachmentContent|AttachmentTitle|AttachmentDescription|AttachmentActions|AttachmentAction|AttachmentTrigger)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Attachment(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:MarkerIcon|MarkerContent)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Marker(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:MessageScrollerViewport|MessageScrollerContent)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<MessageScroller(?:\s|>)"
+    }
   }
 } where {
   register_diagnostic(span=$part, message="Invalid shadcn compound-component anatomy. Nest this part under its documented parent primitive.")

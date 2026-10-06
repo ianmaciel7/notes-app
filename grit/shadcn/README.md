@@ -23,7 +23,8 @@ The current pack covers:
 - logical properties;
 - conditional `cn()` composition;
 - preference for owned shadcn interactive primitives;
-- overlay stacking ownership.
+- overlay stacking ownership;
+- canonical import aliases (`@/components/ui`, `@/lib/utils`, `@/hooks`).
 
 The exact active files are registered in `biome.json`.
 

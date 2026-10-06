@@ -33,7 +33,8 @@ or {
     $component <: r"Drawer",
     $attributes <: contains JsxAttribute() as $attribute,
     $attribute <: r"direction(?:\s*=.*)?"
-  }
+  },
+  `"sonner"` as $attribute
 } where {
-  register_diagnostic(span=$attribute, message="Radix or legacy API detected in a shadcn Base UI component. Use the current Base UI API documented by the project shadcn skill.")
+  register_diagnostic(span=$attribute, message="Radix or legacy API detected in a shadcn Base UI project. Use the Base UI equivalent (e.g. toast from '@/components/ui/toast') as documented by the project shadcn skill.")
 }
