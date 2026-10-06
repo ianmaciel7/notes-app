@@ -168,16 +168,6 @@
         ],
         "enabled": true
       },
-      "shoogle": {
-        "label": "Shoogle",
-        "description": "Remote Google Workspace HTTP MCP server",
-        "transport": "http",
-        "url": "http://127.0.0.1:8765/mcp",
-        "targets": [
-          "antigravity"
-        ],
-        "enabled": true
-      },
       "playwright": {
         "label": "Playwright",
         "description": "Playwright browser automation MCP server",

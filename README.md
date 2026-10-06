@@ -1,44 +1,68 @@
-﻿# note
+# Notes Application
+
+An object-based knowledge management system designed for capturing, organizing, and synthesizing interconnected thoughts and multimedia content.
 
 <!-- agents:project-docs:start -->
-## Using agents in this repository
+## Using Agents in this Repository
 
-This repository uses @agents-dev/cli to keep MCP servers, skills, and instructions aligned across AI tools.
+This repository uses `@agents-dev/cli` to keep MCP servers, skills, and instructions aligned across AI tools.
 
-### Quick commands
+### Quick Commands
 
-`ash
+```bash
 agents status
 agents mcp add <url-or-name>
 agents mcp test --runtime
 agents sync
 agents sync --check
-`
+```
 
-### One MCP setup for all tools
+### One MCP Setup for All Tools
 
-Add a server once in .agents/agents.json, then run gents sync to materialize it for enabled integrations.
+Add a server once in `.agents/agents.json`, then run `agents sync` to materialize it for enabled integrations.
 
-### References
+### Agent References
 
 - MCP Protocol Docs: https://modelcontextprotocol.io
-- MCP servers catalog: https://mcpservers.org
-- Project examples: docs/EXAMPLES.md
+- MCP Servers Catalog: https://mcpservers.org
+- Agent Workflows: [docs/guides/workflows.md](./docs/guides/workflows.md)
 <!-- agents:project-docs:end -->
 
-## Next.js Application
+---
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with:
-`ash
-pnpm create next-app . --ts --tailwind --biome --app --src-dir --react-compiler
-`
+## Architecture & Documentation
 
-### Getting Started
+- [Architecture Guide](./ARCHITECTURE.md): Deep module interfaces, clean storage seams, and layer isolation rules.
+- [Entity-Relationship Model (DER)](./DER.md): Canonical Firestore schemas, relations, cards, and attempts.
+- [Coding Standards](./CODING_STANDARDS.md): Strict TypeScript, React Compiler invariants, and Tailwind CSS guidelines.
+- [Testing Guidelines](./TESTING.md): Testing pyramid, Vitest, Playwright, and Stryker mutation testing.
+- [Security Policy](./SECURITY.md): Vulnerability reporting and security invariants.
+- [Contributing Guide](./CONTRIBUTING.md): Setup instructions, conventional commits, and pull request workflow.
+- [Domain Glossary](./GLOSSARY.md): Ubiquitous language and domain terms.
 
-Run the development server:
+---
 
-`ash
+## Getting Started
+
+### Prerequisites
+
+- Node.js v22+
+- pnpm v12+
+
+### Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Run the development server
 pnpm dev
-`
+```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to explore the application.
+
+### Verification
+
+```bash
+pnpm run verify:fast
+```

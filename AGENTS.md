@@ -37,6 +37,26 @@ Deliver correct, maintainable changes with minimal risk.
 6. Use agents sync --check in CI or before opening a PR to verify lockfile and skills synchronization.
 7. Use agents mcp test --runtime when introducing new servers.
 
+## Tool & MCP Selection Matrix
+
+### Native & System Tools
+- **Filesystem & Shell (`view_file`, `replace_file_content`, `run_command`)**: Primary tools for targeted file reads/writes, running package manager commands, and quick terminal executions.
+
+### Specialized MCP Servers
+- **Serena (`serena`)**: Use for AST-aware symbolic navigation, finding symbols (`find_symbol`), symbol references (`find_referencing_symbols`), type diagnostics, and safe semantic refactorings. Ensure project is activated via `activate_project`.
+- **Graphify (`graphify`)**: Use for codebase architecture queries, dependency graphs, god node detection, cross-module relationships, and PR impact analysis (reads `graphify-out/graph.json`).
+- **Playwright (`playwright`)**: Use for browser automation, E2E execution, and client-side UI validation.
+- **Firebase (`firebase`)**: Use for local Firebase emulator inspection (Firestore, Auth, Storage) and resource management.
+- **Git / GitHub (`git`, `github`)**: Use for branch management, commit generation, PRs, issues, and diff reviews.
+- **Next.js Dev MCP (`nextjs`)**: Use for Next.js internal diagnostics, route tree inspection, and cache component validation.
+
+### Verification & Quality Gates
+- Fast pre-commit check: `pnpm run verify:fast` (Biome, TypeScript, Vitest, dependency-cruiser, CSpell).
+- Dead code & unused exports: `pnpm run check:unused` (Knip).
+- Code duplication: `pnpm run check:duplication` (jscpd).
+- Markdown docs check: `pnpm run lint:md` (markdownlint-cli2).
+
+
 ## Agent skills
 
 ### Issue tracker

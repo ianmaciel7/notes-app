@@ -43,7 +43,22 @@
     "blockquotes",
     "contentful",
     "logomark",
-    "worktress"
+    "worktress",
+    "dexie",
+    "firestore",
+    "diagrama",
+    "entidade",
+    "relacionamento",
+    "backlink",
+    "backlinks",
+    "transclusion",
+    "transclusions",
+    "cloze",
+    "fsrs",
+    "weblink",
+    "subcollections",
+    "hotspot",
+    "unindexed"
   ],
   "ignorePaths": [
     "node_modules",
