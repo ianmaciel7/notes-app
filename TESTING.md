@@ -10,6 +10,8 @@ expectations for future features.
 Current source smoke coverage:
 
 - `tests/unit/smoke.test.ts`
+- `tests/unit/firebase-reference.test.ts` (guards `src/components/firebase/`
+  against any change; see ADR 0004)
 
 Vitest runs in Happy DOM and scans `src/**/*.{test,spec}.{ts,tsx}` and `tests/**/*.{test,spec}.{ts,tsx}` (excluding `tests/e2e/**`).
 `src/components/ui/**` is excluded from project unit tests because that

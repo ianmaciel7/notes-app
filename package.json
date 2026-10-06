@@ -23,9 +23,8 @@
     "lint:spelling": "cspell \"**/*.{ts,tsx,md}\"",
     "lint:md": "markdownlint-cli2 \"**/*.md\"",
     "check:security": "pnpm audit --audit-level high",
-    "guard:firebase": "node grit/firebase/firebase-reference.mjs",
     "verify:agents": "agents sync --check",
-    "verify:fast": "pnpm run guard:firebase && pnpm run lint && pnpm run check:types && pnpm run test && pnpm run check:deps && pnpm run lint:spelling",
+    "verify:fast": "pnpm run lint && pnpm run check:types && pnpm run test && pnpm run check:deps && pnpm run lint:spelling",
     "verify:changed": "pnpm run lint:changed && pnpm run check:types && pnpm run test:changed",
     "prepare": "husky"
   },
