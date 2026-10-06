@@ -4,7 +4,7 @@ import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const referenceDir = "src/components/firebase";
-const manifestPath = "tests/unit/firebase-reference.manifest.json";
+const manifestPath = "tests/unit/firebase-reference.manifest.sha256";
 
 function hashFile(file: string) {
   return createHash("sha256")
@@ -13,16 +13,14 @@ function hashFile(file: string) {
 }
 
 function snapshotReference() {
-  return Object.fromEntries(
-    readdirSync(referenceDir, { recursive: true, withFileTypes: true })
-      .filter((entry) => entry.isFile())
-      .map((entry) => join(entry.parentPath, entry.name))
-      .map((file) => [
-        relative(".", file).replaceAll("\\", "/"),
-        hashFile(file),
-      ])
-      .sort(([a], [b]) => a.localeCompare(b)),
-  );
+  return readdirSync(referenceDir, { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => join(entry.parentPath, entry.name))
+    .map(
+      (file) =>
+        `${hashFile(file)}  ${relative(".", file).replaceAll("\\", "/")}`,
+    )
+    .sort((a, b) => a.slice(66).localeCompare(b.slice(66)));
 }
 
 describe("firebase reference directory", () => {
@@ -30,11 +28,14 @@ describe("firebase reference directory", () => {
     const current = snapshotReference();
 
     if (process.env.FIREBASE_REFERENCE_UPDATE === "1") {
-      writeFileSync(manifestPath, `${JSON.stringify(current, null, 2)}\n`);
+      writeFileSync(manifestPath, `${current.join("\n")}\n`);
       return;
     }
 
-    const baseline = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const baseline = readFileSync(manifestPath, "utf8")
+      .replace(/\r\n/g, "\n")
+      .trim()
+      .split("\n");
     expect(current).toEqual(baseline);
   });
 });
