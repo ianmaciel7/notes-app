@@ -1,5 +1,8 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": ["src/components/ui/**/*.{ts,tsx}"],
-  "project": ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,css}"]
+  "project": [
+    "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,css}!",
+    "!.agents/**"
+  ],
+  "ignoreBinaries": ["agents"]
 }
