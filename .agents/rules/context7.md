@@ -35,9 +35,10 @@ Enforce high-accuracy, token-efficient, and privacy-safe documentation queries u
    - If a problem spans multiple topics, make separate, focused calls with the resolved library ID.
 2. **Specific and Descriptive Queries**:
    - Use concrete questions and descriptive phrases (e.g., `"revalidateTag profile argument signature"` rather than single words like `"revalidate"`).
-3. **Budget and Quota Management**:
-   - Limit calls to a maximum of 2–3 targeted queries per task.
-   - If a quota limit is encountered, inform the user clearly (e.g., suggesting `npx ctx7@latest login` or `CONTEXT7_API_KEY`) and do not silently fall back to hallucinated or outdated training data.
+3. **Free Tier & Quota Conservation**:
+   - Context7 operates in **Free Tier mode** by default with zero configuration or paid API keys required.
+   - Limit calls to a maximum of 2–3 targeted queries per task to stay well within free community quotas.
+   - If a quota limit is ever reached, notify the user without silently falling back to hallucinated training data.
 
 ### 4. Privacy & Security Safeguards
 

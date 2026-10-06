@@ -40,10 +40,11 @@ Do not use for: refactoring, writing scripts from scratch, debugging business lo
   - `npx ctx7@latest library <name> "<intent>"`
   - `npx ctx7@latest docs <libraryId> "<intent>"`
 
-### 4. Quota and Fallback Handling
+### 4. Free Tier & Quota Handling
 
-- If a quota or authentication error occurs, report it clearly and suggest logging in with `npx ctx7@latest login` or configuring `CONTEXT7_API_KEY`.
-- Do not silently fall back to outdated or hallucinated training data.
+- Context7 runs in **Free Tier mode** by default with zero configuration or paid subscriptions required.
+- Maintain query discipline (1–3 focused queries per topic) to preserve free request limits.
+- If a quota or rate-limit notice occurs, inform the user clearly and do not silently fall back to outdated or hallucinated training data.
 
 See [../../rules/context7.md](../../rules/context7.md) and
 [../../rules/token-economy.md](../../rules/token-economy.md).

@@ -57,6 +57,7 @@ Follow [.agents/rules/shadcn.md](./.agents/rules/shadcn.md) and
 - MCP definitions: `.agents/agents.json`
 - Local/private overrides: `.agents/local.json`
 - Project skills: `.agents/skills/*/SKILL.md`
+- Context7 documentation rules: [.agents/rules/context7.md](./.agents/rules/context7.md)
 - Skill lockfile: `skills-lock.json`
 
 Third-party skills are managed artifacts. Do not rewrite their documentation

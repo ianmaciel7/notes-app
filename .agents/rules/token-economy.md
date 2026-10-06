@@ -19,6 +19,7 @@ Enforce token-efficient code inspection, architecture discovery, and verificatio
 
 4. **Third-Party Documentation (Context7)**:
    - Always query library and SDK documentation via Context7 MCP (`resolve-library-id` and `query-docs`) before conducting generic web searches.
+   - Follow best practices detailed in [./context7.md](./context7.md).
 
 5. **Subagent Delegation for Deep Exploration**:
    - Delegate broad exploratory tasks or multi-directory searches to subagents (`research`) to keep the primary orchestrator context window concise.
