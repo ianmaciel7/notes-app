@@ -69,3 +69,5 @@ opencode.json
 .serena/
 graphify-out/
 .firebase/logs/vsce-debug.log
+
+# Note: .scratch/ is intentionally NOT ignored because it is the local issue tracker (see docs/agents/issue-tracker.md)

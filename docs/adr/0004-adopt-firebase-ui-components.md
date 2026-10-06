@@ -24,24 +24,34 @@ Key requirements include:
 
 ## Decision
 
-The application consumes `@firebase-oss/ui-core` and `@firebase-oss/ui-react` directly and implements application-facing auth screens and forms in `src/components/notes-app/` using the repository's shadcn/Base UI primitives.
+The application configures the official `@firebase` open source registry in `components.json`, fetches all upstream Firebase UI components into a dedicated reference directory `src/components/firebase/`, enforces strict immutability on that reference directory via project guards, and implements application-owned auth screens and forms in `src/components/notes-app/` using the project's shadcn and Base UI primitives.
 
 Key architectural rules and structure:
-- **Direct Package Consumption**: Firebase authentication behavior and state machines are sourced directly from `@firebase-oss/ui-core` and `@firebase-oss/ui-react`.
-- **Application Component Ownership**: Auth UI screens, forms, cards, and field groups consumed by application routes live in `src/components/notes-app/` and follow [`CODING_STANDARDS.md`](../../CODING_STANDARDS.md).
-- **No Local Vendor Mirror**: Redundant vendor mirrors (such as the earlier `src/components/firebase/`) are removed to eliminate unused code, maintenance overhead, and copy/paste drift. Upstream diffs and documentation serve as upgrade references rather than persistent in-tree duplicates.
+- **Custom Registry Configuration**: `components.json` declares the `@firebase` registry namespace:
+  ```json
+  {
+    "registries": {
+      "@firebase": "https://firebaseopensource.com/r/{name}.json"
+    }
+  }
+  ```
+- **Upstream Component Discovery & Reference Directory**: Upstream components are discovered via `pnpm dlx shadcn@latest list @firebase`, added, and isolated under `src/components/firebase/`.
+- **Reference-Only Guard & Immutability**: `src/components/firebase/` serves exclusively as an immutable upstream reference. A project guard enforces that files in `src/components/firebase/` must never be modified by application code, developers, or agents.
+- **Application Component Ownership**: Application-facing authentication screens, forms, cards, and modal dialogs consumed by routes live in `src/components/notes-app/`. They compose project-owned shadcn Base Nova / Base UI primitives from `src/components/ui/` and follow [`CODING_STANDARDS.md`](../../CODING_STANDARDS.md), referencing `src/components/firebase/` for behavioral parity without mutating the reference baseline.
+- **Direct Package Dependencies**: Runtime authentication state machines and hooks are driven by `@firebase-oss/ui-core` and `@firebase-oss/ui-react`.
 - **Architectural Alignment**: This design integrates with the emulator architecture in [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md), the fallback strategy in [ADR 0006](./0006-adopt-firebase-ui-v7-and-auth-resilience.md), and system specifications in [`ARCHITECTURE.md`](../../ARCHITECTURE.md).
 
 ## Consequences
 
 ### Positive Outcomes
 
-- Keeps Firebase authentication behavior on supported, tested package APIs.
-- Maintains a single application-owned implementation of each auth screen and form.
-- Eliminates drift and copy/paste duplication between vendor templates and application components.
-- Enables Biome, TypeScript, dependency-cruiser, jscpd, and project guards to evaluate project-owned source consistently.
+- Provides direct, automated access to official Firebase UI component definitions via the shadcn CLI registry mechanism.
+- Establishes `src/components/firebase/` as an immutable upstream baseline, eliminating confusion about what originates from upstream versus project code.
+- Guard enforcement prevents unintentional edits and drift in the reference components.
+- Keeps application-owned UI in `src/components/notes-app/` cleanly separated, using project design system tokens, Tailwind CSS v4, and Base UI primitives.
+- Enables Biome, TypeScript, dependency-cruiser, and project guards to clearly distinguish between reference code and active application code.
 
 ### Trade-offs and Considerations
 
-- Updating to a new Firebase UI package version may require adapting `src/components/notes-app/` components directly.
-- Registry examples remain useful as upstream references, but are not committed as a parallel source tree in the repository.
+- Upstream reference components in `src/components/firebase/` must be explicitly excluded from application mutation rules and test coverage requirements.
+- Any updates from newer upstream releases require re-fetching via the shadcn registry rather than ad-hoc local patching.
