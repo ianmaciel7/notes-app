@@ -1,6 +1,12 @@
 # 0007. Adopt Cookie-Based next-intl Architecture and Firebase Locale Preference Synchronization
 
-- **Status:** Accepted
+> **Current state (2026-10-06): Deprecated on the current `dev` branch.**
+> The packages, modules, and runtime architecture described below are not
+> present in the current implementation. This ADR is retained as historical
+> context only. Re-adoption requires a new decision or an explicit status
+> change backed by implementation and tests.
+
+- **Status:** Deprecated
 - **Date:** 2026-09-28
 - **Canonical Owner:** `ARCHITECTURE.md`
 

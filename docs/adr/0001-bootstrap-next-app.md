@@ -8,9 +8,15 @@ Accepted
 
 2026-10-05
 
+## Current State (2026-10-06)
+
+This ADR remains active. The current implementation is verified on `dev`.
+For exact package versions, guard ownership, and CI behavior, use the current
+root documentation rather than historical command output in this record.
+
 ## Context
 
-The notes application requires a modern, high-performance web foundation capable of delivering responsive client-side interactions, scalable UI component architecture, and optimal developer ergonomics. Key requirements include:
+The exam-study platform foundation requires a modern, high-performance web foundation capable of delivering responsive client-side interactions, scalable UI component architecture, and optimal developer ergonomics. Key requirements include:
 
 1. **High-Performance Rendering**: Fast initial page loads and smooth client updates for rich note editing and navigation.
 2. **Type Safety & Maintainability**: Reliable compile-time checks across data models, application state, and UI components.

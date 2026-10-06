@@ -1,6 +1,12 @@
 # 0008. Adopt Native Firebase Firestore with Persistent Local Cache
 
-- **Status:** Accepted
+> **Current state (2026-10-06): Deprecated on the current `dev` branch.**
+> The packages, modules, and runtime architecture described below are not
+> present in the current implementation. This ADR is retained as historical
+> context only. Re-adoption requires a new decision or an explicit status
+> change backed by implementation and tests.
+
+- **Status:** Deprecated
 - **Date:** 2026-09-29
 - **Canonical Owner:** `ARCHITECTURE.md`
 

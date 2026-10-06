@@ -1,5 +1,9 @@
 # Execution Plan: Adopt shadcn Base Nova UI Component System
 
+> **Historical record.** This completed plan preserves the implementation and
+> verification context from 2026-10-05. Current versions, guards, CI gates,
+> product direction, and architecture are documented in the root project docs.
+
 ## Metadata
 
 - **Status**: Completed
@@ -11,7 +15,7 @@
 
 ## 1. Objective
 
-Integrate the complete shadcn UI component library into the notes application using the `base-nova` design style and `@base-ui/react` primitives. This establishes a fully accessible, composable, in-tree UI design system supporting form controls, navigation shells, overlays, interactive modals, charts, and data displays, while strictly enforcing global pointer cursor standards and Tailwind CSS v4 OKLCH theme token alignment.
+Integrate the complete shadcn UI component library into the exam-study platform foundation using the `base-nova` design style and `@base-ui/react` primitives. This establishes a fully accessible, composable, in-tree UI design system supporting form controls, navigation shells, overlays, interactive modals, charts, and data displays, while strictly enforcing global pointer cursor standards and Tailwind CSS v4 OKLCH theme token alignment.
 
 ---
 

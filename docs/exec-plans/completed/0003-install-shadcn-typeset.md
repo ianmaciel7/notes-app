@@ -1,5 +1,9 @@
 # Execution Plan: Install shadcn/typeset Markdown Typography System
 
+> **Historical record.** This completed plan preserves the implementation and
+> verification context from 2026-10-05. Current versions, guards, CI gates,
+> product direction, and architecture are documented in the root project docs.
+
 ## Metadata
 
 - **Status**: `Completed`
@@ -11,7 +15,7 @@
 
 ## 1. Objective
 
-Integrate the `shadcn/typeset` pure-CSS Markdown typography system into the Next.js notes application. This establishes a high-performance, token-aware prose styling foundation for rendering Markdown notes, documentation, code blocks, tables, and rich text without runtime JavaScript overhead or reliance on legacy PostCSS plugins.
+Integrate the `shadcn/typeset` pure-CSS Markdown typography system into the Next.js exam-study platform foundation. This establishes a high-performance, token-aware prose styling foundation for rendering Markdown notes, documentation, code blocks, tables, and rich text without runtime JavaScript overhead or reliance on legacy PostCSS plugins.
 
 ---
 

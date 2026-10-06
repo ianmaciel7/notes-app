@@ -8,9 +8,15 @@ Accepted
 
 2026-10-05
 
+## Current State (2026-10-06)
+
+This ADR remains active. The current implementation is verified on `dev`.
+For exact package versions, guard ownership, and CI behavior, use the current
+root documentation rather than historical command output in this record.
+
 ## Context
 
-The notes application requires an accessible, cohesive, and comprehensive UI component foundation to support rich user interactions. Key capabilities include:
+The exam-study platform foundation requires an accessible, cohesive, and comprehensive UI component foundation to support rich user interactions. Key capabilities include:
 
 1. **Comprehensive Interactive Primitives**: Standardized components for dialogs, modals, popovers, dropdown menus, context menus, tooltips, and sheet drawers.
 2. **Form Architecture & Controls**: Form validation, text inputs, textareas, checkboxes, radio groups, switches, selects, comboboxes, and date/calendar pickers.

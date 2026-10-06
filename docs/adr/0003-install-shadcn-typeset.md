@@ -8,9 +8,15 @@ Accepted
 
 2026-10-05
 
+## Current State (2026-10-06)
+
+This ADR remains active. The current implementation is verified on `dev`.
+For exact package versions, guard ownership, and CI behavior, use the current
+root documentation rather than historical command output in this record.
+
 ## Context
 
-The notes application centers on reading, authoring, and rendering structured Markdown content, code snippets, mathematical notation, and rich documentation. Delivering an exceptional reader experience requires a cohesive typography system with carefully proportioned vertical rhythm, typographic hierarchy, responsive scale, and dark mode adaptation.
+The exam-study platform foundation centers on reading, authoring, and rendering structured Markdown content, code snippets, mathematical notation, and rich documentation. Delivering an exceptional reader experience requires a cohesive typography system with carefully proportioned vertical rhythm, typographic hierarchy, responsive scale, and dark mode adaptation.
 
 Traditional approaches in the Tailwind ecosystem rely on `@tailwindcss/typography` (the `prose` plugin). While effective, in Tailwind CSS v4 and modern CSS architectures, relying on a JavaScript-based PostCSS plugin introduces friction, less transparent theme variable inheritance, and rigid styling hooks.
 
