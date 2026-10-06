@@ -71,6 +71,18 @@
     {
       "path": "./grit/shadcn/tabs-composition.grit",
       "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
+    },
+    {
+      "path": "./grit/shadcn/button-link-semantics.grit",
+      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
+    },
+    {
+      "path": "./grit/shadcn/button-icon.grit",
+      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
+    },
+    {
+      "path": "./grit/shadcn/field-validation.grit",
+      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
     }
   ],
   "assist": {

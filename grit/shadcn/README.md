@@ -13,6 +13,9 @@ The guards cover only low-ambiguity structural invariants:
 - Required Group composition for grouped menu/select/command items.
 - InputGroup-specific controls.
 - Button loading-state composition.
+- Link semantics when applying Button styling.
+- Button icon placement metadata via `data-icon`.
+- Field validation and disabled-state accessibility pairing.
 - TabsTrigger placement inside TabsList.
 
 Do not use these plugins to encode subjective UI choices. Prefer built-in Biome
