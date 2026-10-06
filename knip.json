@@ -1,4 +1,5 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignoreDependencies": ["shadcn"]
+  "entry": ["src/components/ui/**/*.{ts,tsx}"],
+  "project": ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,css}"]
 }
