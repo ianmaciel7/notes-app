@@ -1,0 +1,15 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  JsxElement() as $card where {
+    $card <: r"(?s)^<Card(?:\s|>)",
+    not $card <: r"(?s)<CardHeader(?:\s|>)"
+  },
+  JsxElement() as $card where {
+    $card <: r"(?s)^<Card(?:\s|>)",
+    not $card <: r"(?s)<CardContent(?:\s|>)"
+  }
+} where {
+  register_diagnostic(span=$card, message="Use the full Card composition with CardHeader and CardContent. CardFooter remains optional.")
+}

@@ -1,0 +1,34 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  or {
+    JsxOpeningElement(attributes=$attributes) as $element,
+    JsxSelfClosingElement(attributes=$attributes) as $element
+  } where {
+    $attributes <: contains JsxAttribute() as $controlled,
+    $controlled <: r"open(?:\s*=.*)?",
+    $attributes <: contains JsxAttribute() as $defaulted,
+    $defaulted <: r"defaultOpen(?:\s*=.*)?"
+  },
+  or {
+    JsxOpeningElement(attributes=$attributes) as $element,
+    JsxSelfClosingElement(attributes=$attributes) as $element
+  } where {
+    $attributes <: contains JsxAttribute() as $controlled,
+    $controlled <: r"value(?:\s*=.*)?",
+    $attributes <: contains JsxAttribute() as $defaulted,
+    $defaulted <: r"defaultValue(?:\s*=.*)?"
+  },
+  or {
+    JsxOpeningElement(attributes=$attributes) as $element,
+    JsxSelfClosingElement(attributes=$attributes) as $element
+  } where {
+    $attributes <: contains JsxAttribute() as $controlled,
+    $controlled <: r"checked(?:\s*=.*)?",
+    $attributes <: contains JsxAttribute() as $defaulted,
+    $defaulted <: r"defaultChecked(?:\s*=.*)?"
+  }
+} where {
+  register_diagnostic(span=$element, message="Do not mix controlled and uncontrolled props on the same component.")
+}

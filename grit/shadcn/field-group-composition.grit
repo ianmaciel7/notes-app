@@ -1,0 +1,16 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  JsxSelfClosingElement(name=$field_name) as $field,
+  JsxOpeningElement(name=$field_name) as $field
+} where {
+  $field_name <: r"Field",
+  $field <: within JsxElement() as $form where {
+    $form <: r"(?s)^<(?:form|Form)(?:\s|>)"
+  },
+  not $field <: within JsxElement() as $group where {
+    $group <: r"(?s)^<FieldGroup(?:\s|>)"
+  },
+  register_diagnostic(span=$field, message="Field used in a form must be composed inside FieldGroup.")
+}

@@ -8,9 +8,7 @@ or {
   } where {
     $item_name <: r"(?:SelectItem|SelectLabel)",
     not $item <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$group_name) where {
-        $group_name <: r"SelectGroup"
-      }
+      $parent <: r"(?s)^<SelectGroup(?:\s|>)"
     }
   },
   or {
@@ -19,9 +17,16 @@ or {
   } where {
     $item_name <: r"(?:DropdownMenuItem|DropdownMenuLabel)",
     not $item <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$group_name) where {
-        $group_name <: r"DropdownMenuGroup"
-      }
+      $parent <: r"(?s)^<DropdownMenuGroup(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$item_name) as $item,
+    JsxOpeningElement(name=$item_name) as $item
+  } where {
+    $item_name <: r"(?:ContextMenuItem|ContextMenuLabel)",
+    not $item <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<ContextMenuGroup(?:\s|>)"
     }
   },
   or {
@@ -30,9 +35,7 @@ or {
   } where {
     $item_name <: r"MenubarItem",
     not $item <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$group_name) where {
-        $group_name <: r"MenubarGroup"
-      }
+      $parent <: r"(?s)^<MenubarGroup(?:\s|>)"
     }
   },
   or {
@@ -41,9 +44,7 @@ or {
   } where {
     $item_name <: r"CommandItem",
     not $item <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$group_name) where {
-        $group_name <: r"CommandGroup"
-      }
+      $parent <: r"(?s)^<CommandGroup(?:\s|>)"
     }
   }
 } where {

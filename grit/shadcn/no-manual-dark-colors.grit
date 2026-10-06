@@ -1,0 +1,7 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsxAttribute() as $attribute where {
+  $attribute <: r"(?s)className(?:\s*=.*)?dark:(?:bg|text|border|ring|outline|fill|stroke)-",
+  register_diagnostic(span=$attribute, message="Do not hard-code dark-mode colors. Use semantic tokens whose values change with the theme.")
+}

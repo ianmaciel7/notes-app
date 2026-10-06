@@ -1,0 +1,7 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsxAttribute() as $attribute where {
+  $attribute <: r"(?s)className(?:\s*=.*)?(?:\b(?:ml|mr|pl|pr|left|right)-|\btext-(?:left|right)\b)",
+  register_diagnostic(span=$attribute, message="Use logical direction utilities (ms/me, ps/pe, start/end, text-start/text-end) so components remain RTL-ready.")
+}

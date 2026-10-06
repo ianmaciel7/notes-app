@@ -1,52 +1,83 @@
 # Rule: shadcn/ui Standards and Principles
 
-## Description
-Guidelines and constraints for adding, composing, styling, and maintaining shadcn/ui components in this Next.js project.
-
 ## Project Context
-- **Framework**: Next.js App Router (RSC enabled: `src/` directory).
-- **Tailwind**: Tailwind CSS v4 (`@theme inline`, styles in `src/app/globals.css`).
-- **Client Directive**: Add `"use client"` at the top of any component file using React hooks (`useState`, `useEffect`), event handlers, or browser APIs.
 
-## Mandatory Rules & Guidelines
+- Framework: Next.js App Router with RSC.
+- shadcn style: Base Nova.
+- primitive base: Base UI.
+- Tailwind CSS v4 with semantic CSS variables.
+- UI primitives live in `src/components/ui` and application code consumes them.
 
-1. **Use Existing Components First & Compose**:
-   - Check existing components before writing custom UI (`npx shadcn@latest search` or inspect project UI directory).
-   - Compose from primitives rather than reinventing (e.g., Cards, Tabs, Dialogs, Popovers).
-   - Use built-in variants before custom classes (`variant="outline"`, `size="sm"`).
-   - Always prefer semantic colors (`bg-primary`, `text-muted-foreground`) over raw color classes (`bg-blue-500`).
+## Mandatory Rules
 
-2. **Styling & Tailwind**:
-   - Use `className` for layout and positioning, never override component internal colors or typography arbitrarily.
-   - Do not use `space-x-*` or `space-y-*`; use `flex` with `gap-*` (for vertical stacks, `flex flex-col gap-*`).
-   - Use `size-*` for equal width and height (`size-10` not `w-10 h-10`).
-   - Use `truncate` shorthand instead of manual overflow truncation classes.
-   - Do not use manual `dark:` color overrides; rely on semantic tokens (`bg-background`, `text-muted-foreground`).
-   - Use `cn()` for conditional classes.
-   - Do not set manual `z-index` on overlay components (Dialog, Sheet, Popover handle their own stacking).
+### Composition and ownership
 
-3. **Forms & Inputs**:
-   - Use `FieldGroup` + `Field` for form layouts, never raw `div` with `space-y-*` or `grid gap-*`.
-   - `InputGroup` requires `InputGroupInput` or `InputGroupTextarea`, never raw inputs.
-   - Buttons within inputs must use `InputGroup` + `InputGroupAddon`.
-   - Use `ToggleGroup` for option sets (2–7 choices).
-   - Use `FieldSet` + `FieldLegend` when grouping related checkboxes or radio items.
-   - Handle validation state with `data-invalid` on `Field` and `aria-invalid` on the control.
+- Reuse existing shadcn primitives before creating custom equivalents.
+- Prefer compound-component composition over monolithic wrappers.
+- Keep each subcomponent under its documented owner primitive.
+- Use `FieldGroup` + `Field` for form layouts.
+- Use `FieldSet` + `FieldLegend` for semantic groups of related controls.
+- Use full `Card` composition with at least `CardHeader` and `CardContent`.
+- Keep Sidebar parts under `SidebarProvider` and their documented parent slots.
+- Do not mix controlled and uncontrolled props on the same component.
 
-4. **Component Structure & Accessibility**:
-   - Items belong inside their groups (`SelectItem` in `SelectGroup`, `DropdownMenuItem` in `DropdownMenuGroup`, `CommandItem` in `CommandGroup`).
-   - Dialog, Sheet, and Drawer must always contain a Title (`DialogTitle`, `SheetTitle`, `DrawerTitle`) for accessibility (use `className="sr-only"` if visually hidden).
-   - Employ full Card composition (`CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`).
-   - Buttons do not accept `isPending` or `isLoading`; compose with `Spinner` + `data-icon` + `disabled`.
-   - `TabsTrigger` must always reside inside `TabsList`.
-   - `Avatar` must include `AvatarFallback`.
+### Base UI
 
-5. **Icons**:
-   - Place `data-icon="inline-start"` or `data-icon="inline-end"` on icons in `Button`.
-   - Do not add explicit sizing classes (`size-4`, `w-4 h-4`) inside components that handle icon sizing automatically.
-   - Pass icons as component objects, not string keys.
+- Never use Radix-only `asChild`; use the Base UI `render` API.
+- Do not use legacy Radix props rejected by the repository GritQL guards.
+- Let Base UI own focus management, portals, dismissal, and overlay behavior.
 
-6. **CLI & Component Management**:
-   - Use the project's package runner (`npx shadcn@latest`).
-   - Never fetch raw component code manually from GitHub; install via `npx shadcn@latest add <component>`.
-   - Review added components after installation to ensure proper relative/alias imports and icon library compatibility.
+### Accessibility
+
+- Dialog, Sheet, Drawer, and AlertDialog content must have a title.
+- Avatar must have `AvatarFallback`.
+- Icon-only Button variants require an accessible name.
+- Pair `Field[data-invalid]` with `aria-invalid` on its control.
+- Pair `Field[data-disabled]` with `disabled` on its control.
+- Preserve native link semantics: style links with `buttonVariants`; do not
+  turn Button into an anchor.
+
+### Styling and tokens
+
+- Use semantic tokens such as `bg-background`, `text-foreground`,
+  `text-muted-foreground`, `border-border`, and component-specific tokens.
+- Do not use raw Tailwind palette colors or arbitrary literal color values in
+  application component class names.
+- Do not add manual `dark:` color overrides; semantic tokens own theme changes.
+- Use `gap-*`, not `space-x-*` or `space-y-*`.
+- Use `truncate` instead of the manual overflow/ellipsis/nowrap trio.
+- Use logical direction utilities (`start/end`, `ms/me`, `ps/pe`,
+  `text-start/text-end`) so code remains RTL-ready.
+- Use `cn()` for conditional class composition.
+- Do not set manual z-index values on shadcn overlay content.
+
+### Buttons, icons, and inputs
+
+- Buttons do not expose `isPending` or `isLoading`; compose loading state with
+  `disabled` + `Spinner` + `data-icon`.
+- Icons in Button must declare `data-icon="inline-start"` or
+  `data-icon="inline-end"`.
+- Do not manually size icons inside Button when Button owns icon sizing.
+- Buttons inside `InputGroup` belong inside `InputGroupAddon`.
+- Use `InputGroupInput`/`InputGroupTextarea` inside `InputGroup`.
+- Prefer shadcn Button/Input/Textarea/Select primitives over raw interactive
+  HTML controls in application code.
+
+### Project configuration
+
+- `components.json` is authoritative for style, RSC, TSX, Tailwind CSS, base
+  color, CSS variables, aliases, icon library, RTL, menu color, and accent.
+- Install registry components through the shadcn CLI; do not copy raw source
+  from GitHub.
+- `src/components/ui/**` is excluded from consumption guards because those
+  files are the owned registry implementation layer.
+
+## Guard boundary
+
+Biome/GritQL enforce only mechanically verifiable invariants. Open Code,
+Distribution, Registry strategy, Presets, monorepo organization, naming
+quality, component responsibility, and 'prefer built-in variants first' remain
+documented architecture policy because reliable AST enforcement would create
+false positives.
+
+See `docs/SHADCN-GUARD-COVERAGE.md` for full coverage.

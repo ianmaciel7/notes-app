@@ -1,0 +1,15 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  JsxAttribute() as $attribute where {
+    $attribute <: r"(?s)className(?:\s*=.*)?space-[xy]-"
+  },
+  JsxAttribute() as $attribute where {
+    $attribute <: r"overflow-hidden",
+    $attribute <: r"text-ellipsis",
+    $attribute <: r"whitespace-nowrap"
+  }
+} where {
+  register_diagnostic(span=$attribute, message="Use shadcn/Tailwind composition conventions: gap-* instead of space-x/y-* and truncate instead of the manual truncation trio.")
+}
