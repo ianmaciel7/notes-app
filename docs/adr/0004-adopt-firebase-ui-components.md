@@ -1,46 +1,47 @@
-# 0004. Adopt Firebase Open Source Auth UI Components
+# ADR 0004: Adopt Firebase Open Source Auth UI Components
 
-> **Current state (2026-10-06): Deprecated on the current `dev` branch.**
-> The packages, modules, and runtime architecture described below are not
-> present in the current implementation. This ADR is retained as historical
-> context only. Re-adoption requires a new decision or an explicit status
-> change backed by implementation and tests.
+## Status
 
-- **Status:** Deprecated
-- **Date:** 2026-09-28
-- **Canonical Owner:** `ARCHITECTURE.md`
+Accepted
 
-## Context and Problem Statement
+## Date
 
-We needed production-ready, accessible authentication and multi-factor authentication UI behavior integrated with `@firebase-oss/ui-core` and `@firebase-oss/ui-react`.
+2026-09-28
 
-## Decision Outcome
+## Current State (2026-10-06)
 
-The application consumes `@firebase-oss/ui-core` and `@firebase-oss/ui-react` directly and implements the application-facing auth screens and forms in `src/components/notes-app/` using the repository's shadcn/Base UI primitives.
+This ADR is accepted as the canonical architectural decision for Firebase Open Source Auth UI components. The architecture is verified and aligned with the project technical standards.
 
-The repository does not retain a second local copy of the Firebase registry components. The earlier `src/components/firebase/` mirror was removed after the application adapters became canonical because keeping both implementations created unused code and systematic duplication without providing a runtime boundary.
+## Context
 
-### Positive Consequences
+The exam-study platform foundation requires production-ready, accessible authentication and multi-factor authentication UI behavior integrated with `@firebase-oss/ui-core` and `@firebase-oss/ui-react`.
 
-- Keeps Firebase auth behavior on the supported package APIs.
-- Maintains one application-owned implementation of each auth screen and form.
-- Removes drift and copy/paste duplication between vendor templates and application components.
-- Lets Biome, TypeScript, dependency-cruiser, jscpd, and project guards evaluate the same project-owned source consistently.
+Key requirements include:
+1. Maintaining standard, accessible authentication flows conforming to WCAG and WAI-ARIA authoring practices.
+2. Avoiding duplicate local vendor mirrors and parallel code trees that drift from upstream packages.
+3. Enabling static analysis tools (Biome, TypeScript, dependency-cruiser, and project guards) to evaluate auth components as standard application code.
+4. Seamlessly integrating authentication screens with the project's shadcn and Base UI design system.
 
-### Tradeoffs
+## Decision
 
-- Updating to a new Firebase UI package version may require adapting `src/components/notes-app/` directly.
-- Registry examples remain useful as upstream references, but are not committed as a parallel source tree.
+The application consumes `@firebase-oss/ui-core` and `@firebase-oss/ui-react` directly and implements application-facing auth screens and forms in `src/components/notes-app/` using the repository's shadcn/Base UI primitives.
 
-## Architectural Rules and Invariants
+Key architectural rules and structure:
+- **Direct Package Consumption**: Firebase authentication behavior and state machines are sourced directly from `@firebase-oss/ui-core` and `@firebase-oss/ui-react`.
+- **Application Component Ownership**: Auth UI screens, forms, cards, and field groups consumed by application routes live in `src/components/notes-app/` and follow [`CODING_STANDARDS.md`](../../CODING_STANDARDS.md).
+- **No Local Vendor Mirror**: Redundant vendor mirrors (such as the earlier `src/components/firebase/`) are removed to eliminate unused code, maintenance overhead, and copy/paste drift. Upstream diffs and documentation serve as upgrade references rather than persistent in-tree duplicates.
+- **Architectural Alignment**: This design integrates with the emulator architecture in [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md), the fallback strategy in [ADR 0006](./0006-adopt-firebase-ui-v7-and-auth-resilience.md), and system specifications in [`ARCHITECTURE.md`](../../ARCHITECTURE.md).
 
-- Auth UI consumed by routes lives in `src/components/notes-app/`.
-- Firebase UI behavior comes from `@firebase-oss/ui-core` and `@firebase-oss/ui-react`.
-- Do not add a persistent local vendor mirror solely to preserve upstream registry output; use upstream diffs/reference material when upgrading instead.
+## Consequences
 
-## Related References and Control Documents
+### Positive Outcomes
 
-- [`ARCHITECTURE.md`](../../ARCHITECTURE.md) - Section 3 (Technology Decisions)
-- [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md) - Adopt Firebase Authentication with Local Emulator
-- [ADR 0006](./0006-adopt-firebase-ui-v7-and-auth-resilience.md) - Adopt FirebaseUI v7 Canonical Architecture and Resilient Auth Fallback
-- [`CONVENTIONS.md`](../../CONVENTIONS.md) - Application component conventions
+- Keeps Firebase authentication behavior on supported, tested package APIs.
+- Maintains a single application-owned implementation of each auth screen and form.
+- Eliminates drift and copy/paste duplication between vendor templates and application components.
+- Enables Biome, TypeScript, dependency-cruiser, jscpd, and project guards to evaluate project-owned source consistently.
+
+### Trade-offs and Considerations
+
+- Updating to a new Firebase UI package version may require adapting `src/components/notes-app/` components directly.
+- Registry examples remain useful as upstream references, but are not committed as a parallel source tree in the repository.
