@@ -1,0 +1,7 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsLiteralMemberName() as $name where {
+  $name <: r"^(?:appIsrStatus|buildActivity|buildActivityPosition)$",
+  register_diagnostic(span=$name, message="Next.js 16 removed this legacy devIndicators option. Remove the obsolete configuration.")
+}

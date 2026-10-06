@@ -1,0 +1,33 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  or {
+    JsxSelfClosingElement(name=$control_name, attributes=$control_attributes) as $control,
+    JsxOpeningElement(name=$control_name, attributes=$control_attributes) as $control
+  } where {
+    $control_name <: r"(?:Input|Textarea|SelectTrigger|Checkbox|RadioGroupItem|Switch|Slider|NativeSelect|InputOTP)",
+    $control <: within JsxElement() as $parent where {
+      $parent <: contains JsxOpeningElement(name=$field_name, attributes=$field_attributes) where {
+        $field_name <: r"Field",
+        $field_attributes <: r"(?s).*data-invalid.*"
+      }
+    } ,
+    not $control_attributes <: r"(?s).*aria-invalid.*",
+    register_diagnostic(span=$control, message="Controls inside Field[data-invalid] must also declare aria-invalid.")
+  },
+  or {
+    JsxSelfClosingElement(name=$control_name, attributes=$control_attributes) as $control,
+    JsxOpeningElement(name=$control_name, attributes=$control_attributes) as $control
+  } where {
+    $control_name <: r"(?:Input|Textarea|SelectTrigger|Checkbox|RadioGroupItem|Switch|Slider|NativeSelect|InputOTP)",
+    $control <: within JsxElement() as $parent where {
+      $parent <: contains JsxOpeningElement(name=$field_name, attributes=$field_attributes) where {
+        $field_name <: r"Field",
+        $field_attributes <: r"(?s).*data-disabled.*"
+      }
+    } ,
+    not $control_attributes <: r"(?s).*disabled.*",
+    register_diagnostic(span=$control, message="Controls inside Field[data-disabled] must also declare disabled.")
+  }
+}

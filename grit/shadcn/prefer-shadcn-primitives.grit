@@ -1,0 +1,19 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  or {
+    JsxOpeningElement(name=$tag) as $element,
+    JsxSelfClosingElement(name=$tag) as $element
+  } where {
+    $tag <: r"(?:button|input|textarea|select)",
+    register_diagnostic(span=$element, message="Prefer the existing shadcn primitive (Button, Input, Textarea, Select/NativeSelect) instead of a raw interactive HTML control in application code.")
+  },
+  or {
+    JsxOpeningElement(name=$tag) as $element,
+    JsxSelfClosingElement(name=$tag) as $element
+  } where {
+    $tag <: r"hr",
+    register_diagnostic(span=$element, message="Prefer the shadcn Separator primitive instead of a raw <hr> in application code.")
+  }
+}

@@ -1,0 +1,8 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsIdentifierBinding() as $name where {
+  $name <: r"^middleware$",
+  $name <: within JsExport() as $export ,
+  register_diagnostic(span=$export, message="Next.js 16 renamed the middleware convention to Proxy. Rename the exported middleware function and file convention to proxy unless an explicit legacy Edge-runtime exception is required.")
+}

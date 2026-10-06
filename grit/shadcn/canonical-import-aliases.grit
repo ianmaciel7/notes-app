@@ -1,0 +1,7 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsImport() as $imp where {
+  $imp <: r"(?s).*import(?:\s+.*?\s+from)?\s*[\"'](?:\.\.\/|\.\/)+(?:src\/)?(?:components\/ui|lib\/utils|hooks).*",
+  register_diagnostic(span=$imp, message="Use canonical import aliases (@/components/ui, @/lib/utils, @/hooks) instead of relative paths across layer boundaries.")
+}

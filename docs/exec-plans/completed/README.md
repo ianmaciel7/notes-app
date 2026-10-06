@@ -1,9 +1,20 @@
 # Completed Execution Plans
 
-This directory serves as the archive of successfully executed and verified engineering initiatives for the notes application.
+Completed plans are historical delivery records.
 
-## Index of Completed Plans
+They preserve what was done at the time. Current architecture and verification
+policy are defined by the root documentation and current CI.
 
-| ID | Title | Owner | Completed Date | Canonical ADR |
-| --- | --- | --- | --- | --- |
-| [0001](./0001-bootstrap-next-app.md) | [Bootstrap Notes Application Foundation (Next.js, TypeScript, Tailwind CSS, Biome, React Compiler)](./0001-bootstrap-next-app.md) | Antigravity Orchestrator | 2026-10-05 | [ADR 0001](../../adr/0001-bootstrap-next-app.md) |
+| ID | Title | Completed |
+| --- | --- | --- |
+| [0001](./0001-bootstrap-next-app.md) | Bootstrap Next.js foundation | 2026-10-05 |
+| [0002](./0002-adopt-shadcn-base-nova-component-system.md) | Adopt shadcn Base Nova | 2026-10-05 |
+| [0003](./0003-install-shadcn-typeset.md) | Install shadcn/typeset | 2026-10-05 |
+
+Current-state references:
+
+- [Architecture](../../../ARCHITECTURE.md)
+- [Coding Standards](../../../CODING_STANDARDS.md)
+- [Testing](../../../TESTING.md)
+- [Next.js guard coverage](../../guards/NEXTJS-GUARD-COVERAGE.md)
+- [shadcn guard coverage](../../guards/SHADCN-GUARD-COVERAGE.md)

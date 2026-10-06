@@ -1,0 +1,14 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  `cookies().get($arg)` as $access,
+  `cookies().getAll($arg)` as $access,
+  `cookies().has($arg)` as $access,
+  `cookies().set($arg)` as $access,
+  `cookies().delete($arg)` as $access,
+  `cookies().clear()` as $access,
+  `cookies().toString()` as $access
+} where {
+  register_diagnostic(span=$access, message="Next.js 16 request APIs are asynchronous. Await cookies() before accessing the cookie store.")
+}

@@ -1,0 +1,322 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"AccordionItem",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Accordion(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:AccordionTrigger|AccordionContent)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<AccordionItem(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:AlertTitle|AlertDescription|AlertAction)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Alert(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"BreadcrumbList",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Breadcrumb(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"BreadcrumbItem",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<BreadcrumbList(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:ButtonGroupSeparator|ButtonGroupText)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<ButtonGroup(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:CarouselContent|CarouselPrevious|CarouselNext)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Carousel(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"CarouselItem",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<CarouselContent(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:EmptyHeader|EmptyTitle|EmptyDescription|EmptyContent|EmptyMedia)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Empty(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:FieldLabel|FieldDescription|FieldError|FieldContent|FieldTitle)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Field(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:ItemMedia|ItemContent|ItemActions|ItemTitle|ItemDescription|ItemHeader|ItemFooter)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Item(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"NavigationMenuList",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<NavigationMenu(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"NavigationMenuItem",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<NavigationMenuList(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:NavigationMenuTrigger|NavigationMenuContent|NavigationMenuLink)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<NavigationMenuItem(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"PaginationContent",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Pagination(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"PaginationItem",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<PaginationContent(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:PaginationLink|PaginationEllipsis|PaginationNext|PaginationPrevious)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<PaginationItem(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"RadioGroupItem",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<RadioGroup(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:TableHeader|TableBody|TableFooter|TableCaption)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Table(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"TableRow",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<(?:TableHeader|TableBody|TableFooter)(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:TableHead|TableCell)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<TableRow(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"ToggleGroupItem",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<ToggleGroup(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:MessageContent|MessageHeader|MessageFooter|MessageAvatar)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Message(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:BubbleContent|BubbleReactions)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Bubble(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:AttachmentMedia|AttachmentContent|AttachmentTitle|AttachmentDescription|AttachmentActions|AttachmentAction|AttachmentTrigger)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Attachment(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:MarkerIcon|MarkerContent)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Marker(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:MessageScrollerViewport|MessageScrollerContent)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<MessageScroller(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:ComboboxInput|ComboboxList|ComboboxClear|ComboboxEmpty)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Combobox(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"MenubarMenu",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Menubar(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:MenubarTrigger|MenubarContent)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<MenubarMenu(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:InputOTPGroup|InputOTPSlot|InputOTPSeparator)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<InputOTP(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:ResizablePanel|ResizableHandle)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<ResizablePanelGroup(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"ScrollBar",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<ScrollArea(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:QuestionnaireItem|QuestionnaireProgress)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Questionnaire(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:QuestionnaireTitle|QuestionnaireDescription|QuestionnaireOptions|QuestionnaireOption)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<QuestionnaireItem(?:\s|>)"
+    }
+  }
+} where {
+  register_diagnostic(span=$part, message="Invalid shadcn compound-component anatomy. Nest this part under its documented parent primitive.")
+}

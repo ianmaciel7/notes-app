@@ -1,0 +1,7 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsLiteralMemberName() as $name where {
+  $name <: r"^(?:dynamicIO|useCache)$",
+  register_diagnostic(span=$name, message="Next.js 16 removed the experimental dynamicIO/useCache configuration flags. Adopt the Cache Components model deliberately through the current cacheComponents option when required.")
+}

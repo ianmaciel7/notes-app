@@ -1,0 +1,70 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:Sidebar|SidebarInset|SidebarTrigger)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<SidebarProvider(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:SidebarHeader|SidebarContent|SidebarFooter|SidebarRail|SidebarSeparator)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Sidebar(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:SidebarGroupLabel|SidebarGroupAction|SidebarGroupContent)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<SidebarGroup(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:SidebarMenuButton|SidebarMenuAction|SidebarMenuBadge|SidebarMenuSub|SidebarMenuSkeleton)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<SidebarMenuItem(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"SidebarMenuItem",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<SidebarMenu(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"SidebarMenuSubItem",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<SidebarMenuSub(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"SidebarMenuSubButton",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<SidebarMenuSubItem(?:\s|>)"
+    }
+  }
+} where {
+  register_diagnostic(span=$part, message="Invalid Sidebar compound-component nesting. Follow the shadcn Sidebar anatomy.")
+}

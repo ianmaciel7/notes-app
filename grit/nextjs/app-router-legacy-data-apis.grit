@@ -1,0 +1,11 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  `getServerSideProps` as $legacy_api,
+  `getStaticProps` as $legacy_api,
+  `getStaticPaths` as $legacy_api,
+  `getInitialProps` as $legacy_api
+} where {
+  register_diagnostic(span=$legacy_api, message="Pages Router data lifecycle APIs are not part of this App Router architecture. Fetch data in Server Components, use generateStaticParams for dynamic prerendering, and use App Router cache/revalidation APIs.")
+}

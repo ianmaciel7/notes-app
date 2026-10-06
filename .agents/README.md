@@ -1,36 +1,44 @@
 # .agents
 
-Project-local standard for AGENTS.md + MCP + SKILLS.
+Project-local configuration for agent instructions, MCP synchronization, and
+skills.
+
+## Canonical project instructions
+
+- Root instructions: `../AGENTS.md`
+- Architecture: `../ARCHITECTURE.md`
+- Coding standards: `../CODING_STANDARDS.md`
+- shadcn rule: `rules/shadcn.md`
 
 ## Quick workflow
-- `agents status` to inspect enabled integrations and MCP state.
-- `agents mcp add <url-or-name>` to add one server for all selected tools.
-- `agents mcp test --runtime` to validate connectivity.
-- `agents sync` to materialize generated configuration.
-- `agents sync --check` for CI-safe drift detection.
 
-## Source files (commit these)
-- `agents.json`: selected integrations + MCP servers + workspace behavior
-- `skills/*/SKILL.md`: project skills
+- `agents status`
+- `agents mcp add <url-or-name>`
+- `agents mcp test --runtime`
+- `agents sync`
+- `agents sync --check`
 
-## Root instruction file
-- `../AGENTS.md`: canonical instruction document
+## Source files
 
-## Local/private files (do not commit)
-- `local.json`: machine-specific MCP overrides and secrets
+Commit:
 
-## Generated files
-- `generated/*`: renderer outputs used by `agents sync`
-- `mcp_config.json`: Antigravity CLI workspace MCP config
-- `generated/vscode.settings.state.json`: managed VS Code hide state
+- `agents.json`
+- project-owned files in `rules/`
+- project skills intentionally managed in `skills/`
 
-## Common materialized outputs
+Do not commit:
+
+- `local.json`
+- machine credentials or secrets
+
+## Generated outputs
+
+Generated configuration can include:
+
 - `.codex/config.toml`
 - `.gemini/settings.json`
 - `.vscode/mcp.json`
-- `.vscode/settings.json`
 - `.cursor/mcp.json`
 - `.agents/mcp_config.json`
-- `opencode.json`
-- `.windsurf/skills/`
-- `~/.codeium/windsurf/mcp_config.json` (global)
+
+Run `agents sync --check` when agent configuration changes.

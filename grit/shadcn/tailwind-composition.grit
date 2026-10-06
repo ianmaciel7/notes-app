@@ -1,0 +1,19 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  JsxAttribute() as $attribute where {
+    $attribute <: r"(?s)className(?:\s*=.*)?space-[xy]-",
+    register_diagnostic(span=$attribute, message="Use shadcn/Tailwind composition conventions: gap-* instead of space-x/y-*.")
+  },
+  JsxAttribute() as $attribute where {
+    $attribute <: r"overflow-hidden",
+    $attribute <: r"text-ellipsis",
+    $attribute <: r"whitespace-nowrap",
+    register_diagnostic(span=$attribute, message="Use shadcn/Tailwind composition conventions: truncate instead of the manual truncation trio.")
+  },
+  JsxAttribute() as $attribute where {
+    $attribute <: r"(?s)className(?:\s*=.*)?\banimate-pulse\b",
+    register_diagnostic(span=$attribute, message="Use the Skeleton primitive for loading placeholders instead of custom animate-pulse classes.")
+  }
+}

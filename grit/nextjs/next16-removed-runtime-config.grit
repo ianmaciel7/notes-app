@@ -1,0 +1,11 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  JsLiteralMemberName() as $legacy where {
+    $legacy <: r"^(?:serverRuntimeConfig|publicRuntimeConfig)$"
+  },
+  `"next/config"` as $legacy
+} where {
+  register_diagnostic(span=$legacy, message="Next.js 16 removed runtime config and next/config. Use server environment variables directly and NEXT_PUBLIC_* only for values intentionally exposed to the browser.")
+}

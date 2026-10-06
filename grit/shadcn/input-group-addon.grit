@@ -1,0 +1,16 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  JsxSelfClosingElement(name=$button_name) as $button,
+  JsxOpeningElement(name=$button_name) as $button
+} where {
+  $button_name <: r"Button",
+  $button <: within JsxElement() as $input_group where {
+    $input_group <: r"(?s)^<InputGroup(?:\s|>)"
+  } ,
+  not $button <: within JsxElement() as $addon where {
+    $addon <: r"(?s)^<InputGroupAddon(?:\s|>)"
+  } ,
+  register_diagnostic(span=$button, message="Buttons inside InputGroup must be composed through InputGroupAddon.")
+}

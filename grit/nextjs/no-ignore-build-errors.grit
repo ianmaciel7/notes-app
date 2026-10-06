@@ -1,0 +1,7 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsObjectExpression() as $object where {
+  $object <: r"(?s).*ignoreBuildErrors\s*:\s*true.*",
+  register_diagnostic(span=$object, message="Do not set typescript.ignoreBuildErrors to true. Production builds must fail on TypeScript errors in this repository.")
+}

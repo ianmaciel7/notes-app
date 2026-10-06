@@ -1,0 +1,6 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+`revalidateTag($tag)` as $call where {
+  register_diagnostic(span=$call, message="The single-argument revalidateTag(tag) form is deprecated. Use revalidateTag(tag, \"max\") or an explicit cache-life profile, or use updateTag when immediate read-your-own-writes behavior is required.")
+}

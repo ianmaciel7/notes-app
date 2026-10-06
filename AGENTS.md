@@ -2,49 +2,105 @@
 
 # This is NOT the Next.js you know
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+This version may contain APIs and conventions newer than model training data.
+Read the relevant installed Next.js documentation before framework-specific
+changes and heed deprecation notices.
 
 <!-- END:nextjs-agent-rules -->
 
 ## Mission
+
 Deliver correct, maintainable changes with minimal risk.
 
-## Scope
-- Respect repository architecture and conventions.
-- Keep edits focused; avoid unrelated refactors.
+## Current stack
+
+- Next.js 16.3.8 App Router
+- React 19.2.8 + React Compiler
+- TypeScript 5.9
+- Tailwind CSS v4
+- shadcn Base Nova / Base UI
+- Biome 2.4.2
+- pnpm 12.8.1
+
+## Repository rules
+
+- Respect [ARCHITECTURE.md](./ARCHITECTURE.md).
+- Follow [CODING_STANDARDS.md](./CODING_STANDARDS.md).
+- Follow naming conventions in [.agents/rules/naming.md](./.agents/rules/naming.md).
+- Do not describe planned architecture as implemented.
 - Never commit secrets.
+- Keep edits focused.
+- `.worktrees/` is reference-only and must not be modified.
+- `src/components/ui/**` is the owned shadcn implementation layer.
 
-## Engineering Rules
-- Validate changes with relevant checks before final delivery.
-- Surface assumptions and edge cases explicitly.
-- Prefer reversible changes and deterministic outputs.
-- `.worktrees/` is strictly read-only and reserved exclusively for reference; never modify, create, or delete files inside it.
+## Next.js rules
 
-## MCP & Skills
-- MCP server definitions: .agents/agents.json
-- Local MCP overrides/secrets: .agents/local.json
+Follow [.agents/rules/nextjs.md](./.agents/rules/nextjs.md) and
+[Next.js guard coverage](./docs/guards/NEXTJS-GUARD-COVERAGE.md).
 
-## MCP & Skills workflow
-1. Add or update MCP entries in .agents/agents.json.
-2. Run agents sync after adding, editing, or updating skills/MCP configurations.
-3. Use agents sync --check in CI or before opening a PR to verify lockfile and skills synchronization.
-4. Use agents mcp test --runtime when introducing new servers.
+- Server Components by default.
+- Keep `"use client"` boundaries small.
+- Do not reintroduce Pages Router APIs.
+- Do not call an internal Route Handler from a Server Component for ordinary
+  server-side data access.
+- Treat Server Actions and Route Handlers as security-sensitive boundaries.
+- Use current async request APIs and route-aware types.
+- Prefer framework/native enforcement over duplicate GritQL heuristics.
 
-## Agent skills
+## shadcn rules
 
-### Issue tracker
-Tracked on GitHub Issues. See `docs/agents/issue-tracker.md`.
+Follow [.agents/rules/shadcn.md](./.agents/rules/shadcn.md) and
+[shadcn guard coverage](./docs/guards/SHADCN-GUARD-COVERAGE.md).
 
-### Triage labels
-Canonical five-label triage vocabulary. See `docs/agents/triage-labels.md`.
+## MCP
 
-### Domain docs
-Single-context domain model and architecture records. See `docs/agents/domain.md`.
+- MCP definitions: `.agents/agents.json`
+- Local/private overrides: `.agents/local.json`
+- Context7 documentation rules: [.agents/rules/context7.md](./.agents/rules/context7.md)
+
+## Verification
+
+Follow [.agents/rules/test.md](./.agents/rules/test.md) and [TESTING.md](./TESTING.md).
+
+Fast iteration:
+
+```bash
+pnpm run verify:changed
+```
+
+Fast delivery gate:
+
+```bash
+pnpm run verify:fast
+```
+
+Additional CI checks:
+
+- Knip
+- jscpd
+- Fallow
+- pnpm audit
+- Next.js production build
+- Size Limit
+- Playwright E2E
 
 ## Workflow
-1. Plan briefly.
-2. Implement minimal viable change.
-3. Validate (lint/tests/build/smoke as needed).
-4. Report results and residual risks.
+
+1. Read relevant project docs and ADRs.
+2. Plan briefly.
+3. Implement the smallest coherent change.
+4. Run the most relevant fast checks.
+5. Run broader verification before delivery.
+6. Update documentation when behavior, architecture, tooling, or policy
+   changes.
+7. Report residual risk explicitly.
+
+## Documentation sources of truth
+
+- Current architecture: `ARCHITECTURE.md`
+- Current coding policy: `CODING_STANDARDS.md`
+- Current tests: `TESTING.md`
+- Security policy: `SECURITY.md`
+- Domain vocabulary: `GLOSSARY.md`
+- Planned data model: `DER.md`
+- Historical decisions: `docs/adr/`

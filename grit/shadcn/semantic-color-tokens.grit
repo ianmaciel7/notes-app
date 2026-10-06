@@ -1,0 +1,13 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  JsxAttribute() as $attribute where {
+    $attribute <: r"(?s)className(?:\s*=.*)?(?:bg|text|border|ring|outline|fill|stroke)-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|black|white)(?:-|/|\b)"
+  },
+  JsxAttribute() as $attribute where {
+    $attribute <: r"(?s)className(?:\s*=.*)?(?:bg|text|border|ring|outline|fill|stroke)-\[(?:#|rgb|rgba|hsl|hsla|oklch|oklab)"
+  }
+} where {
+  register_diagnostic(span=$attribute, message="Use shadcn semantic color tokens instead of raw palette or arbitrary color values.")
+}

@@ -1,0 +1,15 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  JsxOpeningElement(name=$button_name, attributes=$attributes) as $button,
+  JsxSelfClosingElement(name=$button_name, attributes=$attributes) as $button
+} where {
+  $button_name <: r"Button",
+  $attributes <: contains JsxAttribute() as $size,
+  $size <: r"size(?:\s*=.*)?icon",
+  not $attributes <: contains JsxAttribute() as $label where {
+    $label <: r"aria-label(?:\s*=.*)?"
+  },
+  register_diagnostic(span=$button, message="Icon-only Button variants must declare aria-label.")
+}

@@ -122,6 +122,119 @@
           "goose"
         ],
         "enabled": true
+      },
+      "github": {
+        "label": "GitHub",
+        "description": "Official GitHub MCP Server",
+        "transport": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-github"
+        ],
+        "targets": [
+          "codex",
+          "claude",
+          "antigravity",
+          "cursor"
+        ],
+        "enabled": true
+      },
+      "serena": {
+        "label": "Serena",
+        "description": "Serena code navigation and symbolic editing MCP server",
+        "transport": "stdio",
+        "command": "serena",
+        "args": [
+          "start-mcp-server"
+        ],
+        "targets": [
+          "antigravity",
+          "cursor",
+          "claude"
+        ],
+        "enabled": true
+      },
+      "graphify": {
+        "label": "Graphify",
+        "description": "Codebase knowledge graph querying MCP server",
+        "transport": "stdio",
+        "command": "graphify-mcp",
+        "args": [],
+        "targets": [
+          "antigravity",
+          "cursor",
+          "claude"
+        ],
+        "enabled": true
+      },
+      "playwright": {
+        "label": "Playwright",
+        "description": "Playwright browser automation MCP server",
+        "transport": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@playwright/mcp"
+        ],
+        "targets": [
+          "antigravity",
+          "cursor"
+        ],
+        "enabled": true
+      },
+      "firebase": {
+        "label": "Firebase",
+        "description": "Firebase CLI local emulator and project MCP server",
+        "transport": "stdio",
+        "command": "pnpm",
+        "args": [
+          "dlx",
+          "firebase-tools",
+          "mcp"
+        ],
+        "targets": [
+          "antigravity",
+          "cursor"
+        ],
+        "enabled": true
+      },
+      "nextjs": {
+        "label": "Next.js",
+        "description": "Next.js DevTools and agent MCP server",
+        "transport": "stdio",
+        "command": "pnpm",
+        "args": [
+          "exec",
+          "next",
+          "experimental-mcp"
+        ],
+        "targets": [
+          "antigravity",
+          "cursor"
+        ],
+        "enabled": true
+      },
+      "context7": {
+        "label": "Context7",
+        "description": "Up-to-date documentation search for libraries and frameworks",
+        "transport": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@upstash/context7-mcp"
+        ],
+        "targets": [
+          "codex",
+          "claude",
+          "claude_desktop",
+          "gemini",
+          "copilot_vscode",
+          "copilot_cli",
+          "cursor",
+          "antigravity"
+        ],
+        "enabled": true
       }
     }
   },

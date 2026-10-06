@@ -3,7 +3,8 @@
   "vcs": {
     "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": true
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
   },
   "files": {
     "ignoreUnknown": true,
@@ -20,7 +21,9 @@
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "indentWidth": 2
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 80
   },
   "css": {
     "parser": {
@@ -33,10 +36,66 @@
       "recommended": true
     },
     "domains": {
-      "next": "recommended",
-      "react": "recommended"
+      "next": "all",
+      "react": "recommended",
+      "test": "recommended",
+      "playwright": "recommended",
+      "project": "recommended",
+      "types": "recommended"
     }
   },
+  "plugins": [
+    "./grit/nextjs/app-router-legacy-imports.grit",
+    "./grit/nextjs/app-router-legacy-data-apis.grit",
+    "./grit/nextjs/next16-deprecated-middleware-export.grit",
+    "./grit/nextjs/next16-deprecated-middleware-config.grit",
+    "./grit/nextjs/next16-removed-runtime-config.grit",
+    "./grit/nextjs/next16-removed-amp.grit",
+    "./grit/nextjs/next16-removed-root-params.grit",
+    "./grit/nextjs/next16-removed-cache-experiments.grit",
+    "./grit/nextjs/next16-removed-dev-indicators.grit",
+    "./grit/nextjs/next16-removed-eslint-config.grit",
+    "./grit/nextjs/next16-experimental-ppr.grit",
+    "./grit/nextjs/no-ignore-build-errors.grit",
+    "./grit/nextjs/revalidate-tag-profile.grit",
+    "./grit/nextjs/async-cookies-access.grit",
+    "./grit/nextjs/async-headers-access.grit",
+    "./grit/nextjs/async-draft-mode-access.grit",
+    "./grit/nextjs/no-public-secret-env.grit",
+    "./grit/nextjs/redirect-outside-try.grit",
+    "./grit/nextjs/next16-deprecated-cache-primitives.grit",
+    "./grit/nextjs/next16-deprecated-image-domains.grit",
+    "./grit/shadcn/base-ui-no-as-child.grit",
+    "./grit/shadcn/base-ui-api.grit",
+    "./grit/shadcn/required-accessible-parts.grit",
+    "./grit/shadcn/group-composition.grit",
+    "./grit/shadcn/input-group-composition.grit",
+    "./grit/shadcn/field-group-composition.grit",
+    "./grit/shadcn/fieldset-composition.grit",
+    "./grit/shadcn/card-composition.grit",
+    "./grit/shadcn/input-group-addon.grit",
+    "./grit/shadcn/tabs-composition.grit",
+    "./grit/shadcn/compound-component-anatomy.grit",
+    "./grit/shadcn/overlay-composition.grit",
+    "./grit/shadcn/sidebar-composition.grit",
+    "./grit/shadcn/button-state.grit",
+    "./grit/shadcn/button-link-semantics.grit",
+    "./grit/shadcn/button-icon.grit",
+    "./grit/shadcn/icon-button-accessibility.grit",
+    "./grit/shadcn/icon-sizing.grit",
+    "./grit/shadcn/field-validation.grit",
+    "./grit/shadcn/controlled-uncontrolled-state.grit",
+    "./grit/shadcn/semantic-color-tokens.grit",
+    "./grit/shadcn/no-manual-dark-colors.grit",
+    "./grit/shadcn/tailwind-composition.grit",
+    "./grit/shadcn/logical-properties.grit",
+    "./grit/shadcn/conditional-classname-cn.grit",
+    "./grit/shadcn/prefer-shadcn-primitives.grit",
+    "./grit/shadcn/overlay-stacking.grit",
+    "./grit/shadcn/canonical-import-aliases.grit",
+    "./grit/shadcn/no-inline-styles.grit",
+    "./grit/shadcn/no-radix-imports.grit"
+  ],
   "assist": {
     "actions": {
       "source": {

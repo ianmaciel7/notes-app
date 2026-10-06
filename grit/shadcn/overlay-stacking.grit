@@ -1,0 +1,12 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  JsxOpeningElement(name=$component, attributes=$attributes) as $element,
+  JsxSelfClosingElement(name=$component, attributes=$attributes) as $element
+} where {
+  $component <: r"(?:DialogContent|AlertDialogContent|SheetContent|DrawerContent|PopoverContent|HoverCardContent|DropdownMenuContent|ContextMenuContent|TooltipContent)",
+  $attributes <: contains JsxAttribute() as $class_name,
+  $class_name <: r"(?s)className(?:\s*=.*)?\bz-\[?-?[0-9]",
+  register_diagnostic(span=$class_name, message="Do not set a manual z-index on shadcn overlay content. Let the primitive own stacking.")
+}

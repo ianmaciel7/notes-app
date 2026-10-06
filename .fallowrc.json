@@ -1,0 +1,5 @@
+{
+  "$schema": "./node_modules/fallow/schema.json",
+  "entry": ["src/app/**/page.tsx", "src/app/**/layout.tsx"],
+  "ignorePatterns": ["node_modules/**", ".next/**", "src/components/ui/**"]
+}

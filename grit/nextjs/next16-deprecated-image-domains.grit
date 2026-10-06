@@ -1,0 +1,12 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsLiteralMemberName() as $name where {
+  $name <: r"^domains$",
+  $name <: within JsPropertyObjectMember() as $images where {
+    $images <: contains JsLiteralMemberName() as $images_name where {
+      $images_name <: r"^images$"
+    }
+  } ,
+  register_diagnostic(span=$name, message="Next.js 16 deprecated images.domains in next.config in favor of images.remotePatterns for enhanced security. Configure remotePatterns instead.")
+}

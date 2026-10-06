@@ -1,0 +1,31 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["src/app/**/page.tsx", "src/app/**/layout.tsx"],
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignore": [
+    "src/components/ui/**",
+    "src/hooks/use-mobile.ts",
+    "src/lib/utils.ts"
+  ],
+  "ignoreDependencies": [
+    "@base-ui/react",
+    "@shadcn/react",
+    "class-variance-authority",
+    "cmdk",
+    "cn",
+    "date-fns",
+    "embla-carousel-react",
+    "input-otp",
+    "lucide-react",
+    "react-day-picker",
+    "react-resizable-panels",
+    "recharts",
+    "shadcn",
+    "@axe-core/playwright",
+    "@testing-library/dom",
+    "@testing-library/react",
+    "tailwindcss",
+    "tw-animate-css"
+  ],
+  "ignoreBinaries": ["agents"]
+}

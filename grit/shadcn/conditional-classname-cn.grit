@@ -1,0 +1,8 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsxAttribute() as $attribute where {
+  $attribute <: r"(?s)className\s*=\s*\{.*(?:\?|&&).*",
+  not $attribute <: r"(?s)\bcn\s*\(",
+  register_diagnostic(span=$attribute, message="Use cn() for conditional className composition.")
+}

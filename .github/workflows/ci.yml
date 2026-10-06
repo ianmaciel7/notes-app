@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  fast-gate:
+    name: Fast Verification Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".node-version"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v6
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Biome Linter & Formatter
+        run: pnpm run lint
+
+      - name: TypeScript & Next Typegen
+        run: pnpm run check:types
+
+      - name: Vitest Unit Tests
+        run: pnpm run test
+
+      - name: Dependency Architecture (dependency-cruiser)
+        run: pnpm run check:deps
+
+      - name: Spell Check (CSpell)
+        run: pnpm run lint:spelling
+
+      - name: Unused Code & Exports (Knip)
+        run: pnpm run check:unused
+
+      - name: Code Duplication (jscpd)
+        run: pnpm run check:duplication
+
+      - name: Code Health & Complexity (Fallow)
+        run: pnpm run check:health
+
+      - name: Security Vulnerabilities (pnpm audit)
+        run: pnpm run check:security
+
+  extended-verification:
+    name: Extended Verification
+    needs: fast-gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".node-version"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Next.js Production Build
+        run: pnpm run build
+
+      - name: Size Limit Check
+        run: pnpm run check:size
+
+      - name: Playwright E2E Tests
+        run: pnpm run test:e2e

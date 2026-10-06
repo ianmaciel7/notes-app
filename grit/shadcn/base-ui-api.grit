@@ -1,0 +1,40 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  or {
+    JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
+    JsxOpeningElement(name=$component, attributes=$attributes) as $element
+  } where {
+    $component <: r"(?:ToggleGroup|Accordion)",
+    $attributes <: contains JsxAttribute() as $attribute,
+    $attribute <: r"type(?:\s*=.*)?"
+  },
+  or {
+    JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
+    JsxOpeningElement(name=$component, attributes=$attributes) as $element
+  } where {
+    $component <: r"Accordion",
+    $attributes <: contains JsxAttribute() as $attribute,
+    $attribute <: r"collapsible(?:\s*=.*)?"
+  },
+  or {
+    JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
+    JsxOpeningElement(name=$component, attributes=$attributes) as $element
+  } where {
+    $component <: r"SelectContent",
+    $attributes <: contains JsxAttribute() as $attribute,
+    $attribute <: r"position(?:\s*=.*)?"
+  },
+  or {
+    JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
+    JsxOpeningElement(name=$component, attributes=$attributes) as $element
+  } where {
+    $component <: r"Drawer",
+    $attributes <: contains JsxAttribute() as $attribute,
+    $attribute <: r"direction(?:\s*=.*)?"
+  },
+  `"sonner"` as $attribute
+} where {
+  register_diagnostic(span=$attribute, message="Radix or legacy API detected in a shadcn Base UI project. Use the Base UI equivalent (e.g. toast from '@/components/ui/toast') as documented by the project shadcn skill.")
+}

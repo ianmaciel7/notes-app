@@ -1,0 +1,7 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsLiteralMemberName() as $name where {
+  $name <: r"^ignoreDuringBuilds$",
+  register_diagnostic(span=$name, message="Next.js 16 removed the NextConfig ESLint build option. Run Biome or ESLint directly in the repository verification pipeline.")
+}
