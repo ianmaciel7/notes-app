@@ -37,9 +37,7 @@ Primary references:
 | --- | --- |
 | `app-router-legacy-imports.grit` | App Router, Metadata API, next/navigation, next/image, Pages Router separation |
 | `app-router-legacy-data-apis.grit` | Server data fetching, prerendering, generateStaticParams, App Router lifecycle |
-| `client-server-import-boundary.grit` | Server/Client boundary, server-only modules, request APIs, cache APIs |
-| `client-server-directive-boundary.grit` | use client, use server, use cache, module-graph boundaries |
-| `client-private-env.grit` | environment poisoning, secrets, NEXT_PUBLIC_* |
+| `client-server-directive-boundary.grit` | use client, use server, use cache, module-boundary directives |
 | `cache-runtime-apis.grit` | Cache Components, use cache, cookies, headers, request-time data |
 
 ## Concept-by-concept coverage
@@ -47,7 +45,7 @@ Primary references:
 | # | Concept family | Enforcement |
 | --- | --- | --- |
 | 1 | Fundamentals: App Router, app/src/public, project structure, configuration | Next.js conventions, NextConfig types, build |
-| 2 | React components: Server Components, Client Components, RSC payload/module graphs, boundaries, interleaving | Next build + React compiler + client/server Grit guards |
+| 2 | React components: Server Components, Client Components, RSC payload/module graphs, boundaries, interleaving | Next build + React compiler + directive-conflict Grit guard |
 | 3 | Routing: pages, layouts, templates, route groups, dynamic/catch-all segments, parallel/intercepting routes, slots | Next file conventions + `next typegen` + build |
 | 4 | Navigation: Link, router hooks, redirects, rewrites, prefetching, partial prefetching, state preservation | Next APIs + Biome + Playwright; raw anchors remain review-contextual |
 | 5 | Rendering: static/dynamic/request-time rendering, prerendering, PPR, static shell, hydration | Next build/runtime |
@@ -69,7 +67,7 @@ Primary references:
 | 21 | Styling: global CSS, CSS Modules, Tailwind, Sass, CSS chunking/order | Biome CSS + Tailwind parser + build |
 | 22 | Authentication: sessions, cookies, route protection, Server Action/Handler auth | Security tests + review; no syntax-only auth guard |
 | 23 | Authorization: role/resource checks, least privilege, ownership | DAL/service tests + security review |
-| 24 | Data security: DAL, DTOs, server-only, environment poisoning, tainting, CSP/CORS, validation | client/env/import Grit guards + Biome security + review |
+| 24 | Data security: DAL, DTOs, server-only, environment poisoning, tainting, CSP/CORS, validation | Next server-only build checks + environment rules + Biome security + review |
 | 25 | Special files: page/layout/template/loading/error/not-found/default/route/proxy/instrumentation/metadata files | Next file conventions/build |
 | 26 | TypeScript: generated route types, PageProps/LayoutProps/RouteContext, typed routes | `next typegen && tsc --noEmit` |
 | 27 | Internationalization: locale routing/detection/content | Route design + integration tests |
@@ -89,7 +87,7 @@ Primary references:
 | 41 | Build: next build, prerender analysis, output tracing, static/dynamic detection | production build gate |
 | 42 | Configuration: next.config.ts, redirects/rewrites/headers/images/output/cache/compiler/Turbopack | NextConfig TypeScript type + build |
 | 43 | CLI/tooling: create-next-app, next dev/build/start/typegen, codemods/upgrades, MCP | package scripts + documented workflow |
-| 44 | Application architecture: server-first, client islands, DAL/BFF, route/cache/error/security boundaries | Grit boundary guards + Dependency Cruiser + review |
+| 44 | Application architecture: server-first, client islands, DAL/BFF, route/cache/error/security boundaries | Next module-graph checks + Grit directive guard + Dependency Cruiser + review |
 | 45 | React essentials: props/children/composition/state/hooks/context/Suspense/errors/transitions/hydration | React compiler + Biome React domain + TypeScript/tests |
 
 ## Biome Next domain
@@ -107,6 +105,15 @@ This includes checks around:
 - Next-specific React hook correctness.
 
 Native tooling remains preferred over duplicating the same rule in GritQL.
+
+## Framework-owned Server/Client security checks
+
+Next.js already produces build-time errors when a module marked with
+`server-only` is pulled into the client graph. It also exposes browser
+environment variables only when they use the `NEXT_PUBLIC_` prefix.
+Duplicating these cross-module rules with a single-file GritQL heuristic would
+be both weaker and more error-prone than the framework check, so they remain
+framework-owned.
 
 ## Why some official concepts do not get a syntax guard
 

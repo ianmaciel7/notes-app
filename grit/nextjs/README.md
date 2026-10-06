@@ -19,17 +19,20 @@ The project follows a strict enforcement order:
 
 - Reject Pages Router and legacy imports in this App Router-only codebase.
 - Reject Pages Router data lifecycle APIs.
-- Prevent server-only imports from a `"use client"` entry module.
-- Prevent mixing `"use client"` with server/cache directives.
-- Prevent private environment access from Client Component entry modules.
-- Prevent `cookies()` and `headers()` inside a plain `"use cache"` scope.
+- Reject conflicting client/server/cache directives in the same module.
+- Reject direct `cookies()` or `headers()` access inside a plain
+  `"use cache"` function.
 
-## Native Biome coverage
+## Native framework and Biome coverage
 
 `biome.json` enables the Next.js domain with `"next": "all"`. Native rules
 therefore own checks such as image optimization, raw head usage, script
 requirements, synchronous scripts, invalid document imports, and async Client
 Components.
+
+Next.js itself owns server-only/client-only module graph errors and environment
+variable exposure rules. Those checks are intentionally not duplicated with
+cross-file GritQL heuristics.
 
 ## What is intentionally not a GritQL rule
 

@@ -1,13 +1,10 @@
 engine biome(1.0)
 language js(typescript, jsx)
 
-JsCallExpression(callee=$callee) as $call where {
-  $callee <: r"(?:cookies|headers)",
-  $call <: within JsModule() as $module where {
-    $module <: contains JsModuleSource(value=$source) where {
-      $source <: r".*next/headers.*"
-    }
-  },
+or {
+  `cookies()` as $call,
+  `headers()` as $call
+} where {
   or {
     $call <: within JsFunctionDeclaration() as $function1 where {
       $function1 <: contains `"use cache"`
