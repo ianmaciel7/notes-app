@@ -7,8 +7,5 @@ or {
   `"next/document"` as $legacy_module,
   `"next/legacy/image"` as $legacy_module
 } where {
-  register_diagnostic(
-    span=$legacy_module,
-    message="This repository uses the App Router. Replace this Pages Router or legacy module with the App Router equivalent: Metadata API, next/navigation, App Router file conventions, or next/image."
-  )
+  register_diagnostic(span=$legacy_module, message="This repository uses the App Router. Replace this Pages Router or legacy module with the App Router equivalent: Metadata API, next/navigation, App Router file conventions, or next/image.")
 }
