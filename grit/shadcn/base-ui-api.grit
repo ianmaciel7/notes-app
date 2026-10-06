@@ -30,10 +30,10 @@ or {
     JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
     JsxOpeningElement(name=$component, attributes=$attributes) as $element
   } where {
-    $component <: r"SelectValue",
+    $component <: r"Drawer",
     $attributes <: contains JsxAttribute() as $attribute,
-    $attribute <: r"placeholder(\s*=.*)?"
+    $attribute <: r"direction(\s*=.*)?"
   }
 } where {
-  register_diagnostic(span=$attribute, message="Radix-style API detected in a shadcn Base UI component. Use the Base UI API documented by the project shadcn skill.")
+  register_diagnostic(span=$attribute, message="Radix or legacy API detected in a shadcn Base UI component. Use the current Base UI API documented by the project shadcn skill.")
 }

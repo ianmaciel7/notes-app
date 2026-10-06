@@ -17,6 +17,11 @@ or {
     not $drawer_children <: r"(?s).*<DrawerTitle(\s|>).*",
     register_diagnostic(span=$element, message="DrawerContent must contain DrawerTitle. Use className=\"sr-only\" when the title should be visually hidden.")
   },
+  JsxElement(opening_element=JsxOpeningElement(name=$alert_dialog_name), elements=$alert_dialog_children) as $element where {
+    $alert_dialog_name <: r"AlertDialogContent",
+    not $alert_dialog_children <: r"(?s).*<AlertDialogTitle(\s|>).*",
+    register_diagnostic(span=$element, message="AlertDialogContent must contain AlertDialogTitle.")
+  },
   JsxElement(opening_element=JsxOpeningElement(name=$avatar_name), elements=$avatar_children) as $element where {
     $avatar_name <: r"Avatar",
     not $avatar_children <: r"(?s).*<AvatarFallback(\s|>).*",

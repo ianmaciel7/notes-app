@@ -14,7 +14,7 @@ or {
     JsxSelfClosingElement(name=$item_name) as $item,
     JsxOpeningElement(name=$item_name) as $item
   } where {
-    $item_name <: r"(DropdownMenuItem|DropdownMenuLabel|DropdownMenuSub)",
+    $item_name <: r"(DropdownMenuItem|DropdownMenuLabel)",
     not $item <: within JsxElement(opening_element=JsxOpeningElement(name=$group_name)) ,
     $group_name <: r"DropdownMenuGroup"
   },
@@ -25,14 +25,6 @@ or {
     $item_name <: r"MenubarItem",
     not $item <: within JsxElement(opening_element=JsxOpeningElement(name=$group_name)) ,
     $group_name <: r"MenubarGroup"
-  },
-  or {
-    JsxSelfClosingElement(name=$item_name) as $item,
-    JsxOpeningElement(name=$item_name) as $item
-  } where {
-    $item_name <: r"ContextMenuItem",
-    not $item <: within JsxElement(opening_element=JsxOpeningElement(name=$group_name)) ,
-    $group_name <: r"ContextMenuGroup"
   },
   or {
     JsxSelfClosingElement(name=$item_name) as $item,
