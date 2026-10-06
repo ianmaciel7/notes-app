@@ -7,98 +7,126 @@ or {
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:DialogTrigger|DialogContent)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<Dialog(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Dialog(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:DialogHeader|DialogFooter|DialogTitle|DialogDescription|DialogClose)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<DialogContent(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<DialogContent(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:SheetTrigger|SheetContent)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<Sheet(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Sheet(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:SheetHeader|SheetFooter|SheetTitle|SheetDescription|SheetClose)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<SheetContent(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<SheetContent(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:DrawerTrigger|DrawerContent)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<Drawer(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Drawer(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:DrawerHeader|DrawerFooter|DrawerTitle|DrawerDescription|DrawerClose)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<DrawerContent(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<DrawerContent(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:AlertDialogTrigger|AlertDialogContent)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<AlertDialog(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<AlertDialog(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:AlertDialogHeader|AlertDialogFooter|AlertDialogTitle|AlertDialogDescription|AlertDialogAction|AlertDialogCancel)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<AlertDialogContent(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<AlertDialogContent(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:PopoverTrigger|PopoverContent)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<Popover(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Popover(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:HoverCardTrigger|HoverCardContent)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<HoverCard(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<HoverCard(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:TooltipTrigger|TooltipContent)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<Tooltip(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Tooltip(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:DropdownMenuTrigger|DropdownMenuContent)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<DropdownMenu(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<DropdownMenu(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:ContextMenuTrigger|ContextMenuContent)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<ContextMenu(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<ContextMenu(?:\s|>)"
+    }
   },
   or {
     JsxSelfClosingElement(name=$part_name) as $part,
     JsxOpeningElement(name=$part_name) as $part
   } where {
     $part_name <: r"(?:CollapsibleTrigger|CollapsibleContent)",
-    not $part <: within JsxElement() as $parent where { $parent <: r"(?s)^<Collapsible(?:\s|>)" }
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Collapsible(?:\s|>)"
+    }
   }
 } where {
   register_diagnostic(span=$part, message="Invalid overlay/interactive compound-component nesting. Keep triggers, content, and structural parts under their shadcn owner primitive.")

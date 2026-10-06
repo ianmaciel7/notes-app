@@ -8,7 +8,7 @@ or {
   $icon_name <: r"(?:[A-Za-z0-9]+Icon|Spinner)",
   $icon <: within JsxElement() as $button where {
     $button <: r"(?s)^<Button(?:\s|>)"
-  },
+  } ,
   $attributes <: contains JsxAttribute() as $class_name,
   $class_name <: r"(?s)className(?:\s*=.*)?(?:\bsize-|\bw-|\bh-)",
   register_diagnostic(span=$class_name, message="Do not manually size icons inside Button; Button variants own icon sizing.")
