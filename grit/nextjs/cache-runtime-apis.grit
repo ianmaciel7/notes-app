@@ -3,27 +3,29 @@ language js(typescript, jsx)
 
 JsCallExpression(callee=$callee) as $call where {
   $callee <: r"(?:cookies|headers)",
-  $program <: contains JsModuleSource(value=$source) where {
-    $source <: r".*next/headers.*"
+  $call <: within JsModule() as $module where {
+    $module <: contains JsModuleSource(value=$source) where {
+      $source <: r".*next/headers.*"
+    }
   },
   or {
-    $call <: within JsFunctionDeclaration(body=$body1) where {
-      $body1 <: contains `"use cache"`
+    $call <: within JsFunctionDeclaration() as $function1 where {
+      $function1 <: contains `"use cache"`
     },
-    $call <: within JsFunctionExportDefaultDeclaration(body=$body2) where {
-      $body2 <: contains `"use cache"`
+    $call <: within JsFunctionExportDefaultDeclaration() as $function2 where {
+      $function2 <: contains `"use cache"`
     },
-    $call <: within JsFunctionExpression(body=$body3) where {
-      $body3 <: contains `"use cache"`
+    $call <: within JsFunctionExpression() as $function3 where {
+      $function3 <: contains `"use cache"`
     },
-    $call <: within JsArrowFunctionExpression(body=$body4) where {
-      $body4 <: contains `"use cache"`
+    $call <: within JsArrowFunctionExpression() as $function4 where {
+      $function4 <: contains `"use cache"`
     },
-    $call <: within JsMethodObjectMember(body=$body5) where {
-      $body5 <: contains `"use cache"`
+    $call <: within JsMethodObjectMember() as $function5 where {
+      $function5 <: contains `"use cache"`
     },
-    $call <: within JsMethodClassMember(body=$body6) where {
-      $body6 <: contains `"use cache"`
+    $call <: within JsMethodClassMember() as $function6 where {
+      $function6 <: contains `"use cache"`
     }
   },
   register_diagnostic(

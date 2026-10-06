@@ -1,14 +1,11 @@
 engine biome(1.0)
 language js(typescript, jsx)
 
-or {
-  JsFunctionDeclaration(id=$name) as $node,
-  JsVariableDeclarator(id=$name) as $node,
-  JsMethodClassMember(name=$name) as $node
-} where {
-  $name <: r"(?:getServerSideProps|getStaticProps|getStaticPaths|getInitialProps)",
+JsIdentifierBinding() as $name where {
+  $name <: r"^(?:getServerSideProps|getStaticProps|getStaticPaths|getInitialProps)$",
+  $name <: within JsExport(),
   register_diagnostic(
-    span=$node,
+    span=$name,
     message="Pages Router data APIs are not part of this App Router architecture. Fetch data in Server Components, use generateStaticParams for dynamic prerendering, and use the App Router cache/revalidation APIs."
   )
 }
