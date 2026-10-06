@@ -1,51 +1,49 @@
-# Domain Docs
+# Domain Documentation Guide
 
-How the engineering skills should consume this repo's domain documentation when exploring the codebase.
+Use this guide when an engineering task touches product/domain concepts.
 
-## Before exploring, read these
+## Read order
 
-- **`GLOSSARY.md`** at the repo root, or
-- **`GLOSSARY-MAP.md`** at the repo root if it exists: it points at one `GLOSSARY.md` per context. Read each one relevant to the topic.
-- **`docs/adr/`**: read ADRs that touch the area you're about to work in. In multi-context repos, also check `src/<context>/docs/adr/` for context-scoped decisions.
+1. `GLOSSARY.md` for canonical vocabulary.
+2. Active ADRs in `docs/adr/` for technical decisions.
+3. Product specs in `docs/product-specs/` for approved behavior.
+4. `DER.md` only when persistence/data modeling is relevant.
 
-If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill (reached via `/grill-with-docs` and `/improve-codebase-architecture`) creates them lazily when terms or decisions actually get resolved.
+## Current-state rule
 
-## File structure
+The glossary and DER may contain planned concepts that are not implemented on
+`dev`.
 
-Single-context repo (most repos):
+Before assuming a concept exists in code:
 
-```
-/
-├── GLOSSARY.md
-├── docs/adr/
-│   ├── 0001-event-sourced-orders.md
-│   └── 0002-postgres-for-write-model.md
-└── src/
-```
+- verify the source tree;
+- check whether a product spec is implemented;
+- check ADR status;
+- prefer `ARCHITECTURE.md` for current implementation truth.
 
-Multi-context repo (presence of `GLOSSARY-MAP.md` at the root):
+ADRs marked **Deprecated** are historical context only.
 
-```
-/
-├── GLOSSARY-MAP.md
-├── docs/adr/                          ← system-wide decisions
-└── src/
-    ├── ordering/
-    │   ├── GLOSSARY.md
-    │   └── docs/adr/                  ← context-specific decisions
-    └── billing/
-        ├── GLOSSARY.md
-        └── docs/adr/
-```
+## Vocabulary
 
-## Use the glossary's vocabulary
+Use the glossary's canonical term in:
 
-When your output names a domain concept (in an issue title, a refactor proposal, a hypothesis, a test name), use the term as defined in `GLOSSARY.md`. Don't drift to synonyms the glossary explicitly avoids.
+- issue titles;
+- tests;
+- specs;
+- refactor proposals;
+- implementation names.
 
-If the concept you need isn't in the glossary yet, that's a signal: either you're inventing language the project doesn't use (reconsider) or there's a real gap (note it for `/domain-modeling`).
+If a term is missing, either avoid inventing a synonym or resolve the gap
+through domain modeling.
 
-## Flag ADR conflicts
+## ADR conflicts
 
-If your output contradicts an existing ADR, surface it explicitly rather than silently overriding:
+If a proposal contradicts an Accepted ADR, surface the conflict explicitly.
 
-> _Contradicts ADR-0007 (event-sourced orders), but worth reopening because…_
+If it contradicts a Deprecated ADR, note the history but do not treat the old
+decision as a blocker.
+
+## Context growth
+
+Create additional context-specific glossaries only when the repository truly
+has multiple bounded contexts. Do not introduce a glossary map speculatively.

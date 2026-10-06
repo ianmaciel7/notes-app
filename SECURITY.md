@@ -1,61 +1,71 @@
 # Security Policy
 
-## 1. Supported Versions
+## Supported version
 
-Security updates are applied to the active branch and releases of the project.
+The active `0.1.x` development line receives security maintenance.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
-| < 0.1.0 | :x:                |
+## Reporting a vulnerability
 
----
+Do not open a public issue for a vulnerability. Use GitHub Security Advisories
+or another private maintainer channel.
 
-## 2. Reporting a Vulnerability
+Include:
 
-We take the security of this application seriously. If you discover a security vulnerability, please report it responsibly.
+- affected route/component/module;
+- reproduction steps;
+- impact;
+- proof of concept when safe;
+- suggested mitigation if known.
 
-### How to Report
+## Security invariants
 
-1. **Do not create a public GitHub Issue.**
-2. Submit vulnerability details confidentially via GitHub Security Advisories or email the maintainers directly.
-3. Include the following details to help us triage and verify the issue quickly:
-   - Type of vulnerability (e.g., XSS, authentication bypass, prototype pollution).
-   - Step-by-step reproduction instructions or proof-of-concept (PoC).
-   - Impact assessment and affected components/routes.
-   - Any suggested mitigations or patches.
+### Secrets
 
-### Response Timeline
+- Never commit secrets, credentials, tokens, or service-account files.
+- Local secrets belong in ignored environment files such as `.env.local`.
+- Only values intentionally exposed to the browser may use
+  `NEXT_PUBLIC_*`.
+- Privileged modules should be server-only when introduced.
 
-- **Acknowledgment**: Within 48 hours of submission.
-- **Initial Assessment**: Within 5 business days, confirming severity and reproduction.
-- **Fix & Disclosure**: Coordinated patch delivery before public disclosure.
+### Server boundaries
 
----
+When Server Actions, Route Handlers, authentication, or persistence are added:
 
-## 3. Core Security Invariants
+- validate all external input at runtime;
+- authenticate at the server operation boundary;
+- authorize access to the specific resource;
+- do not trust client-provided roles, ownership IDs, or authorization claims;
+- return minimum safe data to Client Components;
+- treat Route Handlers as public HTTP endpoints.
 
-All contributors and autonomous agents must uphold the following core security principles:
+Proxy, layouts, and client-side route guards are not substitutes for
+authorization inside the operation that reads or mutates protected data.
 
-### Secrets & Credentials
+### Rendering
 
-- **Zero Committed Secrets**: Never commit API keys, service account credentials, private tokens, or secrets to Git.
-- **Environment Separation**: Local secrets reside exclusively in `.env.local` (ignored by Git).
-- **Automated Scanning**: Commits and pull requests are checked for exposed secrets before merging.
+Do not render untrusted HTML with `dangerouslySetInnerHTML` without a proven,
+context-appropriate sanitization strategy.
 
-### Authentication & Authorization
+Prefer structured rendering over raw HTML injection.
 
-- **Client vs Server Boundaries**: Secret keys (such as admin SDK tokens) must never be imported into Client Components (`'use client'`).
-- **Input Validation**: Never trust external client input. All server actions and API route handlers must validate input structure and types before processing.
+### Dependencies
 
-### Content Security & Safe Rendering
+Run:
 
-- **XSS Prevention**: Never inject untrusted user input into raw HTML (`dangerouslySetInnerHTML`) without cryptographic sanitization.
-- **Markdown & Rich Content**: Markdown rendering must use AST-based safe parsing with HTML entity escaping.
+```bash
+pnpm run check:security
+```
 
-### Dependency Governance
+CI executes `pnpm audit --audit-level high`.
 
-- **Regular Audits**: Run `pnpm run check:security` (`pnpm audit --audit-level high`) to detect known vulnerabilities in the dependency tree.
-- **Automated Checks**: Dependency additions and updates are tracked in `pnpm-lock.yaml` to ensure deterministic supply chain integrity.
-- **Targeted Audit Exceptions**: `pnpm-workspace.yaml` may ignore a specific GHSA only when no patched dependency exists, the exposure is demonstrably not reachable in this project, and the exception includes a rationale.
-- **Current Exception**: `GHSA-vfj7-8cjw-p6xm` affects `braces` through `markdownlint-cli2`. No patched `braces` release exists as of October 6, 2026. In this repository, `markdownlint-cli2` receives repository-controlled glob patterns rather than untrusted runtime input. Remove the exception as soon as the dependency chain provides a patched release.
+The repository currently contains a documented audit exception for
+`GHSA-vfj7-8cjw-p6xm` through `markdownlint-cli2` because no patched
+`braces` release is available in the current dependency chain. The exposure is
+limited to repository-controlled glob patterns. Remove the exception as soon
+as the dependency chain provides a patched release.
+
+## Current implementation note
+
+The current `dev` branch does not implement authentication, Firebase,
+Firestore, or user data persistence. Historical ADRs covering those systems are
+not active security architecture until explicitly re-adopted.

@@ -1,126 +1,100 @@
-# Notes Application
+# Domain Glossary
 
-An object-based knowledge management system designed for capturing, organizing, and synthesizing interconnected thoughts and multimedia content.
+This glossary defines product vocabulary for the planned exam-study platform.
+It is a domain-language reference, not proof that every concept is currently
+implemented on `dev`.
 
-## Language
+## Study domain
 
-### Core Objects and Spaces
+**Exam**  
+A structured assessment definition containing an ordered set of questions.
 
-**Space**:
-A user-owned, isolated knowledge context encapsulating all objects, collections, and settings.
-_Avoid_: workspace, vault, account, project, tenant
+**Question**  
+An assessable prompt with a defined answer model, correctness criteria, and
+optional explanation.
 
-**Object**:
-First-class entity with an individual identity, typed properties, rich content, and connections.
-_Avoid_: item, record, entry, element
+**Attempt**  
+An immutable record of a submitted answer to a question.
 
-**Object Type**:
-Structural schema defining the properties, templates, and behavior for a set of objects.
-_Avoid_: category, class, database, schema
+**Assessment View**  
+The UI mode used to work through an assessment. Current product planning uses
+Continuous and Focus as primary modes.
 
-**Page**:
-Fundamental free-form canvas object for long-form writing and media composition.
-_Avoid_: note, memo, notebook, document
+**Continuous Mode**  
+A mode that presents questions in a continuous flow.
 
-**Property**:
-Structured metadata field defined on an object type and populated on individual objects.
-_Avoid_: attribute, column, custom field, variable
+**Focus Mode**  
+A mode centered on one active question at a time.
 
-**Collection**:
-Manually curated grouping of objects belonging to the same object type.
-_Avoid_: notebook, folder, directory, list
+**Review**  
+A scheduled practice interaction intended to reinforce recall.
 
-**Tag**:
-Non-hierarchical cross-cutting label applied across objects of any type.
-_Avoid_: label, keyword, mark, category
+**Mock Exam**  
+A timed or exam-like assessment session used to evaluate readiness.
 
-**Daily Note**:
-Automatically provisioned calendar-bound object for ephemeral logs and daily reflections.
-_Avoid_: journal, daily log, day note
+**Leech**  
+A question repeatedly failed enough to warrant special attention or revision.
 
-**Trash**:
-Temporary retention destination for deleted objects before permanent purging.
-_Avoid_: archive, recycle bin, discarded
+## Organization
 
-### Connections and Content
+**Space**  
+A user-scoped context used to organize study content.
 
-**Link**:
-Direct semantic connection from one object to another created inline or via property.
-_Avoid_: reference, relation, hyperlink, shortcut
+**Collection**  
+A manually curated grouping of related entities.
 
-**Back Link**:
-Aggregated list on an object displaying all incoming links from other objects.
-_Avoid_: incoming link, reverse link, citation list
+**Tag**  
+A non-hierarchical label applied across content.
 
-**Block**:
-Atomic addressable content unit within an object canvas, such as a paragraph or media item.
-_Avoid_: section, segment, fragment
+**Template**  
+A reusable structural baseline used when creating an entity.
 
-### Sources and Captures
+**Layout**  
+A presentation arrangement for a set of entities or content.
 
-**Source**:
-Raw external reference object, such as a web link or uploaded document, supporting highlights.
-_Avoid_: reference material, uploaded document, origin
+## Knowledge/content concepts
 
-**Highlight**:
-First-class captured excerpt from a source linked to personal notes and commentary.
-_Avoid_: clip, annotation, marker, snippet
+These remain part of the broader planned model but are not necessarily part of
+the initial assessment MVP.
 
-**Web Link**:
-External online reference preserved as a local source snapshot.
-_Avoid_: bookmark, URL, site link
+**Object**  
+A generic first-class entity in the broader planned knowledge model.
 
-**Document**:
-Uploaded file source such as a PDF or text document supporting inline extraction.
-_Avoid_: attachment, upload, raw file
+**Object Type**  
+A schema describing the structure of a category of objects.
 
-### Study and Practice
+**Page**  
+A free-form content surface.
 
-**Exam**:
-Structured assessment specification composed of an ordered sequence of questions.
-_Avoid_: test, quiz, certification
+**Property**  
+Structured metadata associated with an entity.
 
-**Question**:
-Evaluated prompt containing candidate choices, correct criteria, and an explanation.
-_Avoid_: card, flashcard, exercise
+**Link**  
+A semantic connection between entities.
 
-**Attempt**:
-Immutable historical record of a submitted response to a question.
-_Avoid_: response entry, log, submission
+**Back Link**  
+A derived incoming connection to an entity.
 
-**Review**:
-Spaced repetition session scheduling items based on memory retention intervals.
-_Avoid_: drill, daily review, practice session
+**Source**  
+External material used as study/reference input.
 
-**Mock Exam**:
-Timed assessment simulation evaluating readiness across selected questions.
-_Avoid_: dry run, practice test, trial
+**Highlight**  
+A captured excerpt from a source.
 
-**Leech**:
-Question flagged for revision after repeated consecutive recall failures.
-_Avoid_: problem card, hard question, pain point
+**Document**  
+An uploaded file used as a source.
 
-### Organization and Layout
+**Web Link**  
+An external URL preserved as a source.
 
-**Layout**:
-Structural arrangement and presentation pattern for organizing content components.
-_Avoid_: view, canvas mode, presentation skin
+**Inbox**  
+A triage area for newly captured material.
 
-**Template**:
-Reusable structural baseline and initial content applied when instantiating a new entity.
-_Avoid_: model, skeleton, preset, boilerplate
+**Chat**  
+A conversational session grounded in study content.
 
+## Naming rule
 
-**Search**:
-Query interface retrieving objects, sources, and highlights across the space.
-_Avoid_: lookup, filter tool, finder
-
-### Triage and AI
-
-**Inbox**:
-Central triage repository for newly captured, unprocessed sources and items.
-_Avoid_: incoming, queue, backlog
-
-**Chat**:
-Conversational session grounded in space objects, sources, and knowledge.
-_Avoid_: assistant, copilot, agent
+Code, specs, tests, and issues should prefer the glossary term when describing
+one of these domain concepts. If a concept is still only planned, avoid naming
+implementation modules as though the architecture already exists.

@@ -1,83 +1,60 @@
-# Rule: shadcn/ui Standards and Principles
+# shadcn/ui Project Rules
 
-## Project Context
+## Context
 
-- Framework: Next.js App Router with RSC.
-- shadcn style: Base Nova.
-- primitive base: Base UI.
-- Tailwind CSS v4 with semantic CSS variables.
-- UI primitives live in `src/components/ui` and application code consumes them.
+- Next.js 16 App Router with RSC.
+- shadcn style: `base-nova`.
+- Primitive base: Base UI.
+- Tailwind CSS v4 with semantic variables.
+- Owned primitives: `src/components/ui/**`.
 
-## Mandatory Rules
+## Composition
 
-### Composition and ownership
-
-- Reuse existing shadcn primitives before creating custom equivalents.
-- Prefer compound-component composition over monolithic wrappers.
-- Keep each subcomponent under its documented owner primitive.
+- Reuse existing shadcn primitives before custom equivalents.
+- Prefer compound composition over monolithic wrappers.
+- Keep subcomponents under their documented owner.
 - Use `FieldGroup` + `Field` for form layouts.
-- Use `FieldSet` + `FieldLegend` for semantic groups of related controls.
-- Use full `Card` composition with at least `CardHeader` and `CardContent`.
-- Keep Sidebar parts under `SidebarProvider` and their documented parent slots.
-- Do not mix controlled and uncontrolled props on the same component.
+- Use `FieldSet` + `FieldLegend` for related controls.
+- Keep Sidebar parts under `SidebarProvider`.
+- Do not mix controlled and uncontrolled props.
 
-### Base UI
+## Base UI
 
-- Never use Radix-only `asChild`; use the Base UI `render` API.
-- Do not use legacy Radix props rejected by the repository GritQL guards.
+- Do not use Radix-only `asChild`; use Base UI `render`.
 - Let Base UI own focus management, portals, dismissal, and overlay behavior.
 
-### Accessibility
+## Accessibility
 
-- Dialog, Sheet, Drawer, and AlertDialog content must have a title.
-- Avatar must have `AvatarFallback`.
-- Icon-only Button variants require an accessible name.
-- Pair `Field[data-invalid]` with `aria-invalid` on its control.
-- Pair `Field[data-disabled]` with `disabled` on its control.
-- Preserve native link semantics: style links with `buttonVariants`; do not
-  turn Button into an anchor.
+- Dialog-like content needs an accessible title.
+- Avatar needs `AvatarFallback`.
+- Icon-only buttons require an accessible name.
+- Pair invalid/disabled field state with the control state.
+- Preserve native link semantics.
 
-### Styling and tokens
+## Styling
 
-- Use semantic tokens such as `bg-background`, `text-foreground`,
-  `text-muted-foreground`, `border-border`, and component-specific tokens.
-- Do not use raw Tailwind palette colors or arbitrary literal color values in
-  application component class names.
-- Do not add manual `dark:` color overrides; semantic tokens own theme changes.
-- Use `gap-*`, not `space-x-*` or `space-y-*`.
-- Use `truncate` instead of the manual overflow/ellipsis/nowrap trio.
-- Use logical direction utilities (`start/end`, `ms/me`, `ps/pe`,
-  `text-start/text-end`) so code remains RTL-ready.
-- Use `cn()` for conditional class composition.
-- Do not set manual z-index values on shadcn overlay content.
+- Use semantic tokens.
+- Avoid raw palette colors in application components.
+- Avoid manual `dark:` color ownership when semantic tokens suffice.
+- Prefer `gap-*`, `truncate`, and logical direction utilities.
+- Use `cn()` for conditional classes.
+- Do not set manual z-index on shadcn overlay content.
 
-### Buttons, icons, and inputs
+## Buttons, icons, and inputs
 
-- Buttons do not expose `isPending` or `isLoading`; compose loading state with
-  `disabled` + `Spinner` + `data-icon`.
-- Icons in Button must declare `data-icon="inline-start"` or
-  `data-icon="inline-end"`.
-- Do not manually size icons inside Button when Button owns icon sizing.
-- Buttons inside `InputGroup` belong inside `InputGroupAddon`.
-- Use `InputGroupInput`/`InputGroupTextarea` inside `InputGroup`.
-- Prefer shadcn Button/Input/Textarea/Select primitives over raw interactive
-  HTML controls in application code.
-
-### Project configuration
-
-- `components.json` is authoritative for style, RSC, TSX, Tailwind CSS, base
-  color, CSS variables, aliases, icon library, RTL, menu color, and accent.
-- Install registry components through the shadcn CLI; do not copy raw source
-  from GitHub.
-- `src/components/ui/**` is excluded from consumption guards because those
-  files are the owned registry implementation layer.
+- Loading state is composed with `disabled`, `Spinner`, and icon metadata.
+- Button icons use `data-icon="inline-start"` or `"inline-end"`.
+- Do not manually size icons when Button owns icon sizing.
+- Use owned Input/Button/Textarea/Select primitives in application code when
+  they fit the semantic role.
 
 ## Guard boundary
 
-Biome/GritQL enforce only mechanically verifiable invariants. Open Code,
-Distribution, Registry strategy, Presets, monorepo organization, naming
-quality, component responsibility, and 'prefer built-in variants first' remain
-documented architecture policy because reliable AST enforcement would create
-false positives.
+Application-code guards intentionally exclude `src/components/ui/**`. That
+directory is the owned implementation layer, not ordinary consumption code.
 
-See `docs/SHADCN-GUARD-COVERAGE.md` for full coverage.
+Biome/GritQL should enforce only mechanically reliable invariants. Naming
+quality, abstraction quality, registry strategy, and component responsibility
+remain architecture/review concerns.
+
+See [../../docs/SHADCN-GUARD-COVERAGE.md](../../docs/SHADCN-GUARD-COVERAGE.md).

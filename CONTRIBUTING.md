@@ -1,81 +1,83 @@
-# Contributing Guide
+# Contributing
 
-Thank you for contributing to the Notes App! This guide outlines our development workflow, standards, and verification expectations.
+## Prerequisites
 
----
+- Node.js 22.19.0
+- pnpm 12.8.1
+- Git
 
-## 1. Getting Started
-
-### Prerequisites
-
-- **Node.js**: v22 or higher
-- **pnpm**: v12.x or higher
-- **Git**: Configured with user name and email
-
-### Setup Instructions
+## Setup
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd notes-app
-
-# Install isolated dependencies
 pnpm install
-
-# Start the local development server
 pnpm dev
 ```
 
----
+## Branch workflow
 
-## 2. Commit Message Conventions
+Feature and fix work should branch from `dev` and normally merge back into
+`dev`.
 
-This repository enforces **Conventional Commits** validated via `@commitlint` on every commit:
+Use lowercase kebab-case branch names with a clear prefix, for example:
 
-Format: `<type>(<scope>): <short description>`
+- `feat/question-card`
+- `fix/sidebar-state`
+- `chore/next-guards`
 
-Common types:
-- `feat`: A new user-facing or system feature
-- `fix`: A bug fix
-- `docs`: Documentation updates or additions
-- `refactor`: Code changes that neither fix a bug nor add a feature
-- `test`: Adding or modifying test suites
-- `chore`: Tooling, build configuration, or dependency updates
+Delivery branches such as `stag` and `main` are promoted deliberately rather
+than used as everyday feature integration branches.
 
----
+## Commits
 
-## 3. Pre-Commit Quality Gates
+Use Conventional Commits:
 
-We use **Husky** and **lint-staged** to ensure clean commits. Before creating a commit, staged files are automatically formatted and checked with Biome.
+`<type>(<scope>): <description>`
 
-To run the complete fast verification suite locally:
+Common types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`.
+
+Prefer small commits with one coherent context.
+
+## Local verification
+
+During iteration:
+
+```bash
+pnpm run verify:changed
+```
+
+Before opening or updating a PR:
 
 ```bash
 pnpm run verify:fast
 ```
 
-This verifies:
-1. `pnpm run lint` (Biome linter and import organizer)
-2. `pnpm run check:types` (TypeScript strict typecheck)
-3. `pnpm run test` (Vitest unit and integration tests)
-4. `pnpm run check:deps` (Dependency cruiser architecture boundaries)
-5. `pnpm run lint:spelling` (CSpell dictionary verification)
+The fast CI gate additionally runs Knip, jscpd, Fallow, and the high-severity
+pnpm audit.
 
----
+The extended CI gate runs:
 
-## 4. Code Standards & Architecture
+```bash
+pnpm run build
+pnpm run check:size
+pnpm run test:e2e
+```
 
-All contributions must follow:
-- [Coding Standards](./CODING_STANDARDS.md): Strict TypeScript rules, React Compiler invariants, Tailwind CSS conventions, and Fowler smell baselines.
-- [Architecture Guide](./ARCHITECTURE.md): Deep module interfaces, clean storage seams, and layer isolation rules.
-- [Testing Guidelines](./TESTING.md): Seam-based testing and accessibility standards.
-- [Domain Glossary](./GLOSSARY.md): Canonical terminology for all domain entities.
+## Standards
 
----
+Read these before substantial changes:
 
-## 5. Pull Request Process
+- [Architecture](./ARCHITECTURE.md)
+- [Coding Standards](./CODING_STANDARDS.md)
+- [Testing](./TESTING.md)
+- [Security](./SECURITY.md)
+- [Next.js guard coverage](./docs/NEXTJS-GUARD-COVERAGE.md)
+- [shadcn guard coverage](./docs/SHADCN-GUARD-COVERAGE.md)
 
-1. Create a feature branch off `main`: `git checkout -b feat/your-feature-name`.
-2. Ensure all tests and verification commands pass cleanly (`pnpm run verify:fast`).
-3. Open a Pull Request on GitHub.
-4. The automated CI suite and `/code-review` checks will evaluate the diff along both the **Standards** and **Spec** axes.
+## Pull requests
+
+1. Keep the diff focused.
+2. Explain behavior changes and architectural impact.
+3. Include visual evidence for UI changes when useful.
+4. Confirm relevant fast and extended verification.
+5. Prefer squash merge for feature-to-`dev` integration unless preserving
+   individual commits materially helps history.

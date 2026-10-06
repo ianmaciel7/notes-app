@@ -1,68 +1,96 @@
-# Notes Application
+# Exam Study Platform
 
-An object-based knowledge management system designed for capturing, organizing, and synthesizing interconnected thoughts and multimedia content.
+This repository is the foundation for an exam-study platform built with
+Next.js 16, React 19, TypeScript, Tailwind CSS v4, and shadcn/ui.
 
-<!-- agents:project-docs:start -->
-## Using Agents in this Repository
+The repository name remains `notes-app`, but the active product direction is
+study and assessment workflows rather than a generic notes product.
 
-This repository uses `@agents-dev/cli` to keep MCP servers, skills, and instructions aligned across AI tools.
+## Current implementation state
 
-### Quick Commands
+The `dev` branch currently contains the application foundation:
 
-```bash
-agents status
-agents mcp add <url-or-name>
-agents mcp test --runtime
-agents sync
-agents sync --check
-```
+- Next.js 16.3.8 App Router with React Compiler enabled.
+- React 19.2.8 and TypeScript 5.9.
+- Tailwind CSS v4 and shadcn Base Nova / Base UI.
+- A project-owned UI primitive layer in `src/components/ui/**`.
+- Biome 2.4.2 with Next.js, React, project, types, test, and Playwright domains.
+- Custom GritQL guards for Next.js App Router migration rules and shadcn
+  consumption rules.
+- Vitest and Playwright smoke coverage.
+- CI gates for linting, type generation, tests, architecture, spelling, unused
+  code, duplication, code health, security audit, production build, bundle
+  size, and E2E tests.
 
-### One MCP Setup for All Tools
+Domain features, authentication, persistence, localization, and assessment
+workflows are not yet implemented on the current `dev` branch unless stated
+by a future product spec or ADR.
 
-Add a server once in `.agents/agents.json`, then run `agents sync` to materialize it for enabled integrations.
+## Prerequisites
 
-### Agent References
+- Node.js 22.19.0
+- pnpm 12.8.1
 
-- MCP Protocol Docs: https://modelcontextprotocol.io
-- MCP Servers Catalog: https://mcpservers.org
-- Agent Workflows: [docs/guides/workflows.md](./docs/guides/workflows.md)
-<!-- agents:project-docs:end -->
-
----
-
-## Architecture & Documentation
-
-- [Architecture Guide](./ARCHITECTURE.md): Deep module interfaces, clean storage seams, and layer isolation rules.
-- [Entity-Relationship Model (DER)](./DER.md): Canonical Firestore schemas, relations, cards, and attempts.
-- [Coding Standards](./CODING_STANDARDS.md): Strict TypeScript, React Compiler invariants, and Tailwind CSS guidelines.
-- [Testing Guidelines](./TESTING.md): Testing pyramid, Vitest, Playwright, and Stryker mutation testing.
-- [Security Policy](./SECURITY.md): Vulnerability reporting and security invariants.
-- [Contributing Guide](./CONTRIBUTING.md): Setup instructions, conventional commits, and pull request workflow.
-- [Domain Glossary](./GLOSSARY.md): Ubiquitous language and domain terms.
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js v22+
-- pnpm v12+
-
-### Development
+## Development
 
 ```bash
-# Install dependencies
 pnpm install
-
-# Run the development server
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to explore the application.
+Open `http://localhost:3000`.
 
-### Verification
+## Verification
+
+Fast local verification:
 
 ```bash
 pnpm run verify:fast
 ```
+
+Focused verification while iterating:
+
+```bash
+pnpm run verify:changed
+```
+
+Full CI additionally runs:
+
+- Knip
+- jscpd
+- Fallow
+- `pnpm audit --audit-level high`
+- `next build`
+- Size Limit
+- Playwright E2E
+
+## Guard system
+
+Guard ownership is intentionally layered:
+
+1. Next.js build/runtime owns framework invariants.
+2. `next typegen` + TypeScript own route-aware typing.
+3. Biome owns native Next.js/React/project/type/test rules.
+4. GritQL owns low-ambiguity project-specific AST rules.
+5. Dependency Cruiser owns module-boundary checks.
+6. Vitest/Playwright own runtime behavior.
+7. Code review owns architectural decisions that static analysis cannot prove.
+
+See:
+
+- [Next.js guard coverage](./docs/NEXTJS-GUARD-COVERAGE.md)
+- [shadcn guard coverage](./docs/SHADCN-GUARD-COVERAGE.md)
+
+## Documentation
+
+- [Architecture](./ARCHITECTURE.md)
+- [Coding Standards](./CODING_STANDARDS.md)
+- [Testing](./TESTING.md)
+- [Security](./SECURITY.md)
+- [Contributing](./CONTRIBUTING.md)
+- [Domain Glossary](./GLOSSARY.md)
+- [Proposed Data Model](./DER.md)
+- [ADRs](./docs/adr/README.md)
+- [Product Specs](./docs/product-specs/README.md)
+- [Execution Plans](./docs/exec-plans/README.md)
+- [Agent Workflows](./docs/guides/workflows.md)

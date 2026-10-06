@@ -1,65 +1,91 @@
-# Testing Strategy & Guidelines
+# Testing
 
-This document outlines the testing architecture, suites, and invariants for the Notes App.
+This document describes both the tests that exist today and the testing
+expectations for future features.
 
----
+## Current automated coverage
 
-## 1. Testing Philosophy & Test Pyramid
+### Vitest
 
-Our testing strategy optimizes for high velocity, high confidence, and deterministic execution:
+Current source smoke coverage:
 
+- `src/smoke.test.ts`
+
+Vitest runs in Happy DOM and scans `src/**/*.{test,spec}.{ts,tsx}`.
+`src/components/ui/**` is excluded from project unit tests because that
+directory is the owned shadcn implementation layer.
+
+Run:
+
+```bash
+pnpm test
 ```
-                  ┌────────────────────────┐
-                  │    E2E & A11y (10%)    │  ← Playwright + Axe
-                  ├────────────────────────┤
-                  │ Integration & Seams    │  ← Vitest + Testing Library + Happy DOM
-                  │         (30%)          │
-                  ├────────────────────────┤
-                  │ Unit & Pure Domain     │  ← Vitest (Fast sub-millisecond feedback)
-                  │         (60%)          │
-                  └────────────────────────┘
+
+Coverage:
+
+```bash
+pnpm run test:coverage
 ```
 
-1. **Unit & Domain Tests**: Focus on pure business logic, domain models, markdown parsers, validation schemas, and utilities in `src/lib/`.
-2. **Integration Tests via Architectural Seams**: Exercise components and workflows through defined seams (e.g., repository interfaces) using fast in-memory adapters (`InMemoryNoteAdapter`) rather than brittle external mocks.
-3. **End-to-End (E2E) & Accessibility Tests**: Verify complete user journeys in real browser viewports, validating keyboard navigation and accessibility standards (WCAG 2.1 AA via `@axe-core/playwright`).
-4. **Mutation Testing**: Evaluate test suite effectiveness using Stryker Mutator to guarantee tests actively catch defects.
+### Playwright
 
----
+Current E2E smoke coverage:
 
-## 2. Test Execution Commands
+- `tests/e2e/home.spec.ts`
 
-| Task | Command | Description |
-| ---- | ------- | ----------- |
-| **Unit & Integration** | `pnpm test` | Runs the full Vitest suite in single-run mode. |
-| **Coverage Report** | `pnpm run test:coverage` | Generates code coverage report via `@vitest/coverage-v8`. |
-| **E2E Tests** | `pnpm run test:e2e` | Runs Playwright tests across configured browser environments. |
-| **Mutation Testing** | `pnpm run test:mutation` | Executes Stryker mutation testing against domain suites. |
-| **Fast Verification** | `pnpm run verify:fast` | Runs linter, typecheck, tests, dependency cruiser, and spellcheck. |
+The configured project is Chromium. CI installs Chromium and runs the E2E suite
+after a successful production build and Size Limit check.
 
----
+Run:
 
-## 3. Test-Driven Development (TDD) Workflow
+```bash
+pnpm run test:e2e
+```
 
-When building new features or resolving bugs, engineers and agents follow the red-green-refactor cycle aligned with the `/tdd` skill:
+### Mutation testing
 
-1. **Red**: Write a focused, failing test that defines the desired behavior or reproduces a bug.
-2. **Green**: Write the minimal production code necessary to make the test pass cleanly.
-3. **Refactor**: Clean up the implementation, improve abstractions, and ensure full compliance with `CODING_STANDARDS.md` while keeping tests green.
+Stryker is installed and available through:
 
----
+```bash
+pnpm run test:mutation
+```
 
-## 4. Seam Testing & Avoiding Over-Mocking
+Mutation testing is not currently part of the default CI gates.
 
-To prevent fragile tests that break during internal refactorings:
+## Required testing strategy for new features
 
-- **Test Through Interfaces**: Exercise modules through public API boundaries, as codified in `ARCHITECTURE.md`.
-- **Use Real or In-Memory Adapters**: Prefer `InMemoryNoteAdapter` over mocking individual storage function calls.
-- **Do Not Test Implementation Details**: Avoid checking internal state variables or private helper calls. Assert on observable outputs, rendered DOM nodes, and returned results.
+- Pure domain logic: Vitest.
+- React behavior and integration seams: Vitest + Testing Library when useful.
+- Route/navigation/browser behavior: Playwright.
+- Accessibility behavior that requires a browser: Playwright + axe.
+- Security-sensitive Server Actions and Route Handlers: focused server tests
+  plus E2E where the browser boundary matters.
+- Regressions: add a test that fails before the fix and passes after it.
 
----
+## Accessibility
 
-## 5. Accessibility Testing Invariants
+`@axe-core/playwright` is installed, but the current smoke test does not yet
+run an axe audit. New user-facing feature flows should add accessibility checks
+where they provide meaningful signal.
 
-- All E2E flows tested with Playwright must run automated accessibility audits using `@axe-core/playwright`.
-- Standard components must meet WCAG 2.1 AA contrast and screen-reader navigable hierarchy requirements.
+Do not claim WCAG conformance based only on installed tooling.
+
+## Verification commands
+
+| Purpose | Command |
+| --- | --- |
+| Unit tests | `pnpm test` |
+| Changed tests | `pnpm run test:changed` |
+| Coverage | `pnpm run test:coverage` |
+| E2E | `pnpm run test:e2e` |
+| Mutation | `pnpm run test:mutation` |
+| Fast local gate | `pnpm run verify:fast` |
+| Production build | `pnpm run build` |
+| Bundle budgets | `pnpm run check:size` |
+
+## Test design
+
+- Test observable behavior, not internal implementation details.
+- Avoid mocking framework internals when a real seam can be exercised.
+- Keep browser tests deterministic and focused on user-visible outcomes.
+- Treat the framework build as part of verification for App Router changes.
