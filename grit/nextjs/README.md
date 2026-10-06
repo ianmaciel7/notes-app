@@ -18,6 +18,7 @@ The project follows a strict enforcement order:
 ## Active GritQL coverage
 
 - Reject Pages Router and legacy imports in this App Router-only codebase.
+- Reject Pages Router data lifecycle APIs.
 
 ## Native framework and Biome coverage
 

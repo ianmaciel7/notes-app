@@ -36,6 +36,7 @@ Primary references:
 | Guard | Concepts |
 | --- | --- |
 | `app-router-legacy-imports.grit` | App Router, Metadata API, next/navigation, next/image, Pages Router separation |
+| `app-router-legacy-data-apis.grit` | Server data fetching, prerendering, generateStaticParams, App Router lifecycle |
 
 ## Concept-by-concept coverage
 
@@ -47,7 +48,7 @@ Primary references:
 | 4 | Navigation: Link, router hooks, redirects, rewrites, prefetching, partial prefetching, state preservation | Next APIs + Biome + Playwright; raw anchors remain review-contextual |
 | 5 | Rendering: static/dynamic/request-time rendering, prerendering, PPR, static shell, hydration | Next build/runtime |
 | 6 | Loading/Streaming: loading.tsx, Suspense, streaming, skeletons, blocking-route behavior | Next runtime/build + Playwright + review |
-| 7 | Data fetching: Server Components, direct DB/API access, parallel/sequential fetches, waterfalls, preload | Next App Router build/types + tests + architecture review |
+| 7 | Data fetching: Server Components, direct DB/API access, parallel/sequential fetches, waterfalls, preload | Legacy Pages Router APIs rejected by Grit; App Router behavior covered by Next types/build + tests + review |
 | 8 | Cache Components: use cache/private/remote, cacheLife, cacheTag, cache handlers | Next runtime/build + cache/revalidation tests |
 | 9 | Revalidation: revalidatePath, revalidateTag, updateTag, refresh, ISR | Next types/runtime + mutation tests |
 | 10 | Mutations: Server Functions, Server Actions, use server, optimistic/pending state | Next/React compiler + directive Grit guard + tests + security review |

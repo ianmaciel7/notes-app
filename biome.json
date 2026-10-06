@@ -46,6 +46,7 @@
   },
   "plugins": [
     "./grit/nextjs/app-router-legacy-imports.grit",
+    "./grit/nextjs/app-router-legacy-data-apis.grit",
     "./grit/shadcn/base-ui-no-as-child.grit",
     "./grit/shadcn/base-ui-api.grit",
     "./grit/shadcn/required-accessible-parts.grit",
