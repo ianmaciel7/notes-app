@@ -1,3 +1,9 @@
 allowBuilds:
   sharp: false
   unrs-resolver: false
+
+audit:
+  ignore:
+    # No patched braces release exists for GHSA-vfj7-8cjw-p6xm.
+    # Exposure is limited to markdownlint-cli2 using repository-controlled globs.
+    - GHSA-vfj7-8cjw-p6xm

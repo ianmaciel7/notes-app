@@ -57,3 +57,5 @@ All contributors and autonomous agents must uphold the following core security p
 
 - **Regular Audits**: Run `pnpm run check:security` (`pnpm audit --audit-level high`) to detect known vulnerabilities in the dependency tree.
 - **Automated Checks**: Dependency additions and updates are tracked in `pnpm-lock.yaml` to ensure deterministic supply chain integrity.
+- **Targeted Audit Exceptions**: `pnpm-workspace.yaml` may ignore a specific GHSA only when no patched dependency exists, the exposure is demonstrably not reachable in this project, and the exception includes a rationale.
+- **Current Exception**: `GHSA-vfj7-8cjw-p6xm` affects `braces` through `markdownlint-cli2`. No patched `braces` release exists as of October 6, 2026. In this repository, `markdownlint-cli2` receives repository-controlled glob patterns rather than untrusted runtime input. Remove the exception as soon as the dependency chain provides a patched release.
