@@ -26,7 +26,8 @@
     "verify:agents": "agents sync --check",
     "verify:fast": "pnpm run lint && pnpm run check:types && pnpm run test && pnpm run check:deps && pnpm run lint:spelling",
     "verify:changed": "pnpm run lint:changed && pnpm run check:types && pnpm run test:changed",
-    "prepare": "husky"
+    "prepare": "husky",
+    "shadcn": "shadcn"
   },
   "lint-staged": {
     "*.{js,ts,tsx,css,json}": [
