@@ -1,2 +1,3 @@
 pnpm exec lint-staged
-gitleaks protect --staged --verbose
+command -v pre-commit >/dev/null 2>&1 || { echo "pre-commit is required. Install it with: uv tool install pre-commit"; exit 1; }
+pre-commit run --hook-stage pre-commit

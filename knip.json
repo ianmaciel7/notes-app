@@ -1,7 +1,12 @@
 {
   "$schema": "https://unpkg.com/knip@5/overview/configuration-schema.json",
-  "entry": ["src/app/**/page.tsx", "src/app/**/layout.tsx"],
-  "project": ["src/**/*.{ts,tsx}"],
+  "entry": [
+    "src/app/**/page.tsx",
+    "src/app/**/layout.tsx"
+  ],
+  "project": [
+    "src/**/*.{ts,tsx}"
+  ],
   "ignore": [
     "src/components/ui/**",
     "src/hooks/use-mobile.ts",
@@ -20,12 +25,13 @@
     "react-day-picker",
     "react-resizable-panels",
     "recharts",
-    "shadcn",
     "@axe-core/playwright",
     "@testing-library/dom",
     "@testing-library/react",
     "tailwindcss",
     "tw-animate-css"
   ],
-  "ignoreBinaries": ["agents"]
+  "ignoreBinaries": [
+    "agents"
+  ]
 }

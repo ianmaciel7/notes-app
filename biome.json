@@ -39,6 +39,7 @@
       "react": "recommended",
       "test": "recommended",
       "playwright": "recommended",
+      "project": "recommended",
       "types": "recommended"
     }
   },
