@@ -1,0 +1,13 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  `headers().get($arg)` as $access,
+  `headers().has($arg)` as $access,
+  `headers().entries()` as $access,
+  `headers().keys()` as $access,
+  `headers().values()` as $access,
+  `headers().forEach($callback)` as $access
+} where {
+  register_diagnostic(span=$access, message="Next.js 16 request APIs are asynchronous. Await headers() before accessing the Headers object.")
+}

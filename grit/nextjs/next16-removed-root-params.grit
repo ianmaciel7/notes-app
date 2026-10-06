@@ -1,0 +1,6 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+`unstable_rootParams` as $legacy where {
+  register_diagnostic(span=$legacy, message="Next.js 16 removed unstable_rootParams. Use next/root-params instead.")
+}

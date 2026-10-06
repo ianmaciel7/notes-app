@@ -1,0 +1,9 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  `"next/amp"` as $legacy,
+  `useAmp` as $legacy
+} where {
+  register_diagnostic(span=$legacy, message="Next.js 16 removed AMP support. Remove next/amp and useAmp usage and rely on current Next.js rendering and performance primitives.")
+}

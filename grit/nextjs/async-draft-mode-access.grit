@@ -1,0 +1,10 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  `draftMode().isEnabled` as $access,
+  `draftMode().enable()` as $access,
+  `draftMode().disable()` as $access
+} where {
+  register_diagnostic(span=$access, message="Next.js 16 request APIs are asynchronous. Await draftMode() before reading or changing Draft Mode.")
+}

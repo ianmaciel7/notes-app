@@ -1,0 +1,11 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsPropertyObjectMember(name=$name) as $property where {
+  $name <: r"^(?:appIsrStatus|buildActivity|buildActivityPosition)$",
+  $property <: within JsObjectExpression() as $object,
+  $object <: within JsPropertyObjectMember(name=$parent_name) where {
+    $parent_name <: r"^devIndicators$"
+  },
+  register_diagnostic(span=$property, message="Next.js 16 removed this devIndicators option. Remove the obsolete configuration.")
+}

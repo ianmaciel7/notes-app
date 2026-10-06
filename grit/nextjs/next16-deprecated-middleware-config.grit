@@ -1,0 +1,7 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsPropertyObjectMember(name=$name) as $property where {
+  $name <: r"^skipMiddlewareUrlNormalize$",
+  register_diagnostic(span=$property, message="Next.js 16 renamed skipMiddlewareUrlNormalize to skipProxyUrlNormalize. Use the Proxy-era configuration name.")
+}

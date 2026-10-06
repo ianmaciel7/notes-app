@@ -23,10 +23,29 @@ does not imply a dedicated GritQL file.
 
 ## Active custom GritQL
 
+The current Next.js pack contains **19 active GritQL guards**.
+
 | Guard | Purpose |
 | --- | --- |
 | `app-router-legacy-imports.grit` | blocks Pages Router/legacy Next.js module imports |
 | `app-router-legacy-data-apis.grit` | blocks Pages Router data lifecycle APIs |
+| `next16-deprecated-middleware-export.grit` | rejects the deprecated exported `middleware` convention |
+| `next16-deprecated-middleware-config.grit` | rejects `skipMiddlewareUrlNormalize` |
+| `next16-removed-runtime-config.grit` | rejects removed runtime config and `next/config` |
+| `next16-removed-amp.grit` | rejects removed AMP APIs |
+| `next16-removed-root-params.grit` | rejects removed `unstable_rootParams` |
+| `next16-removed-cache-experiments.grit` | rejects removed experimental Cache Component flags |
+| `next16-promoted-experimental-config.grit` | requires promoted Turbopack/adapter config at top level |
+| `next16-experimental-ppr.grit` | rejects carrying experimental PPR config into Next.js 16 |
+| `next16-removed-dev-indicators.grit` | rejects removed dev-indicator options |
+| `next16-removed-eslint-config.grit` | rejects removed NextConfig ESLint build config |
+| `no-ignore-build-errors.grit` | prevents production builds from ignoring TypeScript errors |
+| `revalidate-tag-profile.grit` | rejects deprecated single-argument `revalidateTag` |
+| `async-cookies-access.grit` | catches common synchronous `cookies()` access |
+| `async-headers-access.grit` | catches common synchronous `headers()` access |
+| `async-draft-mode-access.grit` | catches synchronous `draftMode()` access |
+| `no-public-secret-env.grit` | blocks secret-like `NEXT_PUBLIC_*` names |
+| `redirect-outside-try.grit` | prevents redirect errors from being swallowed by project try/catch flows |
 
 ## Next.js practice coverage
 
@@ -268,11 +287,13 @@ implemented:
 - multi-zone/multi-tenant topology;
 - PWA/offline service workers.
 
-## Why there are only two custom Next.js GritQL files today
+## Why the pack still does not mirror every Next.js concept
 
 The Next.js documentation contains hundreds of concepts and recommended
-practices. Converting each noun into an AST rule would create false confidence
-and false positives.
+practices. The custom pack now covers concrete Next.js 16 migrations, request
+API misuse, cache invalidation signatures, type-safety configuration, and a few
+project security/control-flow invariants. Converting every concept into an AST
+rule would still create false confidence and false positives.
 
 The current project therefore prefers the strongest enforcement layer:
 

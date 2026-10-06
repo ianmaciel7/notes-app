@@ -1,0 +1,11 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsPropertyObjectMember(name=$name) as $property where {
+  $name <: r"^(?:turbopack|adapterPath)$",
+  $property <: within JsObjectExpression() as $object,
+  $object <: within JsPropertyObjectMember(name=$parent_name) where {
+    $parent_name <: r"^experimental$"
+  },
+  register_diagnostic(span=$property, message="This Next.js configuration is no longer experimental. Move it to the current top-level NextConfig option.")
+}
