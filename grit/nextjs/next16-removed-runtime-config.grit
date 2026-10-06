@@ -2,8 +2,8 @@ engine biome(1.0)
 language js(typescript, jsx)
 
 or {
-  JsPropertyObjectMember(name=$name) as $legacy where {
-    $name <: r"^(?:serverRuntimeConfig|publicRuntimeConfig)$"
+  JsLiteralMemberName() as $legacy where {
+    $legacy <: r"^(?:serverRuntimeConfig|publicRuntimeConfig)$"
   },
   `"next/config"` as $legacy
 } where {

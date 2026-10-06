@@ -21,8 +21,6 @@ positive risk. It does not try to convert every Next.js concept into GritQL.
 - `next16-removed-amp.grit`
 - `next16-removed-root-params.grit`
 - `next16-removed-cache-experiments.grit`
-- `next16-promoted-experimental-config.grit`
-- `next16-experimental-ppr.grit`
 - `next16-removed-dev-indicators.grit`
 - `next16-removed-eslint-config.grit`
 

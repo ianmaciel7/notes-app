@@ -1,11 +1,7 @@
 engine biome(1.0)
 language js(typescript, jsx)
 
-JsPropertyObjectMember(name=$name) as $property where {
+JsLiteralMemberName() as $name where {
   $name <: r"^(?:dynamicIO|useCache)$",
-  $property <: within JsObjectExpression() as $object,
-  $object <: within JsPropertyObjectMember(name=$parent_name) where {
-    $parent_name <: r"^experimental$"
-  },
-  register_diagnostic(span=$property, message="Next.js 16 removed experimental.dynamicIO and experimental.useCache. Adopt the Cache Components model through the current top-level cacheComponents option when intentionally required.")
+  register_diagnostic(span=$name, message="Next.js 16 removed the experimental dynamicIO/useCache configuration flags. Adopt the Cache Components model deliberately through the current cacheComponents option when required.")
 }

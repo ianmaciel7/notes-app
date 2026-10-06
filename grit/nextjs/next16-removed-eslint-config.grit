@@ -1,11 +1,7 @@
 engine biome(1.0)
 language js(typescript, jsx)
 
-JsPropertyObjectMember(name=$name) as $property where {
+JsLiteralMemberName() as $name where {
   $name <: r"^ignoreDuringBuilds$",
-  $property <: within JsObjectExpression() as $object,
-  $object <: within JsPropertyObjectMember(name=$parent_name) where {
-    $parent_name <: r"^eslint$"
-  },
-  register_diagnostic(span=$property, message="Next.js 16 removed the eslint option from NextConfig. Run Biome or ESLint directly in the repository verification pipeline.")
+  register_diagnostic(span=$name, message="Next.js 16 removed the NextConfig ESLint build option. Run Biome or ESLint directly in the repository verification pipeline.")
 }

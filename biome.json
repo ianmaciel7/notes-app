@@ -53,8 +53,6 @@
     "./grit/nextjs/next16-removed-amp.grit",
     "./grit/nextjs/next16-removed-root-params.grit",
     "./grit/nextjs/next16-removed-cache-experiments.grit",
-    "./grit/nextjs/next16-promoted-experimental-config.grit",
-    "./grit/nextjs/next16-experimental-ppr.grit",
     "./grit/nextjs/next16-removed-dev-indicators.grit",
     "./grit/nextjs/next16-removed-eslint-config.grit",
     "./grit/nextjs/no-ignore-build-errors.grit",

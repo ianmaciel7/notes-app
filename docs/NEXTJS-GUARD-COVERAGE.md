@@ -23,7 +23,7 @@ does not imply a dedicated GritQL file.
 
 ## Active custom GritQL
 
-The current Next.js pack contains **19 active GritQL guards**.
+The current Next.js pack contains **17 active GritQL guards**.
 
 | Guard | Purpose |
 | --- | --- |
@@ -35,8 +35,6 @@ The current Next.js pack contains **19 active GritQL guards**.
 | `next16-removed-amp.grit` | rejects removed AMP APIs |
 | `next16-removed-root-params.grit` | rejects removed `unstable_rootParams` |
 | `next16-removed-cache-experiments.grit` | rejects removed experimental Cache Component flags |
-| `next16-promoted-experimental-config.grit` | requires promoted Turbopack/adapter config at top level |
-| `next16-experimental-ppr.grit` | rejects carrying experimental PPR config into Next.js 16 |
 | `next16-removed-dev-indicators.grit` | rejects removed dev-indicator options |
 | `next16-removed-eslint-config.grit` | rejects removed NextConfig ESLint build config |
 | `no-ignore-build-errors.grit` | prevents production builds from ignoring TypeScript errors |
