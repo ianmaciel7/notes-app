@@ -54,7 +54,7 @@ src/
 
 ## Configuration in `components.json`
 
-The CLI configuration file [`components.json`](../components.json) is authoritative for path aliases and registry behavior:
+The CLI configuration file [`components.json`](../../components.json) is authoritative for path aliases and registry behavior:
 
 ```json
 {

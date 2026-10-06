@@ -1,0 +1,11 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  `unstable_cacheLife` as $legacy,
+  `unstable_cacheTag` as $legacy,
+  `unstable_noStore` as $legacy,
+  `unstable_after` as $legacy
+} where {
+  register_diagnostic(span=$legacy, message="Next.js 16 stabilized cacheLife, cacheTag, and after, and deprecated unstable_noStore in favor of connection() and 'use cache'. Update legacy unstable_* APIs to their stable or current replacements.")
+}

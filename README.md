@@ -78,8 +78,8 @@ Guard ownership is intentionally layered:
 
 See:
 
-- [Next.js guard coverage](./docs/NEXTJS-GUARD-COVERAGE.md)
-- [shadcn guard coverage](./docs/SHADCN-GUARD-COVERAGE.md)
+- [Next.js guard coverage](./docs/guards/NEXTJS-GUARD-COVERAGE.md)
+- [shadcn guard coverage](./docs/guards/SHADCN-GUARD-COVERAGE.md)
 
 ## Documentation
 

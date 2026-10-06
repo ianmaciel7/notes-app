@@ -244,6 +244,78 @@ or {
     not $part <: within JsxElement() as $parent where {
       $parent <: r"(?s)^<MessageScroller(?:\s|>)"
     }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:ComboboxInput|ComboboxList|ComboboxClear|ComboboxEmpty)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Combobox(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"MenubarMenu",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Menubar(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:MenubarTrigger|MenubarContent)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<MenubarMenu(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:InputOTPGroup|InputOTPSlot|InputOTPSeparator)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<InputOTP(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:ResizablePanel|ResizableHandle)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<ResizablePanelGroup(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"ScrollBar",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<ScrollArea(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:QuestionnaireItem|QuestionnaireProgress)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Questionnaire(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:QuestionnaireTitle|QuestionnaireDescription|QuestionnaireOptions|QuestionnaireOption)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<QuestionnaireItem(?:\s|>)"
+    }
   }
 } where {
   register_diagnostic(span=$part, message="Invalid shadcn compound-component anatomy. Nest this part under its documented parent primitive.")

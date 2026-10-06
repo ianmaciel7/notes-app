@@ -127,6 +127,24 @@ or {
     not $part <: within JsxElement() as $parent where {
       $parent <: r"(?s)^<Collapsible(?:\s|>)"
     }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:SelectTrigger|SelectContent)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Select(?:\s|>)"
+    }
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:ComboboxTrigger|ComboboxContent)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Combobox(?:\s|>)"
+    }
   }
 } where {
   register_diagnostic(span=$part, message="Invalid overlay/interactive compound-component nesting. Keep triggers, content, and structural parts under their shadcn owner primitive.")

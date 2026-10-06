@@ -57,5 +57,5 @@ Biome/GritQL should enforce only mechanically reliable invariants. Naming
 quality, abstraction quality, registry strategy, and component responsibility
 remain architecture/review concerns.
 
-See [../../docs/SHADCN-GUARD-COVERAGE.md](../../docs/SHADCN-GUARD-COVERAGE.md) and
-[../../docs/SHADCN-DIRECTORY-STRUCTURE.md](../../docs/SHADCN-DIRECTORY-STRUCTURE.md).
+See [../../docs/guards/SHADCN-GUARD-COVERAGE.md](../../docs/guards/SHADCN-GUARD-COVERAGE.md) and
+[../../docs/guards/SHADCN-DIRECTORY-STRUCTURE.md](../../docs/guards/SHADCN-DIRECTORY-STRUCTURE.md).

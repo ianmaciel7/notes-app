@@ -16,5 +16,5 @@ Current-state references:
 - [Architecture](../../../ARCHITECTURE.md)
 - [Coding Standards](../../../CODING_STANDARDS.md)
 - [Testing](../../../TESTING.md)
-- [Next.js guard coverage](../../NEXTJS-GUARD-COVERAGE.md)
-- [shadcn guard coverage](../../SHADCN-GUARD-COVERAGE.md)
+- [Next.js guard coverage](../../guards/NEXTJS-GUARD-COVERAGE.md)
+- [shadcn guard coverage](../../guards/SHADCN-GUARD-COVERAGE.md)

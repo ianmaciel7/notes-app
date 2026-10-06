@@ -43,12 +43,12 @@ Deliver correct, maintainable changes with minimal risk.
 - Use current async request APIs and route-aware types.
 - Prefer framework/native enforcement over duplicate GritQL heuristics.
 
-See [Next.js guard coverage](./docs/NEXTJS-GUARD-COVERAGE.md).
+See [Next.js guard coverage](./docs/guards/NEXTJS-GUARD-COVERAGE.md).
 
 ## shadcn rules
 
 Follow [.agents/rules/shadcn.md](./.agents/rules/shadcn.md) and
-[shadcn guard coverage](./docs/SHADCN-GUARD-COVERAGE.md).
+[shadcn guard coverage](./docs/guards/SHADCN-GUARD-COVERAGE.md).
 
 ## MCP and skills
 

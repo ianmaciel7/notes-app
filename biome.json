@@ -63,6 +63,8 @@
     "./grit/nextjs/async-draft-mode-access.grit",
     "./grit/nextjs/no-public-secret-env.grit",
     "./grit/nextjs/redirect-outside-try.grit",
+    "./grit/nextjs/next16-deprecated-cache-primitives.grit",
+    "./grit/nextjs/next16-deprecated-image-domains.grit",
     "./grit/shadcn/base-ui-no-as-child.grit",
     "./grit/shadcn/base-ui-api.grit",
     "./grit/shadcn/required-accessible-parts.grit",
@@ -90,7 +92,9 @@
     "./grit/shadcn/conditional-classname-cn.grit",
     "./grit/shadcn/prefer-shadcn-primitives.grit",
     "./grit/shadcn/overlay-stacking.grit",
-    "./grit/shadcn/canonical-import-aliases.grit"
+    "./grit/shadcn/canonical-import-aliases.grit",
+    "./grit/shadcn/no-inline-styles.grit",
+    "./grit/shadcn/no-radix-imports.grit"
   ],
   "assist": {
     "actions": {

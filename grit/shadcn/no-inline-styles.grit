@@ -1,0 +1,7 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsxAttribute() as $attribute where {
+  $attribute <: r"(?s)style\s*=",
+  register_diagnostic(span=$attribute, message="Do not use inline styles in application code. Use Tailwind utility classes and semantic design tokens.")
+}

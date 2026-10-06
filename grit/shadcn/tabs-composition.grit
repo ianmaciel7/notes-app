@@ -2,14 +2,26 @@ engine biome(1.0)
 language js(typescript, jsx)
 
 or {
-  JsxSelfClosingElement(name=$trigger_name) as $trigger,
-  JsxOpeningElement(name=$trigger_name) as $trigger
-} where {
-  $trigger_name <: r"TabsTrigger",
-  not $trigger <: within JsxElement() as $parent where {
-    $parent <: contains JsxOpeningElement(name=$list_name) where {
-      $list_name <: r"TabsList"
-    }
-  } ,
-  register_diagnostic(span=$trigger, message="TabsTrigger must be nested inside TabsList.")
+  or {
+    JsxSelfClosingElement(name=$trigger_name) as $trigger,
+    JsxOpeningElement(name=$trigger_name) as $trigger
+  } where {
+    $trigger_name <: r"TabsTrigger",
+    not $trigger <: within JsxElement() as $parent where {
+      $parent <: contains JsxOpeningElement(name=$list_name) where {
+        $list_name <: r"TabsList"
+      }
+    } ,
+    register_diagnostic(span=$trigger, message="TabsTrigger must be nested inside TabsList.")
+  },
+  or {
+    JsxSelfClosingElement(name=$part_name) as $part,
+    JsxOpeningElement(name=$part_name) as $part
+  } where {
+    $part_name <: r"(?:TabsList|TabsContent)",
+    not $part <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<Tabs(?:\s|>)"
+    } ,
+    register_diagnostic(span=$part, message="TabsList and TabsContent must be nested inside Tabs.")
+  }
 }

@@ -42,6 +42,8 @@ consumption to avoid rewriting registry-owned implementation details.
 | `prefer-shadcn-primitives.grit` | owned primitives over raw controls and hr |
 | `overlay-stacking.grit` | no manual overlay z-index ownership |
 | `canonical-import-aliases.grit` | canonical import aliases (@/components/ui, @/lib/utils, @/hooks) |
+| `no-inline-styles.grit` | no inline style={{ ... }} in application code |
+| `no-radix-imports.grit` | no direct @radix-ui/* imports (enforces Base UI ecosystem) |
 
 ## `components.json` ownership
 

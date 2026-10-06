@@ -31,8 +31,8 @@ For current implementation truth, read:
 
 - [../../ARCHITECTURE.md](../../ARCHITECTURE.md)
 - [../../CODING_STANDARDS.md](../../CODING_STANDARDS.md)
-- [../NEXTJS-GUARD-COVERAGE.md](../NEXTJS-GUARD-COVERAGE.md)
-- [../SHADCN-GUARD-COVERAGE.md](../SHADCN-GUARD-COVERAGE.md)
+- [../guards/NEXTJS-GUARD-COVERAGE.md](../guards/NEXTJS-GUARD-COVERAGE.md)
+- [../guards/SHADCN-GUARD-COVERAGE.md](../guards/SHADCN-GUARD-COVERAGE.md)
 
 ## ADR format
 

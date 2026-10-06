@@ -123,7 +123,7 @@ Application code should:
 - avoid manual overlay z-index ownership.
 
 Application consumption rules are enforced by the GritQL pack documented in
-[shadcn guard coverage](./docs/SHADCN-GUARD-COVERAGE.md).
+[shadcn guard coverage](./docs/guards/SHADCN-GUARD-COVERAGE.md).
 
 ## 6. Tailwind CSS
 
@@ -174,7 +174,7 @@ Do not create a custom GritQL rule when Next.js, TypeScript, Biome, or runtime
 tests already enforce the invariant more accurately.
 
 Current Next.js GritQL rules intentionally focus on low-ambiguity legacy
-patterns. See [Next.js guard coverage](./docs/NEXTJS-GUARD-COVERAGE.md).
+patterns. See [Next.js guard coverage](./docs/guards/NEXTJS-GUARD-COVERAGE.md).
 
 ## 11. Verification
 

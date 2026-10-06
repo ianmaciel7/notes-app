@@ -70,8 +70,8 @@ Read these before substantial changes:
 - [Coding Standards](./CODING_STANDARDS.md)
 - [Testing](./TESTING.md)
 - [Security](./SECURITY.md)
-- [Next.js guard coverage](./docs/NEXTJS-GUARD-COVERAGE.md)
-- [shadcn guard coverage](./docs/SHADCN-GUARD-COVERAGE.md)
+- [Next.js guard coverage](./docs/guards/NEXTJS-GUARD-COVERAGE.md)
+- [shadcn guard coverage](./docs/guards/SHADCN-GUARD-COVERAGE.md)
 
 ## Pull requests
 

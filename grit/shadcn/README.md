@@ -24,7 +24,9 @@ The current pack covers:
 - conditional `cn()` composition;
 - preference for owned shadcn interactive primitives;
 - overlay stacking ownership;
-- canonical import aliases (`@/components/ui`, `@/lib/utils`, `@/hooks`).
+- canonical import aliases (`@/components/ui`, `@/lib/utils`, `@/hooks`);
+- prohibition of inline styles (`style={{ ... }}`);
+- Base UI ecosystem protection (blocking direct `@radix-ui/*` imports).
 
 The exact active files are registered in `biome.json`.
 
@@ -40,4 +42,4 @@ Leave these to their stronger owners:
 - registry/project style configuration -> `components.json`;
 - naming/abstraction quality -> architecture review.
 
-See [../../docs/SHADCN-GUARD-COVERAGE.md](../../docs/SHADCN-GUARD-COVERAGE.md).
+See [../../docs/guards/SHADCN-GUARD-COVERAGE.md](../../docs/guards/SHADCN-GUARD-COVERAGE.md).

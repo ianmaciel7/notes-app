@@ -68,8 +68,8 @@ CI then verifies:
 - Playwright E2E
 
 Framework-specific changes must also respect
-`docs/NEXTJS-GUARD-COVERAGE.md`. UI changes must respect
-`docs/SHADCN-GUARD-COVERAGE.md`.
+`docs/guards/NEXTJS-GUARD-COVERAGE.md`. UI changes must respect
+`docs/guards/SHADCN-GUARD-COVERAGE.md`.
 
 ## Documentation workflow
 

@@ -23,7 +23,7 @@ does not imply a dedicated GritQL file.
 
 ## Active custom GritQL
 
-The current Next.js pack contains **18 active GritQL guards**.
+The current Next.js pack contains **20 active GritQL guards**.
 
 | Guard | Purpose |
 | --- | --- |
@@ -37,9 +37,11 @@ The current Next.js pack contains **18 active GritQL guards**.
 | `next16-removed-cache-experiments.grit` | rejects removed experimental Cache Component flags |
 | `next16-removed-dev-indicators.grit` | rejects removed dev-indicator options |
 | `next16-removed-eslint-config.grit` | rejects removed NextConfig ESLint build config |
-| `next16-experimental-ppr.grit` | blocks legacy `experimental.ppr` in Next.js 16 |
+| `next16-experimental-ppr.grit` | blocks legacy `experimental.ppr` in NextConfig and route segment config |
+| `next16-deprecated-image-domains.grit` | rejects deprecated `images.domains` in favor of `images.remotePatterns` |
 | `no-ignore-build-errors.grit` | prevents production builds from ignoring TypeScript errors |
 | `revalidate-tag-profile.grit` | rejects deprecated single-argument `revalidateTag` |
+| `next16-deprecated-cache-primitives.grit` | rejects legacy `unstable_cacheLife`, `unstable_cacheTag`, `unstable_noStore`, and `unstable_after` |
 | `async-cookies-access.grit` | catches common synchronous `cookies()` access |
 | `async-headers-access.grit` | catches common synchronous `headers()` access |
 | `async-draft-mode-access.grit` | catches synchronous `draftMode()` access |

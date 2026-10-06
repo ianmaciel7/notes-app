@@ -46,6 +46,15 @@ or {
     not $item <: within JsxElement() as $parent where {
       $parent <: r"(?s)^<CommandGroup(?:\s|>)"
     }
+  },
+  or {
+    JsxSelfClosingElement(name=$item_name) as $item,
+    JsxOpeningElement(name=$item_name) as $item
+  } where {
+    $item_name <: r"(?:ComboboxItem|ComboboxLabel)",
+    not $item <: within JsxElement() as $parent where {
+      $parent <: r"(?s)^<ComboboxGroup(?:\s|>)"
+    }
   }
 } where {
   register_diagnostic(span=$item, message="This shadcn item must be nested inside its corresponding Group component.")

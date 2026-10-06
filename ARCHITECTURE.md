@@ -117,7 +117,7 @@ Cache semantics belong to Next.js framework checks and explicit tests. Do not
 invent GritQL rules for behavior that requires request/runtime knowledge.
 
 When Cache Components are adopted, use current Next.js APIs and update
-`docs/NEXTJS-GUARD-COVERAGE.md` with the chosen enforcement layer.
+`docs/guards/NEXTJS-GUARD-COVERAGE.md` with the chosen enforcement layer.
 
 ## 4. UI architecture
 

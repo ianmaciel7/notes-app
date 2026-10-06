@@ -64,7 +64,7 @@ Document:
 - responsive behavior.
 
 Prefer existing shadcn primitives and follow
-`docs/SHADCN-GUARD-COVERAGE.md`.
+`docs/guards/SHADCN-GUARD-COVERAGE.md`.
 
 ## 8. Acceptance criteria
 

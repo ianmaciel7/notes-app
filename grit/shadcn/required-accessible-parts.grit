@@ -39,6 +39,15 @@ or {
     register_diagnostic(span=$element, message="AlertDialogContent must contain AlertDialogTitle.")
   },
   JsxElement() as $element where {
+    $element <: contains JsxOpeningElement(name=$alert_dialog_name) where {
+      $alert_dialog_name <: r"AlertDialogContent"
+    },
+    not $element <: contains JsxOpeningElement(name=$alert_dialog_desc) where {
+      $alert_dialog_desc <: r"AlertDialogDescription"
+    },
+    register_diagnostic(span=$element, message="AlertDialogContent must contain AlertDialogDescription.")
+  },
+  JsxElement() as $element where {
     $element <: contains JsxOpeningElement(name=$avatar_name) where {
       $avatar_name <: r"Avatar"
     },

@@ -24,11 +24,13 @@ positive risk. It does not try to convert every Next.js concept into GritQL.
 - `next16-removed-dev-indicators.grit`
 - `next16-removed-eslint-config.grit`
 - `next16-experimental-ppr.grit`
+- `next16-deprecated-image-domains.grit`
 
 ### Type safety, cache, and request APIs
 
 - `no-ignore-build-errors.grit`
 - `revalidate-tag-profile.grit`
+- `next16-deprecated-cache-primitives.grit`
 - `async-cookies-access.grit`
 - `async-headers-access.grit`
 - `async-draft-mode-access.grit`
@@ -53,4 +55,4 @@ Examples intentionally left outside GritQL include authorization correctness,
 DAL quality, whether two awaits are independent, Suspense placement, and
 whether a Client Component boundary is unnecessarily large.
 
-See [../../docs/NEXTJS-GUARD-COVERAGE.md](../../docs/NEXTJS-GUARD-COVERAGE.md).
+See [../../docs/guards/NEXTJS-GUARD-COVERAGE.md](../../docs/guards/NEXTJS-GUARD-COVERAGE.md).
