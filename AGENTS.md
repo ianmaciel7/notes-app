@@ -63,6 +63,20 @@ Follow [.agents/rules/shadcn.md](./.agents/rules/shadcn.md) and
 Third-party skills are managed artifacts. Do not rewrite their documentation
 merely to update project docs.
 
+## Agent skills
+
+### Issue tracker
+
+Local markdown files in `.scratch/`. See [docs/agents/issue-tracker.md](./docs/agents/issue-tracker.md).
+
+### Triage labels
+
+Canonical five roles mapping (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See [docs/agents/triage-labels.md](./docs/agents/triage-labels.md).
+
+### Domain docs
+
+Single-context (`GLOSSARY.md` + `docs/adr/`). See [docs/agents/domain.md](./docs/agents/domain.md).
+
 ## Verification
 
 Follow [.agents/rules/test.md](./.agents/rules/test.md) and [TESTING.md](./TESTING.md).
