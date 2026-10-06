@@ -214,6 +214,27 @@
           "cursor"
         ],
         "enabled": true
+      },
+      "context7": {
+        "label": "Context7",
+        "description": "Up-to-date documentation search for libraries and frameworks",
+        "transport": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@upstash/context7-mcp"
+        ],
+        "targets": [
+          "codex",
+          "claude",
+          "claude_desktop",
+          "gemini",
+          "copilot_vscode",
+          "copilot_cli",
+          "cursor",
+          "antigravity"
+        ],
+        "enabled": true
       }
     }
   },

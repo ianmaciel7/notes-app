@@ -2,29 +2,49 @@ engine biome(1.0)
 language js(typescript, jsx)
 
 or {
-  JsxElement(opening_element=JsxOpeningElement(name=$dialog_name), elements=$dialog_children) as $element where {
-    $dialog_name <: r"DialogContent",
-    not $dialog_children <: r"(?s).*<DialogTitle(\s|>).*",
+  JsxElement() as $element where {
+    $element <: contains JsxOpeningElement(name=$dialog_name) where {
+      $dialog_name <: r"DialogContent"
+    },
+    not $element <: contains JsxOpeningElement(name=$dialog_title) where {
+      $dialog_title <: r"DialogTitle"
+    },
     register_diagnostic(span=$element, message="DialogContent must contain DialogTitle. Use className=\"sr-only\" when the title should be visually hidden.")
   },
-  JsxElement(opening_element=JsxOpeningElement(name=$sheet_name), elements=$sheet_children) as $element where {
-    $sheet_name <: r"SheetContent",
-    not $sheet_children <: r"(?s).*<SheetTitle(\s|>).*",
+  JsxElement() as $element where {
+    $element <: contains JsxOpeningElement(name=$sheet_name) where {
+      $sheet_name <: r"SheetContent"
+    },
+    not $element <: contains JsxOpeningElement(name=$sheet_title) where {
+      $sheet_title <: r"SheetTitle"
+    },
     register_diagnostic(span=$element, message="SheetContent must contain SheetTitle. Use className=\"sr-only\" when the title should be visually hidden.")
   },
-  JsxElement(opening_element=JsxOpeningElement(name=$drawer_name), elements=$drawer_children) as $element where {
-    $drawer_name <: r"DrawerContent",
-    not $drawer_children <: r"(?s).*<DrawerTitle(\s|>).*",
+  JsxElement() as $element where {
+    $element <: contains JsxOpeningElement(name=$drawer_name) where {
+      $drawer_name <: r"DrawerContent"
+    },
+    not $element <: contains JsxOpeningElement(name=$drawer_title) where {
+      $drawer_title <: r"DrawerTitle"
+    },
     register_diagnostic(span=$element, message="DrawerContent must contain DrawerTitle. Use className=\"sr-only\" when the title should be visually hidden.")
   },
-  JsxElement(opening_element=JsxOpeningElement(name=$alert_dialog_name), elements=$alert_dialog_children) as $element where {
-    $alert_dialog_name <: r"AlertDialogContent",
-    not $alert_dialog_children <: r"(?s).*<AlertDialogTitle(\s|>).*",
+  JsxElement() as $element where {
+    $element <: contains JsxOpeningElement(name=$alert_dialog_name) where {
+      $alert_dialog_name <: r"AlertDialogContent"
+    },
+    not $element <: contains JsxOpeningElement(name=$alert_dialog_title) where {
+      $alert_dialog_title <: r"AlertDialogTitle"
+    },
     register_diagnostic(span=$element, message="AlertDialogContent must contain AlertDialogTitle.")
   },
-  JsxElement(opening_element=JsxOpeningElement(name=$avatar_name), elements=$avatar_children) as $element where {
-    $avatar_name <: r"Avatar",
-    not $avatar_children <: r"(?s).*<AvatarFallback(\s|>).*",
+  JsxElement() as $element where {
+    $element <: contains JsxOpeningElement(name=$avatar_name) where {
+      $avatar_name <: r"Avatar"
+    },
+    not $element <: contains JsxOpeningElement(name=$avatar_fallback) where {
+      $avatar_fallback <: r"AvatarFallback"
+    },
     register_diagnostic(span=$element, message="Avatar must contain AvatarFallback.")
   }
 }

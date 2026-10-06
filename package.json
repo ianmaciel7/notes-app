@@ -8,8 +8,10 @@
     "start": "next start",
     "format": "biome format --write",
     "lint": "biome check",
+    "lint:changed": "biome check --changed",
     "check:types": "next typegen && tsc --noEmit",
     "test": "vitest run",
+    "test:changed": "vitest run --changed",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:mutation": "stryker run",
@@ -23,6 +25,7 @@
     "check:security": "pnpm audit --audit-level high",
     "verify:agents": "agents sync --check",
     "verify:fast": "pnpm run lint && pnpm run check:types && pnpm run test && pnpm run check:deps && pnpm run lint:spelling",
+    "verify:changed": "pnpm run lint:changed && pnpm run check:types && pnpm run test:changed",
     "prepare": "husky"
   },
   "lint-staged": {

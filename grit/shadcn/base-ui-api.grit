@@ -6,9 +6,9 @@ or {
     JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
     JsxOpeningElement(name=$component, attributes=$attributes) as $element
   } where {
-    $component <: r"(ToggleGroup|Accordion)",
+    $component <: r"(?:ToggleGroup|Accordion)",
     $attributes <: contains JsxAttribute() as $attribute,
-    $attribute <: r"type(\s*=.*)?"
+    $attribute <: r"type(?:\s*=.*)?"
   },
   or {
     JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
@@ -16,7 +16,7 @@ or {
   } where {
     $component <: r"Accordion",
     $attributes <: contains JsxAttribute() as $attribute,
-    $attribute <: r"collapsible(\s*=.*)?"
+    $attribute <: r"collapsible(?:\s*=.*)?"
   },
   or {
     JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
@@ -24,7 +24,7 @@ or {
   } where {
     $component <: r"SelectContent",
     $attributes <: contains JsxAttribute() as $attribute,
-    $attribute <: r"position(\s*=.*)?"
+    $attribute <: r"position(?:\s*=.*)?"
   },
   or {
     JsxSelfClosingElement(name=$component, attributes=$attributes) as $element,
@@ -32,7 +32,7 @@ or {
   } where {
     $component <: r"Drawer",
     $attributes <: contains JsxAttribute() as $attribute,
-    $attribute <: r"direction(\s*=.*)?"
+    $attribute <: r"direction(?:\s*=.*)?"
   }
 } where {
   register_diagnostic(span=$attribute, message="Radix or legacy API detected in a shadcn Base UI component. Use the current Base UI API documented by the project shadcn skill.")

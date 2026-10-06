@@ -58,7 +58,9 @@
     "weblink",
     "subcollections",
     "hotspot",
-    "unindexed"
+    "unindexed",
+    "customerio",
+    "threejs"
   ],
   "ignorePaths": [
     "node_modules",

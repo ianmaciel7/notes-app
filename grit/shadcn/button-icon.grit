@@ -5,9 +5,12 @@ or {
   JsxSelfClosingElement(name=$icon_name, attributes=$attributes) as $icon,
   JsxOpeningElement(name=$icon_name, attributes=$attributes) as $icon
 } where {
-  $icon_name <: r"([A-Za-z0-9]+Icon|Spinner)",
-  $icon <: within JsxElement(opening_element=JsxOpeningElement(name=$button_name)) ,
-  $button_name <: r"Button",
+  $icon_name <: r"(?:[A-Za-z0-9]+Icon|Spinner)",
+  $icon <: within JsxElement() as $parent where {
+    $parent <: contains JsxOpeningElement(name=$button_name) where {
+      $button_name <: r"Button"
+    }
+  } ,
   not $attributes <: r"(?s).*data-icon.*",
   register_diagnostic(span=$icon, message="Icons and Spinner inside Button must declare data-icon=\"inline-start\" or data-icon=\"inline-end\".")
 }

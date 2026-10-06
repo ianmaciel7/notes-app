@@ -3,7 +3,8 @@
   "vcs": {
     "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": true
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
   },
   "files": {
     "ignoreUnknown": true,
@@ -44,46 +45,16 @@
     }
   },
   "plugins": [
-    {
-      "path": "./grit/shadcn/base-ui-no-as-child.grit",
-      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
-    },
-    {
-      "path": "./grit/shadcn/base-ui-api.grit",
-      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
-    },
-    {
-      "path": "./grit/shadcn/required-accessible-parts.grit",
-      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
-    },
-    {
-      "path": "./grit/shadcn/group-composition.grit",
-      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
-    },
-    {
-      "path": "./grit/shadcn/input-group-composition.grit",
-      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
-    },
-    {
-      "path": "./grit/shadcn/button-state.grit",
-      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
-    },
-    {
-      "path": "./grit/shadcn/tabs-composition.grit",
-      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
-    },
-    {
-      "path": "./grit/shadcn/button-link-semantics.grit",
-      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
-    },
-    {
-      "path": "./grit/shadcn/button-icon.grit",
-      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
-    },
-    {
-      "path": "./grit/shadcn/field-validation.grit",
-      "includes": ["src/**/*.ts", "src/**/*.tsx", "!src/components/ui/**"]
-    }
+    "./grit/shadcn/base-ui-no-as-child.grit",
+    "./grit/shadcn/base-ui-api.grit",
+    "./grit/shadcn/required-accessible-parts.grit",
+    "./grit/shadcn/group-composition.grit",
+    "./grit/shadcn/input-group-composition.grit",
+    "./grit/shadcn/button-state.grit",
+    "./grit/shadcn/tabs-composition.grit",
+    "./grit/shadcn/button-link-semantics.grit",
+    "./grit/shadcn/button-icon.grit",
+    "./grit/shadcn/field-validation.grit"
   ],
   "assist": {
     "actions": {

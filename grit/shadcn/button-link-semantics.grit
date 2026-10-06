@@ -7,6 +7,9 @@ or {
 } where {
   $component <: r"Button",
   $attributes <: contains JsxAttribute() as $attribute,
-  $attribute <: r"(?s)render\s*=.*<(a|Link)(\s|/|>)",
+  $attribute <: contains or {
+    JsxOpeningElement(name=$tag) where { $tag <: r"(?:a|Link)" },
+    JsxSelfClosingElement(name=$tag) where { $tag <: r"(?:a|Link)" }
+  },
   register_diagnostic(span=$attribute, message="Do not render Button as a link. Apply buttonVariants to the anchor or Link so link semantics are preserved.")
 }
