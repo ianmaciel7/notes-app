@@ -19,7 +19,6 @@ The project follows a strict enforcement order:
 
 - Reject Pages Router and legacy imports in this App Router-only codebase.
 - Reject Pages Router data lifecycle APIs.
-- Reject conflicting client/server/cache directives in the same module.
 - Reject direct `cookies()` or `headers()` access inside a plain
   `"use cache"` function.
 
@@ -30,9 +29,9 @@ therefore own checks such as image optimization, raw head usage, script
 requirements, synchronous scripts, invalid document imports, and async Client
 Components.
 
-Next.js itself owns server-only/client-only module graph errors and environment
-variable exposure rules. Those checks are intentionally not duplicated with
-cross-file GritQL heuristics.
+Next.js itself owns Server/Client module-graph errors, directive boundaries,
+server-only/client-only imports, and environment-variable exposure rules. Those
+checks are intentionally not duplicated with GritQL heuristics.
 
 ## What is intentionally not a GritQL rule
 

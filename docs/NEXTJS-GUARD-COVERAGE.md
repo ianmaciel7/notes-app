@@ -37,7 +37,6 @@ Primary references:
 | --- | --- |
 | `app-router-legacy-imports.grit` | App Router, Metadata API, next/navigation, next/image, Pages Router separation |
 | `app-router-legacy-data-apis.grit` | Server data fetching, prerendering, generateStaticParams, App Router lifecycle |
-| `client-server-directive-boundary.grit` | use client, use server, use cache, module-boundary directives |
 | `cache-runtime-apis.grit` | Cache Components, use cache, cookies, headers, request-time data |
 
 ## Concept-by-concept coverage
@@ -45,7 +44,7 @@ Primary references:
 | # | Concept family | Enforcement |
 | --- | --- | --- |
 | 1 | Fundamentals: App Router, app/src/public, project structure, configuration | Next.js conventions, NextConfig types, build |
-| 2 | React components: Server Components, Client Components, RSC payload/module graphs, boundaries, interleaving | Next build + React compiler + directive-conflict Grit guard |
+| 2 | React components: Server Components, Client Components, RSC payload/module graphs, boundaries, interleaving | Next build + React compiler + Biome Next/React domains |
 | 3 | Routing: pages, layouts, templates, route groups, dynamic/catch-all segments, parallel/intercepting routes, slots | Next file conventions + `next typegen` + build |
 | 4 | Navigation: Link, router hooks, redirects, rewrites, prefetching, partial prefetching, state preservation | Next APIs + Biome + Playwright; raw anchors remain review-contextual |
 | 5 | Rendering: static/dynamic/request-time rendering, prerendering, PPR, static shell, hydration | Next build/runtime |
@@ -87,7 +86,7 @@ Primary references:
 | 41 | Build: next build, prerender analysis, output tracing, static/dynamic detection | production build gate |
 | 42 | Configuration: next.config.ts, redirects/rewrites/headers/images/output/cache/compiler/Turbopack | NextConfig TypeScript type + build |
 | 43 | CLI/tooling: create-next-app, next dev/build/start/typegen, codemods/upgrades, MCP | package scripts + documented workflow |
-| 44 | Application architecture: server-first, client islands, DAL/BFF, route/cache/error/security boundaries | Next module-graph checks + Grit directive guard + Dependency Cruiser + review |
+| 44 | Application architecture: server-first, client islands, DAL/BFF, route/cache/error/security boundaries | Next module-graph checks + Dependency Cruiser + review |
 | 45 | React essentials: props/children/composition/state/hooks/context/Suspense/errors/transitions/hydration | React compiler + Biome React domain + TypeScript/tests |
 
 ## Biome Next domain

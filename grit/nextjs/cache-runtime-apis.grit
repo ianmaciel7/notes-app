@@ -5,25 +5,8 @@ or {
   `cookies()` as $call,
   `headers()` as $call
 } where {
-  or {
-    $call <: within JsFunctionDeclaration() as $function1 where {
-      $function1 <: contains `"use cache"`
-    },
-    $call <: within JsFunctionExportDefaultDeclaration() as $function2 where {
-      $function2 <: contains `"use cache"`
-    },
-    $call <: within JsFunctionExpression() as $function3 where {
-      $function3 <: contains `"use cache"`
-    },
-    $call <: within JsArrowFunctionExpression() as $function4 where {
-      $function4 <: contains `"use cache"`
-    },
-    $call <: within JsMethodObjectMember() as $function5 where {
-      $function5 <: contains `"use cache"`
-    },
-    $call <: within JsMethodClassMember() as $function6 where {
-      $function6 <: contains `"use cache"`
-    }
+  $call <: within JsFunctionBody() as $body where {
+    $body <: contains `"use cache"`
   },
   register_diagnostic(
     span=$call,
