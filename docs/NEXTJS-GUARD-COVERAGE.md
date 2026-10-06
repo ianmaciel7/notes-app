@@ -37,7 +37,6 @@ Primary references:
 | --- | --- |
 | `app-router-legacy-imports.grit` | App Router, Metadata API, next/navigation, next/image, Pages Router separation |
 | `app-router-legacy-data-apis.grit` | Server data fetching, prerendering, generateStaticParams, App Router lifecycle |
-| `cache-runtime-apis.grit` | Cache Components, use cache, cookies, headers, request-time data |
 
 ## Concept-by-concept coverage
 
@@ -50,7 +49,7 @@ Primary references:
 | 5 | Rendering: static/dynamic/request-time rendering, prerendering, PPR, static shell, hydration | Next build/runtime |
 | 6 | Loading/Streaming: loading.tsx, Suspense, streaming, skeletons, blocking-route behavior | Next runtime/build + Playwright + review |
 | 7 | Data fetching: Server Components, direct DB/API access, parallel/sequential fetches, waterfalls, preload | TypeScript + tests + architecture review; legacy data APIs rejected by Grit |
-| 8 | Cache Components: use cache/private/remote, cacheLife, cacheTag, cache handlers | Next runtime/build + cache-runtime Grit guard |
+| 8 | Cache Components: use cache/private/remote, cacheLife, cacheTag, cache handlers | Next runtime/build + cache/revalidation tests |
 | 9 | Revalidation: revalidatePath, revalidateTag, updateTag, refresh, ISR | Next types/runtime + mutation tests |
 | 10 | Mutations: Server Functions, Server Actions, use server, optimistic/pending state | Next/React compiler + directive Grit guard + tests + security review |
 | 11 | Forms: Form, FormData, progressive enhancement, validation, useActionState/useFormStatus | TypeScript + React/Next + Vitest/Playwright/axe |
