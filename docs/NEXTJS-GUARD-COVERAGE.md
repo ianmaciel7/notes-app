@@ -25,7 +25,7 @@ Primary references:
 | --- | --- |
 | Next.js build/runtime | File conventions, RSC constraints, route behavior, cache/runtime invariants |
 | `next typegen` + TypeScript | Route-aware types, async request APIs, public signatures, type safety |
-| Biome Next/React/security domains | Framework-native lint rules and React/security correctness |
+| Biome Next/React/project/types/test/playwright domains | Framework-native lint rules, React correctness, project checks, typing hints, and test rules |
 | GritQL | Low-ambiguity project-specific App Router invariants |
 | Dependency Cruiser / Knip / Size Limit | Architecture edges, dead code, package/bundle health |
 | Vitest / Playwright / axe | Runtime behavior, navigation, accessibility, forms, offline/UI state |
@@ -51,12 +51,12 @@ Primary references:
 | 7 | Data fetching: Server Components, direct DB/API access, parallel/sequential fetches, waterfalls, preload | Legacy Pages Router APIs rejected by Grit; App Router behavior covered by Next types/build + tests + review |
 | 8 | Cache Components: use cache/private/remote, cacheLife, cacheTag, cache handlers | Next runtime/build + cache/revalidation tests |
 | 9 | Revalidation: revalidatePath, revalidateTag, updateTag, refresh, ISR | Next types/runtime + mutation tests |
-| 10 | Mutations: Server Functions, Server Actions, use server, optimistic/pending state | Next/React compiler + directive Grit guard + tests + security review |
+| 10 | Mutations: Server Functions, Server Actions, use server, optimistic/pending state | Next/React compiler + TypeScript + tests + security review |
 | 11 | Forms: Form, FormData, progressive enhancement, validation, useActionState/useFormStatus | TypeScript + React/Next + Vitest/Playwright/axe |
 | 12 | Route Handlers: route.ts, HTTP methods, Request/Response, NextRequest/NextResponse, CORS, streaming | Next build/types + API tests + security review |
 | 13 | Backend for Frontend: public endpoints, webhooks, callbacks, proxying, server resources | Route/API tests + security/architecture review |
 | 14 | Proxy: proxy.ts, matchers, redirects/rewrites, auth gates, headers/cookies | Next file convention/build + integration tests |
-| 15 | Request APIs: cookies, headers, draftMode, connection, params, searchParams, userAgent | Next 16 types/build; cache misuse additionally guarded by Grit |
+| 15 | Request APIs: cookies, headers, draftMode, connection, params, searchParams, userAgent | Next 16 types/build + runtime/cache tests |
 | 16 | Error handling: error/global-error/not-found/forbidden/unauthorized/reset | Next file conventions + runtime tests |
 | 17 | Metadata/SEO: metadata, generateMetadata, OG, icons, robots, sitemap, manifest, viewport | Next Metadata API/types + Biome noHeadElement + legacy-import Grit |
 | 18 | Images: next/image, responsive sizing, remote patterns, placeholders | Biome Next `noImgElement` + Next build/config |
@@ -69,7 +69,7 @@ Primary references:
 | 25 | Special files: page/layout/template/loading/error/not-found/default/route/proxy/instrumentation/metadata files | Next file conventions/build |
 | 26 | TypeScript: generated route types, PageProps/LayoutProps/RouteContext, typed routes | `next typegen && tsc --noEmit` |
 | 27 | Internationalization: locale routing/detection/content | Route design + integration tests |
-| 28 | Accessibility: semantic UI, route announcements, focus, forms, keyboard behavior | Biome a11y + shadcn/Base UI + axe/Playwright |
+| 28 | Accessibility: semantic UI, route announcements, focus, forms, keyboard behavior | Biome recommended accessibility rules + shadcn/Base UI + axe/Playwright |
 | 29 | Observability: instrumentation, OpenTelemetry, Web Vitals, analytics/logging | instrumentation tests + production review |
 | 30 | Performance: code splitting, lazy loading, bundle size, images/fonts/scripts, Web Vitals | Biome + Size Limit + build + field metrics |
 | 31 | Package/bundling: Turbopack, client/server bundles, tree shaking, package optimization | Next build + Size Limit + Knip |
