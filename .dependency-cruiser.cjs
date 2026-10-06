@@ -11,6 +11,17 @@ module.exports = {
       },
     },
     {
+      name: "src-root-allowed-files-only",
+      severity: "error",
+      comment:
+        "Only official Next.js root files (proxy, middleware, instrumentation) are permitted directly under src/",
+      from: {
+        path: "^src/[^/]+\\.(ts|tsx|js|jsx)$",
+        pathNot: "^src/(proxy|middleware|instrumentation)\\.(ts|js)$",
+      },
+      to: {},
+    },
+    {
       name: "not-to-unresolvable",
       severity: "error",
       comment: "Do not allow dependencies to unresolvable modules",

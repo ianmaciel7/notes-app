@@ -52,11 +52,12 @@ The current Next.js pack contains **20 active GritQL guards**.
 
 ### App Router
 
-Covered by Next.js build, typegen, Biome, and the two migration guards.
+Covered by Next.js build, typegen, Biome, Dependency Cruiser, and the migration guards.
 
 Includes:
 
 - `app/` routing;
+- `src/` root convention boundaries (`proxy`, `middleware`, `instrumentation` allowed only; enforced by Dependency Cruiser `src-root-allowed-files-only`);
 - pages/layouts/templates;
 - route groups;
 - dynamic/catch-all segments;

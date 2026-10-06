@@ -9,9 +9,9 @@ expectations for future features.
 
 Current source smoke coverage:
 
-- `src/smoke.test.ts`
+- `tests/unit/smoke.test.ts`
 
-Vitest runs in Happy DOM and scans `src/**/*.{test,spec}.{ts,tsx}`.
+Vitest runs in Happy DOM and scans `src/**/*.{test,spec}.{ts,tsx}` and `tests/**/*.{test,spec}.{ts,tsx}` (excluding `tests/e2e/**`).
 `src/components/ui/**` is excluded from project unit tests because that
 directory is the owned shadcn implementation layer.
 

@@ -26,6 +26,7 @@ Deliver correct, maintainable changes with minimal risk.
 
 - Respect [ARCHITECTURE.md](./ARCHITECTURE.md).
 - Follow [CODING_STANDARDS.md](./CODING_STANDARDS.md).
+- Follow naming conventions in [.agents/rules/naming.md](./.agents/rules/naming.md).
 - Do not describe planned architecture as implemented.
 - Never commit secrets.
 - Keep edits focused.
@@ -33,6 +34,9 @@ Deliver correct, maintainable changes with minimal risk.
 - `src/components/ui/**` is the owned shadcn implementation layer.
 
 ## Next.js rules
+
+Follow [.agents/rules/nextjs.md](./.agents/rules/nextjs.md) and
+[Next.js guard coverage](./docs/guards/NEXTJS-GUARD-COVERAGE.md).
 
 - Server Components by default.
 - Keep `"use client"` boundaries small.
@@ -42,8 +46,6 @@ Deliver correct, maintainable changes with minimal risk.
 - Treat Server Actions and Route Handlers as security-sensitive boundaries.
 - Use current async request APIs and route-aware types.
 - Prefer framework/native enforcement over duplicate GritQL heuristics.
-
-See [Next.js guard coverage](./docs/guards/NEXTJS-GUARD-COVERAGE.md).
 
 ## shadcn rules
 
@@ -61,6 +63,8 @@ Third-party skills are managed artifacts. Do not rewrite their documentation
 merely to update project docs.
 
 ## Verification
+
+Follow [.agents/rules/test.md](./.agents/rules/test.md) and [TESTING.md](./TESTING.md).
 
 Fast iteration:
 

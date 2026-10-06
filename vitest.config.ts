@@ -5,13 +5,17 @@ export default defineConfig({
   test: {
     environment: "happy-dom",
     globals: true,
-    include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    include: [
+      "src/**/*.{test,spec}.{ts,tsx}",
+      "tests/**/*.{test,spec}.{ts,tsx}",
+    ],
     exclude: [
       "**/node_modules/**",
       "**/.next/**",
       "**/.worktrees/**",
       "**/.worktress/**",
       "src/components/ui/**",
+      "tests/e2e/**",
       "**/*.d.ts",
     ],
     coverage: {
