@@ -1,122 +1,81 @@
-# shadcn Concept Guard Coverage
+# shadcn Guard Coverage
 
-This document maps the shadcn concepts used by this repository to the layer
-that enforces them. "Covered" does not always mean GritQL: some concepts are
-configuration, type-system, runtime-primitive, or repository-policy concerns.
+The project uses shadcn Base Nova with Base UI primitives.
 
-## 1. GritQL-enforced concepts
+## Boundary
 
-| Concept | Enforcement |
+- `src/components/ui/**`: owned implementation/registry layer.
+- application code outside that directory: guard-consumption layer.
+
+Biome excludes `src/components/ui/**` from ordinary application lint/guard
+consumption to avoid rewriting registry-owned implementation details.
+
+## Active GritQL guards
+
+| Guard | Enforces |
 | --- | --- |
-| Base UI APIs | `base-ui-api.grit`, `base-ui-no-as-child.grit` |
-| Composition / Compound Components / Component Anatomy | `compound-component-anatomy.grit`, specialized composition guards |
-| Required accessible subparts | `required-accessible-parts.grit` |
-| Group composition | `group-composition.grit` |
-| Field / FieldGroup / FieldSet / FieldLegend | field guards |
-| InputGroup | input-group guards |
-| Card composition | `card-composition.grit` |
-| Tabs composition | `tabs-composition.grit` |
-| Sidebar / Provider ownership | `sidebar-composition.grit` |
-| Trigger / Content / overlay ownership | `overlay-composition.grit` |
-| Button loading composition | `button-state.grit` |
-| Link semantics | `button-link-semantics.grit` |
-| Button icon placement | `button-icon.grit` |
-| Icon-only accessible names | `icon-button-accessibility.grit` |
-| Component-owned icon sizing | `icon-sizing.grit` |
-| Field invalid/disabled states | `field-validation.grit` |
-| Controlled / uncontrolled state | `controlled-uncontrolled-state.grit` |
-| Semantic design tokens / foreground pairing discipline | `semantic-color-tokens.grit` plus token configuration |
-| Dark-mode token ownership | `no-manual-dark-colors.grit` |
-| Tailwind composition | `tailwind-composition.grit` |
-| Logical properties / RTL readiness | `logical-properties.grit` |
-| Conditional class composition with cn() | `conditional-classname-cn.grit` |
-| Prefer existing shadcn interactive primitives | `prefer-shadcn-primitives.grit` |
-| Overlay z-index ownership | `overlay-stacking.grit` |
+| `base-ui-no-as-child.grit` | no Radix-only `asChild` |
+| `base-ui-api.grit` | Base UI API compatibility |
+| `required-accessible-parts.grit` | required accessible compound parts |
+| `group-composition.grit` | grouped primitive ownership |
+| `input-group-composition.grit` | InputGroup anatomy |
+| `field-group-composition.grit` | FieldGroup anatomy |
+| `fieldset-composition.grit` | FieldSet/FieldLegend anatomy |
+| `card-composition.grit` | Card composition |
+| `input-group-addon.grit` | InputGroup addon ownership |
+| `tabs-composition.grit` | Tabs anatomy |
+| `compound-component-anatomy.grit` | broad compound-component ownership |
+| `overlay-composition.grit` | trigger/content/overlay composition |
+| `sidebar-composition.grit` | Sidebar/provider ownership |
+| `button-state.grit` | Button loading/state shape |
+| `button-link-semantics.grit` | action vs navigation semantics |
+| `button-icon.grit` | Button icon placement metadata |
+| `icon-button-accessibility.grit` | accessible name for icon-only controls |
+| `icon-sizing.grit` | component-owned icon sizing |
+| `field-validation.grit` | invalid/disabled field pairing |
+| `controlled-uncontrolled-state.grit` | controlled vs uncontrolled exclusivity |
+| `semantic-color-tokens.grit` | semantic token usage |
+| `no-manual-dark-colors.grit` | theme token ownership |
+| `tailwind-composition.grit` | preferred Tailwind composition |
+| `logical-properties.grit` | logical direction utilities |
+| `conditional-classname-cn.grit` | `cn()` conditional composition |
+| `prefer-shadcn-primitives.grit` | owned primitives over raw interactive controls |
+| `overlay-stacking.grit` | no manual overlay z-index ownership |
 
-## 2. Biome, TypeScript, React, and Next.js coverage
+## `components.json` ownership
 
-These concepts are already better enforced by standard tooling than by a
-repository-specific GritQL rule:
+The manifest is authoritative for:
 
-- TypeScript/TSX correctness.
-- React and Next.js recommended lint domains.
-- basic JSX accessibility and semantic interaction checks available in Biome.
-- imports and unresolved types.
-- React Server Component/client-boundary compile constraints.
-- formatting, import organization, and the 80-column repository formatter.
+- `base-nova` style;
+- RSC and TSX;
+- Tailwind CSS path;
+- neutral base color;
+- CSS variables;
+- aliases;
+- Lucide;
+- RTL setting;
+- menu color/accent;
+- registries.
 
-## 3. `components.json`-enforced concepts
+## Runtime ownership
 
-The shadcn project manifest is authoritative for:
+Base UI owns:
 
-- Style (`base-nova`).
-- RSC.
-- TSX.
-- Tailwind CSS file/config integration.
-- Base color (`neutral`).
-- CSS variables.
-- Tailwind prefix.
-- aliases for components, UI, utils, lib, and hooks.
-- icon library (`lucide`).
-- RTL project setting.
-- menu color and menu accent.
-- configured registries.
+- focus management;
+- focus return/trapping;
+- portals;
+- outside/Escape dismissal;
+- keyboard interaction details;
+- low-level ARIA wiring.
 
-These correspond to the shadcn concepts Style, Base configuration, Theming,
-CSS Variables, Import Aliases, Icon Library, Base Color, Menu Color, Menu
-Accent, RSC, TypeScript/TSX, and Registry configuration.
+## Review ownership
 
-## 4. Base UI/runtime-enforced concepts
+Static guards do not decide:
 
-The underlying primitive should own these behaviors. Reimplementing them in
-GritQL would be incorrect:
+- whether a wrapper is a good abstraction;
+- naming quality;
+- when a new primitive should exist;
+- whether a built-in variant is semantically preferable;
+- registry distribution strategy.
 
-- Portal behavior.
-- Overlay lifecycle.
-- focus management and focus return.
-- focus trapping.
-- Escape/outside-interaction dismissal.
-- keyboard interaction details.
-- orientation behavior implemented by the primitive.
-- low-level ARIA wiring produced by Base UI.
-- controlled-state runtime behavior after the controlled/uncontrolled shape is
-  validated statically.
-
-## 5. Repository-policy concepts
-
-These are real shadcn concepts but are not reliable AST invariants. They are
-covered by `.agents/rules/shadcn.md`, code review, or the shadcn CLI workflow:
-
-- Open Code and code ownership.
-- Distribution.
-- Registry, `registry.json`, `registry-item.json`, registry schemas, registry
-  dependencies, package dependencies, namespaces, directory, authentication,
-  GitHub registries, and programmatic registry API.
-- Base and Style packages as distribution concepts.
-- Presets.
-- fonts, radius, theme color, chart color, and other design-system choices not
-  inferable from a JSX node.
-- CLI operations (`create`, `init`, `add`, `search`, `view`, `info`, `docs`,
-  `build`, `migrate`, `preset`, `eject`).
-- migrations.
-- monorepo and local UI package organization.
-- Blocks, Components, UI Components, Hooks, Lib, Pages, Files, and registry item
-  type taxonomy.
-- design-system distribution, override, extend, and mix-and-match.
-- ownership and consistency as engineering principles.
-- "use built-in variants before custom classes" when both are semantically
-  valid.
-- component naming based on its actual responsibility/root primitive.
-- component responsibility boundaries and when a wrapper should exist.
-
-## 6. Why there is no one-Grit-file-per-concept
-
-shadcn spans source-code structure, configuration, distribution, runtime
-behavior, accessibility, and design-system policy. Forcing Registry, Preset,
-CLI, or Open Code into JSX AST checks would create fake coverage and noisy
-false positives. The repository therefore treats a concept as covered when the
-correct enforcement layer owns it.
-
-Application-code GritQL guards intentionally exclude `src/components/ui/**`.
-That directory is the project-owned shadcn implementation layer; consumption
-rules apply to the rest of the application.
+Those remain architecture/review decisions.

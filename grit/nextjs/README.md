@@ -1,49 +1,44 @@
-# Next.js GritQL guards
+# Next.js GritQL Guards
 
-These guards complement Biome's native Next.js domain for this repository's
-Next.js 16 App Router architecture.
+This directory contains only the Next.js invariants that are both:
 
-The project follows a strict enforcement order:
+1. project-specific; and
+2. reliably provable with the current Biome GritQL plugin engine.
 
-1. Prefer Next.js build/type checks when the framework already owns an
-   invariant.
-2. Prefer Biome's native Next.js/React/security rules when they already express
-   the invariant.
-3. Use GritQL only for low-ambiguity App Router rules that are not covered
-   reliably by the standard tooling.
-4. Use tests for runtime behavior.
-5. Keep architectural decisions that require cross-file or domain knowledge in
-   code review and repository documentation.
+The project does **not** use one `.grit` file per Next.js concept. Framework
+invariants stay with the framework when Next.js, TypeScript, Biome, or runtime
+tests can enforce them more accurately.
 
-## Active GritQL coverage
+## Active guards
 
-- Reject Pages Router and legacy imports in this App Router-only codebase.
-- Reject Pages Router data lifecycle APIs.
+### `app-router-legacy-imports.grit`
 
-## Native framework and Biome coverage
+Rejects legacy/Pages Router module references:
 
-`biome.json` enables the Next.js domain with `"next": "all"`. Native rules
-therefore own checks such as image optimization, raw head usage, script
-requirements, synchronous scripts, invalid document imports, and async Client
-Components.
+- `next/head`
+- `next/router`
+- `next/document`
+- `next/legacy/image`
 
-Next.js itself owns Server/Client module-graph errors, directive boundaries,
-server-only/client-only imports, environment-variable exposure, and Cache
-Components runtime constraints such as request APIs inside plain `"use cache"`.
-Those checks are intentionally not duplicated with GritQL heuristics.
+### `app-router-legacy-data-apis.grit`
 
-## What is intentionally not a GritQL rule
+Rejects Pages Router data lifecycle APIs:
 
-GritQL is not used when a rule would need semantic knowledge that a single-file
-AST cannot prove. Examples include:
+- `getServerSideProps`
+- `getStaticProps`
+- `getStaticPaths`
+- `getInitialProps`
 
-- whether a Client Component prop actually crosses a Server/Client boundary;
-- whether independent fetches should run in parallel;
-- whether a Server Action has correct authorization for a domain resource;
-- whether a Route Handler needs authentication or rate limiting;
-- whether a Suspense boundary is placed at the correct UX boundary;
-- whether a raw anchor represents navigation versus a download/resource;
-- whether a data-access module is the canonical DAL for the application.
+## Enforcement ownership
 
-Those concepts are still covered by the correct enforcement layer. See
-`docs/NEXTJS-GUARD-COVERAGE.md`.
+- Next.js build/runtime: RSC boundaries, file conventions, rendering/cache
+  behavior.
+- `next typegen` + TypeScript: route-aware types and API signatures.
+- Biome `next: "all"`: native Next.js lint rules.
+- GritQL: low-ambiguity project migration/architecture patterns.
+- Dependency Cruiser: import/dependency boundaries.
+- Vitest/Playwright: runtime behavior.
+- Review: authorization, DAL quality, Suspense placement, data minimization,
+  deployment intent.
+
+See [../../docs/NEXTJS-GUARD-COVERAGE.md](../../docs/NEXTJS-GUARD-COVERAGE.md).
