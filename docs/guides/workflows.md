@@ -1,6 +1,44 @@
 # Engineering Workflows
 
-## Feature flow
+The engineering workflow follows a two-tier model: a **Fast Track** for quick, focused tasks and a **Spec Track** for high-complexity features and architectural shifts.
+
+```text
+               ┌──► Fast Track  ──► Direct Prompt ──► Atomic Change ──► verify:changed
+Task Complexity│
+               └──► Spec Track  ──► Grill ──► Spec ──► Tickets ──► Implement ──► Review ──► PR
+```
+
+---
+
+## 1. Fast Track (Lightweight / Direct Loop)
+
+Use for small, unambiguous changes where rework cost is low:
+
+- CSS/UI tweaks, styling fixes, typos;
+- Isolated bug fixes touching 1–2 files;
+- Minor refactors or localized helper adjustments.
+
+### Fast Track Workflow
+
+```text
+Direct Prompt ──► Code Edit ──► pnpm run verify:changed
+```
+
+- **No slash-command ceremony**: Do not use `/grill-with-docs`, `/to-spec`, `/to-tickets`, or `/implement`.
+- State the requirement directly in natural language.
+- Make the minimal, focused change and validate with `pnpm run verify:changed`.
+
+---
+
+## 2. Spec Track (Full Feature Flow / Spec-Driven)
+
+Use for high-complexity work where rework cost or architectural risk is high:
+
+- New features, pages, or complex routes;
+- Domain model changes, database schema shifts, or auth boundaries;
+- Multi-component interactions or wide-ranging refactors.
+
+### Spec Track Workflow
 
 ```text
 /grill-with-docs

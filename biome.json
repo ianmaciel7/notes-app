@@ -15,7 +15,8 @@
       "!dist",
       "!build",
       "!.agents",
-      "!src/components/ui"
+      "!src/components/ui",
+      "!src/components/firebase"
     ]
   },
   "formatter": {
