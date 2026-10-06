@@ -60,7 +60,10 @@
     "hotspot",
     "unindexed",
     "customerio",
-    "threejs"
+    "threejs",
+    "subsetting",
+    "prerender",
+    "codemods"
   ],
   "ignorePaths": [
     "node_modules",
