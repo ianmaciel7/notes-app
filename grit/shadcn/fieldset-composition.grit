@@ -2,7 +2,7 @@ engine biome(1.0)
 language js(typescript, jsx)
 
 JsxElement() as $fieldset where {
-  $fieldset <: r"(?s)^\s*<FieldSet(?:\s|>)",
+  $fieldset <: r"(?s)^[^<]*<FieldSet(?:\s|>).*",
   not $fieldset <: r"(?s)<FieldLegend(?:\s|>)",
   register_diagnostic(span=$fieldset, message="FieldSet must contain FieldLegend so the related fields have a semantic group label.")
 }

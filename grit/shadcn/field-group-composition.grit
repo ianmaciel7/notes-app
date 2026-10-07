@@ -7,10 +7,10 @@ or {
 } where {
   $field_name <: r"Field",
   $field <: within JsxElement() as $form where {
-    $form <: r"(?s)^\s*<(?:form|Form)(?:\s|>)"
+    $form <: r"(?s)^[^<]*<(?:form|Form)(?:\s|>).*"
   } ,
   not $field <: within JsxElement() as $group where {
-    $group <: r"(?s)^\s*<FieldGroup(?:\s|>)"
+    $group <: r"(?s)^[^<]*<FieldGroup(?:\s|>).*"
   } ,
   register_diagnostic(span=$field, message="Field used in a form must be composed inside FieldGroup.")
 }

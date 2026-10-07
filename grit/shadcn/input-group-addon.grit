@@ -7,10 +7,10 @@ or {
 } where {
   $button_name <: r"Button",
   $button <: within JsxElement() as $input_group where {
-    $input_group <: r"(?s)^\s*<InputGroup(?:\s|>)"
+    $input_group <: r"(?s)^[^<]*<InputGroup(?:\s|>).*"
   } ,
   not $button <: within JsxElement() as $addon where {
-    $addon <: r"(?s)^\s*<InputGroupAddon(?:\s|>)"
+    $addon <: r"(?s)^[^<]*<InputGroupAddon(?:\s|>).*"
   } ,
   register_diagnostic(span=$button, message="Buttons inside InputGroup must be composed through InputGroupAddon.")
 }
