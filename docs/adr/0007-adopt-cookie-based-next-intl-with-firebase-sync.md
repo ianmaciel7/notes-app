@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Accepted (not yet implemented on `dev`)
 
 ## Date
 
@@ -10,7 +10,12 @@ Accepted
 
 ## Current State (2026-10-06)
 
-This ADR is accepted as the canonical architectural decision for cookie-based next-intl architecture and Firebase locale preference synchronization. The architecture is verified and coordinates localized text across all 30 Firebase UI auth components.
+The decision is accepted, but not yet implemented on `dev`. `next-intl` is not
+installed, and `src/i18n/request.ts`, `src/messages/*.json`, and the
+`NEXT_LOCALE` cookie handling do not exist; `src/app/layout.tsx` hardcodes
+`lang="en"`. Locale synchronization also depends on the unimplemented Firebase
+Auth layer in [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md).
+Treat the structure below as the target design.
 
 ## Context
 

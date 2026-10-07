@@ -51,16 +51,20 @@ src/
     page.tsx
     typeset.css
   components/
+    firebase/           # immutable upstream Firebase UI reference (ADR 0004)
     ui/                 # project-owned shadcn implementation layer
   hooks/
     use-mobile.ts
   lib/
     utils.ts
-  smoke.test.ts
 
 tests/
   e2e/
     home.spec.ts
+  unit/
+    firebase-reference.test.ts
+    firebase-reference.manifest.sha256
+    smoke.test.ts
 
 grit/
   nextjs/
@@ -74,9 +78,10 @@ docs/
   product-specs/
 ```
 
-There is currently no implemented Firebase layer, authentication layer,
-internationalization layer, DAL, repository layer, exam domain service layer,
-or persistence adapter on `dev`.
+`src/components/firebase/` holds the immutable upstream Firebase UI reference
+components (ADR 0004). There is currently no application-owned Firebase layer,
+authentication layer, internationalization layer, DAL, repository layer, exam
+domain service layer, or persistence adapter on `dev`.
 
 ## 3. Next.js architecture
 
@@ -174,8 +179,11 @@ target-domain vocabulary and proposed data modeling.
 Those documents are planning artifacts until corresponding source modules,
 tests, and active ADRs exist.
 
-Historical Firebase and localization ADRs are retained for traceability but are
-not active implementation decisions on the current `dev` branch.
+ADRs 0004-0008 (Firebase auth, Firestore, and localization) are accepted but
+only partly built on `dev`: the immutable Firebase UI reference components in
+`src/components/firebase/` and their guard exist, while the application auth
+layer, Firestore access, and `next-intl` do not. See each ADR's Current State
+section.
 
 ## 7. Architecture rules
 

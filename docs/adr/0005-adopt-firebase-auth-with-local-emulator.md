@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Accepted (not yet implemented on `dev`)
 
 ## Date
 
@@ -10,7 +10,14 @@ Accepted
 
 ## Current State (2026-10-06)
 
-This ADR is accepted as the canonical architectural decision for Firebase Authentication with local emulator. Runtime packages `firebase` 12.19.0 and `@firebase-oss/ui-core` 7.1.0 are active, with build scripts authorized in `pnpm-workspace.yaml` (`@firebase/util` and `protobufjs`), ensuring complete emulator protocol compatibility.
+The decision is accepted, but only its groundwork exists on `dev`: `firebase`
+12.19.0 and `@firebase-oss/ui-core` 7.1.0 are installed, `allowBuilds` covers
+`@firebase/util` and `protobufjs`, and `firebase.json` configures the Auth
+(`127.0.0.1:9099`), Firestore (`127.0.0.1:8080`), and UI (`127.0.0.1:4000`)
+emulators. Not yet implemented: `AuthProvider`, `src/lib/auth-context.ts`,
+`src/hooks/use-auth.ts`, the `src/app/(auth)/login/` routes, and the seed data
+(`.firebase/seeds/auth_export/` is empty). Treat the structure below as the
+target design.
 
 ## Context
 

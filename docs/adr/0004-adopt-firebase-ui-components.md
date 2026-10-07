@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Accepted (partially implemented)
 
 ## Date
 
@@ -10,7 +10,16 @@ Accepted
 
 ## Current State (2026-10-06)
 
-This ADR is accepted as the canonical architectural decision for Firebase Open Source Auth UI components. All 30 upstream components from the `@firebase` registry have been cataloged and installed into the reference directory, the pnpm build script requirements have been satisfied in `pnpm-workspace.yaml`, and project-owned base UI components in `src/components/ui/` remain preserved.
+Partially implemented on `dev`. Implemented: the `@firebase` registry in
+`components.json`; the 30 upstream components in `src/components/firebase/` as
+an immutable reference baseline; its Biome and `tsconfig.check.json` exclusions;
+the SHA-256 manifest guard in `tests/unit/firebase-reference.test.ts`; provider
+theming in `src/app/globals.css`; and `allowBuilds` for `@firebase/util` and
+`protobufjs` in `pnpm-workspace.yaml`. Not yet implemented: the
+application-owned screens, forms, and dialogs in `src/components/notes-app/`
+(the directory is empty) and any route that consumes them. Installed versions:
+`firebase` 12.19.0, `@firebase-oss/ui-core` 7.1.0, `@firebase-oss/ui-react`
+7.1.0, `react-hook-form` 7.89.0, `@hookform/resolvers` 5.9.1.
 
 ## Context
 

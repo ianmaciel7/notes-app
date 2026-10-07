@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Accepted (not yet implemented on `dev`)
 
 ## Date
 
@@ -10,7 +10,13 @@ Accepted
 
 ## Current State (2026-10-06)
 
-This ADR is accepted as the canonical architectural decision for FirebaseUI v7 canonical architecture and resilient auth fallback. Upstream v7 packages (`@firebase-oss/ui-react` 7.1.0 and `@firebase-oss/ui-core` 7.1.0) with `react-hook-form` (7.89.0) and `@hookform/resolvers` (5.9.1) are installed and verified.
+The decision is accepted, but not yet implemented on `dev`. Only the packages
+(`@firebase-oss/ui-react` 7.1.0, `@firebase-oss/ui-core` 7.1.0,
+`react-hook-form` 7.89.0, `@hookform/resolvers` 5.9.1) and the upstream reference
+components (including `redirect-error.tsx`) are present. `src/app/layout.tsx`
+does not mount `FirebaseUIProvider`, no application screens exist in
+`src/components/notes-app/`, and there is no popup-to-redirect fallback or
+`captureError` code. Treat the structure below as the target design.
 
 ## Context
 

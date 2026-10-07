@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Accepted (not yet implemented on `dev`)
 
 ## Date
 
@@ -10,7 +10,12 @@ Accepted
 
 ## Current State (2026-10-06)
 
-This ADR is accepted as the canonical architectural decision for native Firebase Firestore with persistent local cache. Package governance via `pnpm-workspace.yaml` explicitly allows `protobufjs` and `@firebase/util` build scripts, unblocking Firestore's protocol buffer engine and offline cache serialization.
+The decision is accepted, but only its groundwork exists on `dev`: `firebase`
+12.19.0 is installed, `allowBuilds` covers `protobufjs` and `@firebase/util`, and
+`firebase.json` configures the Firestore emulator (`127.0.0.1:8080`). Not yet
+implemented: `src/lib/firebase/firestore.ts` (the directory is empty), the
+persistent local cache initialization, and the emulator connection logic.
+Treat the structure below as the target design.
 
 ## Context
 
