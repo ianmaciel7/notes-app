@@ -8,9 +8,7 @@ or {
   } where {
     $part_name <: r"(?:DialogTrigger|DialogContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<Dialog"
-      }
+      $parent <: r"(?s)^\s*<Dialog(?:\s|>)"
     }
   },
   or {
@@ -19,9 +17,7 @@ or {
   } where {
     $part_name <: r"(?:DialogHeader|DialogFooter|DialogTitle|DialogDescription|DialogClose)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<DialogContent"
-      }
+      $parent <: r"(?s)^\s*<DialogContent(?:\s|>)"
     }
   },
   or {
@@ -30,9 +26,7 @@ or {
   } where {
     $part_name <: r"(?:SheetTrigger|SheetContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<Sheet"
-      }
+      $parent <: r"(?s)^\s*<Sheet(?:\s|>)"
     }
   },
   or {
@@ -41,9 +35,7 @@ or {
   } where {
     $part_name <: r"(?:SheetHeader|SheetFooter|SheetTitle|SheetDescription|SheetClose)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<SheetContent"
-      }
+      $parent <: r"(?s)^\s*<SheetContent(?:\s|>)"
     }
   },
   or {
@@ -52,9 +44,7 @@ or {
   } where {
     $part_name <: r"(?:DrawerTrigger|DrawerContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<Drawer"
-      }
+      $parent <: r"(?s)^\s*<Drawer(?:\s|>)"
     }
   },
   or {
@@ -63,9 +53,7 @@ or {
   } where {
     $part_name <: r"(?:DrawerHeader|DrawerFooter|DrawerTitle|DrawerDescription|DrawerClose)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<DrawerContent"
-      }
+      $parent <: r"(?s)^\s*<DrawerContent(?:\s|>)"
     }
   },
   or {
@@ -74,9 +62,7 @@ or {
   } where {
     $part_name <: r"(?:AlertDialogTrigger|AlertDialogContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<AlertDialog"
-      }
+      $parent <: r"(?s)^\s*<AlertDialog(?:\s|>)"
     }
   },
   or {
@@ -85,9 +71,7 @@ or {
   } where {
     $part_name <: r"(?:AlertDialogHeader|AlertDialogFooter|AlertDialogTitle|AlertDialogDescription|AlertDialogAction|AlertDialogCancel)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<AlertDialogContent"
-      }
+      $parent <: r"(?s)^\s*<AlertDialogContent(?:\s|>)"
     }
   },
   or {
@@ -96,9 +80,7 @@ or {
   } where {
     $part_name <: r"(?:PopoverTrigger|PopoverContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<Popover"
-      }
+      $parent <: r"(?s)^\s*<Popover(?:\s|>)"
     }
   },
   or {
@@ -107,9 +89,7 @@ or {
   } where {
     $part_name <: r"(?:HoverCardTrigger|HoverCardContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<HoverCard"
-      }
+      $parent <: r"(?s)^\s*<HoverCard(?:\s|>)"
     }
   },
   or {
@@ -118,9 +98,7 @@ or {
   } where {
     $part_name <: r"(?:TooltipTrigger|TooltipContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<Tooltip"
-      }
+      $parent <: r"(?s)^\s*<Tooltip(?:\s|>)"
     }
   },
   or {
@@ -129,9 +107,7 @@ or {
   } where {
     $part_name <: r"(?:DropdownMenuTrigger|DropdownMenuContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<DropdownMenu"
-      }
+      $parent <: r"(?s)^\s*<DropdownMenu(?:\s|>)"
     }
   },
   or {
@@ -140,9 +116,7 @@ or {
   } where {
     $part_name <: r"(?:ContextMenuTrigger|ContextMenuContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<ContextMenu"
-      }
+      $parent <: r"(?s)^\s*<ContextMenu(?:\s|>)"
     }
   },
   or {
@@ -151,9 +125,7 @@ or {
   } where {
     $part_name <: r"(?:CollapsibleTrigger|CollapsibleContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<Collapsible"
-      }
+      $parent <: r"(?s)^\s*<Collapsible(?:\s|>)"
     }
   },
   or {
@@ -162,9 +134,7 @@ or {
   } where {
     $part_name <: r"(?:SelectTrigger|SelectContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<Select"
-      }
+      $parent <: r"(?s)^\s*<Select(?:\s|>)"
     }
   },
   or {
@@ -173,9 +143,7 @@ or {
   } where {
     $part_name <: r"(?:ComboboxTrigger|ComboboxContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<Combobox"
-      }
+      $parent <: r"(?s)^\s*<Combobox(?:\s|>)"
     }
   }
 } where {

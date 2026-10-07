@@ -7,9 +7,7 @@ or {
 } where {
   $icon_name <: r"(?:[A-Za-z0-9]+Icon|Spinner)",
   $icon <: within JsxElement() as $parent where {
-    $parent <: contains JsxOpeningElement(name=$parent_name) where {
-      $parent_name <: r": r"(?s)^\\s*<(?:Button|Badge|ItemMedia|MarkerIcon|InputGroupAddon)"
-    }
+    $parent <: r"(?s)^\s*<(?:Button|Badge|ItemMedia|MarkerIcon|InputGroupAddon)(?:\s|>)"
   } ,
   $attributes <: contains JsxAttribute() as $class_name,
   $class_name <: r"(?s)className(?:\s*=.*)?(?:\bsize-|\bw-|\bh-)",

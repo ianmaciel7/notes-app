@@ -20,9 +20,7 @@ or {
   } where {
     $part_name <: r"(?:TabsList|TabsContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<Tabs"
-      }
+      $parent <: r"(?s)^\s*<Tabs(?:\s|>)"
     } ,
     register_diagnostic(span=$part, message="TabsList and TabsContent must be nested inside Tabs.")
   }

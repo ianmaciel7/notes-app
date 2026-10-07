@@ -8,9 +8,7 @@ or {
   } where {
     $part_name <: r"(?:Sidebar|SidebarInset|SidebarTrigger)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<SidebarProvider"
-      }
+      $parent <: r"(?s)^\s*<SidebarProvider(?:\s|>)"
     }
   },
   or {
@@ -19,9 +17,7 @@ or {
   } where {
     $part_name <: r"(?:SidebarHeader|SidebarContent|SidebarFooter|SidebarRail|SidebarSeparator)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<Sidebar"
-      }
+      $parent <: r"(?s)^\s*<Sidebar(?:\s|>)"
     }
   },
   or {
@@ -30,9 +26,7 @@ or {
   } where {
     $part_name <: r"(?:SidebarGroupLabel|SidebarGroupAction|SidebarGroupContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<SidebarGroup"
-      }
+      $parent <: r"(?s)^\s*<SidebarGroup(?:\s|>)"
     }
   },
   or {
@@ -41,9 +35,7 @@ or {
   } where {
     $part_name <: r"(?:SidebarMenuButton|SidebarMenuAction|SidebarMenuBadge|SidebarMenuSub|SidebarMenuSkeleton)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<SidebarMenuItem"
-      }
+      $parent <: r"(?s)^\s*<SidebarMenuItem(?:\s|>)"
     }
   },
   or {
@@ -52,9 +44,7 @@ or {
   } where {
     $part_name <: r"SidebarMenuItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<SidebarMenu"
-      }
+      $parent <: r"(?s)^\s*<SidebarMenu(?:\s|>)"
     }
   },
   or {
@@ -63,9 +53,7 @@ or {
   } where {
     $part_name <: r"SidebarMenuSubItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<SidebarMenuSub"
-      }
+      $parent <: r"(?s)^\s*<SidebarMenuSub(?:\s|>)"
     }
   },
   or {
@@ -74,9 +62,7 @@ or {
   } where {
     $part_name <: r"SidebarMenuSubButton",
     not $part <: within JsxElement() as $parent where {
-      $parent <: contains JsxOpeningElement(name=$parent_name) where {
-        $parent_name <: r": r"(?s)^\\s*<SidebarMenuSubItem"
-      }
+      $parent <: r"(?s)^\s*<SidebarMenuSubItem(?:\s|>)"
     }
   }
 } where {

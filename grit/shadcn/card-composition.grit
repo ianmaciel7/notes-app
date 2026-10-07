@@ -3,11 +3,11 @@ language js(typescript, jsx)
 
 or {
   JsxElement() as $card where {
-    $card <: r"(?s)^\\s*<Card(?:\s|>)",
+    $card <: r"(?s)^\s*<Card(?:\s|>)",
     not $card <: r"(?s)<CardHeader(?:\s|>)"
   },
   JsxElement() as $card where {
-    $card <: r"(?s)^\\s*<Card(?:\s|>)",
+    $card <: r"(?s)^\s*<Card(?:\s|>)",
     not $card <: r"(?s)<CardContent(?:\s|>)"
   }
 } where {
