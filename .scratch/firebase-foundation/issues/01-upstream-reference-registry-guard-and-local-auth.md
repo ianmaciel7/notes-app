@@ -6,8 +6,8 @@
 
 **Status:** ready-for-agent
 
-- [ ] The custom `@firebase` registry is configured in the component configuration and upstream reference components are installed into a dedicated reference directory.
-- [ ] An automated guard enforces that the reference directory is strictly immutable and cannot be modified by application code, developers, or agents.
+- [x] The custom `@firebase` registry is configured in the component configuration and upstream reference components are installed into a dedicated reference directory.
+- [x] An automated SHA-256 manifest guard detects any modification, deletion, or addition in the immutable upstream reference directory.
 - [ ] Application-owned authentication screens and forms compose project design system primitives with full accessibility support.
 - [ ] Users can register a new account and sign in using email/password against the local Firebase Auth emulator.
 - [ ] Deterministic login works seamlessly using pre-seeded local emulator test accounts.

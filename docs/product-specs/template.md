@@ -78,8 +78,10 @@ Link only active architecture:
 - execution plan;
 - Next.js/shadcn guard coverage when applicable.
 
-Do not treat deprecated Firebase/localization ADRs as current architecture
-unless they are explicitly re-adopted.
+Check each ADR's status and Current State before describing implementation.
+Accepted-but-not-yet-implemented ADRs describe adopted target design, not
+behavior that already exists. Deprecated or superseded ADRs are historical
+context only.
 
 ## 10. Open questions and risks
 

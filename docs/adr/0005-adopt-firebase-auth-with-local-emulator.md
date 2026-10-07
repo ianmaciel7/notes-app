@@ -15,9 +15,9 @@ The decision is accepted, but only its groundwork exists on `dev`: `firebase`
 `@firebase/util` and `protobufjs`, and `firebase.json` configures the Auth
 (`127.0.0.1:9099`), Firestore (`127.0.0.1:8080`), and UI (`127.0.0.1:4000`)
 emulators. Not yet implemented: `AuthProvider`, `src/lib/auth-context.ts`,
-`src/hooks/use-auth.ts`, the `src/app/(auth)/login/` routes, and the seed data
-(`.firebase/seeds/auth_export/` is empty). Treat the structure below as the
-target design.
+`src/hooks/use-auth.ts`, the `src/app/(auth)/login/` routes, and the seed data.
+The `.firebase/` seed directory does not exist yet. Treat the structure below
+as the target design.
 
 ## Context
 

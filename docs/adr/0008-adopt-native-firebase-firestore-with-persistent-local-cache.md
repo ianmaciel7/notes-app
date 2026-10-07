@@ -13,9 +13,9 @@ Accepted (not yet implemented on `dev`)
 The decision is accepted, but only its groundwork exists on `dev`: `firebase`
 12.19.0 is installed, `allowBuilds` covers `protobufjs` and `@firebase/util`, and
 `firebase.json` configures the Firestore emulator (`127.0.0.1:8080`). Not yet
-implemented: `src/lib/firebase/firestore.ts` (the directory is empty), the
-persistent local cache initialization, and the emulator connection logic.
-Treat the structure below as the target design.
+implemented: `src/lib/firebase/firestore.ts` (the `src/lib/firebase/`
+directory does not exist yet), the persistent local cache initialization, and
+the emulator connection logic. Treat the structure below as the target design.
 
 ## Context
 

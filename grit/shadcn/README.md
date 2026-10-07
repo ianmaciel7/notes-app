@@ -3,8 +3,14 @@
 This directory contains application-consumption rules for the project's shadcn
 Base Nova / Base UI system.
 
-The guards intentionally exclude `src/components/ui/**`, which is the
-project-owned implementation/registry layer.
+The guards intentionally exclude two reserved component layers:
+
+- `src/components/ui/**`: project-owned shadcn implementation/registry layer;
+- `src/components/firebase/**`: immutable upstream Firebase UI reference
+  layer protected separately by its SHA-256 manifest test.
+
+Application-owned consumers outside those layers are the GritQL
+guard-consumption surface.
 
 ## Active guard areas
 

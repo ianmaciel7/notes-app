@@ -17,7 +17,8 @@ the SHA-256 manifest guard in `tests/unit/firebase-reference.test.ts`; provider
 theming in `src/app/globals.css`; and `allowBuilds` for `@firebase/util` and
 `protobufjs` in `pnpm-workspace.yaml`. Not yet implemented: the
 application-owned screens, forms, and dialogs in `src/components/notes-app/`
-(the directory is empty) and any route that consumes them. Installed versions:
+(the directory does not exist yet) and any route that consumes them. Installed
+versions:
 `firebase` 12.19.0, `@firebase-oss/ui-core` 7.1.0, `@firebase-oss/ui-react`
 7.1.0, `react-hook-form` 7.89.0, `@hookform/resolvers` 5.9.1.
 
