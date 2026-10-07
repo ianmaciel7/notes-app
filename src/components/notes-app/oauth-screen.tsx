@@ -1,13 +1,19 @@
 "use client";
 
 import { getTranslation } from "@firebase-oss/ui-core";
-import { type User } from "firebase/auth";
-import { type PropsWithChildren } from "react";
-import { useUI, useOnUserAuthenticated } from "@firebase-oss/ui-react";
-import { Card, CardContent, CardHeader, CardDescription, CardTitle } from "@/components/ui/card";
-import { Policies } from "@/components/notes-app/policies";
+import { useOnUserAuthenticated, useUI } from "@firebase-oss/ui-react";
+import type { User } from "firebase/auth";
+import type { PropsWithChildren } from "react";
 import { MultiFactorAuthAssertionScreen } from "@/components/notes-app/multi-factor-auth-assertion-screen";
+import { Policies } from "@/components/notes-app/policies";
 import { RedirectError } from "@/components/notes-app/redirect-error";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export type OAuthScreenProps = PropsWithChildren<{
   onSignIn?: (user: User) => void;

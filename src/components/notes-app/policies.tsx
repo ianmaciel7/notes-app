@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { getTranslation } from "@firebase-oss/ui-core";
 import { PolicyContext, useUI } from "@firebase-oss/ui-react";
 import { useContext } from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function Policies() {
   const ui = useUI();
@@ -17,11 +17,7 @@ export function Policies() {
   const parts = termsAndPrivacyText.split(/(\{tos\}|\{privacy\})/);
   const className = cn("h-auto p-0 text-xs font-semibold");
 
-  const renderPolicyLink = (
-    label: string,
-    url: string,
-    key: number,
-  ) => {
+  const renderPolicyLink = (label: string, url: string, key: number) => {
     if (onNavigate) {
       return (
         <Button

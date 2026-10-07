@@ -8,7 +8,7 @@ or {
   } where {
     $part_name <: r"AccordionItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Accordion(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Accordion(?:\s|>)"
     }
   },
   or {
@@ -17,7 +17,7 @@ or {
   } where {
     $part_name <: r"(?:AccordionTrigger|AccordionContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<AccordionItem(?:\s|>)"
+      $parent <: r"(?s)^\\s*<AccordionItem(?:\s|>)"
     }
   },
   or {
@@ -26,7 +26,7 @@ or {
   } where {
     $part_name <: r"(?:AlertTitle|AlertDescription|AlertAction)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Alert(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Alert(?:\s|>)"
     }
   },
   or {
@@ -35,7 +35,7 @@ or {
   } where {
     $part_name <: r"BreadcrumbList",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Breadcrumb(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Breadcrumb(?:\s|>)"
     }
   },
   or {
@@ -44,7 +44,7 @@ or {
   } where {
     $part_name <: r"BreadcrumbItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<BreadcrumbList(?:\s|>)"
+      $parent <: r"(?s)^\\s*<BreadcrumbList(?:\s|>)"
     }
   },
   or {
@@ -53,7 +53,7 @@ or {
   } where {
     $part_name <: r"(?:ButtonGroupSeparator|ButtonGroupText)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<ButtonGroup(?:\s|>)"
+      $parent <: r"(?s)^\\s*<ButtonGroup(?:\s|>)"
     }
   },
   or {
@@ -62,7 +62,7 @@ or {
   } where {
     $part_name <: r"(?:CarouselContent|CarouselPrevious|CarouselNext)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Carousel(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Carousel(?:\s|>)"
     }
   },
   or {
@@ -71,7 +71,7 @@ or {
   } where {
     $part_name <: r"CarouselItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<CarouselContent(?:\s|>)"
+      $parent <: r"(?s)^\\s*<CarouselContent(?:\s|>)"
     }
   },
   or {
@@ -80,7 +80,7 @@ or {
   } where {
     $part_name <: r"(?:EmptyHeader|EmptyTitle|EmptyDescription|EmptyContent|EmptyMedia)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Empty(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Empty(?:\s|>)"
     }
   },
   or {
@@ -89,7 +89,7 @@ or {
   } where {
     $part_name <: r"(?:FieldLabel|FieldDescription|FieldError|FieldContent|FieldTitle)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Field(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Field(?:\s|>)"
     }
   },
   or {
@@ -98,7 +98,7 @@ or {
   } where {
     $part_name <: r"(?:ItemMedia|ItemContent|ItemActions|ItemTitle|ItemDescription|ItemHeader|ItemFooter)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Item(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Item(?:\s|>)"
     }
   },
   or {
@@ -107,7 +107,7 @@ or {
   } where {
     $part_name <: r"NavigationMenuList",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<NavigationMenu(?:\s|>)"
+      $parent <: r"(?s)^\\s*<NavigationMenu(?:\s|>)"
     }
   },
   or {
@@ -116,7 +116,7 @@ or {
   } where {
     $part_name <: r"NavigationMenuItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<NavigationMenuList(?:\s|>)"
+      $parent <: r"(?s)^\\s*<NavigationMenuList(?:\s|>)"
     }
   },
   or {
@@ -125,7 +125,7 @@ or {
   } where {
     $part_name <: r"(?:NavigationMenuTrigger|NavigationMenuContent|NavigationMenuLink)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<NavigationMenuItem(?:\s|>)"
+      $parent <: r"(?s)^\\s*<NavigationMenuItem(?:\s|>)"
     }
   },
   or {
@@ -134,7 +134,7 @@ or {
   } where {
     $part_name <: r"PaginationContent",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Pagination(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Pagination(?:\s|>)"
     }
   },
   or {
@@ -143,7 +143,7 @@ or {
   } where {
     $part_name <: r"PaginationItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<PaginationContent(?:\s|>)"
+      $parent <: r"(?s)^\\s*<PaginationContent(?:\s|>)"
     }
   },
   or {
@@ -152,7 +152,7 @@ or {
   } where {
     $part_name <: r"(?:PaginationLink|PaginationEllipsis|PaginationNext|PaginationPrevious)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<PaginationItem(?:\s|>)"
+      $parent <: r"(?s)^\\s*<PaginationItem(?:\s|>)"
     }
   },
   or {
@@ -161,7 +161,7 @@ or {
   } where {
     $part_name <: r"RadioGroupItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<RadioGroup(?:\s|>)"
+      $parent <: r"(?s)^\\s*<RadioGroup(?:\s|>)"
     }
   },
   or {
@@ -170,7 +170,7 @@ or {
   } where {
     $part_name <: r"(?:TableHeader|TableBody|TableFooter|TableCaption)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Table(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Table(?:\s|>)"
     }
   },
   or {
@@ -179,7 +179,7 @@ or {
   } where {
     $part_name <: r"TableRow",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<(?:TableHeader|TableBody|TableFooter)(?:\s|>)"
+      $parent <: r"(?s)^\\s*<(?:TableHeader|TableBody|TableFooter)(?:\s|>)"
     }
   },
   or {
@@ -188,7 +188,7 @@ or {
   } where {
     $part_name <: r"(?:TableHead|TableCell)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<TableRow(?:\s|>)"
+      $parent <: r"(?s)^\\s*<TableRow(?:\s|>)"
     }
   },
   or {
@@ -197,7 +197,7 @@ or {
   } where {
     $part_name <: r"ToggleGroupItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<ToggleGroup(?:\s|>)"
+      $parent <: r"(?s)^\\s*<ToggleGroup(?:\s|>)"
     }
   },
   or {
@@ -206,7 +206,7 @@ or {
   } where {
     $part_name <: r"(?:MessageContent|MessageHeader|MessageFooter|MessageAvatar)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Message(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Message(?:\s|>)"
     }
   },
   or {
@@ -215,7 +215,7 @@ or {
   } where {
     $part_name <: r"(?:BubbleContent|BubbleReactions)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Bubble(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Bubble(?:\s|>)"
     }
   },
   or {
@@ -224,7 +224,7 @@ or {
   } where {
     $part_name <: r"(?:AttachmentMedia|AttachmentContent|AttachmentTitle|AttachmentDescription|AttachmentActions|AttachmentAction|AttachmentTrigger)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Attachment(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Attachment(?:\s|>)"
     }
   },
   or {
@@ -233,7 +233,7 @@ or {
   } where {
     $part_name <: r"(?:MarkerIcon|MarkerContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Marker(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Marker(?:\s|>)"
     }
   },
   or {
@@ -242,7 +242,7 @@ or {
   } where {
     $part_name <: r"(?:MessageScrollerViewport|MessageScrollerContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<MessageScroller(?:\s|>)"
+      $parent <: r"(?s)^\\s*<MessageScroller(?:\s|>)"
     }
   },
   or {
@@ -251,7 +251,7 @@ or {
   } where {
     $part_name <: r"(?:ComboboxInput|ComboboxList|ComboboxClear|ComboboxEmpty)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Combobox(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Combobox(?:\s|>)"
     }
   },
   or {
@@ -260,7 +260,7 @@ or {
   } where {
     $part_name <: r"MenubarMenu",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Menubar(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Menubar(?:\s|>)"
     }
   },
   or {
@@ -269,7 +269,7 @@ or {
   } where {
     $part_name <: r"(?:MenubarTrigger|MenubarContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<MenubarMenu(?:\s|>)"
+      $parent <: r"(?s)^\\s*<MenubarMenu(?:\s|>)"
     }
   },
   or {
@@ -278,7 +278,7 @@ or {
   } where {
     $part_name <: r"(?:InputOTPGroup|InputOTPSlot|InputOTPSeparator)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<InputOTP(?:\s|>)"
+      $parent <: r"(?s)^\\s*<InputOTP(?:\s|>)"
     }
   },
   or {
@@ -287,7 +287,7 @@ or {
   } where {
     $part_name <: r"(?:ResizablePanel|ResizableHandle)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<ResizablePanelGroup(?:\s|>)"
+      $parent <: r"(?s)^\\s*<ResizablePanelGroup(?:\s|>)"
     }
   },
   or {
@@ -296,7 +296,7 @@ or {
   } where {
     $part_name <: r"ScrollBar",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<ScrollArea(?:\s|>)"
+      $parent <: r"(?s)^\\s*<ScrollArea(?:\s|>)"
     }
   },
   or {
@@ -305,7 +305,7 @@ or {
   } where {
     $part_name <: r"(?:QuestionnaireItem|QuestionnaireProgress)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Questionnaire(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Questionnaire(?:\s|>)"
     }
   },
   or {
@@ -314,7 +314,7 @@ or {
   } where {
     $part_name <: r"(?:QuestionnaireTitle|QuestionnaireDescription|QuestionnaireOptions|QuestionnaireOption)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<QuestionnaireItem(?:\s|>)"
+      $parent <: r"(?s)^\\s*<QuestionnaireItem(?:\s|>)"
     }
   }
 } where {

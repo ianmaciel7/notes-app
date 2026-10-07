@@ -1,11 +1,20 @@
 "use client";
 
-import { useUI, type OAuthButtonProps, useSignInWithProvider } from "@firebase-oss/ui-react";
+import {
+  type OAuthButtonProps,
+  useSignInWithProvider,
+  useUI,
+} from "@firebase-oss/ui-react";
 import { Button } from "@/components/ui/button";
 
 export type { OAuthButtonProps };
 
-export function OAuthButton({ provider, children, themed, onSignIn }: OAuthButtonProps) {
+export function OAuthButton({
+  provider,
+  children,
+  themed,
+  onSignIn,
+}: OAuthButtonProps) {
   const ui = useUI();
 
   const { error, callback } = useSignInWithProvider(provider, onSignIn);
@@ -23,7 +32,9 @@ export function OAuthButton({ provider, children, themed, onSignIn }: OAuthButto
       >
         {children}
       </Button>
-      {error && <div className="text-destructive text-left text-xs">{error}</div>}
+      {error && (
+        <div className="text-destructive text-left text-xs">{error}</div>
+      )}
     </div>
   );
 }

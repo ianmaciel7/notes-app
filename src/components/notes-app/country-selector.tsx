@@ -21,7 +21,9 @@ export const CountrySelector = forwardRef<CountrySelectorRef, CountrySelectorPro
   const setCountry = useCallback(
     (code: CountryCode) => {
       const foundCountry = countries.find((country) => country.code === code);
-      setSelected(foundCountry!);
+      if (foundCountry) {
+        setSelected(foundCountry);
+      }
     },
     [countries]
   );

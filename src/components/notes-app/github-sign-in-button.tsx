@@ -1,14 +1,21 @@
 "use client";
 
-import { GithubAuthProvider } from "firebase/auth";
 import { getTranslation } from "@firebase-oss/ui-core";
-import { useUI, type GitHubSignInButtonProps, GitHubLogo } from "@firebase-oss/ui-react";
+import {
+  GitHubLogo,
+  type GitHubSignInButtonProps,
+  useUI,
+} from "@firebase-oss/ui-react";
+import { GithubAuthProvider } from "firebase/auth";
 
 import { OAuthButton } from "@/components/notes-app/oauth-button";
 
 export type { GitHubSignInButtonProps };
 
-export function GitHubSignInButton({ provider, ...props }: GitHubSignInButtonProps) {
+export function GitHubSignInButton({
+  provider,
+  ...props
+}: GitHubSignInButtonProps) {
   const ui = useUI();
 
   return (

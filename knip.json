@@ -1,9 +1,15 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": ["src/app/**/page.tsx", "src/app/**/layout.tsx"],
+  "entry": [
+    "src/app/**/page.tsx",
+    "src/app/**/layout.tsx",
+    "src/components/notes-app/**/*-screen.tsx",
+    "src/components/notes-app/**/*-sign-in-button.tsx"
+  ],
   "project": ["src/**/*.{ts,tsx}"],
   "ignore": [
     "src/components/ui/**",
+    "src/components/firebase/**",
     "src/hooks/use-mobile.ts",
     "src/lib/utils.ts"
   ],

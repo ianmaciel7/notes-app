@@ -8,7 +8,7 @@ or {
   } where {
     $part_name <: r"(?:DialogTrigger|DialogContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Dialog(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Dialog(?:\s|>)"
     }
   },
   or {
@@ -17,7 +17,7 @@ or {
   } where {
     $part_name <: r"(?:DialogHeader|DialogFooter|DialogTitle|DialogDescription|DialogClose)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<DialogContent(?:\s|>)"
+      $parent <: r"(?s)^\\s*<DialogContent(?:\s|>)"
     }
   },
   or {
@@ -26,7 +26,7 @@ or {
   } where {
     $part_name <: r"(?:SheetTrigger|SheetContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Sheet(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Sheet(?:\s|>)"
     }
   },
   or {
@@ -35,7 +35,7 @@ or {
   } where {
     $part_name <: r"(?:SheetHeader|SheetFooter|SheetTitle|SheetDescription|SheetClose)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<SheetContent(?:\s|>)"
+      $parent <: r"(?s)^\\s*<SheetContent(?:\s|>)"
     }
   },
   or {
@@ -44,7 +44,7 @@ or {
   } where {
     $part_name <: r"(?:DrawerTrigger|DrawerContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Drawer(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Drawer(?:\s|>)"
     }
   },
   or {
@@ -53,7 +53,7 @@ or {
   } where {
     $part_name <: r"(?:DrawerHeader|DrawerFooter|DrawerTitle|DrawerDescription|DrawerClose)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<DrawerContent(?:\s|>)"
+      $parent <: r"(?s)^\\s*<DrawerContent(?:\s|>)"
     }
   },
   or {
@@ -62,7 +62,7 @@ or {
   } where {
     $part_name <: r"(?:AlertDialogTrigger|AlertDialogContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<AlertDialog(?:\s|>)"
+      $parent <: r"(?s)^\\s*<AlertDialog(?:\s|>)"
     }
   },
   or {
@@ -71,7 +71,7 @@ or {
   } where {
     $part_name <: r"(?:AlertDialogHeader|AlertDialogFooter|AlertDialogTitle|AlertDialogDescription|AlertDialogAction|AlertDialogCancel)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<AlertDialogContent(?:\s|>)"
+      $parent <: r"(?s)^\\s*<AlertDialogContent(?:\s|>)"
     }
   },
   or {
@@ -80,7 +80,7 @@ or {
   } where {
     $part_name <: r"(?:PopoverTrigger|PopoverContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Popover(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Popover(?:\s|>)"
     }
   },
   or {
@@ -89,7 +89,7 @@ or {
   } where {
     $part_name <: r"(?:HoverCardTrigger|HoverCardContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<HoverCard(?:\s|>)"
+      $parent <: r"(?s)^\\s*<HoverCard(?:\s|>)"
     }
   },
   or {
@@ -98,7 +98,7 @@ or {
   } where {
     $part_name <: r"(?:TooltipTrigger|TooltipContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Tooltip(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Tooltip(?:\s|>)"
     }
   },
   or {
@@ -107,7 +107,7 @@ or {
   } where {
     $part_name <: r"(?:DropdownMenuTrigger|DropdownMenuContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<DropdownMenu(?:\s|>)"
+      $parent <: r"(?s)^\\s*<DropdownMenu(?:\s|>)"
     }
   },
   or {
@@ -116,7 +116,7 @@ or {
   } where {
     $part_name <: r"(?:ContextMenuTrigger|ContextMenuContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<ContextMenu(?:\s|>)"
+      $parent <: r"(?s)^\\s*<ContextMenu(?:\s|>)"
     }
   },
   or {
@@ -125,7 +125,7 @@ or {
   } where {
     $part_name <: r"(?:CollapsibleTrigger|CollapsibleContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Collapsible(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Collapsible(?:\s|>)"
     }
   },
   or {
@@ -134,7 +134,7 @@ or {
   } where {
     $part_name <: r"(?:SelectTrigger|SelectContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Select(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Select(?:\s|>)"
     }
   },
   or {
@@ -143,7 +143,7 @@ or {
   } where {
     $part_name <: r"(?:ComboboxTrigger|ComboboxContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Combobox(?:\s|>)"
+      $parent <: r"(?s)^\\s*<Combobox(?:\s|>)"
     }
   }
 } where {
