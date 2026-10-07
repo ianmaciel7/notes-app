@@ -10,6 +10,8 @@ expectations for future features.
 Current source smoke coverage:
 
 - `tests/unit/smoke.test.ts`
+- `tests/unit/firebase-reference.test.ts` (guards `src/components/firebase/`
+  against any change; see ADR 0004)
 
 Vitest runs in Happy DOM and scans `src/**/*.{test,spec}.{ts,tsx}` and `tests/**/*.{test,spec}.{ts,tsx}` (excluding `tests/e2e/**`).
 `src/components/ui/**` is excluded from project unit tests because that
@@ -82,6 +84,22 @@ Do not claim WCAG conformance based only on installed tooling.
 | Fast local gate | `pnpm run verify:fast` |
 | Production build | `pnpm run build` |
 | Bundle budgets | `pnpm run check:size` |
+
+## Git hooks and CI split
+
+Local Git hooks stay light so they do not overload developer machines:
+
+| Hook | Runs |
+| --- | --- |
+| `pre-commit` | `lint-staged` (Biome on staged files) and gitleaks |
+| `commit-msg` | commitlint |
+| `pre-push` | `pnpm run verify:changed` |
+
+`pnpm run verify:fast` is not run by a Git hook. Run it manually before
+delivery. CI (`.github/workflows/ci.yml`) is the authoritative gate and runs
+the full unit suite, dependency rules, spelling, Knip, jscpd, Fallow, audit,
+secret scan, build, Size Limit, and E2E on every push and pull request to
+`dev` and `main`.
 
 ## Test design
 

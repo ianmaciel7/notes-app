@@ -1,52 +1,59 @@
-# 0007. Adopt Cookie-Based next-intl Architecture and Firebase Locale Preference Synchronization
+# ADR 0007: Adopt Cookie-Based next-intl Architecture and Firebase Locale Preference Synchronization
 
-> **Current state (2026-10-06): Deprecated on the current `dev` branch.**
-> The packages, modules, and runtime architecture described below are not
-> present in the current implementation. This ADR is retained as historical
-> context only. Re-adoption requires a new decision or an explicit status
-> change backed by implementation and tests.
+## Status
 
-- **Status:** Deprecated
-- **Date:** 2026-09-28
-- **Canonical Owner:** `ARCHITECTURE.md`
+Accepted (not yet implemented on `dev`)
 
-## Context and Problem Statement
+## Date
 
-Previous iterations explored two diverging paths:
-1. Hardcoded route prefix routing (`defineRouting` with `localePrefix: "always"` in `old-4`), which required nesting all application routes under `[locale]` segments, complicating deep links, canonical paths, and client routing.
-2. In-house typed React context dictionaries without external libraries (`old-9`), which lacked built-in server component request caching, automated ICU formatting, and Next.js App Router middleware integration.
+2026-09-28
 
-Furthermore, user-visible terminology across spaces and object types must remain localized without mutating canonical English identifiers persisted in IndexedDB/Dexie or remote database models.
+## Current State (2026-10-06)
 
-## Decision Outcome
+The decision is accepted, but not yet implemented on `dev`. `next-intl` is not
+installed, and `src/i18n/request.ts`, `src/messages/*.json`, and the
+`NEXT_LOCALE` cookie handling do not exist; `src/app/layout.tsx` hardcodes
+`lang="en"`. Locale synchronization also depends on the unimplemented Firebase
+Auth layer in [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md).
+Treat the structure below as the target design.
 
-We adopt `next-intl` using a cookie-driven request configuration without URL path prefixes, paired with Firebase Authentication user language synchronization following official Firebase recommendations:
+## Context
 
-1. **Clean URL Strategy**: Routes remain un-prefixed (e.g., `/`, `/editor`, `/settings`). The active locale is resolved on the server in e.g. `src/i18n/request.ts` via the `NEXT_LOCALE` cookie using `next-intl/server` (`getRequestConfig`), falling back to `en` by default.
-2. **Supported Locales**: The default locale is `en` (English), with support for `pt-BR` (Portuguese - Brazil) and `es` (Spanish).
-3. **Firebase Auth Synchronization**: `auth.useDeviceLanguage()` is called strictly as an initial fallback for unauthenticated guest sessions. When an explicit language preference is set or retrieved from the user's profile document (e.g. Firestore `/users/{uid}`), client handlers assign `auth.languageCode = selectedLocale` on the Firebase `Auth` instance (localizing Auth emails, SMS, reCAPTCHA, and OAuth popups) and synchronize the `NEXT_LOCALE` cookie for server-side `next-intl` rendering.
-4. **Canonical Domain Separation**: Persisted entities, database models, and built-in object type records preserve canonical English identifiers (e.g. `singularName`, `pluralName`, `spaceId`), while all UI surfaces (menus, command palette, tabs, notifications, Firebase error codes) resolve dynamic display labels from `src/messages/*.json`.
+The exam-study platform foundation requires multi-language localization supporting English, Brazilian Portuguese, and Spanish without introducing URL routing friction or database schema pollution.
 
-### Positive Consequences
+Key requirements include:
+1. **Clean URL Strategy**: Clean URLs without `[locale]` prefix clutter across application routes (e.g. `/`, `/editor`, `/settings`, `/login`) to simplify deep links, canonical paths, and client routing.
+2. **Server-Side Integration**: Built-in React Server Component request caching, automated ICU formatting, and Next.js App Router middleware integration.
+3. **Firebase Auth Synchronization**: Seamless alignment with Firebase Auth SDK conventions (`auth.languageCode` for emails, SMS, reCAPTCHA, and OAuth popups, and user profile persistence).
+4. **Auth Component Localization**: Seamless localization across all 30 installed Firebase UI components, including `@firebase/country-selector`, `@firebase/policies`, `@firebase/redirect-error`, and authentication forms/screens.
+5. **Domain Term Separation**: Localized user-visible terminology across spaces and object types without mutating canonical English identifiers persisted in database models.
 
-- Clean, un-prefixed URLs across all application routes without routing noise.
-- Server-side translation rendering and request caching via standard `next-intl` server configuration.
-- Strict alignment with Firebase Auth SDK conventions (`auth.languageCode` for client auth flows, user DB document for cross-device persistence).
-- Clear separation between canonical persisted domain identifiers (English) and localized UI strings.
+## Decision
 
-### Negative Consequences
+We adopt `next-intl` using a cookie-driven request configuration without URL path prefixes, paired with Firebase Authentication user language synchronization following official Firebase recommendations.
 
-- Locale switching requires updating the `NEXT_LOCALE` cookie and triggering a client router refresh/re-render.
+Key architectural rules and structure:
+- **Cookie-Driven Request Configuration**: Routes remain un-prefixed. The active locale is resolved on the server in `src/i18n/request.ts` via the `NEXT_LOCALE` cookie using `next-intl/server` (`getRequestConfig`), falling back to `en` by default.
+- **Supported Locales**: The default locale is `en` (English), with support for `pt-BR` (Portuguese - Brazil) and `es` (Spanish). UI strings are externalized in `src/messages/*.json`.
+- **Firebase Auth Synchronization**: `auth.useDeviceLanguage()` is called strictly as an initial fallback for unauthenticated guest sessions. When an explicit language preference is set or retrieved from the user's profile document (e.g. Firestore `/users/{uid}`), client handlers assign `auth.languageCode = selectedLocale` on the Firebase `Auth` instance and synchronize the `NEXT_LOCALE` cookie for server-side `next-intl` rendering.
+- **Component-Level Localization Interplay**:
+  - `country-selector.tsx` formats international dial codes and localized country labels while emitting standard E.164 phone numbers to `phone-auth-form` and SMS MFA forms.
+  - Legal disclaimer links in `policies.tsx` (Terms of Service, Privacy Policy) resolve localized targets without route disruption.
+  - Redirect error messages from `redirect-error.tsx` and form validation messages from `@hookform/resolvers` map directly to localized message strings in `src/messages/*.json`.
+- **Canonical Domain Separation**: Persisted entities, database models, and built-in object type records preserve canonical English identifiers (e.g. `singularName`, `pluralName`, `spaceId`), while all UI surfaces resolve dynamic display labels from `src/messages/*.json`.
+- **Architectural Alignment**: Aligns with [`ARCHITECTURE.md`](../../ARCHITECTURE.md), auth components in [ADR 0004](./0004-adopt-firebase-ui-components.md), and auth resilience in [ADR 0006](./0006-adopt-firebase-ui-v7-and-auth-resilience.md).
 
-## Architectural Rules and Invariants
+## Consequences
 
-- All UI text strings must be externalized into `src/messages/*.json` translation files.
-- Persisted database entities, schema field names, and object type keys must remain strictly in canonical English.
-- Active locale must be determined via the `NEXT_LOCALE` cookie managed through e.g. `src/i18n/request.ts`.
-- Client Firebase Auth instance language must be set via `auth.languageCode = activeLocale` when user locale is resolved or updated (`useDeviceLanguage()` reserved for guest initialization).
+### Positive Outcomes
 
-## Related References and Control Documents
+- Delivers clean, un-prefixed URLs across all application routes without routing noise.
+- Provides server-side translation rendering and request caching via standard `next-intl` server configuration.
+- Maintains strict alignment with Firebase Auth SDK conventions (`auth.languageCode` for client auth flows, user database document for cross-device persistence).
+- Ensures seamless multi-language presentation for all 30 Firebase UI components, country selections, legal policies, and error handling.
+- Enforces clear separation between canonical persisted domain identifiers in English and localized UI strings.
 
-- Runtime integration context: [`ARCHITECTURE.md`](../../ARCHITECTURE.md), Sections 3–4.
-- Auth UI vendor boundary: see [ADR 0004](./0004-adopt-firebase-ui-components.md).
-- FirebaseUI resilience dependency: see [ADR 0006](./0006-adopt-firebase-ui-v7-and-auth-resilience.md).
+### Trade-offs and Considerations
+
+- Locale switching requires updating the `NEXT_LOCALE` cookie and triggering a client router refresh or re-render.
+- Custom form validator errors from `@hookform/resolvers` must maintain localized message key parity across all supported language catalogs (`en`, `pt-BR`, `es`).

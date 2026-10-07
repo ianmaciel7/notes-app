@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   cacheComponents: true,
   partialPrefetching: true,
+  typescript: {
+    tsconfigPath: "tsconfig.check.json",
+  },
 };
 
 export default nextConfig;

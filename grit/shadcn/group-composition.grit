@@ -8,7 +8,12 @@ or {
   } where {
     $item_name <: r"(?:SelectItem|SelectLabel)",
     not $item <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<SelectGroup(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^SelectGroup$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -17,7 +22,12 @@ or {
   } where {
     $item_name <: r"(?:DropdownMenuItem|DropdownMenuLabel)",
     not $item <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<DropdownMenuGroup(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^DropdownMenuGroup$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -26,7 +36,12 @@ or {
   } where {
     $item_name <: r"(?:ContextMenuItem|ContextMenuLabel)",
     not $item <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<ContextMenuGroup(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^ContextMenuGroup$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -35,7 +50,12 @@ or {
   } where {
     $item_name <: r"MenubarItem",
     not $item <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<MenubarGroup(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^MenubarGroup$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -44,7 +64,12 @@ or {
   } where {
     $item_name <: r"CommandItem",
     not $item <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<CommandGroup(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^CommandGroup$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -53,7 +78,12 @@ or {
   } where {
     $item_name <: r"(?:ComboboxItem|ComboboxLabel)",
     not $item <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<ComboboxGroup(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^ComboboxGroup$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   }
 } where {

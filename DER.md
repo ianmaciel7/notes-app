@@ -5,16 +5,19 @@
 This document preserves the proposed entity model for the future study
 platform. It must not be interpreted as the current persistence architecture.
 
-The current `dev` branch has no Firebase/Firestore dependency, no active data
-access layer, and no implemented persistence schema. Historical Firebase ADRs
-0004–0008 are retained for traceability but are not active decisions.
+The current `dev` branch includes Firebase/Firebase UI dependencies and local
+emulator groundwork, but it has no application Firestore data-access layer and
+no implemented persistence schema. ADRs 0004–0008 are accepted decisions:
+ADR 0004 is partially implemented, while ADRs 0005–0008 are accepted target
+designs that are not yet implemented on `dev`.
 
 Before implementing persistence, this model must be reconciled with:
 
 - [Domain Glossary](./GLOSSARY.md)
 - [Architecture](./ARCHITECTURE.md)
 - the active product specification;
-- a new or re-accepted persistence ADR.
+- [ADR 0008](./docs/adr/0008-adopt-native-firebase-firestore-with-persistent-local-cache.md)
+  and its current implementation state.
 
 ## Proposed core assessment entities
 

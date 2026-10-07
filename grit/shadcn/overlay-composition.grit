@@ -8,7 +8,12 @@ or {
   } where {
     $part_name <: r"(?:DialogTrigger|DialogContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Dialog(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^Dialog$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -17,7 +22,12 @@ or {
   } where {
     $part_name <: r"(?:DialogHeader|DialogFooter|DialogTitle|DialogDescription|DialogClose)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<DialogContent(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^DialogContent$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -26,7 +36,12 @@ or {
   } where {
     $part_name <: r"(?:SheetTrigger|SheetContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Sheet(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^Sheet$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -35,7 +50,12 @@ or {
   } where {
     $part_name <: r"(?:SheetHeader|SheetFooter|SheetTitle|SheetDescription|SheetClose)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<SheetContent(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^SheetContent$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -44,7 +64,12 @@ or {
   } where {
     $part_name <: r"(?:DrawerTrigger|DrawerContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Drawer(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^Drawer$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -53,7 +78,12 @@ or {
   } where {
     $part_name <: r"(?:DrawerHeader|DrawerFooter|DrawerTitle|DrawerDescription|DrawerClose)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<DrawerContent(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^DrawerContent$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -62,7 +92,12 @@ or {
   } where {
     $part_name <: r"(?:AlertDialogTrigger|AlertDialogContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<AlertDialog(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^AlertDialog$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -71,7 +106,12 @@ or {
   } where {
     $part_name <: r"(?:AlertDialogHeader|AlertDialogFooter|AlertDialogTitle|AlertDialogDescription|AlertDialogAction|AlertDialogCancel)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<AlertDialogContent(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^AlertDialogContent$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -80,7 +120,12 @@ or {
   } where {
     $part_name <: r"(?:PopoverTrigger|PopoverContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Popover(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^Popover$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -89,7 +134,12 @@ or {
   } where {
     $part_name <: r"(?:HoverCardTrigger|HoverCardContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<HoverCard(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^HoverCard$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -98,7 +148,12 @@ or {
   } where {
     $part_name <: r"(?:TooltipTrigger|TooltipContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Tooltip(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^Tooltip$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -107,7 +162,12 @@ or {
   } where {
     $part_name <: r"(?:DropdownMenuTrigger|DropdownMenuContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<DropdownMenu(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^DropdownMenu$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -116,7 +176,12 @@ or {
   } where {
     $part_name <: r"(?:ContextMenuTrigger|ContextMenuContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<ContextMenu(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^ContextMenu$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -125,7 +190,12 @@ or {
   } where {
     $part_name <: r"(?:CollapsibleTrigger|CollapsibleContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Collapsible(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^Collapsible$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -134,7 +204,12 @@ or {
   } where {
     $part_name <: r"(?:SelectTrigger|SelectContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Select(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^Select$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   },
   or {
@@ -143,7 +218,12 @@ or {
   } where {
     $part_name <: r"(?:ComboboxTrigger|ComboboxContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^<Combobox(?:\s|>)"
+      $parent <: contains ( JsxOpeningElement(name=r"^Combobox$") as $owner where {
+        not $owner <: within JsxElement() as $between where {
+          $between <: within $parent ,
+          not $between <: $parent
+        }
+      })
     }
   }
 } where {

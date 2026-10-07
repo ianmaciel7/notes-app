@@ -1,0 +1,9 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsExport() as $hook where {
+  $hook <: r"(?s)^\s*export\s+(?:async\s+)?(?:function\s+use[A-Z]|const\s+use[A-Z]\w*\s*(?::[^=]+)?=).*",
+  $hook <: not r"(?s).*\b(?:React\.)?(?:useContext|use)\s*[(<].*",
+  $filename <: not r".*src.hooks.*",
+  register_diagnostic(span=$hook, message="Exported hooks that do not read a context belong in src/hooks/ (import via @/hooks). Keep a hook in its component file only when it is a context accessor (like useSidebar), or leave it non-exported when it is local to that component.")
+}

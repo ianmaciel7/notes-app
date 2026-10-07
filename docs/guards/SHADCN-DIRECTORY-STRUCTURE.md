@@ -9,11 +9,12 @@ The component architecture is divided into distinct layers to separate owned des
 ```txt
 src/
 ├── app/                  # Next.js App Router routes, layouts, and pages
-├── components/           # Application-level and domain components
+├── components/
+│   ├── firebase/         # Immutable upstream Firebase UI reference layer
 │   └── ui/               # Owned shadcn Base Nova / Base UI primitive layer
 ├── hooks/                # Shared application and component hooks
 └── lib/                  # Shared utility functions and library adapters
-    └── utils.ts          # Core styling helper (cn)
+    └── utils.ts          # Canonical cn re-export
 ```
 
 ---
@@ -26,26 +27,46 @@ src/
 * **Source**: Generated and managed via shadcn CLI (`base-nova` style with Base UI primitives).
 * **Ownership**: This directory is an **owned implementation/registry layer**.
   * It is intentionally excluded from ordinary application linters (`!src/components/ui` in `biome.json`) to preserve registry compatibility.
-  * Primitives here must never import domain code or application routes (`.dependency-cruiser.cjs`).
+  * Primitives here must never import domain code or application routes. This
+    is an architecture/review invariant while this directory remains excluded
+    from the Dependency Cruiser graph.
 
-### 2. `src/components/` (Application Components Layer)
+### 2. `src/components/firebase/` (Upstream Reference Layer)
 
-* **Purpose**: Hosts composite components, domain widgets, and feature-specific UI (e.g., note editors, user navigation cards).
-* **Composition Rule**: Application components compose primitives from `src/components/ui/`.
-* **Guard Boundary**: Code here is part of the **guard-consumption layer** and must strictly adhere to project GritQL guards (e.g., using `cn()`, semantic color tokens, and accessible compound parts).
+* **Purpose**: Holds the 30 upstream Firebase OSS UI components as an immutable
+  behavioral/reference baseline defined by ADR 0004.
+* **Ownership**: This is **not application code** and is not an owned shadcn
+  implementation layer.
+* **Guard Boundary**: Biome/GritQL and `tsconfig.check.json` exclude this
+  directory. `tests/unit/firebase-reference.test.ts` protects its exact
+  contents with a SHA-256 manifest.
+* **Usage Rule**: Application-owned auth UI may use this layer for behavioral
+  parity/reference, but must not modify these files.
 
-### 3. `src/lib/` & `src/lib/utils.ts` (Utilities Layer)
+### 3. `src/components/` (Application Components Layer)
+
+* **Purpose**: Application-owned composite components, domain widgets, and
+  feature-specific UI live here when introduced, excluding the reserved
+  `ui/` and `firebase/` layers.
+* **Composition Rule**: Application components compose primitives from
+  `src/components/ui/`.
+* **Guard Boundary**: Application-owned code is part of the
+  **guard-consumption layer** and must follow project GritQL guards.
+
+### 4. `src/lib/` & `src/lib/utils.ts` (Utilities Layer)
 
 * **Purpose**: General helper functions, runtime utilities, and third-party wrappers.
-* **`utils.ts`**: Contains the canonical `cn()` helper (combining `clsx` and `tailwind-merge` / styling variance).
-* **Rule**: All dynamic and conditional class composition must flow through `cn()` from `@/lib/utils`.
+* **`utils.ts`**: Re-exports the canonical `cn()` helper from the `cn`
+  package.
+* **Rule**: Dynamic and conditional class composition should use `cn()` from
+  `@/lib/utils`.
 
-### 4. `src/hooks/` (Custom Hooks Layer)
+### 5. `src/hooks/` (Custom Hooks Layer)
 
 * **Purpose**: Reusable React hooks consumed across components and pages (e.g., `use-mobile.ts`, `use-media-query.ts`).
 * **Rule**: Primitives such as `sidebar.tsx` or application components import shared state hooks from `@/hooks/*`.
 
-### 5. `src/app/` (Routing & Views Layer)
+### 6. `src/app/` (Routing & Views Layer)
 
 * **Purpose**: Next.js App Router pages, route handlers, error boundaries, and root layouts.
 * **Rule**: Views compose components from `src/components/` and `src/components/ui/` via canonical aliases.
@@ -77,6 +98,11 @@ The CLI configuration file [`components.json`](../../components.json) is authori
     "ui": "@/components/ui",
     "lib": "@/lib",
     "hooks": "@/hooks"
+  },
+  "menuColor": "default",
+  "menuAccent": "subtle",
+  "registries": {
+    "@firebase": "https://firebaseopensource.com/r/{name}.json"
   }
 }
 ```
@@ -92,6 +118,16 @@ Boundary integrity is verified mechanically across multiple layers:
 1. **Canonical Import Aliases (`canonical-import-aliases.grit`)**:
    Enforces that application consumers import primitives and helpers using their canonical aliases (`@/components/ui`, `@/lib/utils`, `@/hooks`) rather than deep relative paths (`../../components/ui/*`).
 2. **Dependency Cruiser (`.dependency-cruiser.cjs`)**:
-   Ensures generic UI primitives in `src/components/ui` do not form circular dependencies or import application domain modules.
+   Enforces dependency rules on the source it cruises, but currently excludes
+   `src/components/ui/**` from traversal. UI-to-application dependency
+   direction is therefore an architecture/review invariant rather than a
+   mechanically enforced Dependency Cruiser guarantee.
 3. **Biome Guard Boundary**:
-   Excludes `src/components/ui/**` from opinionated application refactor rules while enforcing semantic tokens, accessible parts, and primitive composition in all consuming files.
+   Excludes both `src/components/ui/**` (owned implementation) and
+   `src/components/firebase/**` (immutable upstream reference) from ordinary
+   application guard consumption. Application-owned consumers remain subject
+   to semantic-token, accessibility, composition, and import guards.
+4. **Firebase Reference Integrity**:
+   `tests/unit/firebase-reference.test.ts` verifies
+   `src/components/firebase/**` against
+   `tests/unit/firebase-reference.manifest.sha256`.

@@ -1,1 +1,1 @@
-pnpm run verify:fast
+pnpm run verify:changed

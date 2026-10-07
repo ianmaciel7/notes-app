@@ -4,11 +4,16 @@ The project uses shadcn Base Nova with Base UI primitives.
 
 ## Boundary
 
-- `src/components/ui/**`: owned implementation/registry layer.
-- application code outside that directory: guard-consumption layer.
+- `src/components/ui/**`: owned shadcn implementation/registry layer.
+- `src/components/firebase/**`: immutable upstream Firebase UI reference layer.
+- application-owned code outside those reserved layers: guard-consumption
+  layer.
 
-Biome excludes `src/components/ui/**` from ordinary application lint/guard
-consumption to avoid rewriting registry-owned implementation details.
+Biome excludes both reserved component layers from ordinary application
+lint/GritQL consumption: `ui/**` to avoid rewriting the owned registry
+implementation and `firebase/**` because ADR 0004 treats it as an immutable
+upstream reference. Firebase reference integrity is enforced separately by
+`tests/unit/firebase-reference.test.ts` and its SHA-256 manifest.
 
 ## Active GritQL guards
 
@@ -44,6 +49,7 @@ consumption to avoid rewriting registry-owned implementation details.
 | `canonical-import-aliases.grit` | canonical import aliases (@/components/ui, @/lib/utils, @/hooks) |
 | `no-inline-styles.grit` | no inline style={{ ... }} in application code |
 | `no-radix-imports.grit` | no direct @radix-ui/* imports (enforces Base UI ecosystem) |
+| `exported-hook-location.grit` | exported hooks outside `src/hooks/` must read a context (shadcn `useSidebar` pattern); generic hooks go in `src/hooks/` |
 
 ## `components.json` ownership
 

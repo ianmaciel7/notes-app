@@ -66,6 +66,12 @@ as the dependency chain provides a patched release.
 
 ## Current implementation note
 
-The current `dev` branch does not implement authentication, Firebase,
-Firestore, or user data persistence. Historical ADRs covering those systems are
-not active security architecture until explicitly re-adopted.
+The current `dev` branch includes Firebase/Firebase UI dependencies, local
+Auth/Firestore emulator configuration, and the immutable Firebase UI reference
+layer. It does not yet implement the application authentication layer,
+Firestore data access, or user data persistence.
+
+ADRs 0004–0008 are accepted decisions. Their Current State sections distinguish
+implemented groundwork from target behavior that is not yet built. Security
+reviews must not treat accepted-but-unimplemented behavior as an existing
+control.

@@ -1,40 +1,60 @@
-# 0006. Adopt FirebaseUI v7 Canonical Architecture and Resilient Auth Fallback
+# ADR 0006: Adopt FirebaseUI v7 Canonical Architecture and Resilient Auth Fallback
 
-> **Current state (2026-10-06): Deprecated on the current `dev` branch.**
-> The packages, modules, and runtime architecture described below are not
-> present in the current implementation. This ADR is retained as historical
-> context only. Re-adoption requires a new decision or an explicit status
-> change backed by implementation and tests.
+## Status
 
-- **Status:** Deprecated
-- **Date:** 2026-09-28
-- **Canonical Owner:** `ARCHITECTURE.md`
+Accepted (not yet implemented on `dev`)
 
-## Context and Problem Statement
+## Date
 
-We needed a resilient, standardized client authentication architecture capable of handling OAuth popup blocks, cross-origin iframe restrictions, and Firebase emulator environment limitations without user disruption or custom form state duplication.
+2026-09-28
 
-## Decision Outcome
+## Current State (2026-10-06)
 
-We adopted the modular FirebaseUI v7 (`@firebase-oss/ui-react` and `@firebase-oss/ui-core`) architecture with centralized provider initialization and resilient popup-to-redirect fallback. We wrap the application in `FirebaseUIProvider` via `AuthProvider` in `src/app/layout.tsx` and delegate authentication flows directly to canonical screen components (`SignInAuthScreen` and `SignUpAuthScreen` in `src/components/notes-app/`), avoiding custom form state duplication. When popup sign-in fails for a recoverable reason (`auth/popup-blocked`, `auth/popup-closed-by-user`, `auth/operation-not-supported-in-this-environment`, or the code-less `No matching frame` emulator iframe failure), client login automatically falls back to `signInWithRedirect` and `getRedirectResult`. Failures that cannot be recovered, including a failed redirect, are captured through `captureError` and surfaced as a translated error alert rather than swallowed.
+The decision is accepted, but not yet implemented on `dev`. Only the packages
+(`@firebase-oss/ui-react` 7.1.0, `@firebase-oss/ui-core` 7.1.0,
+`react-hook-form` 7.89.0, `@hookform/resolvers` 5.9.1) and the upstream reference
+components (including `redirect-error.tsx`) are present. `src/app/layout.tsx`
+does not mount `FirebaseUIProvider`, no application screens exist in
+`src/components/notes-app/`, and there is no popup-to-redirect fallback or
+`captureError` code. Treat the structure below as the target design.
 
-### Positive Consequences
+## Context
 
-- Eliminates auth flow failures caused by iframe blocks or popup blockers in emulator/local environments.
-- Centralizes auth provider setup inside `AuthProvider` without duplicating state management.
+The application requires a resilient, standardized client authentication architecture capable of handling OAuth popup blocks, cross-origin iframe restrictions, and Firebase emulator environment limitations without user disruption or custom form state duplication.
+
+Key requirements include:
+1. Handling third-party cookie restrictions, aggressive popup blockers, and emulator iframe incompatibilities gracefully.
+2. Avoiding duplicate state machines and ad-hoc form error handling across auth screens.
+3. Providing clear error reporting and user feedback when authentication attempts encounter non-recoverable failures, including dedicated display via `redirect-error`.
+4. Supporting multi-factor authentication (MFA) resilience for SMS and TOTP enrollment/assertion.
+5. Standardizing form validation using `react-hook-form` and `@hookform/resolvers` alongside FirebaseUI v7.
+
+## Decision
+
+We adopt the modular FirebaseUI v7 (`@firebase-oss/ui-react` and `@firebase-oss/ui-core`) architecture with centralized provider initialization, resilient popup-to-redirect fallback, and standardized error and form integration.
+
+Key architectural rules and structure:
+- **Centralized Provider Initialization**: The application root layout wraps child trees in `FirebaseUIProvider` via `AuthProvider` in `src/app/layout.tsx`.
+- **Modular Ecosystem & Form Validation**: State management is coordinated between `@firebase-oss/ui-core` (7.1.0) and `@firebase-oss/ui-react` (7.1.0). Auth forms leverage `react-hook-form` with schema validation from `@hookform/resolvers`.
+- **Canonical Screen & Form Delegation**: Authentication flows delegate directly to canonical screen components (`SignInAuthScreen`, `SignUpAuthScreen`, `EmailLinkAuthScreen`, `ForgotPasswordAuthScreen`, `MultiFactorAuthAssertionScreen`, `MultiFactorAuthEnrollmentScreen`, `PhoneAuthScreen`, `OAuthScreen` in `src/components/notes-app/`), avoiding custom form state duplication.
+- **Resilient Fallback Handling**: When popup sign-in fails due to recoverable conditions (`auth/popup-blocked`, `auth/popup-closed-by-user`, `auth/operation-not-supported-in-this-environment`, or the code-less emulator iframe failure), client authentication automatically falls back to `signInWithRedirect` and `getRedirectResult`.
+- **Dedicated Redirect Error Management**: Redirect error flows are captured and rendered via the `@firebase/redirect-error` component (`redirect-error.tsx`), ensuring clear diagnostics and user messaging when redirect operations encounter cross-origin or network exceptions.
+- **Provider Theming Continuity**: Theming rules in `src/app/globals.css` provide consistent visual styling across light and dark modes for all provider buttons (`button[data-provider][data-themed]`), ensuring no visual jarring during popup-to-redirect transitions.
+- **Error Observability**: Non-recoverable failures are captured via `captureError` and surfaced as translated error alerts rather than being silently ignored.
+- **Architectural Alignment**: Complements the component boundary in [ADR 0004](./0004-adopt-firebase-ui-components.md), emulator architecture in [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md), and system specifications in [`ARCHITECTURE.md`](../../ARCHITECTURE.md).
+
+## Consequences
+
+### Positive Outcomes
+
+- Eliminates authentication flow failures caused by iframe blocks or popup blockers in emulator and local environments.
+- Centralizes authentication provider setup inside `AuthProvider` without duplicating state management.
 - Leverages canonical FirebaseUI v7 screen components maintained under `src/components/notes-app/`.
+- Integrates dedicated `redirect-error.tsx` handling for robust user feedback following redirect attempts.
+- Ensures form validation robustness across all 11 authentication forms using `react-hook-form` and `@hookform/resolvers`.
+- Preserves consistent provider button branding in `src/app/globals.css` across dark and light modes.
 
-### Negative Consequences
+### Trade-offs and Considerations
 
 - Redirect fallback flow causes a full page reload, which must be handled gracefully by the client router.
-
-## Architectural Rules and Invariants
-
-- `AuthProvider` must initialize `FirebaseUIProvider` at the application root layout.
-- Authentication operations must implement resilient fallback logic from popup to redirect authentication methods.
-
-## Related References and Control Documents
-
-- Architecture decision context: [`ARCHITECTURE.md`](../../ARCHITECTURE.md), Sections 3–4.
-- Vendor component boundary: see [ADR 0004](./0004-adopt-firebase-ui-components.md).
-- Authentication foundation: see [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md).
+- Requires maintaining form schema resolvers in sync with `@hookform/resolvers` updates.

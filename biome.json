@@ -15,7 +15,8 @@
       "!dist",
       "!build",
       "!.agents",
-      "!src/components/ui"
+      "!src/components/ui",
+      "!src/components/firebase"
     ]
   },
   "formatter": {
@@ -94,7 +95,8 @@
     "./grit/shadcn/overlay-stacking.grit",
     "./grit/shadcn/canonical-import-aliases.grit",
     "./grit/shadcn/no-inline-styles.grit",
-    "./grit/shadcn/no-radix-imports.grit"
+    "./grit/shadcn/no-radix-imports.grit",
+    "./grit/shadcn/exported-hook-location.grit"
   ],
   "assist": {
     "actions": {
