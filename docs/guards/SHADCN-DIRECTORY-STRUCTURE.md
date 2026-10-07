@@ -27,7 +27,9 @@ src/
 * **Source**: Generated and managed via shadcn CLI (`base-nova` style with Base UI primitives).
 * **Ownership**: This directory is an **owned implementation/registry layer**.
   * It is intentionally excluded from ordinary application linters (`!src/components/ui` in `biome.json`) to preserve registry compatibility.
-  * Primitives here must never import domain code or application routes (`.dependency-cruiser.cjs`).
+  * Primitives here must never import domain code or application routes. This
+    is an architecture/review invariant while this directory remains excluded
+    from the Dependency Cruiser graph.
 
 ### 2. `src/components/firebase/` (Upstream Reference Layer)
 
@@ -116,7 +118,10 @@ Boundary integrity is verified mechanically across multiple layers:
 1. **Canonical Import Aliases (`canonical-import-aliases.grit`)**:
    Enforces that application consumers import primitives and helpers using their canonical aliases (`@/components/ui`, `@/lib/utils`, `@/hooks`) rather than deep relative paths (`../../components/ui/*`).
 2. **Dependency Cruiser (`.dependency-cruiser.cjs`)**:
-   Ensures generic UI primitives in `src/components/ui` do not form circular dependencies or import application domain modules.
+   Enforces dependency rules on the source it cruises, but currently excludes
+   `src/components/ui/**` from traversal. UI-to-application dependency
+   direction is therefore an architecture/review invariant rather than a
+   mechanically enforced Dependency Cruiser guarantee.
 3. **Biome Guard Boundary**:
    Excludes both `src/components/ui/**` (owned implementation) and
    `src/components/firebase/**` (immutable upstream reference) from ordinary

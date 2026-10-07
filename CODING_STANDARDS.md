@@ -160,11 +160,18 @@ See [TESTING.md](./TESTING.md).
 
 ## 9. Module boundaries
 
-Dependency Cruiser enforces:
+Dependency Cruiser enforces graph rules on the source it currently cruises,
+including:
 
 - no circular dependencies;
 - no unresolved dependencies;
-- UI primitives cannot depend on domain components or app routing.
+- allowed-file rules for files directly under `src/`.
+
+`src/components/ui/**` is currently excluded from the Dependency Cruiser
+graph to avoid traversing registry-managed implementation details. The rule
+that UI primitives must not depend on domain components or app routing remains
+an architecture/review invariant unless that exclusion is removed or replaced
+with a dedicated validation pass.
 
 Avoid speculative service/repository layers until an actual domain seam exists.
 
