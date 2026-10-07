@@ -8,7 +8,9 @@ or {
   } where {
     $item_name <: r"SelectLabel",
     not $item <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<SelectGroup(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<SelectGroup"
+      }
     }
   },
   or {
@@ -17,7 +19,9 @@ or {
   } where {
     $item_name <: r"(?:DropdownMenuItem|DropdownMenuLabel)",
     not $item <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<DropdownMenuGroup(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<DropdownMenuGroup"
+      }
     }
   },
   or {
@@ -26,7 +30,9 @@ or {
   } where {
     $item_name <: r"(?:ContextMenuItem|ContextMenuLabel)",
     not $item <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<ContextMenuGroup(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<ContextMenuGroup"
+      }
     }
   },
   or {
@@ -35,7 +41,9 @@ or {
   } where {
     $item_name <: r"MenubarItem",
     not $item <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<MenubarGroup(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<MenubarGroup"
+      }
     }
   },
   or {
@@ -44,7 +52,9 @@ or {
   } where {
     $item_name <: r"CommandItem",
     not $item <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<CommandGroup(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<CommandGroup"
+      }
     }
   },
   or {
@@ -53,7 +63,9 @@ or {
   } where {
     $item_name <: r"(?:ComboboxItem|ComboboxLabel)",
     not $item <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<ComboboxGroup(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<ComboboxGroup"
+      }
     }
   }
 } where {

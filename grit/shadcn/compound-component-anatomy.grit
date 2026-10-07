@@ -8,7 +8,9 @@ or {
   } where {
     $part_name <: r"AccordionItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Accordion(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Accordion"
+      }
     }
   },
   or {
@@ -17,7 +19,9 @@ or {
   } where {
     $part_name <: r"(?:AccordionTrigger|AccordionContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<AccordionItem(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<AccordionItem"
+      }
     }
   },
   or {
@@ -26,7 +30,9 @@ or {
   } where {
     $part_name <: r"(?:AlertTitle|AlertDescription|AlertAction)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Alert(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Alert"
+      }
     }
   },
   or {
@@ -35,7 +41,9 @@ or {
   } where {
     $part_name <: r"BreadcrumbList",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Breadcrumb(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Breadcrumb"
+      }
     }
   },
   or {
@@ -44,7 +52,9 @@ or {
   } where {
     $part_name <: r"BreadcrumbItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<BreadcrumbList(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<BreadcrumbList"
+      }
     }
   },
   or {
@@ -53,7 +63,9 @@ or {
   } where {
     $part_name <: r"(?:ButtonGroupSeparator|ButtonGroupText)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<ButtonGroup(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<ButtonGroup"
+      }
     }
   },
   or {
@@ -62,7 +74,9 @@ or {
   } where {
     $part_name <: r"(?:CarouselContent|CarouselPrevious|CarouselNext)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Carousel(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Carousel"
+      }
     }
   },
   or {
@@ -71,7 +85,9 @@ or {
   } where {
     $part_name <: r"CarouselItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<CarouselContent(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<CarouselContent"
+      }
     }
   },
   or {
@@ -80,7 +96,9 @@ or {
   } where {
     $part_name <: r"(?:EmptyHeader|EmptyTitle|EmptyDescription|EmptyContent|EmptyMedia)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Empty(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Empty"
+      }
     }
   },
   or {
@@ -89,7 +107,9 @@ or {
   } where {
     $part_name <: r"(?:FieldLabel|FieldDescription|FieldError|FieldContent|FieldTitle)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Field(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Field"
+      }
     }
   },
   or {
@@ -98,7 +118,9 @@ or {
   } where {
     $part_name <: r"(?:ItemMedia|ItemContent|ItemActions|ItemTitle|ItemDescription|ItemHeader|ItemFooter)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Item(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Item"
+      }
     }
   },
   or {
@@ -107,7 +129,9 @@ or {
   } where {
     $part_name <: r"NavigationMenuList",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<NavigationMenu(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<NavigationMenu"
+      }
     }
   },
   or {
@@ -116,7 +140,9 @@ or {
   } where {
     $part_name <: r"NavigationMenuItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<NavigationMenuList(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<NavigationMenuList"
+      }
     }
   },
   or {
@@ -125,7 +151,9 @@ or {
   } where {
     $part_name <: r"(?:NavigationMenuTrigger|NavigationMenuContent|NavigationMenuLink)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<NavigationMenuItem(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<NavigationMenuItem"
+      }
     }
   },
   or {
@@ -134,7 +162,9 @@ or {
   } where {
     $part_name <: r"PaginationContent",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Pagination(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Pagination"
+      }
     }
   },
   or {
@@ -143,7 +173,9 @@ or {
   } where {
     $part_name <: r"PaginationItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<PaginationContent(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<PaginationContent"
+      }
     }
   },
   or {
@@ -152,7 +184,9 @@ or {
   } where {
     $part_name <: r"(?:PaginationLink|PaginationEllipsis|PaginationNext|PaginationPrevious)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<PaginationItem(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<PaginationItem"
+      }
     }
   },
   or {
@@ -161,7 +195,9 @@ or {
   } where {
     $part_name <: r"RadioGroupItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<RadioGroup(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<RadioGroup"
+      }
     }
   },
   or {
@@ -170,7 +206,9 @@ or {
   } where {
     $part_name <: r"(?:TableHeader|TableBody|TableFooter|TableCaption)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Table(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Table"
+      }
     }
   },
   or {
@@ -179,7 +217,9 @@ or {
   } where {
     $part_name <: r"TableRow",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<(?:TableHeader|TableBody|TableFooter)(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<(?:TableHeader|TableBody|TableFooter)"
+      }
     }
   },
   or {
@@ -188,7 +228,9 @@ or {
   } where {
     $part_name <: r"(?:TableHead|TableCell)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<TableRow(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<TableRow"
+      }
     }
   },
   or {
@@ -197,7 +239,9 @@ or {
   } where {
     $part_name <: r"ToggleGroupItem",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<ToggleGroup(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<ToggleGroup"
+      }
     }
   },
   or {
@@ -206,7 +250,9 @@ or {
   } where {
     $part_name <: r"(?:MessageContent|MessageHeader|MessageFooter|MessageAvatar)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Message(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Message"
+      }
     }
   },
   or {
@@ -215,7 +261,9 @@ or {
   } where {
     $part_name <: r"(?:BubbleContent|BubbleReactions)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Bubble(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Bubble"
+      }
     }
   },
   or {
@@ -224,7 +272,9 @@ or {
   } where {
     $part_name <: r"(?:AttachmentMedia|AttachmentContent|AttachmentTitle|AttachmentDescription|AttachmentActions|AttachmentAction|AttachmentTrigger)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Attachment(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Attachment"
+      }
     }
   },
   or {
@@ -233,7 +283,9 @@ or {
   } where {
     $part_name <: r"(?:MarkerIcon|MarkerContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Marker(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Marker"
+      }
     }
   },
   or {
@@ -242,7 +294,9 @@ or {
   } where {
     $part_name <: r"(?:MessageScrollerViewport|MessageScrollerContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<MessageScroller(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<MessageScroller"
+      }
     }
   },
   or {
@@ -251,7 +305,9 @@ or {
   } where {
     $part_name <: r"(?:ComboboxInput|ComboboxList|ComboboxClear|ComboboxEmpty)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Combobox(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Combobox"
+      }
     }
   },
   or {
@@ -260,7 +316,9 @@ or {
   } where {
     $part_name <: r"MenubarMenu",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Menubar(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Menubar"
+      }
     }
   },
   or {
@@ -269,7 +327,9 @@ or {
   } where {
     $part_name <: r"(?:MenubarTrigger|MenubarContent)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<MenubarMenu(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<MenubarMenu"
+      }
     }
   },
   or {
@@ -278,7 +338,9 @@ or {
   } where {
     $part_name <: r"(?:InputOTPGroup|InputOTPSlot|InputOTPSeparator)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<InputOTP(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<InputOTP"
+      }
     }
   },
   or {
@@ -287,7 +349,9 @@ or {
   } where {
     $part_name <: r"(?:ResizablePanel|ResizableHandle)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<ResizablePanelGroup(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<ResizablePanelGroup"
+      }
     }
   },
   or {
@@ -296,7 +360,9 @@ or {
   } where {
     $part_name <: r"ScrollBar",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<ScrollArea(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<ScrollArea"
+      }
     }
   },
   or {
@@ -305,7 +371,9 @@ or {
   } where {
     $part_name <: r"(?:QuestionnaireItem|QuestionnaireProgress)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<Questionnaire(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<Questionnaire"
+      }
     }
   },
   or {
@@ -314,7 +382,9 @@ or {
   } where {
     $part_name <: r"(?:QuestionnaireTitle|QuestionnaireDescription|QuestionnaireOptions|QuestionnaireOption)",
     not $part <: within JsxElement() as $parent where {
-      $parent <: r"(?s)^\\s*<QuestionnaireItem(?:\s|>)"
+      $parent <: contains JsxOpeningElement(name=$parent_name) where {
+        $parent_name <: r": r"(?s)^\\s*<QuestionnaireItem"
+      }
     }
   }
 } where {
