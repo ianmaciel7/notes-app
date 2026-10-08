@@ -43,7 +43,7 @@ invent a new file when an existing source of truth covers the topic.
 | A code rule a tool could check | See "Prose or enforcement?" below | Enforce first, document second. |
 | A rule every agent must follow, long or topic-scoped | `.agents/rules/<topic>.md` | Then `agents sync`. |
 | A rule every agent must follow, short and core | `AGENTS.md` | Never edit `CLAUDE.md`; it only imports `AGENTS.md`. |
-| A reusable multi-step procedure | `.agents/skills/<name>/SKILL.md` | See `/skill-guide`, `/writing-for-agents`. Local skills are not in `skills-lock.json`. |
+| A reusable multi-step procedure | `.agents/skills/<name>/SKILL.md` | See "Saving through a skill" below, `/skill-guide`, `/writing-for-agents`. Local skills are not in `skills-lock.json`. |
 | Research findings with sources | File produced by `/research` | |
 | Where the current session stands, for a new session or tool | `/handoff` file | Portable and temporary, not a source of truth. |
 | User preference, working style, or feedback to Claude | Claude auto-memory (`memory/` directory in the Claude project folder, plus its `MEMORY.md` index) | Claude-only: never the only home of a fact other agents also need. One fact per file, typed `user`, `feedback`, `project` or `reference`; add a one-line pointer to `MEMORY.md`; update an existing memory instead of adding a duplicate. If other tools need it too, use `.agents/rules/` instead. |
@@ -79,6 +79,33 @@ prose in `CODING_STANDARDS.md` (what `/code-review` enforces).
 Never weaken a check or add a suppression to make something pass; that is not
 "saving" anything.
 
+## Saving through a skill
+
+A skill is the right home when the information is a **procedure someone will
+run again**: ordered steps, commands, and the traps found the first time. It is
+read by every tool that loads `.agents/skills/`, and it is committed, so it
+survives machines and sessions.
+
+| If it is... | It belongs in | Not in |
+| --- | --- | --- |
+| Steps to repeat (a git recovery, a release, a migration, a debugging loop) | A skill | A memory or Serena note |
+| A fact or rule ("X is forbidden", "this table means Y") | The owning document (see the routing table) | A skill |
+| A preference about how the user works with Claude | Claude auto-memory | A skill |
+| Where a symbol lives or how modules connect | Nowhere; query Serena or graphify again | Any file |
+
+To save through a skill:
+
+1. Grep `.agents/skills/` for an existing skill on the topic and extend it
+   instead of adding a near-duplicate.
+2. Create `.agents/skills/<name>/SKILL.md` with `name` matching the directory
+   and a `description` that states exactly when to trigger it. Write it in
+   English (`.agents/rules/language.md`) and keep it narrow, with one outcome.
+3. Record the destructive or irreversible steps and the confirmation they need;
+   include the verification command for each step.
+4. Add the name to the list in `TOOLING.md` section 8.3, then run
+   `pnpm run verify:agents` (and `agents sync` if rules changed).
+5. Do not copy the same steps into a memory; link to the skill instead.
+
 ## What the code-intelligence tools are for
 
 - **graphify** (`graphify-out/`) and **Serena** (`.serena/`) are read tools.
@@ -86,6 +113,8 @@ Never weaken a check or add a suppression to make something pass; that is not
   where something already lives before choosing a home.
 - `graphify-out/` is generated and git-ignored: never save facts there. After
   large structural changes, rebuild it with `/graphify`.
+- Use them to decide *where* something lives, never as the place to keep it. The
+  when-to-use table is in `TOOLING.md` section 8.4.
 - Serena memories are machine-local scratch notes. Anything other people or
   other tools need goes to a committed file.
 

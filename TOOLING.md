@@ -214,6 +214,22 @@ enables `context7` and disables `fetch`, `filesystem`, `git`, `github`,
 | Fallow cache | `.fallow/` | Cache for the Fallow audit |
 | Issue tracker | `.scratch/` | Local markdown issues (see `docs/agents/issue-tracker.md`) |
 
+When to use each code-intelligence tool (rule:
+[`token-economy.md`](./.agents/rules/token-economy.md)):
+
+| Question | Use | Do not use for |
+| --- | --- | --- |
+| Where is symbol X defined, what does it contain, who references it? | Serena (`find_symbol`, `get_symbols_overview`, `find_referencing_symbols`) | Reading a whole file to find one function; storing project facts |
+| How do modules relate, what depends on what, what is the path between A and B? | graphify (`query_graph`, `get_neighbors`, `shortest_path`, or the CLI `graphify explain\|path\|query`) | Exact symbol bodies (use Serena); anything that must be current to the minute |
+| Is a library or SDK API what I remember? | Context7 | Project-specific facts |
+| The answer needs many files or an unknown location | A `research` subagent | Single-symbol lookups |
+
+Both are read tools backed by git-ignored, machine-local state. `graphify-out/`
+is generated and is rebuilt with `/graphify`; never edit it by hand. `.serena/`
+holds a cache and optional scratch memories; a fact other agents or machines
+need must live in a committed file or a skill (see the `save` skill). If either
+MCP server fails to connect, fall back to `rg` and targeted reads and say so.
+
 ## 9. Machine-level CLIs
 
 Verified on 2026-10-07:

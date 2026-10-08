@@ -8,10 +8,13 @@ Enforce token-efficient code inspection, architecture discovery, and verificatio
 1. **Symbol-First Code Inspection (Serena MCP)**:
    - When inspecting function implementations, types, or declarations, use Serena MCP (`find_symbol`, `get_symbols_overview`, `find_referencing_symbols`) before reading whole source files.
    - Avoid executing repetitive `view_file` calls across large multi-hundred line files when only a specific function or type is needed.
+   - Serena is a read tool. Do not store project facts, procedures, or decisions in `.serena/memories/`; they are machine-local. Save them through the `save` skill.
 
 2. **Architecture Discovery (Graphify MCP)**:
    - Use Graphify MCP (`query_graph`, `get_neighbors`, `shortest_path`) to analyze cross-module dependencies, relationships, and caller hierarchies.
    - Do not manually crawl imports across multiple directories when answering architectural questions.
+   - `graphify-out/` is generated and can be stale after large changes: rebuild it with `/graphify` before trusting it, and never write facts into it.
+   - If Serena or Graphify fails to connect, fall back to `rg` and targeted reads and say so.
 
 3. **Targeted Verification During Development**:
    - During code iteration, use targeted checks (`pnpm run verify:changed`, `pnpm run test:changed`, `pnpm run lint:changed`) to test and lint only modified files.
