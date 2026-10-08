@@ -29,7 +29,7 @@ Include:
 
 ### Server boundaries
 
-When Server Actions, Route Handlers, authentication, or persistence are added:
+Server Actions, Route Handlers, authentication, and future persistence must:
 
 - validate all external input at runtime;
 - authenticate at the server operation boundary;
@@ -66,10 +66,13 @@ as the dependency chain provides a patched release.
 
 ## Current implementation note
 
-The current `dev` branch includes Firebase/Firebase UI dependencies, local
-Auth/Firestore emulator configuration, a password authentication flow, and a
-server-only Firebase session boundary. Firestore data access and user data
-persistence are not yet implemented.
+The current `dev` branch includes Firebase/Firebase UI, Auth Emulator flows
+for password, email link, phone/SMS, Google OAuth redirect, and SMS MFA,
+and server-only, revocation-checked Firebase session cookies. Sign-out
+requires a successful same-origin server-session removal before the client
+signs out; a failed request displays a retryable error instead of pretending
+that the session ended. The Firestore emulator is configured, but application
+data access and user data persistence are not implemented.
 
 ADRs 0004–0008 are accepted decisions. Their Current State sections distinguish
 implemented groundwork from target behavior that is not yet built. Security

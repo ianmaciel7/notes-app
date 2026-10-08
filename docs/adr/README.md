@@ -28,6 +28,33 @@ Check it and the source tree before treating an accepted ADR as built.
 | [0007](./0007-adopt-cookie-based-next-intl-with-firebase-sync.md) | next-intl + Firebase locale sync | Accepted | Partially implemented | 2026-09-28 |
 | [0008](./0008-adopt-native-firebase-firestore-with-persistent-local-cache.md) | Firestore persistent local cache | Accepted | Not started | 2026-09-29 |
 
+## Source review — 2026-10-07
+
+All eight records were reconciled against available files on the remote
+`dev` branch. The original decision dates are retained; the
+`Current State` sections describe what is present now, not what was
+envisioned when each decision was made.
+
+- **0001–0003:** framework, Base UI/shadcn, and Typeset foundations are
+  present in configuration and implementation files.
+- **0004:** the 30 Firebase UI reference files are tracked by the immutable
+  baseline manifest. This does not enable 30 different sign-in flows.
+- **0005–0006:** the local Auth Emulator architecture, server session
+  boundary, redirect-only OAuth, and application-owned auth components
+  are present. Server-session-first logout and associated regression tests
+  are documented. Production identity-provider behavior is not certified.
+- **0007:** locale negotiation and Firebase UI translation synchronization
+  exist, but full application localization and cross-device preference
+  sync are unfinished.
+- **0008:** Firestore emulator configuration exists, but the Firestore
+  client/data layer and persistent cache are **not implemented**.
+
+**Verification level:** source inspection only for this documentation update.
+No local dependency installation, Biome, TypeScript, Vitest, Playwright, or
+Next.js production build was executed. The CI result was not established.
+The words *Implemented* and *Partially implemented* indicate the documented
+source state, not a new claim that all quality gates passed.
+
 ## Current architecture
 
 For current implementation truth, read:

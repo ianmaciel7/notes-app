@@ -14,9 +14,10 @@ Partially implemented
 
 ## Current State (2026-10-07)
 
-`next-intl` is configured without locale URL prefixes and the three message
-catalogs exist. The revised decision below is implemented on `dev` for these
-parts (unit-tested; no production build has been run, see below):
+**Implementation: Partially implemented (source-confirmed).**
+`next-intl` is configured without locale URL prefixes, and the `en`,
+`pt-BR`, and `es` message catalogs are present. The following foundations
+exist in `dev`, with unit tests committed but not rerun for this review:
 
 - `src/i18n/request.ts` resolves the locale as `NEXT_LOCALE` cookie, then
   `Accept-Language` (`negotiateLocale` / `matchLocale` in
@@ -49,11 +50,31 @@ Not implemented:
 - Firestore-backed profile persistence and a user-facing locale picker that
   calls `setLocalePreference`.
 - Localized form-validation messages.
-- Verification with a production build: `next build` could not load
-  `next.config.ts` in the working environment (`next-intl/plugin` requires
-  `@swc/core`, whose native binding fails to load on the development machine:
-  `ERR_SWC_NATIVE_CACHE`, cache root ACL).
-  Run `next build --debug-prerender` to confirm no blocking-prerender errors.
+- A confirmed production build with Cache Components: a previously documented
+  local attempt failed while loading `next.config.ts` because a native
+  `@swc/core` binding was unavailable (`ERR_SWC_NATIVE_CACHE`).
+  That is an environment failure, not proof of valid prerender behavior.
+  Re-run `pnpm run build` and `next build --debug-prerender` on a working
+  checkout before marking this decision fully verified.
+
+### Review evidence and next steps (2026-10-07)
+
+- `src/i18n/request.ts` and `src/lib/i18n/config.ts` provide server locale
+  resolution, while `src/lib/i18n/actions.ts` writes the explicit locale
+  cookie. `src/lib/i18n/client.ts` and `firebase-ui-locale.ts` mirror locale
+  into Firebase Auth/Firebase UI. `src/app/layout.tsx` uses a
+  `beforeInteractive` language script.
+- `tests/unit/i18n-config.test.ts` and `i18n-client.test.ts` provide
+  regression coverage in source; their success was **not** established
+  during this ADR-only review.
+- Application-auth cards currently use the Firebase UI
+  `useTranslation` hook, not app-owned `next-intl` strings. This is only
+  **library UI localization**, not complete localization of forms, validation,
+  navigation, and the study workflow.
+- Next deliverables: a visible locale picker, translations for application-owned
+  text and validation, and Firestore-backed cross-device preferences once
+  [ADR 0008](./0008-adopt-native-firebase-firestore-with-persistent-local-cache.md)
+  has an implemented data layer.
 
 ## Context
 

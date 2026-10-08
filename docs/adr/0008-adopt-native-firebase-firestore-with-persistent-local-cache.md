@@ -12,14 +12,29 @@ Not started
 
 2026-09-29
 
-## Current State (2026-10-06)
+## Current State (2026-10-07)
 
-The decision is accepted, but only its groundwork exists on `dev`: `firebase`
-12.19.0 is installed, `allowBuilds` covers `protobufjs` and `@firebase/util`, and
-`firebase.json` configures the Firestore emulator (`127.0.0.1:8080`). Not yet
-implemented: `src/lib/firebase/firestore.ts` (the `src/lib/firebase/`
-directory does not exist yet), the persistent local cache initialization, and
-the emulator connection logic. Treat the structure below as the target design.
+**Implementation: Not started (configuration groundwork only).**
+`package.json` declares `firebase` ^12.19.0,
+`pnpm-workspace.yaml` allows scripts for `protobufjs` and
+`@firebase/util`, and `firebase.json` configures the Firestore
+emulator at `127.0.0.1:8080`. The `src/lib/firebase/` directory
+already exists **for Authentication**, not for Firestore.
+
+Still absent from `dev`: `src/lib/firebase/firestore.ts`,
+`initializeFirestore` with `persistentLocalCache`, an idempotent
+`connectFirestoreEmulator` boundary, application Firestore data access,
+Firestore security rules/tests, and offline/multi-tab lifecycle tests.
+The existing `emulator`, `emulators:seed`, and `test:e2e`
+package scripts run the Auth Emulator only.
+
+**Implementation order:** add the browser/server Firestore initialization
+boundary and emulator configuration, then validate IndexedDB persistence,
+multi-tab behavior, security rules, and cache cleanup on user changes before
+adding study-domain data. The `Decision` and `Consequences` below describe
+a **target architecture**, not code that is already deployed.
+No Firestore tests, production build, or CI checks were executed during this
+documentation review.
 
 ## Context
 

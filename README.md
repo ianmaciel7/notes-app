@@ -11,20 +11,25 @@ study and assessment workflows rather than a generic notes product.
 The `dev` branch currently contains the application foundation:
 
 - Next.js 16.3.8 App Router with React Compiler enabled.
+- Local Firebase Authentication, server-verified sessions, and protected routes.
+- Cookie-based locale negotiation for `en`, `pt-BR`, and `es`; Firebase UI
+  translations are synchronized after mount.
 - React 19.2.8 and TypeScript 5.9.
 - Tailwind CSS v4 and shadcn Base Nova / Base UI.
 - A project-owned UI primitive layer in `src/components/ui/**`.
 - Biome 2.4.2 with Next.js, React, project, types, test, and Playwright domains.
 - Custom GritQL guards for Next.js App Router migration rules and shadcn
   consumption rules.
-- Vitest and Playwright smoke coverage.
+- Vitest unit and regression tests, including authentication and locale
+  behavior, plus Playwright authentication E2E coverage.
 - CI gates for linting, type generation, tests, architecture, spelling, unused
   code, duplication, code health, security audit, production build, bundle
   size, and E2E tests.
 
-Domain features, authentication, persistence, localization, and assessment
-workflows are not yet implemented on the current `dev` branch unless stated
-by a future product spec or ADR.
+The exam domain and assessment workflows are not yet implemented. Firebase
+Authentication and the foundational localization plumbing are present, but
+Firestore application access, user-facing locale selection, cross-device
+preference sync, and full localization remain planned. See ADRs 0005-0008.
 
 ## Prerequisites
 

@@ -46,10 +46,14 @@ Current core versions:
 ```text
 src/
   app/
+    (public)/             # sign-in, sign-up, recovery, email-link, phone
+    (protected)/          # dashboard and settings
+    api/auth/session/      # server cookie exchange and sign-out
     globals.css
     layout.tsx
     page.tsx
     typeset.css
+  proxy.ts                 # optimistic protected-route redirect
   i18n/
     request.ts              # cookie-driven next-intl request configuration
   messages/                 # en, pt-BR, and es message catalogs
@@ -61,6 +65,8 @@ src/
     use-mobile.ts
     use-*.ts            # state/form logic extracted from src/components/notes-app/
   lib/
+    firebase/               # client, admin, server identity, session
+    i18n/                   # locale negotiation and client synchronization
     utils.ts
 
 tests/
@@ -69,6 +75,10 @@ tests/
   unit/
     firebase-reference.test.ts
     firebase-reference.manifest.sha256
+    i18n-client.test.ts
+    i18n-config.test.ts
+    locale-lang-script.test.ts
+    sign-out-button.test.tsx
     smoke.test.ts
 
 grit/
@@ -100,8 +110,9 @@ are never persisted. The root layout renders a static `<html lang>` and a
 `beforeInteractive` script sets it from the same rules before hydration (it must
 not read cookies under Cache Components). Firebase Auth mirrors the resolved
 locale in `auth.languageCode`, and Firebase UI text is localized after mount
-through `@firebase-oss/ui-translations`. Application-owned auth text, a locale
-picker, and Firestore preference sync are not implemented yet (ADR 0007).
+through `@firebase-oss/ui-translations`. Auth cards use Firebase UI translations through their translation hooks, but
+full localization of application-owned strings, a locale picker, and Firestore
+preference sync are not implemented yet (ADR 0007).
 
 ## 3. Next.js architecture
 

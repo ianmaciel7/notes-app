@@ -12,11 +12,19 @@ Implemented
 
 2026-10-05
 
-## Current State (2026-10-06)
+## Current State (2026-10-07)
 
-This ADR remains active. The current implementation is verified on `dev`.
-For exact package versions, guard ownership, and CI behavior, use the current
-root documentation rather than historical command output in this record.
+**Implementation: Implemented (source-confirmed).**
+`src/app/typeset.css` provides the `.typeset` typography rules and is
+imported by `src/app/globals.css`. That global stylesheet defines the
+`.typeset-docs` preset and binds typography tokens to the Geist font
+variables supplied by `src/app/layout.tsx`. The styling decision remains
+active for the exam-study platform.
+
+The source files were inspected, but visual rendering, typography
+regressions, and the production build were not rerun in this ADR review.
+Actual use of the typography classes on future exam-content screens will
+need feature-specific UI tests and accessibility checks.
 
 ## Context
 

@@ -40,6 +40,20 @@ Not implemented: TOTP MFA (unsupported by the Auth Emulator, out of scope per
 ADR 0005) and the popup-then-redirect fallback this ADR originally proposed (see
 "Alternatives considered"). `captureError` is not used.
 
+### Review evidence and limitations (2026-10-07)
+
+- Auth cards delegate shared title, state, callback, and translation concerns
+  to `src/hooks/use-sign-in-card.ts`, `use-oauth-button.ts`, and
+  `use-translation.ts`. They continue to use Firebase UI translation
+  primitives rather than application-owned `next-intl` messages.
+- The sign-in route visibly renders the Google provider button.
+  Other provider components in `src/components/notes-app/` do **not**
+  establish that those OAuth providers are configured or E2E-tested.
+- The source and Playwright test definitions were inspected, but this review
+  did not run browser tests or verify production OAuth configuration.
+  Redirect-only remains the implemented strategy; popup fallback is not
+  a pending requirement.
+
 ## Context
 
 The application requires a standardized client authentication architecture that

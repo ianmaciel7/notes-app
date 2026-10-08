@@ -7,11 +7,17 @@ expectations for future features.
 
 ### Vitest
 
-Current source smoke coverage:
+Examples of current coverage (not an exhaustive file inventory):
 
-- `tests/unit/smoke.test.ts`
-- `tests/unit/firebase-reference.test.ts` (guards `src/components/firebase/`
-  against any change; see ADR 0004)
+- `tests/unit/smoke.test.ts` for the test runner.
+- `tests/unit/firebase-reference.test.ts` for the immutable Firebase UI
+  baseline (ADR 0004).
+- `tests/unit/i18n-client.test.ts`, `i18n-config.test.ts`, and
+  `locale-lang-script.test.ts` for locale negotiation and synchronization.
+- `tests/unit/sign-out-button.test.tsx` for server-session-first sign-out,
+  including rejected and unreachable session endpoints.
+- Server-session Route Handler tests and other authentication tests under
+  `tests/unit/` (see ADR 0005).
 
 Vitest runs in Happy DOM and scans `src/**/*.{test,spec}.{ts,tsx}` and `tests/**/*.{test,spec}.{ts,tsx}` (excluding `tests/e2e/**`).
 `src/components/ui/**` is excluded from project unit tests because that
@@ -31,9 +37,11 @@ pnpm run test:coverage
 
 ### Playwright
 
-Current E2E smoke coverage:
+Current authentication E2E coverage:
 
-- `tests/e2e/home.spec.ts`
+- `tests/e2e/home.spec.ts`, including password and email-link sign-in,
+  phone/SMS, Google Emulator redirect, SMS MFA, server-protected pages,
+  and accessibility audits (see ADR 0005).
 
 The configured project is Chromium. CI installs Chromium and runs the E2E suite
 after a successful production build and Size Limit check.

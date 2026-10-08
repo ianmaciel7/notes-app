@@ -11,6 +11,7 @@ docs/exec-plans/
   template.md
   active/
   completed/
+  superseded/
 ```
 
 ## Lifecycle
@@ -24,6 +25,8 @@ Draft -> In Progress -> Verification -> Completed
 ## Rules
 
 - Active plans describe work that is actually underway.
+- Superseded drafts are archived under `superseded/` with a dated
+  current-state note; their unchecked tasks are not an implementation report.
 - Completed plans are historical records and should not be rewritten to pretend
   their original environment matched today's repository.
 - If current architecture differs, add a current-state note instead.

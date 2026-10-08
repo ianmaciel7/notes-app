@@ -14,15 +14,23 @@ Implemented
 
 ## Current State (2026-10-07)
 
-Fully implemented on `dev`. Implemented: the `@firebase` registry in
-`components.json`; automatic discovery and vendoring of all 30 upstream
-components in `src/components/firebase/` as an immutable reference baseline via
-`pnpm dlx shadcn@latest add`; Biome and `tsconfig.check.json` exclusions on the
-reference directory; the SHA-256 manifest guard in `tests/unit/firebase-reference.test.ts`
-to detect unintended mutations; and `allowBuilds` for `@firebase/util` and
-`protobufjs` in `pnpm-workspace.yaml`. Installed versions:
-`firebase` 12.19.0, `@firebase-oss/ui-core` 7.1.0, `@firebase-oss/ui-react`
-7.1.0.
+**Implementation: Implemented (reference layer, source-confirmed).**
+`components.json` registers `@firebase`; the committed
+`src/components/firebase/` reference baseline has 30 entries in
+`tests/unit/firebase-reference.manifest.sha256`. The
+`firebase-reference.test.ts` integrity test checks hashes and file
+additions/deletions. `biome.json` and `tsconfig.check.json` exclude this
+upstream reference layer from project-specific checks. `pnpm-workspace.yaml`
+allows build scripts for `@firebase/util` and `protobufjs`.
+`package.json` declares `firebase` ^12.19.0 and Firebase UI core/react
+^7.1.0; exact installed versions depend on the lockfile.
+
+**Scope clarification:** these 30 files are vendored **references**, not
+30 distinct authentication flows enabled in the application.
+`src/components/notes-app/` owns active user-facing composition, with
+actual supported flows documented in [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md).
+This review checked the manifest and test source but did not execute the test
+or re-run the upstream registry installer.
 
 ## Context
 

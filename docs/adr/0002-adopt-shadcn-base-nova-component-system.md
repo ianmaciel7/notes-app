@@ -12,11 +12,22 @@ Implemented
 
 2026-10-05
 
-## Current State (2026-10-06)
+## Current State (2026-10-07)
 
-This ADR remains active. The current implementation is verified on `dev`.
-For exact package versions, guard ownership, and CI behavior, use the current
-root documentation rather than historical command output in this record.
+**Implementation: Implemented (source-confirmed).**
+`components.json` configures `base-nova`, Base UI, Tailwind CSS variables,
+and the `@/components/ui` alias. `src/components/ui/button.tsx` uses
+`@base-ui/react/button`; `src/app/globals.css` applies pointer cursors
+to enabled buttons and button-role elements. The current toast primitive is
+`src/components/ui/toast.tsx` (Base UI), not a Sonner adapter.
+
+Application code composes the owned primitives; `src/components/ui/**`
+remains excluded from application-specific Biome/GritQL enforcement as
+documented in [Coding Standards](../../CODING_STANDARDS.md) and
+[shadcn guard coverage](../guards/SHADCN-GUARD-COVERAGE.md).
+The historical installation inventory below is not a guarantee that every
+originally listed file is still present (for example, `sonner.tsx` is absent).
+No browser accessibility or interaction test was rerun in this ADR review.
 
 ## Context
 

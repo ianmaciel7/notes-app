@@ -136,13 +136,18 @@ only fires from a workflow file on the default branch.
 
 | Item | Detail |
 | --- | --- |
-| CLI | `firebase` (machine-level) |
+| CLI | `firebase-tools` 15.0.0, pinned as a dev dependency |
 | Emulators | Auth `127.0.0.1:9099`, Firestore `127.0.0.1:8080`, UI `127.0.0.1:4000`, single-project mode (`firebase.json`) |
 | Project alias | `.firebaserc` |
 | Local state | `.firebase/` (logs, seeds) |
 | Java | Installed on the machine (OpenJDK) for the Firestore emulator |
 
-`package.json` has no emulator or seed scripts at this snapshot.
+`package.json` provides `emulator`, `emulators:seed`, and `test:e2e`.
+These commands currently start only the Auth Emulator; the Firestore emulator
+is configured in `firebase.json` but has not yet been incorporated into the
+application's test lifecycle. The emulator seed lives in `.firebase/seeds/`.
+See [ADR 0005](./docs/adr/0005-adopt-firebase-auth-with-local-emulator.md)
+for the supported authentication scenarios.
 
 ## 8. Agent tooling
 

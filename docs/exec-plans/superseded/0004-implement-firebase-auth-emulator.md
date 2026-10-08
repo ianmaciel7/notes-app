@@ -2,10 +2,17 @@
 
 ## Metadata
 
-- Status: Draft
+- Status: Superseded (historical draft)
 - Owner: BobBytes
 - Started: 2026-10-07
 - Last Updated: 2026-10-07
+
+> **Current-state note (2026-10-07):** This draft did not track the
+> implementation that subsequently appears on `dev`. Its unchecked boxes are
+> retained for historical accuracy and must not be read as pending tasks.
+> Authentication state and verified scope are documented in
+> [ADR 0005](../../adr/0005-adopt-firebase-auth-with-local-emulator.md).
+> This plan records no independently executed verification commands.
 
 ## 1. Objective
 
@@ -50,12 +57,12 @@ deterministically without Firebase cloud credentials or services.
 
 ## 3. Canonical context
 
-- [ADR 0005](../adr/0005-adopt-firebase-auth-with-local-emulator.md)
-- [ADR 0006](../adr/0006-adopt-firebase-ui-v7-and-auth-resilience.md)
-- [Architecture](../../ARCHITECTURE.md)
-- [Coding standards](../../CODING_STANDARDS.md)
-- [Testing strategy](../../TESTING.md)
-- [Firebase emulator configuration](../../firebase.json)
+- [ADR 0005](../../adr/0005-adopt-firebase-auth-with-local-emulator.md)
+- [ADR 0006](../../adr/0006-adopt-firebase-ui-v7-and-auth-resilience.md)
+- [Architecture](../../../ARCHITECTURE.md)
+- [Coding standards](../../../CODING_STANDARDS.md)
+- [Testing strategy](../../../TESTING.md)
+- [Firebase emulator configuration](../../../firebase.json)
 - [Firebase Authentication Emulator guide](https://firebase.google.com/docs/emulator-suite/connect_auth)
 - [Firebase Admin session-cookie guide](https://firebase.google.com/docs/auth/admin/manage-cookies)
 - [Next.js `cookies` reference](https://nextjs.org/docs/app/api-reference/functions/cookies)

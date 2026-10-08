@@ -12,11 +12,21 @@ Implemented
 
 2026-10-05
 
-## Current State (2026-10-06)
+## Current State (2026-10-07)
 
-This ADR remains active. The current implementation is verified on `dev`.
-For exact package versions, guard ownership, and CI behavior, use the current
-root documentation rather than historical command output in this record.
+**Implementation: Implemented (source-confirmed).** The `dev` branch retains
+Next.js 16.3.8, React 19.2.8, App Router, TypeScript, Tailwind CSS v4, and
+Biome 2.4.2. `next.config.ts` enables `reactCompiler`,
+`cacheComponents`, and `partialPrefetching`, and uses
+`tsconfig.check.json` for build-time type checking. `package.json`
+declares `pnpm@12.8.1`; `biome.json` contains the active lint and
+GritQL configuration.
+
+**Follow-up:** use [Tooling](../../TOOLING.md) and
+[Next.js guard coverage](../guards/NEXTJS-GUARD-COVERAGE.md) for
+current verification responsibilities. These settings were checked in source;
+the compiler, test suite, and CI were not rerun as part of this ADR review.
+Historical bootstrap commands below remain a record of the original decision.
 
 ## Context
 

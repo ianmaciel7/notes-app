@@ -37,6 +37,25 @@ and an E2E that follows the password-reset link (the E2E covers only the
 request). Treat any structure below that this section does not mention as
 target design.
 
+### Review evidence and limitations (2026-10-07)
+
+- The client uses `getFirebaseClient()`; the server verifies Firebase
+  session cookies in `src/lib/firebase/identity.ts`; protected pages call
+  `getCurrentIdentity()` instead of relying on proxy checks.
+- `src/lib/firebase/session-client.ts` rejects a failed
+  `DELETE /api/auth/session`. `src/hooks/use-sign-out-button.ts` then
+  attempts client sign-out only after the HTTP request succeeds; the button
+  exposes a retryable error, and `tests/unit/sign-out-button.test.tsx`
+  contains success and failure cases.
+- Server token revocation is **best-effort** and is not proof of global
+  sign-out: `revokeCurrentSession()` catches revocation failures before the
+  Route Handler deletes the caller's cookie. A successful DELETE confirms
+  cookie clearing, not successful revocation on other devices.
+- `tests/e2e/home.spec.ts` defines three Auth Emulator journeys; their
+  presence is not evidence that they passed in this documentation review.
+  Run `pnpm run verify:fast`, `pnpm run test:e2e`, and the GitHub CI
+  before considering the current branch verified.
+
 ### Implementation overview
 
 Routes, grouped by access in `src/app/`:
@@ -66,9 +85,12 @@ Session model:
   `/settings/*` to `/sign-in` when the cookie is missing. Authorization is
   decided by the pages, which call `verifySessionCookie(cookie, true)` in the
   server-only `src/lib/firebase/identity.ts`, so revoked cookies are rejected.
-- `DELETE /api/auth/session` applies the same origin check, best-effort revokes
-  the user's refresh tokens (so the cookie stops verifying everywhere), and then
-  clears the cookie. Revocation signs the user out on all devices.
+- `DELETE /api/auth/session` applies the same origin check, attempts to revoke
+  the user's refresh tokens, and clears the browser cookie. Revocation is
+  best-effort; only successful revocation invalidates other devices' cookies.
+  The sign-out button waits for a successful HTTP response before signing out
+  of the browser Firebase client and navigating away. Failed server logout
+  displays a retryable error instead of leaving an active cookie unnoticed.
 - After a successful session exchange the provider redirects to `/dashboard`,
   except when the user is already on a protected route (so `/settings` is not
   bounced).
@@ -143,7 +165,7 @@ matrix must be retained even after application flows are added.
 
 ## Context
 
-The exam-study platform foundation requires reliable local development, automated testing, and isolated user identity without external cloud dependencies, live network calls, or production credentials. The application must compose all 30 upstream Firebase UI components (from ADR 0004) into application-owned cards and forms using project-owned shadcn primitives.
+The exam-study platform foundation requires reliable local development, automated testing, and isolated user identity without external cloud dependencies, live network calls, or production credentials. The application composes the upstream Firebase UI reference components (ADR 0004) into application-owned cards and forms for supported flows, using project-owned shadcn primitives.
 
 Key requirements include:
 1. Hermetic local development environments capable of running fully offline.
@@ -154,7 +176,7 @@ Key requirements include:
 
 ## Decision
 
-We adopt Firebase Authentication with the local Firebase Auth Emulator (`port: 9099`) and compose all 30 upstream Firebase UI components (from ADR 0004) into application-owned auth cards and forms in `src/components/notes-app/`, using project-owned shadcn primitives.
+We adopt Firebase Authentication with the local Firebase Auth Emulator (`port: 9099`) and compose appropriate upstream Firebase UI behaviors into application-owned auth cards and forms in `src/components/notes-app/`, using project-owned shadcn primitives.
 
 Key architectural rules and structure:
 - **Emulator Configuration**: The Auth emulator runs on `127.0.0.1:9099` (with emulator UI on `127.0.0.1:4000`), loaded with pre-seeded test accounts from `.firebase/seeds/`.
@@ -178,7 +200,7 @@ Key architectural rules and structure:
   group and `/settings`, keeping the Firebase UI client boundary off the rest of
   the app. New protected routes must be added to both `isProtectedPath()` and
   the `src/proxy.ts` matcher.
-- **Application-Owned Auth Components**: All 30 application-facing authentication cards, forms, cards, and modal dialogs live in `src/components/notes-app/` (created in commit 9686a943), composing project-owned shadcn Base Nova / Base UI primitives from `src/components/ui/` and following [`CODING_STANDARDS.md`](../../CODING_STANDARDS.md). They reference `src/components/firebase/` for behavioral parity without mutating the reference baseline (ADR 0004). Provider button theming is integrated into `src/app/globals.css` with `@layer components` custom CSS variables and `@variant dark` rules for full light/dark mode support.
+- **Application-Owned Auth Components**: Application-facing authentication cards, forms, and dialogs for supported flows live in `src/components/notes-app/` (created in commit 9686a943), composing project-owned shadcn Base Nova / Base UI primitives from `src/components/ui/` and following [`CODING_STANDARDS.md`](../../CODING_STANDARDS.md). They reference `src/components/firebase/` for behavioral parity without mutating the reference baseline (ADR 0004). Provider button theming is integrated into `src/app/globals.css` with `@layer components` custom CSS variables and `@variant dark` rules for full light/dark mode support.
 - **Architectural Alignment**: Aligns with upstream component baseline in [ADR 0004](./0004-adopt-firebase-ui-components.md) and resilient auth fallback logic defined in [ADR 0006](./0006-adopt-firebase-ui-v7-and-auth-resilience.md).
 
 ## Consequences
