@@ -18,6 +18,7 @@ vi.mock("@firebase-oss/ui-core", () => ({
     get: () => ({ setLocale: mocks.setLocale }),
     isInitialized: true,
   })),
+  providerPopupStrategy: vi.fn(() => "popup"),
   providerRedirectStrategy: vi.fn(() => "redirect"),
 }));
 

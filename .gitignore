@@ -75,6 +75,7 @@ graphify-out/
 # local Claude Code settings (machine-specific, rewritten by tooling)
 .claude/settings.local.json
 firebase-debug.log
+firestore-debug.log
 
 # Playwright output
 playwright-report/

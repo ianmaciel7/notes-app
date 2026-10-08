@@ -4,7 +4,9 @@
     "studyWorkspace": "Espacio de estudio",
     "signedInAs": "Sesión iniciada como {email}",
     "signOut": "Cerrar sesión",
-    "signOutError": "No se pudo cerrar la sesión. Inténtalo de nuevo."
+    "signOutError": "No se pudo cerrar la sesión. Inténtalo de nuevo.",
+    "somethingWentWrong": "Algo salió mal",
+    "tryAgain": "Intentar de nuevo"
   },
   "locale": {
     "label": "Idioma",
@@ -31,7 +33,20 @@
     "multiFactorAssertion": "Verifica tu identidad",
     "multiFactorAssertionSubtitle": "Completa el paso adicional de verificación",
     "multiFactorEnrollment": "Configura la autenticación en dos pasos",
-    "multiFactorEnrollmentSubtitle": "Añade una capa adicional de seguridad a tu cuenta"
+    "multiFactorEnrollmentSubtitle": "Añade una capa adicional de seguridad a tu cuenta",
+    "secondFactorsTitle": "Autenticación en dos pasos",
+    "secondFactorsSubtitle": "Los segundos factores protegen tu cuenta al iniciar sesión",
+    "removeSecondFactor": "Quitar",
+    "removeSecondFactorNamed": "Quitar {name}",
+    "removeSecondFactorError": "No se pudo quitar el segundo factor. Inténtalo de nuevo.",
+    "emailVerificationRequired": "Verifica tu correo electrónico antes de añadir un segundo factor.",
+    "emailRequiredForSecondFactor": "La autenticación en dos pasos requiere una cuenta con correo electrónico.",
+    "sendVerificationEmail": "Enviar correo de verificación",
+    "checkEmailVerification": "Ya verifiqué mi correo",
+    "verificationEmailSent": "Correo de verificación enviado. Abre el enlace y vuelve a comprobar.",
+    "verificationEmailError": "No se pudo completar la verificación del correo. Inténtalo de nuevo.",
+    "requiresRecentLogin": "Por tu seguridad, inicia sesión de nuevo y vuelve a intentarlo.",
+    "reauthenticate": "Iniciar sesión de nuevo"
   },
   "validation": {
     "email": "Introduce un correo válido.",

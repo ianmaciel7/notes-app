@@ -16,6 +16,10 @@ Examples of current coverage (not an exhaustive file inventory):
   `locale-lang-script.test.ts` for locale negotiation and synchronization.
 - `tests/unit/sign-out-button.test.tsx` for server-session-first sign-out,
   including rejected and unreachable session endpoints.
+- `tests/unit/auth-error.test.ts` and `tests/unit/second-factor-panel.test.tsx`
+  for the second-factor settings: failure classification, factor listing and
+  removal, the verified-e-mail gate, recent-login handling, and session renewal
+  or sign-out after a factor change (ADR 0005).
 - `tests/unit/locale-preference-actions.test.ts` for authenticated profile
   preference writes, sign-in synchronization, and guest locale handling.
 - Server-session Route Handler tests and other authentication tests under
@@ -42,8 +46,9 @@ pnpm run test:coverage
 Current authentication E2E coverage:
 
 - `tests/e2e/home.spec.ts`, including password and email-link sign-in,
-  phone/SMS, Google Emulator redirect, SMS MFA, server-protected pages,
-  and accessibility audits (see ADR 0005).
+  phone/SMS, Google Emulator popup (and redirect for embedded Electron browsers), SMS MFA (enrollment, reload
+  persistence, assertion, removal), the unverified-e-mail gate on `/settings`,
+  server-protected pages, and accessibility audits (see ADR 0005).
 - `tests/e2e/locale.spec.ts`, covering the language selector, explicit cookie
   persistence, and a Firestore preference restored in a separate browser
   after re-authentication (ADR 0007).

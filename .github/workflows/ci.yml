@@ -84,6 +84,12 @@ jobs:
         with:
           run_install: false
 
+      - name: Setup Java (Firebase emulators)
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 

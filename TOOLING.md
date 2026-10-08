@@ -67,7 +67,7 @@ Framework configuration:
 | Knip | Unused files, exports, and dependencies | `pnpm run check:unused` | `knip.json` |
 | jscpd | Code duplication (threshold 2) | `pnpm run check:duplication` | `.jscpd.json` |
 | Fallow | Code health and complexity audit | `pnpm run check:health` | `.fallowrc.json` |
-| Size Limit | Budgets: JS 450 kB, CSS 100 kB under `.next/static` | `pnpm run check:size` | `.size-limit.json` |
+| Size Limit | Budgets: JS 470 kB, CSS 100 kB under `.next/static` | `pnpm run check:size` | `.size-limit.json` |
 | CSpell | Spell check for `.ts`, `.tsx`, `.md` | `pnpm run lint:spelling` | `cspell.json` |
 | markdownlint-cli2 | Markdown lint | `pnpm run lint:md` | `.markdownlint-cli2.jsonc` |
 | `pnpm audit` | Dependency vulnerabilities, high and above | `pnpm run check:security` | `package.json`, `pnpm-workspace.yaml` |

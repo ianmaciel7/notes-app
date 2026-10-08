@@ -5,12 +5,26 @@
       "name": "Next.js: debug server-side",
       "type": "node-terminal",
       "request": "launch",
-      "command": "pnpm dev",
+      "command": "pnpm dev --port 3000",
       "cwd": "${workspaceFolder}",
+      "env": {
+        "FIREBASE_AUTH_EMULATOR_HOST": "127.0.0.1:9099",
+        "FIRESTORE_EMULATOR_HOST": "127.0.0.1:8080"
+      },
       "serverReadyAction": {
         "pattern": "http://localhost:([0-9]+)",
-        "uriFormat": "http://localhost:%s",
-        "action": "debugWithChrome"
+        "action": "startDebugging",
+        "name": "Next.js: Chrome client"
+      }
+    },
+    {
+      "name": "Next.js: Chrome client",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "windows": {
+        "runtimeExecutable": "C:/Program Files/Google/Chrome/Application/chrome.exe"
       }
     },
     {
@@ -19,6 +33,10 @@
       "request": "launch",
       "command": "pnpm dev",
       "cwd": "${workspaceFolder}",
+      "env": {
+        "FIREBASE_AUTH_EMULATOR_HOST": "127.0.0.1:9099",
+        "FIRESTORE_EMULATOR_HOST": "127.0.0.1:8080"
+      },
       "serverReadyAction": {
         "pattern": "http://localhost:([0-9]+)",
         "uriFormat": "http://localhost:%s",
@@ -29,7 +47,7 @@
       "name": "Firebase Auth Emulator",
       "type": "node-terminal",
       "request": "launch",
-      "command": "pnpm emulator",
+      "command": "pnpm emulator --project demo-notes-app",
       "cwd": "${workspaceFolder}"
     }
   ],

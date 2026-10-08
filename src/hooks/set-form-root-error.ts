@@ -1,5 +1,6 @@
 import { FirebaseUIError } from "@firebase-oss/ui-core";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
+import { classifyAuthFailure } from "@/lib/firebase/auth-error";
 
 export function setFormRootError<T extends FieldValues>(
   form: UseFormReturn<T>,
@@ -7,5 +8,5 @@ export function setFormRootError<T extends FieldValues>(
 ) {
   const message =
     error instanceof FirebaseUIError ? error.message : String(error);
-  form.setError("root", { message });
+  form.setError("root", { message, type: classifyAuthFailure(error) });
 }

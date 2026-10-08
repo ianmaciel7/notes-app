@@ -55,7 +55,13 @@ Firebase cloud credentials in local development.
 
 Production builds must provide `NEXT_PUBLIC_FIREBASE_CONFIG` as JSON with
 `apiKey`, `appId`, `authDomain`, and `projectId`. This is Firebase's public
-browser configuration, not a privileged credential.
+browser configuration, not a privileged credential. In production,
+`authDomain` must be the domain that serves the app (not
+`<projectId>.firebaseapp.com`): the app proxies `/__/auth/*` to Firebase so
+sign-in works in browsers that block third-party storage. Also
+authorize that domain in Firebase Authentication and add
+`https://<app domain>/__/auth/handler` to the Google OAuth client's redirect
+URIs (see [ADR 0006](docs/adr/0006-adopt-firebase-ui-v7-and-auth-resilience.md)).
 
 ```bash
 pnpm run emulator
@@ -76,14 +82,14 @@ E2E commands import that baseline and never rewrite it. `pnpm run test:e2e`
 owns the Auth and Firestore emulators and the Next.js lifecycle.
 
 The supported local flows are e-mail/password registration, sign-in, sign-out,
-e-mail-link sign-in, phone sign-in, and Firebase SDK-managed OAuth redirect
+e-mail-link sign-in, phone sign-in, and Firebase SDK-managed OAuth popup (redirect in embedded Electron browsers such as Cursor's)
 sign-in. The Auth Emulator stores e-mail links and produces SMS/MFA codes
 locally; it does not deliver messages. Tests retrieve OOB links from `oobCodes`
 and SMS codes from `verificationCodes` through the emulator REST API instead of
 relying on terminal output.
 
-SMS MFA is enrolled from the protected `/settings` route and asserted at
-sign-in; the E2E retrieves both codes from `verificationCodes`. TOTP MFA is not an Emulator-backed flow in the pinned toolchain. The Emulator
+SMS MFA is enrolled and removed from the protected `/settings` route (which
+requires a verified e-mail) and asserted at sign-in; the E2E retrieves both codes from `verificationCodes`. TOTP MFA is not an Emulator-backed flow in the pinned toolchain. The Emulator
 serves a local provider page with mock accounts for Firebase SDK-managed OAuth;
 manually supplied provider credentials remain subject to Emulator limits. See
 [ADR 0005](./docs/adr/0005-adopt-firebase-auth-with-local-emulator.md) for the

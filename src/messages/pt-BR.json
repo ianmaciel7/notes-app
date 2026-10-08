@@ -4,7 +4,9 @@
     "studyWorkspace": "Espaço de estudo",
     "signedInAs": "Conectado como {email}",
     "signOut": "Sair",
-    "signOutError": "Não foi possível sair. Tente novamente."
+    "signOutError": "Não foi possível sair. Tente novamente.",
+    "somethingWentWrong": "Algo deu errado",
+    "tryAgain": "Tentar novamente"
   },
   "locale": {
     "label": "Idioma",
@@ -31,7 +33,20 @@
     "multiFactorAssertion": "Verifique sua identidade",
     "multiFactorAssertionSubtitle": "Conclua a etapa adicional de verificação",
     "multiFactorEnrollment": "Configure a autenticação em dois fatores",
-    "multiFactorEnrollmentSubtitle": "Adicione uma camada extra de segurança à sua conta"
+    "multiFactorEnrollmentSubtitle": "Adicione uma camada extra de segurança à sua conta",
+    "secondFactorsTitle": "Autenticação em dois fatores",
+    "secondFactorsSubtitle": "Os segundos fatores protegem sua conta no login",
+    "removeSecondFactor": "Remover",
+    "removeSecondFactorNamed": "Remover {name}",
+    "removeSecondFactorError": "Não foi possível remover o segundo fator. Tente novamente.",
+    "emailVerificationRequired": "Verifique seu e-mail antes de adicionar um segundo fator.",
+    "emailRequiredForSecondFactor": "A autenticação em dois fatores exige uma conta com e-mail.",
+    "sendVerificationEmail": "Enviar e-mail de verificação",
+    "checkEmailVerification": "Já verifiquei meu e-mail",
+    "verificationEmailSent": "E-mail de verificação enviado. Abra o link e verifique novamente.",
+    "verificationEmailError": "Não foi possível concluir a verificação do e-mail. Tente novamente.",
+    "requiresRecentLogin": "Por segurança, entre novamente e tente de novo.",
+    "reauthenticate": "Entrar novamente"
   },
   "validation": {
     "email": "Informe um e-mail válido.",

@@ -67,7 +67,7 @@ as the dependency chain provides a patched release.
 ## Current implementation note
 
 The current `dev` branch includes Firebase/Firebase UI, Auth Emulator flows
-for password, email link, phone/SMS, Google OAuth redirect, and SMS MFA,
+for password, email link, phone/SMS, Google OAuth popup, and SMS MFA,
 and server-only, revocation-checked Firebase session cookies. Sign-out
 requires a successful same-origin server-session removal before the client
 signs out; a failed request displays a retryable error instead of pretending

@@ -106,7 +106,7 @@ Source: [SECURITY.md](./SECURITY.md).
 - During iteration run `pnpm run verify:changed`. Before delivery run
   `pnpm run verify:fast`.
 - CI additionally runs Knip, jscpd, Fallow, `pnpm audit`, the production build,
-  Size Limit (JS 450 kB, CSS 100 kB), and Playwright E2E.
+  Size Limit (JS 470 kB, CSS 100 kB), and Playwright E2E.
 - A `git push` is not completion. After pushing to `dev` or `main`, run
   `pnpm run ci:wait`; the task is done only when it exits `0`.
 - Add a failing regression test before fixing a bug.

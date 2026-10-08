@@ -24,7 +24,7 @@ Check it and the source tree before treating an accepted ADR as built.
 | [0003](./0003-install-shadcn-typeset.md) | Install shadcn/typeset | Accepted | Implemented | 2026-10-05 |
 | [0004](./0004-adopt-firebase-ui-components.md) | Firebase OSS auth UI components | Accepted | Implemented | 2026-09-28 |
 | [0005](./0005-adopt-firebase-auth-with-local-emulator.md) | Firebase Auth emulator architecture | Accepted | Implemented | 2026-09-28 |
-| [0006](./0006-adopt-firebase-ui-v7-and-auth-resilience.md) | FirebaseUI v7 client architecture with redirect-only OAuth | Accepted | Implemented | 2026-09-28 |
+| [0006](./0006-adopt-firebase-ui-v7-and-auth-resilience.md) | FirebaseUI v7 client architecture with popup OAuth | Accepted | Implemented | 2026-09-28 |
 | [0007](./0007-adopt-cookie-based-next-intl-with-firebase-sync.md) | next-intl + Firebase locale sync | Accepted | Partially implemented | 2026-09-28 |
 | [0008](./0008-adopt-native-firebase-firestore-with-persistent-local-cache.md) | Firestore persistent local cache | Accepted | Not started | 2026-09-29 |
 
@@ -40,7 +40,7 @@ envisioned when each decision was made.
 - **0004:** the 30 Firebase UI reference files are tracked by the immutable
   baseline manifest. This does not enable 30 different sign-in flows.
 - **0005–0006:** the local Auth Emulator architecture, server session
-  boundary, redirect-only OAuth, and application-owned auth components
+  boundary, popup OAuth, and application-owned auth components
   are present. Server-session-first logout and associated regression tests
   are documented. Production identity-provider behavior is not certified.
 - **0007:** locale negotiation and Firebase UI translation synchronization

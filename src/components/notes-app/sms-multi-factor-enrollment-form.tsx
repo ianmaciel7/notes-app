@@ -8,6 +8,7 @@ import {
   AuthRootError,
 } from "@/components/notes-app/auth-field-error";
 import { CountrySelector } from "@/components/notes-app/country-selector";
+import { ReauthenticateButton } from "@/components/notes-app/reauthenticate-button";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -102,6 +103,9 @@ function MultiFactorEnrollmentPhoneNumberForm(
             <FieldError>
               <AuthRootError />
             </FieldError>
+            {form.formState.errors.root.type === "requiresRecentLogin" && (
+              <ReauthenticateButton />
+            )}
           </Field>
         )}
       </form>
@@ -166,6 +170,9 @@ export function MultiFactorEnrollmentVerifyPhoneNumberForm(
             <FieldError>
               <AuthRootError />
             </FieldError>
+            {form.formState.errors.root.type === "requiresRecentLogin" && (
+              <ReauthenticateButton />
+            )}
           </Field>
         )}
       </form>

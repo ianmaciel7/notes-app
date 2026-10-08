@@ -1,21 +1,33 @@
 "use client";
 
-import { initializeUI, providerRedirectStrategy } from "@firebase-oss/ui-core";
+import {
+  initializeUI,
+  providerPopupStrategy,
+  providerRedirectStrategy,
+} from "@firebase-oss/ui-core";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { getFirebaseClient } from "@/lib/firebase/client";
 import { isProtectedPath } from "@/lib/firebase/session";
+import { createServerSession } from "@/lib/firebase/session-client";
 import { syncLocalePreference } from "@/lib/i18n/actions";
 import { applyAuthLocale } from "@/lib/i18n/client";
 import type { Locale } from "@/lib/i18n/config";
 
 const firebaseClient = getFirebaseClient();
+// Embedded Electron browsers (for example Cursor's) do not preserve
+// `window.opener` in popups, which breaks the popup result relay, so they use
+// the redirect flow instead.
+const isElectronBrowser =
+  typeof navigator !== "undefined" && navigator.userAgent.includes("Electron/");
 const firebaseUi = initializeUI({
   app: firebaseClient.app,
   auth: firebaseClient.auth,
-  behaviors: [providerRedirectStrategy()],
+  behaviors: [
+    isElectronBrowser ? providerRedirectStrategy() : providerPopupStrategy(),
+  ],
 });
 
 export function useAuthProvider() {
@@ -42,16 +54,7 @@ export function useAuthProvider() {
         }
 
         try {
-          const idToken = await user.getIdToken(true);
-          const response = await fetch("/api/auth/session", {
-            body: JSON.stringify({ idToken }),
-            headers: { "Content-Type": "application/json" },
-            method: "POST",
-          });
-
-          if (!response.ok) {
-            throw new Error("Unable to establish a server session.");
-          }
+          await createServerSession(await user.getIdToken(true));
 
           try {
             // Profile preferences are trusted only after session verification.

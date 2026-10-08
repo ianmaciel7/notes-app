@@ -159,6 +159,13 @@ test("enrolls an SMS second factor and asserts it at sign-in", async ({
   await page.getByRole("button", { name: /verify code/i }).click();
   await expect(page.getByText(/sms second factor enrolled/i)).toBeVisible();
 
+  // The enrolled state comes from Firebase, so it survives a reload.
+  await page.reload();
+  await expect(page.getByText(/sms second factor enrolled/i)).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /^remove test phone$/i }),
+  ).toBeVisible();
+
   await page.goto("/dashboard");
   await page.getByRole("button", { name: "Sign out" }).click();
   await expect(page).toHaveURL(/\/sign-in$/);
@@ -173,19 +180,65 @@ test("enrolls an SMS second factor and asserts it at sign-in", async ({
     .fill((await latestVerificationCode("+16505559876")) ?? "");
   await page.getByRole("button", { name: /verify code/i }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
+
+  await page.getByRole("link", { name: /^settings$/i }).click();
+  await page.getByRole("button", { name: /^remove test phone$/i }).click();
+  await expect(page.getByLabel(/phone number/i)).toBeVisible();
 });
 
-test("signs in with the Emulator-hosted Google provider via redirect", async ({
+test("asks for a verified e-mail before offering a second factor", async ({
+  page,
+}) => {
+  await page.goto("/sign-up");
+  await page
+    .getByLabel(/email address/i)
+    .fill(`unverified-${Date.now()}@example.test`);
+  await page.getByLabel(/password/i).fill("correct-horse-battery-staple");
+  await page.getByRole("button", { name: /create account/i }).click();
+  await expect(page).toHaveURL(/\/dashboard$/);
+
+  await page.getByRole("link", { name: /^settings$/i }).click();
+  await expect(page.getByText(/verify your e-mail address/i)).toBeVisible();
+  await expect(page.getByLabel(/phone number/i)).toHaveCount(0);
+  await page.getByRole("button", { name: /send verification e-mail/i }).click();
+  await expect(page.getByText(/verification e-mail sent/i)).toBeVisible();
+});
+
+test("signs in with the Emulator-hosted Google provider via popup", async ({
   page,
 }) => {
   await page.goto("/sign-in");
-  await page.getByRole("button", { name: /sign in with google/i }).click();
 
-  await page.waitForURL(/\/emulator\/auth\/handler/);
-  await page.getByText(/add new account/i).click();
-  await page.getByRole("button", { name: /auto-generate/i }).click();
+  const popupPromise = page.waitForEvent("popup");
   await page.getByRole("button", { name: /sign in with google/i }).click();
+  const popup = await popupPromise;
+
+  await popup.waitForURL(/\/emulator\/auth\/handler/);
+  await popup.getByText(/add new account/i).click();
+  await popup.getByRole("button", { name: /auto-generate/i }).click();
+  await popup.getByRole("button", { name: /sign in with google/i }).click();
 
   await expect(page).toHaveURL(/\/dashboard$/);
   await expect(page.getByText(/signed in as/i)).toBeVisible();
+});
+
+test.describe("embedded Electron browser", () => {
+  test.use({
+    userAgent: "Mozilla/5.0 Chrome/140 Electron/38.0.0 Safari/537.36",
+  });
+
+  test("signs in with the Emulator-hosted Google provider via redirect", async ({
+    page,
+  }) => {
+    await page.goto("/sign-in");
+    await page.getByRole("button", { name: /sign in with google/i }).click();
+
+    await page.waitForURL(/\/emulator\/auth\/handler/);
+    await page.getByText(/add new account/i).click();
+    await page.getByRole("button", { name: /auto-generate/i }).click();
+    await page.getByRole("button", { name: /sign in with google/i }).click();
+
+    await expect(page).toHaveURL(/\/dashboard$/);
+    await expect(page.getByText(/signed in as/i)).toBeVisible();
+  });
 });

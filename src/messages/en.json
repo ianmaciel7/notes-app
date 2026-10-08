@@ -4,7 +4,9 @@
     "studyWorkspace": "Study workspace",
     "signedInAs": "Signed in as {email}",
     "signOut": "Sign out",
-    "signOutError": "Could not sign out. Please try again."
+    "signOutError": "Could not sign out. Please try again.",
+    "somethingWentWrong": "Something went wrong",
+    "tryAgain": "Try again"
   },
   "locale": {
     "label": "Language",
@@ -31,7 +33,20 @@
     "multiFactorAssertion": "Verify your identity",
     "multiFactorAssertionSubtitle": "Complete the additional verification step",
     "multiFactorEnrollment": "Set up two-factor authentication",
-    "multiFactorEnrollmentSubtitle": "Add an extra layer of security to your account"
+    "multiFactorEnrollmentSubtitle": "Add an extra layer of security to your account",
+    "secondFactorsTitle": "Two-factor authentication",
+    "secondFactorsSubtitle": "Second factors protect your account at sign-in",
+    "removeSecondFactor": "Remove",
+    "removeSecondFactorNamed": "Remove {name}",
+    "removeSecondFactorError": "Could not remove the second factor. Please try again.",
+    "emailVerificationRequired": "Verify your e-mail address before adding a second factor.",
+    "emailRequiredForSecondFactor": "Two-factor authentication requires an account with an e-mail address.",
+    "sendVerificationEmail": "Send verification e-mail",
+    "checkEmailVerification": "I verified my e-mail",
+    "verificationEmailSent": "Verification e-mail sent. Open the link, then check again.",
+    "verificationEmailError": "Could not complete the e-mail verification step. Please try again.",
+    "requiresRecentLogin": "For your security, sign in again and retry.",
+    "reauthenticate": "Sign in again"
   },
   "validation": {
     "email": "Enter a valid e-mail address.",
