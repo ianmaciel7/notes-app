@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { createLocaleLangScript } from "@/components/notes-app/locale-lang-script";
 import { defaultLocale, locales } from "@/lib/i18n/config";
+import { createLocaleLangScript } from "@/lib/i18n/locale-lang-script";
 
 function runLocaleLangScript({
   cookie = "",

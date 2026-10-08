@@ -13,7 +13,10 @@ Examples of current coverage (not an exhaustive file inventory):
 - `tests/unit/firebase-reference.test.ts` for the immutable Firebase UI
   baseline (ADR 0004).
 - `tests/unit/i18n-client.test.ts`, `i18n-config.test.ts`, and
-  `locale-lang-script.test.ts` for locale negotiation and synchronization.
+  `locale-lang-script.test.ts` for locale negotiation and synchronization in
+  `src/lib/i18n/locale-lang-script.ts`.
+- `tests/unit/components-layer-structure.test.ts` for the application
+  components-layer file-placement guard.
 - `tests/unit/sign-out-button.test.tsx` for server-session-first sign-out,
   including rejected and unreachable session endpoints.
 - `tests/unit/auth-error.test.ts` and `tests/unit/second-factor-panel.test.tsx`

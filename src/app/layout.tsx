@@ -3,13 +3,10 @@ import { Geist_Mono, Inter } from "next/font/google";
 import Script from "next/script";
 import { Suspense } from "react";
 import { IntlProvider } from "@/components/notes-app/intl-provider";
-import { createLocaleLangScript } from "@/components/notes-app/locale-lang-script";
 import { ThemeProvider } from "@/components/notes-app/theme";
-import {
-  createThemeScript,
-  themeStorageKey,
-} from "@/components/notes-app/theme-script";
 import { defaultLocale, locales } from "@/lib/i18n/config";
+import { createLocaleLangScript } from "@/lib/i18n/locale-lang-script";
+import { createThemeScript, themeStorageKey } from "@/lib/theme/theme-script";
 import "./globals.css";
 
 const inter = Inter({

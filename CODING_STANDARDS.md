@@ -184,6 +184,11 @@ See [TESTING.md](./TESTING.md).
 
 ## 9. Module boundaries
 
+Application-owned files under `src/components/` are components and must use
+the `.tsx` extension, except for the reserved `ui/` and `firebase/` layers.
+Place hooks in `src/hooks/` and pure utilities, constants, script builders, or
+other logic in `src/lib/<domain>/`; the Vitest structure guard enforces this.
+
 Dependency Cruiser enforces graph rules on the source it currently cruises,
 including:
 

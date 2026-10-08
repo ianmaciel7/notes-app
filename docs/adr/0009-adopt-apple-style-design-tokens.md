@@ -281,3 +281,11 @@ exit on dialog/drawer/navigation-menu/toast) and both color schemes.
 - Light mode only: rejected, the spec's dark tokens exist and the app needs both.
 - Keep Geist: rejected, `-apple-system` plus Inter is closer to the spec's
   SF Pro feel off Apple platforms.
+
+## Amendment (2026-10-08)
+
+`locale-lang-script` and `theme-script` moved from
+`src/components/notes-app/` to `src/lib/i18n/` and `src/lib/theme/`.
+They contain pure logic and script builders rather than JSX or components, so
+the move aligns them with the shared-helper and shadcn registry type
+conventions.

@@ -58,7 +58,7 @@ Framework configuration:
 | Biome 2.4.2 | Lint and format; hosts the GritQL plugin packs | `pnpm run lint`, `pnpm run lint:changed`, `pnpm run format` | `biome.json` |
 | GritQL | Project-specific AST rules: `grit/nextjs/` and `grit/shadcn/` | runs inside Biome | `grit/`, `biome.json` `plugins` |
 | TypeScript | Type check after `next typegen` | `pnpm run check:types` | `tsconfig.json`, `tsconfig.check.json` |
-| Vitest | Unit tests with Happy DOM and V8 coverage | `pnpm test`, `pnpm run test:changed`, `pnpm run test:coverage` | `vitest.config.ts` |
+| Vitest | Unit tests with Happy DOM and V8 coverage, including the components-layer structure guard | `pnpm test`, `pnpm run test:guards`, `pnpm run test:changed`, `pnpm run test:coverage` | `vitest.config.ts`, `tests/unit/components-layer-structure.test.ts` |
 | Testing Library | React and DOM test helpers | used by Vitest tests | `@testing-library/react`, `@testing-library/dom` |
 | Playwright | E2E on Chromium, starts `pnpm dev` | `pnpm run test:e2e` | `playwright.config.ts` |
 | Firestore rules tests | Security rules against the Firestore emulator | `pnpm run test:rules` | `vitest.rules.config.ts`, `tests/rules/` |

@@ -7,7 +7,11 @@ import {
   useContext,
   useSyncExternalStore,
 } from "react";
-import { parseTheme, type Theme, themeStorageKey } from "./theme-script";
+import {
+  parseTheme,
+  type Theme,
+  themeStorageKey,
+} from "@/lib/theme/theme-script";
 
 type ThemeContextValue = {
   theme: Theme;

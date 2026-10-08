@@ -67,6 +67,8 @@ src/
   lib/
     firebase/               # client, admin, server identity, session
     i18n/                   # locale negotiation and client synchronization
+      locale-lang-script.ts # pre-hydration locale synchronization script builder
+    theme/                  # theme constants, parsing, and script builder
     utils.ts
 
 tests/

@@ -3,7 +3,7 @@ import {
   createThemeScript,
   parseTheme,
   themeStorageKey,
-} from "@/components/notes-app/theme-script";
+} from "@/lib/theme/theme-script";
 
 function runThemeScript(stored: string | null, initialClass = "") {
   localStorage.clear();

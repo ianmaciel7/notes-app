@@ -52,6 +52,12 @@ src/
   `src/components/ui/`.
 * **Guard Boundary**: Application-owned code is part of the
   **guard-consumption layer** and must follow project GritQL guards.
+* **File Rule**: Outside the reserved `ui/` and `firebase/` directories, every
+  file must be `.tsx`. Hooks belong in `src/hooks/use-*.ts`; utilities,
+  constants, script builders, and pure logic belong in `src/lib/<domain>/`.
+  This matches shadcn registry types (`hook` -> `hooks`, `lib` -> `lib`) and
+  Next.js project-structure guidance for shared helpers. The Vitest structure
+  guard in `tests/unit/components-layer-structure.test.ts` enforces this rule.
 
 ### 4. `src/lib/` & `src/lib/utils.ts` (Utilities Layer)
 
@@ -131,3 +137,6 @@ Boundary integrity is verified mechanically across multiple layers:
    `tests/unit/firebase-reference.test.ts` verifies
    `src/components/firebase/**` against
    `tests/unit/firebase-reference.manifest.sha256`.
+5. **Components-Layer Structure**: The Vitest guard scans
+   `src/components/**`, excluding `ui/**` and `firebase/**`, and rejects
+   non-`.tsx` files with placement guidance for `src/hooks/` and `src/lib/`.

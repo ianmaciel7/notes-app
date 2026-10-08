@@ -4,7 +4,6 @@ import { MoonIcon, SunIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { useTheme } from "@/components/notes-app/theme";
-import { parseTheme, themes } from "@/components/notes-app/theme-script";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,6 +12,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { parseTheme, themes } from "@/lib/theme/theme-script";
 
 type ThemeToggleProps = ComponentProps<typeof DropdownMenu>;
 
