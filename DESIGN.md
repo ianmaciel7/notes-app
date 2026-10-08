@@ -78,25 +78,8 @@ OAuth buttons keep each provider's brand color, scoped by
 
 ## Motion
 
-Tokens live in `globals.css`; source is the Apple HIG motion system.
-
-| Token | Value | Use |
-| --- | --- | --- |
-| `--duration-instant` / `fast` | 0 / 150ms | direct manipulation / hover, tooltips, badges |
-| `--duration-default` | 300ms | modals, sheets, navigation |
-| `--duration-slow` / `slower` | 400 / 500ms | full-screen, hero transitions |
-| `ease-out` (default) | `cubic-bezier(0.33, 1, 0.68, 1)` | entering, hover |
-| `ease-in` | `cubic-bezier(0.32, 0, 0.67, 0)` | exiting |
-| `ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | repositioning, cross-fade |
-| `ease-deceleration` | `cubic-bezier(0, 0, 0.2, 1)` | entering from off-screen |
-| `ease-spring-default` / `snappy` / `gentle` / `tight` | `linear()` of 300/30, 500/40, 170/26, 700/60 | anything the user touches |
-
-- Interactive responses use a spring, ambient ones use a curve.
-- Enter with `ease-out` (alerts: opacity + scale 0.94 to 1), exit faster with
-  `ease-in`. Never exit in the entry direction.
-- Reduced motion: slides and scales become fades at 250ms ease-out.
-- Not adopted: stagger, push/sheet/hero transitions, tvOS focus lift, haptics,
-  shimmer skeletons.
+Durations, easing, springs, enter/exit and reduced-motion rules live in
+[MOTION.md](./MOTION.md). Values are in `globals.css`.
 
 ## Not adopted
 

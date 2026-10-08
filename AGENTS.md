@@ -155,6 +155,7 @@ completion. Codex sessions implement directly and do not delegate again.
 - Current architecture: `ARCHITECTURE.md`
 - Current coding policy: `CODING_STANDARDS.md`
 - Visual design tokens and UI rules: `DESIGN.md`
+- Motion tokens and animation rules: `MOTION.md`
 - Consolidated hard constraints (index): `CONSTRAINTS.md`
 - Current tests: `TESTING.md`
 - Security policy: `SECURITY.md`

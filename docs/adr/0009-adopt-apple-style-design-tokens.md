@@ -22,7 +22,8 @@ shapes, 14px caption text, `transition-press` on buttons). `font-medium`
 resolves to weight 600 through `--font-weight-medium`. Remaining primitives
 inherit through tokens; all `shadow-*` utilities resolve to nothing. Provider
 OAuth buttons keep brand colors. `--product-shadow` was removed because nothing
-uses it.
+uses it. The motion rules were extracted from DESIGN.md into
+[MOTION.md](../../MOTION.md); DESIGN.md links to it.
 
 ## Context
 
@@ -36,8 +37,9 @@ without a coherent identity.
 
 ## Decision
 
-Adopt the token layer only. [DESIGN.md](../../DESIGN.md) is the rule set and
-`src/app/globals.css` is the source of values.
+Adopt the token layer only. [DESIGN.md](../../DESIGN.md) is the visual rule
+set, [MOTION.md](../../MOTION.md) is the motion rule set, and
+`src/app/globals.css` is the source of values for both.
 
 - **Color:** one accent (`#0066cc` light, `#2997ff` dark) for every interactive
   signal. Parchment and near-black surfaces, hairline borders.
@@ -61,7 +63,8 @@ Adopt the token layer only. [DESIGN.md](../../DESIGN.md) is the rule set and
   option-picker chips, sticky price bar, and photography components. The list
   lives in DESIGN.md so they are not rebuilt by accident.
 - **Motion:** adopt the token layer of the Apple HIG motion system (DesignMD
-  `motion/apple`) in `globals.css`, CSS only (no animation library).
+  `motion/apple`) in `globals.css`, CSS only (no animation library). The rules
+  are documented in [MOTION.md](../../MOTION.md), the counterpart of DESIGN.md.
   - Durations: `--duration-instant|fast|default|slow|slower` = 0 / 150 / 300 /
     400 / 500ms. Hover and color changes use `fast`.
   - Easing: `ease-out`, `ease-in`, `ease-in-out`, `ease-deceleration` with the
@@ -99,8 +102,8 @@ Adopt the token layer only. [DESIGN.md](../../DESIGN.md) is the rule set and
 
 ## Verification
 
-Source-confirmed against `globals.css`, `src/components/ui/**` and DESIGN.md on
-2026-10-08. `pnpm run verify:changed` (lint, types, unit tests) passed. No
+Source-confirmed against `globals.css`, `src/components/ui/**`, DESIGN.md and
+MOTION.md on 2026-10-08. `pnpm run verify:changed` (lint, types, unit tests) passed. No
 browser contrast, motion, or visual regression test was run, so the
 `linear()` spring approximations, the reduced-motion override, and both color
 schemes still need a manual pass. Run `pnpm run verify:changed` and that pass
