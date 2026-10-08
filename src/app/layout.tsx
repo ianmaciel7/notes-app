@@ -4,6 +4,11 @@ import Script from "next/script";
 import { Suspense } from "react";
 import { IntlProvider } from "@/components/notes-app/intl-provider";
 import { createLocaleLangScript } from "@/components/notes-app/locale-lang-script";
+import { ThemeProvider } from "@/components/notes-app/theme";
+import {
+  createThemeScript,
+  themeStorageKey,
+} from "@/components/notes-app/theme-script";
 import { defaultLocale, locales } from "@/lib/i18n/config";
 import "./globals.css";
 
@@ -33,9 +38,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Script id="locale-lang" strategy="beforeInteractive">
           {createLocaleLangScript(locales, defaultLocale)}
         </Script>
-        <Suspense fallback={null}>
-          <IntlProvider>{children}</IntlProvider>
-        </Suspense>
+        <Script id="theme" strategy="beforeInteractive">
+          {createThemeScript(themeStorageKey)}
+        </Script>
+        <ThemeProvider>
+          <Suspense fallback={null}>
+            <IntlProvider>{children}</IntlProvider>
+          </Suspense>
+        </ThemeProvider>
       </body>
     </html>
   );

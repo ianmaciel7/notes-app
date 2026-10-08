@@ -15,6 +15,12 @@
     "spanish": "Español",
     "saveError": "Não foi possível salvar o idioma. Tente novamente."
   },
+  "theme": {
+    "label": "Tema",
+    "light": "Claro",
+    "dark": "Escuro",
+    "system": "Sistema"
+  },
   "auth": {
     "signIn": "Entrar",
     "signUp": "Criar uma conta",
