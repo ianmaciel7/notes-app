@@ -50,12 +50,16 @@ src/
     layout.tsx
     page.tsx
     typeset.css
+  i18n/
+    request.ts              # cookie-driven next-intl request configuration
+  messages/                 # en, pt-BR, and es message catalogs
   components/
     firebase/           # immutable upstream Firebase UI reference (ADR 0004)
-    notes-app/          # application-owned auth screens, forms, dialogs (ADR 0004)
+    notes-app/          # application-owned auth cards, forms, dialogs (ADR 0004)
     ui/                 # project-owned shadcn implementation layer
-  hooks/
+  hooks/                # custom hooks (alias @/hooks), one use-*.ts(x) per hook
     use-mobile.ts
+    use-*.ts            # state/form logic extracted from src/components/notes-app/
   lib/
     utils.ts
 
@@ -81,11 +85,23 @@ docs/
 
 `src/components/firebase/` holds the immutable upstream Firebase UI reference
 components (ADR 0004). `src/components/notes-app/` holds application-owned
-authentication screens, forms, and dialogs built with project shadcn primitives
-(ADR 0004). There is currently no authenticated routes consuming
-`src/components/notes-app/`, authentication middleware, internationalization
-layer, DAL, repository layer, exam domain service layer, or persistence adapter
-on `dev`.
+authentication cards, forms, and dialogs built with project shadcn primitives
+(ADR 0004). Their state and form logic lives in `src/hooks/` (see
+`CODING_STANDARDS.md` section 4). The implemented authentication slice (ADR
+0005) uses the local Firebase Auth Emulator, a server-only session-verification
+boundary, public `(public)` sign-in routes, and the protected `(protected)`
+routes `/dashboard` and `/settings`. Firestore access, a DAL, repository
+layer, exam domain services, and persistence remain unimplemented.
+Internationalization uses cookie-driven `next-intl` request configuration
+without locale URL prefixes. The server resolves the locale from the
+`NEXT_LOCALE` cookie, then `Accept-Language`, then `en`; only the
+`setLocalePreference` Server Action writes the cookie, so auto-detected locales
+are never persisted. The root layout renders a static `<html lang>` and a
+`beforeInteractive` script sets it from the same rules before hydration (it must
+not read cookies under Cache Components). Firebase Auth mirrors the resolved
+locale in `auth.languageCode`, and Firebase UI text is localized after mount
+through `@firebase-oss/ui-translations`. Application-owned auth text, a locale
+picker, and Firestore preference sync are not implemented yet (ADR 0007).
 
 ## 3. Next.js architecture
 
@@ -184,16 +200,19 @@ Those documents are planning artifacts until corresponding source modules,
 tests, and active ADRs exist.
 
 ADRs 0004-0008 (Firebase auth, Firestore, and localization) are accepted but
-only partly built on `dev`: the immutable Firebase UI reference components in
-`src/components/firebase/`, application-owned auth components in
-`src/components/notes-app/`, and their guard exist, while authenticated routes,
-auth middleware, Firestore access, and `next-intl` do not. See each ADR's
+only partly built on `dev`: ADR 0005 is implemented (Auth Emulator with
+password, e-mail-link, phone, Google OAuth, and SMS MFA flows, plus cookie-backed
+protected routes), ADR 0007 is partially implemented (cookie-based `next-intl`
+foundation only), and Firestore access remains unimplemented. See each ADR's
 Current State section.
 
 ## 7. Architecture rules
 
 - No circular dependencies.
-- UI primitives cannot depend on application routing or domain components.
+- UI primitives cannot depend on application routing or application components.
+- `src/lib` and `src/hooks` cannot depend at runtime on `src/components` or
+  `src/app`; components cannot depend on `src/app`. Type-only imports are
+  allowed. Enforced by Dependency Cruiser.
 - Server-first Next.js composition.
 - Small client boundaries.
 - No speculative wrappers or service layers.

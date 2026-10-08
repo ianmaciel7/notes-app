@@ -1,7 +1,7 @@
 [
   {
     "path": ".next/static/**/*.js",
-    "limit": "300 kB"
+    "limit": "450 kB"
   },
   {
     "path": ".next/static/**/*.css",

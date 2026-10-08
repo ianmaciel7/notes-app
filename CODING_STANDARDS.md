@@ -21,6 +21,15 @@ Formatting is owned by Biome:
 - 80-column formatter width;
 - organized imports.
 
+Fallow audits code size and complexity (tests are exempt):
+
+- functions over 80 lines (blank lines ignored);
+- files over 300 lines (blank lines ignored);
+- more than 4 parameters (use an options object);
+- cognitive complexity above 15.
+
+See [TOOLING.md](./TOOLING.md) section 3 for the check (`pnpm run check:health`).
+
 ## 2. Next.js App Router
 
 The project is App Router-only.
@@ -88,8 +97,23 @@ Treat both as externally reachable server operations.
 - Keep state logic in the smallest sensible owner.
 - Extract a custom hook when state/effects form a reusable or independently
   understandable behavior.
+- There are two kinds of custom hooks:
+  - **Context accessors** (read a context owned by the component, e.g.
+    `useSidebar` in `sidebar.tsx`) stay in the same component file and are
+    exported from it. This follows shadcn.
+  - **All other hooks** (state, effects, refs, forms, behavior) live in their
+    own `use-*.ts(x)` file in `src/hooks/`. shadcn defines the `@/hooks` alias
+    (`aliases.hooks`) and keeps generic hooks there (e.g. `use-mobile.ts`).
+- Project convention (stricter than shadcn, which keeps state inside its own
+  `ui/` components): application components must not call stateful React hooks
+  (`useState`, `useReducer`, `useEffect`, `useRef`, `useCallback`, `useMemo`, `useForm`)
+  directly, and single-consumer hooks also go to `src/hooks/`. Files that own a
+  context (`createContext`) are exempt, and `src/components/ui/**` is not
+  linted.
 - Avoid middleman components that only rename another component.
 - Name components after their actual primitive/semantic role.
+- Component props must use a named type/interface or `ComponentProps<...>`; never
+  define props inline or omit the props parameter.
 
 For UI naming, prefer vocabulary from:
 

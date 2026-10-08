@@ -1,0 +1,15 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  JsFunctionDeclaration() as $hook where {
+    $hook <: r"(?s)^\s*(?:async\s+)?function\s+use[A-Z].*"
+  },
+  JsVariableDeclarator() as $hook where {
+    $hook <: r"(?s)^\s*use[A-Z]\w*\s*(?::[^=]+)?=.*"
+  }
+} where {
+  $hook <: not r"(?s).*\b(?:React\.)?(?:useContext|use)\s*[(<].*",
+  $filename <: not r".*src.hooks.*",
+  register_diagnostic(span=$hook, message="Custom hooks must not be defined inside component files. Extract it to src/hooks/ (import via @/hooks), as defined by the shadcn aliases.hooks setting. Context accessors (like useSidebar) are exempt.")
+}

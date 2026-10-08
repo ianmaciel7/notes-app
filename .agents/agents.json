@@ -9,9 +9,7 @@
       "claude",
       "claude_desktop",
       "gemini",
-      "antigravity",
-      "cursor",
-      "grok"
+      "antigravity"
     ],
     "options": {
       "cursorAutoApprove": true,
@@ -265,5 +263,6 @@
     }
   },
   "lastSync": null,
-  "lastSyncSourceHash": null
+  "lastSyncSourceHash": null,
+  "activeProfile": null
 }

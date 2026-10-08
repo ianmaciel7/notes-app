@@ -1,21 +1,10 @@
 "use client";
 
-import {
-  enrollWithMultiFactorAssertion,
-  FirebaseUIError,
-  generateTotpQrCode,
-  generateTotpSecret,
-  getTranslation,
-} from "@firebase-oss/ui-core";
-import {
-  useMultiFactorTotpAuthNumberFormSchema,
-  useMultiFactorTotpAuthVerifyFormSchema,
-  useUI,
-} from "@firebase-oss/ui-react";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { TotpMultiFactorGenerator, type TotpSecret } from "firebase/auth";
-import { useState } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { generateTotpQrCode, getTranslation } from "@firebase-oss/ui-core";
+import type { TotpSecret } from "firebase/auth";
+import Image from "next/image";
+import type { PropsWithChildren } from "react";
+import { Controller, FormProvider } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -24,35 +13,19 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { useAuthenticatedUserGuard } from "@/hooks/use-authenticated-user-guard";
+import { useMultiFactorEnrollmentVerifyTotpForm } from "@/hooks/use-multi-factor-enrollment-verify-totp-form";
+import { useTotpMultiFactorEnrollmentForm } from "@/hooks/use-totp-multi-factor-enrollment-form";
+import { useTotpMultiFactorSecretGenerationForm } from "@/hooks/use-totp-multi-factor-secret-generation-form";
 
-type TotpMultiFactorSecretGenerationFormProps = {
+type TotpMultiFactorSecretGenerationFormProps = PropsWithChildren<{
   onSubmit: (secret: TotpSecret, displayName: string) => void;
-};
+}>;
 
 function TotpMultiFactorSecretGenerationForm(
   props: TotpMultiFactorSecretGenerationFormProps,
 ) {
-  const ui = useUI();
-  const schema = useMultiFactorTotpAuthNumberFormSchema();
-
-  const form = useForm<{ displayName: string }>({
-    resolver: standardSchemaResolver(schema),
-    mode: "onChange",
-    defaultValues: {
-      displayName: "",
-    },
-  });
-
-  const onSubmit = async (values: { displayName: string }) => {
-    try {
-      const secret = await generateTotpSecret(ui);
-      props.onSubmit(secret, values.displayName);
-    } catch (error) {
-      const message =
-        error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
-    }
-  };
+  const { ui, form, onSubmit } = useTotpMultiFactorSecretGenerationForm(props);
 
   return (
     <FormProvider {...form}>
@@ -93,51 +66,30 @@ function TotpMultiFactorSecretGenerationForm(
   );
 }
 
-type MultiFactorEnrollmentVerifyTotpFormProps = {
+type MultiFactorEnrollmentVerifyTotpFormProps = PropsWithChildren<{
   secret: TotpSecret;
   displayName: string;
   onSuccess: () => void;
-};
+}>;
 
 export function MultiFactorEnrollmentVerifyTotpForm(
   props: MultiFactorEnrollmentVerifyTotpFormProps,
 ) {
-  const ui = useUI();
-  const schema = useMultiFactorTotpAuthVerifyFormSchema();
-
-  const form = useForm<{ verificationCode: string }>({
-    resolver: standardSchemaResolver(schema),
-    mode: "onChange",
-    defaultValues: {
-      verificationCode: "",
-    },
-  });
-
-  const onSubmit = async (values: { verificationCode: string }) => {
-    try {
-      const assertion = TotpMultiFactorGenerator.assertionForEnrollment(
-        props.secret,
-        values.verificationCode,
-      );
-      await enrollWithMultiFactorAssertion(
-        ui,
-        assertion,
-        values.verificationCode,
-      );
-      props.onSuccess();
-    } catch (error) {
-      const message =
-        error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
-    }
-  };
+  const { ui, form, onSubmit } = useMultiFactorEnrollmentVerifyTotpForm(props);
 
   const qrCodeDataUrl = generateTotpQrCode(ui, props.secret, props.displayName);
 
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-y-4 items-center justify-center">
-        <img src={qrCodeDataUrl} alt="TOTP QR Code" className="mx-auto" />
+        <Image
+          src={qrCodeDataUrl}
+          alt="TOTP QR Code"
+          width={200}
+          height={200}
+          unoptimized
+          className="mx-auto"
+        />
         <code className="text-xs text-muted-foreground text-center">
           {props.secret.secretKey.toString()}
         </code>
@@ -193,25 +145,15 @@ export function MultiFactorEnrollmentVerifyTotpForm(
   );
 }
 
-export type TotpMultiFactorEnrollmentFormProps = {
+export type TotpMultiFactorEnrollmentFormProps = PropsWithChildren<{
   onSuccess?: () => void;
-};
+}>;
 
 export function TotpMultiFactorEnrollmentForm(
   props: TotpMultiFactorEnrollmentFormProps,
 ) {
-  const ui = useUI();
-
-  const [enrollment, setEnrollment] = useState<{
-    secret: TotpSecret;
-    displayName: string;
-  } | null>(null);
-
-  if (!ui.auth.currentUser) {
-    throw new Error(
-      "User must be authenticated to enroll with multi-factor authentication",
-    );
-  }
+  const { enrollment, setEnrollment } = useTotpMultiFactorEnrollmentForm();
+  useAuthenticatedUserGuard();
 
   if (!enrollment) {
     return (

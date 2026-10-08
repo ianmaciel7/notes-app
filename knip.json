@@ -25,6 +25,7 @@
     "react-day-picker",
     "react-resizable-panels",
     "recharts",
+    "server-only",
     "shadcn",
     "@axe-core/playwright",
     "@testing-library/dom",

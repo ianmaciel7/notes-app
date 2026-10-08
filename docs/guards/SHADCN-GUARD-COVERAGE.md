@@ -49,7 +49,10 @@ upstream reference. Firebase reference integrity is enforced separately by
 | `canonical-import-aliases.grit` | canonical import aliases (@/components/ui, @/lib/utils, @/hooks) |
 | `no-inline-styles.grit` | no inline style={{ ... }} in application code |
 | `no-radix-imports.grit` | no direct @radix-ui/* imports (enforces Base UI ecosystem) |
-| `exported-hook-location.grit` | exported hooks outside `src/hooks/` must read a context (shadcn `useSidebar` pattern); generic hooks go in `src/hooks/` |
+| `exported-hook-location.grit` | exported hooks must live in `src/hooks/`, unless they read a context (shadcn `useSidebar` pattern) |
+| `no-inline-hook-definition.grit` | no hook definitions (exported or not) inside component files; extract to `src/hooks/` (context accessors exempt) |
+| `extract-stateful-hooks.grit` | warns when `useState`/`useReducer`/`useEffect`/`useRef`/`useCallback`/`useMemo`/`useForm`, or the stateful `@firebase-oss/ui-react` hooks `useUI`/`useSignInWithProvider`/`useOnUserAuthenticated`/`useRedirectError`, are called directly in a component file; extract to a hook in `src/hooks/` (files that own a context via `createContext` are exempt) |
+| `component-props-type.grit` | warns when a `*Props` type/interface in a `.tsx` file is a bare object literal, when a PascalCase exported function component uses an inline props type, or when it omits its props parameter; use a named React/DOM-based props type or `ComponentProps<...>`, and spread props onto the root when applicable |
 
 ## `components.json` ownership
 

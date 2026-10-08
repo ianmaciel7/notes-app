@@ -1,9 +1,9 @@
 "use client";
 
-import { useRedirectError } from "@firebase-oss/ui-react";
+import { useRedirectErrorMessage } from "@/hooks/use-redirect-error-message";
 
 export function RedirectError() {
-  const error = useRedirectError();
+  const error = useRedirectErrorMessage();
 
   if (!error) {
     return null;

@@ -1,0 +1,32 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  TsTypeAliasDeclaration() as $match where {
+    $match <: r"(?s)^\s*(?:export\s+)?type\s+\w*Props\b(?:<[^=]*>)?\s*=\s*\{.*",
+    $match <: not r"(?s).*\b(?:ComponentProps|ComponentPropsWithRef|ComponentPropsWithoutRef|PropsWithChildren|PropsWithRef|DetailedHTMLProps|HTMLProps|SVGProps|AriaAttributes|VariantProps|PageProps|LayoutProps|RouteContext)\b.*",
+    $match <: not r"(?s).*\b\w*HTMLAttributes\b.*",
+    $match <: not r"(?s).*\bJSX\.IntrinsicElements\b.*",
+    $match <: not r"(?s).*\bchildren\??\s*:.*"
+  },
+  TsInterfaceDeclaration() as $match where {
+    $match <: r"(?s)^\s*(?:export\s+)?interface\s+\w*Props\b(?:<[^{]*>)?\s*\{.*",
+    $match <: not r"(?s).*\b(?:ComponentProps|ComponentPropsWithRef|ComponentPropsWithoutRef|PropsWithChildren|PropsWithRef|DetailedHTMLProps|HTMLProps|SVGProps|AriaAttributes|VariantProps|PageProps|LayoutProps|RouteContext)\b.*",
+    $match <: not r"(?s).*\b\w*HTMLAttributes\b.*",
+    $match <: not r"(?s).*\bJSX\.IntrinsicElements\b.*",
+    $match <: not r"(?s).*\bchildren\??\s*:.*"
+  },
+  JsFunctionDeclaration() as $match where {
+    $match <: r"(?s).*function\s+[A-Z]\w*\s*\([^)]*\}\s*:\s*\{.*",
+    $match <: within JsExport()
+  },
+  JsFunctionDeclaration() as $match where {
+    $match <: r"(?s).*function\s+[A-Z]\w*\s*\(\s*\).*",
+    $match <: within JsExport()
+  }
+} where {
+  $filename <: r".*\.tsx$",
+  $filename <: not r".*src.app.*error\.tsx$",
+  $filename <: not r".*src.app.*(?:page|layout|loading|not-found|template|default)\.tsx$",
+  register_diagnostic(severity="warn", span=$match, message="Component props must use a named XProps type or interface built on React/DOM props or ComponentProps<...>; never use an inline props type or omit the props parameter. Spread ...props onto the root element when applicable.")
+}

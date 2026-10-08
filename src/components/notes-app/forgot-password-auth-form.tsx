@@ -1,48 +1,19 @@
 "use client";
 
-import type { ForgotPasswordAuthFormSchema } from "@firebase-oss/ui-core";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
-import {
-  type ForgotPasswordAuthFormProps,
-  useForgotPasswordAuthFormAction,
-  useForgotPasswordAuthFormSchema,
-  useUI,
-} from "@firebase-oss/ui-react";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useState } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { getTranslation } from "@firebase-oss/ui-core";
+import type { ForgotPasswordAuthFormProps } from "@firebase-oss/ui-react";
+import Link from "next/link";
+import { Controller, FormProvider } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useForgotPasswordAuthForm } from "@/hooks/use-forgot-password-auth-form";
 import { Policies } from "./policies";
 
 export type { ForgotPasswordAuthFormProps };
 
 export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
-  const ui = useUI();
-  const schema = useForgotPasswordAuthFormSchema();
-  const action = useForgotPasswordAuthFormAction();
-  const [emailSent, setEmailSent] = useState(false);
-
-  const form = useForm<ForgotPasswordAuthFormSchema>({
-    resolver: standardSchemaResolver(schema),
-    mode: "onChange",
-    defaultValues: {
-      email: "",
-    },
-  });
-
-  async function onSubmit(values: ForgotPasswordAuthFormSchema) {
-    try {
-      await action(values);
-      setEmailSent(true);
-      props.onPasswordSent?.();
-    } catch (error) {
-      const message =
-        error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
-    }
-  }
+  const { ui, form, emailSent, onSubmit } = useForgotPasswordAuthForm(props);
 
   if (emailSent) {
     return (
@@ -100,7 +71,14 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
               &larr; {getTranslation(ui, "labels", "backToSignIn")}
             </span>
           </Button>
-        ) : null}
+        ) : (
+          <Link
+            href="/sign-in"
+            className="text-primary text-center text-xs font-medium underline-offset-4 hover:underline"
+          >
+            &larr; {getTranslation(ui, "labels", "backToSignIn")}
+          </Link>
+        )}
       </form>
     </FormProvider>
   );

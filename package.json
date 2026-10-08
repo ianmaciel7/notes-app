@@ -8,12 +8,14 @@
     "start": "next start",
     "format": "biome format --write",
     "lint": "biome check",
-    "lint:changed": "biome check --changed",
+    "lint:changed": "biome check --changed --since=origin/main",
     "check:types": "next typegen && tsc --noEmit -p tsconfig.check.json",
     "test": "vitest run",
     "test:changed": "vitest run --changed",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test",
+    "test:e2e": "firebase emulators:exec --project demo-notes-app --only auth --import .firebase/seeds \"playwright test\"",
+    "emulator": "firebase emulators:start --project demo-notes-app --only auth --import .firebase/seeds",
+    "emulators:seed": "firebase emulators:exec --project demo-notes-app --only auth --export-on-exit .firebase/seeds \"node scripts/create-auth-emulator-seed.mjs\"",
     "test:mutation": "stryker run",
     "check:deps": "dependency-cruiser --config .dependency-cruiser.cjs src",
     "check:unused": "knip",
@@ -24,19 +26,22 @@
     "lint:md": "markdownlint-cli2 \"**/*.md\"",
     "check:security": "pnpm audit --audit-level high",
     "verify:agents": "agents sync --check",
+    "ci:wait": "node scripts/wait-for-ci.mjs",
+    "ci:check-paths": "node scripts/wait-for-ci.mjs --check-paths",
     "verify:fast": "pnpm run lint && pnpm run check:types && pnpm run test && pnpm run check:deps && pnpm run lint:spelling",
     "verify:changed": "pnpm run lint:changed && pnpm run check:types && pnpm run test:changed",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,ts,tsx,css,json}": [
-      "biome check --write --no-errors-on-unmatched"
+      "biome check --write --error-on-warnings --no-errors-on-unmatched"
     ]
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
     "@firebase-oss/ui-core": "^7.1.0",
     "@firebase-oss/ui-react": "^7.1.0",
+    "@firebase-oss/ui-translations": "7.1.0",
     "@hookform/resolvers": "^5.9.1",
     "@shadcn/react": "^0.3.1",
     "class-variance-authority": "^0.7.1",
@@ -48,6 +53,7 @@
     "input-otp": "^1.5.0",
     "lucide-react": "^1.52.0",
     "next": "16.3.8",
+    "next-intl": "^4.14.9",
     "react": "19.2.8",
     "react-day-picker": "^10.0.2",
     "react-dom": "19.2.8",
@@ -78,6 +84,8 @@
     "cspell": "^10.3.6",
     "dependency-cruiser": "^18.5.0",
     "fallow": "^3.31.0",
+    "firebase-admin": "13.4.0",
+    "firebase-tools": "15.0.0",
     "happy-dom": "^20.14.5",
     "husky": "^9.1.7",
     "jscpd": "^5.4.0",

@@ -1,0 +1,11 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+JsModule() as $file where {
+  $filename <: not r".*src.hooks.*",
+  $file <: not r"(?s).*\bcreateContext\s*[(<].*",
+  $file <: contains JsCallExpression() as $call where {
+    $call <: r"(?s)^\s*(?:React\.)?use(?:State|Reducer|Effect|LayoutEffect|Ref|Callback|Memo|Form|UI|SignInWithProvider|OnUserAuthenticated|RedirectError)\s*[(<].*",
+    register_diagnostic(severity="warn", span=$call, message="Stateful React hooks (useState, useReducer, useEffect, useRef, ...) and stateful @firebase-oss/ui-react hooks (useUI, useSignInWithProvider, useOnUserAuthenticated, useRedirectError) must not be called directly in a component file. Extract this logic into a custom hook in src/hooks/ (import via @/hooks). Files that own a React context (createContext) are exempt.")
+  }
+}

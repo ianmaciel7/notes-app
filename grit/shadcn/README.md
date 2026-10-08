@@ -34,6 +34,7 @@ The current pack covers:
 - prohibition of inline styles (`style={{ ... }}`);
 - Base UI ecosystem protection (blocking direct `@radix-ui/*` imports).
 - hook placement: exported hooks outside `src/hooks/` must be context accessors (`exported-hook-location.grit`).
+- component props typing: `*Props` types in `.tsx` files must build on `PropsWithChildren`, `ComponentProps` or similar DOM/React props types (`component-props-type.grit`).
 
 The exact active files are registered in `biome.json`.
 

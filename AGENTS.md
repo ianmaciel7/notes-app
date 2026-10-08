@@ -2,9 +2,9 @@
 
 # This is NOT the Next.js you know
 
-This version may contain APIs and conventions newer than model training data.
-Read the relevant installed Next.js documentation before framework-specific
-changes and heed deprecation notices.
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
 
@@ -98,6 +98,35 @@ Additional CI checks:
 - Size Limit
 - Playwright E2E
 
+## CI after push
+
+A `git push` is not completion. After pushing to `dev` or `main`, run
+`pnpm run ci:wait` and treat the task as done only when it exits `0`.
+
+| Exit | Meaning | Action |
+| --- | --- | --- |
+| `0` | CI green | Task may be reported as complete |
+| `1` | CI failed; logs printed | Diagnose the root cause, fix, run `pnpm run verify:fast` and `pnpm run ci:check-paths`, commit with the trailer `CI-Fix-Attempt: <n>` printed by the script, push, run `pnpm run ci:wait` again |
+| `2` | Commit not pushed or no run found | Fix the setup (push, `gh auth status`) and retry |
+| `3` | Attempt limit reached, run cancelled or timed out | Stop and report to the human; do not retry |
+| `4` | `ci:check-paths` found protected changes | Revert them or stop and ask |
+
+`ci:check-paths` applies to CI-fix commits only. Changes to the guard itself
+need human review, so ask instead of working around it.
+
+Never, to make CI green:
+
+- force push, or edit secrets;
+- delete, skip or weaken tests, or add lint/type/spell suppressions;
+- raise thresholds or disable checks (Biome, Knip, jscpd, Fallow, Size Limit,
+  `pnpm audit`, gitleaks, dependency-cruiser);
+- edit `.github/workflows/**`, gate configs, `package.json`,
+  `pnpm-lock.yaml` or `src/components/firebase/**` without human approval.
+
+Do not auto-fix flaky tests, infrastructure or registry failures, gitleaks
+findings (rotate the secret instead), new `pnpm audit` advisories, or
+architecture violations; report them. See [TOOLING.md](./TOOLING.md) section 6.
+
 ## Workflow
 
 1. Read relevant project docs and ADRs.
@@ -113,6 +142,7 @@ Additional CI checks:
 
 - Current architecture: `ARCHITECTURE.md`
 - Current coding policy: `CODING_STANDARDS.md`
+- Consolidated hard constraints (index): `CONSTRAINTS.md`
 - Current tests: `TESTING.md`
 - Security policy: `SECURITY.md`
 - Domain vocabulary: `GLOSSARY.md`

@@ -1,0 +1,18 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+or {
+  JsxText() as $text where {
+    $text <: r"\p{L}",
+    register_diagnostic(span=$text, message="Hardcoded UI text. Render user-visible copy from src/messages/*.json through next-intl (useTranslations/getTranslations).")
+  },
+  JsxExpressionChild(expression=JsStringLiteralExpression() as $literal) where {
+    $literal <: r"\p{L}",
+    register_diagnostic(span=$literal, message="Hardcoded UI text in a JSX expression. Render user-visible copy from src/messages/*.json through next-intl.")
+  },
+  JsxAttribute(name=$name, initializer=JsxAttributeInitializerClause(value=JsxString() as $value)) as $attribute where {
+    $name <: r"^(?:placeholder|title|alt|label|aria-label|aria-description|aria-placeholder|aria-roledescription|aria-valuetext)$",
+    $value <: r"\p{L}",
+    register_diagnostic(span=$attribute, message="Hardcoded user-visible attribute text. Read it from src/messages/*.json through next-intl.")
+  }
+}

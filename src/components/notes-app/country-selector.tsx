@@ -1,14 +1,11 @@
 "use client";
 
-import type { CountryCode, CountryData } from "@firebase-oss/ui-core";
-import {
-  type CountrySelectorProps,
-  type CountrySelectorRef,
-  useCountries,
-  useDefaultCountry,
+import type { CountryCode } from "@firebase-oss/ui-core";
+import type {
+  CountrySelectorProps,
+  CountrySelectorRef,
 } from "@firebase-oss/ui-react";
-import { forwardRef, useCallback, useImperativeHandle, useState } from "react";
-
+import { forwardRef } from "react";
 import {
   Select,
   SelectContent,
@@ -17,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useCountrySelector } from "@/hooks/use-country-selector";
 
 export type { CountrySelectorRef };
 
@@ -24,27 +22,7 @@ export const CountrySelector = forwardRef<
   CountrySelectorRef,
   CountrySelectorProps
 >((_props, ref) => {
-  const countries = useCountries();
-  const defaultCountry = useDefaultCountry();
-  const [selected, setSelected] = useState<CountryData>(defaultCountry);
-
-  const setCountry = useCallback(
-    (code: CountryCode) => {
-      const foundCountry =
-        countries.find((country) => country.code === code) ?? defaultCountry;
-      setSelected(foundCountry);
-    },
-    [countries, defaultCountry],
-  );
-
-  useImperativeHandle(
-    ref,
-    () => ({
-      getCountry: () => selected,
-      setCountry,
-    }),
-    [selected, setCountry],
-  );
+  const { countries, selected, setCountry } = useCountrySelector(ref);
 
   return (
     <Select

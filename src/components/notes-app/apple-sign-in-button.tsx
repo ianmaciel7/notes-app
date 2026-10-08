@@ -1,14 +1,10 @@
 "use client";
 
-import { getTranslation } from "@firebase-oss/ui-core";
-import {
-  AppleLogo,
-  type AppleSignInButtonProps,
-  useUI,
-} from "@firebase-oss/ui-react";
+import { AppleLogo, type AppleSignInButtonProps } from "@firebase-oss/ui-react";
 import { OAuthProvider } from "firebase/auth";
 
 import { OAuthButton } from "@/components/notes-app/oauth-button";
+import { useTranslation } from "@/hooks/use-translation";
 
 export type { AppleSignInButtonProps };
 
@@ -16,7 +12,7 @@ export function AppleSignInButton({
   provider,
   ...props
 }: AppleSignInButtonProps) {
-  const ui = useUI();
+  const translate = useTranslation();
 
   return (
     <OAuthButton
@@ -24,7 +20,7 @@ export function AppleSignInButton({
       provider={provider || new OAuthProvider("apple.com")}
     >
       <AppleLogo />
-      <span>{getTranslation(ui, "labels", "signInWithApple")}</span>
+      <span>{translate("labels", "signInWithApple")}</span>
     </OAuthButton>
   );
 }

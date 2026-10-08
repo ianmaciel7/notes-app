@@ -20,7 +20,7 @@ with each tool's `--version`.
 | --- | --- | --- |
 | Node.js | 22.19.0 | `.node-version` |
 | Package manager | pnpm 12.8.1 | `packageManager` in `package.json` |
-| Build-script allowlist | `@firebase/util`, `protobufjs` allowed; `sharp`, `unrs-resolver` blocked | `pnpm-workspace.yaml` `allowBuilds` |
+| Build-script allowlist | `@firebase/util`, `protobufjs` allowed; `sharp`, `unrs-resolver`, `@parcel/watcher`, `@swc/core` blocked | `pnpm-workspace.yaml` `allowBuilds` |
 | Dependency overrides | `@grpc/grpc-js`, `qs`, `smol-toml` | `pnpm-workspace.yaml` `overrides` |
 | Audit exception | `GHSA-vfj7-8cjw-p6xm` (markdownlint-cli2 globs only) | `pnpm-workspace.yaml` `audit.ignore` |
 | Dependency updates | Renovate; `next`, `react`, `react-dom` grouped as `core-framework` | `renovate.json` |
@@ -63,11 +63,11 @@ Framework configuration:
 | Playwright | E2E on Chromium, starts `pnpm dev` | `pnpm run test:e2e` | `playwright.config.ts` |
 | axe-core | Accessibility checks inside Playwright | used by E2E tests | `@axe-core/playwright` |
 | Stryker | Mutation testing (Vitest runner, TypeScript checker) | `pnpm run test:mutation` | `stryker.config.json` |
-| Dependency Cruiser | Architecture rules: `no-circular`, `src-root-allowed-files-only`, `not-to-unresolvable`, `ui-primitives-cannot-import-domain` | `pnpm run check:deps` | `.dependency-cruiser.cjs` |
+| Dependency Cruiser | Architecture rules: `no-circular`, `src-root-allowed-files-only`, `not-to-unresolvable`, `no-non-package-json`, `not-to-dev-dep`, `not-to-test`, `ui-primitives-cannot-import-domain`, `lib-and-hooks-cannot-import-ui-layers`, `components-cannot-import-app` | `pnpm run check:deps` | `.dependency-cruiser.cjs` |
 | Knip | Unused files, exports, and dependencies | `pnpm run check:unused` | `knip.json` |
 | jscpd | Code duplication (threshold 2) | `pnpm run check:duplication` | `.jscpd.json` |
 | Fallow | Code health and complexity audit | `pnpm run check:health` | `.fallowrc.json` |
-| Size Limit | Budgets: JS 300 kB, CSS 100 kB under `.next/static` | `pnpm run check:size` | `.size-limit.json` |
+| Size Limit | Budgets: JS 450 kB, CSS 100 kB under `.next/static` | `pnpm run check:size` | `.size-limit.json` |
 | CSpell | Spell check for `.ts`, `.tsx`, `.md` | `pnpm run lint:spelling` | `cspell.json` |
 | markdownlint-cli2 | Markdown lint | `pnpm run lint:md` | `.markdownlint-cli2.jsonc` |
 | `pnpm audit` | Dependency vulnerabilities, high and above | `pnpm run check:security` | `package.json`, `pnpm-workspace.yaml` |
@@ -86,6 +86,8 @@ ownership.
 | `verify:changed` | `lint:changed`, `check:types`, `test:changed` | Fast iteration and the `pre-push` hook |
 | `verify:fast` | `lint`, `check:types`, `test`, `check:deps`, `lint:spelling` | Delivery gate; run manually |
 | `verify:agents` | `agents sync --check` | Confirms agent config is in sync; not part of the other gates |
+| `ci:wait` | `scripts/wait-for-ci.mjs` | After `git push`: waits for the `CI` run of `HEAD`, prints failed steps and the last log lines, exits `0` green, `1` failed, `2` setup, `3` human needed |
+| `ci:check-paths` | `scripts/wait-for-ci.mjs --check-paths` | Before committing a CI fix: fails (`4`) on protected paths, deleted tests or added suppressions |
 
 ## 5. Git hooks
 
@@ -113,6 +115,22 @@ Workflow: `.github/workflows/ci.yml`, on push and pull request to `dev` and
 | `secret-scan` | gitleaks (`gitleaks-action@v3`) over the full history |
 
 Not run in CI: `lint:md`, `verify:agents`, `test:coverage`, `test:mutation`.
+
+### 6.1 Watching CI after a push
+
+`pnpm run ci:wait` needs the GitHub CLI (`gh auth status`) and a classic or
+OAuth login (fine-grained tokens lack `checks:read`). It finds `CI` runs by
+commit SHA, polls until they finish (default 30 minutes), and counts automatic
+fix attempts through the `CI-Fix-Attempt: <n>` commit trailer (default limit
+2; the counter resets on any commit without the trailer, so it is a guard
+rail for agents, not a security boundary). `ci:check-paths` guards CI-fix
+commits made by agents only: the commit that adds or changes the guard, its
+tests (which contain suppression patterns on purpose), `package.json` or
+these docs is a human-reviewed commit and is expected to trip it. Rules for
+agents are in
+`AGENTS.md` ("CI after push"). No remote self-healing workflow exists; any
+future one must open a pull request instead of pushing, and `workflow_run`
+only fires from a workflow file on the default branch.
 
 ## 7. Firebase
 

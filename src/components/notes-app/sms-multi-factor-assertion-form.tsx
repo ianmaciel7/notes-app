@@ -1,17 +1,9 @@
 "use client";
 
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
-import {
-  useMultiFactorPhoneAuthVerifyFormSchema,
-  useRecaptchaVerifier,
-  useSmsMultiFactorAssertionPhoneFormAction,
-  useSmsMultiFactorAssertionVerifyFormAction,
-  useUI,
-} from "@firebase-oss/ui-react";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { getTranslation } from "@firebase-oss/ui-core";
 import type { MultiFactorInfo, UserCredential } from "firebase/auth";
-import { useRef, useState } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import type { PropsWithChildren } from "react";
+import { Controller, FormProvider } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -24,39 +16,24 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { useSmsMultiFactorAssertionForm } from "@/hooks/use-sms-multi-factor-assertion-form";
+import { useSmsMultiFactorAssertionPhoneForm } from "@/hooks/use-sms-multi-factor-assertion-phone-form";
+import { useSmsMultiFactorAssertionVerifyForm } from "@/hooks/use-sms-multi-factor-assertion-verify-form";
 
 type PhoneMultiFactorInfo = MultiFactorInfo & {
   phoneNumber?: string;
 };
 
-type SmsMultiFactorAssertionPhoneFormProps = {
+type SmsMultiFactorAssertionPhoneFormProps = PropsWithChildren<{
   hint: MultiFactorInfo;
   onSubmit: (verificationId: string) => void;
-};
+}>;
 
 function SmsMultiFactorAssertionPhoneForm(
   props: SmsMultiFactorAssertionPhoneFormProps,
 ) {
-  const ui = useUI();
-  const recaptchaContainerRef = useRef<HTMLDivElement>(null);
-  const recaptchaVerifier = useRecaptchaVerifier(recaptchaContainerRef);
-  const action = useSmsMultiFactorAssertionPhoneFormAction();
-  const [error, setError] = useState<string | null>(null);
-
-  const onSubmit = async () => {
-    try {
-      setError(null);
-      const verificationId = await action({
-        hint: props.hint,
-        recaptchaVerifier: recaptchaVerifier!,
-      });
-      props.onSubmit(verificationId);
-    } catch (error) {
-      const message =
-        error instanceof FirebaseUIError ? error.message : String(error);
-      setError(message);
-    }
-  };
+  const { ui, recaptchaContainerRef, error, onSubmit } =
+    useSmsMultiFactorAssertionPhoneForm(props.hint, props.onSubmit);
 
   return (
     <div className="space-y-4">
@@ -77,43 +54,15 @@ function SmsMultiFactorAssertionPhoneForm(
   );
 }
 
-type SmsMultiFactorAssertionVerifyFormProps = {
+type SmsMultiFactorAssertionVerifyFormProps = PropsWithChildren<{
   verificationId: string;
   onSuccess: (credential: UserCredential) => void;
-};
+}>;
 
 function SmsMultiFactorAssertionVerifyForm(
   props: SmsMultiFactorAssertionVerifyFormProps,
 ) {
-  const ui = useUI();
-  const schema = useMultiFactorPhoneAuthVerifyFormSchema();
-  const action = useSmsMultiFactorAssertionVerifyFormAction();
-
-  const form = useForm<{ verificationId: string; verificationCode: string }>({
-    resolver: standardSchemaResolver(schema),
-    mode: "onChange",
-    defaultValues: {
-      verificationId: props.verificationId,
-      verificationCode: "",
-    },
-  });
-
-  const onSubmit = async (values: {
-    verificationId: string;
-    verificationCode: string;
-  }) => {
-    try {
-      const credential = await action({
-        verificationId: values.verificationId,
-        verificationCode: values.verificationCode,
-      });
-      props.onSuccess(credential);
-    } catch (error) {
-      const message =
-        error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
-    }
-  };
+  const { ui, form, onSubmit } = useSmsMultiFactorAssertionVerifyForm(props);
 
   return (
     <FormProvider {...form}>
@@ -166,17 +115,15 @@ function SmsMultiFactorAssertionVerifyForm(
   );
 }
 
-export type SmsMultiFactorAssertionFormProps = {
+export type SmsMultiFactorAssertionFormProps = PropsWithChildren<{
   hint: MultiFactorInfo;
   onSuccess?: (credential: UserCredential) => void;
-};
+}>;
 
 export function SmsMultiFactorAssertionForm(
   props: SmsMultiFactorAssertionFormProps,
 ) {
-  const [verification, setVerification] = useState<{
-    verificationId: string;
-  } | null>(null);
+  const { verification, setVerification } = useSmsMultiFactorAssertionForm();
 
   if (!verification) {
     return (

@@ -59,7 +59,7 @@ Standard Next.js metadata and static assets detected automatically:
 
 - **React Components**: `PascalCase` function declarations (`export default function NoteList() {}`).
 - **File & Directory Names**: `kebab-case` for all repository files (`note-card.tsx`, `use-mobile.ts`).
-- **Custom Hooks**: `camelCase` prefixed with `use` (`useMobile`, `useNotesFilter`).
+- **Custom Hooks**: `camelCase` prefixed with `use` (`useMobile`, `useNotesFilter`). Two kinds: context accessors (like `useSidebar`) stay in their component file; every other hook lives in its own `use-*.ts(x)` file in `src/hooks/` (import via `@/hooks`), never inline in a component file.
 - **Server Actions**: `camelCase` verb phrases (`createNote`, `deleteNote`, `updateNoteTitle`).
 - **Route Handler Methods**: Uppercase HTTP method names (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, `OPTIONS`).
 - **Types & Interfaces**: `PascalCase` (`NoteItem`, `CreateNoteInput`, `PageProps`).

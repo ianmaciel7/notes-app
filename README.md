@@ -40,6 +40,46 @@ pnpm dev
 
 Open `http://localhost:3000`.
 
+## Local authentication
+
+Authentication uses the Firebase Auth Emulator with the `demo-notes-app`
+project ID. It never needs Firebase cloud credentials.
+
+Production builds must provide `NEXT_PUBLIC_FIREBASE_CONFIG` as JSON with
+`apiKey`, `appId`, `authDomain`, and `projectId`. This is Firebase's public
+browser configuration, not a privileged credential.
+
+```bash
+pnpm run emulator
+$env:FIREBASE_AUTH_EMULATOR_HOST = "127.0.0.1:9099"
+pnpm dev
+```
+
+The committed emulator seed contains one non-secret development account:
+
+| Email | Password |
+| --- | --- |
+| `student@example.test` | `correct-horse-battery-staple` |
+
+Run `pnpm run emulators:seed` only when intentionally refreshing the committed
+fixture. It exports a new baseline to `.firebase/seeds/`; ordinary emulator and
+E2E commands import that baseline and never rewrite it. `pnpm run test:e2e`
+owns both the Auth Emulator and Next.js lifecycle.
+
+The supported local flows are e-mail/password registration, sign-in, sign-out,
+e-mail-link sign-in, phone sign-in, and Firebase SDK-managed OAuth redirect
+sign-in. The Auth Emulator stores e-mail links and produces SMS/MFA codes
+locally; it does not deliver messages. Tests retrieve OOB links from `oobCodes`
+and SMS codes from `verificationCodes` through the emulator REST API instead of
+relying on terminal output.
+
+SMS MFA is enrolled from the protected `/settings` route and asserted at
+sign-in; the E2E retrieves both codes from `verificationCodes`. TOTP MFA is not an Emulator-backed flow in the pinned toolchain. The Emulator
+serves a local provider page with mock accounts for Firebase SDK-managed OAuth;
+manually supplied provider credentials remain subject to Emulator limits. See
+[ADR 0005](./docs/adr/0005-adopt-firebase-auth-with-local-emulator.md) for the
+support matrix.
+
 ## Verification
 
 Fast local verification:

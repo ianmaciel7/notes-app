@@ -1,46 +1,19 @@
 "use client";
 
-import type { SignInAuthFormSchema } from "@firebase-oss/ui-core";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
-import {
-  type SignInAuthFormProps,
-  useSignInAuthFormAction,
-  useSignInAuthFormSchema,
-  useUI,
-} from "@firebase-oss/ui-react";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { getTranslation } from "@firebase-oss/ui-core";
+import type { SignInAuthFormProps } from "@firebase-oss/ui-react";
+import Link from "next/link";
+import { Controller, FormProvider } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useSignInAuthForm } from "@/hooks/use-sign-in-auth-form";
 import { Policies } from "./policies";
 
 export type { SignInAuthFormProps };
 
 export function SignInAuthForm(props: SignInAuthFormProps) {
-  const ui = useUI();
-  const schema = useSignInAuthFormSchema();
-  const action = useSignInAuthFormAction();
-
-  const form = useForm<SignInAuthFormSchema>({
-    resolver: standardSchemaResolver(schema),
-    mode: "onChange",
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  async function onSubmit(values: SignInAuthFormSchema) {
-    try {
-      const credential = await action(values);
-      if (credential) props.onSignIn?.(credential);
-    } catch (error) {
-      const message =
-        error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
-    }
-  }
+  const { ui, form, onSubmit } = useSignInAuthForm(props);
 
   return (
     <FormProvider {...form}>
@@ -91,7 +64,14 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
                       {getTranslation(ui, "labels", "forgotPassword")}
                     </span>
                   </Button>
-                ) : null}
+                ) : (
+                  <Link
+                    href="/forgot-password"
+                    className="text-primary text-xs font-medium underline-offset-4 hover:underline"
+                  >
+                    {getTranslation(ui, "labels", "forgotPassword")}
+                  </Link>
+                )}
               </FieldLabel>
               <Input
                 {...field}
@@ -126,7 +106,29 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
               {getTranslation(ui, "labels", "signUp")}
             </span>
           </Button>
-        ) : null}
+        ) : (
+          <Link
+            href="/sign-up"
+            className="text-primary text-center text-xs font-medium underline-offset-4 hover:underline"
+          >
+            {getTranslation(ui, "prompts", "noAccount")}{" "}
+            {getTranslation(ui, "labels", "signUp")}
+          </Link>
+        )}
+        <div className="flex justify-center gap-3 text-xs">
+          <Link
+            href="/email-link"
+            className="text-primary font-medium underline-offset-4 hover:underline"
+          >
+            Sign in with e-mail link
+          </Link>
+          <Link
+            href="/phone"
+            className="text-primary font-medium underline-offset-4 hover:underline"
+          >
+            Sign in with phone
+          </Link>
+        </div>
       </form>
     </FormProvider>
   );

@@ -1,54 +1,20 @@
 "use client";
 
-import type { EmailLinkAuthFormSchema } from "@firebase-oss/ui-core";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
-import {
-  type EmailLinkAuthFormProps,
-  useEmailLinkAuthFormAction,
-  useEmailLinkAuthFormCompleteSignIn,
-  useEmailLinkAuthFormSchema,
-  useUI,
-} from "@firebase-oss/ui-react";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useState } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { getTranslation } from "@firebase-oss/ui-core";
+import type { EmailLinkAuthFormProps } from "@firebase-oss/ui-react";
+import { Controller, FormProvider } from "react-hook-form";
 
 import { Policies } from "@/components/notes-app/policies";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useEmailLinkAuthForm } from "@/hooks/use-email-link-auth-form";
 
 export type { EmailLinkAuthFormProps };
 
 export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
-  const { onEmailSent, onSignIn } = props;
-  const ui = useUI();
-  const schema = useEmailLinkAuthFormSchema();
-  const action = useEmailLinkAuthFormAction();
-  const [emailSent, setEmailSent] = useState(false);
-
-  const form = useForm<EmailLinkAuthFormSchema>({
-    resolver: standardSchemaResolver(schema),
-    mode: "onChange",
-    defaultValues: {
-      email: "",
-    },
-  });
-
-  useEmailLinkAuthFormCompleteSignIn(onSignIn);
-
-  async function onSubmit(values: EmailLinkAuthFormSchema) {
-    try {
-      await action(values);
-      setEmailSent(true);
-      onEmailSent?.();
-    } catch (error) {
-      const message =
-        error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
-    }
-  }
+  const { ui, form, emailSent, onSubmit } = useEmailLinkAuthForm(props);
 
   if (emailSent) {
     return (

@@ -1,45 +1,30 @@
 "use client";
 
-import { getTranslation } from "@firebase-oss/ui-core";
-import { useMultiFactorAssertionCleanup, useUI } from "@firebase-oss/ui-react";
 import {
-  type MultiFactorInfo,
   PhoneMultiFactorGenerator,
   TotpMultiFactorGenerator,
   type UserCredential,
 } from "firebase/auth";
-import { type ComponentProps, useState } from "react";
+import type { ComponentProps, PropsWithChildren } from "react";
 
 import { SmsMultiFactorAssertionForm } from "@/components/notes-app/sms-multi-factor-assertion-form";
 import { TotpMultiFactorAssertionForm } from "@/components/notes-app/totp-multi-factor-assertion-form";
 import { Button } from "@/components/ui/button";
+import { useMultiFactorAuthAssertionForm } from "@/hooks/use-multi-factor-auth-assertion-form";
+import { useTranslation } from "@/hooks/use-translation";
 
-export type MultiFactorAuthAssertionFormProps = {
+export type MultiFactorAuthAssertionFormProps = PropsWithChildren<{
   onSuccess?: (credential: UserCredential) => void;
-};
+}>;
 
 export function MultiFactorAuthAssertionForm({
   onSuccess,
 }: MultiFactorAuthAssertionFormProps) {
-  const ui = useUI();
-  const resolver = ui.multiFactorResolver;
-  const mfaAssertionFactorPrompt = getTranslation(
-    ui,
+  const { resolver, hint, setHint } = useMultiFactorAuthAssertionForm();
+  const translate = useTranslation();
+  const mfaAssertionFactorPrompt = translate(
     "prompts",
     "mfaAssertionFactorPrompt",
-  );
-
-  useMultiFactorAssertionCleanup();
-
-  if (!resolver) {
-    throw new Error(
-      "MultiFactorAuthAssertionForm requires a multi-factor resolver",
-    );
-  }
-
-  // If only a single hint is provided, select it by default to improve UX.
-  const [hint, setHint] = useState<MultiFactorInfo | undefined>(
-    resolver.hints.length === 1 ? resolver.hints[0] : undefined,
   );
 
   if (hint) {
@@ -77,13 +62,13 @@ export function MultiFactorAuthAssertionForm({
 }
 
 function TotpButton(props: ComponentProps<typeof Button>) {
-  const ui = useUI();
-  const labelText = getTranslation(ui, "labels", "mfaTotpVerification");
+  const translate = useTranslation();
+  const labelText = translate("labels", "mfaTotpVerification");
   return <Button {...props}>{labelText}</Button>;
 }
 
 function SmsButton(props: ComponentProps<typeof Button>) {
-  const ui = useUI();
-  const labelText = getTranslation(ui, "labels", "mfaSmsVerification");
+  const translate = useTranslation();
+  const labelText = translate("labels", "mfaSmsVerification");
   return <Button {...props}>{labelText}</Button>;
 }

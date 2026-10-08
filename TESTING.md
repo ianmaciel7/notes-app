@@ -66,9 +66,9 @@ Mutation testing is not currently part of the default CI gates.
 
 ## Accessibility
 
-`@axe-core/playwright` is installed, but the current smoke test does not yet
-run an axe audit. New user-facing feature flows should add accessibility checks
-where they provide meaningful signal.
+`tests/e2e/home.spec.ts` runs axe audits on the password-authentication and
+protected-route journeys. New user-facing feature flows should add accessibility
+checks where they provide meaningful signal.
 
 Do not claim WCAG conformance based only on installed tooling.
 

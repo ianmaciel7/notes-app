@@ -28,8 +28,8 @@ src/
 * **Ownership**: This directory is an **owned implementation/registry layer**.
   * It is intentionally excluded from ordinary application linters (`!src/components/ui` in `biome.json`) to preserve registry compatibility.
   * Primitives here must never import domain code or application routes. This
-    is an architecture/review invariant while this directory remains excluded
-    from the Dependency Cruiser graph.
+    is enforced mechanically by the Dependency Cruiser rule
+    `ui-primitives-cannot-import-domain`, which cruises this directory.
 
 ### 2. `src/components/firebase/` (Upstream Reference Layer)
 
@@ -65,6 +65,7 @@ src/
 
 * **Purpose**: Reusable React hooks consumed across components and pages (e.g., `use-mobile.ts`, `use-media-query.ts`).
 * **Rule**: Primitives such as `sidebar.tsx` or application components import shared state hooks from `@/hooks/*`.
+* **Placement**: Two kinds of hooks. Context accessors (like `useSidebar`) stay in the component file that owns the context (shadcn pattern). Every other hook lives here, one `use-*.ts(x)` file per hook: shadcn defines the `@/hooks` alias for generic hooks, and this project additionally places single-consumer hooks here (project convention, stricter than shadcn). Enforced by `no-inline-hook-definition.grit` and `exported-hook-location.grit`.
 
 ### 6. `src/app/` (Routing & Views Layer)
 
@@ -118,10 +119,9 @@ Boundary integrity is verified mechanically across multiple layers:
 1. **Canonical Import Aliases (`canonical-import-aliases.grit`)**:
    Enforces that application consumers import primitives and helpers using their canonical aliases (`@/components/ui`, `@/lib/utils`, `@/hooks`) rather than deep relative paths (`../../components/ui/*`).
 2. **Dependency Cruiser (`.dependency-cruiser.cjs`)**:
-   Enforces dependency rules on the source it cruises, but currently excludes
-   `src/components/ui/**` from traversal. UI-to-application dependency
-   direction is therefore an architecture/review invariant rather than a
-   mechanically enforced Dependency Cruiser guarantee.
+   Cruises `src/components/ui/**` and enforces
+   `ui-primitives-cannot-import-domain`, so UI primitives cannot import
+   `src/components/notes-app`, `src/components/firebase` or `src/app`.
 3. **Biome Guard Boundary**:
    Excludes both `src/components/ui/**` (owned implementation) and
    `src/components/firebase/**` (immutable upstream reference) from ordinary

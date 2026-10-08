@@ -7,6 +7,8 @@
     "affordances",
     "backlink",
     "backlinks",
+    "behaviour",
+    "betweenness",
     "blockquotes",
     "cloze",
     "cmdk",
@@ -22,6 +24,7 @@
     "entidade",
     "fallow",
     "fallowrc",
+    "firebaseapp",
     "firebaserc",
     "firestore",
     "fsrs",
@@ -79,5 +82,11 @@
     ".next",
     "pnpm-lock.yaml",
     "src/components/ui"
+  ],
+  "overrides": [
+    {
+      "filename": ["src/components/notes-app/**", "src/hooks/**"],
+      "flagWords": ["screen", "screens", "view", "views"]
+    }
   ]
 }

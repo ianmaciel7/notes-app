@@ -1,37 +1,27 @@
 "use client";
 
-import { getTranslation } from "@firebase-oss/ui-core";
-import { useUI } from "@firebase-oss/ui-react";
 import { FactorId } from "firebase/auth";
-import { type ComponentProps, useState } from "react";
+import type { ComponentProps, PropsWithChildren } from "react";
 
 import { SmsMultiFactorEnrollmentForm } from "@/components/notes-app/sms-multi-factor-enrollment-form";
 import { TotpMultiFactorEnrollmentForm } from "@/components/notes-app/totp-multi-factor-enrollment-form";
 import { Button } from "@/components/ui/button";
+import {
+  type Hint,
+  useMultiFactorAuthEnrollmentForm,
+} from "@/hooks/use-multi-factor-auth-enrollment-form";
+import { useTranslation } from "@/hooks/use-translation";
 
-type Hint = (typeof FactorId)[keyof typeof FactorId];
-
-export type MultiFactorAuthEnrollmentFormProps = {
+export type MultiFactorAuthEnrollmentFormProps = PropsWithChildren<{
   onEnrollment?: () => void;
   hints?: Hint[];
-};
-
-const DEFAULT_HINTS = [FactorId.TOTP, FactorId.PHONE] as const;
+}>;
 
 export function MultiFactorAuthEnrollmentForm(
   props: MultiFactorAuthEnrollmentFormProps,
 ) {
-  const hints = props.hints ?? DEFAULT_HINTS;
-
-  if (hints.length === 0) {
-    throw new Error(
-      "MultiFactorAuthEnrollmentForm must have at least one hint",
-    );
-  }
-
-  // If only a single hint is provided, select it by default to improve UX.
-  const [hint, setHint] = useState<Hint | undefined>(
-    hints.length === 1 ? hints[0] : undefined,
+  const { hints, hint, setHint } = useMultiFactorAuthEnrollmentForm(
+    props.hints,
   );
 
   if (hint) {
@@ -64,8 +54,8 @@ export function MultiFactorAuthEnrollmentForm(
 }
 
 function TotpButton(props: ComponentProps<typeof Button>) {
-  const ui = useUI();
-  const labelText = getTranslation(ui, "labels", "mfaTotpVerification");
+  const translate = useTranslation();
+  const labelText = translate("labels", "mfaTotpVerification");
   return (
     <Button {...props} variant="outline">
       {labelText}
@@ -74,8 +64,8 @@ function TotpButton(props: ComponentProps<typeof Button>) {
 }
 
 function SmsButton(props: ComponentProps<typeof Button>) {
-  const ui = useUI();
-  const labelText = getTranslation(ui, "labels", "mfaSmsVerification");
+  const translate = useTranslation();
+  const labelText = translate("labels", "mfaSmsVerification");
   return (
     <Button {...props} variant="outline">
       {labelText}

@@ -1,11 +1,8 @@
 "use client";
 
-import {
-  type OAuthButtonProps,
-  useSignInWithProvider,
-  useUI,
-} from "@firebase-oss/ui-react";
+import type { OAuthButtonProps } from "@firebase-oss/ui-react";
 import { Button } from "@/components/ui/button";
+import { useOAuthButton } from "@/hooks/use-oauth-button";
 
 export type { OAuthButtonProps };
 
@@ -15,15 +12,13 @@ export function OAuthButton({
   themed,
   onSignIn,
 }: OAuthButtonProps) {
-  const ui = useUI();
-
-  const { error, callback } = useSignInWithProvider(provider, onSignIn);
+  const { disabled, error, callback } = useOAuthButton(provider, onSignIn);
 
   return (
     <div>
       <Button
         type="button"
-        disabled={ui.state !== "idle"}
+        disabled={disabled}
         onClick={callback}
         data-provider={provider.providerId}
         data-themed={themed}

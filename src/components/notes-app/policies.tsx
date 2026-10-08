@@ -1,13 +1,13 @@
 "use client";
 
-import { getTranslation } from "@firebase-oss/ui-core";
-import { PolicyContext, useUI } from "@firebase-oss/ui-react";
+import { PolicyContext } from "@firebase-oss/ui-react";
 import { useContext } from "react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/hooks/use-translation";
 import { cn } from "@/lib/utils";
 
 export function Policies() {
-  const ui = useUI();
+  const translate = useTranslation();
   const policies = useContext(PolicyContext);
 
   if (!policies) {
@@ -15,7 +15,7 @@ export function Policies() {
   }
 
   const { termsOfServiceUrl, privacyPolicyUrl, onNavigate } = policies;
-  const termsAndPrivacyText = getTranslation(ui, "messages", "termsAndPrivacy");
+  const termsAndPrivacyText = translate("messages", "termsAndPrivacy");
   const parts = termsAndPrivacyText.split(/(\{tos\}|\{privacy\})/);
   const className = cn("h-auto p-0 text-xs font-semibold");
 
@@ -58,7 +58,7 @@ export function Policies() {
         const partKey = `${index}-${part}`;
         if (part === "{tos}") {
           return renderPolicyLink(
-            getTranslation(ui, "labels", "termsOfService"),
+            translate("labels", "termsOfService"),
             termsOfServiceUrl,
             partKey,
           );
@@ -66,7 +66,7 @@ export function Policies() {
 
         if (part === "{privacy}") {
           return renderPolicyLink(
-            getTranslation(ui, "labels", "privacyPolicy"),
+            translate("labels", "privacyPolicy"),
             privacyPolicyUrl,
             partKey,
           );

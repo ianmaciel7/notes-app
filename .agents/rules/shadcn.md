@@ -17,6 +17,10 @@
 - Use `FieldSet` + `FieldLegend` for related controls.
 - Keep Sidebar parts under `SidebarProvider`.
 - Do not mix controlled and uncontrolled props.
+- Type props of a component that wraps a shadcn primitive as
+  `ComponentProps<typeof Primitive> & { ... }` (for example `typeof Button`). Use
+  `PropsWithChildren<{ ... }>` or `ComponentProps<"tag">` only when no shadcn primitive
+  is the root. Enforced as a warning by `component-props-type.grit`.
 
 ## Base UI
 

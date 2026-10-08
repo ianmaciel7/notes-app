@@ -1,49 +1,19 @@
 "use client";
 
-import type { SignUpAuthFormSchema } from "@firebase-oss/ui-core";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
-import {
-  type SignUpAuthFormProps,
-  useRequireDisplayName,
-  useSignUpAuthFormAction,
-  useSignUpAuthFormSchema,
-  useUI,
-} from "@firebase-oss/ui-react";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { getTranslation } from "@firebase-oss/ui-core";
+import type { SignUpAuthFormProps } from "@firebase-oss/ui-react";
+import Link from "next/link";
+import { Controller, FormProvider } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useSignUpAuthForm } from "@/hooks/use-sign-up-auth-form";
 import { Policies } from "./policies";
 
 export type { SignUpAuthFormProps };
 
 export function SignUpAuthForm(props: SignUpAuthFormProps) {
-  const ui = useUI();
-  const schema = useSignUpAuthFormSchema();
-  const action = useSignUpAuthFormAction();
-  const requireDisplayName = useRequireDisplayName();
-
-  const form = useForm<SignUpAuthFormSchema>({
-    resolver: standardSchemaResolver(schema),
-    mode: "onChange",
-    defaultValues: {
-      email: "",
-      password: "",
-      displayName: requireDisplayName ? "" : undefined,
-    },
-  });
-
-  async function onSubmit(values: SignUpAuthFormSchema) {
-    try {
-      const credential = await action(values);
-      if (credential) props.onSignUp?.(credential);
-    } catch (error) {
-      const message =
-        error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
-    }
-  }
+  const { ui, form, requireDisplayName, onSubmit } = useSignUpAuthForm(props);
 
   return (
     <FormProvider {...form}>
@@ -133,7 +103,15 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
               {getTranslation(ui, "labels", "signIn")}
             </span>
           </Button>
-        ) : null}
+        ) : (
+          <Link
+            href="/sign-in"
+            className="text-primary text-center text-xs font-medium underline-offset-4 hover:underline"
+          >
+            {getTranslation(ui, "prompts", "haveAccount")}{" "}
+            {getTranslation(ui, "labels", "signIn")}
+          </Link>
+        )}
       </form>
     </FormProvider>
   );

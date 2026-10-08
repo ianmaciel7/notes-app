@@ -16,7 +16,8 @@
       "!build",
       "!.agents",
       "!src/components/ui",
-      "!src/components/firebase"
+      "!src/components/firebase",
+      "!.firebase/seeds"
     ]
   },
   "formatter": {
@@ -96,7 +97,25 @@
     "./grit/shadcn/canonical-import-aliases.grit",
     "./grit/shadcn/no-inline-styles.grit",
     "./grit/shadcn/no-radix-imports.grit",
-    "./grit/shadcn/exported-hook-location.grit"
+    "./grit/shadcn/exported-hook-location.grit",
+    "./grit/shadcn/no-inline-hook-definition.grit",
+    "./grit/shadcn/extract-stateful-hooks.grit",
+    "./grit/shadcn/component-props-type.grit"
+  ],
+  "overrides": [
+    {
+      "includes": [
+        "tests/unit/i18n-client.test.ts",
+        "tests/unit/locale-lang-script.test.ts"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noDocumentCookie": "off"
+          }
+        }
+      }
+    }
   ],
   "assist": {
     "actions": {

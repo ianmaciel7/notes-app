@@ -1,14 +1,13 @@
 "use client";
 
-import { getTranslation } from "@firebase-oss/ui-core";
 import {
   TwitterLogo,
   type TwitterSignInButtonProps,
-  useUI,
 } from "@firebase-oss/ui-react";
 import { TwitterAuthProvider } from "firebase/auth";
 
 import { OAuthButton } from "@/components/notes-app/oauth-button";
+import { useTranslation } from "@/hooks/use-translation";
 
 export type { TwitterSignInButtonProps };
 
@@ -16,12 +15,12 @@ export function TwitterSignInButton({
   provider,
   ...props
 }: TwitterSignInButtonProps) {
-  const ui = useUI();
+  const translate = useTranslation();
 
   return (
     <OAuthButton {...props} provider={provider || new TwitterAuthProvider()}>
       <TwitterLogo />
-      <span>{getTranslation(ui, "labels", "signInWithTwitter")}</span>
+      <span>{translate("labels", "signInWithTwitter")}</span>
     </OAuthButton>
   );
 }

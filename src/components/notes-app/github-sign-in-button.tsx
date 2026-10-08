@@ -1,14 +1,13 @@
 "use client";
 
-import { getTranslation } from "@firebase-oss/ui-core";
 import {
   GitHubLogo,
   type GitHubSignInButtonProps,
-  useUI,
 } from "@firebase-oss/ui-react";
 import { GithubAuthProvider } from "firebase/auth";
 
 import { OAuthButton } from "@/components/notes-app/oauth-button";
+import { useTranslation } from "@/hooks/use-translation";
 
 export type { GitHubSignInButtonProps };
 
@@ -16,12 +15,12 @@ export function GitHubSignInButton({
   provider,
   ...props
 }: GitHubSignInButtonProps) {
-  const ui = useUI();
+  const translate = useTranslation();
 
   return (
     <OAuthButton {...props} provider={provider || new GithubAuthProvider()}>
       <GitHubLogo />
-      <span>{getTranslation(ui, "labels", "signInWithGitHub")}</span>
+      <span>{translate("labels", "signInWithGitHub")}</span>
     </OAuthButton>
   );
 }

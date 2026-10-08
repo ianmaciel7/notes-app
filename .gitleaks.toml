@@ -1,0 +1,10 @@
+title = "notes-app gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "SHA-256 file hashes in the immutable Firebase UI reference manifest are not secrets."
+paths = [
+  '''tests/unit/firebase-reference\.manifest\.(json|sha256)''',
+]

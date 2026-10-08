@@ -1,14 +1,10 @@
 "use client";
 
-import { getTranslation } from "@firebase-oss/ui-core";
-import {
-  useUI,
-  YahooLogo,
-  type YahooSignInButtonProps,
-} from "@firebase-oss/ui-react";
+import { YahooLogo, type YahooSignInButtonProps } from "@firebase-oss/ui-react";
 import { OAuthProvider } from "firebase/auth";
 
 import { OAuthButton } from "@/components/notes-app/oauth-button";
+import { useTranslation } from "@/hooks/use-translation";
 
 export type { YahooSignInButtonProps };
 
@@ -16,7 +12,7 @@ export function YahooSignInButton({
   provider,
   ...props
 }: YahooSignInButtonProps) {
-  const ui = useUI();
+  const translate = useTranslation();
 
   return (
     <OAuthButton
@@ -24,7 +20,7 @@ export function YahooSignInButton({
       provider={provider || new OAuthProvider("yahoo.com")}
     >
       <YahooLogo />
-      <span>{getTranslation(ui, "labels", "signInWithYahoo")}</span>
+      <span>{translate("labels", "signInWithYahoo")}</span>
     </OAuthButton>
   );
 }

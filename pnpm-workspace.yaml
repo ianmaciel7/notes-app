@@ -1,5 +1,7 @@
 allowBuilds:
   '@firebase/util': true
+  '@parcel/watcher': false
+  '@swc/core': false
   protobufjs: true
   sharp: false
   unrs-resolver: false
@@ -9,8 +11,13 @@ audit:
     # No patched braces release exists for GHSA-vfj7-8cjw-p6xm.
     # Exposure is limited to markdownlint-cli2 using repository-controlled globs.
     - GHSA-vfj7-8cjw-p6xm
+    # No patched node-forge release exists for GHSA-86w9-cpqp-85rv.
+    # Transitive via firebase-admin; the app never verifies RSA PKCS#1 v1.5
+    # signatures with node-forge directly.
+    - GHSA-86w9-cpqp-85rv
 
 overrides:
   '@grpc/grpc-js': '>=1.13.6'
   qs: '>=6.16.0'
+  basic-ftp: '>=6.2.1'
   smol-toml: '>=1.9.0'
