@@ -5,6 +5,10 @@ import type { PhoneAuthFormProps } from "@firebase-oss/ui-react";
 import type { UserCredential } from "firebase/auth";
 import type { PropsWithChildren } from "react";
 import { Controller, FormProvider } from "react-hook-form";
+import {
+  AuthFieldError,
+  AuthRootError,
+} from "@/components/notes-app/auth-field-error";
 import { CountrySelector } from "@/components/notes-app/country-selector";
 import { Policies } from "@/components/notes-app/policies";
 import { Button } from "@/components/ui/button";
@@ -68,7 +72,9 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
                 </InputOTPGroup>
               </InputOTP>
               {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
+                <FieldError>
+                  <AuthFieldError field="verificationCode" />
+                </FieldError>
               )}
             </Field>
           )}
@@ -78,7 +84,9 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
         </Button>
         {form.formState.errors.root && (
           <Field data-invalid="true">
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <FieldError>
+              <AuthRootError />
+            </FieldError>
           </Field>
         )}
       </form>
@@ -127,7 +135,9 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
                 />
               </div>
               {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
+                <FieldError>
+                  <AuthFieldError field="phoneNumber" />
+                </FieldError>
               )}
             </Field>
           )}
@@ -142,7 +152,9 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
         </Button>
         {form.formState.errors.root && (
           <Field data-invalid="true">
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <FieldError>
+              <AuthRootError />
+            </FieldError>
           </Field>
         )}
       </form>

@@ -4,6 +4,10 @@ import { getTranslation } from "@firebase-oss/ui-core";
 import type { EmailLinkAuthFormProps } from "@firebase-oss/ui-react";
 import { Controller, FormProvider } from "react-hook-form";
 
+import {
+  AuthFieldError,
+  AuthRootError,
+} from "@/components/notes-app/auth-field-error";
 import { Policies } from "@/components/notes-app/policies";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -47,7 +51,9 @@ export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
                 aria-invalid={!!fieldState.error}
               />
               {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
+                <FieldError>
+                  <AuthFieldError field="email" />
+                </FieldError>
               )}
             </Field>
           )}
@@ -58,7 +64,9 @@ export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
         </Button>
         {form.formState.errors.root && (
           <Field data-invalid="true">
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <FieldError>
+              <AuthRootError />
+            </FieldError>
           </Field>
         )}
       </form>

@@ -1,6 +1,44 @@
 {
   "common": {
     "settings": "Configurações",
-    "studyWorkspace": "Espaço de estudo"
+    "studyWorkspace": "Espaço de estudo",
+    "signedInAs": "Conectado como {email}",
+    "signOut": "Sair",
+    "signOutError": "Não foi possível sair. Tente novamente."
+  },
+  "locale": {
+    "label": "Idioma",
+    "english": "English",
+    "portuguese": "Português (Brasil)",
+    "spanish": "Español",
+    "saveError": "Não foi possível salvar o idioma. Tente novamente."
+  },
+  "auth": {
+    "signIn": "Entrar",
+    "signUp": "Criar uma conta",
+    "resetPassword": "Redefinir senha",
+    "signInWithEmailLink": "Entrar com link por e-mail",
+    "signInWithPhone": "Entrar com telefone",
+    "smsEnrolled": "Segundo fator por SMS ativado",
+    "authenticationFailed": "Falha na autenticação. Tente novamente.",
+    "sessionFailed": "Não foi possível iniciar uma sessão segura.",
+    "redirectFailed": "Não foi possível concluir o acesso. Tente novamente.",
+    "recaptchaNotReady": "A verificação ainda não está pronta. Tente novamente.",
+    "preferenceSyncFailed": "Não foi possível sincronizar sua preferência de idioma.",
+    "signInSubtitle": "Entre na sua conta",
+    "signUpSubtitle": "Informe seus dados para criar uma conta",
+    "resetPasswordSubtitle": "Informe seu e-mail para redefinir a senha",
+    "multiFactorAssertion": "Verifique sua identidade",
+    "multiFactorAssertionSubtitle": "Conclua a etapa adicional de verificação",
+    "multiFactorEnrollment": "Configure a autenticação em dois fatores",
+    "multiFactorEnrollmentSubtitle": "Adicione uma camada extra de segurança à sua conta"
+  },
+  "validation": {
+    "email": "Informe um e-mail válido.",
+    "password": "Verifique sua senha.",
+    "displayName": "Informe seu nome.",
+    "phoneNumber": "Informe um número de telefone válido.",
+    "verificationCode": "Informe o código de seis dígitos.",
+    "general": "Verifique este campo e tente novamente."
   }
 }

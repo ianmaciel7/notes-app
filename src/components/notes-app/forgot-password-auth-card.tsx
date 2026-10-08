@@ -4,6 +4,7 @@ import type {
   // cspell:disable-next-line
   ForgotPasswordAuthScreenProps as ForgotPasswordAuthCardProps,
 } from "@firebase-oss/ui-react";
+import { useTranslations } from "next-intl";
 import { ForgotPasswordAuthForm } from "@/components/notes-app/forgot-password-auth-form";
 import {
   Card,
@@ -12,15 +13,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useTranslation } from "@/hooks/use-translation";
 
 export type { ForgotPasswordAuthCardProps };
 
 export function ForgotPasswordAuthCard(props: ForgotPasswordAuthCardProps) {
-  const translate = useTranslation();
+  const translate = useTranslations("auth");
 
-  const titleText = translate("labels", "resetPassword");
-  const subtitleText = translate("prompts", "enterEmailToReset");
+  const titleText = translate("resetPassword");
+  const subtitleText = translate("resetPasswordSubtitle");
 
   return (
     <div className="max-w-sm mx-auto">

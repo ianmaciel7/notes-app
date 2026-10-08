@@ -5,6 +5,10 @@ import type { TotpSecret } from "firebase/auth";
 import Image from "next/image";
 import type { PropsWithChildren } from "react";
 import { Controller, FormProvider } from "react-hook-form";
+import {
+  AuthFieldError,
+  AuthRootError,
+} from "@/components/notes-app/auth-field-error";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -48,7 +52,9 @@ function TotpMultiFactorSecretGenerationForm(
                 aria-invalid={!!fieldState.error}
               />
               {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
+                <FieldError>
+                  <AuthFieldError field="displayName" />
+                </FieldError>
               )}
             </Field>
           )}
@@ -58,7 +64,9 @@ function TotpMultiFactorSecretGenerationForm(
         </Button>
         {form.formState.errors.root && (
           <Field data-invalid="true">
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <FieldError>
+              <AuthRootError />
+            </FieldError>
           </Field>
         )}
       </form>
@@ -126,7 +134,9 @@ export function MultiFactorEnrollmentVerifyTotpForm(
                   </InputOTPGroup>
                 </InputOTP>
                 {fieldState.error && (
-                  <FieldError>{fieldState.error.message}</FieldError>
+                  <FieldError>
+                    <AuthFieldError field="verificationCode" />
+                  </FieldError>
                 )}
               </Field>
             )}
@@ -136,7 +146,9 @@ export function MultiFactorEnrollmentVerifyTotpForm(
           </Button>
           {form.formState.errors.root && (
             <Field data-invalid="true">
-              <FieldError>{form.formState.errors.root.message}</FieldError>
+              <FieldError>
+                <AuthRootError />
+              </FieldError>
             </Field>
           )}
         </form>

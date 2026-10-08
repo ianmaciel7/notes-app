@@ -12,8 +12,8 @@ The `dev` branch currently contains the application foundation:
 
 - Next.js 16.3.8 App Router with React Compiler enabled.
 - Local Firebase Authentication, server-verified sessions, and protected routes.
-- Cookie-based locale negotiation for `en`, `pt-BR`, and `es`; Firebase UI
-  translations are synchronized after mount.
+- Cookie-driven language preferences for `en`, `pt-BR`, and `es`, with a
+  user-facing selector, translated validation, and Firestore profile sync.
 - React 19.2.8 and TypeScript 5.9.
 - Tailwind CSS v4 and shadcn Base Nova / Base UI.
 - A project-owned UI primitive layer in `src/components/ui/**`.
@@ -26,10 +26,12 @@ The `dev` branch currently contains the application foundation:
   code, duplication, code health, security audit, production build, bundle
   size, and E2E tests.
 
-The exam domain and assessment workflows are not yet implemented. Firebase
-Authentication and the foundational localization plumbing are present, but
-Firestore application access, user-facing locale selection, cross-device
-preference sync, and full localization remain planned. See ADRs 0005-0008.
+The exam domain and assessment workflows are not yet implemented.
+Authentication and cookie-based localization are present. The language
+picker and signed-in preference synchronization use a narrow server-only
+Firestore seam (ADR 0007). The general Firestore application data layer,
+browser persistent cache, and exam-domain persistence remain planned
+(ADR 0008).
 
 ## Prerequisites
 
@@ -47,8 +49,9 @@ Open `http://localhost:3000`.
 
 ## Local authentication
 
-Authentication uses the Firebase Auth Emulator with the `demo-notes-app`
-project ID. It never needs Firebase cloud credentials.
+Authentication and locale profile preferences use Firebase Auth and
+Firestore Emulators with the `demo-notes-app` project ID, without any
+Firebase cloud credentials in local development.
 
 Production builds must provide `NEXT_PUBLIC_FIREBASE_CONFIG` as JSON with
 `apiKey`, `appId`, `authDomain`, and `projectId`. This is Firebase's public
@@ -57,6 +60,7 @@ browser configuration, not a privileged credential.
 ```bash
 pnpm run emulator
 $env:FIREBASE_AUTH_EMULATOR_HOST = "127.0.0.1:9099"
+$env:FIRESTORE_EMULATOR_HOST = "127.0.0.1:8080"
 pnpm dev
 ```
 
@@ -69,7 +73,7 @@ The committed emulator seed contains one non-secret development account:
 Run `pnpm run emulators:seed` only when intentionally refreshing the committed
 fixture. It exports a new baseline to `.firebase/seeds/`; ordinary emulator and
 E2E commands import that baseline and never rewrite it. `pnpm run test:e2e`
-owns both the Auth Emulator and Next.js lifecycle.
+owns the Auth and Firestore emulators and the Next.js lifecycle.
 
 The supported local flows are e-mail/password registration, sign-in, sign-out,
 e-mail-link sign-in, phone sign-in, and Firebase SDK-managed OAuth redirect
@@ -84,6 +88,15 @@ serves a local provider page with mock accounts for Firebase SDK-managed OAuth;
 manually supplied provider credentials remain subject to Emulator limits. See
 [ADR 0005](./docs/adr/0005-adopt-firebase-auth-with-local-emulator.md) for the
 support matrix.
+
+## Language preferences
+
+Select English, Brazilian Portuguese, or Spanish in the page header. An
+explicit choice is stored in `NEXT_LOCALE` and, for signed-in users, in
+`users/{uid}.locale` through a verified server session and Firebase Admin.
+At sign-in a saved profile preference is applied across devices; automatically
+detected languages are never stored as a deliberate choice. The Firestore
+emulator is required locally when using signed-in locale preferences.
 
 ## Verification
 

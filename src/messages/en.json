@@ -1,6 +1,44 @@
 {
   "common": {
     "settings": "Settings",
-    "studyWorkspace": "Study workspace"
+    "studyWorkspace": "Study workspace",
+    "signedInAs": "Signed in as {email}",
+    "signOut": "Sign out",
+    "signOutError": "Could not sign out. Please try again."
+  },
+  "locale": {
+    "label": "Language",
+    "english": "English",
+    "portuguese": "Português (Brasil)",
+    "spanish": "Español",
+    "saveError": "Could not save language. Please try again."
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signUp": "Create an account",
+    "resetPassword": "Reset your password",
+    "signInWithEmailLink": "Sign in with e-mail link",
+    "signInWithPhone": "Sign in with phone",
+    "smsEnrolled": "SMS second factor enrolled",
+    "authenticationFailed": "Authentication failed. Please try again.",
+    "sessionFailed": "Could not start a secure session.",
+    "redirectFailed": "Unable to complete sign-in. Please try again.",
+    "recaptchaNotReady": "Verification is not ready yet. Please try again.",
+    "preferenceSyncFailed": "Could not synchronize your language preference.",
+    "signInSubtitle": "Sign in to your account",
+    "signUpSubtitle": "Enter your details to create an account",
+    "resetPasswordSubtitle": "Enter your email address to reset your password",
+    "multiFactorAssertion": "Verify your identity",
+    "multiFactorAssertionSubtitle": "Complete the additional verification step",
+    "multiFactorEnrollment": "Set up two-factor authentication",
+    "multiFactorEnrollmentSubtitle": "Add an extra layer of security to your account"
+  },
+  "validation": {
+    "email": "Enter a valid e-mail address.",
+    "password": "Check your password.",
+    "displayName": "Enter your name.",
+    "phoneNumber": "Enter a valid phone number.",
+    "verificationCode": "Enter the six-digit verification code.",
+    "general": "Check this field and try again."
   }
 }

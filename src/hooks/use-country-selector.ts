@@ -4,10 +4,25 @@ import {
   useCountries,
   useDefaultCountry,
 } from "@firebase-oss/ui-react";
-import { type Ref, useCallback, useImperativeHandle, useState } from "react";
+import { useLocale } from "next-intl";
+import {
+  type Ref,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
 
 export function useCountrySelector(ref: Ref<CountrySelectorRef>) {
   const countries = useCountries();
+  const locale = useLocale();
+  const localizedCountries = useMemo(() => {
+    const displayNames = new Intl.DisplayNames([locale], { type: "region" });
+    return countries.map((country) => ({
+      ...country,
+      name: displayNames.of(country.code.toUpperCase()) ?? country.name,
+    }));
+  }, [countries, locale]);
   const defaultCountry = useDefaultCountry();
   const [selected, setSelected] = useState<CountryData>(defaultCountry);
 
@@ -29,5 +44,5 @@ export function useCountrySelector(ref: Ref<CountrySelectorRef>) {
     [selected, setCountry],
   );
 
-  return { countries, selected, setCountry };
+  return { countries: localizedCountries, selected, setCountry };
 }

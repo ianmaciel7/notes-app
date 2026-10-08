@@ -9,6 +9,13 @@ vi.mock("next/headers", () => ({
   cookies: vi.fn(async () => mocks.cookieStore),
 }));
 vi.mock("next/cache", () => ({ refresh: mocks.refresh }));
+vi.mock("@/lib/firebase/identity", () => ({
+  getCurrentIdentity: vi.fn(async () => null),
+}));
+vi.mock("@/lib/i18n/profile-preference", () => ({
+  writeProfileLocale: vi.fn(),
+  readProfileLocale: vi.fn(),
+}));
 
 import { setLocalePreference } from "@/lib/i18n/actions";
 
@@ -25,13 +32,14 @@ describe("setLocalePreference", () => {
       maxAge: 31_536_000,
       path: "/",
       sameSite: "lax",
+      secure: false,
     });
     expect(mocks.refresh).toHaveBeenCalledOnce();
   });
 
   it("rejects unsupported locales without writing", async () => {
     await expect(setLocalePreference("fr")).rejects.toThrow(
-      "Unsupported locale: fr",
+      "Unsupported locale.",
     );
     expect(mocks.cookieStore.set).not.toHaveBeenCalled();
     expect(mocks.refresh).not.toHaveBeenCalled();

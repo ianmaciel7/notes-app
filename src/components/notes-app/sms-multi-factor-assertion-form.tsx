@@ -4,6 +4,10 @@ import { getTranslation } from "@firebase-oss/ui-core";
 import type { MultiFactorInfo, UserCredential } from "firebase/auth";
 import type { PropsWithChildren } from "react";
 import { Controller, FormProvider } from "react-hook-form";
+import {
+  AuthFieldError,
+  AuthRootError,
+} from "@/components/notes-app/auth-field-error";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -97,7 +101,9 @@ function SmsMultiFactorAssertionVerifyForm(
                 </InputOTPGroup>
               </InputOTP>
               {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
+                <FieldError>
+                  <AuthFieldError field="verificationCode" />
+                </FieldError>
               )}
             </Field>
           )}
@@ -107,7 +113,9 @@ function SmsMultiFactorAssertionVerifyForm(
         </Button>
         {form.formState.errors.root && (
           <Field data-invalid="true">
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <FieldError>
+              <AuthRootError />
+            </FieldError>
           </Field>
         )}
       </form>

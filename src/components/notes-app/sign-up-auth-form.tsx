@@ -4,6 +4,10 @@ import { getTranslation } from "@firebase-oss/ui-core";
 import type { SignUpAuthFormProps } from "@firebase-oss/ui-react";
 import Link from "next/link";
 import { Controller, FormProvider } from "react-hook-form";
+import {
+  AuthFieldError,
+  AuthRootError,
+} from "@/components/notes-app/auth-field-error";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -36,7 +40,9 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
                   aria-invalid={!!fieldState.error}
                 />
                 {fieldState.error && (
-                  <FieldError>{fieldState.error.message}</FieldError>
+                  <FieldError>
+                    <AuthFieldError field="displayName" />
+                  </FieldError>
                 )}
               </Field>
             )}
@@ -57,7 +63,9 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
                 aria-invalid={!!fieldState.error}
               />
               {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
+                <FieldError>
+                  <AuthFieldError field="email" />
+                </FieldError>
               )}
             </Field>
           )}
@@ -77,7 +85,9 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
                 aria-invalid={!!fieldState.error}
               />
               {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
+                <FieldError>
+                  <AuthFieldError field="password" />
+                </FieldError>
               )}
             </Field>
           )}
@@ -88,7 +98,9 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
         </Button>
         {form.formState.errors.root && (
           <Field data-invalid="true">
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <FieldError>
+              <AuthRootError />
+            </FieldError>
           </Field>
         )}
         {props.onSignInClick ? (

@@ -30,6 +30,14 @@ vi.mock("firebase/auth", () => ({
   ),
 }));
 
+vi.mock("next-intl", () => ({
+  useLocale: () => mocks.locale,
+  useTranslations: () => (key: string) => key,
+}));
+vi.mock("@/lib/i18n/actions", () => ({
+  syncLocalePreference: vi.fn(async () => null),
+}));
+
 vi.mock("next/navigation", () => ({
   usePathname: vi.fn(() => "/"),
   useRouter: vi.fn(() => mocks.router),

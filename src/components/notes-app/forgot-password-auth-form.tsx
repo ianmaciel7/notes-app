@@ -4,6 +4,10 @@ import { getTranslation } from "@firebase-oss/ui-core";
 import type { ForgotPasswordAuthFormProps } from "@firebase-oss/ui-react";
 import Link from "next/link";
 import { Controller, FormProvider } from "react-hook-form";
+import {
+  AuthFieldError,
+  AuthRootError,
+} from "@/components/notes-app/auth-field-error";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -46,7 +50,9 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
                 aria-invalid={!!fieldState.error}
               />
               {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
+                <FieldError>
+                  <AuthFieldError field="email" />
+                </FieldError>
               )}
             </Field>
           )}
@@ -57,7 +63,9 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
         </Button>
         {form.formState.errors.root && (
           <Field data-invalid="true">
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <FieldError>
+              <AuthRootError />
+            </FieldError>
           </Field>
         )}
         {props.onBackToSignInClick ? (

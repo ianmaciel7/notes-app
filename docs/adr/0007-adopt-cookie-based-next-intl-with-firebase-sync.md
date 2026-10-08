@@ -14,67 +14,64 @@ Partially implemented
 
 ## Current State (2026-10-07)
 
-**Implementation: Partially implemented (source-confirmed).**
-`next-intl` is configured without locale URL prefixes, and the `en`,
-`pt-BR`, and `es` message catalogs are present. The following foundations
-exist in `dev`, with unit tests committed but not rerun for this review:
+**Implementation: source implementation delivered; CI verification in progress.**
+This decision is implemented in the remote `dev` source tree. It does not
+introduce a general Firestore browser data layer, which remains ADR 0008.
 
-- `src/i18n/request.ts` resolves the locale as `NEXT_LOCALE` cookie, then
-  `Accept-Language` (`negotiateLocale` / `matchLocale` in
-  `src/lib/i18n/config.ts`, so `pt` and `en-US` map to `pt-BR` and `en`), then `en`.
-- `src/lib/i18n/actions.ts` provides the `setLocalePreference` Server Action,
-  which is the only code that writes the `NEXT_LOCALE` cookie.
-- `src/lib/i18n/client.ts` resolves the client locale (cookie, then browser
-  languages) without persisting it, and mirrors it to `auth.languageCode` and
-  to Firebase UI text (`applyAuthLocale`). `auth.useDeviceLanguage()` is no
-  longer used.
-- Firebase UI text localization: `@firebase-oss/ui-translations` 7.1.0 is a
-  direct dependency. `src/lib/i18n/firebase-ui-locale.ts` maps `en` to `enUs`,
-  `pt-BR` to `ptBr`, and `es` to `esLa`. `useAuthProvider` calls
-  `ui.setLocale()` from the `onAuthStateChanged` callback, after mount, so the
-  first client render matches the server-rendered English text and hydration
-  stays consistent. `initializeUI` is therefore not given a `locale`, and the
-  UI text switches from English to the resolved locale after hydration.
-  `changeLocalePreference` persists an explicit choice and mirrors it, but no
-  UI calls it yet.
-- `src/app/layout.tsx` renders a static `lang` with `suppressHydrationWarning`
-  and sets it before hydration with a `next/script` `beforeInteractive` script
-  (`src/components/notes-app/locale-lang-script.ts`); it no longer reads
-  `cookies()`.
+### Locale routing and hydration
 
-Not implemented:
+- Supported locales: `en`, `pt-BR`, `es` with matching namespaces and
+  placeholders in `src/messages/*.json`.
+- `src/i18n/request.ts` resolves an explicitly selected `NEXT_LOCALE`
+  cookie, then `Accept-Language`, then English; unselected browser values
+  remain automatic and are never written as a preference.
+- The root layout retains a static `<html lang>` and a
+  `beforeInteractive` language script. The async
+  `src/components/notes-app/intl-provider.tsx` runs under `Suspense`
+  and supplies `NextIntlClientProvider` to client routes and controls.
+- The page-header `LocalePicker` uses the project's shadcn/Base UI Select.
+  `src/hooks/use-locale-picker.ts` invokes a Server Action, updates the
+  document language, refreshes the route, and exposes localized errors.
 
-- Localization of application-owned auth text: `src/messages/*.json` holds only
-  the `common` namespace, and the auth cards and dialogs in
-  `src/components/notes-app/` do not use `next-intl` yet.
-- Firestore-backed profile persistence and a user-facing locale picker that
-  calls `setLocalePreference`.
-- Localized form-validation messages.
-- A confirmed production build with Cache Components: a previously documented
-  local attempt failed while loading `next.config.ts` because a native
-  `@swc/core` binding was unavailable (`ERR_SWC_NATIVE_CACHE`).
-  That is an environment failure, not proof of valid prerender behavior.
-  Re-run `pnpm run build` and `next build --debug-prerender` on a working
-  checkout before marking this decision fully verified.
+### Authentication and preferences
 
-### Review evidence and next steps (2026-10-07)
+- FirebaseUI v7 text continues to use `@firebase-oss/ui-translations`;
+  Firebase Auth's `languageCode` is synchronized after mount. App-owned
+  authentication card text, validation feedback, navigation, sign-out,
+  redirect errors, and study/settings labels come from the `next-intl`
+  catalogs. Region labels in the country picker use ECMA-402
+  `Intl.DisplayNames`.
+- `setLocalePreference` stores the explicit `NEXT_LOCALE` cookie and,
+  when a server-verified identity is present, merges `locale` into
+  Firestore `users/{uid}` via the Admin SDK. Clients cannot supply
+  the UID. Firestore writes occur before setting the cookie, so a failed
+  profile update does not falsely claim the choice was saved.
+- After Firebase Auth exchanges an ID token for a verified server session,
+  `syncLocalePreference` reads that user's Firestore profile once and
+  reapplies a saved locale. If a new profile has no locale but the guest
+  previously chose one explicitly, it adopts that choice. The system never
+  persists automatic browser negotiation. Preference-service failures do
+  not block sign-in and are displayed in the chosen UI language.
+- Local development and E2E now start both Auth and Firestore emulators.
+  Set `FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099` and
+  `FIRESTORE_EMULATOR_HOST=127.0.0.1:8080` for the local server.
+  Production uses Firebase Admin credentials and the configured project.
 
-- `src/i18n/request.ts` and `src/lib/i18n/config.ts` provide server locale
-  resolution, while `src/lib/i18n/actions.ts` writes the explicit locale
-  cookie. `src/lib/i18n/client.ts` and `firebase-ui-locale.ts` mirror locale
-  into Firebase Auth/Firebase UI. `src/app/layout.tsx` uses a
-  `beforeInteractive` language script.
-- `tests/unit/i18n-config.test.ts` and `i18n-client.test.ts` provide
-  regression coverage in source; their success was **not** established
-  during this ADR-only review.
-- Application-auth cards currently use the Firebase UI
-  `useTranslation` hook, not app-owned `next-intl` strings. This is only
-  **library UI localization**, not complete localization of forms, validation,
-  navigation, and the study workflow.
-- Next deliverables: a visible locale picker, translations for application-owned
-  text and validation, and Firestore-backed cross-device preferences once
-  [ADR 0008](./0008-adopt-native-firebase-firestore-with-persistent-local-cache.md)
-  has an implemented data layer.
+### Verification and scope boundary
+
+- Unit test sources cover locale negotiation, client synchronization,
+  explicit cookie writes, verified-user Firestore preferences, and sign-in
+  precedence (`tests/unit/i18n-*.test.ts` and
+  `tests/unit/locale-preference-actions.test.ts`).
+- `tests/e2e/locale.spec.ts` covers explicit language selection and
+  cross-browser profile preference restoration with the emulators.
+- The GitHub CI outcome for the final implementation has not yet been
+  recorded here. Passing lint, TypeScript, unit, build, and browser tests
+  remains the acceptance gate; code presence alone is not a passing test.
+- Out of scope: ADR 0008's direct browser Firestore persistence,
+  IndexedDB multi-tab cache, study-domain entities, and TOTP in the
+  Auth Emulator. These are not required to use the server-only locale
+  preference seam.
 
 ## Context
 

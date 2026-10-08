@@ -4,6 +4,7 @@ import type {
   // cspell:disable-next-line
   MultiFactorAuthAssertionScreenProps as MultiFactorAuthAssertionCardProps,
 } from "@firebase-oss/ui-react";
+import { useTranslations } from "next-intl";
 import { MultiFactorAuthAssertionForm } from "@/components/notes-app/multi-factor-auth-assertion-form";
 import {
   Card,
@@ -12,7 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useTranslation } from "@/hooks/use-translation";
 
 export type MultiFactorAuthEnrollmentCardProps =
   MultiFactorAuthAssertionCardProps;
@@ -20,10 +20,10 @@ export type MultiFactorAuthEnrollmentCardProps =
 export function MultiFactorAuthAssertionCard(
   props: MultiFactorAuthEnrollmentCardProps,
 ) {
-  const translate = useTranslation();
+  const translate = useTranslations("auth");
 
-  const titleText = translate("labels", "multiFactorAssertion");
-  const subtitleText = translate("prompts", "mfaAssertionPrompt");
+  const titleText = translate("multiFactorAssertion");
+  const subtitleText = translate("multiFactorAssertionSubtitle");
 
   return (
     <div className="max-w-sm mx-auto">

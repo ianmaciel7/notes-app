@@ -3,7 +3,12 @@
 import { getTranslation } from "@firebase-oss/ui-core";
 import type { SignInAuthFormProps } from "@firebase-oss/ui-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Controller, FormProvider } from "react-hook-form";
+import {
+  AuthFieldError,
+  AuthRootError,
+} from "@/components/notes-app/auth-field-error";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -14,6 +19,7 @@ export type { SignInAuthFormProps };
 
 export function SignInAuthForm(props: SignInAuthFormProps) {
   const { ui, form, onSubmit } = useSignInAuthForm(props);
+  const translate = useTranslations("auth");
 
   return (
     <FormProvider {...form}>
@@ -36,7 +42,9 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
                 aria-invalid={!!fieldState.error}
               />
               {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
+                <FieldError>
+                  <AuthFieldError field="email" />
+                </FieldError>
               )}
             </Field>
           )}
@@ -80,7 +88,9 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
                 aria-invalid={!!fieldState.error}
               />
               {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
+                <FieldError>
+                  <AuthFieldError field="password" />
+                </FieldError>
               )}
             </Field>
           )}
@@ -91,7 +101,9 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
         </Button>
         {form.formState.errors.root && (
           <Field data-invalid="true">
-            <FieldError>{form.formState.errors.root.message}</FieldError>
+            <FieldError>
+              <AuthRootError />
+            </FieldError>
           </Field>
         )}
         {props.onSignUpClick ? (
@@ -120,13 +132,13 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
             href="/email-link"
             className="text-primary font-medium underline-offset-4 hover:underline"
           >
-            Sign in with e-mail link
+            {translate("signInWithEmailLink")}
           </Link>
           <Link
             href="/phone"
             className="text-primary font-medium underline-offset-4 hover:underline"
           >
-            Sign in with phone
+            {translate("signInWithPhone")}
           </Link>
         </div>
       </form>

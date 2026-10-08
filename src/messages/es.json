@@ -1,6 +1,44 @@
 {
   "common": {
     "settings": "Configuración",
-    "studyWorkspace": "Espacio de estudio"
+    "studyWorkspace": "Espacio de estudio",
+    "signedInAs": "Sesión iniciada como {email}",
+    "signOut": "Cerrar sesión",
+    "signOutError": "No se pudo cerrar la sesión. Inténtalo de nuevo."
+  },
+  "locale": {
+    "label": "Idioma",
+    "english": "English",
+    "portuguese": "Português (Brasil)",
+    "spanish": "Español",
+    "saveError": "No se pudo guardar el idioma. Inténtalo de nuevo."
+  },
+  "auth": {
+    "signIn": "Iniciar sesión",
+    "signUp": "Crear una cuenta",
+    "resetPassword": "Restablecer contraseña",
+    "signInWithEmailLink": "Acceder con enlace por correo",
+    "signInWithPhone": "Acceder con teléfono",
+    "smsEnrolled": "Segundo factor por SMS activado",
+    "authenticationFailed": "No se pudo iniciar sesión. Inténtalo de nuevo.",
+    "sessionFailed": "No se pudo iniciar una sesión segura.",
+    "redirectFailed": "No se pudo completar el acceso. Inténtalo de nuevo.",
+    "recaptchaNotReady": "La verificación aún no está lista. Inténtalo de nuevo.",
+    "preferenceSyncFailed": "No se pudo sincronizar tu preferencia de idioma.",
+    "signInSubtitle": "Inicia sesión en tu cuenta",
+    "signUpSubtitle": "Introduce tus datos para crear una cuenta",
+    "resetPasswordSubtitle": "Introduce tu correo para restablecer la contraseña",
+    "multiFactorAssertion": "Verifica tu identidad",
+    "multiFactorAssertionSubtitle": "Completa el paso adicional de verificación",
+    "multiFactorEnrollment": "Configura la autenticación en dos pasos",
+    "multiFactorEnrollmentSubtitle": "Añade una capa adicional de seguridad a tu cuenta"
+  },
+  "validation": {
+    "email": "Introduce un correo válido.",
+    "password": "Comprueba tu contraseña.",
+    "displayName": "Introduce tu nombre.",
+    "phoneNumber": "Introduce un teléfono válido.",
+    "verificationCode": "Introduce el código de seis dígitos.",
+    "general": "Revisa este campo e inténtalo de nuevo."
   }
 }

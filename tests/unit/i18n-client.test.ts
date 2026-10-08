@@ -26,7 +26,7 @@ describe("i18n client helpers", () => {
   });
 
   it("reads the locale cookie and rejects encoded unsupported values", () => {
-    document.cookie = "NEXT_LOCALE=pt-BR%3Dignored";
+    document.cookie = `NEXT_LOCALE=${encodeURIComponent("pt-BR=ignored")}`;
     expect(readLocaleCookie()).toBeUndefined();
 
     document.cookie = "NEXT_LOCALE=pt-BR";

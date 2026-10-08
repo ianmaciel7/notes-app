@@ -1,6 +1,7 @@
 "use client";
 
 import type { MultiFactorAuthEnrollmentFormProps } from "@firebase-oss/ui-react";
+import { useTranslations } from "next-intl";
 import { MultiFactorAuthEnrollmentForm } from "@/components/notes-app/multi-factor-auth-enrollment-form";
 import {
   Card,
@@ -9,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useTranslation } from "@/hooks/use-translation";
 
 export type MultiFactorAuthEnrollmentCardProps =
   MultiFactorAuthEnrollmentFormProps;
@@ -17,10 +17,10 @@ export type MultiFactorAuthEnrollmentCardProps =
 export function MultiFactorAuthEnrollmentCard(
   props: MultiFactorAuthEnrollmentCardProps,
 ) {
-  const translate = useTranslation();
+  const translate = useTranslations("auth");
 
-  const titleText = translate("labels", "multiFactorEnrollment");
-  const subtitleText = translate("prompts", "mfaEnrollmentPrompt");
+  const titleText = translate("multiFactorEnrollment");
+  const subtitleText = translate("multiFactorEnrollmentSubtitle");
 
   return (
     <div className="max-w-sm mx-auto">

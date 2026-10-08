@@ -1,8 +1,8 @@
 "use client";
 
-import { getTranslation } from "@firebase-oss/ui-core";
 // cspell:disable-next-line
 import type { SignUpAuthScreenProps as SignUpAuthCardProps } from "@firebase-oss/ui-react";
+import { useTranslations } from "next-intl";
 import { MultiFactorAuthAssertionCard } from "@/components/notes-app/multi-factor-auth-assertion-card";
 import { SignUpAuthForm } from "@/components/notes-app/sign-up-auth-form";
 import {
@@ -24,8 +24,9 @@ export function SignUpAuthCard({
 }: SignUpAuthCardProps) {
   const { ui, handleSignUp } = useSignUpAuthCard(onSignUp, !!children);
 
-  const titleText = getTranslation(ui, "labels", "signUp");
-  const subtitleText = getTranslation(ui, "prompts", "enterDetailsToCreate");
+  const translate = useTranslations("auth");
+  const titleText = translate("signUp");
+  const subtitleText = translate("signUpSubtitle");
 
   if (ui.multiFactorResolver) {
     return <MultiFactorAuthAssertionCard />;

@@ -71,8 +71,12 @@ for password, email link, phone/SMS, Google OAuth redirect, and SMS MFA,
 and server-only, revocation-checked Firebase session cookies. Sign-out
 requires a successful same-origin server-session removal before the client
 signs out; a failed request displays a retryable error instead of pretending
-that the session ended. The Firestore emulator is configured, but application
-data access and user data persistence are not implemented.
+that the session ended. Locale preferences are the first narrow Firestore
+use case: authenticated Server Actions derive the UID from a revocation-checked
+HttpOnly session and read or merge `users/{uid}.locale` through the
+server-only Firebase Admin SDK. The browser cannot submit an arbitrary UID
+to access another profile. The general Firestore study-domain data layer,
+security rules for direct browser access, and offline cache are not implemented.
 
 ADRs 0004–0008 are accepted decisions. Their Current State sections distinguish
 implemented groundwork from target behavior that is not yet built. Security

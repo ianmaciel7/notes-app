@@ -14,27 +14,32 @@ Not started
 
 ## Current State (2026-10-07)
 
-**Implementation: Not started (configuration groundwork only).**
+**Implementation: Not started for browser persistence (separate from ADR 0007).**
 `package.json` declares `firebase` ^12.19.0,
 `pnpm-workspace.yaml` allows scripts for `protobufjs` and
 `@firebase/util`, and `firebase.json` configures the Firestore
 emulator at `127.0.0.1:8080`. The `src/lib/firebase/` directory
-already exists **for Authentication**, not for Firestore.
+already exists for Authentication and a narrowly scoped **server-only**
+Admin Firestore preference store at `src/lib/i18n/profile-preference.ts`
+(ADR 0007). That server-side user-locale operation is not a client Firestore
+instance or the general study-domain data layer specified by this ADR.
 
 Still absent from `dev`: `src/lib/firebase/firestore.ts`,
 `initializeFirestore` with `persistentLocalCache`, an idempotent
 `connectFirestoreEmulator` boundary, application Firestore data access,
 Firestore security rules/tests, and offline/multi-tab lifecycle tests.
-The existing `emulator`, `emulators:seed`, and `test:e2e`
-package scripts run the Auth Emulator only.
+The `emulator`, `emulators:seed`, and `test:e2e` scripts now start **both**
+the Auth and Firestore emulators for locale-profile testing, but they do not
+enable persistent browser caching or general Firestore application access.
 
 **Implementation order:** add the browser/server Firestore initialization
 boundary and emulator configuration, then validate IndexedDB persistence,
 multi-tab behavior, security rules, and cache cleanup on user changes before
 adding study-domain data. The `Decision` and `Consequences` below describe
 a **target architecture**, not code that is already deployed.
-No Firestore tests, production build, or CI checks were executed during this
-documentation review.
+ADR 0007 adds server-action and cross-browser tests for profile locale
+persistence. No browser-cache or general Firestore tests have been run
+under ADR 0008.
 
 ## Context
 
@@ -79,7 +84,7 @@ Key architectural rules and structure:
 ### Trade-offs and Considerations
 
 - Requires careful query design matching Firestore indexing and compound query capabilities.
-- Local integration tests require the Firestore emulator running alongside the Auth emulator (refer to [`TESTING.md`](../../TESTING.md)). The `emulator`, `emulators:seed` and `test:e2e` scripts in `package.json` currently start only `--only auth` and must add `firestore` when this is implemented.
+- Local integration tests require the Firestore emulator running alongside the Auth emulator (refer to [`TESTING.md`](../../TESTING.md)). The `emulator`, `emulators:seed` and `test:e2e` scripts in `package.json` already start `--only auth,firestore` (added for ADR 0007 locale-profile tests).
 - Persistence is unavailable in unsupported browsers and some restricted contexts; those clients run with an in-memory cache and lose offline durability.
 - Multi-tab persistence has a known open issue where hidden tabs can re-run queries with a stale resume token after the primary tab changes, increasing billed reads ([firebase-js-sdk #10410](https://github.com/firebase/firebase-js-sdk/issues/10410); not re-checked against 12.19.0). `memoryLocalCache()` is the fallback if this proves material.
 - Multi-tab persistence relies on `localStorage` and is not supported inside Web Workers.

@@ -16,6 +16,8 @@ Examples of current coverage (not an exhaustive file inventory):
   `locale-lang-script.test.ts` for locale negotiation and synchronization.
 - `tests/unit/sign-out-button.test.tsx` for server-session-first sign-out,
   including rejected and unreachable session endpoints.
+- `tests/unit/locale-preference-actions.test.ts` for authenticated profile
+  preference writes, sign-in synchronization, and guest locale handling.
 - Server-session Route Handler tests and other authentication tests under
   `tests/unit/` (see ADR 0005).
 
@@ -42,9 +44,14 @@ Current authentication E2E coverage:
 - `tests/e2e/home.spec.ts`, including password and email-link sign-in,
   phone/SMS, Google Emulator redirect, SMS MFA, server-protected pages,
   and accessibility audits (see ADR 0005).
+- `tests/e2e/locale.spec.ts`, covering the language selector, explicit cookie
+  persistence, and a Firestore preference restored in a separate browser
+  after re-authentication (ADR 0007).
 
-The configured project is Chromium. CI installs Chromium and runs the E2E suite
-after a successful production build and Size Limit check.
+The configured project is Chromium. The E2E command starts both Auth and
+Firestore emulators and requires Java to run the Firestore emulator. CI
+installs Chromium and runs the E2E suite after a successful production build
+and Size Limit check.
 
 Run:
 

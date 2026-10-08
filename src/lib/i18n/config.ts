@@ -26,9 +26,9 @@ export function matchLocale(
     return exactLocale;
   }
 
-  const primarySubtag = normalizedTag.split("-")[0];
+  const primaryLanguage = normalizedTag.split("-")[0];
   return locales.find(
-    (locale) => locale.toLowerCase().split("-")[0] === primarySubtag,
+    (locale) => locale.toLowerCase().split("-")[0] === primaryLanguage,
   );
 }
 

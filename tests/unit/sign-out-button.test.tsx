@@ -7,10 +7,22 @@ import {
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+const originalFetch = globalThis.fetch;
+
 const mocks = vi.hoisted(() => ({
   replace: vi.fn(),
   refresh: vi.fn(),
   signOut: vi.fn(async () => undefined),
+}));
+
+vi.mock("next-intl", () => ({
+  useTranslations: () => (key: string) => {
+    const values: Record<string, string> = {
+      signOut: "Sign out",
+      signOutError: "Could not sign out. Please try again.",
+    };
+    return values[key] ?? key;
+  },
 }));
 
 vi.mock("next/navigation", () => ({
@@ -30,11 +42,14 @@ describe("SignOutButton", () => {
 
   afterEach(() => {
     cleanup();
-    vi.unstubAllGlobals();
+    vi.stubGlobal("fetch", originalFetch);
   });
 
   it("keeps the browser signed in if the server refuses logout", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false })));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({ ok: false })),
+    );
     render(<SignOutButton />);
 
     fireEvent.click(screen.getByRole("button", { name: "Sign out" }));

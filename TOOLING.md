@@ -143,11 +143,14 @@ only fires from a workflow file on the default branch.
 | Java | Installed on the machine (OpenJDK) for the Firestore emulator |
 
 `package.json` provides `emulator`, `emulators:seed`, and `test:e2e`.
-These commands currently start only the Auth Emulator; the Firestore emulator
-is configured in `firebase.json` but has not yet been incorporated into the
-application's test lifecycle. The emulator seed lives in `.firebase/seeds/`.
-See [ADR 0005](./docs/adr/0005-adopt-firebase-auth-with-local-emulator.md)
-for the supported authentication scenarios.
+All three now start **Auth and Firestore** emulators. The committed
+`.firebase/seeds/` fixture provides Auth accounts; Firestore documents are
+created by verified Server Actions for locale preferences. Local Next.js
+development must set both `FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099`
+and `FIRESTORE_EMULATOR_HOST=127.0.0.1:8080`; the E2E runner sets
+them through the emulator launcher. See [ADR 0005](./docs/adr/0005-adopt-firebase-auth-with-local-emulator.md)
+and [ADR 0007](./docs/adr/0007-adopt-cookie-based-next-intl-with-firebase-sync.md).
+ADR 0008's browser persistent cache remains unimplemented.
 
 ## 8. Agent tooling
 

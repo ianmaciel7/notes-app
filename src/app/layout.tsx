@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { Suspense } from "react";
+import { IntlProvider } from "@/components/notes-app/intl-provider";
 import { createLocaleLangScript } from "@/components/notes-app/locale-lang-script";
 import { defaultLocale, locales } from "@/lib/i18n/config";
 import "./globals.css";
@@ -31,7 +33,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Script id="locale-lang" strategy="beforeInteractive">
           {createLocaleLangScript(locales, defaultLocale)}
         </Script>
-        {children}
+        <Suspense fallback={null}>
+          <IntlProvider>{children}</IntlProvider>
+        </Suspense>
       </body>
     </html>
   );

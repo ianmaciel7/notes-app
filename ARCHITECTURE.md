@@ -100,19 +100,23 @@ authentication cards, forms, and dialogs built with project shadcn primitives
 `CODING_STANDARDS.md` section 4). The implemented authentication slice (ADR
 0005) uses the local Firebase Auth Emulator, a server-only session-verification
 boundary, public `(public)` sign-in routes, and the protected `(protected)`
-routes `/dashboard` and `/settings`. Firestore access, a DAL, repository
-layer, exam domain services, and persistence remain unimplemented.
-Internationalization uses cookie-driven `next-intl` request configuration
-without locale URL prefixes. The server resolves the locale from the
-`NEXT_LOCALE` cookie, then `Accept-Language`, then `en`; only the
-`setLocalePreference` Server Action writes the cookie, so auto-detected locales
-are never persisted. The root layout renders a static `<html lang>` and a
-`beforeInteractive` script sets it from the same rules before hydration (it must
-not read cookies under Cache Components). Firebase Auth mirrors the resolved
-locale in `auth.languageCode`, and Firebase UI text is localized after mount
-through `@firebase-oss/ui-translations`. Auth cards use Firebase UI translations through their translation hooks, but
-full localization of application-owned strings, a locale picker, and Firestore
-preference sync are not implemented yet (ADR 0007).
+routes `/dashboard` and `/settings`. Firestore's general client data access, DAL, exam domain services, and
+offline cache remain unimplemented (ADR 0008). A narrow **server-only**
+Firestore Admin seam does persist signed-in user locale preferences to
+`users/{uid}.locale`, after verifying the Firebase session (ADR 0007).
+
+Internationalization uses cookie-driven `next-intl` without locale URL
+prefixes. The server resolves locale from the `NEXT_LOCALE` cookie,
+`Accept-Language`, or the English default; auto-detected values are never
+persisted. The root layout keeps static `<html lang>`, with a
+`beforeInteractive` script for pre-hydration language selection. An async
+`IntlProvider` under root `Suspense` supplies translated application strings
+and a page-header locale picker. The picker calls a Server Action, which
+writes the explicit cookie and updates the verified user's Firestore profile.
+At sign-in, a stored profile locale is applied through a server action.
+Firebase Auth mirrors it in `auth.languageCode`, and Firebase UI text is
+localized through `@firebase-oss/ui-translations` after mount. App-owned
+messages and validation use `src/messages/{locale}.json`.
 
 ## 3. Next.js architecture
 
@@ -210,12 +214,12 @@ target-domain vocabulary and proposed data modeling.
 Those documents are planning artifacts until corresponding source modules,
 tests, and active ADRs exist.
 
-ADRs 0004-0008 (Firebase auth, Firestore, and localization) are accepted but
-only partly built on `dev`: ADR 0005 is implemented (Auth Emulator with
-password, e-mail-link, phone, Google OAuth, and SMS MFA flows, plus cookie-backed
-protected routes), ADR 0007 is partially implemented (cookie-based `next-intl`
-foundation only), and Firestore access remains unimplemented. See each ADR's
-Current State section.
+ADRs 0004-0008 cover Firebase UI, Authentication, localization, and
+Firestore. ADR 0005 provides Auth Emulator flows and protected sessions.
+ADR 0007 adds cookie-based locale selection, translated interfaces,
+validation, and user-profile persistence through Firebase Admin Firestore.
+ADR 0008 remains unimplemented for general Firestore data access and browser
+persistent caching. Runtime verification status belongs to each ADR and CI.
 
 ## 7. Architecture rules
 
