@@ -1,12 +1,14 @@
 "use client";
 
 import { PolicyContext } from "@firebase-oss/ui-react";
-import { useContext } from "react";
+import { type ComponentProps, useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/hooks/use-translation";
 import { cn } from "@/lib/utils";
 
-export function Policies() {
+type PoliciesProps = ComponentProps<"div">;
+
+export function Policies(props: PoliciesProps) {
   const translate = useTranslation();
   const policies = useContext(PolicyContext);
 
@@ -17,7 +19,7 @@ export function Policies() {
   const { termsOfServiceUrl, privacyPolicyUrl, onNavigate } = policies;
   const termsAndPrivacyText = translate("messages", "termsAndPrivacy");
   const parts = termsAndPrivacyText.split(/(\{tos\}|\{privacy\})/);
-  const className = cn("h-auto p-0 text-xs font-semibold");
+  const className = cn("h-auto p-0 text-sm font-semibold");
 
   const renderPolicyLink = (
     label: string,
@@ -53,7 +55,7 @@ export function Policies() {
   };
 
   return (
-    <div className="text-text-muted text-center text-xs">
+    <div {...props} className="text-muted-foreground text-center text-sm">
       {parts.map((part: string, index: number) => {
         const partKey = `${index}-${part}`;
         if (part === "{tos}") {

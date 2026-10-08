@@ -127,7 +127,10 @@ export function MultiFactorEnrollmentVerifyPhoneNumberForm(
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-4"
+      >
         <Controller
           control={form.control}
           name="verificationCode"

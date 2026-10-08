@@ -110,7 +110,7 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
             size="sm"
             onClick={props.onSignInClick}
           >
-            <span className="text-xs">
+            <span className="text-sm">
               {getTranslation(ui, "prompts", "haveAccount")}{" "}
               {getTranslation(ui, "labels", "signIn")}
             </span>
@@ -118,7 +118,7 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
         ) : (
           <Link
             href="/sign-in"
-            className="text-primary text-center text-xs font-medium underline-offset-4 hover:underline"
+            className="text-primary text-center text-sm font-medium underline-offset-4 hover:underline"
           >
             {getTranslation(ui, "prompts", "haveAccount")}{" "}
             {getTranslation(ui, "labels", "signIn")}

@@ -68,14 +68,14 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
                     onClick={props.onForgotPasswordClick}
                     size="sm"
                   >
-                    <span className="text-xs">
+                    <span className="text-sm">
                       {getTranslation(ui, "labels", "forgotPassword")}
                     </span>
                   </Button>
                 ) : (
                   <Link
                     href="/forgot-password"
-                    className="text-primary text-xs font-medium underline-offset-4 hover:underline"
+                    className="text-primary text-sm font-medium underline-offset-4 hover:underline"
                   >
                     {getTranslation(ui, "labels", "forgotPassword")}
                   </Link>
@@ -113,7 +113,7 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
             size="sm"
             onClick={props.onSignUpClick}
           >
-            <span className="text-xs">
+            <span className="text-sm">
               {getTranslation(ui, "prompts", "noAccount")}{" "}
               {getTranslation(ui, "labels", "signUp")}
             </span>
@@ -121,13 +121,13 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
         ) : (
           <Link
             href="/sign-up"
-            className="text-primary text-center text-xs font-medium underline-offset-4 hover:underline"
+            className="text-primary text-center text-sm font-medium underline-offset-4 hover:underline"
           >
             {getTranslation(ui, "prompts", "noAccount")}{" "}
             {getTranslation(ui, "labels", "signUp")}
           </Link>
         )}
-        <div className="flex justify-center gap-3 text-xs">
+        <div className="flex justify-center gap-3 text-sm">
           <Link
             href="/email-link"
             className="text-primary font-medium underline-offset-4 hover:underline"

@@ -88,7 +88,7 @@ export function MultiFactorEnrollmentVerifyTotpForm(
   const qrCodeDataUrl = generateTotpQrCode(ui, props.secret, props.displayName);
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-y-4 items-center justify-center">
         <Image
           src={qrCodeDataUrl}
@@ -98,10 +98,10 @@ export function MultiFactorEnrollmentVerifyTotpForm(
           unoptimized
           className="mx-auto"
         />
-        <code className="text-xs text-muted-foreground text-center">
+        <code className="text-sm text-muted-foreground text-center">
           {props.secret.secretKey.toString()}
         </code>
-        <p className="text-xs text-muted-foreground text-center">
+        <p className="text-sm text-muted-foreground text-center">
           {getTranslation(ui, "prompts", "mfaTotpQrCodePrompt")}
         </p>
       </div>

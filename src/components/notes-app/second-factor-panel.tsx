@@ -2,6 +2,7 @@
 
 import { FactorId } from "firebase/auth";
 import { useTranslations } from "next-intl";
+import type { ComponentProps } from "react";
 import { MultiFactorAuthEnrollmentCard } from "@/components/notes-app/multi-factor-auth-enrollment-card";
 import { ReauthenticateButton } from "@/components/notes-app/reauthenticate-button";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,9 @@ import {
 import { useSecondFactorPanel } from "@/hooks/use-second-factor-panel";
 import { cn } from "@/lib/utils";
 
-export function SecondFactorPanel() {
+type SecondFactorPanelProps = ComponentProps<"div">;
+
+export function SecondFactorPanel(props: SecondFactorPanelProps) {
   const panel = useSecondFactorPanel();
   const translate = useTranslations("auth");
   const { snapshot } = panel;
@@ -29,7 +32,7 @@ export function SecondFactorPanel() {
   }
 
   return (
-    <div className="flex w-full max-w-sm flex-col gap-4">
+    <div {...props} className="flex w-full max-w-sm flex-col gap-4">
       {snapshot.factors.length > 0 ? (
         <Card>
           <CardHeader>

@@ -1,8 +1,9 @@
 "use client";
 
 import {
+  type ComponentProps,
   createContext,
-  type ReactNode,
+  type PropsWithChildren,
   useContext,
   useSyncExternalStore,
 } from "react";
@@ -70,7 +71,9 @@ function getServerTheme(): Theme {
   return "system";
 }
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
+type ThemeProviderProps = PropsWithChildren<ComponentProps<"div">>;
+
+export function ThemeProvider({ children }: ThemeProviderProps) {
   const theme = useSyncExternalStore(subscribe, readTheme, getServerTheme);
 
   return (

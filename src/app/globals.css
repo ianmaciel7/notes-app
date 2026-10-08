@@ -10,6 +10,7 @@
   --typeset-size: 15px;
   --typeset-leading: 1.75;
   --typeset-flow: 1.25em;
+  --typeset-highlight: var(--highlight);
 }
 
 /* Follows the OS color scheme; an explicit .dark / .light class overrides it. */
@@ -63,6 +64,9 @@
   --color-pearl: var(--pearl);
   --color-divider-soft: var(--divider-soft);
   --color-chip: var(--chip);
+  --color-overlay: var(--overlay);
+  --color-success: var(--success);
+  --color-highlight: var(--highlight);
 
   /* DESIGN.md radius grammar: 8px utility, 18px containers, pill actions. */
   --radius-xs: 5px;
@@ -219,11 +223,14 @@
   --pearl: #fafafc;
   --divider-soft: #f0f0f0;
   --chip: rgb(210 210 215 / 0.64);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --overlay: rgb(0 0 0 / 0.1);
+  --success: #248a3d;
+  --highlight: #f2c94c;
+  --chart-1: #004c99;
+  --chart-2: #005eb8;
+  --chart-3: #0066cc;
+  --chart-4: #2d7fd1;
+  --chart-5: #4f91d9;
   --radius: 0.5rem;
   --sidebar: #f5f5f7;
   --sidebar-foreground: #1d1d1f;
@@ -264,6 +271,14 @@
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: rgb(255 255 255 / 0.14);
   --sidebar-ring: #2997ff;
+  --overlay: rgb(0 0 0 / 0.25);
+  --success: #63d471;
+  --highlight: #9a7b00;
+  --chart-1: #147bd5;
+  --chart-2: #238be8;
+  --chart-3: #2997ff;
+  --chart-4: #5aafff;
+  --chart-5: #8ac5ff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -296,6 +311,14 @@
     --sidebar-accent-foreground: #ffffff;
     --sidebar-border: rgb(255 255 255 / 0.14);
     --sidebar-ring: #2997ff;
+    --overlay: rgb(0 0 0 / 0.25);
+    --success: #63d471;
+    --highlight: #9a7b00;
+    --chart-1: #147bd5;
+    --chart-2: #238be8;
+    --chart-3: #2997ff;
+    --chart-4: #5aafff;
+    --chart-5: #8ac5ff;
   }
 }
 

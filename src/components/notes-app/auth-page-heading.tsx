@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import type { ComponentProps } from "react";
 
 type AuthHeadingKey =
   | "signIn"
@@ -9,7 +10,15 @@ type AuthHeadingKey =
   | "signInWithEmailLink"
   | "signInWithPhone";
 
-export function AuthPageHeading({ message }: { message: AuthHeadingKey }) {
+type AuthPageHeadingProps = ComponentProps<"h1"> & {
+  message: AuthHeadingKey;
+};
+
+export function AuthPageHeading({ message, ...props }: AuthPageHeadingProps) {
   const translate = useTranslations("auth");
-  return <h1 className="sr-only">{translate(message)}</h1>;
+  return (
+    <h1 {...props} className="sr-only">
+      {translate(message)}
+    </h1>
+  );
 }

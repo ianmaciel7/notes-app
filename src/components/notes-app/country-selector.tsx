@@ -29,7 +29,7 @@ export const CountrySelector = forwardRef<
       value={selected.code}
       onValueChange={(code) => setCountry(code as CountryCode)}
     >
-      <SelectTrigger className="w-[120px]">
+      <SelectTrigger className="w-30">
         <SelectValue>
           {selected.emoji} {selected.dialCode}
         </SelectValue>

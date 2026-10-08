@@ -40,7 +40,7 @@ function SmsMultiFactorAssertionPhoneForm(
     useSmsMultiFactorAssertionPhoneForm(props.hint, props.onSubmit);
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <Field>
         <FieldLabel>{getTranslation(ui, "labels", "phoneNumber")}</FieldLabel>
         <FieldDescription>
@@ -53,7 +53,7 @@ function SmsMultiFactorAssertionPhoneForm(
       <Button onClick={onSubmit} disabled={ui.state !== "idle"}>
         {getTranslation(ui, "labels", "sendCode")}
       </Button>
-      {error && <div className="text-sm text-red-600">{error}</div>}
+      {error && <div className="text-sm text-destructive">{error}</div>}
     </div>
   );
 }

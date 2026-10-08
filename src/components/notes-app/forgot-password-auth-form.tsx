@@ -21,8 +21,8 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
 
   if (emailSent) {
     return (
-      <div className="text-center space-y-4">
-        <div className="text-green-600 dark:text-green-400">
+      <div className="flex flex-col gap-4 text-center">
+        <div className="text-success">
           {getTranslation(ui, "messages", "checkEmailForReset")}
         </div>
       </div>
@@ -75,14 +75,14 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
             size="sm"
             onClick={props.onBackToSignInClick}
           >
-            <span className="text-xs">
+            <span className="text-sm">
               &larr; {getTranslation(ui, "labels", "backToSignIn")}
             </span>
           </Button>
         ) : (
           <Link
             href="/sign-in"
-            className="text-primary text-center text-xs font-medium underline-offset-4 hover:underline"
+            className="text-primary text-center text-sm font-medium underline-offset-4 hover:underline"
           >
             &larr; {getTranslation(ui, "labels", "backToSignIn")}
           </Link>

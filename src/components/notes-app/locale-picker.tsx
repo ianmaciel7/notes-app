@@ -1,5 +1,6 @@
 "use client";
 
+import type { ComponentProps } from "react";
 import {
   Select,
   SelectContent,
@@ -10,12 +11,14 @@ import {
 } from "@/components/ui/select";
 import { useLocalePicker } from "@/hooks/use-locale-picker";
 
-export function LocalePicker() {
+type LocalePickerProps = ComponentProps<"div">;
+
+export function LocalePicker(props: LocalePickerProps) {
   const { selectedLocale, pending, error, selectLocale, label, options } =
     useLocalePicker();
 
   return (
-    <div className="flex flex-col gap-1">
+    <div {...props} className="flex flex-col gap-1">
       <label htmlFor="locale-preference" className="text-sm font-medium">
         {label}
       </label>

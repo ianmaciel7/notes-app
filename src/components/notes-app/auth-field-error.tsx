@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import type { ComponentProps } from "react";
 import { useFormContext } from "react-hook-form";
 
 type FieldName =
@@ -11,12 +12,16 @@ type FieldName =
   | "verificationCode"
   | "general";
 
-export function AuthFieldError({ field }: { field: FieldName }) {
+type AuthFieldErrorProps = ComponentProps<"span"> & { field: FieldName };
+
+export function AuthFieldError({ field }: AuthFieldErrorProps) {
   const translate = useTranslations("validation");
   return translate(field);
 }
 
-export function AuthRootError() {
+type AuthRootErrorProps = ComponentProps<"div">;
+
+export function AuthRootError(_props: AuthRootErrorProps) {
   const translate = useTranslations("auth");
   const { formState } = useFormContext();
   const failure = formState.errors.root?.type;

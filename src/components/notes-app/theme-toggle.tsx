@@ -2,6 +2,7 @@
 
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import type { ComponentProps } from "react";
 import { useTheme } from "@/components/notes-app/theme";
 import { parseTheme, themes } from "@/components/notes-app/theme-script";
 import { Button } from "@/components/ui/button";
@@ -13,12 +14,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function ThemeToggle() {
+type ThemeToggleProps = ComponentProps<typeof DropdownMenu>;
+
+export function ThemeToggle(props: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
   const translate = useTranslations("theme");
 
   return (
-    <DropdownMenu>
+    <DropdownMenu {...props}>
       <DropdownMenuTrigger
         render={
           <Button variant="ghost" size="icon" aria-label={translate("label")} />

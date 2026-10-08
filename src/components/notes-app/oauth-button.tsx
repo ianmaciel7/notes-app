@@ -28,7 +28,7 @@ export function OAuthButton({
         {children}
       </Button>
       {error && (
-        <div className="text-destructive text-left text-xs">{error}</div>
+        <div className="text-destructive text-left text-sm">{error}</div>
       )}
     </div>
   );
