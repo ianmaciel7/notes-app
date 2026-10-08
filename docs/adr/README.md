@@ -27,6 +27,7 @@ Check it and the source tree before treating an accepted ADR as built.
 | [0006](./0006-adopt-firebase-ui-v7-and-auth-resilience.md) | FirebaseUI v7 client architecture with popup OAuth | Accepted | Implemented | 2026-09-28 |
 | [0007](./0007-adopt-cookie-based-next-intl-with-firebase-sync.md) | next-intl + Firebase locale sync | Accepted | Implemented | 2026-09-28 |
 | [0008](./0008-adopt-native-firebase-firestore-with-persistent-local-cache.md) | Firestore persistent local cache | Accepted | Partially implemented | 2026-09-29 |
+| [0009](./0009-adopt-apple-style-design-tokens.md) | Apple-style design tokens (no tiles or shadows) | Accepted | Implemented | 2026-10-08 |
 
 ## Source review — 2026-10-07
 

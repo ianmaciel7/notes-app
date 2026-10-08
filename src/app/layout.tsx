@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Inter } from "next/font/google";
 import Script from "next/script";
 import { Suspense } from "react";
 import { IntlProvider } from "@/components/notes-app/intl-provider";
@@ -7,9 +7,9 @@ import { createLocaleLangScript } from "@/components/notes-app/locale-lang-scrip
 import { defaultLocale, locales } from "@/lib/i18n/config";
 import "./globals.css";
 
-const geist = Geist({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-inter",
 });
 
 const geistMono = Geist_Mono({
@@ -27,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang={defaultLocale}
       suppressHydrationWarning
-      className={`${geist.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <Script id="locale-lang" strategy="beforeInteractive">

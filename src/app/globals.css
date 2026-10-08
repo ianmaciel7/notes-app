@@ -4,22 +4,33 @@
 @import "shadcn/tailwind.css";
 
 .typeset-docs {
-  --typeset-font-body: var(--font-geist);
-  --typeset-font-heading: var(--font-geist);
+  --typeset-font-body: var(--font-sans);
+  --typeset-font-heading: var(--font-sans);
   --typeset-font-mono: var(--font-geist-mono);
   --typeset-size: 15px;
   --typeset-leading: 1.75;
   --typeset-flow: 1.25em;
 }
 
-@custom-variant dark (&:is(.dark *));
+/* Follows the OS color scheme; an explicit .dark / .light class overrides it. */
+@custom-variant dark {
+  &:where(.dark, .dark *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:not(.light, .light *)) {
+      @slot;
+    }
+  }
+}
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist);
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-geist);
+  --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,100 +60,338 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-pearl: var(--pearl);
+  --color-divider-soft: var(--divider-soft);
+  --color-chip: var(--chip);
+
+  /* DESIGN.md radius grammar: 8px utility, 18px containers, pill actions. */
+  --radius-xs: 5px;
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 8px;
+  --radius-xl: 18px;
+  --radius-2xl: 18px;
+  --radius-3xl: 18px;
+  --radius-4xl: 9999px;
+
+  /* No UI shadows (DESIGN.md elevation). Depth comes from surface and blur. */
+  --shadow-2xs: 0 0 #0000;
+  --shadow-xs: 0 0 #0000;
+  --shadow-sm: 0 0 #0000;
+  --shadow-md: 0 0 #0000;
+  --shadow-lg: 0 0 #0000;
+  --shadow-xl: 0 0 #0000;
+  --shadow-2xl: 0 0 #0000;
+
+  /* DESIGN.md: weight 500 is absent; mid-weight reads as 600. */
+  --font-weight-medium: 600;
+
+  /* Motion (Apple HIG MOTION.md). Springs are linear() samples of the
+     documented stiffness/damping; durations live in :root below. */
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in: cubic-bezier(0.32, 0, 0.67, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-deceleration: cubic-bezier(0, 0, 0.2, 1);
+  --ease-spring-default: linear(
+    0,
+    0.049,
+    0.161,
+    0.297,
+    0.435,
+    0.561,
+    0.669,
+    0.758,
+    0.829,
+    0.883,
+    0.923,
+    0.952,
+    0.972,
+    0.985,
+    0.994,
+    1,
+    1.003,
+    1.004,
+    1.004,
+    1.004,
+    1
+  );
+  --ease-spring-snappy: linear(
+    0,
+    0.046,
+    0.151,
+    0.28,
+    0.411,
+    0.533,
+    0.638,
+    0.727,
+    0.798,
+    0.854,
+    0.897,
+    0.929,
+    0.953,
+    0.97,
+    0.982,
+    0.99,
+    0.995,
+    0.998,
+    1,
+    1.001,
+    1
+  );
+  --ease-spring-gentle: linear(
+    0,
+    0.077,
+    0.232,
+    0.398,
+    0.546,
+    0.666,
+    0.759,
+    0.829,
+    0.88,
+    0.917,
+    0.943,
+    0.961,
+    0.974,
+    0.982,
+    0.988,
+    0.992,
+    0.995,
+    0.996,
+    0.998,
+    0.998,
+    1
+  );
+  --ease-spring-tight: linear(
+    0,
+    0.179,
+    0.437,
+    0.636,
+    0.77,
+    0.856,
+    0.91,
+    0.944,
+    0.965,
+    0.978,
+    0.987,
+    0.992,
+    0.995,
+    0.997,
+    0.998,
+    0.999,
+    0.999,
+    1,
+    1,
+    1,
+    1
+  );
+  --animate-spin: spin 0.9s linear infinite;
+
+  --text-body: 17px;
+  --text-body--line-height: 1.47;
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --duration-instant: 0ms;
+  --duration-fast: 150ms;
+  --duration-default: 300ms;
+  --duration-slow: 400ms;
+  --duration-slower: 500ms;
+  --background: #ffffff;
+  --foreground: #1d1d1f;
+  --card: #ffffff;
+  --card-foreground: #1d1d1f;
+  --popover: #f5f5f7;
+  --popover-foreground: #1d1d1f;
+  --primary: #0066cc;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f7;
+  --secondary-foreground: #1d1d1f;
+  --muted: #f5f5f7;
+  --muted-foreground: #6e6e73;
+  --accent: #f5f5f7;
+  --accent-foreground: #1d1d1f;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #e0e0e0;
+  --input: #e0e0e0;
+  --ring: #0071e3;
+  --pearl: #fafafc;
+  --divider-soft: #f0f0f0;
+  --chip: rgb(210 210 215 / 0.64);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --radius: 0.5rem;
+  --sidebar: #f5f5f7;
+  --sidebar-foreground: #1d1d1f;
+  --sidebar-primary: #0066cc;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ececf0;
+  --sidebar-accent-foreground: #1d1d1f;
+  --sidebar-border: #e0e0e0;
+  --sidebar-ring: #0071e3;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: #252527;
+  --foreground: #ffffff;
+  --card: #272729;
+  --card-foreground: #ffffff;
+  --popover: #2a2a2c;
+  --popover-foreground: #ffffff;
+  --primary: #2997ff;
+  --primary-foreground: #1d1d1f;
+  --secondary: #2a2a2c;
+  --secondary-foreground: #ffffff;
+  --muted: #2a2a2c;
+  --muted-foreground: #cccccc;
+  --accent: #2a2a2c;
+  --accent-foreground: #ffffff;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --border: rgb(255 255 255 / 0.14);
+  --input: rgb(255 255 255 / 0.18);
+  --ring: #2997ff;
+  --pearl: #2a2a2c;
+  --divider-soft: rgb(255 255 255 / 0.06);
+  --sidebar: #272729;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #2997ff;
+  --sidebar-primary-foreground: #1d1d1f;
+  --sidebar-accent: #2a2a2c;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 0.14);
+  --sidebar-ring: #2997ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --background: #252527;
+    --foreground: #ffffff;
+    --card: #272729;
+    --card-foreground: #ffffff;
+    --popover: #2a2a2c;
+    --popover-foreground: #ffffff;
+    --primary: #2997ff;
+    --primary-foreground: #1d1d1f;
+    --secondary: #2a2a2c;
+    --secondary-foreground: #ffffff;
+    --muted: #2a2a2c;
+    --muted-foreground: #cccccc;
+    --accent: #2a2a2c;
+    --accent-foreground: #ffffff;
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: rgb(255 255 255 / 0.14);
+    --input: rgb(255 255 255 / 0.18);
+    --ring: #2997ff;
+    --pearl: #2a2a2c;
+    --divider-soft: rgb(255 255 255 / 0.06);
+    --sidebar: #272729;
+    --sidebar-foreground: #ffffff;
+    --sidebar-primary: #2997ff;
+    --sidebar-primary-foreground: #1d1d1f;
+    --sidebar-accent: #2a2a2c;
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: rgb(255 255 255 / 0.14);
+    --sidebar-ring: #2997ff;
+  }
+}
+
+/* Hover/color changes use fast ease-out; the press scale settles on the tight spring. */
+@utility transition-press {
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out),
+    scale var(--duration-default) var(--ease-spring-tight);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply font-sans;
+    font-feature-settings: "ss03";
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-body text-foreground;
+    letter-spacing: -0.374px;
+  }
+  h1,
+  h2,
+  h3,
+  .font-heading {
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
-  html {
-    @apply font-sans;
+}
+
+/*
+ * Floating layers: popover surface at 80% with backdrop blur (DESIGN.md
+ * sub-nav-frosted treatment). Unlayered so it wins over bg-popover utilities.
+ */
+[data-slot="popover-content"],
+[data-slot="dropdown-menu-content"],
+[data-slot="dropdown-menu-sub-content"],
+[data-slot="select-content"],
+[data-slot="context-menu-content"],
+[data-slot="context-menu-sub-content"],
+[data-slot="menubar-content"],
+[data-slot="menubar-sub-content"],
+[data-slot="hover-card-content"],
+[data-slot="combobox-content"] {
+  background-color: color-mix(in srgb, var(--popover) 80%, transparent);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  [data-slot="popover-content"],
+  [data-slot="dropdown-menu-content"],
+  [data-slot="dropdown-menu-sub-content"],
+  [data-slot="select-content"],
+  [data-slot="context-menu-content"],
+  [data-slot="context-menu-sub-content"],
+  [data-slot="menubar-content"],
+  [data-slot="menubar-sub-content"],
+  [data-slot="hover-card-content"],
+  [data-slot="combobox-content"] {
+    background-color: var(--popover);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 
+/*
+ * Reduced motion (MOTION.md): slides and scales become fades, springs become
+ * 250ms ease-out. Unlayered so it beats tw-animate-css utilities.
+ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    --tw-enter-translate-x: 0;
+    --tw-enter-translate-y: 0;
+    --tw-enter-scale: 1;
+    --tw-exit-translate-x: 0;
+    --tw-exit-translate-y: 0;
+    --tw-exit-scale: 1;
+    transition-duration: 250ms;
+    transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+    scroll-behavior: auto;
+  }
+}
+
+/*
+ * OAuth buttons keep each provider's brand color (provider brand guidelines).
+ * This is the only exception to the single-accent rule in DESIGN.md.
+ */
 @layer components {
   button[data-provider="apple.com"][data-themed="true"] {
     --apple-primary: #000000;
