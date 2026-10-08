@@ -102,6 +102,9 @@ Additional CI checks:
 
 A `git push` is not completion. After pushing to `dev` or `main`, run
 `pnpm run ci:wait` and treat the task as done only when it exits `0`.
+Run it in the background (`run_in_background`, or Monitor) and read its output
+when it finishes: it blocks for minutes and `gh run watch` redraws its status on
+every refresh.
 
 | Exit | Meaning | Action |
 | --- | --- | --- |

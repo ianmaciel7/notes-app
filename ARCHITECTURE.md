@@ -100,8 +100,11 @@ authentication cards, forms, and dialogs built with project shadcn primitives
 `CODING_STANDARDS.md` section 4). The implemented authentication slice (ADR
 0005) uses the local Firebase Auth Emulator, a server-only session-verification
 boundary, public `(public)` sign-in routes, and the protected `(protected)`
-routes `/dashboard` and `/settings`. Firestore's general client data access, DAL, exam domain services, and
-offline cache remain unimplemented (ADR 0008). A narrow **server-only**
+routes `/dashboard` and `/settings`. The browser Firestore base configuration (persistent multi-tab cache,
+emulator connection, cache cleanup on sign-out) exists in
+`src/lib/firebase/firestore.ts` (ADR 0008), but no feature reads or writes
+application data through it; a general client data layer and exam domain
+services remain unimplemented. A narrow **server-only**
 Firestore Admin seam does persist signed-in user locale preferences to
 `users/{uid}.locale`, after verifying the Firebase session (ADR 0007).
 
@@ -218,8 +221,8 @@ ADRs 0004-0008 cover Firebase UI, Authentication, localization, and
 Firestore. ADR 0005 provides Auth Emulator flows and protected sessions.
 ADR 0007 adds cookie-based locale selection, translated interfaces,
 validation, and user-profile persistence through Firebase Admin Firestore.
-ADR 0008 remains unimplemented for general Firestore data access and browser
-persistent caching. Runtime verification status belongs to each ADR and CI.
+ADR 0008 implements the base browser Firestore configuration, security rules
+and cache cleanup; general data access remains unimplemented. Runtime verification status belongs to each ADR and CI.
 
 ## 7. Architecture rules
 

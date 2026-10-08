@@ -1,5 +1,9 @@
 {
   "$schema": "./node_modules/fallow/schema.json",
-  "entry": ["src/app/**/page.tsx", "src/app/**/layout.tsx"],
+  "entry": [
+    "src/app/**/page.tsx",
+    "src/app/**/layout.tsx",
+    "vitest.rules.config.ts"
+  ],
   "ignorePatterns": ["node_modules/**", ".next/**", "src/components/ui/**"]
 }

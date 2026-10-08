@@ -152,6 +152,7 @@ function makeDeps(responses: object[][], headMessage = "fix: x") {
   let call = 0;
   const logs: string[] = [];
   const errors: string[] = [];
+  const watched: number[] = [];
   return {
     logs,
     errors,
@@ -165,6 +166,10 @@ function makeDeps(responses: object[][], headMessage = "fix: x") {
     isPushed: () => true,
     headMessage: () => headMessage,
     listRuns: () => responses[Math.min(call++, responses.length - 1)],
+    watched,
+    watchRun: (runId: number) => {
+      watched.push(runId);
+    },
     jobs: () => [
       {
         name: "Fast",
@@ -213,6 +218,13 @@ describe("waitForCi", () => {
     const deps = makeDeps([[run(running)], [run(pass)]]);
     expect(await waitForCi(waitOptions, deps)).toBe(EXIT.ok);
     expect(deps.logs).toContain("CI passed.");
+    expect(deps.watched).toEqual([1]);
+  });
+
+  it("does not watch runs that already finished", async () => {
+    const deps = makeDeps([[run(pass)]]);
+    expect(await waitForCi(waitOptions, deps)).toBe(EXIT.ok);
+    expect(deps.watched).toEqual([]);
   });
 
   it("waits for a run that is not yet registered", async () => {

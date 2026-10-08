@@ -16,6 +16,7 @@ export default defineConfig({
       "**/.worktress/**",
       "src/components/ui/**",
       "tests/e2e/**",
+      "tests/rules/**",
       "**/*.d.ts",
     ],
     coverage: {

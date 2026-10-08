@@ -61,13 +61,14 @@ Framework configuration:
 | Vitest | Unit tests with Happy DOM and V8 coverage | `pnpm test`, `pnpm run test:changed`, `pnpm run test:coverage` | `vitest.config.ts` |
 | Testing Library | React and DOM test helpers | used by Vitest tests | `@testing-library/react`, `@testing-library/dom` |
 | Playwright | E2E on Chromium, starts `pnpm dev` | `pnpm run test:e2e` | `playwright.config.ts` |
+| Firestore rules tests | Security rules against the Firestore emulator | `pnpm run test:rules` | `vitest.rules.config.ts`, `tests/rules/` |
 | axe-core | Accessibility checks inside Playwright | used by E2E tests | `@axe-core/playwright` |
 | Stryker | Mutation testing (Vitest runner, TypeScript checker) | `pnpm run test:mutation` | `stryker.config.json` |
 | Dependency Cruiser | Architecture rules: `no-circular`, `src-root-allowed-files-only`, `not-to-unresolvable`, `no-non-package-json`, `not-to-dev-dep`, `not-to-test`, `ui-primitives-cannot-import-domain`, `lib-and-hooks-cannot-import-ui-layers`, `components-cannot-import-app` | `pnpm run check:deps` | `.dependency-cruiser.cjs` |
 | Knip | Unused files, exports, and dependencies | `pnpm run check:unused` | `knip.json` |
 | jscpd | Code duplication (threshold 2) | `pnpm run check:duplication` | `.jscpd.json` |
 | Fallow | Code health and complexity audit | `pnpm run check:health` | `.fallowrc.json` |
-| Size Limit | Budgets: JS 470 kB, CSS 100 kB under `.next/static` | `pnpm run check:size` | `.size-limit.json` |
+| Size Limit | Budgets: JS 600 kB, CSS 100 kB under `.next/static` | `pnpm run check:size` | `.size-limit.json` |
 | CSpell | Spell check for `.ts`, `.tsx`, `.md` | `pnpm run lint:spelling` | `cspell.json` |
 | markdownlint-cli2 | Markdown lint | `pnpm run lint:md` | `.markdownlint-cli2.jsonc` |
 | `pnpm audit` | Dependency vulnerabilities, high and above | `pnpm run check:security` | `package.json`, `pnpm-workspace.yaml` |
@@ -103,6 +104,10 @@ They stay light on purpose; CI is the authoritative gate.
 `.pre-commit-config.yaml` pins gitleaks v8.24.0. The `pre-commit` hook requires
 the `pre-commit` tool on the machine.
 
+If `pre-push` or `check:types` fails with `ERR_SWC_NATIVE_CACHE` (bad ACL on
+the default SWC cache directory on Windows), set `SWC_NATIVE_BINDING_CACHE` to
+a directory you own and rerun. Never bypass the hook with `--no-verify`.
+
 ## 6. CI
 
 Workflow: `.github/workflows/ci.yml`, on push and pull request to `dev` and
@@ -111,7 +116,7 @@ Workflow: `.github/workflows/ci.yml`, on push and pull request to `dev` and
 | Job | Steps |
 | --- | --- |
 | `fast-gate` | Biome, type check, Vitest, Dependency Cruiser, CSpell, Knip, jscpd, Fallow, `pnpm audit` |
-| `extended-verification` (after `fast-gate`) | Playwright browser install, Next.js production build, Size Limit, Playwright E2E |
+| `extended-verification` (after `fast-gate`) | Playwright browser install, Next.js production build, Size Limit, Firestore rules tests, Playwright E2E |
 | `secret-scan` | gitleaks (`gitleaks-action@v3`) over the full history |
 
 Not run in CI: `lint:md`, `verify:agents`, `test:coverage`, `test:mutation`.
@@ -120,7 +125,7 @@ Not run in CI: `lint:md`, `verify:agents`, `test:coverage`, `test:mutation`.
 
 `pnpm run ci:wait` needs the GitHub CLI (`gh auth status`) and a classic or
 OAuth login (fine-grained tokens lack `checks:read`). It finds `CI` runs by
-commit SHA, polls until they finish (default 30 minutes), and counts automatic
+commit SHA, discovers them by polling, then blocks on `gh run watch --compact --exit-status` until they finish (default timeout 30 minutes), and counts automatic
 fix attempts through the `CI-Fix-Attempt: <n>` commit trailer (default limit
 2; the counter resets on any commit without the trailer, so it is a guard
 rail for agents, not a security boundary). `ci:check-paths` guards CI-fix

@@ -6,40 +6,50 @@ Accepted
 
 ## Implementation
 
-Not started
+Partially implemented
 
 ## Date
 
 2026-09-29
 
-## Current State (2026-10-07)
+## Current State (2026-10-08)
 
-**Implementation: Not started for browser persistence (separate from ADR 0007).**
-`package.json` declares `firebase` ^12.19.0,
-`pnpm-workspace.yaml` allows scripts for `protobufjs` and
-`@firebase/util`, and `firebase.json` configures the Firestore
-emulator at `127.0.0.1:8080`. The `src/lib/firebase/` directory
-already exists for Authentication and a narrowly scoped **server-only**
-Admin Firestore preference store at `src/lib/i18n/profile-preference.ts`
-(ADR 0007). That server-side user-locale operation is not a client Firestore
-instance or the general study-domain data layer specified by this ADR.
+**Implementation: base Firestore configuration, security rules, cache cleanup
+and their tests are delivered (GitHub CI green on `dev`). No feature reads or
+writes application data through Firestore yet.**
 
-Still absent from `dev`: `src/lib/firebase/firestore.ts`,
-`initializeFirestore` with `persistentLocalCache`, an idempotent
-`connectFirestoreEmulator` boundary, application Firestore data access,
-Firestore security rules/tests, and offline/multi-tab lifecycle tests.
-The `emulator`, `emulators:seed`, and `test:e2e` scripts now start **both**
-the Auth and Firestore emulators for locale-profile testing, but they do not
-enable persistent browser caching or general Firestore application access.
+Delivered:
 
-**Implementation order:** add the browser/server Firestore initialization
-boundary and emulator configuration, then validate IndexedDB persistence,
-multi-tab behavior, security rules, and cache cleanup on user changes before
-adding study-domain data. The `Decision` and `Consequences` below describe
-a **target architecture**, not code that is already deployed.
-ADR 0007 adds server-action and cross-browser tests for profile locale
-persistence. No browser-cache or general Firestore tests have been run
-under ADR 0008.
+- `src/lib/firebase/firestore.ts`: idempotent browser instance with
+  `persistentLocalCache` + `persistentMultipleTabManager`, fallback to the
+  existing or in-memory instance when persistence fails, in-memory default on
+  the server, and `connectFirestoreEmulator` (`127.0.0.1:8080`) only outside
+  production, once per instance (state kept on `globalThis` so Fast Refresh
+  reuses it). `getDb` is internal until a data consumer exists.
+- `clearFirestoreCache()` runs `terminate` then `clearIndexedDbPersistence`
+  and rejects on failure. The sign-out hook calls it after Auth sign-out and
+  surfaces the error without redirecting.
+- `firestore.rules` (deny by default; a user may read only `users/{uid}`; no
+  client writes) wired through `firebase.json`, with emulator tests in
+  `tests/rules/` (`pnpm run test:rules`, also run in CI).
+- Unit tests (`tests/unit/firebase-firestore.test.ts` and the sign-out cases)
+  and `tests/e2e/firestore-cache.spec.ts` (sign-out leaves no `firestore/`
+  IndexedDB database in Chromium).
+- Build-script policy: `allowBuilds` is `false` for `protobufjs` and
+  `@firebase/util`; their install scripts are inert here.
+- The JS size budget was raised to 600 kB for the Firestore SDK.
+
+Still pending (needs a feature that reads Firestore from the browser):
+
+- `onSnapshot` listeners and optimistic writes for application data.
+- Browser tests of IndexedDB persistence across reloads and multi-tab
+  behavior. Observed in Chromium with Firebase 12.19.0: `clearIndexedDbPersistence`
+  did not reject while a second tab was open, contrary to the failure scenario
+  the Decision anticipates; the error path stays implemented and unit tested.
+- Study-domain collections and indexes: not chosen (see `DER.md`).
+
+The `Decision` and `Consequences` below remain the target architecture for the
+pending items.
 
 ## Context
 

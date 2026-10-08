@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { getFirebaseClient } from "@/lib/firebase/client";
+import { clearFirestoreCache } from "@/lib/firebase/firestore";
 import { clearServerSession } from "@/lib/firebase/session-client";
 
 export function useSignOutButton() {
@@ -24,6 +25,7 @@ export function useSignOutButton() {
     try {
       await clearServerSession();
       await signOut(getFirebaseClient().auth);
+      await clearFirestoreCache();
       router.replace("/sign-in");
       router.refresh();
     } catch {

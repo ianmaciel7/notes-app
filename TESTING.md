@@ -64,6 +64,16 @@ Run:
 pnpm run test:e2e
 ```
 
+### Firestore security rules
+
+`firestore.rules` is tested against the Firestore Emulator with
+`@firebase/rules-unit-testing` (`tests/rules/`, excluded from `pnpm test`).
+CI runs it in the extended verification job.
+
+```bash
+pnpm run test:rules
+```
+
 ### Mutation testing
 
 Stryker is installed and available through:
@@ -100,6 +110,7 @@ Do not claim WCAG conformance based only on installed tooling.
 | Changed tests | `pnpm run test:changed` |
 | Coverage | `pnpm run test:coverage` |
 | E2E | `pnpm run test:e2e` |
+| Firestore rules | `pnpm run test:rules` |
 | Mutation | `pnpm run test:mutation` |
 | Fast local gate | `pnpm run verify:fast` |
 | Production build | `pnpm run build` |

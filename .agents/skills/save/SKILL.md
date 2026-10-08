@@ -34,6 +34,7 @@ invent a new file when an existing source of truth covers the topic.
 | Security policy | `SECURITY.md` | |
 | A hard constraint (protected path, forbidden API, "never do X") | The owning document from this table first, then a one-line entry in `CONSTRAINTS.md` | `CONSTRAINTS.md` is an index that links to the owner; never make it the only home of a rule. |
 | Tool, script, hook, MCP server, CI job, skill added or changed | `TOOLING.md` | Keep the matching section and snapshot date current. |
+| A workaround for a tool, hook or environment failure (error code, env var, permission fix) | `TOOLING.md`, next to the tool or hook it affects | Every agent hits the same failure. Only the machine-specific value (a local path) may also go in Claude auto-memory. |
 | Product behavior (exam-study platform) | `docs/product-specs/<slug>.md` | Copy `template.md`. |
 | Multi-step delivery plan | `docs/exec-plans/active/<slug>.md` | Copy `template.md`; move to `completed/` when done. |
 | Feature spec, ticket, or triage state | `.scratch/<feature>/spec.md`, `.scratch/<feature>/issues/NN-<slug>.md` | Format in `docs/agents/issue-tracker.md`; use `/to-spec`, `/to-tickets`, `/triage`. |
@@ -45,7 +46,7 @@ invent a new file when an existing source of truth covers the topic.
 | A reusable multi-step procedure | `.agents/skills/<name>/SKILL.md` | See `/skill-guide`, `/writing-for-agents`. Local skills are not in `skills-lock.json`. |
 | Research findings with sources | File produced by `/research` | |
 | Where the current session stands, for a new session or tool | `/handoff` file | Portable and temporary, not a source of truth. |
-| User preference, working style, or feedback to Claude | Claude auto-memory (`memory/` directory in the Claude project folder, plus its `MEMORY.md` index) | Claude-only. One fact per file, typed `user`, `feedback`, `project` or `reference`; add a one-line pointer to `MEMORY.md`; update an existing memory instead of adding a duplicate. If other tools need it too, use `.agents/rules/` instead. |
+| User preference, working style, or feedback to Claude | Claude auto-memory (`memory/` directory in the Claude project folder, plus its `MEMORY.md` index) | Claude-only: never the only home of a fact other agents also need. One fact per file, typed `user`, `feedback`, `project` or `reference`; add a one-line pointer to `MEMORY.md`; update an existing memory instead of adding a duplicate. If other tools need it too, use `.agents/rules/` instead. |
 | An external pointer (dashboard, ticket, doc URL) or a non-obvious project constraint | Claude auto-memory, type `reference` or `project` | Only if the repo does not already record it. |
 | A new or changed MCP server | `.agents/agents.json`, then `agents sync` | Machine-specific or private overrides go in `.agents/local.json`. Update `TOOLING.md` section 8.2. |
 | An automated behavior ("whenever X, do Y") | A hook in `.claude/settings.json` | Claude-only. `.agents/agents.json` has no hooks. `.claude/settings.local.json` is git-ignored and machine-specific. Husky hooks are for git events. |

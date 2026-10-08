@@ -105,6 +105,9 @@ jobs:
       - name: Size Limit Check
         run: pnpm run check:size
 
+      - name: Firestore Rules Tests
+        run: pnpm run test:rules
+
       - name: Playwright E2E Tests
         run: pnpm run test:e2e
 

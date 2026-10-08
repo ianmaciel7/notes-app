@@ -6,15 +6,15 @@ Accepted
 
 ## Implementation
 
-Partially implemented
+Implemented
 
 ## Date
 
-2026-09-28 (revised 2026-10-07)
+2026-09-28 (revised 2026-10-08)
 
-## Current State (2026-10-07)
+## Current State (2026-10-08)
 
-**Implementation: source implementation delivered; CI verification in progress.**
+**Implementation: delivered and verified; GitHub CI is green on `dev`.**
 This decision is implemented in the remote `dev` source tree. It does not
 introduce a general Firestore browser data layer, which remains ADR 0008.
 
@@ -65,9 +65,9 @@ introduce a general Firestore browser data layer, which remains ADR 0008.
   `tests/unit/locale-preference-actions.test.ts`).
 - `tests/e2e/locale.spec.ts` covers explicit language selection and
   cross-browser profile preference restoration with the emulators.
-- The GitHub CI outcome for the final implementation has not yet been
-  recorded here. Passing lint, TypeScript, unit, build, and browser tests
-  remains the acceptance gate; code presence alone is not a passing test.
+- GitHub CI on `dev` passes (lint, TypeScript, unit, production build,
+  size limit and Playwright E2E, commit `9b036dfc`). Local unit run: 18 files,
+  111 tests passing.
 - Out of scope: ADR 0008's direct browser Firestore persistence,
   IndexedDB multi-tab cache, study-domain entities, and TOTP in the
   Auth Emulator. These are not required to use the server-only locale

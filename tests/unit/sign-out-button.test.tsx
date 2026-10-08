@@ -13,6 +13,7 @@ const mocks = vi.hoisted(() => ({
   replace: vi.fn(),
   refresh: vi.fn(),
   signOut: vi.fn(async () => undefined),
+  clearFirestoreCache: vi.fn(async () => undefined),
 }));
 
 vi.mock("next-intl", () => ({
@@ -29,6 +30,9 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace: mocks.replace, refresh: mocks.refresh }),
 }));
 vi.mock("firebase/auth", () => ({ signOut: mocks.signOut }));
+vi.mock("@/lib/firebase/firestore", () => ({
+  clearFirestoreCache: mocks.clearFirestoreCache,
+}));
 vi.mock("@/lib/firebase/client", () => ({
   getFirebaseClient: () => ({ auth: {} }),
 }));
@@ -89,7 +93,24 @@ describe("SignOutButton", () => {
       method: "DELETE",
     });
     expect(mocks.signOut).toHaveBeenCalledOnce();
+    expect(mocks.clearFirestoreCache).toHaveBeenCalledOnce();
     expect(mocks.refresh).toHaveBeenCalledOnce();
     expect(screen.queryByRole("alert")).toBeNull();
+  });
+
+  it("does not leave the page when the offline cache cannot be cleared", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({ ok: true })),
+    );
+    mocks.clearFirestoreCache.mockRejectedValueOnce(new Error("other tabs"));
+    render(<SignOutButton />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+
+    expect((await screen.findByRole("alert")).textContent).toContain(
+      "Could not sign out",
+    );
+    expect(mocks.replace).not.toHaveBeenCalled();
   });
 });

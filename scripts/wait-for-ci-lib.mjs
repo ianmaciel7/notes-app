@@ -159,9 +159,7 @@ export function addedLinesFromDiff(diffText) {
 
 const DISCOVERY_TIMEOUT_MS = 120_000;
 const DISCOVERY_INTERVAL_MS = 5_000;
-const POLL_INTERVAL_MS = 15_000;
-
-const ignore = () => undefined;
+const MIN_WATCH_TIMEOUT_MS = 1_000;
 
 export async function pollUntil({
   fetch,
@@ -170,22 +168,13 @@ export async function pollUntil({
   now,
   intervalMs,
   deadline,
-  onTick = ignore,
 }) {
   let value = await fetch();
-  onTick(value);
   while (!isDone(value) && now() < deadline) {
     await sleep(intervalMs);
     value = await fetch();
-    onTick(value);
   }
   return value;
-}
-
-function statusLine(runs) {
-  return runs
-    .map((run) => `${run.event}#${run.databaseId}:${classifyRun(run)}`)
-    .join(" ");
 }
 
 export function overallOutcome(runs) {
@@ -196,35 +185,28 @@ export function overallOutcome(runs) {
   return outcomes.includes("failure") ? "failure" : "human";
 }
 
-function collectRuns(sha, options, deps) {
+async function collectRuns(sha, options, deps) {
   const list = () => deps.listRuns(sha, options.workflow);
-  const timing = { sleep: deps.sleep, now: deps.now };
-  let lastStatus = "";
-  const logChange = (runs) => {
-    const status = statusLine(runs);
-    if (status !== lastStatus) {
-      deps.log(`[wait-for-ci] ${status}`);
-      lastStatus = status;
-    }
-  };
-  return pollUntil({
-    ...timing,
+  const discovered = await pollUntil({
+    sleep: deps.sleep,
+    now: deps.now,
     fetch: list,
     isDone: (runs) => runs.length > 0,
     intervalMs: DISCOVERY_INTERVAL_MS,
     deadline: deps.now() + DISCOVERY_TIMEOUT_MS,
-  }).then((discovered) =>
-    discovered.length === 0
-      ? discovered
-      : pollUntil({
-          ...timing,
-          fetch: list,
-          isDone: (runs) => runs.every((run) => classifyRun(run) !== "pending"),
-          intervalMs: POLL_INTERVAL_MS,
-          deadline: deps.now() + options.timeoutMinutes * 60_000,
-          onTick: logChange,
-        }),
-  );
+  });
+  const pending = discovered.filter((run) => classifyRun(run) === "pending");
+  if (pending.length === 0) {
+    return discovered;
+  }
+  const deadline = deps.now() + options.timeoutMinutes * 60_000;
+  for (const run of pending) {
+    deps.watchRun(
+      run.databaseId,
+      Math.max(deadline - deps.now(), MIN_WATCH_TIMEOUT_MS),
+    );
+  }
+  return list();
 }
 
 function printFailures(runs, logLines, deps) {

@@ -25,8 +25,8 @@ Check it and the source tree before treating an accepted ADR as built.
 | [0004](./0004-adopt-firebase-ui-components.md) | Firebase OSS auth UI components | Accepted | Implemented | 2026-09-28 |
 | [0005](./0005-adopt-firebase-auth-with-local-emulator.md) | Firebase Auth emulator architecture | Accepted | Implemented | 2026-09-28 |
 | [0006](./0006-adopt-firebase-ui-v7-and-auth-resilience.md) | FirebaseUI v7 client architecture with popup OAuth | Accepted | Implemented | 2026-09-28 |
-| [0007](./0007-adopt-cookie-based-next-intl-with-firebase-sync.md) | next-intl + Firebase locale sync | Accepted | Partially implemented | 2026-09-28 |
-| [0008](./0008-adopt-native-firebase-firestore-with-persistent-local-cache.md) | Firestore persistent local cache | Accepted | Not started | 2026-09-29 |
+| [0007](./0007-adopt-cookie-based-next-intl-with-firebase-sync.md) | next-intl + Firebase locale sync | Accepted | Implemented | 2026-09-28 |
+| [0008](./0008-adopt-native-firebase-firestore-with-persistent-local-cache.md) | Firestore persistent local cache | Accepted | Partially implemented | 2026-09-29 |
 
 ## Source review — 2026-10-07
 
@@ -43,11 +43,14 @@ envisioned when each decision was made.
   boundary, popup OAuth, and application-owned auth components
   are present. Server-session-first logout and associated regression tests
   are documented. Production identity-provider behavior is not certified.
-- **0007:** locale negotiation and Firebase UI translation synchronization
-  exist, but full application localization and cross-device preference
-  sync are unfinished.
-- **0008:** Firestore emulator configuration exists, but the Firestore
-  client/data layer and persistent cache are **not implemented**.
+- **0007:** cookie-based locale selection, Firebase UI/Auth language
+  synchronization and the Firestore profile preference are implemented and
+  covered by unit and E2E tests.
+- **0008:** the base Firestore configuration (persistent cache, emulator,
+  sign-out cache clearing), deny-by-default rules with emulator tests and the
+  build-script policy are implemented. No feature reads Firestore from the
+  browser yet, so listeners, optimistic writes and browser persistence tests
+  are pending.
 
 **Verification level:** source inspection only for this documentation update.
 No local dependency installation, Biome, TypeScript, Vitest, Playwright, or

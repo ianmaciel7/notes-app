@@ -1,8 +1,8 @@
 allowBuilds:
-  '@firebase/util': true
+  '@firebase/util': false
   '@parcel/watcher': false
   '@swc/core': false
-  protobufjs: true
+  protobufjs: false
   sharp: false
   unrs-resolver: false
 

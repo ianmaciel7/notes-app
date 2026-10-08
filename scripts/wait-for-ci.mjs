@@ -1,4 +1,4 @@
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import {
   checkPaths,
@@ -54,6 +54,21 @@ const deps = {
       ),
       workflow,
     ),
+  watchRun: (runId, timeoutMs) => {
+    spawnSync(
+      "gh",
+      [
+        "run",
+        "watch",
+        String(runId),
+        "--compact",
+        "--exit-status",
+        "--interval",
+        "15",
+      ],
+      { stdio: "inherit", timeout: timeoutMs },
+    );
+  },
   jobs: (runId) =>
     JSON.parse(gh(["run", "view", String(runId), "--json", "jobs"])).jobs,
   failedLog: (runId) => gh(["run", "view", String(runId), "--log-failed"]),
