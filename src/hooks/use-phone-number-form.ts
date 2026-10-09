@@ -12,7 +12,7 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 
-import type { CountrySelectorRef } from "@/components/notes-app/country-selector";
+import type { CountrySelectorRef } from "@/app/_components/country-selector";
 import { useAppVerifier } from "@/hooks/use-app-verifier";
 import { setFormRootError } from "@/lib/firebase/form-error";
 

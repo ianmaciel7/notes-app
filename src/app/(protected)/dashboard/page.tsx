@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { SignOutButton } from "@/components/notes-app/sign-out-button";
+import { SignOutButton } from "@/app/_components/sign-out-button";
 import { getCurrentIdentity } from "@/lib/firebase/identity";
 
 export const instant = false;

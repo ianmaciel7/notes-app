@@ -2,9 +2,9 @@
 
 import type { User } from "firebase/auth";
 import type { PropsWithChildren } from "react";
-import { MultiFactorAuthAssertionCard } from "@/components/notes-app/multi-factor-auth-assertion-card";
-import { Policies } from "@/components/notes-app/policies";
-import { RedirectError } from "@/components/notes-app/redirect-error";
+import { MultiFactorAuthAssertionCard } from "@/app/(public)/_components/multi-factor-auth-assertion-card";
+import { Policies } from "@/app/(public)/_components/policies";
+import { RedirectError } from "@/app/(public)/_components/redirect-error";
 import {
   Card,
   CardContent,

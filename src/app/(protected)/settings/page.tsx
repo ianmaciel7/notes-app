@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { SecondFactorPanel } from "@/components/notes-app/second-factor-panel";
+import { SecondFactorPanel } from "@/app/(protected)/_components/second-factor-panel";
 import { getCurrentIdentity } from "@/lib/firebase/identity";
 
 export const instant = false;

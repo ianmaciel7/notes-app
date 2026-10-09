@@ -1,10 +1,12 @@
 "use client";
 
-import type { User } from "firebase/auth";
-import type { PropsWithChildren } from "react";
-import { MultiFactorAuthAssertionCard } from "@/components/notes-app/multi-factor-auth-assertion-card";
-import { PhoneAuthForm } from "@/components/notes-app/phone-auth-form";
-import { RedirectError } from "@/components/notes-app/redirect-error";
+import type {
+  // cspell:disable-next-line
+  EmailLinkAuthScreenProps as EmailLinkAuthCardProps,
+} from "@firebase-oss/ui-react";
+import { EmailLinkAuthForm } from "@/app/(public)/_components/email-link-auth-form";
+import { MultiFactorAuthAssertionCard } from "@/app/(public)/_components/multi-factor-auth-assertion-card";
+import { RedirectError } from "@/app/(public)/_components/redirect-error";
 import {
   Card,
   CardContent,
@@ -15,11 +17,13 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useSignInCard } from "@/hooks/use-sign-in-card";
 
-export type PhoneAuthCardProps = PropsWithChildren<{
-  onSignIn?: (user: User) => void;
-}>;
+export type { EmailLinkAuthCardProps };
 
-export function PhoneAuthCard({ children, onSignIn }: PhoneAuthCardProps) {
+export function EmailLinkAuthCard({
+  children,
+  onSignIn,
+  ...props
+}: EmailLinkAuthCardProps) {
   const { titleText, subtitleText, hasMultiFactorResolver } =
     useSignInCard(onSignIn);
 
@@ -35,7 +39,7 @@ export function PhoneAuthCard({ children, onSignIn }: PhoneAuthCardProps) {
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>
-          <PhoneAuthForm />
+          <EmailLinkAuthForm {...props} />
           {children ? (
             <>
               <Separator className="my-4" />

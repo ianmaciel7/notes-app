@@ -1,32 +1,31 @@
 "use client";
 
 import { getTranslation } from "@firebase-oss/ui-core";
-import type { EmailLinkAuthFormProps } from "@firebase-oss/ui-react";
+import type { ForgotPasswordAuthFormProps } from "@firebase-oss/ui-react";
+import Link from "next/link";
 import { Controller, FormProvider } from "react-hook-form";
-
 import {
   AuthFieldError,
   AuthRootError,
-} from "@/components/notes-app/auth-field-error";
-import { Policies } from "@/components/notes-app/policies";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+} from "@/app/_components/auth-field-error";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useEmailLinkAuthForm } from "@/hooks/use-email-link-auth-form";
+import { useForgotPasswordAuthForm } from "@/hooks/use-forgot-password-auth-form";
+import { Policies } from "./policies";
 
-export type { EmailLinkAuthFormProps };
+export type { ForgotPasswordAuthFormProps };
 
-export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
-  const { ui, form, emailSent, onSubmit } = useEmailLinkAuthForm(props);
+export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
+  const { ui, form, emailSent, onSubmit } = useForgotPasswordAuthForm(props);
 
   if (emailSent) {
     return (
-      <Alert>
-        <AlertDescription>
-          {getTranslation(ui, "messages", "signInLinkSent")}
-        </AlertDescription>
-      </Alert>
+      <div className="flex flex-col gap-4 text-center">
+        <div className="text-success">
+          {getTranslation(ui, "messages", "checkEmailForReset")}
+        </div>
+      </div>
     );
   }
 
@@ -60,7 +59,7 @@ export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
         />
         <Policies />
         <Button type="submit" disabled={ui.state !== "idle"}>
-          {getTranslation(ui, "labels", "sendSignInLink")}
+          {getTranslation(ui, "labels", "resetPassword")}
         </Button>
         {form.formState.errors.root && (
           <Field data-invalid="true">
@@ -68,6 +67,25 @@ export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
               <AuthRootError />
             </FieldError>
           </Field>
+        )}
+        {props.onBackToSignInClick ? (
+          <Button
+            type="button"
+            variant="link"
+            size="sm"
+            onClick={props.onBackToSignInClick}
+          >
+            <span className="text-sm">
+              &larr; {getTranslation(ui, "labels", "backToSignIn")}
+            </span>
+          </Button>
+        ) : (
+          <Link
+            href="/sign-in"
+            className="text-primary text-center text-sm font-medium underline-offset-4 hover:underline"
+          >
+            &larr; {getTranslation(ui, "labels", "backToSignIn")}
+          </Link>
         )}
       </form>
     </FormProvider>

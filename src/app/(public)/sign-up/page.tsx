@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { AuthPageHeading } from "@/components/notes-app/auth-page-heading";
-import { SignUpAuthCard } from "@/components/notes-app/sign-up-auth-card";
+import { AuthPageHeading } from "@/app/(public)/_components/auth-page-heading";
+import { SignUpAuthCard } from "@/app/(public)/_components/sign-up-auth-card";
 
 export const metadata: Metadata = { title: "Create an account" };
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { AuthPageHeading } from "@/components/notes-app/auth-page-heading";
-import { PhoneAuthCard } from "@/components/notes-app/phone-auth-card";
+import { AuthPageHeading } from "@/app/(public)/_components/auth-page-heading";
+import { PhoneAuthCard } from "@/app/(public)/_components/phone-auth-card";
 
 export const metadata: Metadata = { title: "Sign in with phone" };
 

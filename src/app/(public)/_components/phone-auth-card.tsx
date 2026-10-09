@@ -1,12 +1,10 @@
 "use client";
 
-import type {
-  // cspell:disable-next-line
-  SignInAuthScreenProps as SignInAuthCardProps,
-} from "@firebase-oss/ui-react";
-import { MultiFactorAuthAssertionCard } from "@/components/notes-app/multi-factor-auth-assertion-card";
-import { RedirectError } from "@/components/notes-app/redirect-error";
-import { SignInAuthForm } from "@/components/notes-app/sign-in-auth-form";
+import type { User } from "firebase/auth";
+import type { PropsWithChildren } from "react";
+import { MultiFactorAuthAssertionCard } from "@/app/(public)/_components/multi-factor-auth-assertion-card";
+import { PhoneAuthForm } from "@/app/(public)/_components/phone-auth-form";
+import { RedirectError } from "@/app/(public)/_components/redirect-error";
 import {
   Card,
   CardContent,
@@ -17,13 +15,11 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useSignInCard } from "@/hooks/use-sign-in-card";
 
-export type { SignInAuthCardProps };
+export type PhoneAuthCardProps = PropsWithChildren<{
+  onSignIn?: (user: User) => void;
+}>;
 
-export function SignInAuthCard({
-  children,
-  onSignIn,
-  ...props
-}: SignInAuthCardProps) {
+export function PhoneAuthCard({ children, onSignIn }: PhoneAuthCardProps) {
   const { titleText, subtitleText, hasMultiFactorResolver } =
     useSignInCard(onSignIn);
 
@@ -39,12 +35,12 @@ export function SignInAuthCard({
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>
-          <SignInAuthForm {...props} />
+          <PhoneAuthForm />
           {children ? (
             <>
               <Separator className="my-4" />
-              <div className="flex flex-col gap-2">{children}</div>
-              <div className="mt-4">
+              <div className="flex flex-col gap-2">
+                {children}
                 <RedirectError />
               </div>
             </>

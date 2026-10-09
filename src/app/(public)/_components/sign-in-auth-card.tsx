@@ -2,11 +2,11 @@
 
 import type {
   // cspell:disable-next-line
-  EmailLinkAuthScreenProps as EmailLinkAuthCardProps,
+  SignInAuthScreenProps as SignInAuthCardProps,
 } from "@firebase-oss/ui-react";
-import { EmailLinkAuthForm } from "@/components/notes-app/email-link-auth-form";
-import { MultiFactorAuthAssertionCard } from "@/components/notes-app/multi-factor-auth-assertion-card";
-import { RedirectError } from "@/components/notes-app/redirect-error";
+import { MultiFactorAuthAssertionCard } from "@/app/(public)/_components/multi-factor-auth-assertion-card";
+import { RedirectError } from "@/app/(public)/_components/redirect-error";
+import { SignInAuthForm } from "@/app/(public)/_components/sign-in-auth-form";
 import {
   Card,
   CardContent,
@@ -17,13 +17,13 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useSignInCard } from "@/hooks/use-sign-in-card";
 
-export type { EmailLinkAuthCardProps };
+export type { SignInAuthCardProps };
 
-export function EmailLinkAuthCard({
+export function SignInAuthCard({
   children,
   onSignIn,
   ...props
-}: EmailLinkAuthCardProps) {
+}: SignInAuthCardProps) {
   const { titleText, subtitleText, hasMultiFactorResolver } =
     useSignInCard(onSignIn);
 
@@ -39,12 +39,12 @@ export function EmailLinkAuthCard({
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>
-          <EmailLinkAuthForm {...props} />
+          <SignInAuthForm {...props} />
           {children ? (
             <>
               <Separator className="my-4" />
-              <div className="flex flex-col gap-2">
-                {children}
+              <div className="flex flex-col gap-2">{children}</div>
+              <div className="mt-4">
                 <RedirectError />
               </div>
             </>

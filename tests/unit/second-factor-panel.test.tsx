@@ -73,7 +73,7 @@ vi.mock(
   },
 );
 
-import { SecondFactorPanel } from "@/components/notes-app/second-factor-panel";
+import { SecondFactorPanel } from "@/app/(protected)/_components/second-factor-panel";
 
 function signIn(overrides: Partial<FakeUser> = {}) {
   const user: FakeUser = {

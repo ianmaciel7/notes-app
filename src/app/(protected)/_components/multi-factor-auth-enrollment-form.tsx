@@ -3,8 +3,8 @@
 import { FactorId } from "firebase/auth";
 import type { ComponentProps, PropsWithChildren } from "react";
 
-import { SmsMultiFactorEnrollmentForm } from "@/components/notes-app/sms-multi-factor-enrollment-form";
-import { TotpMultiFactorEnrollmentForm } from "@/components/notes-app/totp-multi-factor-enrollment-form";
+import { SmsMultiFactorEnrollmentForm } from "@/app/(protected)/_components/sms-multi-factor-enrollment-form";
+import { TotpMultiFactorEnrollmentForm } from "@/app/(protected)/_components/totp-multi-factor-enrollment-form";
 import { Button } from "@/components/ui/button";
 import {
   type Hint,

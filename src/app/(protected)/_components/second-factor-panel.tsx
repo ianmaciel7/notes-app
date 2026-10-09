@@ -3,8 +3,8 @@
 import { FactorId } from "firebase/auth";
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { MultiFactorAuthEnrollmentCard } from "@/components/notes-app/multi-factor-auth-enrollment-card";
-import { ReauthenticateButton } from "@/components/notes-app/reauthenticate-button";
+import { MultiFactorAuthEnrollmentCard } from "@/app/(protected)/_components/multi-factor-auth-enrollment-card";
+import { ReauthenticateButton } from "@/app/(protected)/_components/reauthenticate-button";
 import { Button } from "@/components/ui/button";
 import {
   Card,

@@ -3,8 +3,8 @@
 // cspell:disable-next-line
 import type { SignUpAuthScreenProps as SignUpAuthCardProps } from "@firebase-oss/ui-react";
 import { useTranslations } from "next-intl";
-import { MultiFactorAuthAssertionCard } from "@/components/notes-app/multi-factor-auth-assertion-card";
-import { SignUpAuthForm } from "@/components/notes-app/sign-up-auth-form";
+import { MultiFactorAuthAssertionCard } from "@/app/(public)/_components/multi-factor-auth-assertion-card";
+import { SignUpAuthForm } from "@/app/(public)/_components/sign-up-auth-form";
 import {
   Card,
   CardContent,

@@ -7,7 +7,7 @@ import { Controller, FormProvider } from "react-hook-form";
 import {
   AuthFieldError,
   AuthRootError,
-} from "@/components/notes-app/auth-field-error";
+} from "@/app/_components/auth-field-error";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import {

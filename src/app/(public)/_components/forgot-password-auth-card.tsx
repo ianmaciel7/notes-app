@@ -2,10 +2,10 @@
 
 import type {
   // cspell:disable-next-line
-  MultiFactorAuthAssertionScreenProps as MultiFactorAuthAssertionCardProps,
+  ForgotPasswordAuthScreenProps as ForgotPasswordAuthCardProps,
 } from "@firebase-oss/ui-react";
 import { useTranslations } from "next-intl";
-import { MultiFactorAuthAssertionForm } from "@/components/notes-app/multi-factor-auth-assertion-form";
+import { ForgotPasswordAuthForm } from "@/app/(public)/_components/forgot-password-auth-form";
 import {
   Card,
   CardContent,
@@ -14,16 +14,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export type MultiFactorAuthEnrollmentCardProps =
-  MultiFactorAuthAssertionCardProps;
+export type { ForgotPasswordAuthCardProps };
 
-export function MultiFactorAuthAssertionCard(
-  props: MultiFactorAuthEnrollmentCardProps,
-) {
+export function ForgotPasswordAuthCard(props: ForgotPasswordAuthCardProps) {
   const translate = useTranslations("auth");
 
-  const titleText = translate("multiFactorAssertion");
-  const subtitleText = translate("multiFactorAssertionSubtitle");
+  const titleText = translate("resetPassword");
+  const subtitleText = translate("resetPasswordSubtitle");
 
   return (
     <div className="max-w-sm mx-auto">
@@ -33,7 +30,7 @@ export function MultiFactorAuthAssertionCard(
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>
-          <MultiFactorAuthAssertionForm {...props} />
+          <ForgotPasswordAuthForm {...props} />
         </CardContent>
       </Card>
     </div>

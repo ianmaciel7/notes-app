@@ -8,9 +8,9 @@ import { Controller, FormProvider } from "react-hook-form";
 import {
   AuthFieldError,
   AuthRootError,
-} from "@/components/notes-app/auth-field-error";
-import { CountrySelector } from "@/components/notes-app/country-selector";
-import { Policies } from "@/components/notes-app/policies";
+} from "@/app/_components/auth-field-error";
+import { CountrySelector } from "@/app/_components/country-selector";
+import { Policies } from "@/app/(public)/_components/policies";
 import { Button } from "@/components/ui/button";
 import {
   Field,

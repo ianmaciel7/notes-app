@@ -2,7 +2,7 @@
 
 import type { MultiFactorAuthEnrollmentFormProps } from "@firebase-oss/ui-react";
 import { useTranslations } from "next-intl";
-import { MultiFactorAuthEnrollmentForm } from "@/components/notes-app/multi-factor-auth-enrollment-form";
+import { MultiFactorAuthEnrollmentForm } from "@/app/(protected)/_components/multi-factor-auth-enrollment-form";
 import {
   Card,
   CardContent,

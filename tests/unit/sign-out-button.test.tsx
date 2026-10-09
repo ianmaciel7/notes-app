@@ -37,7 +37,7 @@ vi.mock("@/lib/firebase/client", () => ({
   getFirebaseClient: () => ({ auth: {} }),
 }));
 
-import { SignOutButton } from "@/components/notes-app/sign-out-button";
+import { SignOutButton } from "@/app/_components/sign-out-button";
 
 describe("SignOutButton", () => {
   beforeEach(() => {

@@ -7,8 +7,8 @@ import {
 } from "firebase/auth";
 import type { ComponentProps, PropsWithChildren } from "react";
 
-import { SmsMultiFactorAssertionForm } from "@/components/notes-app/sms-multi-factor-assertion-form";
-import { TotpMultiFactorAssertionForm } from "@/components/notes-app/totp-multi-factor-assertion-form";
+import { SmsMultiFactorAssertionForm } from "@/app/(public)/_components/sms-multi-factor-assertion-form";
+import { TotpMultiFactorAssertionForm } from "@/app/(public)/_components/totp-multi-factor-assertion-form";
 import { Button } from "@/components/ui/button";
 import { useMultiFactorAuthAssertionForm } from "@/hooks/use-multi-factor-auth-assertion-form";
 import { useTranslation } from "@/hooks/use-translation";

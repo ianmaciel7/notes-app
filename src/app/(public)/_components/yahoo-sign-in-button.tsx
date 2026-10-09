@@ -3,7 +3,7 @@
 import { YahooLogo, type YahooSignInButtonProps } from "@firebase-oss/ui-react";
 import { OAuthProvider } from "firebase/auth";
 
-import { OAuthButton } from "@/components/notes-app/oauth-button";
+import { OAuthButton } from "@/app/(public)/_components/oauth-button";
 import { useTranslation } from "@/hooks/use-translation";
 
 export type { YahooSignInButtonProps };
