@@ -200,8 +200,9 @@ The Dependency Cruiser rules `domain-is-pure`,
 `client-cannot-import-server-layers`, `data-cannot-import-client-layers`,
 `data-not-importable-by-browser-layers` (only `src/app/` and `src/actions/`
 may import `src/data/`; `src/components/`, `src/hooks/`, `src/client/`,
-`src/domain/`, and `src/lib/` may not), `data-files-must-be-dal` (every file
-under `src/data/` must match `*-dal.ts`), and
+`src/domain/`, and `src/lib/` may not), `data-files-must-be-dal` (a partial,
+redundant check that `src/data/` files match `*-dal.ts`; it only sees files
+with at least one dependency), and
 `actions-cannot-import-client-layers` enforce the table. The Vitest suite
 `tests/unit/data-layer-structure.test.ts` (with its helper
 `tests/unit/data-layer-structure-lib.ts`, which parses each `src/data/` file

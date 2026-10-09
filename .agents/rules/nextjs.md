@@ -47,8 +47,10 @@
 
 `src/data` file structure (`*-dal.ts`, `server-only`, async exports only, no
 `uid`/`userId`/`ownerId` parameter) is checked by
-`tests/unit/data-layer-structure.test.ts` and the Dependency Cruiser rules
-`data-files-must-be-dal` and `data-not-importable-by-browser-layers`.
+`tests/unit/data-layer-structure.test.ts` for every file in `src/data`. The
+Dependency Cruiser rule `data-not-importable-by-browser-layers` restricts who
+may import `src/data`; `data-files-must-be-dal` is a partial, redundant
+import-graph check that only sees files with at least one dependency.
 
 These DAL and Server Action placement rules are project conventions backed by
 focused tests and Dependency Cruiser layer restrictions; they are not a

@@ -190,10 +190,12 @@ UID, and exposes only minimal DTOs where a result crosses the action boundary.
 "server-only"`; their only exports are async DAL operations. Pure rules,
 errors, and validation belong in `src/domain/`, while server-only Firebase
 Admin SDK adapters shared by DALs belong in `src/lib/firebase/` and are
-imported only by `src/data/`. The Vitest data-layer structure test and
-Dependency Cruiser rules `data-files-must-be-dal` and
-`data-not-importable-by-browser-layers` enforce these boundaries alongside the
-existing layer rules.
+imported only by `src/data/`. The Vitest data-layer structure test enforces
+the `*-dal.ts` name and the export rules for every file in `src/data/`, and the
+Dependency Cruiser rule `data-not-importable-by-browser-layers` enforces who may
+import `src/data/`, alongside the existing layer rules. The Dependency Cruiser
+rule `data-files-must-be-dal` is a partial, redundant check that only sees
+files with at least one dependency.
 `src/domain/` contains the SDK-free Space types and Object Type parsing and
 inheritance-resolution logic; the Dependency Cruiser rules `domain-is-pure`,
 `client-cannot-import-server-layers`, `data-cannot-import-client-layers`, and

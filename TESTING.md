@@ -34,9 +34,11 @@ Examples of current coverage (not an exhaustive file inventory):
   `exported-function-identity-parameter` for `uid`, `userId`, `ownerId`). It
   checks file structure only; it does not exercise runtime DAL behavior,
   authentication, authorization, or DTO shape, which stay with
-  `tests/unit/locale-dal.test.ts`-style tests and review. Its Dependency
-  Cruiser companions are `data-files-must-be-dal` and
-  `data-not-importable-by-browser-layers`.
+  `tests/unit/locale-dal.test.ts`-style tests and review. It is the real
+  enforcement of the `*-dal.ts` name for every file in `src/data`. Its
+  Dependency Cruiser companions are `data-not-importable-by-browser-layers`
+  (who may import `src/data`) and `data-files-must-be-dal`, a partial,
+  redundant check that only sees files with at least one dependency.
 - `tests/unit/sign-out-button.test.tsx` for server-session-first sign-out,
   including rejected and unreachable session endpoints.
 - `tests/unit/auth-error.test.ts` and `tests/unit/second-factor-panel.test.tsx`

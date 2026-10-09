@@ -231,10 +231,13 @@ including:
 - `data-not-importable-by-browser-layers`: components, hooks, client, domain,
   and lib cannot import `src/data/`; only `src/app/` and `src/actions/` may do
   so;
-- `data-files-must-be-dal`: `src/data/` contains only `*-dal.ts` modules.
+- `data-files-must-be-dal`: a partial, redundant import-graph check for
+  `*-dal.ts` names in `src/data/`; it only reports files that have at least one
+  dependency.
 
 `tests/unit/data-layer-structure.test.ts`, supported by
-`data-layer-structure-lib.ts`, enforces the Data Access Layer file structure.
+`data-layer-structure-lib.ts`, enforces that `src/data/` contains only
+`*-dal.ts` modules and the Data Access Layer export rules for every file.
 
 `src/components/ui/**` is currently excluded from the Dependency Cruiser
 graph to avoid traversing registry-managed implementation details. The rule

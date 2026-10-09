@@ -113,10 +113,12 @@ Mechanically enforced for `src/data` (file structure only):
   re-exports or default exports), and no `uid`, `userId` or `ownerId`
   parameter name on an exported function. It covers the real directory plus
   embedded positive and negative fixtures.
-- Dependency Cruiser `data-files-must-be-dal` (only `*-dal.ts` under
-  `src/data`) and `data-not-importable-by-browser-layers` (components, hooks,
-  client, domain and lib cannot import `src/data`; `src/app` and `src/actions`
-  can).
+- Dependency Cruiser `data-not-importable-by-browser-layers` (components,
+  hooks, client, domain and lib cannot import `src/data`; `src/app` and
+  `src/actions` can). `data-files-must-be-dal` is a partial, redundant
+  import-graph check of `*-dal.ts` names that only sees files with at least one
+  dependency; the Vitest guard above is what enforces the name for every file
+  in `src/data`.
 
 `actions-cannot-import-client-layers` restricts Server Action imports, while
 `data-cannot-import-client-layers` restricts the DAL import graph. None of
