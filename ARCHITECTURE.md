@@ -64,11 +64,21 @@ src/
   hooks/                # custom hooks (alias @/hooks), one use-*.ts(x) per hook
     use-mobile.ts
     use-*.ts            # state/form logic extracted from src/components/notes-app/
+  actions/              # thin Server Actions: verify identity, delegate to src/data
+    space-actions.ts
+  domain/               # SDK-free domain rules (ADR 0011)
+    space.ts            # Space types, conflict and deletion errors
+    object-type.ts      # Object Type document parsing
+    object-type-inheritance.ts  # effective schema and parent validation
+  client/               # browser Firestore access
+    space-client.ts
+  data/                 # server-only Data Access Layer (Admin SDK)
+    space-dal.ts
+    object-type-dal.ts
   lib/
-    firebase/               # client, admin, server identity, session, deletion
+    firebase/               # client, admin, server identity, session, form errors
     i18n/                   # locale negotiation and client synchronization
       locale-lang-script.ts # pre-hydration locale synchronization script builder
-    object-types/           # pure Object Type parsing and schema resolution
     theme/                  # theme constants, parsing, and script builder
     utils.ts
 
@@ -106,10 +116,14 @@ boundary, public `(public)` sign-in routes, and the protected `(protected)`
 routes `/dashboard` and `/settings`. The browser Firestore base configuration
 (persistent multi-tab cache, emulator connection, cache cleanup on sign-out)
 exists in `src/lib/firebase/firestore.ts` (ADR 0008). The Space module supports
-owner-scoped Space reads and writes, while Space deletion is a narrow
-**server-only** Admin SDK boundary reached through a Server Action (ADR 0011).
-`src/lib/object-types/` contains pure parsing and inheritance-resolution logic,
-but no runtime path uses inherited Object Types. A narrow **server-only**
+owner-scoped Space reads and writes in `src/client/space-client.ts`, while
+Space and Object Type deletion is a narrow **server-only** Admin SDK Data
+Access Layer in `src/data/`, reached through the thin Server Actions in
+`src/actions/space-actions.ts` (ADR 0011). `src/domain/` contains the
+SDK-free Space types and Object Type parsing and inheritance-resolution logic;
+the Dependency Cruiser rules `domain-is-pure`,
+`client-cannot-import-server-layers`, `data-cannot-import-client-layers`, and
+`actions-cannot-import-client-layers` enforce the layer boundaries. No runtime path uses inherited Object Types. A narrow **server-only**
 Firestore Admin seam does persist signed-in user locale preferences to
 `users/{uid}.locale`, after verifying the Firebase session (ADR 0007).
 

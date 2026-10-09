@@ -21,7 +21,7 @@ vi.mock("@/lib/firebase/firestore", () => ({
   getDb: () => holder.db,
 }));
 
-vi.mock("@/lib/firebase/space-deletion-actions", () => ({
+vi.mock("@/actions/space-actions", () => ({
   deleteSpaceAction,
 }));
 
@@ -30,11 +30,10 @@ import {
   deleteSpace,
   getSpace,
   listSpaces,
-  type Space,
-  SpaceConflictError,
   subscribeToSpaces,
   updateSpace,
-} from "@/lib/firebase/spaces";
+} from "@/client/space-client";
+import { type Space, SpaceConflictError } from "@/domain/space";
 
 let environment: RulesTestEnvironment;
 

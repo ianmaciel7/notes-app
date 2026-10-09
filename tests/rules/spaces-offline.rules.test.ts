@@ -26,7 +26,7 @@ const holder = vi.hoisted(() => ({ db: undefined as Firestore | undefined }));
 const deleteSpaceAction = vi.hoisted(() => vi.fn());
 
 vi.mock("@/lib/firebase/firestore", () => ({ getDb: () => holder.db }));
-vi.mock("@/lib/firebase/space-deletion-actions", () => ({
+vi.mock("@/actions/space-actions", () => ({
   deleteSpaceAction,
 }));
 
@@ -34,10 +34,10 @@ import {
   createSpace,
   deleteSpace,
   getSpace,
-  SpaceConflictError,
   subscribeToSpaces,
   updateSpace,
-} from "@/lib/firebase/spaces";
+} from "@/client/space-client";
+import { SpaceConflictError } from "@/domain/space";
 
 let environment: RulesTestEnvironment;
 let deviceA: Firestore;

@@ -29,14 +29,15 @@ Configured and delivered:
   `pluralName`, `description`, `propertyDefinitions`, `stateVersion`, and
   `updatedAt`; `stateVersion` must increase by one. There is no client
   `delete` permission.
-- `src/lib/firebase/space-deletion.ts` deletes an owned Space with the Admin
-  SDK's `recursiveDelete`, and deletes an Object Type only after confirming
-  that it has no direct children. `src/lib/firebase/space-deletion-actions.ts`
-  verifies the current identity before calling that boundary. `deleteSpace` in
-  `src/lib/firebase/spaces.ts` calls the Space deletion Server Action, and
+- `src/data/space-dal.ts` deletes an owned Space with the Admin SDK's
+  `recursiveDelete`, and `src/data/object-type-dal.ts` deletes an Object Type
+  only after confirming that it has no direct children. Both are the
+  server-only Data Access Layer. `src/actions/space-actions.ts` verifies
+  the current identity before calling that layer. `deleteSpace` in
+  `src/client/space-client.ts` calls the Space deletion Server Action, and
   client Space deletion is denied by `firestore.rules`.
-- `src/lib/object-types/object-type.ts` parses persisted Object Type documents
-  without an SDK dependency. `src/lib/object-types/resolve-schema.ts` provides
+- `src/domain/object-type.ts` parses persisted Object Type documents without
+  an SDK dependency. `src/domain/object-type-inheritance.ts` provides
   `resolveEffectiveSchema` and `validateParentChange`, including checks for
   missing types and parents, self-parenting, cycles, duplicate keys and
   property IDs, and a maximum inheritance depth. These pure functions are not
@@ -164,6 +165,29 @@ clients and writable only through the Admin SDK, remains planned. No Rules,
 collection, or cross-path reference convention is configured. Cross-path
 inheritance from a system type remains unresolved.
 
+**Code layout.** Space and Object Type share one domain, and the code is
+split by runtime rather than by concept, following the Next.js Data Access
+Layer guidance (a `server-only` access layer behind thin Server Actions):
+
+| Folder | Holds | May import |
+| --- | --- | --- |
+| `src/domain/` | `space.ts`, `object-type.ts`, `object-type-inheritance.ts`: SDK-free types, errors, parsing, and inheritance rules | nothing else in `src/` and no Firebase SDK |
+| `src/client/` | `space-client.ts`: browser Firestore access | `src/domain/`, `src/lib/`, and the Server Actions in `src/actions/` |
+| `src/data/` | `space-dal.ts`, `object-type-dal.ts`: `server-only` Admin SDK access | `src/domain/` and `src/lib/` |
+| `src/actions/` | `space-actions.ts`: `"use server"`, verifies identity, delegates to `src/data/` | `src/data/`, `src/domain/`, and `src/lib/` |
+
+The `domain/`, `client/`, `data/`, and `actions/` folders and the `-client`,
+`-dal`, and `-actions` file suffixes are project conventions, not Next.js,
+Firebase, or shadcn requirements: the shadcn `lib` alias is reserved for
+generic helpers, and the Next.js documentation prescribes no folder for domain
+rules or for Server Actions (its examples use `app/actions/`, but any
+`"use server"` file works). Actions sit outside `src/app/` because they are not
+routes and are imported by `src/client/`, which must not depend on app routing.
+The Dependency Cruiser rules `domain-is-pure`,
+`client-cannot-import-server-layers`, `data-cannot-import-client-layers`, and
+`actions-cannot-import-client-layers` enforce the table. The suffixes keep
+same-concept files distinguishable in tabs, search results, and imports.
+
 **Indexes.** No index is needed or configured. Listing Object Types, lookup by
 ID, and the direct-child `parentTypeId` query use Firestore's automatic
 single-field indexes.
@@ -199,16 +223,16 @@ server; orphans are invisible to queries but remain stored.
   non-owner access, root-type creation and update validation, immutable fields,
   denied client delete, and unrelated path isolation against the Firestore
   Emulator.
-- [x] `tests/rules/space-deletion.test.ts`: 9 cases cover recursive Space
+- [x] `tests/rules/space-deletion.rules.test.ts`: 9 cases cover recursive Space
   deletion, ownership and ID validation, direct-child blocking, and leaf Object
   Type deletion against the Firestore Emulator.
 - [x] `tests/rules/spaces.rules.test.ts` (25 cases),
-  `tests/rules/spaces-client.test.ts` (8 cases), and
-  `tests/rules/spaces-offline.test.ts` (3 cases) cover revoked client Space
+  `tests/rules/spaces-client.rules.test.ts` (8 cases), and
+  `tests/rules/spaces-offline.rules.test.ts` (3 cases) cover revoked client Space
   delete and `deleteSpace` delegation alongside the existing Space behavior.
 - [x] `tests/unit/object-type-parse.test.ts` (11 cases),
-  `tests/unit/object-type-resolve-schema.test.ts` (12 cases), and
-  `tests/unit/space-deletion-actions.test.ts` (4 cases) cover the pure domain
+  `tests/unit/object-type-inheritance.test.ts` (12 cases), and
+  `tests/unit/space-actions.test.ts` (4 cases) cover the pure domain
   helpers and Server Action identity and error handling.
 - [ ] A runtime write path for non-null `parentTypeId`, including trusted
   inheritance validation and its authorization design.

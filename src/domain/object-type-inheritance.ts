@@ -1,7 +1,7 @@
 import type {
   ObjectTypeDocument,
   PropertyDefinition,
-} from "@/lib/object-types/object-type";
+} from "@/domain/object-type";
 
 export const MAX_SCHEMA_DEPTH = 20;
 

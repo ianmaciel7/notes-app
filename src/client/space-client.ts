@@ -13,53 +13,17 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+import { deleteSpaceAction } from "@/actions/space-actions";
+import {
+  type NewSpace,
+  type Space,
+  type SpaceChanges,
+  SpaceConflictError,
+} from "@/domain/space";
 import { getDb } from "@/lib/firebase/firestore";
-import { deleteSpaceAction } from "@/lib/firebase/space-deletion-actions";
 
 // Owner-scoped Spaces at /users/{uid}/spaces/{spaceId} (ADR 0010). The
 // Security Rules are the authorization boundary; this module only shapes data.
-
-export type Space = {
-  id: string;
-  ownerId: string;
-  name: string;
-  description?: string;
-  icon: string;
-  stateVersion: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type NewSpace = {
-  name: string;
-  description?: string;
-  icon: string;
-};
-
-/** Fields the owner may change. `null` removes the description. */
-export type SpaceChanges = {
-  name?: string;
-  description?: string | null;
-  icon?: string;
-};
-
-/**
- * The write was based on a stale `stateVersion`. Carries what the user tried
- * to save and the current server state so the caller can resolve it.
- */
-export class SpaceConflictError extends Error {
-  readonly spaceId: string;
-  readonly attempted: SpaceChanges;
-  readonly current: Space;
-
-  constructor(spaceId: string, attempted: SpaceChanges, current: Space) {
-    super(`Space ${spaceId} changed since it was loaded.`);
-    this.name = "SpaceConflictError";
-    this.spaceId = spaceId;
-    this.attempted = attempted;
-    this.current = current;
-  }
-}
 
 const spacesPath = (uid: string) => `users/${uid}/spaces`;
 

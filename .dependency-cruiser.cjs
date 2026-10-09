@@ -93,6 +93,54 @@ module.exports = {
       },
     },
     {
+      name: "domain-is-pure",
+      severity: "error",
+      comment:
+        "src/domain holds SDK-free domain logic: it cannot import Firebase SDKs or any other application layer (ADR 0011).",
+      from: {
+        path: "^src/domain/",
+      },
+      to: {
+        path: "^(src/(app|actions|client|data|components|hooks|lib)/|node_modules/(firebase|firebase-admin|@firebase|@google-cloud)/)",
+      },
+    },
+    {
+      name: "client-cannot-import-server-layers",
+      severity: "error",
+      comment:
+        "src/client runs in the browser: it cannot import the server-only Data Access Layer, the Admin SDK, or app routing. Server Actions in src/actions are its only server entry point.",
+      from: {
+        path: "^src/client/",
+      },
+      to: {
+        path: "^(src/data/|src/app/|node_modules/firebase-admin/)",
+      },
+    },
+    {
+      name: "data-cannot-import-client-layers",
+      severity: "error",
+      comment:
+        "src/data is the server-only Data Access Layer: it cannot import browser code, components, hooks, or app routing.",
+      from: {
+        path: "^src/data/",
+      },
+      to: {
+        path: "^src/(client|components|hooks|app)/",
+      },
+    },
+    {
+      name: "actions-cannot-import-client-layers",
+      severity: "error",
+      comment:
+        "src/actions holds thin Server Actions: they delegate to src/data and src/domain and cannot import browser code, components, hooks, or app routing.",
+      from: {
+        path: "^src/actions/",
+      },
+      to: {
+        path: "^src/(client|components|hooks|app)/",
+      },
+    },
+    {
       name: "components-cannot-import-app",
       severity: "error",
       comment: "Components cannot depend on app routing files",

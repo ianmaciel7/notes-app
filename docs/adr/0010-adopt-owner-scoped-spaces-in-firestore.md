@@ -15,8 +15,8 @@ Implemented for the Firebase layer. `DER.md` documents the Space model and ADR 0
 ## Current State (2026-10-09)
 
 Delivered: the Space rules in `firestore.rules` (`tests/rules/spaces.rules.test.ts`),
-`src/lib/firebase/spaces.ts` with emulator-backed tests
-(`tests/rules/spaces-client.test.ts`, `tests/rules/spaces-offline.test.ts`) and
+`src/client/space-client.ts` with emulator-backed tests
+(`tests/rules/spaces-client.rules.test.ts`, `tests/rules/spaces-offline.rules.test.ts`) and
 unit tests for document parsing (`tests/unit/firebase-spaces.test.ts`). The
 Space ID was changed from the Firestore automatic ID to a UUID v4 on the same
 day, before any data existed, so no migration is needed.
@@ -65,7 +65,8 @@ The client uses plain `updateDoc` with the known version plus one, not
 conflict that carries the user's attempted changes, and the Space is re-read
 from the server, so nothing is lost silently.
 
-**Client.** One file, `src/lib/firebase/spaces.ts`: types, hand-written
+**Client.** `src/client/space-client.ts` (types and errors live in
+`src/domain/space.ts`, ADR 0011): hand-written
 document parsing (no schema library), `createSpace`, `getSpace`, `listSpaces`
 (ordered by `createdAt`), `updateSpace`, `deleteSpace` and `subscribeToSpaces`
 (`onSnapshot`). It uses the internal `getDb()`; `db` is not exported.

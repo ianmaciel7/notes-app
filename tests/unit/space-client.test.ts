@@ -1,8 +1,8 @@
 import type { DocumentSnapshot } from "firebase/firestore";
 import { describe, expect, it, vi } from "vitest";
-import { parseSpace } from "@/lib/firebase/spaces";
+import { parseSpace } from "@/client/space-client";
 
-vi.mock("@/lib/firebase/space-deletion-actions", () => ({
+vi.mock("@/actions/space-actions", () => ({
   deleteSpaceAction: vi.fn(),
 }));
 

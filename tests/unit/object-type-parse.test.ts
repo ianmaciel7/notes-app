@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  ObjectTypeParseError,
-  parseObjectType,
-} from "@/lib/object-types/object-type";
+import { ObjectTypeParseError, parseObjectType } from "@/domain/object-type";
 
 const timestamps = {
   createdAt: { seconds: 1 },

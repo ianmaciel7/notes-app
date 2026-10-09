@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { ObjectTypeDocument } from "@/lib/object-types/object-type";
+import type { ObjectTypeDocument } from "@/domain/object-type";
 import {
   MAX_SCHEMA_DEPTH,
   resolveEffectiveSchema,
   validateParentChange,
-} from "@/lib/object-types/resolve-schema";
+} from "@/domain/object-type-inheritance";
 
 function objectType(
   id: string,

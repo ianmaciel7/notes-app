@@ -18,9 +18,11 @@ const OTHER_SPACE_ID = "f0bc4335-2fcd-4a71-88e4-ce7c1f7985de";
 const PARENT_TYPE_ID = "5b7a3a30-6f5e-4d52-8f62-0c5a8d1d9e11";
 const CHILD_TYPE_ID = "9a1f0c52-3b0e-4f3e-9c35-7d2b6a4e8f20";
 
-type SpaceDeletionModule = typeof import("@/lib/firebase/space-deletion");
+type SpaceDal = typeof import("@/data/space-dal");
+type ObjectTypeDal = typeof import("@/data/object-type-dal");
 
-let deletion: SpaceDeletionModule;
+let spaceDal: SpaceDal;
+let objectTypeDal: ObjectTypeDal;
 let originalProjectId: string | undefined;
 
 function space(uid = "alice", spaceId = SPACE_ID) {
@@ -59,7 +61,8 @@ beforeAll(async () => {
   originalProjectId = process.env.FIREBASE_PROJECT_ID;
   vi.stubEnv("NODE_ENV", "production");
   process.env.FIREBASE_PROJECT_ID = PROJECT_ID;
-  deletion = await import("@/lib/firebase/space-deletion");
+  spaceDal = await import("@/data/space-dal");
+  objectTypeDal = await import("@/data/object-type-dal");
 });
 
 beforeEach(async () => {
@@ -92,7 +95,7 @@ describe("space deletion", () => {
       .doc("title")
       .set({ key: "title" });
 
-    await deletion.deleteSpaceTree("alice", SPACE_ID);
+    await spaceDal.deleteSpaceTree("alice", SPACE_ID);
 
     await expect(space().get()).resolves.toMatchObject({ exists: false });
     await expect(objectType(PARENT_TYPE_ID, null).get()).resolves.toMatchObject(
@@ -117,7 +120,7 @@ describe("space deletion", () => {
     await seedSpace("bob", OTHER_SPACE_ID, "alice");
 
     await expect(
-      deletion.deleteSpaceTree("bob", OTHER_SPACE_ID),
+      spaceDal.deleteSpaceTree("bob", OTHER_SPACE_ID),
     ).rejects.toMatchObject({
       code: "forbidden",
     });
@@ -128,7 +131,7 @@ describe("space deletion", () => {
 
   it("rejects a missing Space", async () => {
     await expect(
-      deletion.deleteSpaceTree("alice", SPACE_ID),
+      spaceDal.deleteSpaceTree("alice", SPACE_ID),
     ).rejects.toMatchObject({
       code: "not-found",
     });
@@ -140,7 +143,7 @@ describe("space deletion", () => {
     ["an invalid Object Type id", "alice", SPACE_ID, "not-a-uuid"],
   ])("rejects %s", async (_label, uid, spaceId, objectTypeId) => {
     await expect(
-      deletion.deleteObjectType(uid, spaceId, objectTypeId),
+      objectTypeDal.deleteObjectType(uid, spaceId, objectTypeId),
     ).rejects.toMatchObject({ code: "invalid-id" });
   });
 
@@ -150,7 +153,7 @@ describe("space deletion", () => {
     await seedObjectType(CHILD_TYPE_ID, PARENT_TYPE_ID);
 
     await expect(
-      deletion.deleteObjectType("alice", SPACE_ID, PARENT_TYPE_ID),
+      objectTypeDal.deleteObjectType("alice", SPACE_ID, PARENT_TYPE_ID),
     ).rejects.toMatchObject({ code: "has-descendants" });
     await expect(objectType(PARENT_TYPE_ID, null).get()).resolves.toMatchObject(
       {
@@ -163,7 +166,7 @@ describe("space deletion", () => {
     await seedSpace();
     await seedObjectType(PARENT_TYPE_ID, null);
 
-    await deletion.deleteObjectType("alice", SPACE_ID, PARENT_TYPE_ID);
+    await objectTypeDal.deleteObjectType("alice", SPACE_ID, PARENT_TYPE_ID);
 
     await expect(objectType(PARENT_TYPE_ID, null).get()).resolves.toMatchObject(
       {
@@ -177,8 +180,8 @@ describe("space deletion", () => {
     await seedObjectType(PARENT_TYPE_ID, null);
     await seedObjectType(CHILD_TYPE_ID, PARENT_TYPE_ID);
 
-    await deletion.deleteObjectType("alice", SPACE_ID, CHILD_TYPE_ID);
-    await deletion.deleteObjectType("alice", SPACE_ID, PARENT_TYPE_ID);
+    await objectTypeDal.deleteObjectType("alice", SPACE_ID, CHILD_TYPE_ID);
+    await objectTypeDal.deleteObjectType("alice", SPACE_ID, PARENT_TYPE_ID);
 
     await expect(objectType(PARENT_TYPE_ID, null).get()).resolves.toMatchObject(
       {

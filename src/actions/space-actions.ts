@@ -1,12 +1,12 @@
 "use server";
 
-import { getCurrentIdentity } from "@/lib/firebase/identity";
+import { deleteObjectType } from "@/data/object-type-dal";
+import { deleteSpaceTree } from "@/data/space-dal";
 import {
-  deleteObjectType,
-  deleteSpaceTree,
   SpaceDeletionError,
   type SpaceDeletionErrorCode,
-} from "@/lib/firebase/space-deletion";
+} from "@/domain/space";
+import { getCurrentIdentity } from "@/lib/firebase/identity";
 
 export type SpaceDeletionActionResult =
   | { ok: true }

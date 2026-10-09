@@ -5,24 +5,14 @@ const deleteSpaceTree = vi.hoisted(() => vi.fn());
 const deleteObjectType = vi.hoisted(() => vi.fn());
 
 vi.mock("@/lib/firebase/identity", () => ({ getCurrentIdentity }));
-vi.mock("@/lib/firebase/space-deletion", () => {
-  class SpaceDeletionError extends Error {
-    code: string;
+vi.mock("@/data/space-dal", () => ({ deleteSpaceTree }));
+vi.mock("@/data/object-type-dal", () => ({ deleteObjectType }));
 
-    constructor(code: string) {
-      super();
-      this.code = code;
-    }
-  }
-
-  return { deleteObjectType, deleteSpaceTree, SpaceDeletionError };
-});
-
-import { SpaceDeletionError } from "@/lib/firebase/space-deletion";
 import {
   deleteObjectTypeAction,
   deleteSpaceAction,
-} from "@/lib/firebase/space-deletion-actions";
+} from "@/actions/space-actions";
+import { SpaceDeletionError } from "@/domain/space";
 
 beforeEach(() => {
   vi.resetAllMocks();

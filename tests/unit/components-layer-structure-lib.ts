@@ -20,4 +20,4 @@ export function findMisplacedComponentFiles(
 }
 
 export const misplacedComponentFileMessage =
-  "Components-layer files must be .tsx. Move hooks to src/hooks/use-*.ts; move utilities, constants, script builders, and pure logic to src/lib/<domain>/. This follows shadcn registry types (hook -> hooks, lib -> lib) and Next.js project-structure guidance for shared helpers.";
+  "Components-layer files must be .tsx. Move hooks to src/hooks/use-*.ts; move utilities, constants, script builders, and pure logic to src/lib/<domain>/ (or src/domain/ for domain rules). This follows shadcn registry types (hook -> hooks, lib -> lib) and Next.js project-structure guidance for shared helpers.";

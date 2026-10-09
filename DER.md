@@ -54,7 +54,7 @@ erDiagram
   schema is closed; `id`, `ownerId` and `createdAt` never change after creation,
   and each update must raise `stateVersion` by exactly one. There is no
   `roles`, `members` or `permissions` field and no sharing. Access is in
-  `src/lib/firebase/spaces.ts`; the rules are in `firestore.rules`.
+  `src/client/space-client.ts`; the rules are in `firestore.rules`.
 - Every other Firestore path is denied by `firestore.rules`.
 
 ## Proposed, not stored
