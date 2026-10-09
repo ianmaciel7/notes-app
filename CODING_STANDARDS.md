@@ -210,9 +210,11 @@ operations that authenticate and authorize their own caller and take no
 `uid`, `userId`, or `ownerId` parameter. Private helpers inside a DAL file are
 allowed; do not export helpers, constants, validators, regexes, error classes,
 types, or re-exports from this layer. Put pure rules, errors, and validation in
-`src/domain/`; put server-only Firebase Admin SDK adapters shared by DALs in
-`src/lib/firebase/` (for example `space-ownership.ts`), where only `src/data/`
-imports them by convention.
+`src/domain/`. The shared ownership guard
+`requireOwnedSpaceRef(spaceId)` is exported by `src/data/current-identity-dal.ts` and is
+used by the Space and Object Type DALs. Other server-only Firebase Admin SDK
+adapters shared by DALs belong in `src/lib/firebase/` and are imported only by
+`src/data/` by convention.
 
 Dependency Cruiser enforces graph rules on the source it currently cruises,
 including:

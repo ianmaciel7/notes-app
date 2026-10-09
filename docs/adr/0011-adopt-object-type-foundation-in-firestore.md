@@ -36,11 +36,12 @@ Configured and delivered:
   each starting with `import "server-only"` and exporting only async
   operations that verify the current identity themselves and take no
   `uid`, `userId`, or `ownerId` parameter. The Space and Object Type deletion
-  functions export only `deleteSpaceTree` and `deleteObjectType`; UUID
-  validation lives in the pure `src/domain/space.ts`, and the shared Admin SDK
-  adapter (verified identity and owned-Space lookup) lives in
-  `src/lib/firebase/space-ownership.ts`, imported only by the `src/data/`
-  files today. These rules are enforced structurally (see Code layout), not
+  functions export only `deleteSpaceTree` and `deleteObjectType`; UUID and
+  owner-id validation lives in the pure `src/domain/space.ts`, and the shared
+  ownership guard `requireOwnedSpaceRef(spaceId)` lives in
+  `src/data/current-identity-dal.ts`. It authenticates through `getCurrentIdentity`, reads
+  the owned-Space reference with the Admin SDK, and is used by both deletion
+  DALs. These rules are enforced structurally (see Code layout), not
   by runtime behavior. `src/actions/space-actions.ts` only checks
   argument types, delegates, and returns a minimal result DTO. `deleteSpace` in
   `src/client/space-client.ts` calls the Space deletion Server Action, and
@@ -185,8 +186,8 @@ locale preference (ADR 0007) uses the same layout:
 | `src/domain/` | `space.ts`, `object-type.ts`, `object-type-inheritance.ts`: SDK-free types, errors, parsing, inheritance rules | nothing else in `src/` and no Firebase SDK |
 | `src/client/` | `space-client.ts`: browser Firestore access | `src/domain/`, `src/lib/`, and the Server Actions in `src/actions/` |
 | `src/domain/` (Space validation) | `space.ts` also holds the pure UUID v4 and owner-id validation (`assertValidSpaceDeletionIds`, `assertValidSpaceOwnerId`) | nothing else in `src/` and no Firebase SDK |
-| `src/lib/firebase/` | `space-ownership.ts`: `server-only` Admin SDK adapter for the verified identity and the owned-Space lookup, shared by the Space and Object Type DAL files | `src/domain/` and other `src/lib/` modules |
-| `src/data/` | Only `*-dal.ts` files, each `import "server-only"` and exporting only async DAL operations that authenticate and authorize their own caller and take no `uid`, `userId`, or `ownerId`: `space-dal.ts`: `deleteSpaceTree(spaceId)`; `object-type-dal.ts`: `deleteObjectType(spaceId, objectTypeId)`; `locale-dal.ts`: `readProfileLocale`, `writeProfileLocale`, and `syncProfileLocale(explicitLocale)`. No exported types, constants, classes, non-async functions, re-exports, or default exports | `src/domain/` and `src/lib/` |
+| `src/lib/firebase/` | Server-only Firebase adapters such as `admin.ts` and `identity.ts`, shared by server-side modules where needed | `src/domain/` and other `src/lib/` modules |
+| `src/data/` | Only `*-dal.ts` files, each `import "server-only"` and exporting only async DAL operations that authenticate and authorize their own caller and take no `uid`, `userId`, or `ownerId`: `space-dal.ts`: `deleteSpaceTree(spaceId)`; `object-type-dal.ts`: `deleteObjectType(spaceId, objectTypeId)`; `current-identity-dal.ts`: `requireOwnedSpaceRef(spaceId)`; `locale-dal.ts`: `readProfileLocale`, `writeProfileLocale`, and `syncProfileLocale(explicitLocale)`. No exported types, constants, classes, non-async functions, re-exports, or default exports | `src/domain/` and `src/lib/` |
 | `src/actions/` | `space-actions.ts`, `locale-actions.ts`: `"use server"`, thin: validates argument types, delegates to `src/data/`, returns a DTO | `src/data/`, `src/domain/`, and `src/lib/` |
 
 The `domain/`, `client/`, `data/`, and `actions/` folders and the `-client`,
@@ -208,9 +209,7 @@ with at least one dependency), and
 `tests/unit/data-layer-structure-lib.ts`, which parses each `src/data/` file
 with the TypeScript compiler) additionally checks the file structure: the
 file name, the `server-only` import, and exports limited to async functions
-with no `uid`, `userId`, or `ownerId` parameter. Nothing enforces that only
-`src/data/` imports `src/lib/firebase/space-ownership.ts`; that is the
-current state of the code. The suffixes keep
+with no `uid`, `userId`, or `ownerId` parameter. The suffixes keep
 files of the same concept distinguishable in tabs, search results, and
 imports. The `domain-is-pure` and `client-cannot-import-server-layers` rules
 also match Firebase SDK paths resolved through pnpm's virtual store
@@ -221,14 +220,14 @@ were reported by Dependency Cruiser.
 The Data Access Layer holds only `*-dal.ts` files that are `server-only` and
 export only async operations; none accepts a uid, so no caller can hand the
 Admin SDK an unverified uid. Everything else lives elsewhere: pure UUID and
-owner-id validation in `src/domain/space.ts`, and the Admin SDK adapter
-(`requireVerifiedUid` and `getOwnedSpaceForVerifiedUid`, resolving the
-verified identity and the owned Space) in `src/lib/firebase/space-ownership.ts`,
-which is not part of the DAL's exports. `deleteSpaceTree(spaceId)`
-authenticates, validates the Space UUID, and checks the Space's stored owner
-through that adapter before deletion. `deleteObjectType(spaceId,
-objectTypeId)` authenticates once, validates both UUIDs, and checks ownership
-before deletion. `syncProfileLocale`
+owner-id validation in `src/domain/space.ts`, and the shared ownership guard
+`requireOwnedSpaceRef(spaceId)` in `src/data/current-identity-dal.ts`. The guard
+authenticates through `getCurrentIdentity`, validates the owner and Space ID,
+checks the stored owner with the Admin SDK, and returns the document reference
+only for the verified owner. `deleteSpaceTree(spaceId)` and
+`deleteObjectType(spaceId, objectTypeId)` use that guard before deletion, with
+their other UUID validation remaining in the pure domain module.
+`syncProfileLocale`
 authenticates once and internally chooses whether to return a stored locale or
 migrate an explicit one; `readProfileLocale` and `writeProfileLocale` also
 authenticate their own callers. Server Actions stay thin and are not trusted
@@ -240,6 +239,13 @@ Object Type data do not go through the server: the browser reads
 Spaces and Object Types directly through the Firestore SDK under the Rules, so
 there is no read DTO yet. A future server read must return a DTO from
 `src/data/` rather than a Firestore document.
+
+**Known structure trade-off.** Everything exported from `src/data/` is
+importable by `src/actions/` and `src/app/`, so `current-identity-dal.ts` exports a shared
+guard that returns an Admin SDK document reference rather than a DTO. The
+data-layer structure guard checks file names, imports, and export signatures;
+it does not check return types or enforce that this reference stays inside
+`src/data/`.
 
 **Indexes.** No index is needed or configured. Listing Object Types, lookup by
 ID, and the direct-child `parentTypeId` query use Firestore's automatic

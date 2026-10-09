@@ -1,14 +1,11 @@
 import "server-only";
 
+import { requireOwnedSpaceRef } from "@/data/current-identity-dal";
 import {
   assertValidSpaceDeletionIds,
   SpaceDeletionError,
 } from "@/domain/space";
 import { getFirebaseAdminFirestore } from "@/lib/firebase/admin";
-import {
-  getOwnedSpaceForVerifiedUid,
-  requireVerifiedUid,
-} from "@/lib/firebase/space-ownership";
 
 /**
  * Deletes an Object Type after verifying the current identity owns its Space.
@@ -19,10 +16,8 @@ export async function deleteObjectType(
   spaceId: string,
   objectTypeId: string,
 ): Promise<void> {
-  const uid = await requireVerifiedUid();
-  assertValidSpaceDeletionIds(spaceId, objectTypeId);
-
-  const space = await getOwnedSpaceForVerifiedUid(uid, spaceId);
+  const space = await requireOwnedSpaceRef(spaceId);
+  assertValidSpaceDeletionIds(objectTypeId);
   const objectTypes = space.collection("objectTypes");
   const descendants = await objectTypes
     .where("parentTypeId", "==", objectTypeId)

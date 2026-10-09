@@ -168,10 +168,17 @@ describe("space deletion", () => {
   it.each([
     ["an invalid uid", "", SPACE_ID, PARENT_TYPE_ID],
     ["an invalid Space id", "alice", "not-a-uuid", PARENT_TYPE_ID],
-    ["an invalid Object Type id", "alice", SPACE_ID, "not-a-uuid"],
   ])("rejects %s", async (_label, uid, spaceId, objectTypeId) => {
     await expect(
       deleteObjectTypeAs(uid, spaceId, objectTypeId),
+    ).rejects.toMatchObject({ code: "invalid-id" });
+  });
+
+  it("rejects an invalid Object Type id after checking Space ownership", async () => {
+    await seedSpace();
+
+    await expect(
+      deleteObjectTypeAs("alice", SPACE_ID, "not-a-uuid"),
     ).rejects.toMatchObject({ code: "invalid-id" });
   });
 

@@ -80,6 +80,7 @@ src/
     locale-dal.ts
     object-type-dal.ts
     space-dal.ts
+    current-identity-dal.ts # shared verified-owner Space reference guard
   domain/                  # SDK-free domain rules (ADR 0011)
     object-type-inheritance.ts
     object-type.ts
@@ -101,7 +102,6 @@ src/
       server-config.ts
       session-client.ts
       session.ts
-      space-ownership.ts   # server-only Admin SDK adapter, imported only by src/data
     i18n/                  # locale negotiation and client synchronization
       client.ts
       config.ts
@@ -188,9 +188,12 @@ identity itself, authorizes the requested resource, accepts no caller-supplied
 UID, and exposes only minimal DTOs where a result crosses the action boundary.
 `src/data/` contains only `*-dal.ts` modules beginning with `import
 "server-only"`; their only exports are async DAL operations. Pure rules,
-errors, and validation belong in `src/domain/`, while server-only Firebase
-Admin SDK adapters shared by DALs belong in `src/lib/firebase/` and are
-imported only by `src/data/`. The Vitest data-layer structure test enforces
+errors, and validation belong in `src/domain/`. The shared ownership guard
+`requireOwnedSpaceRef(spaceId)` lives in `src/data/current-identity-dal.ts` and is used by
+`space-dal.ts` and `object-type-dal.ts`; it returns an Admin SDK document
+reference only after authenticating and verifying ownership. Other server-only
+Firebase Admin SDK adapters shared by DALs belong in `src/lib/firebase/` and
+are imported only by `src/data/`. The Vitest data-layer structure test enforces
 the `*-dal.ts` name and the export rules for every file in `src/data/`, and the
 Dependency Cruiser rule `data-not-importable-by-browser-layers` enforces who may
 import `src/data/`, alongside the existing layer rules. The Dependency Cruiser
