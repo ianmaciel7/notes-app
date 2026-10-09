@@ -4,17 +4,20 @@
 > "Proposed, not stored" is a planning artifact and is not implemented.**
 
 The application defines no database tables of its own yet. All persisted data is
-native to Firebase: the Firebase Auth user record and one Firestore profile
-document per user. Auth comes from
+native to Firebase: the Firebase Auth user record, one Firestore profile
+document per user, and the user's Spaces. Auth comes from
 [ADR 0005](./docs/adr/0005-adopt-firebase-auth-with-local-emulator.md); the
 Firestore client, persistent cache, emulator and deny-by-default rules come from
-[ADR 0008](./docs/adr/0008-adopt-native-firebase-firestore-with-persistent-local-cache.md).
+[ADR 0008](./docs/adr/0008-adopt-native-firebase-firestore-with-persistent-local-cache.md);
+Spaces come from
+[ADR 0010](./docs/adr/0010-adopt-owner-scoped-spaces-in-firestore.md).
 
 ## Implemented data (Firebase-native)
 
 ```mermaid
 erDiagram
     FIREBASE_AUTH_USER ||--o| FIRESTORE_USERS_DOC : "uid"
+    FIRESTORE_USERS_DOC ||--o{ FIRESTORE_SPACE_DOC : "owns"
 
     FIREBASE_AUTH_USER {
         string uid PK "managed by Firebase Auth"
@@ -28,6 +31,17 @@ erDiagram
         string uid PK "document id equals the Auth uid"
         string locale "en, pt-BR or es"
     }
+
+    FIRESTORE_SPACE_DOC {
+        string id PK "UUID v4, equals the document id"
+        string ownerId "equals the uid in the path"
+        string name "1 to 80 characters"
+        string description "optional, up to 500 characters"
+        string icon "1 to 40 characters, a-z 0-9 and hyphen"
+        number stateVersion "starts at 1, +1 per update"
+        timestamp createdAt "server time, immutable"
+        timestamp updatedAt "server time"
+    }
 ```
 
 - `FIREBASE_AUTH_USER` is owned and stored by Firebase Auth. The application
@@ -35,6 +49,12 @@ erDiagram
 - `users/{uid}` is written by the server (Admin SDK) when a signed-in user picks
   a language explicitly (`src/lib/i18n/profile-preference.ts`). The owner may
   read it; every client write is denied.
+- `users/{uid}/spaces/{spaceId}` holds one Space per document. Only its owner
+  (`request.auth.uid == uid`) may read, list, create, update or delete it. The
+  schema is closed; `id`, `ownerId` and `createdAt` never change after creation,
+  and each update must raise `stateVersion` by exactly one. There is no
+  `roles`, `members` or `permissions` field and no sharing. Access is in
+  `src/lib/firebase/spaces.ts`; the rules are in `firestore.rules`.
 - Every other Firestore path is denied by `firestore.rules`.
 
 ## Proposed, not stored
@@ -52,7 +72,7 @@ Assessment MVP candidates:
 - Review: schedules a Question; due date and spaced-repetition state (stability,
   difficulty, reps, lapses).
 
-The product may later include Spaces, Objects, Object Types, Collections, Tags,
+The product may later include Objects, Object Types, Collections, Tags,
 Sources, Highlights, Links, Layouts, Templates, Inbox items, and grounded Chat
 sessions. Those concepts remain proposals until approved by product specs and
 active ADRs.
@@ -70,5 +90,9 @@ Before implementing persistence, reconcile this model with:
 Do not implement collection paths, indexes, Firebase rules, or a generalized
 object graph solely because an older version of this document described them.
 
-The persistence design should be chosen when the assessment MVP requirements
+Exception: the Space collection (`/users/{uid}/spaces/{spaceId}`) is decided and
+implemented; see
+[ADR 0010](./docs/adr/0010-adopt-owner-scoped-spaces-in-firestore.md).
+
+The persistence design for everything else should be chosen when the assessment MVP requirements
 are concrete enough to justify it.

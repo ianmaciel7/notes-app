@@ -46,7 +46,8 @@ Still pending (needs a feature that reads Firestore from the browser):
   behavior. Observed in Chromium with Firebase 12.19.0: `clearIndexedDbPersistence`
   did not reject while a second tab was open, contrary to the failure scenario
   the Decision anticipates; the error path stays implemented and unit tested.
-- Study-domain collections and indexes: not chosen (see `DER.md`).
+- Study-domain collections and indexes: not chosen (see `DER.md`), except
+  Spaces, decided in [ADR 0010](./0010-adopt-owner-scoped-spaces-in-firestore.md).
 
 The `Decision` and `Consequences` below remain the target architecture for the
 pending items.

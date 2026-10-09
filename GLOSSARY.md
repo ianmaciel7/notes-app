@@ -38,7 +38,12 @@ A question repeatedly failed enough to warrant special attention or revision.
 ## Organization
 
 **Space**  
-A user-scoped context used to organize study content.
+An isolated, user-scoped context used to organize study content. A user may
+have many Spaces; each Space has exactly one Owner.
+
+**Owner**  
+The signed-in user a Space belongs to. Only the Owner can read or change the
+Space. Ownership cannot be transferred, and Spaces are not shared.
 
 **Collection**  
 A manually curated grouping of related entities.

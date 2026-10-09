@@ -6,6 +6,55 @@ service cloud.firestore {
     match /users/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
       allow write: if false;
+
+      // Spaces (ADR 0010): path-based single-owner access.
+      match /spaces/{spaceId} {
+        function isOwner() {
+          return request.auth != null && request.auth.uid == uid;
+        }
+
+        function hasValidShape(data) {
+          return data.keys().hasAll([
+              'id', 'ownerId', 'name', 'icon', 'stateVersion',
+              'createdAt', 'updatedAt'
+            ])
+            && data.keys().hasOnly([
+              'id', 'ownerId', 'name', 'description', 'icon',
+              'stateVersion', 'createdAt', 'updatedAt'
+            ])
+            && data.id is string && data.id == spaceId
+            && data.ownerId is string && data.ownerId == uid
+            && data.name is string
+            && data.name.size() >= 1 && data.name.size() <= 80
+            && data.get('description', '') is string
+            && data.get('description', '').size() <= 500
+            && data.icon is string
+            && data.icon.size() >= 1 && data.icon.size() <= 40
+            && data.icon.matches('^[a-z0-9-]+$')
+            && data.stateVersion is int
+            && data.createdAt is timestamp
+            && data.updatedAt is timestamp;
+        }
+
+        allow get, list, delete: if isOwner();
+
+        allow create: if isOwner()
+          && spaceId.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$')
+          && hasValidShape(request.resource.data)
+          && request.resource.data.stateVersion == 1
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.updatedAt == request.time;
+
+        allow update: if isOwner()
+          && hasValidShape(request.resource.data)
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly([
+              'name', 'description', 'icon', 'stateVersion', 'updatedAt'
+            ])
+          && request.resource.data.stateVersion
+            == resource.data.stateVersion + 1
+          && request.resource.data.updatedAt == request.time;
+      }
     }
 
     match /{document=**} {

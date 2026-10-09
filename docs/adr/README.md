@@ -28,6 +28,7 @@ Check it and the source tree before treating an accepted ADR as built.
 | [0007](./0007-adopt-cookie-based-next-intl-with-firebase-sync.md) | next-intl + Firebase locale sync | Accepted | Implemented | 2026-09-28 |
 | [0008](./0008-adopt-native-firebase-firestore-with-persistent-local-cache.md) | Firestore persistent local cache | Accepted | Partially implemented | 2026-09-29 |
 | [0009](./0009-adopt-apple-style-design-tokens.md) | Apple-style design tokens (no tiles or shadows) | Accepted | Implemented | 2026-10-08 |
+| [0010](./0010-adopt-owner-scoped-spaces-in-firestore.md) | Owner-scoped Spaces at `/users/{uid}/spaces` | Accepted | Implemented | 2026-10-09 |
 
 ## Source review — 2026-10-07
 

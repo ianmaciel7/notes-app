@@ -52,9 +52,9 @@ function createFirestore(app: FirebaseApp): Firestore {
 
 /**
  * Single access point for the browser Firestore instance (ADR 0008).
- * Not exported until the first data consumer needs it.
+ * Data modules in this folder (for example `spaces.ts`) are its consumers.
  */
-function getDb(): Firestore {
+export function getDb(): Firestore {
   const state = getState();
 
   if (state.instance) {
