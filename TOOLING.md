@@ -149,8 +149,9 @@ only fires from a workflow file on the default branch.
 
 `package.json` provides `emulator`, `emulators:seed`, and `test:e2e`.
 All three now start **Auth and Firestore** emulators. The committed
-`.firebase/seeds/` fixture provides Auth accounts; Firestore documents are
-created by verified Server Actions for locale preferences. Local Next.js
+`.firebase/seeds/` fixture provides Auth accounts and two owner-scoped Spaces
+(ADR 0010); other Firestore documents are created by verified Server Actions
+for locale preferences. Local Next.js
 development must set both `FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099`
 and `FIRESTORE_EMULATOR_HOST=127.0.0.1:8080`; the E2E runner sets
 them through the emulator launcher. See [ADR 0005](./docs/adr/0005-adopt-firebase-auth-with-local-emulator.md)

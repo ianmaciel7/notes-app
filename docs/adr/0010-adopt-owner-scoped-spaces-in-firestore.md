@@ -73,6 +73,19 @@ a hard delete with no per-user limit. Each subscriber owns its unsubscribe
 function; `clearFirestoreCache()` calls `terminate`, which also stops the
 listeners of that instance.
 
+**Seeds.** The committed emulator fixture in `.firebase/seeds/` includes
+Spaces for the seeded development account (`student@example.test`), so local
+development and E2E start with data. Each seeded Space follows the same
+contract as a client-created one: path `/users/{uid}/spaces/{spaceId}`, a
+lowercase UUID v4 `spaceId` that is fixed in the seed script (not random, so the
+fixture stays deterministic), `id == spaceId`, `ownerId == uid` of the seeded
+account, `stateVersion: 1`, and `createdAt`/`updatedAt` set at export time.
+The seed script `scripts/create-auth-emulator-seed.mjs` creates the account
+first and then writes the Spaces as that user through the Firestore emulator,
+so the rules validate the seed instead of being bypassed. Seed Spaces cover the
+optional `description` both present and absent. Refreshing the fixture still
+uses `pnpm run emulators:seed` only.
+
 **Out of scope, deliberately not adopted.** Custom Claims, RBAC, sharing,
 members and App Check. Path-based ownership is enough for personal Spaces; any
 of these needs its own ADR. The Admin SDK bypasses the rules, so any future
@@ -114,6 +127,9 @@ least-privilege IAM.
   uppercase and non-v4 UUIDs are rejected).
 - [x] Emulator tests for CRUD, queries, `onSnapshot` and permission errors.
 - [x] Offline create and stale offline update, in Node against the emulator.
+- [x] Seed with Spaces: the seed script writes two Spaces through the rules
+  and `.firebase/seeds/firestore_export/` is regenerated. Not covered by an
+  automated test that imports the fixture and calls `listSpaces`.
 
 Out of scope here (needs a UI consumer of `spaces.ts`, decided in a later ADR):
 browser coverage of IndexedDB persistence across reloads, conflict handling

@@ -76,6 +76,9 @@ The committed emulator seed contains one non-secret development account:
 | --- | --- |
 | `student@example.test` | `correct-horse-battery-staple` |
 
+The same account owns two seeded Spaces (ADR 0010), written through
+`firestore.rules` by the seed script.
+
 Run `pnpm run emulators:seed` only when intentionally refreshing the committed
 fixture. It exports a new baseline to `.firebase/seeds/`; ordinary emulator and
 E2E commands import that baseline and never rewrite it. `pnpm run test:e2e`
