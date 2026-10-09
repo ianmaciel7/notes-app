@@ -112,6 +112,9 @@ Treat both as externally reachable server operations.
   linted.
 - Avoid middleman components that only rename another component.
 - Name components after their actual primitive/semantic role.
+- Include an imported shadcn primitive in the component name when it is the
+  component's returned JSX root; the component primitive name guard enforces
+  this convention.
 - Component props must use a named type/interface or `ComponentProps<...>`; never
   define props inline or omit the props parameter.
 
@@ -184,10 +187,15 @@ See [TESTING.md](./TESTING.md).
 
 ## 9. Module boundaries
 
+Application-owned app-private components live in `src/app/_components` when
+shared, or in `(group)/_components` when private to a route group. A group's
+`_components` must not import from another group's `_components`.
 Application-owned files under `src/components/` are components and must use
 the `.tsx` extension, except for the reserved `ui/` and `firebase/` layers.
 Place hooks in `src/hooks/` and pure utilities, constants, script builders, or
 other logic in `src/lib/<domain>/`; the Vitest structure guard enforces this.
+Component `.tsx` files under `src/` must be named as the kebab-case of their
+exported PascalCase component; a Vitest guard enforces this.
 
 Dependency Cruiser enforces graph rules on the source it currently cruises,
 including:

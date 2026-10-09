@@ -58,6 +58,13 @@ Standard Next.js metadata and static assets detected automatically:
 ## 4. Code & Identifier Conventions
 
 - **React Components**: `PascalCase` function declarations (`export default function NoteList() {}`).
+- **Component names reveal the primitive they are**: when a component's root
+  JSX element is a shadcn overlay or selection primitive imported from
+  `@/components/ui/*` (`DropdownMenu`, `Dialog`, `AlertDialog`, `Select`,
+  `Popover`, `Sheet`, `Tabs`, `Tooltip`, ...), the exported name must contain
+  that primitive's name (`ThemeToggle` returning `<DropdownMenu>` becomes
+  `ThemeDropdownMenu`). A primitive nested inside another root element is not
+  checked. Enforced by `tests/unit/component-primitive-name-guard.test.ts`.
 - **File & Directory Names**: `kebab-case` for all repository files (`note-card.tsx`, `use-mobile.ts`).
 - **Custom Hooks**: `camelCase` prefixed with `use` (`useMobile`, `useNotesFilter`). Two kinds: context accessors (like `useSidebar`) stay in their component file; every other hook lives in its own `use-*.ts(x)` file in `src/hooks/` (import via `@/hooks`), never inline in a component file.
 - **Server Actions**: `camelCase` verb phrases (`createNote`, `deleteNote`, `updateNoteTitle`).

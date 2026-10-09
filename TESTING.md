@@ -17,6 +17,12 @@ Examples of current coverage (not an exhaustive file inventory):
   `src/lib/i18n/locale-lang-script.ts`.
 - `tests/unit/components-layer-structure.test.ts` for the application
   components-layer file-placement guard.
+- `tests/unit/component-file-name-guard.test.ts`, backed by
+  `component-file-name-guard-lib.ts`, for the guard that matches exported
+  PascalCase component names to their kebab-case `.tsx` file names under `src/`.
+- `tests/unit/component-primitive-name-guard.test.ts`, backed by
+  `component-primitive-name-guard-lib.ts`, for the guard that requires
+  application component names to include an imported shadcn root primitive.
 - `tests/unit/sign-out-button.test.tsx` for server-session-first sign-out,
   including rejected and unreachable session endpoints.
 - `tests/unit/auth-error.test.ts` and `tests/unit/second-factor-panel.test.tsx`

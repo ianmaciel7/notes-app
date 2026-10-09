@@ -11,7 +11,7 @@
     "lint:changed": "biome check --changed --since=origin/main",
     "check:types": "next typegen && tsc --noEmit -p tsconfig.check.json",
     "test": "vitest run",
-    "test:guards": "vitest run tests/unit/components-layer-structure.test.ts tests/unit/component-props-type-guard.test.ts tests/unit/shadcn-composition-guards.test.ts",
+    "test:guards": "vitest run tests/unit/components-layer-structure.test.ts tests/unit/component-file-name-guard.test.ts tests/unit/component-primitive-name-guard.test.ts tests/unit/component-props-type-guard.test.ts tests/unit/shadcn-composition-guards.test.ts",
     "test:changed": "vitest run --changed",
     "test:coverage": "vitest run --coverage",
     "test:rules": "firebase emulators:exec --project demo-notes-app --only firestore \"vitest run --config vitest.rules.config.ts\"",
