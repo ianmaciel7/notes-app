@@ -61,8 +61,10 @@ introduce a general Firestore browser data layer, which remains ADR 0008.
 
 - Unit test sources cover locale negotiation, client synchronization,
   explicit cookie writes, verified-user Firestore preferences, and sign-in
-  precedence (`tests/unit/i18n-*.test.ts` and
-  `tests/unit/locale-preference-actions.test.ts`).
+  precedence (`tests/unit/i18n-*.test.ts`,
+  `tests/unit/locale-actions.test.ts`,
+  `tests/unit/locale-actions-profile.test.ts`, and
+  `tests/unit/locale-dal.test.ts`).
 - `tests/e2e/locale.spec.ts` covers explicit language selection and
   cross-browser profile preference restoration with the emulators.
 - GitHub CI on `dev` passes (lint, TypeScript, unit, production build,

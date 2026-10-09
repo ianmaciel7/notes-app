@@ -14,9 +14,10 @@ Partially implemented
 
 ## Current State (2026-10-08)
 
-**Implementation: base Firestore configuration, security rules, cache cleanup
-and their tests are delivered (GitHub CI green on `dev`). No feature reads or
-writes application data through Firestore yet.**
+**Implementation: base Firestore configuration, security rules, cache cleanup,
+and their tests are delivered (GitHub CI green on `dev`). The Space client now
+reads and writes owner-scoped Space data through Firestore; broader application
+data access remains pending.**
 
 Delivered:
 
@@ -25,7 +26,8 @@ Delivered:
   existing or in-memory instance when persistence fails, in-memory default on
   the server, and `connectFirestoreEmulator` (`127.0.0.1:8080`) only outside
   production, once per instance (state kept on `globalThis` so Fast Refresh
-  reuses it). `getDb` is internal until a data consumer exists.
+  reuses it). `getDb()` is the browser Firestore access point for
+  `src/client/space-client.ts`.
 - `clearFirestoreCache()` runs `terminate` then `clearIndexedDbPersistence`
   and rejects on failure. The sign-out hook calls it after Auth sign-out and
   surfaces the error without redirecting.
@@ -46,10 +48,10 @@ Still pending (needs a feature that reads Firestore from the browser):
   behavior. Observed in Chromium with Firebase 12.19.0: `clearIndexedDbPersistence`
   did not reject while a second tab was open, contrary to the failure scenario
   the Decision anticipates; the error path stays implemented and unit tested.
-- Study-domain collections and indexes: not chosen (see `DER.md`), except
-  Spaces, decided in [ADR 0010](./0010-adopt-owner-scoped-spaces-in-firestore.md).
-  The Object Type contract is documented, not implemented, in
-  [ADR 0011](./0011-adopt-object-type-foundation-in-firestore.md).
+- Study-domain collections and indexes beyond owner-scoped Spaces (ADR 0010)
+  and root Object Types (partially implemented in ADR 0011). Object Type
+  inheritance and a runtime write path for non-null `parentTypeId` remain
+  pending.
 
 The `Decision` and `Consequences` below remain the target architecture for the
 pending items.
@@ -77,7 +79,10 @@ Key architectural rules and structure:
   - `initializeFirestore` can be called only once per app with a given configuration; after a failed or repeated call, `getFirestore(app)` returns whatever instance already exists. Guard initialization so Fast Refresh and the fallback path never create conflicting instances.
 - **Local Emulator Integration**: Connect to the Firestore emulator (`127.0.0.1:8080`) with `connectFirestoreEmulator` only in local development and test runs, gated by an explicit environment flag so production builds never connect to it. Run it alongside the Auth emulator (`127.0.0.1:9099`) for deterministic offline and multi-client testing.
 - **Unified Firebase SDK**: Use the native Firestore client as the single data persistence layer with snapshot listeners (`onSnapshot`) and optimistic writes, so the UI reacts to local state immediately (latency compensation) while the SDK syncs with the backend in the background.
-- **Single Source of Truth Export**: All Firestore access goes through the `db` export in `src/lib/firebase/firestore.ts`. Initialization and emulator connection must be idempotent so Next.js Fast Refresh does not re-initialize Firestore or reconnect the emulator.
+- **Single Source of Truth Export**: All browser Firestore access goes through
+  `getDb()` in `src/lib/firebase/firestore.ts`. Initialization and emulator
+  connection must be idempotent so Next.js Fast Refresh does not re-initialize
+  Firestore or reconnect the emulator.
 - **Cache Lifecycle and Privacy**: The persistent cache is not cleared between sessions, and the Firestore docs advise against persistence when cached data is sensitive to disclosure between users on the same device. Notes are user data, so the cache must not outlive the signed-in user: on sign-out, call `terminate(db)` and then `clearIndexedDbPersistence(db)` before the next user can sign in. `clearIndexedDbPersistence` requires a terminated instance and can fail while other tabs are open, so the sign-out flow must handle that failure explicitly (for example by surfacing it and blocking the next sign-in on the same instance). The exact UX is to be validated at implementation.
 - **Cache Size**: Keep the SDK default cache threshold (older unused documents are garbage-collected periodically). Do not use `CACHE_SIZE_UNLIMITED` unless a later ADR justifies it. Set `cacheSizeBytes` explicitly only if measurements require it.
 - **Canonical Persisted Identifiers**: Data structures maintain canonical English identifiers for database keys and system attributes.

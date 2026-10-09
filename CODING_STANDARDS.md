@@ -61,14 +61,16 @@ Keep client boundaries as small and deep as practical.
 
 ### Data access
 
-When server data is introduced:
+For server-side data access:
 
 - read server-accessible data directly in Server Components or server-only
   modules;
 - do not call the application's own Route Handler from a Server Component;
-- centralize privileged data access behind a narrow server-only boundary when
-  the domain justifies a DAL;
-- return minimum safe DTOs to Client Components;
+- put privileged Firebase Admin SDK access in `src/data/`; each public DAL
+  function obtains the current identity and authorizes the requested resource
+  itself, never accepting a UID from its caller;
+- return minimal DTOs rather than raw records when data leaves the DAL or
+  crosses to a Client Component;
 - parallelize independent I/O instead of introducing avoidable waterfalls.
 
 ### Server Actions and Route Handlers
@@ -76,9 +78,10 @@ When server data is introduced:
 Treat both as externally reachable server operations.
 
 - Validate input at runtime.
-- Authenticate at the operation boundary.
-- Authorize the concrete resource/action.
-- Never trust client-provided ownership or role claims.
+- Server Actions in `src/actions/` stay thin: validate their arguments,
+  delegate data access to `src/data/`, and return only the DTO the UI needs.
+- The DAL, not the Action, authenticates and authorizes the concrete resource
+  or action. Never trust client-provided ownership or role claims.
 - Revalidate/cache-invalidate intentionally after mutations.
 
 ## 3. React
@@ -196,12 +199,10 @@ Place hooks in `src/hooks/` and pure utilities, constants, script builders, or
 other generic logic in `src/lib/<domain>/`; the Vitest structure guard enforces
 this. Component `.tsx` files under `src/` must be named as the kebab-case of
 their exported PascalCase component; a Vitest guard enforces this. SDK-free
-business rules for a domain concept live in `src/domain/`,
-browser Firestore access in `src/client/`, and the server-only Data Access
-Layer in `src/data/` (ADR 0011). The Data Access Layer authenticates and
-authorizes inside each function, takes no uid from its caller, and returns
-minimal DTOs. Server Actions live in `src/actions/` and stay thin: they
-validate argument types and delegate to `src/data/`.
+business rules live in `src/domain/`, browser Firestore access lives in
+`src/client/`, the server-only Data Access Layer lives in `src/data/`,
+and Server Actions live in `src/actions/` (ADR 0011). The data-access and
+Server Action requirements are defined once in [section 2](#2-nextjs-app-router).
 
 Dependency Cruiser enforces graph rules on the source it currently cruises,
 including:
@@ -209,6 +210,14 @@ including:
 - no circular dependencies;
 - no unresolved dependencies;
 - allowed-file rules for files directly under `src/`.
+- `domain-is-pure`: `src/domain/` cannot import application layers or Firebase
+  and Google Cloud SDKs;
+- `client-cannot-import-server-layers`: `src/client/` cannot import
+  `src/data/`, `src/app/`, or the Firebase Admin SDK;
+- `data-cannot-import-client-layers`: `src/data/` cannot import `src/client/`,
+  components, hooks, or app routing;
+- `actions-cannot-import-client-layers`: `src/actions/` cannot import
+  `src/client/`, components, hooks, or app routing.
 
 `src/components/ui/**` is currently excluded from the Dependency Cruiser
 graph to avoid traversing registry-managed implementation details. The rule

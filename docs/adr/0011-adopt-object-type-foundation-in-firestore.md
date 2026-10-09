@@ -157,9 +157,10 @@ a closed shape, require server timestamps, and restrict updates with an
 affected-fields allowlist. Matches overlap permissively, so no recursive
 wildcard may be added under `/users/{uid}`, and Rules are not query filters:
 client queries must stay inside the owner's path. Rules must not walk
-hierarchies (document access calls per request are limited). Client delete is intentionally absent for both
-Object Types and Spaces. The Admin SDK bypasses Rules, so the server deletion
-boundary checks both the verified identity and the Space's stored owner.
+hierarchies (document access calls per request are limited). Client delete is
+intentionally absent for both Object Types and Spaces. The Admin SDK bypasses
+Rules, so the Data Access Layer checks both the verified identity and the
+Space's stored owner itself.
 
 **System types.** A top-level system-types collection, readable by authenticated
 clients and writable only through the Admin SDK, remains planned. No Rules,
@@ -168,35 +169,48 @@ inheritance from a system type remains unresolved.
 
 **Code layout.** Space and Object Type share one domain, and the code is
 split by runtime rather than by concept, following the Next.js Data Access
-Layer guidance (a `server-only` access layer behind thin Server Actions):
+Layer guidance (a `server-only` access layer behind thin Server Actions). The
+locale preference (ADR 0007) uses the same layout:
 
 | Folder | Holds | May import |
 | --- | --- | --- |
-| `src/domain/` | `space.ts`, `object-type.ts`, `object-type-inheritance.ts`: SDK-free types, errors, parsing, and inheritance rules | nothing else in `src/` and no Firebase SDK |
+| `src/domain/` | `space.ts`, `object-type.ts`, `object-type-inheritance.ts`: SDK-free types, errors, parsing, inheritance rules | nothing else in `src/` and no Firebase SDK |
 | `src/client/` | `space-client.ts`: browser Firestore access | `src/domain/`, `src/lib/`, and the Server Actions in `src/actions/` |
-| `src/data/` | `space-dal.ts`, `object-type-dal.ts`: `server-only` Admin SDK access; authenticates and authorizes its caller | `src/domain/` and `src/lib/` |
-| `src/actions/` | `space-actions.ts`: `"use server"`, thin: validates argument types, delegates to `src/data/`, returns a DTO | `src/data/`, `src/domain/`, and `src/lib/` |
+| `src/data/` | `space-dal.ts`: `requireVerifiedUid`, `getOwnedSpace(spaceId)`, and `deleteSpaceTree(spaceId)`; `object-type-dal.ts`: `deleteObjectType(spaceId, objectTypeId)`; `locale-dal.ts`: `readProfileLocale`, `writeProfileLocale`, and `syncProfileLocale(explicitLocale)`; all are `server-only` Admin SDK access and no exported function takes a uid | `src/domain/` and `src/lib/` |
+| `src/actions/` | `space-actions.ts`, `locale-actions.ts`: `"use server"`, thin: validates argument types, delegates to `src/data/`, returns a DTO | `src/data/`, `src/domain/`, and `src/lib/` |
 
 The `domain/`, `client/`, `data/`, and `actions/` folders and the `-client`,
 `-dal`, and `-actions` file suffixes are project conventions, not Next.js,
-Firebase, or shadcn requirements: the shadcn `lib` alias is reserved for
-generic helpers, and the Next.js documentation prescribes no folder for domain
-rules or for Server Actions (its examples use `app/actions/`, but any
-`"use server"` file works). Actions sit outside `src/app/` because they are not
+Firebase, or shadcn requirements. The shadcn `lib` alias is reserved for
+generic helpers. The Next.js documentation prescribes no folder for domain
+rules or for Server Actions: its examples use `app/actions/`, but any
+`"use server"` file works. Actions sit outside `src/app/` because they are not
 routes and are imported by `src/client/`, which must not depend on app routing.
 The Dependency Cruiser rules `domain-is-pure`,
 `client-cannot-import-server-layers`, `data-cannot-import-client-layers`, and
 `actions-cannot-import-client-layers` enforce the table. The suffixes keep
-same-concept files distinguishable in tabs, search results, and imports.
+files of the same concept distinguishable in tabs, search results, and
+imports. The `domain-is-pure` and `client-cannot-import-server-layers` rules
+also match Firebase SDK paths resolved through pnpm's virtual store
+(`node_modules/.pnpm/<pkg>/node_modules/...`); planted forbidden SDK imports
+were reported by Dependency Cruiser.
 
 **Data Access Layer and DTOs.** This follows the Next.js data security guide.
-The Data Access Layer is `server-only`, performs authentication (the current
-identity from the session) and authorization (the Space's stored owner) inside
-each function, and never accepts a uid from its caller, so no caller can hand
-the Admin SDK an unverified uid. Server Actions stay thin and are not trusted
-for security. What reaches the client is a minimal DTO: `SpaceDeletionResult` in
-`src/domain/space.ts` is only `{ ok: true }` or `{ ok: false, code }`, never a
-record or an identity. Reads do not go through the server: the browser reads
+The Data Access Layer is `server-only` and no exported function accepts a uid,
+so no caller can hand the Admin SDK an unverified uid. `requireVerifiedUid`
+authenticates the current session. `getOwnedSpace(spaceId)` authenticates,
+validates the Space UUID, and checks the Space's stored owner itself;
+`deleteSpaceTree(spaceId)` uses it before deletion. `deleteObjectType(spaceId,
+objectTypeId)` authenticates once, validates both UUIDs, and checks ownership
+before deletion. Its ID-validation helper is private. `syncProfileLocale`
+authenticates once and internally chooses whether to return a stored locale or
+migrate an explicit one; `readProfileLocale` and `writeProfileLocale` also
+authenticate their own callers. Server Actions stay thin and are not trusted
+for security. What reaches the client is a minimal DTO: `SpaceDeletionResult`
+in `src/domain/space.ts` is only `{ ok: true }` or `{ ok: false, code }`, never
+a record or an identity. A guest is not an error for the locale preference:
+`locale-dal.ts` reads `null` and reports a write as `false`. Reads of Space and
+Object Type data do not go through the server: the browser reads
 Spaces and Object Types directly through the Firestore SDK under the Rules, so
 there is no read DTO yet. A future server read must return a DTO from
 `src/data/` rather than a Firestore document.
@@ -215,6 +229,14 @@ recursive deletion resumable: a run interrupted midway leaves partial data and
 must be retried. Firestore does not delete nested collections with their
 parent, and its documentation advises deleting collections only from a trusted
 server; orphans are invisible to queries but remain stored.
+
+Known limitations of `deleteObjectType`: the direct-child check and the
+recursive delete are not atomic, which is harmless while clients can create
+only root types, but a future inheritance write path must close that gap, for
+example with a transaction. The recursive delete also removes any nested
+Objects, so the deferred objects-in-use check must run before it. The
+ownership check on the stored `ownerId` is defensive, because the path already
+scopes the Space to the verified uid.
 
 ## Consequences
 
@@ -247,6 +269,11 @@ server; orphans are invisible to queries but remain stored.
   `tests/unit/object-type-inheritance.test.ts` (12 cases), and
   `tests/unit/space-actions.test.ts` (4 cases) cover the pure domain
   helpers and Server Action delegation and error handling.
+- [x] `tests/unit/locale-dal.test.ts` (8 cases),
+  `tests/unit/locale-actions-profile.test.ts` (7 cases), and
+  `tests/unit/locale-actions.test.ts` (2 cases) cover the locale Data Access
+  Layer's own authentication (guest read and write), single-authentication
+  synchronization, and the thin locale actions that delegate to it.
 - [ ] A runtime write path for non-null `parentTypeId`, including trusted
   inheritance validation and its authorization design.
 - [ ] Objects-in-use validation for Object Type deletion, pending an Objects

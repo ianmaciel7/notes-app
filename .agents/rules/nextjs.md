@@ -13,11 +13,13 @@
 - **Server Components by Default**: All components are React Server Components unless client capabilities are strictly required.
 - **Minimal Client Boundaries**: Use `"use client"` only for interactive leaves requiring client state, effects, event handlers, browser APIs, or client-only packages. Keep client boundaries as small and deep as practical.
 - **Server/Client Serialization**: Pass only minimal, serializable DTOs across the Server-to-Client component boundary.
-- **Allowed `src/` Root Files**: Only official Next.js root convention files (`proxy.ts`, `middleware.ts`, `instrumentation.ts`) may reside directly under `src/`. All other application code must live in standard subdirectories (`src/app`, `src/components`, `src/hooks`, `src/lib`, `src/styles`), and tests belong under `tests/` or module subdirectories. Enforced by Dependency Cruiser rule `src-root-allowed-files-only`.
+- **Allowed `src/` Root Files**: Only official Next.js root convention files (`proxy.ts`, `middleware.ts`, `instrumentation.ts`) may reside directly under `src/`. All other application code must live in standard subdirectories (`src/app`, `src/actions`, `src/client`, `src/components`, `src/data`, `src/domain`, `src/hooks`, `src/lib`, `src/styles`), and tests belong under `tests/` or module subdirectories. Enforced by Dependency Cruiser rule `src-root-allowed-files-only`.
 
 ## Data Access & Caching
 
 - **Direct Server-Side Data Access**: Read database and server-side data directly in Server Components or dedicated server-only modules.
+- **Data Access Layer**: Put privileged Admin SDK access in `src/data/*-dal.ts`, mark it with `server-only`, and authenticate and authorize inside each DAL function. DAL callers must not supply a `uid`.
+- **Minimal DTOs**: Return only the DTO fields needed by the caller; never return raw Admin SDK records across a Server-to-Client or Server Action boundary.
 - **No Self-Fetch**: Never call the application's internal Route Handlers via `fetch()` from a Server Component for ordinary data access.
 - **Concurrency & Waterfalls**: Parallelize independent I/O operations (`Promise.all`) rather than creating sequential waterfall awaits.
 - **Streaming & Suspense**: Wrap slow or dynamic data dependencies in `<Suspense>` boundaries.
@@ -41,6 +43,11 @@
 - **Runtime Validation**: Always validate input schemas (e.g., Zod) on all parameters, request bodies, and query parameters.
 - **Explicit Authorization**: Verify authentication and concrete resource ownership/permissions at the operation boundary. Never rely on client state, role claims, or middleware alone for authorization.
 - **Data Minimization**: Never expose sensitive internal model fields or infrastructure secrets in action returns or handler responses.
+- **Server Action Location and Scope**: Place module-level Server Actions in `src/actions/*-actions.ts`. Keep `use server` actions thin: validate their arguments, delegate privileged work to `src/data/`, and return only the minimal DTO needed by the UI. Authentication and authorization for DAL work happen inside the DAL, not through caller-provided identity.
+
+These DAL and Server Action placement rules are project conventions backed by
+focused tests and Dependency Cruiser layer restrictions; they are not a
+single GritQL guard that proves authorization correctness.
 
 ## Navigation & Media
 

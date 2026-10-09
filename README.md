@@ -20,18 +20,20 @@ The `dev` branch currently contains the application foundation:
 - Biome 2.4.2 with Next.js, React, project, types, test, and Playwright domains.
 - Custom GritQL guards for Next.js App Router migration rules and shadcn
   consumption rules.
-- Vitest unit and regression tests, including authentication and locale
-  behavior, plus Playwright authentication E2E coverage.
+- Vitest unit and regression tests, Firestore security-rules tests, and
+  Playwright E2E coverage.
 - CI gates for linting, type generation, tests, architecture, spelling, unused
   code, duplication, code health, security audit, production build, bundle
   size, and E2E tests.
 
 The exam domain and assessment workflows are not yet implemented.
-Authentication and cookie-based localization are present. The language
-picker and signed-in preference synchronization use a narrow server-only
-Firestore seam (ADR 0007). The general Firestore application data layer,
-browser persistent cache, and exam-domain persistence remain planned
-(ADR 0008).
+Authentication and cookie-based localization are present. The repository has
+an SDK-free domain layer (`src/domain/`), browser Firestore access
+(`src/client/`), a server-only Admin SDK Data Access Layer (`src/data/`), and
+thin Server Actions (`src/actions/`). The implemented data access covers
+Spaces, Object Type deletion, and signed-in locale preferences; broader
+exam-domain persistence remains planned. Browser Firestore configuration also
+includes persistent local caching.
 
 ## Prerequisites
 
@@ -83,6 +85,8 @@ Run `pnpm run emulators:seed` only when intentionally refreshing the committed
 fixture. It exports a new baseline to `.firebase/seeds/`; ordinary emulator and
 E2E commands import that baseline and never rewrite it. `pnpm run test:e2e`
 owns the Auth and Firestore emulators and the Next.js lifecycle.
+`pnpm run test:rules` separately starts a Firestore Emulator through
+`firebase emulators:exec` on port 8080 to run the security-rules suite.
 
 The supported local flows are e-mail/password registration, sign-in, sign-out,
 e-mail-link sign-in, phone sign-in, and Firebase SDK-managed OAuth popup (redirect in embedded Electron browsers such as Cursor's)
@@ -121,6 +125,12 @@ Focused verification while iterating:
 pnpm run verify:changed
 ```
 
+Test suites are separated into `tests/unit/` (Vitest), `tests/rules/`
+(Firestore Emulator security rules), and `tests/e2e/` (Playwright). Run the
+rules suite with `pnpm run test:rules`; it requires the Firestore Emulator and
+Java. See [TESTING.md](./TESTING.md) for the test inventory and server-only
+Vitest pattern.
+
 Full CI additionally runs:
 
 - Knip
@@ -129,6 +139,7 @@ Full CI additionally runs:
 - `pnpm audit --audit-level high`
 - `next build`
 - Size Limit
+- Firestore security-rules tests
 - Playwright E2E
 
 ## Guard system

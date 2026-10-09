@@ -31,9 +31,9 @@ Check it and the source tree before treating an accepted ADR as built.
 | [0010](./0010-adopt-owner-scoped-spaces-in-firestore.md) | Owner-scoped Spaces at `/users/{uid}/spaces` | Accepted | Implemented | 2026-10-09 |
 | [0011](./0011-adopt-object-type-foundation-in-firestore.md) | Object Type foundation under Spaces | Accepted | Partially implemented | 2026-10-09 |
 
-## Source review — 2026-10-07
+## Source review — 2026-10-09
 
-All eight records were reconciled against available files on the remote
+All eleven records were reconciled against available files on the remote
 `dev` branch. The original decision dates are retained; the
 `Current State` sections describe what is present now, not what was
 envisioned when each decision was made.
@@ -50,10 +50,13 @@ envisioned when each decision was made.
   synchronization and the Firestore profile preference are implemented and
   covered by unit and E2E tests.
 - **0008:** the base Firestore configuration (persistent cache, emulator,
-  sign-out cache clearing), deny-by-default rules with emulator tests and the
-  build-script policy are implemented. No feature reads Firestore from the
-  browser yet, so listeners, optimistic writes and browser persistence tests
-  are pending.
+  sign-out cache clearing), Rules tests, and build-script policy are
+  implemented. Broader browser persistence coverage remains pending.
+- **0010:** owner-scoped Spaces are implemented, including browser reads and
+  writes through `src/client/space-client.ts` and server-side deletion.
+- **0011:** root Object Type Rules, parsing, inheritance helpers, and
+  server-side deletion are partially implemented; a runtime non-null-parent
+  write path and operational inheritance remain pending.
 
 **Verification level:** source inspection only for this documentation update.
 No local dependency installation, Biome, TypeScript, Vitest, Playwright, or

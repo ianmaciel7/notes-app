@@ -29,14 +29,30 @@ Examples of current coverage (not an exhaustive file inventory):
   for the second-factor settings: failure classification, factor listing and
   removal, the verified-e-mail gate, recent-login handling, and session renewal
   or sign-out after a factor change (ADR 0005).
-- `tests/unit/locale-preference-actions.test.ts` for authenticated profile
-  preference writes, sign-in synchronization, and guest locale handling.
+- `tests/unit/space-client.test.ts` and `space-actions.test.ts` for Space
+  document parsing and the thin deletion Server Actions.
+- `tests/unit/locale-actions.test.ts` and `locale-actions-profile.test.ts` for
+  locale cookies, profile preference writes, sign-in synchronization, and
+  guest locale handling.
+- `tests/unit/locale-dal.test.ts` for the server-only locale Data Access
+  Layer.
+- `tests/unit/object-type-parse.test.ts` and
+  `object-type-inheritance.test.ts` for Object Type parsing and inheritance
+  validation.
 - Server-session Route Handler tests and other authentication tests under
   `tests/unit/` (see ADR 0005).
 
-Vitest runs in Happy DOM and scans `src/**/*.{test,spec}.{ts,tsx}` and `tests/**/*.{test,spec}.{ts,tsx}` (excluding `tests/e2e/**`).
-`src/components/ui/**` is excluded from project unit tests because that
-directory is the owned shadcn implementation layer.
+The default Vitest configuration runs in Happy DOM and scans
+`src/**/*.{test,spec}.{ts,tsx}` and `tests/**/*.{test,spec}.{ts,tsx}`, while
+excluding `tests/e2e/**` and `tests/rules/**`. `src/components/ui/**` is
+excluded from project unit tests because that directory is the owned shadcn
+implementation layer.
+
+Server-only unit tests use `// @vitest-environment node`. Because
+`server-only` is resolved by Next.js rather than installed as a package, mock
+it with `vi.mock("server-only")` and dynamically import the module under test
+only after the mock is registered. `tests/unit/locale-dal.test.ts` is the
+reference pattern.
 
 Run:
 
@@ -61,6 +77,7 @@ Current authentication E2E coverage:
 - `tests/e2e/locale.spec.ts`, covering the language selector, explicit cookie
   persistence, and a Firestore preference restored in a separate browser
   after re-authentication (ADR 0007).
+- `tests/e2e/firestore-cache.spec.ts`, covering Firestore cache behavior.
 
 The configured project is Chromium. The E2E command starts both Auth and
 Firestore emulators and requires Java to run the Firestore emulator. CI
@@ -76,8 +93,16 @@ pnpm run test:e2e
 ### Firestore security rules
 
 `firestore.rules` is tested against the Firestore Emulator with
-`@firebase/rules-unit-testing` (`tests/rules/`, excluded from `pnpm test`).
-CI runs it in the extended verification job.
+`@firebase/rules-unit-testing`. The rules suite consists of
+`tests/rules/firestore.rules.test.ts`, `spaces.rules.test.ts`,
+`spaces-client.rules.test.ts`, `spaces-offline.rules.test.ts`,
+`space-deletion.rules.test.ts`, and `object-types.rules.test.ts`; it is
+excluded from `pnpm test`. CI runs it in the extended verification job.
+
+`pnpm run test:rules` uses `firebase emulators:exec` to start a Firestore
+Emulator for the test command on port 8080. It therefore requires the
+Firestore Emulator prerequisites, including Java; do not run the Vitest rules
+configuration directly without an emulator.
 
 ```bash
 pnpm run test:rules

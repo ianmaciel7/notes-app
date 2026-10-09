@@ -59,8 +59,29 @@ The extended CI gate runs:
 ```bash
 pnpm run build
 pnpm run check:size
+pnpm run test:rules
 pnpm run test:e2e
 ```
+
+Firestore security rules are a separate suite. `pnpm run test:rules` starts a
+Firestore Emulator through `firebase emulators:exec` on port 8080, so it
+requires the emulator prerequisites, including Java. See
+[Testing](./TESTING.md) for the complete unit, rules, and E2E test layout.
+
+## Repository layout
+
+The application is organized by runtime boundary. `src/domain/` contains
+SDK-free domain rules; `src/client/` contains browser Firestore access;
+`src/data/` contains the server-only Admin SDK Data Access Layer; and
+`src/actions/` contains thin Server Actions that validate arguments and
+delegate. `src/components/notes-app/` contains application components,
+`src/components/ui/` is the owned shadcn implementation layer, and `src/lib/`
+and `src/hooks/` hold shared infrastructure and client behavior.
+
+Tests are separated into `tests/unit/` (Vitest), `tests/rules/` (Firestore
+security rules), and `tests/e2e/` (Playwright). Dependency Cruiser enforces
+the domain, client, data, and actions boundaries; see
+[ARCHITECTURE.md](./ARCHITECTURE.md) for the implemented structure.
 
 ## Standards
 

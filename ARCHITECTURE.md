@@ -46,53 +46,112 @@ Current core versions:
 ```text
 src/
   app/
-    (public)/             # sign-in, sign-up, recovery, email-link, phone
+    (public)/             # email-link, forgot-password, phone, sign-in, sign-up
+      email-link/page.tsx
+      forgot-password/page.tsx
+      layout.tsx
+      phone/page.tsx
+      sign-in/page.tsx
+      sign-up/page.tsx
     (protected)/          # dashboard and settings
-    api/auth/session/      # server cookie exchange and sign-out
+      dashboard/page.tsx
+      error.tsx
+      layout.tsx
+      settings/page.tsx
+    api/auth/session/
+      route.ts             # server cookie exchange and sign-out
+    error.tsx
+    favicon.ico
     globals.css
     layout.tsx
+    not-found.tsx
     page.tsx
     typeset.css
-  proxy.ts                 # optimistic protected-route redirect
-  i18n/
-    request.ts              # cookie-driven next-intl request configuration
-  messages/                 # en, pt-BR, and es message catalogs
-  components/
-    firebase/           # immutable upstream Firebase UI reference (ADR 0004)
-    notes-app/          # application-owned auth cards, forms, dialogs (ADR 0004)
-    ui/                 # project-owned shadcn implementation layer
-  hooks/                # custom hooks (alias @/hooks), one use-*.ts(x) per hook
-    use-mobile.ts
-    use-*.ts            # state/form logic extracted from src/components/notes-app/
-  actions/              # thin Server Actions: validate arguments, delegate to src/data
+  actions/                 # thin Server Actions
+    locale-actions.ts
     space-actions.ts
-  domain/               # SDK-free domain rules (ADR 0011)
-    space.ts            # Space types, conflict and deletion errors
-    object-type.ts      # Object Type document parsing
-    object-type-inheritance.ts  # effective schema and parent validation
-  client/               # browser Firestore access
+  client/                  # browser Firestore access
     space-client.ts
-  data/                 # server-only DAL (Admin SDK): authenticates, authorizes, returns DTOs
-    space-dal.ts
+  components/
+    firebase/              # immutable upstream Firebase UI reference (ADR 0004)
+    notes-app/             # application-owned auth cards, forms, dialogs (ADR 0004)
+    ui/                    # project-owned shadcn implementation layer
+  data/                    # server-only DAL (Admin SDK)
+    locale-dal.ts
     object-type-dal.ts
+    space-dal.ts
+  domain/                  # SDK-free domain rules (ADR 0011)
+    object-type-inheritance.ts
+    object-type.ts
+    space.ts
+  hooks/                   # custom hooks (alias @/hooks), one use-*.ts(x) per hook
+  i18n/
+    request.ts             # cookie-driven next-intl request configuration
   lib/
-    firebase/               # client, admin, server identity, session, form errors
-    i18n/                   # locale negotiation and client synchronization
+    firebase/              # client, admin, server identity, session, form errors
+      admin.ts
+      auth-error.ts
+      auth-proxy.ts
+      client.ts
+      config.ts
+      firestore.ts
+      form-error.ts
+      identity.ts
+      second-factors.ts
+      server-config.ts
+      session-client.ts
+      session.ts
+    i18n/                  # locale negotiation and client synchronization
+      client.ts
+      config.ts
+      firebase-ui-locale.ts
       locale-lang-script.ts # pre-hydration locale synchronization script builder
-    theme/                  # theme constants, parsing, and script builder
+    theme/                 # theme constants, parsing, and script builder
     utils.ts
+  messages/                # en, pt-BR, and es message catalogs
+  proxy.ts                 # optimistic protected-route redirect
 
 tests/
   e2e/
+    firestore-cache.spec.ts
     home.spec.ts
+    locale.spec.ts
+  rules/
+    firestore.rules.test.ts
+    object-types.rules.test.ts
+    space-deletion.rules.test.ts
+    spaces-client.rules.test.ts
+    spaces-offline.rules.test.ts
+    spaces.rules.test.ts
   unit/
+    auth-error.test.ts
+    auth-proxy.test.ts
+    auth-session-route.test.ts
+    component-props-type-guard.test.ts
+    components-layer-structure-lib.ts
+    components-layer-structure.test.ts
+    firebase-firestore.test.ts
     firebase-reference.test.ts
     firebase-reference.manifest.sha256
+    firebase-session.test.ts
+    firebase-ui-locale.test.ts
     i18n-client.test.ts
     i18n-config.test.ts
+    locale-actions-profile.test.ts
+    locale-actions.test.ts
+    locale-dal.test.ts
     locale-lang-script.test.ts
+    object-type-inheritance.test.ts
+    object-type-parse.test.ts
+    second-factor-panel.test.tsx
+    shadcn-composition-guards.test.ts
     sign-out-button.test.tsx
     smoke.test.ts
+    space-actions.test.ts
+    space-client.test.ts
+    theme-script.test.ts
+    use-auth-provider.test.ts
+    wait-for-ci.test.ts
 
 grit/
   nextjs/
@@ -111,21 +170,26 @@ components (ADR 0004). `src/components/notes-app/` holds application-owned
 authentication cards, forms, and dialogs built with project shadcn primitives
 (ADR 0004). Their state and form logic lives in `src/hooks/` (see
 `CODING_STANDARDS.md` section 4). The implemented authentication slice (ADR
-0005) uses the local Firebase Auth Emulator, a server-only session-verification
-boundary, public `(public)` sign-in routes, and the protected `(protected)`
-routes `/dashboard` and `/settings`. The browser Firestore base configuration
+0005) uses `src/lib/firebase/session.ts` and `src/lib/firebase/identity.ts` for
+the server-side session and identity boundary, public `(public)` sign-in
+routes, and the protected `(protected)` routes `/dashboard` and `/settings`.
+The browser Firestore base configuration
 (persistent multi-tab cache, emulator connection, cache cleanup on sign-out)
 exists in `src/lib/firebase/firestore.ts` (ADR 0008). The Space module supports
 owner-scoped Space reads and writes in `src/client/space-client.ts`, while
 Space and Object Type deletion is a narrow **server-only** Admin SDK Data
 Access Layer in `src/data/`, reached through the thin Server Actions in
-`src/actions/space-actions.ts` (ADR 0011). `src/domain/` contains the
-SDK-free Space types and Object Type parsing and inheritance-resolution logic;
-the Dependency Cruiser rules `domain-is-pure`,
+`src/actions/space-actions.ts` (ADR 0011). The DAL obtains the current
+identity itself, authorizes the requested resource, accepts no caller-supplied
+UID, and exposes only minimal DTOs where a result crosses the action boundary.
+`src/domain/` contains the SDK-free Space types and Object Type parsing and
+inheritance-resolution logic; the Dependency Cruiser rules `domain-is-pure`,
 `client-cannot-import-server-layers`, `data-cannot-import-client-layers`, and
-`actions-cannot-import-client-layers` enforce the layer boundaries. No runtime path uses inherited Object Types. A narrow **server-only**
-Firestore Admin seam does persist signed-in user locale preferences to
-`users/{uid}.locale`, after verifying the Firebase session (ADR 0007).
+`actions-cannot-import-client-layers` enforce the layer boundaries. No runtime
+path uses inherited Object Types. The same layout serves the locale
+preference: `src/actions/locale-actions.ts` is thin, and the server-only
+`src/data/locale-dal.ts` verifies the Firebase session itself and persists
+signed-in user locale preferences to `users/{uid}.locale` (ADR 0007).
 
 Internationalization uses cookie-driven `next-intl` without locale URL
 prefixes. The server resolves locale from the `NEXT_LOCALE` cookie,
@@ -241,7 +305,7 @@ Firestore. ADR 0005 provides Auth Emulator flows and protected sessions.
 ADR 0007 adds cookie-based locale selection, translated interfaces,
 validation, and user-profile persistence through Firebase Admin Firestore.
 ADR 0008 implements the base browser Firestore configuration, security rules
-and cache cleanup; general data access remains unimplemented. Runtime verification status belongs to each ADR and CI.
+and cache cleanup. Runtime verification status belongs to each ADR and CI.
 
 ## 7. Architecture rules
 

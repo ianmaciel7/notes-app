@@ -8,13 +8,19 @@ The component architecture is divided into distinct layers to separate owned des
 
 ```txt
 src/
+├── actions/              # Thin Server Actions
 ├── app/                  # Next.js App Router routes, layouts, and pages
+├── client/               # Browser-only Firestore access
 ├── components/
 │   ├── firebase/         # Immutable upstream Firebase UI reference layer
 │   └── ui/               # Owned shadcn Base Nova / Base UI primitive layer
+├── data/                 # Server-only Admin SDK data access layer
+├── domain/               # SDK-free domain rules
 ├── hooks/                # Shared application and component hooks
-└── lib/                  # Shared utility functions and library adapters
-    └── utils.ts          # Canonical cn re-export
+├── i18n/                 # next-intl request configuration
+├── lib/                  # Shared utility functions and library adapters
+│   └── utils.ts          # Canonical cn re-export
+└── messages/             # Locale message catalogs
 ```
 
 ---
@@ -27,9 +33,12 @@ src/
 * **Source**: Generated and managed via shadcn CLI (`base-nova` style with Base UI primitives).
 * **Ownership**: This directory is an **owned implementation/registry layer**.
   * It is intentionally excluded from ordinary application linters (`!src/components/ui` in `biome.json`) to preserve registry compatibility.
-  * Primitives here must never import domain code or application routes. This
-    is enforced mechanically by the Dependency Cruiser rule
-    `ui-primitives-cannot-import-domain`, which cruises this directory.
+  * Primitives here must never import domain code or application routes.
+    Dependency Cruiser rule `ui-primitives-cannot-import-domain` (its
+    historical name) mechanically blocks imports from application component
+    layers and `src/app/`; it does not currently match `src/domain/`. The
+    no-domain-import requirement is therefore a project convention enforced
+    by review.
 
 ### 2. `src/components/firebase/` (Upstream Reference Layer)
 
@@ -54,7 +63,8 @@ src/
   **guard-consumption layer** and must follow project GritQL guards.
 * **File Rule**: Outside the reserved `ui/` and `firebase/` directories, every
   file must be `.tsx`. Hooks belong in `src/hooks/use-*.ts`; utilities,
-  constants, script builders, and pure logic belong in `src/lib/<domain>/`.
+  constants, script builders, and generic logic belong in `src/lib/<domain>/`;
+  SDK-free domain rules belong in `src/domain/` (ADR 0011).
   This matches shadcn registry types (`hook` -> `hooks`, `lib` -> `lib`) and
   Next.js project-structure guidance for shared helpers. The Vitest structure
   guard in `tests/unit/components-layer-structure.test.ts` enforces this rule.
@@ -125,9 +135,10 @@ Boundary integrity is verified mechanically across multiple layers:
 1. **Canonical Import Aliases (`canonical-import-aliases.grit`)**:
    Enforces that application consumers import primitives and helpers using their canonical aliases (`@/components/ui`, `@/lib/utils`, `@/hooks`) rather than deep relative paths (`../../components/ui/*`).
 2. **Dependency Cruiser (`.dependency-cruiser.cjs`)**:
-   Cruises `src/components/ui/**` and enforces
-   `ui-primitives-cannot-import-domain`, so UI primitives cannot import
-   `src/components/notes-app`, `src/components/firebase` or `src/app`.
+   Cruises `src/components/ui/**` and enforces the historically named
+   `ui-primitives-cannot-import-domain` rule, which blocks imports from
+   `src/components/notes-app`, `src/components/firebase`, and `src/app`.
+   It does not currently enforce the separate no-`src/domain/` convention.
 3. **Biome Guard Boundary**:
    Excludes both `src/components/ui/**` (owned implementation) and
    `src/components/firebase/**` (immutable upstream reference) from ordinary

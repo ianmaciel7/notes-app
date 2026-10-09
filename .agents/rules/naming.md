@@ -67,7 +67,10 @@ Standard Next.js metadata and static assets detected automatically:
   checked. Enforced by `tests/unit/component-primitive-name-guard.test.ts`.
 - **File & Directory Names**: `kebab-case` for all repository files (`note-card.tsx`, `use-mobile.ts`).
 - **Custom Hooks**: `camelCase` prefixed with `use` (`useMobile`, `useNotesFilter`). Two kinds: context accessors (like `useSidebar`) stay in their component file; every other hook lives in its own `use-*.ts(x)` file in `src/hooks/` (import via `@/hooks`), never inline in a component file.
-- **Server Actions**: `camelCase` verb phrases (`createNote`, `deleteNote`, `updateNoteTitle`).
+- **Server Actions**: `camelCase` verb phrases. Destructive actions use the
+  `Action` suffix (`deleteSpaceAction`, `deleteObjectTypeAction`); other
+  action entry points use an explicit verb phrase (`setLocalePreference`,
+  `syncLocalePreference`).
 - **Route Handler Methods**: Uppercase HTTP method names (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, `OPTIONS`).
 - **Types & Interfaces**: `PascalCase` (`NoteItem`, `CreateNoteInput`, `PageProps`).
 - **Environment Variables**:
@@ -77,3 +80,19 @@ Standard Next.js metadata and static assets detected automatically:
 See [./nextjs.md](./nextjs.md),
 [../../docs/guards/NEXTJS-GUARD-COVERAGE.md](../../docs/guards/NEXTJS-GUARD-COVERAGE.md), and
 [../../CODING_STANDARDS.md](../../CODING_STANDARDS.md).
+
+## 5. Application Layer File Conventions
+
+- `src/domain/` contains SDK-free domain rules and types. Use descriptive
+  `kebab-case` filenames without a layer suffix (for example, `space.ts` and
+  `object-type.ts`).
+- `src/client/` contains browser Firestore modules named `*-client.ts` (for
+  example, `space-client.ts`).
+- `src/data/` contains the server-only Admin SDK Data Access Layer named
+  `*-dal.ts` (for example, `space-dal.ts` and `locale-dal.ts`).
+- `src/actions/` contains thin `use server` Server Action modules named
+  `*-actions.ts` (for example, `space-actions.ts` and `locale-actions.ts`).
+
+The layer locations and suffixes are project conventions. Dependency Cruiser
+enforces selected import boundaries, but it does not mechanically enforce
+these filename suffixes.

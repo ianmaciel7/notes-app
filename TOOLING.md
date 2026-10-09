@@ -58,13 +58,13 @@ Framework configuration:
 | Biome 2.4.2 | Lint and format; hosts the GritQL plugin packs | `pnpm run lint`, `pnpm run lint:changed`, `pnpm run format` | `biome.json` |
 | GritQL | Project-specific AST rules: `grit/nextjs/` and `grit/shadcn/` | runs inside Biome | `grit/`, `biome.json` `plugins` |
 | TypeScript | Type check after `next typegen` | `pnpm run check:types` | `tsconfig.json`, `tsconfig.check.json` |
-| Vitest | Unit tests with Happy DOM and V8 coverage, including the components-layer structure guard | `pnpm test`, `pnpm run test:guards`, `pnpm run test:changed`, `pnpm run test:coverage` | `vitest.config.ts`, `tests/unit/components-layer-structure.test.ts` |
+| Vitest | Unit tests with Happy DOM by default, Node overrides for server-only modules, and V8 coverage; includes the components-layer structure guard | `pnpm test`, `pnpm run test:guards`, `pnpm run test:changed`, `pnpm run test:coverage` | `vitest.config.ts`, `tests/unit/components-layer-structure.test.ts` |
 | Testing Library | React and DOM test helpers | used by Vitest tests | `@testing-library/react`, `@testing-library/dom` |
 | Playwright | E2E on Chromium, starts `pnpm dev` | `pnpm run test:e2e` | `playwright.config.ts` |
-| Firestore rules tests | Security rules against the Firestore emulator | `pnpm run test:rules` | `vitest.rules.config.ts`, `tests/rules/` |
+| Firestore rules tests | Security rules against a Firestore Emulator started by `firebase emulators:exec` on port 8080 | `pnpm run test:rules` | `vitest.rules.config.ts`, `tests/rules/` |
 | axe-core | Accessibility checks inside Playwright | used by E2E tests | `@axe-core/playwright` |
 | Stryker | Mutation testing (Vitest runner, TypeScript checker) | `pnpm run test:mutation` | `stryker.config.json` |
-| Dependency Cruiser | Architecture rules: `no-circular`, `src-root-allowed-files-only`, `not-to-unresolvable`, `no-non-package-json`, `not-to-dev-dep`, `not-to-test`, `ui-primitives-cannot-import-domain`, `lib-and-hooks-cannot-import-ui-layers`, `components-cannot-import-app` | `pnpm run check:deps` | `.dependency-cruiser.cjs` |
+| Dependency Cruiser | Architecture rules: `no-circular`, `src-root-allowed-files-only`, `not-to-unresolvable`, `no-non-package-json`, `not-to-dev-dep`, `not-to-test`, `ui-primitives-cannot-import-domain`, `lib-and-hooks-cannot-import-ui-layers`, `domain-is-pure`, `client-cannot-import-server-layers`, `data-cannot-import-client-layers`, `actions-cannot-import-client-layers`, `components-cannot-import-app` | `pnpm run check:deps` | `.dependency-cruiser.cjs` |
 | Knip | Unused files, exports, and dependencies | `pnpm run check:unused` | `knip.json` |
 | jscpd | Code duplication (threshold 2) | `pnpm run check:duplication` | `.jscpd.json` |
 | Fallow | Code health and complexity audit | `pnpm run check:health` | `.fallowrc.json` |
@@ -147,8 +147,10 @@ only fires from a workflow file on the default branch.
 | Local state | `.firebase/` (logs, seeds) |
 | Java | Installed on the machine (OpenJDK) for the Firestore emulator |
 
-`package.json` provides `emulator`, `emulators:seed`, and `test:e2e`.
-All three now start **Auth and Firestore** emulators. The committed
+`package.json` provides `emulator`, `emulators:seed`, `test:e2e`, and
+`test:rules`. The first three start **Auth and Firestore** emulators;
+`test:rules` starts only Firestore through `firebase emulators:exec` on port
+8080. The committed
 `.firebase/seeds/` fixture provides Auth accounts and two owner-scoped Spaces
 (ADR 0010); other Firestore documents are created by verified Server Actions
 for locale preferences. Local Next.js

@@ -26,3 +26,13 @@ Enforce automated testing discipline, test design quality, and verification hier
    - **Fast Iteration**: Run `pnpm run verify:changed` or `pnpm run test:changed` while developing.
    - **Pre-Completion / Gate**: Run `pnpm run verify:fast` before concluding tasks to validate lint, types, unit tests, dependency constraints, and spelling.
    - **No Fictitious Coverage**: Never describe planned tests or unverified coverage as already implemented.
+
+5. **Server-only and Firestore Rules Tests**:
+   - A unit test for a `server-only` DAL module must use the Node environment
+     (`// @vitest-environment node`), register a `server-only` mock, and
+     dynamically import the module only after that mock is registered. The
+     package is resolved by Next.js and is not installed for Vitest. See
+     `tests/unit/locale-dal.test.ts`.
+   - Firestore security-rules tests in `tests/rules/` require the Firestore
+     Emulator and are excluded from `pnpm test`; run them only through
+     `pnpm run test:rules` when emulator execution is appropriate.

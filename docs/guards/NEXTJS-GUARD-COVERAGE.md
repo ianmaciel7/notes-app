@@ -95,16 +95,20 @@ so no fake waterfall guard is used.
 
 ### Server Actions
 
-Tests/security review own:
+The following are project conventions verified by focused tests and security
+review, not dedicated GritQL proofs:
 
 - runtime input validation;
-- authentication;
-- resource-level authorization;
-- minimal returned data;
+- thin `use server` modules in `src/actions/*-actions.ts`;
+- authentication and resource-level authorization inside `src/data/*-dal.ts`;
+- no caller-supplied `uid` for DAL operations;
+- minimal returned DTOs;
 - intentional cache invalidation.
 
-A call named `auth()` does not prove correct authorization, so these are not
-GritQL-only rules.
+`actions-cannot-import-client-layers` restricts Server Action imports, while
+`data-cannot-import-client-layers` restricts the DAL import graph. They do
+not prove that an authorization check is correct; a call named `auth()` is not
+sufficient evidence by itself.
 
 ### Route Handlers
 
@@ -241,10 +245,14 @@ own:
 
 - secret isolation;
 - environment poisoning prevention;
-- safe DTOs;
-- data minimization;
+- safe DTOs and data minimization;
 - tainting when useful;
 - CSP/CORS decisions.
+
+The implemented Admin SDK DAL is `src/data/`. Its modules use the
+`server-only` marker; the `data-cannot-import-client-layers` Dependency
+Cruiser rule prevents imports from browser/component layers, but it does not
+prove DTO shape or authorization behavior.
 
 ### TypeScript and configuration
 
@@ -262,8 +270,10 @@ own:
 Biome recommended accessibility rules, semantic primitives, Base UI, and
 browser tests own accessibility behavior.
 
-Locale routing/content is validated when an i18n architecture is actually
-introduced. The current `dev` branch has no active i18n implementation.
+The current application uses cookie-driven `next-intl` without locale URL
+prefixes. Vitest and Playwright cover locale negotiation, explicit cookie
+persistence, and authenticated profile-preference restoration; this is
+behavioral coverage, not a Next.js GritQL guard.
 
 ### Performance and production
 

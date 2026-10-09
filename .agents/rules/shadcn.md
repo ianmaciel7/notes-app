@@ -61,5 +61,12 @@ Biome/GritQL should enforce only mechanically reliable invariants. Naming
 quality, abstraction quality, registry strategy, and component responsibility
 remain architecture/review concerns.
 
+## Shared Helper Placement
+
+The `components.json` aliases reserve `@/hooks` for React hooks and `@/lib`
+for generic helpers. Keep non-hook helpers, including Firebase form-error
+mapping, in `src/lib/` (currently `src/lib/firebase/form-error.ts`), not in
+`src/hooks/`.
+
 See [../../docs/guards/SHADCN-GUARD-COVERAGE.md](../../docs/guards/SHADCN-GUARD-COVERAGE.md) and
 [../../docs/guards/SHADCN-DIRECTORY-STRUCTURE.md](../../docs/guards/SHADCN-DIRECTORY-STRUCTURE.md).

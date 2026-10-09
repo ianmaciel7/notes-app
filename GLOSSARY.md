@@ -76,9 +76,9 @@ its name, the kind of value it holds and whether it is required.
 The value an Object holds for one Property Definition of its Object Type.
 
 **Object Type Inheritance**  
-The specialization of an Object Type by exactly one parent Object Type, so the
-child includes the Property Definitions of its ancestors. An Object Type has at
-most one parent.
+The planned specialization of an Object Type by exactly one parent Object Type,
+so the child would include the Property Definitions of its ancestors. An Object
+Type has at most one parent; inheritance is not yet operationally supported.
 
 **Page**  
 A free-form content surface.

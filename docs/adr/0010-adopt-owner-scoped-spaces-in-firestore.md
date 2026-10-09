@@ -17,7 +17,7 @@ Implemented for the Firebase layer. `DER.md` documents the Space model and ADR 0
 Delivered: the Space rules in `firestore.rules` (`tests/rules/spaces.rules.test.ts`),
 `src/client/space-client.ts` with emulator-backed tests
 (`tests/rules/spaces-client.rules.test.ts`, `tests/rules/spaces-offline.rules.test.ts`) and
-unit tests for document parsing (`tests/unit/firebase-spaces.test.ts`). The
+unit tests for document parsing (`tests/unit/space-client.test.ts`). The
 Space ID was changed from the Firestore automatic ID to a UUID v4 on the same
 day, before any data existed, so no migration is needed.
 `getDb()` is exported for data modules in `src/lib/firebase/`. No UI, route or
@@ -134,7 +134,7 @@ least-privilege IAM.
   and `.firebase/seeds/firestore_export/` is regenerated. Not covered by an
   automated test that imports the fixture and calls `listSpaces`.
 
-Out of scope here (needs a UI consumer of `spaces.ts`, decided in a later ADR):
+Out of scope here (needs a UI consumer of `src/client/space-client.ts`, decided in a later ADR):
 browser coverage of IndexedDB persistence across reloads, conflict handling
 after a reload, account switch leaving no cached Spaces, and the failure path
 when another tab holds the cache.

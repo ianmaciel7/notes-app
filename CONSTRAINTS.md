@@ -80,7 +80,18 @@ Sources: [CODING_STANDARDS.md](./CODING_STANDARDS.md),
 [shadcn rules](./.agents/rules/shadcn.md),
 [SHADCN-GUARD-COVERAGE](./docs/guards/SHADCN-GUARD-COVERAGE.md).
 
-## 5. Security
+## 5. Data and module boundaries
+
+- `src/domain/` is SDK-free, and Dependency Cruiser enforces
+  `domain-is-pure`.
+- Dependency Cruiser enforces `client-cannot-import-server-layers`,
+  `data-cannot-import-client-layers`, and `actions-cannot-import-client-layers`.
+- Public DAL functions obtain the caller identity and accept no caller-supplied
+  UID; Server Actions remain thin and delegate data access to the DAL.
+
+Source: [Coding Standards, sections 2 and 9](./CODING_STANDARDS.md).
+
+## 6. Security
 
 - Never commit secrets, credentials, tokens, or service-account files. Local
   secrets belong in ignored files such as `.env.local`.
@@ -101,7 +112,7 @@ Sources: [CODING_STANDARDS.md](./CODING_STANDARDS.md),
 
 Source: [SECURITY.md](./SECURITY.md).
 
-## 6. Verification and CI
+## 7. Verification and CI
 
 - During iteration run `pnpm run verify:changed`. Before delivery run
   `pnpm run verify:fast`.
@@ -129,7 +140,7 @@ at the limit, stop and report to the human.
 Sources: [AGENTS.md](./AGENTS.md), [TESTING.md](./TESTING.md),
 [TOOLING.md](./TOOLING.md) sections 4 to 6.
 
-## 7. Internationalization
+## 8. Internationalization
 
 - No locale URL prefixes. The locale resolves from the `NEXT_LOCALE` cookie,
   then `Accept-Language`, then `en`.
@@ -139,7 +150,7 @@ Sources: [AGENTS.md](./AGENTS.md), [TESTING.md](./TESTING.md),
 
 Source: [ADR 0007](./docs/adr/0007-adopt-cookie-based-next-intl-with-firebase-sync.md).
 
-## 8. Repository hygiene
+## 9. Repository hygiene
 
 - English only for code, comments, docs, rules, skills, and commit messages,
   regardless of the conversation language.
@@ -155,7 +166,7 @@ Sources: [language](./.agents/rules/language.md),
 [path-portability](./.agents/rules/path-portability.md),
 [TOOLING.md](./TOOLING.md).
 
-## 9. Documentation ownership
+## 10. Documentation ownership
 
 | Concern | Owner |
 | --- | --- |
