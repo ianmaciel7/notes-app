@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const setLocalePreference = vi.hoisted(() => vi.fn(async () => undefined));
 
-vi.mock("@/lib/i18n/actions", () => ({ setLocalePreference }));
+vi.mock("@/actions/locale-actions", () => ({ setLocalePreference }));
 
 import {
   applyAuthLocale,

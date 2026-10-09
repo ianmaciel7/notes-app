@@ -21,24 +21,20 @@ export async function requireVerifiedUid(): Promise<string> {
     throw new SpaceDeletionError("unauthenticated");
   }
 
+  if (!hasValidUid(identity.uid)) {
+    throw new SpaceDeletionError("invalid-id");
+  }
+
   return identity.uid;
 }
 
-export function assertValidIds(
-  uid: string,
-  spaceId: string,
-  objectTypeId?: string,
-): void {
-  if (
-    !hasValidUid(uid) ||
-    !UUID_V4_PATTERN.test(spaceId) ||
-    (objectTypeId !== undefined && !UUID_V4_PATTERN.test(objectTypeId))
-  ) {
+function assertValidSpaceId(spaceId: string): void {
+  if (!UUID_V4_PATTERN.test(spaceId)) {
     throw new SpaceDeletionError("invalid-id");
   }
 }
 
-export async function getOwnedSpace(uid: string, spaceId: string) {
+async function getOwnedSpaceForVerifiedUid(uid: string, spaceId: string) {
   const space = getFirebaseAdminFirestore()
     .collection("users")
     .doc(uid)
@@ -58,13 +54,20 @@ export async function getOwnedSpace(uid: string, spaceId: string) {
 }
 
 /**
+ * Gets a Space only when the authenticated caller owns it.
+ */
+export async function getOwnedSpace(spaceId: string) {
+  const uid = await requireVerifiedUid();
+  assertValidSpaceId(spaceId);
+
+  return getOwnedSpaceForVerifiedUid(uid, spaceId);
+}
+
+/**
  * Deletes a Space and every nested document. Verifies the current identity,
  * then that this identity owns the Space.
  */
 export async function deleteSpaceTree(spaceId: string): Promise<void> {
-  const uid = await requireVerifiedUid();
-  assertValidIds(uid, spaceId);
-
-  const space = await getOwnedSpace(uid, spaceId);
+  const space = await getOwnedSpace(spaceId);
   await getFirebaseAdminFirestore().recursiveDelete(space);
 }

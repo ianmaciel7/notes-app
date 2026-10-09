@@ -2,9 +2,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   refresh: vi.fn(),
-  getCurrentIdentity: vi.fn(async (): Promise<{ uid: string } | null> => null),
-  readProfileLocale: vi.fn(async (): Promise<string | null> => null),
-  writeProfileLocale: vi.fn(async () => undefined),
+  writeProfileLocale: vi.fn(async (_locale: string) => false),
+  syncProfileLocale: vi.fn(
+    async (_locale: string | null): Promise<string | null> => null,
+  ),
   getCookie: vi.fn((): { value: string } | undefined => undefined),
   setCookie: vi.fn(),
 }));
@@ -13,21 +14,21 @@ vi.mock("next/cache", () => ({ refresh: mocks.refresh }));
 vi.mock("next/headers", () => ({
   cookies: async () => ({ get: mocks.getCookie, set: mocks.setCookie }),
 }));
-vi.mock("@/lib/firebase/identity", () => ({
-  getCurrentIdentity: mocks.getCurrentIdentity,
-}));
-vi.mock("@/lib/i18n/profile-preference", () => ({
-  readProfileLocale: mocks.readProfileLocale,
+vi.mock("@/data/locale-dal", () => ({
   writeProfileLocale: mocks.writeProfileLocale,
+  syncProfileLocale: mocks.syncProfileLocale,
 }));
 
-import { setLocalePreference, syncLocalePreference } from "@/lib/i18n/actions";
+import {
+  setLocalePreference,
+  syncLocalePreference,
+} from "@/actions/locale-actions";
 
 describe("locale preference server actions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mocks.getCurrentIdentity.mockResolvedValue(null);
-    mocks.readProfileLocale.mockResolvedValue(null);
+    mocks.writeProfileLocale.mockResolvedValue(false);
+    mocks.syncProfileLocale.mockResolvedValue(null);
     mocks.getCookie.mockReturnValue(undefined);
   });
 
@@ -39,7 +40,7 @@ describe("locale preference server actions", () => {
 
   it("saves guest choices only in the explicit cookie", async () => {
     await setLocalePreference("pt-BR");
-    expect(mocks.writeProfileLocale).not.toHaveBeenCalled();
+    expect(mocks.writeProfileLocale).toHaveBeenCalledWith("pt-BR");
     expect(mocks.setCookie).toHaveBeenCalledWith(
       "NEXT_LOCALE",
       "pt-BR",
@@ -48,10 +49,10 @@ describe("locale preference server actions", () => {
     expect(mocks.refresh).toHaveBeenCalledOnce();
   });
 
-  it("persists authenticated choices under the verified identity", async () => {
-    mocks.getCurrentIdentity.mockResolvedValue({ uid: "user-a" });
+  it("hands the choice to the Data Access Layer, which verifies the identity", async () => {
+    mocks.writeProfileLocale.mockResolvedValue(true);
     await setLocalePreference("es");
-    expect(mocks.writeProfileLocale).toHaveBeenCalledWith("user-a", "es");
+    expect(mocks.writeProfileLocale).toHaveBeenCalledWith("es");
     expect(mocks.setCookie).toHaveBeenCalledWith(
       "NEXT_LOCALE",
       "es",
@@ -60,10 +61,10 @@ describe("locale preference server actions", () => {
   });
 
   it("overrides the browser cookie with the signed-in user's profile", async () => {
-    mocks.getCurrentIdentity.mockResolvedValue({ uid: "user-b" });
-    mocks.readProfileLocale.mockResolvedValue("pt-BR");
+    mocks.syncProfileLocale.mockResolvedValue("pt-BR");
     await expect(syncLocalePreference()).resolves.toBe("pt-BR");
-    expect(mocks.readProfileLocale).toHaveBeenCalledWith("user-b");
+    expect(mocks.syncProfileLocale).toHaveBeenCalledOnce();
+    expect(mocks.syncProfileLocale).toHaveBeenCalledWith(null);
     expect(mocks.setCookie).toHaveBeenCalledWith(
       "NEXT_LOCALE",
       "pt-BR",
@@ -72,21 +73,26 @@ describe("locale preference server actions", () => {
   });
 
   it("migrates an explicit guest choice on first login", async () => {
-    mocks.getCurrentIdentity.mockResolvedValue({ uid: "user-c" });
     mocks.getCookie.mockReturnValue({ value: "es" });
+    mocks.syncProfileLocale.mockResolvedValue("es");
     await expect(syncLocalePreference()).resolves.toBe("es");
-    expect(mocks.writeProfileLocale).toHaveBeenCalledWith("user-c", "es");
+    expect(mocks.syncProfileLocale).toHaveBeenCalledOnce();
+    expect(mocks.syncProfileLocale).toHaveBeenCalledWith("es");
   });
 
   it("never persists automatically negotiated locales", async () => {
-    mocks.getCurrentIdentity.mockResolvedValue({ uid: "user-d" });
     await expect(syncLocalePreference()).resolves.toBeNull();
+    expect(mocks.syncProfileLocale).toHaveBeenCalledOnce();
+    expect(mocks.syncProfileLocale).toHaveBeenCalledWith(null);
     expect(mocks.writeProfileLocale).not.toHaveBeenCalled();
     expect(mocks.setCookie).not.toHaveBeenCalled();
   });
 
-  it("does not fetch any profile for anonymous visitors", async () => {
+  it("does not save a cookie for a guest with an explicit locale", async () => {
+    mocks.getCookie.mockReturnValue({ value: "es" });
     await expect(syncLocalePreference()).resolves.toBeNull();
-    expect(mocks.readProfileLocale).not.toHaveBeenCalled();
+    expect(mocks.syncProfileLocale).toHaveBeenCalledOnce();
+    expect(mocks.syncProfileLocale).toHaveBeenCalledWith("es");
+    expect(mocks.setCookie).not.toHaveBeenCalled();
   });
 });

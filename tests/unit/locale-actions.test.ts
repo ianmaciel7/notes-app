@@ -9,15 +9,12 @@ vi.mock("next/headers", () => ({
   cookies: vi.fn(async () => mocks.cookieStore),
 }));
 vi.mock("next/cache", () => ({ refresh: mocks.refresh }));
-vi.mock("@/lib/firebase/identity", () => ({
-  getCurrentIdentity: vi.fn(async () => null),
-}));
-vi.mock("@/lib/i18n/profile-preference", () => ({
+vi.mock("@/data/locale-dal", () => ({
   writeProfileLocale: vi.fn(),
-  readProfileLocale: vi.fn(),
+  syncProfileLocale: vi.fn(),
 }));
 
-import { setLocalePreference } from "@/lib/i18n/actions";
+import { setLocalePreference } from "@/actions/locale-actions";
 
 describe("setLocalePreference", () => {
   beforeEach(() => {

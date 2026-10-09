@@ -35,7 +35,7 @@ vi.mock("next-intl", () => ({
   useLocale: () => mocks.locale,
   useTranslations: () => (key: string) => key,
 }));
-vi.mock("@/lib/i18n/actions", () => ({
+vi.mock("@/actions/locale-actions", () => ({
   syncLocalePreference: vi.fn(async () => null),
 }));
 

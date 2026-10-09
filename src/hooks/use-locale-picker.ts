@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
-import { setLocalePreference } from "@/lib/i18n/actions";
+import { setLocalePreference } from "@/actions/locale-actions";
 import { isSupportedLocale } from "@/lib/i18n/config";
 
 export function useLocalePicker() {

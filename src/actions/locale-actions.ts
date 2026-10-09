@@ -2,16 +2,12 @@
 
 import { refresh } from "next/cache";
 import { cookies } from "next/headers";
-import { getCurrentIdentity } from "@/lib/firebase/identity";
+import { syncProfileLocale, writeProfileLocale } from "@/data/locale-dal";
 import {
   isSupportedLocale,
   LOCALE_COOKIE_NAME,
   type Locale,
 } from "@/lib/i18n/config";
-import {
-  readProfileLocale,
-  writeProfileLocale,
-} from "@/lib/i18n/profile-preference";
 
 async function saveLocaleCookie(locale: Locale) {
   const cookieStore = await cookies();
@@ -30,34 +26,24 @@ export async function setLocalePreference(locale: string): Promise<void> {
     throw new Error("Unsupported locale.");
   }
 
-  const identity = await getCurrentIdentity();
-  if (identity) {
-    await writeProfileLocale(identity.uid, locale);
-  }
-
+  await writeProfileLocale(locale);
   await saveLocaleCookie(locale);
 }
 
 /** Called once after login exchanges an ID token for a verified cookie. */
 export async function syncLocalePreference(): Promise<Locale | null> {
-  const identity = await getCurrentIdentity();
-  if (!identity) {
+  const explicitCookie = (await cookies()).get(LOCALE_COOKIE_NAME)?.value;
+  const stored = await syncProfileLocale(
+    isSupportedLocale(explicitCookie) ? explicitCookie : null,
+  );
+  if (!stored) {
+    // Never save browser auto-detection as a user's explicit preference.
     return null;
   }
 
-  const stored = await readProfileLocale(identity.uid);
-  if (stored) {
+  if (stored !== explicitCookie) {
     await saveLocaleCookie(stored);
-    return stored;
   }
 
-  // A guest's explicit selection can become the initial profile preference.
-  const explicitCookie = (await cookies()).get(LOCALE_COOKIE_NAME)?.value;
-  if (isSupportedLocale(explicitCookie)) {
-    await writeProfileLocale(identity.uid, explicitCookie);
-    return explicitCookie;
-  }
-
-  // Never save browser auto-detection as a user's explicit preference.
-  return null;
+  return stored;
 }

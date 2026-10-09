@@ -1,5 +1,5 @@
 import type { Auth } from "firebase/auth";
-import { setLocalePreference } from "@/lib/i18n/actions";
+import { setLocalePreference } from "@/actions/locale-actions";
 import {
   defaultLocale,
   isSupportedLocale,

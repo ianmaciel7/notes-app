@@ -101,7 +101,7 @@ module.exports = {
         path: "^src/domain/",
       },
       to: {
-        path: "^(src/(app|actions|client|data|components|hooks|lib)/|node_modules/(firebase|firebase-admin|@firebase|@google-cloud)/)",
+        path: "^(src/(app|actions|client|data|components|hooks|lib)/|node_modules/(firebase|firebase-admin|@firebase/[^/]+|@google-cloud/[^/]+)/|node_modules/[.]pnpm/[^/]+/node_modules/(firebase|firebase-admin|@firebase/[^/]+|@google-cloud/[^/]+)/)",
       },
     },
     {
@@ -113,7 +113,7 @@ module.exports = {
         path: "^src/client/",
       },
       to: {
-        path: "^(src/data/|src/app/|node_modules/firebase-admin/)",
+        path: "^(src/data/|src/app/|node_modules/firebase-admin/|node_modules/[.]pnpm/[^/]+/node_modules/firebase-admin/)",
       },
     },
     {

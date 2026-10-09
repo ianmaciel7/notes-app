@@ -9,10 +9,10 @@ import { onAuthStateChanged, type User } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import { syncLocalePreference } from "@/actions/locale-actions";
 import { getFirebaseClient } from "@/lib/firebase/client";
 import { isProtectedPath } from "@/lib/firebase/session";
 import { createServerSession } from "@/lib/firebase/session-client";
-import { syncLocalePreference } from "@/lib/i18n/actions";
 import { applyAuthLocale } from "@/lib/i18n/client";
 import type { Locale } from "@/lib/i18n/config";
 
