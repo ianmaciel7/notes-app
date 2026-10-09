@@ -51,6 +51,10 @@ export type SpaceDeletionErrorCode =
   | "not-found"
   | "unauthenticated";
 
+/** Lowercase UUID v4 identifiers used for Spaces and Object Types. */
+const UUID_V4_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+
 /**
  * The only thing a deletion Server Action sends to the client: no records, no
  * identity, just the outcome (DTO, Next.js data security guide).
@@ -66,5 +70,19 @@ export class SpaceDeletionError extends Error {
     super(`Space deletion failed: ${code}.`);
     this.name = "SpaceDeletionError";
     this.code = code;
+  }
+}
+
+/** Rejects caller identities which cannot safely form an owner-scoped path. */
+export function assertValidSpaceOwnerId(uid: string): void {
+  if (typeof uid !== "string" || uid.trim().length === 0 || uid.includes("/")) {
+    throw new SpaceDeletionError("invalid-id");
+  }
+}
+
+/** Rejects any Space or Object Type identifier that is not a lowercase UUID v4. */
+export function assertValidSpaceDeletionIds(...ids: string[]): void {
+  if (!ids.every((id) => UUID_V4_PATTERN.test(id))) {
+    throw new SpaceDeletionError("invalid-id");
   }
 }

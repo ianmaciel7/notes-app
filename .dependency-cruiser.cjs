@@ -129,6 +129,29 @@ module.exports = {
       },
     },
     {
+      name: "data-not-importable-by-browser-layers",
+      severity: "error",
+      comment:
+        "Browser-capable layers must not import the server-only Data Access Layer; only src/app and src/actions may depend on it.",
+      from: {
+        path: "^src/(components|hooks|client|domain|lib)/",
+      },
+      to: {
+        path: "^src/data/",
+      },
+    },
+    {
+      name: "data-files-must-be-dal",
+      severity: "error",
+      comment:
+        "The server-only Data Access Layer contains only *-dal.ts modules.",
+      from: {
+        path: "^src/data/.*",
+        pathNot: "^src/data/.*-dal[.]ts$",
+      },
+      to: {},
+    },
+    {
       name: "actions-cannot-import-client-layers",
       severity: "error",
       comment:
