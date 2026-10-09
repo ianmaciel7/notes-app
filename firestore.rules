@@ -36,7 +36,7 @@ service cloud.firestore {
             && data.updatedAt is timestamp;
         }
 
-        allow get, list, delete: if isOwner();
+        allow get, list: if isOwner();
 
         allow create: if isOwner()
           && spaceId.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$')
@@ -54,6 +54,57 @@ service cloud.firestore {
           && request.resource.data.stateVersion
             == resource.data.stateVersion + 1
           && request.resource.data.updatedAt == request.time;
+
+        // Object Types (ADR 0011): path-based single-owner access.
+        match /objectTypes/{objectTypeId} {
+          function hasValidShape(data) {
+            return data.keys().hasAll([
+                'name', 'pluralName', 'parentTypeId', 'schemaVersion',
+                'stateVersion', 'propertyDefinitions', 'createdAt', 'updatedAt'
+              ])
+              && data.keys().hasOnly([
+                'name', 'pluralName', 'description', 'parentTypeId',
+                'schemaVersion', 'stateVersion', 'propertyDefinitions',
+                'createdAt', 'updatedAt'
+              ])
+              && data.name is string
+              && data.name.size() >= 1 && data.name.size() <= 80
+              && data.pluralName is string
+              && data.pluralName.size() >= 1 && data.pluralName.size() <= 80
+              && data.get('description', '') is string
+              && data.get('description', '').size() <= 500
+              && data.parentTypeId == null
+              && data.schemaVersion is int
+              && data.stateVersion is int
+              // Rules cannot iterate map values, so property entries are not
+              // validated here. Inheritance remains a trusted-backend concern.
+              && data.propertyDefinitions is map
+              && data.propertyDefinitions.size() <= 100
+              && data.createdAt is timestamp
+              && data.updatedAt is timestamp;
+          }
+
+          allow get, list: if isOwner();
+
+          allow create: if isOwner()
+            && objectTypeId.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$')
+            && hasValidShape(request.resource.data)
+            && request.resource.data.schemaVersion == 1
+            && request.resource.data.stateVersion == 1
+            && request.resource.data.createdAt == request.time
+            && request.resource.data.updatedAt == request.time;
+
+          allow update: if isOwner()
+            && hasValidShape(request.resource.data)
+            && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly([
+                'name', 'pluralName', 'description', 'propertyDefinitions',
+                'stateVersion', 'updatedAt'
+              ])
+            && request.resource.data.stateVersion
+              == resource.data.stateVersion + 1
+            && request.resource.data.updatedAt == request.time;
+        }
       }
     }
 

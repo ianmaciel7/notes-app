@@ -51,8 +51,8 @@ both `create` and `update`. Because `description` may be absent, the helper
 reads it with `data.get('description', default)`; reading a missing field
 directly errors and denies the write.
 
-**Rules.** Separate `get`, `list`, `create`, `update` and `delete` for the
-exact path only; everything else stays denied. `users/{uid}` keeps
+**Rules.** Separate `get`, `list`, `create`, and `update` for the exact path
+only; client `delete` is denied. Everything else stays denied. `users/{uid}` keeps
 `write: false`. Update uses an allowlist
 (`diff().affectedKeys().hasOnly(['name','description','icon','stateVersion','updatedAt'])`),
 so `id`, `ownerId` and `createdAt` are immutable. `createdAt` and `updatedAt`
@@ -68,8 +68,9 @@ from the server, so nothing is lost silently.
 **Client.** One file, `src/lib/firebase/spaces.ts`: types, hand-written
 document parsing (no schema library), `createSpace`, `getSpace`, `listSpaces`
 (ordered by `createdAt`), `updateSpace`, `deleteSpace` and `subscribeToSpaces`
-(`onSnapshot`). It uses the internal `getDb()`; `db` is not exported. Delete is
-a hard delete with no per-user limit. Each subscriber owns its unsubscribe
+(`onSnapshot`). It uses the internal `getDb()`; `db` is not exported.
+`deleteSpace` calls the server-side deletion action from ADR 0011 rather than
+deleting through the browser client. Each subscriber owns its unsubscribe
 function; `clearFirestoreCache()` calls `terminate`, which also stops the
 listeners of that instance.
 
@@ -115,15 +116,16 @@ least-privilege IAM.
   of treating the user as signed out of the cache.
 - A stale `stateVersion` can also come from another tab of the same user, not
   only from offline edits. The same conflict path handles both.
-- Deleting a Space does not cascade. The ADR that introduces child data must
-  define cascade behavior.
+- Client Space delete is revoked. [ADR 0011](./0011-adopt-object-type-foundation-in-firestore.md)
+  provides server-side, ownership-checked recursive deletion through the Admin
+  SDK, so deleting a Space cascades to nested Firestore documents.
 
 ## Verification
 
 - [x] Rules tests with `@firebase/rules-unit-testing`: signed-in owner, other
   user, unauthenticated, forged `ownerId` or `id`, unknown or invalid fields,
-  immutable fields, allowed-field update, wrong `stateVersion`, delete own
-  versus other, and a `spaceId` that is not a lowercase UUID v4 (non-UUID,
+  immutable fields, allowed-field update, wrong `stateVersion`, denied client
+  delete, and a `spaceId` that is not a lowercase UUID v4 (non-UUID,
   uppercase and non-v4 UUIDs are rejected).
 - [x] Emulator tests for CRUD, queries, `onSnapshot` and permission errors.
 - [x] Offline create and stale offline update, in Node against the emulator.

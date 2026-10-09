@@ -23,11 +23,16 @@ import {
 } from "vitest";
 
 const holder = vi.hoisted(() => ({ db: undefined as Firestore | undefined }));
+const deleteSpaceAction = vi.hoisted(() => vi.fn());
 
 vi.mock("@/lib/firebase/firestore", () => ({ getDb: () => holder.db }));
+vi.mock("@/lib/firebase/space-deletion-actions", () => ({
+  deleteSpaceAction,
+}));
 
 import {
   createSpace,
+  deleteSpace,
   getSpace,
   SpaceConflictError,
   subscribeToSpaces,
@@ -66,6 +71,14 @@ beforeEach(async () => {
 });
 
 describe("spaces offline behavior", () => {
+  it("delegates deletion to the server action", async () => {
+    deleteSpaceAction.mockResolvedValue({ ok: true });
+
+    await deleteSpace("space-id");
+
+    expect(deleteSpaceAction).toHaveBeenCalledWith("space-id");
+  });
+
   it("shows an offline create locally, then syncs it after reconnecting", async () => {
     const seen: string[][] = [];
     const unsubscribe = subscribeToSpaces(

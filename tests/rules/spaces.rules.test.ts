@@ -70,14 +70,14 @@ beforeEach(async () => {
 });
 
 describe("spaces rules: access", () => {
-  it("lets the owner create, get, list and delete their own Space", async () => {
+  it("lets the owner create, get and list their own Space, but not delete it", async () => {
     const db = aliceDb();
     const ref = doc(db, `users/alice/spaces/${SPACE_ID}`);
 
     await assertSucceeds(setDoc(ref, newSpace("alice", SPACE_ID)));
     await assertSucceeds(getDoc(ref));
     await assertSucceeds(getDocs(collection(db, "users/alice/spaces")));
-    await assertSucceeds(deleteDoc(ref));
+    await assertFails(deleteDoc(ref));
   });
 
   it("denies unauthenticated clients everything", async () => {

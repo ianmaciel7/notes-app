@@ -68,6 +68,18 @@ A generic first-class entity in the broader planned knowledge model.
 **Object Type**  
 A schema describing the structure of a category of objects.
 
+**Property Definition**  
+A declaration, owned by one Object Type, of a property its Objects may carry:
+its name, the kind of value it holds and whether it is required.
+
+**Property Value**  
+The value an Object holds for one Property Definition of its Object Type.
+
+**Object Type Inheritance**  
+The specialization of an Object Type by exactly one parent Object Type, so the
+child includes the Property Definitions of its ancestors. An Object Type has at
+most one parent.
+
 **Page**  
 A free-form content surface.
 

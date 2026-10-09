@@ -94,5 +94,11 @@ Exception: the Space collection (`/users/{uid}/spaces/{spaceId}`) is decided and
 implemented; see
 [ADR 0010](./docs/adr/0010-adopt-owner-scoped-spaces-in-firestore.md).
 
+Exception: the Object Type path (`/users/{uid}/spaces/{spaceId}/objectTypes/{objectTypeId}`)
+and document contract are documented in
+[ADR 0011](./docs/adr/0011-adopt-object-type-foundation-in-firestore.md). Rules,
+server-side deletion, and pure domain code exist, but no Object Type data or
+runtime write path for non-null parents exists.
+
 The persistence design for everything else should be chosen when the assessment MVP requirements
 are concrete enough to justify it.

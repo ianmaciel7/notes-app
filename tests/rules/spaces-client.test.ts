@@ -15,9 +15,14 @@ import {
 } from "vitest";
 
 const holder = vi.hoisted(() => ({ db: undefined as Firestore | undefined }));
+const deleteSpaceAction = vi.hoisted(() => vi.fn());
 
 vi.mock("@/lib/firebase/firestore", () => ({
   getDb: () => holder.db,
+}));
+
+vi.mock("@/lib/firebase/space-deletion-actions", () => ({
+  deleteSpaceAction,
 }));
 
 import {
@@ -119,12 +124,14 @@ describe("spaces client", () => {
     });
   });
 
-  it("deletes a Space", async () => {
+  it("deletes a Space through the server action", async () => {
     const space = await created();
+    deleteSpaceAction.mockResolvedValue({ ok: true });
 
-    await deleteSpace("alice", space.id);
+    await deleteSpace(space.id);
 
-    expect(await getSpace("alice", space.id)).toBeNull();
+    expect(deleteSpaceAction).toHaveBeenCalledWith(space.id);
+    expect(await getSpace("alice", space.id)).toMatchObject({ id: space.id });
   });
 
   it("streams Space changes and unsubscribes", async () => {

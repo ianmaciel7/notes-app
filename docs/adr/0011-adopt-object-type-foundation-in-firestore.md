@@ -1,0 +1,232 @@
+# ADR 0011: Adopt the Object Type Foundation in Firestore
+
+## Status
+
+Accepted
+
+## Implementation
+
+Partially implemented. Firestore Rules permit owner-scoped root Object Type
+reads, creates, and updates; server-side deletion is available; and a pure
+domain layer validates and resolves Object Type documents. There is no runtime
+write path for a non-null parent, so inheritance is not operationally
+supported.
+
+## Date
+
+2026-10-09
+
+## Current State (2026-10-09)
+
+Configured and delivered:
+
+- `firestore.rules` defines owner-only `get`, `list`, `create`, and `update`
+  access at `/users/{uid}/spaces/{spaceId}/objectTypes/{objectTypeId}`. Create
+  requires a lowercase UUID v4 document ID, the closed document shape,
+  `parentTypeId == null`, `schemaVersion == 1`, `stateVersion == 1`, and
+  server timestamps. The rules limit `propertyDefinitions` to a map of at most
+  100 entries but cannot validate its entries. Updates permit only `name`,
+  `pluralName`, `description`, `propertyDefinitions`, `stateVersion`, and
+  `updatedAt`; `stateVersion` must increase by one. There is no client
+  `delete` permission.
+- `src/lib/firebase/space-deletion.ts` deletes an owned Space with the Admin
+  SDK's `recursiveDelete`, and deletes an Object Type only after confirming
+  that it has no direct children. `src/lib/firebase/space-deletion-actions.ts`
+  verifies the current identity before calling that boundary. `deleteSpace` in
+  `src/lib/firebase/spaces.ts` calls the Space deletion Server Action, and
+  client Space deletion is denied by `firestore.rules`.
+- `src/lib/object-types/object-type.ts` parses persisted Object Type documents
+  without an SDK dependency. `src/lib/object-types/resolve-schema.ts` provides
+  `resolveEffectiveSchema` and `validateParentChange`, including checks for
+  missing types and parents, self-parenting, cycles, duplicate keys and
+  property IDs, and a maximum inheritance depth. These pure functions are not
+  called by a runtime read or write path.
+- The rules, deletion, Space client, and pure-domain tests listed in
+  Verification cover the delivered behavior. No Object Type data is seeded or
+  otherwise persisted by the application.
+
+Planned, not implemented:
+
+- A Server Action, Route Handler, or other write path that creates or updates
+  an Object Type with a non-null `parentTypeId`.
+- Operational inheritance. A trusted backend must call
+  `validateParentChange` and `resolveEffectiveSchema` before it writes a
+  non-null parent reference.
+- An Objects collection and the corresponding objects-in-use deletion check.
+- System Types, their collection, and a convention for cross-path system-type
+  references.
+
+## Context
+
+[`DER.md`](../../DER.md) forbids collection paths, rules, or a generalized
+object graph without an approved ADR. Object Types, Property Definitions, and
+inheritance are planned ([`GLOSSARY.md`](../../GLOSSARY.md)). This ADR fixes
+the Object Type path, identity, document contract, access rules, and deletion
+boundary without claiming that inherited types are usable. The original brief
+placed types at `spaces/{spaceId}/objectTypes`, but Spaces live under
+`/users/{uid}` ([ADR 0010](./0010-adopt-owner-scoped-spaces-in-firestore.md)),
+so that path was rejected.
+
+## Decision
+
+**Path.** `/users/{uid}/spaces/{spaceId}/objectTypes/{objectTypeId}`. Ownership
+comes from the path (`request.auth.uid == uid`), as in ADR 0010: Object Type
+documents do not duplicate `ownerId`, `spaceId`, or `id`. A future `objects`
+nested collection is anticipated but not designed.
+
+**Identity.** `objectTypeId` is a client-generated UUID v4, the same convention
+as Spaces. The rules require its lowercase UUID v4 representation. The
+document ID is immutable; names are editable and independent of identity. A
+semantic `key` belongs to a Property Definition, never to the Object Type
+document ID. No reserved system IDs are defined. The Firestore automatic ID and
+UUID v7 were considered: automatic IDs would split the convention from Spaces
+and need a generated ID offline; UUID v7 is time-ordered, which the Firestore
+best practices advise against for document IDs. Firestore ID limits apply (no
+`/`, not `.` or `..`, not `__.*__`, at most 1,500 bytes); a UUID satisfies
+them.
+
+**Document contract.** The Rules enforce these fields and constraints for
+client-created root types:
+
+| Field | Notes |
+| --- | --- |
+| `name`, `pluralName` | Required strings, each 1 to 80 characters |
+| `description` | Optional string, at most 500 characters |
+| `parentTypeId` | Required and currently must be `null` for client writes |
+| `schemaVersion` | Required integer; `1` on create and immutable thereafter |
+| `stateVersion` | Required integer; `1` on create and exactly `+1` per update |
+| `propertyDefinitions` | Required map of own definitions; at most 100 entries in Rules |
+| `createdAt`, `updatedAt` | Required server timestamps; `createdAt` is immutable |
+
+The pure parser expects a property definition to contain `key`, `name`,
+`valueType`, and `required`, and accepts the logical value types `text`,
+`richText`, `number`, `boolean`, `date`, `dateTime`, `select`, `multiSelect`,
+`reference`, `relation`, `url`, `file`, and `computed`. Rules cannot iterate
+map values, so their entry shapes are deliberately not validated in Rules.
+
+**Logical versus physical types.** `valueType` is a logical application type.
+Firestore stores `string`, `number`, `boolean`, `timestamp`, `map`, `array` and
+`reference`. Indicative mapping: `text`, `richText`, `url` to `string`; `date`
+and `dateTime` to `timestamp`; `multiSelect` to `array`; `number` and
+`boolean` to themselves; `reference`, `relation`, `select`, `file` and
+`computed` are not mapped yet. No renderer, calculation or specialized
+validation exists. Extensions outside the contract: property `description`,
+`defaultValue`, `multiple`, `validation`, `readonly`. Policy target of about
+100 own properties per type (the Rules enforce this size limit).
+
+**Storing property definitions.** A map inside the type document, keyed by
+stable property id (the id is the key and is not repeated in the value). An
+array cannot update or address one element by key without rewriting the whole
+field; a nested collection multiplies reads, rules and deletion work and is
+justified only if properties must be queried individually, which no
+requirement says. A document can hold 1 MiB and map or array nesting is
+limited to 20 levels; about 100 small definitions are far below both. Fields
+are indexed automatically, so indexing exemptions on `propertyDefinitions` are
+to be evaluated when real data exists.
+
+**Versions.** Three things are distinguished: the persisted document format
+version (`schemaVersion`, the only one that exists, fixed at 1), the Object
+Type definition version, and the schema version an instance was written under.
+The last two belong to future instances and are not implemented. Migrations
+will read `schemaVersion`; none are written.
+
+**Inheritance.** The domain contract is single inheritance through
+`parentTypeId`; only own properties are persisted, and an effective schema is
+not materialized. `resolveEffectiveSchema` resolves ancestors before descendants
+and rejects invalid chains or duplicate property IDs and keys.
+`validateParentChange` validates a proposed parent relationship. These helpers
+are pure and not wired to a write path. Therefore, inheritance is not
+operationally supported: clients can create only root types, and a trusted
+backend must call both helpers before writing a non-null parent reference.
+
+Known limitation: if a future trusted backend writes a non-null
+`parentTypeId`, the current client update rules reject every subsequent client
+update of that document because their shape check requires `parentTypeId ==
+null`. That backend must provide the necessary update path or the Rules must be
+revised with the inheritance write design.
+
+**Authorization and Rules policy.** Path ownership is the only authorization
+model. There are no roles, members, permissions, or Custom Claims. Custom
+Claims are set by a trusted server, travel in the ID token and are not a store
+for per-Space permissions, so they are not adopted. Authentication identifies
+the user; the path decides access. Permission changes propagate through the
+path model; sharing needs its own ADR. Google Cloud IAM is unchanged. Rules keep
+a closed shape, require server timestamps, and restrict updates with an
+affected-fields allowlist. Matches overlap permissively, so no recursive
+wildcard may be added under `/users/{uid}`, and Rules are not query filters:
+client queries must stay inside the owner's path. Rules must not walk
+hierarchies (document access calls per request are limited). Client delete is intentionally absent for both
+Object Types and Spaces. The Admin SDK bypasses Rules, so the server deletion
+boundary checks both the verified identity and the Space's stored owner.
+
+**System types.** A top-level system-types collection, readable by authenticated
+clients and writable only through the Admin SDK, remains planned. No Rules,
+collection, or cross-path reference convention is configured. Cross-path
+inheritance from a system type remains unresolved.
+
+**Indexes.** No index is needed or configured. Listing Object Types, lookup by
+ID, and the direct-child `parentTypeId` query use Firestore's automatic
+single-field indexes.
+
+**Deletion and integrity.** A client cannot delete a Space or an Object Type.
+`deleteSpaceTree` verifies ownership and uses Admin SDK `recursiveDelete` to
+remove the Space and every nested document. `deleteObjectType` verifies Space
+ownership, rejects a type with direct children, and recursively deletes a leaf
+type. The Objects collection does not exist, so an objects-in-use deletion
+check is deferred. The deletion boundary does not itself make interrupted
+recursive deletion resumable: a run interrupted midway leaves partial data and
+must be retried. Firestore does not delete nested collections with their
+parent, and its documentation advises deleting collections only from a trusted
+server; orphans are invisible to queries but remain stored.
+
+## Consequences
+
+- Root Object Types can be read, listed, created, and updated by their Space
+  owner under the enforced Rules contract; client deletes are denied.
+- Space deletion is server-side, checks identity and ownership, and cascades
+  through nested Firestore documents. Object Type deletion is likewise
+  server-side and is blocked by direct children.
+- Property-definition entry validation and all inheritance invariants remain a
+  trusted-backend responsibility for any future inherited write path.
+- No Object Type data, system-type collection, cross-path reference convention,
+  or Objects collection exists yet.
+- The non-null-parent client-update limitation must be addressed when a trusted
+  backend begins writing inherited Object Types.
+
+## Verification
+
+- [x] `tests/rules/object-types.rules.test.ts`: 21 cases cover owner and
+  non-owner access, root-type creation and update validation, immutable fields,
+  denied client delete, and unrelated path isolation against the Firestore
+  Emulator.
+- [x] `tests/rules/space-deletion.test.ts`: 9 cases cover recursive Space
+  deletion, ownership and ID validation, direct-child blocking, and leaf Object
+  Type deletion against the Firestore Emulator.
+- [x] `tests/rules/spaces.rules.test.ts` (25 cases),
+  `tests/rules/spaces-client.test.ts` (8 cases), and
+  `tests/rules/spaces-offline.test.ts` (3 cases) cover revoked client Space
+  delete and `deleteSpace` delegation alongside the existing Space behavior.
+- [x] `tests/unit/object-type-parse.test.ts` (11 cases),
+  `tests/unit/object-type-resolve-schema.test.ts` (12 cases), and
+  `tests/unit/space-deletion-actions.test.ts` (4 cases) cover the pure domain
+  helpers and Server Action identity and error handling.
+- [ ] A runtime write path for non-null `parentTypeId`, including trusted
+  inheritance validation and its authorization design.
+- [ ] Objects-in-use validation for Object Type deletion, pending an Objects
+  collection.
+
+## References
+
+- [Data model](https://firebase.google.com/docs/firestore/data-model)
+- [Structure data](https://firebase.google.com/docs/firestore/manage-data/structure-data)
+- [Quotas](https://firebase.google.com/docs/firestore/quotas)
+- [Best practices](https://firebase.google.com/docs/firestore/best-practices)
+- [Rules structure](https://firebase.google.com/docs/firestore/security/rules-structure)
+- [Rules conditions](https://firebase.google.com/docs/firestore/security/rules-conditions)
+- [Rules fields](https://firebase.google.com/docs/firestore/security/rules-fields)
+- [Secure queries](https://firebase.google.com/docs/firestore/security/rules-query)
+- [Custom claims](https://firebase.google.com/docs/auth/admin/custom-claims)
+- [IAM overview](https://firebase.google.com/docs/projects/iam/overview)
+- [Indexing](https://firebase.google.com/docs/firestore/query-data/indexing)
+- [Test rules with the emulator](https://firebase.google.com/docs/firestore/security/test-rules-emulator)
+- [Delete data](https://firebase.google.com/docs/firestore/manage-data/delete-data)

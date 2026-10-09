@@ -65,9 +65,10 @@ src/
     use-mobile.ts
     use-*.ts            # state/form logic extracted from src/components/notes-app/
   lib/
-    firebase/               # client, admin, server identity, session
+    firebase/               # client, admin, server identity, session, deletion
     i18n/                   # locale negotiation and client synchronization
       locale-lang-script.ts # pre-hydration locale synchronization script builder
+    object-types/           # pure Object Type parsing and schema resolution
     theme/                  # theme constants, parsing, and script builder
     utils.ts
 
@@ -102,11 +103,13 @@ authentication cards, forms, and dialogs built with project shadcn primitives
 `CODING_STANDARDS.md` section 4). The implemented authentication slice (ADR
 0005) uses the local Firebase Auth Emulator, a server-only session-verification
 boundary, public `(public)` sign-in routes, and the protected `(protected)`
-routes `/dashboard` and `/settings`. The browser Firestore base configuration (persistent multi-tab cache,
-emulator connection, cache cleanup on sign-out) exists in
-`src/lib/firebase/firestore.ts` (ADR 0008), but no feature reads or writes
-application data through it; a general client data layer and exam domain
-services remain unimplemented. A narrow **server-only**
+routes `/dashboard` and `/settings`. The browser Firestore base configuration
+(persistent multi-tab cache, emulator connection, cache cleanup on sign-out)
+exists in `src/lib/firebase/firestore.ts` (ADR 0008). The Space module supports
+owner-scoped Space reads and writes, while Space deletion is a narrow
+**server-only** Admin SDK boundary reached through a Server Action (ADR 0011).
+`src/lib/object-types/` contains pure parsing and inheritance-resolution logic,
+but no runtime path uses inherited Object Types. A narrow **server-only**
 Firestore Admin seam does persist signed-in user locale preferences to
 `users/{uid}.locale`, after verifying the Firebase session (ADR 0007).
 

@@ -1,7 +1,6 @@
 import {
   collection,
   type DocumentSnapshot,
-  deleteDoc,
   deleteField,
   doc,
   getDoc,
@@ -15,6 +14,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { getDb } from "@/lib/firebase/firestore";
+import { deleteSpaceAction } from "@/lib/firebase/space-deletion-actions";
 
 // Owner-scoped Spaces at /users/{uid}/spaces/{spaceId} (ADR 0010). The
 // Security Rules are the authorization boundary; this module only shapes data.
@@ -207,6 +207,9 @@ export async function updateSpace(
   }
 }
 
-export async function deleteSpace(uid: string, spaceId: string): Promise<void> {
-  await deleteDoc(doc(getDb(), spacesPath(uid), spaceId));
+export async function deleteSpace(spaceId: string): Promise<void> {
+  const result = await deleteSpaceAction(spaceId);
+  if (!result.ok) {
+    throw new Error(`Space deletion failed: ${result.code}.`);
+  }
 }

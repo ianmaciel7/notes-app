@@ -1,6 +1,10 @@
 import type { DocumentSnapshot } from "firebase/firestore";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { parseSpace } from "@/lib/firebase/spaces";
+
+vi.mock("@/lib/firebase/space-deletion-actions", () => ({
+  deleteSpaceAction: vi.fn(),
+}));
 
 const when = new Date("2026-10-09T10:00:00Z");
 const stamp = { toDate: () => when };
