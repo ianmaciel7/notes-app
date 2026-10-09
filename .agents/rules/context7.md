@@ -12,6 +12,9 @@ Enforce high-accuracy, token-efficient, and privacy-safe documentation queries u
   - Investigating third-party libraries, frameworks, SDKs, CLIs, and cloud services (e.g., Next.js 16, React 19, Tailwind CSS v4, Base UI, Biome, Vitest).
   - API signatures, configuration schemas, breaking changes, and version migration guides.
   - Library-specific error diagnosis or setup commands.
+  - Whenever the user asks to check, read, or confirm official documentation:
+    try Context7 first, and use web search or fetch only if Context7 has no
+    relevant result.
 - **DO NOT USE**:
   - Debugging project-specific business logic or internal repository modules.
   - General programming algorithms or vanilla language questions.
