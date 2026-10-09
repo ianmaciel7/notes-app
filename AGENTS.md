@@ -141,6 +141,15 @@ architecture violations; report them. See [TOOLING.md](./TOOLING.md) section 6.
    changes.
 7. Report residual risk explicitly.
 
+### Delegating implementation
+
+In Claude Code sessions, delegate implementation (code, tests, rules) to the
+Codex CLI with `codex exec` by default. Check `command -v codex` before
+treating it as unavailable. Claude keeps the design and interview, writes a
+self-contained brief (ADR path, files, constraints, verification commands),
+reviews the resulting diff, and runs the verification gates before reporting
+completion. Codex sessions implement directly and do not delegate again.
+
 ## Documentation sources of truth
 
 - Current architecture: `ARCHITECTURE.md`

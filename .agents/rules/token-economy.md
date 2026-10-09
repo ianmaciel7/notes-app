@@ -23,3 +23,8 @@ Enforce token-efficient code inspection, architecture discovery, and verificatio
 
 5. **Subagent Delegation for Deep Exploration**:
    - Delegate broad exploratory tasks or multi-directory searches to subagents (`research`) to keep the primary orchestrator context window concise.
+
+6. **Check Before Re-Deriving, Save After Deciding**:
+   - Before researching, designing or re-reading docs, look for an existing record: `GLOSSARY.md`, `docs/adr/`, `DER.md`, `ARCHITECTURE.md`, `docs/`, then agent memory. Reuse and link to it; do not re-derive a settled decision or repeat a finished investigation.
+   - When something important is settled or found (a decision, a non-obvious finding, a workaround, a rule), save it once through the `save` skill so the next session finds it instead of rebuilding it. Update the existing entry instead of adding a duplicate.
+   - Do not save what code, `git log` or library docs (Context7) already answer.
