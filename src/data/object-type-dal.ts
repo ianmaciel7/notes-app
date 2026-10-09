@@ -1,19 +1,23 @@
 import "server-only";
 
-import { assertValidIds, getOwnedSpace } from "@/data/space-dal";
+import {
+  assertValidIds,
+  getOwnedSpace,
+  requireVerifiedUid,
+} from "@/data/space-dal";
 import { SpaceDeletionError } from "@/domain/space";
 import { getFirebaseAdminFirestore } from "@/lib/firebase/admin";
 
 /**
- * Deletes an Object Type after checking the verified uid owns its Space.
+ * Deletes an Object Type after verifying the current identity owns its Space.
  * Objects-in-use validation is deferred because the objects collection does
  * not exist yet.
  */
 export async function deleteObjectType(
-  uid: string,
   spaceId: string,
   objectTypeId: string,
 ): Promise<void> {
+  const uid = await requireVerifiedUid();
   assertValidIds(uid, spaceId, objectTypeId);
 
   const space = await getOwnedSpace(uid, spaceId);

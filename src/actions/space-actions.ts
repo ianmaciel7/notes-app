@@ -2,30 +2,20 @@
 
 import { deleteObjectType } from "@/data/object-type-dal";
 import { deleteSpaceTree } from "@/data/space-dal";
-import {
-  SpaceDeletionError,
-  type SpaceDeletionErrorCode,
-} from "@/domain/space";
-import { getCurrentIdentity } from "@/lib/firebase/identity";
+import { SpaceDeletionError, type SpaceDeletionResult } from "@/domain/space";
 
-export type SpaceDeletionActionResult =
-  | { ok: true }
-  | { ok: false; code: SpaceDeletionErrorCode | "unauthenticated" };
+// Thin entry points: they validate argument types and delegate. The Data
+// Access Layer authenticates and authorizes (Next.js data security guide).
 
-function invalidResult(): SpaceDeletionActionResult {
+function invalidResult(): SpaceDeletionResult {
   return { ok: false, code: "invalid-id" };
 }
 
-async function withVerifiedIdentity(
-  operation: (uid: string) => Promise<void>,
-): Promise<SpaceDeletionActionResult> {
-  const identity = await getCurrentIdentity();
-  if (!identity) {
-    return { ok: false, code: "unauthenticated" };
-  }
-
+async function toResult(
+  operation: () => Promise<void>,
+): Promise<SpaceDeletionResult> {
   try {
-    await operation(identity.uid);
+    await operation();
     return { ok: true };
   } catch (error) {
     if (error instanceof SpaceDeletionError) {
@@ -37,23 +27,21 @@ async function withVerifiedIdentity(
 
 export async function deleteSpaceAction(
   spaceId: string,
-): Promise<SpaceDeletionActionResult> {
+): Promise<SpaceDeletionResult> {
   if (typeof spaceId !== "string") {
     return invalidResult();
   }
 
-  return withVerifiedIdentity((uid) => deleteSpaceTree(uid, spaceId));
+  return toResult(() => deleteSpaceTree(spaceId));
 }
 
 export async function deleteObjectTypeAction(
   spaceId: string,
   objectTypeId: string,
-): Promise<SpaceDeletionActionResult> {
+): Promise<SpaceDeletionResult> {
   if (typeof spaceId !== "string" || typeof objectTypeId !== "string") {
     return invalidResult();
   }
 
-  return withVerifiedIdentity((uid) =>
-    deleteObjectType(uid, spaceId, objectTypeId),
-  );
+  return toResult(() => deleteObjectType(spaceId, objectTypeId));
 }

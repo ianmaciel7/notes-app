@@ -32,8 +32,9 @@ Configured and delivered:
 - `src/data/space-dal.ts` deletes an owned Space with the Admin SDK's
   `recursiveDelete`, and `src/data/object-type-dal.ts` deletes an Object Type
   only after confirming that it has no direct children. Both are the
-  server-only Data Access Layer. `src/actions/space-actions.ts` verifies
-  the current identity before calling that layer. `deleteSpace` in
+  server-only Data Access Layer: each function verifies the current identity
+  itself and takes no uid argument. `src/actions/space-actions.ts` only checks
+  argument types, delegates, and returns a minimal result DTO. `deleteSpace` in
   `src/client/space-client.ts` calls the Space deletion Server Action, and
   client Space deletion is denied by `firestore.rules`.
 - `src/domain/object-type.ts` parses persisted Object Type documents without
@@ -173,8 +174,8 @@ Layer guidance (a `server-only` access layer behind thin Server Actions):
 | --- | --- | --- |
 | `src/domain/` | `space.ts`, `object-type.ts`, `object-type-inheritance.ts`: SDK-free types, errors, parsing, and inheritance rules | nothing else in `src/` and no Firebase SDK |
 | `src/client/` | `space-client.ts`: browser Firestore access | `src/domain/`, `src/lib/`, and the Server Actions in `src/actions/` |
-| `src/data/` | `space-dal.ts`, `object-type-dal.ts`: `server-only` Admin SDK access | `src/domain/` and `src/lib/` |
-| `src/actions/` | `space-actions.ts`: `"use server"`, verifies identity, delegates to `src/data/` | `src/data/`, `src/domain/`, and `src/lib/` |
+| `src/data/` | `space-dal.ts`, `object-type-dal.ts`: `server-only` Admin SDK access; authenticates and authorizes its caller | `src/domain/` and `src/lib/` |
+| `src/actions/` | `space-actions.ts`: `"use server"`, thin: validates argument types, delegates to `src/data/`, returns a DTO | `src/data/`, `src/domain/`, and `src/lib/` |
 
 The `domain/`, `client/`, `data/`, and `actions/` folders and the `-client`,
 `-dal`, and `-actions` file suffixes are project conventions, not Next.js,
@@ -187,6 +188,18 @@ The Dependency Cruiser rules `domain-is-pure`,
 `client-cannot-import-server-layers`, `data-cannot-import-client-layers`, and
 `actions-cannot-import-client-layers` enforce the table. The suffixes keep
 same-concept files distinguishable in tabs, search results, and imports.
+
+**Data Access Layer and DTOs.** This follows the Next.js data security guide.
+The Data Access Layer is `server-only`, performs authentication (the current
+identity from the session) and authorization (the Space's stored owner) inside
+each function, and never accepts a uid from its caller, so no caller can hand
+the Admin SDK an unverified uid. Server Actions stay thin and are not trusted
+for security. What reaches the client is a minimal DTO: `SpaceDeletionResult` in
+`src/domain/space.ts` is only `{ ok: true }` or `{ ok: false, code }`, never a
+record or an identity. Reads do not go through the server: the browser reads
+Spaces and Object Types directly through the Firestore SDK under the Rules, so
+there is no read DTO yet. A future server read must return a DTO from
+`src/data/` rather than a Firestore document.
 
 **Indexes.** No index is needed or configured. Listing Object Types, lookup by
 ID, and the direct-child `parentTypeId` query use Firestore's automatic
@@ -223,7 +236,7 @@ server; orphans are invisible to queries but remain stored.
   non-owner access, root-type creation and update validation, immutable fields,
   denied client delete, and unrelated path isolation against the Firestore
   Emulator.
-- [x] `tests/rules/space-deletion.rules.test.ts`: 9 cases cover recursive Space
+- [x] `tests/rules/space-deletion.rules.test.ts`: 10 cases cover recursive Space
   deletion, ownership and ID validation, direct-child blocking, and leaf Object
   Type deletion against the Firestore Emulator.
 - [x] `tests/rules/spaces.rules.test.ts` (25 cases),
@@ -233,7 +246,7 @@ server; orphans are invisible to queries but remain stored.
 - [x] `tests/unit/object-type-parse.test.ts` (11 cases),
   `tests/unit/object-type-inheritance.test.ts` (12 cases), and
   `tests/unit/space-actions.test.ts` (4 cases) cover the pure domain
-  helpers and Server Action identity and error handling.
+  helpers and Server Action delegation and error handling.
 - [ ] A runtime write path for non-null `parentTypeId`, including trusted
   inheritance validation and its authorization design.
 - [ ] Objects-in-use validation for Object Type deletion, pending an Objects

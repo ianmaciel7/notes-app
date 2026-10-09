@@ -10,7 +10,13 @@ import {
 } from "vitest";
 import { getFirebaseAdminFirestore } from "@/lib/firebase/admin";
 
+const identity = vi.hoisted(() => ({ uid: null as string | null }));
+
 vi.mock("server-only", () => ({}));
+vi.mock("@/lib/firebase/identity", () => ({
+  getCurrentIdentity: async () =>
+    identity.uid === null ? null : { email: null, uid: identity.uid },
+}));
 
 const PROJECT_ID = "demo-notes-app-space-deletion";
 const SPACE_ID = "0b9d72d1-2ca5-4df2-97f0-30e311eef4cb";
@@ -57,6 +63,20 @@ async function seedObjectType(
   await objectType(objectTypeId, parentTypeId).set({ parentTypeId });
 }
 
+async function deleteSpaceTreeAs(uid: string, spaceId: string) {
+  identity.uid = uid;
+  return spaceDal.deleteSpaceTree(spaceId);
+}
+
+async function deleteObjectTypeAs(
+  uid: string,
+  spaceId: string,
+  objectTypeId: string,
+) {
+  identity.uid = uid;
+  return objectTypeDal.deleteObjectType(spaceId, objectTypeId);
+}
+
 beforeAll(async () => {
   originalProjectId = process.env.FIREBASE_PROJECT_ID;
   vi.stubEnv("NODE_ENV", "production");
@@ -95,7 +115,7 @@ describe("space deletion", () => {
       .doc("title")
       .set({ key: "title" });
 
-    await spaceDal.deleteSpaceTree("alice", SPACE_ID);
+    await deleteSpaceTreeAs("alice", SPACE_ID);
 
     await expect(space().get()).resolves.toMatchObject({ exists: false });
     await expect(objectType(PARENT_TYPE_ID, null).get()).resolves.toMatchObject(
@@ -120,7 +140,7 @@ describe("space deletion", () => {
     await seedSpace("bob", OTHER_SPACE_ID, "alice");
 
     await expect(
-      spaceDal.deleteSpaceTree("bob", OTHER_SPACE_ID),
+      deleteSpaceTreeAs("bob", OTHER_SPACE_ID),
     ).rejects.toMatchObject({
       code: "forbidden",
     });
@@ -129,10 +149,18 @@ describe("space deletion", () => {
     });
   });
 
+  it("rejects an unauthenticated caller before touching Firestore", async () => {
+    await seedSpace();
+    identity.uid = null;
+
+    await expect(spaceDal.deleteSpaceTree(SPACE_ID)).rejects.toMatchObject({
+      code: "unauthenticated",
+    });
+    await expect(space().get()).resolves.toMatchObject({ exists: true });
+  });
+
   it("rejects a missing Space", async () => {
-    await expect(
-      spaceDal.deleteSpaceTree("alice", SPACE_ID),
-    ).rejects.toMatchObject({
+    await expect(deleteSpaceTreeAs("alice", SPACE_ID)).rejects.toMatchObject({
       code: "not-found",
     });
   });
@@ -143,7 +171,7 @@ describe("space deletion", () => {
     ["an invalid Object Type id", "alice", SPACE_ID, "not-a-uuid"],
   ])("rejects %s", async (_label, uid, spaceId, objectTypeId) => {
     await expect(
-      objectTypeDal.deleteObjectType(uid, spaceId, objectTypeId),
+      deleteObjectTypeAs(uid, spaceId, objectTypeId),
     ).rejects.toMatchObject({ code: "invalid-id" });
   });
 
@@ -153,7 +181,7 @@ describe("space deletion", () => {
     await seedObjectType(CHILD_TYPE_ID, PARENT_TYPE_ID);
 
     await expect(
-      objectTypeDal.deleteObjectType("alice", SPACE_ID, PARENT_TYPE_ID),
+      deleteObjectTypeAs("alice", SPACE_ID, PARENT_TYPE_ID),
     ).rejects.toMatchObject({ code: "has-descendants" });
     await expect(objectType(PARENT_TYPE_ID, null).get()).resolves.toMatchObject(
       {
@@ -166,7 +194,7 @@ describe("space deletion", () => {
     await seedSpace();
     await seedObjectType(PARENT_TYPE_ID, null);
 
-    await objectTypeDal.deleteObjectType("alice", SPACE_ID, PARENT_TYPE_ID);
+    await deleteObjectTypeAs("alice", SPACE_ID, PARENT_TYPE_ID);
 
     await expect(objectType(PARENT_TYPE_ID, null).get()).resolves.toMatchObject(
       {
@@ -180,8 +208,8 @@ describe("space deletion", () => {
     await seedObjectType(PARENT_TYPE_ID, null);
     await seedObjectType(CHILD_TYPE_ID, PARENT_TYPE_ID);
 
-    await objectTypeDal.deleteObjectType("alice", SPACE_ID, CHILD_TYPE_ID);
-    await objectTypeDal.deleteObjectType("alice", SPACE_ID, PARENT_TYPE_ID);
+    await deleteObjectTypeAs("alice", SPACE_ID, CHILD_TYPE_ID);
+    await deleteObjectTypeAs("alice", SPACE_ID, PARENT_TYPE_ID);
 
     await expect(objectType(PARENT_TYPE_ID, null).get()).resolves.toMatchObject(
       {

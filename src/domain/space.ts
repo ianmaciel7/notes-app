@@ -48,7 +48,16 @@ export type SpaceDeletionErrorCode =
   | "forbidden"
   | "has-descendants"
   | "invalid-id"
-  | "not-found";
+  | "not-found"
+  | "unauthenticated";
+
+/**
+ * The only thing a deletion Server Action sends to the client: no records, no
+ * identity, just the outcome (DTO, Next.js data security guide).
+ */
+export type SpaceDeletionResult =
+  | { ok: true }
+  | { ok: false; code: SpaceDeletionErrorCode };
 
 export class SpaceDeletionError extends Error {
   readonly code: SpaceDeletionErrorCode;

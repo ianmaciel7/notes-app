@@ -64,7 +64,7 @@ src/
   hooks/                # custom hooks (alias @/hooks), one use-*.ts(x) per hook
     use-mobile.ts
     use-*.ts            # state/form logic extracted from src/components/notes-app/
-  actions/              # thin Server Actions: verify identity, delegate to src/data
+  actions/              # thin Server Actions: validate arguments, delegate to src/data
     space-actions.ts
   domain/               # SDK-free domain rules (ADR 0011)
     space.ts            # Space types, conflict and deletion errors
@@ -72,7 +72,7 @@ src/
     object-type-inheritance.ts  # effective schema and parent validation
   client/               # browser Firestore access
     space-client.ts
-  data/                 # server-only Data Access Layer (Admin SDK)
+  data/                 # server-only DAL (Admin SDK): authenticates, authorizes, returns DTOs
     space-dal.ts
     object-type-dal.ts
   lib/

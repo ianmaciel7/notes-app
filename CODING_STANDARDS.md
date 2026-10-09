@@ -198,8 +198,10 @@ this. Component `.tsx` files under `src/` must be named as the kebab-case of
 their exported PascalCase component; a Vitest guard enforces this. SDK-free
 business rules for a domain concept live in `src/domain/`,
 browser Firestore access in `src/client/`, and the server-only Data Access
-Layer in `src/data/` (ADR 0011). Server Actions live in `src/actions/` and
-stay thin: they verify identity and delegate to `src/data/`.
+Layer in `src/data/` (ADR 0011). The Data Access Layer authenticates and
+authorizes inside each function, takes no uid from its caller, and returns
+minimal DTOs. Server Actions live in `src/actions/` and stay thin: they
+validate argument types and delegate to `src/data/`.
 
 Dependency Cruiser enforces graph rules on the source it currently cruises,
 including:
