@@ -23,6 +23,20 @@ Examples of current coverage (not an exhaustive file inventory):
 - `tests/unit/component-primitive-name-guard.test.ts`, backed by
   `component-primitive-name-guard-lib.ts`, for the guard that requires
   application component names to include an imported shadcn root primitive.
+- `tests/unit/data-layer-structure.test.ts`, backed by
+  `tests/unit/data-layer-structure-lib.ts` (TypeScript compiler API), for the
+  `src/data` structure guard. It scans every file in the real `src/data`
+  directory and also runs embedded fixtures: one conforming DAL file with
+  private helpers and one negative fixture per violation kind
+  (`invalid-file-name`, `missing-server-only-import`, `exported-variable`,
+  `exported-type`, `exported-class`, `exported-enum`,
+  `exported-non-async-function`, `re-export`, `default-export`, and
+  `exported-function-identity-parameter` for `uid`, `userId`, `ownerId`). It
+  checks file structure only; it does not exercise runtime DAL behavior,
+  authentication, authorization, or DTO shape, which stay with
+  `tests/unit/locale-dal.test.ts`-style tests and review. Its Dependency
+  Cruiser companions are `data-files-must-be-dal` and
+  `data-not-importable-by-browser-layers`.
 - `tests/unit/sign-out-button.test.tsx` for server-session-first sign-out,
   including rejected and unreachable session endpoints.
 - `tests/unit/auth-error.test.ts` and `tests/unit/second-factor-panel.test.tsx`

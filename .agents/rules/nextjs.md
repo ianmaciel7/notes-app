@@ -45,6 +45,11 @@
 - **Data Minimization**: Never expose sensitive internal model fields or infrastructure secrets in action returns or handler responses.
 - **Server Action Location and Scope**: Place module-level Server Actions in `src/actions/*-actions.ts`. Keep `use server` actions thin: validate their arguments, delegate privileged work to `src/data/`, and return only the minimal DTO needed by the UI. Authentication and authorization for DAL work happen inside the DAL, not through caller-provided identity.
 
+`src/data` file structure (`*-dal.ts`, `server-only`, async exports only, no
+`uid`/`userId`/`ownerId` parameter) is checked by
+`tests/unit/data-layer-structure.test.ts` and the Dependency Cruiser rules
+`data-files-must-be-dal` and `data-not-importable-by-browser-layers`.
+
 These DAL and Server Action placement rules are project conventions backed by
 focused tests and Dependency Cruiser layer restrictions; they are not a
 single GritQL guard that proves authorization correctness.

@@ -76,7 +76,7 @@ src/
     firebase/              # immutable upstream Firebase UI reference (ADR 0004)
     notes-app/             # application-owned auth cards, forms, dialogs (ADR 0004)
     ui/                    # project-owned shadcn implementation layer
-  data/                    # server-only DAL (Admin SDK)
+  data/                    # server-only Data Access Layer (*-dal.ts only)
     locale-dal.ts
     object-type-dal.ts
     space-dal.ts
@@ -101,6 +101,7 @@ src/
       server-config.ts
       session-client.ts
       session.ts
+      space-ownership.ts   # server-only Admin SDK adapter, imported only by src/data
     i18n/                  # locale negotiation and client synchronization
       client.ts
       config.ts
@@ -130,6 +131,8 @@ tests/
     component-props-type-guard.test.ts
     components-layer-structure-lib.ts
     components-layer-structure.test.ts
+    data-layer-structure-lib.ts
+    data-layer-structure.test.ts
     firebase-firestore.test.ts
     firebase-reference.test.ts
     firebase-reference.manifest.sha256
@@ -149,6 +152,7 @@ tests/
     smoke.test.ts
     space-actions.test.ts
     space-client.test.ts
+    space-domain.test.ts
     theme-script.test.ts
     use-auth-provider.test.ts
     wait-for-ci.test.ts
@@ -182,6 +186,14 @@ Access Layer in `src/data/`, reached through the thin Server Actions in
 `src/actions/space-actions.ts` (ADR 0011). The DAL obtains the current
 identity itself, authorizes the requested resource, accepts no caller-supplied
 UID, and exposes only minimal DTOs where a result crosses the action boundary.
+`src/data/` contains only `*-dal.ts` modules beginning with `import
+"server-only"`; their only exports are async DAL operations. Pure rules,
+errors, and validation belong in `src/domain/`, while server-only Firebase
+Admin SDK adapters shared by DALs belong in `src/lib/firebase/` and are
+imported only by `src/data/`. The Vitest data-layer structure test and
+Dependency Cruiser rules `data-files-must-be-dal` and
+`data-not-importable-by-browser-layers` enforce these boundaries alongside the
+existing layer rules.
 `src/domain/` contains the SDK-free Space types and Object Type parsing and
 inheritance-resolution logic; the Dependency Cruiser rules `domain-is-pure`,
 `client-cannot-import-server-layers`, `data-cannot-import-client-layers`, and
@@ -314,6 +326,9 @@ and cache cleanup. Runtime verification status belongs to each ADR and CI.
 - `src/lib` and `src/hooks` cannot depend at runtime on `src/components` or
   `src/app`; components cannot depend on `src/app`. Type-only imports are
   allowed. Enforced by Dependency Cruiser.
+- `src/data/` contains only server-only `*-dal.ts` Data Access Layer modules;
+  browser-capable layers cannot import it. Enforced by Vitest and Dependency
+  Cruiser.
 - Server-first Next.js composition.
 - Small client boundaries.
 - No speculative wrappers or service layers.

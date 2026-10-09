@@ -204,6 +204,16 @@ business rules live in `src/domain/`, browser Firestore access lives in
 and Server Actions live in `src/actions/` (ADR 0011). The data-access and
 Server Action requirements are defined once in [section 2](#2-nextjs-app-router).
 
+`src/data/` contains only Data Access Layer files: each is named `*-dal.ts`,
+starts with `import "server-only"`, and exports only `export async function`
+operations that authenticate and authorize their own caller and take no
+`uid`, `userId`, or `ownerId` parameter. Private helpers inside a DAL file are
+allowed; do not export helpers, constants, validators, regexes, error classes,
+types, or re-exports from this layer. Put pure rules, errors, and validation in
+`src/domain/`; put server-only Firebase Admin SDK adapters shared by DALs in
+`src/lib/firebase/` (for example `space-ownership.ts`), where only `src/data/`
+imports them by convention.
+
 Dependency Cruiser enforces graph rules on the source it currently cruises,
 including:
 
@@ -218,6 +228,13 @@ including:
   components, hooks, or app routing;
 - `actions-cannot-import-client-layers`: `src/actions/` cannot import
   `src/client/`, components, hooks, or app routing.
+- `data-not-importable-by-browser-layers`: components, hooks, client, domain,
+  and lib cannot import `src/data/`; only `src/app/` and `src/actions/` may do
+  so;
+- `data-files-must-be-dal`: `src/data/` contains only `*-dal.ts` modules.
+
+`tests/unit/data-layer-structure.test.ts`, supported by
+`data-layer-structure-lib.ts`, enforces the Data Access Layer file structure.
 
 `src/components/ui/**` is currently excluded from the Dependency Cruiser
 graph to avoid traversing registry-managed implementation details. The rule

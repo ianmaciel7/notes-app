@@ -32,8 +32,16 @@ Configured and delivered:
 - `src/data/space-dal.ts` deletes an owned Space with the Admin SDK's
   `recursiveDelete`, and `src/data/object-type-dal.ts` deletes an Object Type
   only after confirming that it has no direct children. Both are the
-  server-only Data Access Layer: each function verifies the current identity
-  itself and takes no uid argument. `src/actions/space-actions.ts` only checks
+  server-only Data Access Layer: `src/data/` contains only `*-dal.ts` files,
+  each starting with `import "server-only"` and exporting only async
+  operations that verify the current identity themselves and take no
+  `uid`, `userId`, or `ownerId` parameter. The Space and Object Type deletion
+  functions export only `deleteSpaceTree` and `deleteObjectType`; UUID
+  validation lives in the pure `src/domain/space.ts`, and the shared Admin SDK
+  adapter (verified identity and owned-Space lookup) lives in
+  `src/lib/firebase/space-ownership.ts`, imported only by the `src/data/`
+  files today. These rules are enforced structurally (see Code layout), not
+  by runtime behavior. `src/actions/space-actions.ts` only checks
   argument types, delegates, and returns a minimal result DTO. `deleteSpace` in
   `src/client/space-client.ts` calls the Space deletion Server Action, and
   client Space deletion is denied by `firestore.rules`.
@@ -176,7 +184,9 @@ locale preference (ADR 0007) uses the same layout:
 | --- | --- | --- |
 | `src/domain/` | `space.ts`, `object-type.ts`, `object-type-inheritance.ts`: SDK-free types, errors, parsing, inheritance rules | nothing else in `src/` and no Firebase SDK |
 | `src/client/` | `space-client.ts`: browser Firestore access | `src/domain/`, `src/lib/`, and the Server Actions in `src/actions/` |
-| `src/data/` | `space-dal.ts`: `requireVerifiedUid`, `getOwnedSpace(spaceId)`, and `deleteSpaceTree(spaceId)`; `object-type-dal.ts`: `deleteObjectType(spaceId, objectTypeId)`; `locale-dal.ts`: `readProfileLocale`, `writeProfileLocale`, and `syncProfileLocale(explicitLocale)`; all are `server-only` Admin SDK access and no exported function takes a uid | `src/domain/` and `src/lib/` |
+| `src/domain/` (Space validation) | `space.ts` also holds the pure UUID v4 and owner-id validation (`assertValidSpaceDeletionIds`, `assertValidSpaceOwnerId`) | nothing else in `src/` and no Firebase SDK |
+| `src/lib/firebase/` | `space-ownership.ts`: `server-only` Admin SDK adapter for the verified identity and the owned-Space lookup, shared by the Space and Object Type DAL files | `src/domain/` and other `src/lib/` modules |
+| `src/data/` | Only `*-dal.ts` files, each `import "server-only"` and exporting only async DAL operations that authenticate and authorize their own caller and take no `uid`, `userId`, or `ownerId`: `space-dal.ts`: `deleteSpaceTree(spaceId)`; `object-type-dal.ts`: `deleteObjectType(spaceId, objectTypeId)`; `locale-dal.ts`: `readProfileLocale`, `writeProfileLocale`, and `syncProfileLocale(explicitLocale)`. No exported types, constants, classes, non-async functions, re-exports, or default exports | `src/domain/` and `src/lib/` |
 | `src/actions/` | `space-actions.ts`, `locale-actions.ts`: `"use server"`, thin: validates argument types, delegates to `src/data/`, returns a DTO | `src/data/`, `src/domain/`, and `src/lib/` |
 
 The `domain/`, `client/`, `data/`, and `actions/` folders and the `-client`,
@@ -187,8 +197,19 @@ rules or for Server Actions: its examples use `app/actions/`, but any
 `"use server"` file works. Actions sit outside `src/app/` because they are not
 routes and are imported by `src/client/`, which must not depend on app routing.
 The Dependency Cruiser rules `domain-is-pure`,
-`client-cannot-import-server-layers`, `data-cannot-import-client-layers`, and
-`actions-cannot-import-client-layers` enforce the table. The suffixes keep
+`client-cannot-import-server-layers`, `data-cannot-import-client-layers`,
+`data-not-importable-by-browser-layers` (only `src/app/` and `src/actions/`
+may import `src/data/`; `src/components/`, `src/hooks/`, `src/client/`,
+`src/domain/`, and `src/lib/` may not), `data-files-must-be-dal` (every file
+under `src/data/` must match `*-dal.ts`), and
+`actions-cannot-import-client-layers` enforce the table. The Vitest suite
+`tests/unit/data-layer-structure.test.ts` (with its helper
+`tests/unit/data-layer-structure-lib.ts`, which parses each `src/data/` file
+with the TypeScript compiler) additionally checks the file structure: the
+file name, the `server-only` import, and exports limited to async functions
+with no `uid`, `userId`, or `ownerId` parameter. Nothing enforces that only
+`src/data/` imports `src/lib/firebase/space-ownership.ts`; that is the
+current state of the code. The suffixes keep
 files of the same concept distinguishable in tabs, search results, and
 imports. The `domain-is-pure` and `client-cannot-import-server-layers` rules
 also match Firebase SDK paths resolved through pnpm's virtual store
@@ -196,13 +217,17 @@ also match Firebase SDK paths resolved through pnpm's virtual store
 were reported by Dependency Cruiser.
 
 **Data Access Layer and DTOs.** This follows the Next.js data security guide.
-The Data Access Layer is `server-only` and no exported function accepts a uid,
-so no caller can hand the Admin SDK an unverified uid. `requireVerifiedUid`
-authenticates the current session. `getOwnedSpace(spaceId)` authenticates,
-validates the Space UUID, and checks the Space's stored owner itself;
-`deleteSpaceTree(spaceId)` uses it before deletion. `deleteObjectType(spaceId,
+The Data Access Layer holds only `*-dal.ts` files that are `server-only` and
+export only async operations; none accepts a uid, so no caller can hand the
+Admin SDK an unverified uid. Everything else lives elsewhere: pure UUID and
+owner-id validation in `src/domain/space.ts`, and the Admin SDK adapter
+(`requireVerifiedUid` and `getOwnedSpaceForVerifiedUid`, resolving the
+verified identity and the owned Space) in `src/lib/firebase/space-ownership.ts`,
+which is not part of the DAL's exports. `deleteSpaceTree(spaceId)`
+authenticates, validates the Space UUID, and checks the Space's stored owner
+through that adapter before deletion. `deleteObjectType(spaceId,
 objectTypeId)` authenticates once, validates both UUIDs, and checks ownership
-before deletion. Its ID-validation helper is private. `syncProfileLocale`
+before deletion. `syncProfileLocale`
 authenticates once and internally chooses whether to return a stored locale or
 migrate an explicit one; `readProfileLocale` and `writeProfileLocale` also
 authenticate their own callers. Server Actions stay thin and are not trusted
@@ -269,6 +294,13 @@ scopes the Space to the verified uid.
   `tests/unit/object-type-inheritance.test.ts` (12 cases), and
   `tests/unit/space-actions.test.ts` (4 cases) cover the pure domain
   helpers and Server Action delegation and error handling.
+- [x] `tests/unit/space-domain.test.ts` (5 cases) covers the pure Space and
+  Object Type UUID v4 validation and owner-id checks in `src/domain/space.ts`.
+  `tests/unit/data-layer-structure.test.ts` (15 cases, with helper
+  `tests/unit/data-layer-structure-lib.ts`) checks that the real `src/data/`
+  files are `*-dal.ts` modules importing `server-only` and exporting only async
+  operations without uid parameters, and that 13 non-conforming fixtures are
+  detected. These tests check structure, not runtime authorization behavior.
 - [x] `tests/unit/locale-dal.test.ts` (8 cases),
   `tests/unit/locale-actions-profile.test.ts` (7 cases), and
   `tests/unit/locale-actions.test.ts` (2 cases) cover the locale Data Access

@@ -33,6 +33,9 @@ Enforce automated testing discipline, test design quality, and verification hier
      dynamically import the module only after that mock is registered. The
      package is resolved by Next.js and is not installed for Vitest. See
      `tests/unit/locale-dal.test.ts`.
+   - `tests/unit/data-layer-structure.test.ts` guards `src/data` file
+     structure only (not runtime DAL behavior); keep its fixtures in sync when
+     the DAL rules change.
    - Firestore security-rules tests in `tests/rules/` require the Firestore
      Emulator and are excluded from `pnpm test`; run them only through
      `pnpm run test:rules` when emulator execution is appropriate.

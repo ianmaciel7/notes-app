@@ -101,13 +101,26 @@ review, not dedicated GritQL proofs:
 - runtime input validation;
 - thin `use server` modules in `src/actions/*-actions.ts`;
 - authentication and resource-level authorization inside `src/data/*-dal.ts`;
-- no caller-supplied `uid` for DAL operations;
 - minimal returned DTOs;
 - intentional cache invalidation.
 
+Mechanically enforced for `src/data` (file structure only):
+
+- `tests/unit/data-layer-structure.test.ts` (helper
+  `tests/unit/data-layer-structure-lib.ts`) requires `*-dal.ts` file names, a
+  leading `import "server-only"`, only exported `async function` declarations
+  (no exported variables, types, classes, enums, non-async functions,
+  re-exports or default exports), and no `uid`, `userId` or `ownerId`
+  parameter name on an exported function. It covers the real directory plus
+  embedded positive and negative fixtures.
+- Dependency Cruiser `data-files-must-be-dal` (only `*-dal.ts` under
+  `src/data`) and `data-not-importable-by-browser-layers` (components, hooks,
+  client, domain and lib cannot import `src/data`; `src/app` and `src/actions`
+  can).
+
 `actions-cannot-import-client-layers` restricts Server Action imports, while
-`data-cannot-import-client-layers` restricts the DAL import graph. They do
-not prove that an authorization check is correct; a call named `auth()` is not
+`data-cannot-import-client-layers` restricts the DAL import graph. None of
+these prove that an authorization check is correct; a call named `auth()` is not
 sufficient evidence by itself.
 
 ### Route Handlers
@@ -251,8 +264,11 @@ own:
 
 The implemented Admin SDK DAL is `src/data/`. Its modules use the
 `server-only` marker; the `data-cannot-import-client-layers` Dependency
-Cruiser rule prevents imports from browser/component layers, but it does not
-prove DTO shape or authorization behavior.
+Cruiser rule prevents imports from browser/component layers,
+`data-not-importable-by-browser-layers` blocks the reverse direction, and the
+`data-layer-structure` Vitest guard checks file structure. None of them prove
+DTO shape or authorization behavior; a parameter-name check does not prove the
+caller identity is derived correctly inside the DAL.
 
 ### TypeScript and configuration
 

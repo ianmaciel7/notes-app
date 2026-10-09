@@ -82,6 +82,7 @@ Sources: [CODING_STANDARDS.md](./CODING_STANDARDS.md),
 
 ## 5. Data and module boundaries
 
+- Data-layer structure and import boundaries: [Coding Standards, section 9](./CODING_STANDARDS.md#9-module-boundaries).
 - `src/domain/` is SDK-free, and Dependency Cruiser enforces
   `domain-is-pure`.
 - Dependency Cruiser enforces `client-cannot-import-server-layers`,
