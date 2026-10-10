@@ -1,6 +1,5 @@
 import {
   collection,
-  type DocumentSnapshot,
   deleteField,
   doc,
   getDoc,
@@ -21,52 +20,12 @@ import {
   SpaceConflictError,
 } from "@/domain/space";
 import { getDb } from "@/lib/firebase/firestore";
+import { parseSpace, parseSpaces } from "@/parsers/space-parser";
 
 // Owner-scoped Spaces at /users/{uid}/spaces/{spaceId} (ADR 0010). The
 // Security Rules are the authorization boundary; this module only shapes data.
 
 const spacesPath = (uid: string) => `users/${uid}/spaces`;
-
-function toDate(value: unknown): Date | undefined {
-  const candidate = value as { toDate?: () => Date } | undefined;
-  return typeof candidate?.toDate === "function"
-    ? candidate.toDate()
-    : undefined;
-}
-
-const REQUIRED_STRINGS = ["ownerId", "name", "icon"] as const;
-
-export function parseSpace(snapshot: DocumentSnapshot): Space | null {
-  // "estimate" gives pending serverTimestamp() fields a local value.
-  const data = snapshot.data({ serverTimestamps: "estimate" });
-  const createdAt = toDate(data?.createdAt);
-  const updatedAt = toDate(data?.updatedAt);
-
-  if (
-    !(data && createdAt && updatedAt) ||
-    typeof data.stateVersion !== "number" ||
-    !REQUIRED_STRINGS.every((key) => typeof data[key] === "string")
-  ) {
-    return null;
-  }
-
-  return {
-    id: snapshot.id,
-    ownerId: data.ownerId,
-    name: data.name,
-    ...(typeof data.description === "string" && {
-      description: data.description,
-    }),
-    icon: data.icon,
-    stateVersion: data.stateVersion,
-    createdAt,
-    updatedAt,
-  };
-}
-
-function parseSpaces(snapshots: DocumentSnapshot[]): Space[] {
-  return snapshots.flatMap((snapshot) => parseSpace(snapshot) ?? []);
-}
 
 /**
  * Creates a Space. The id is available immediately (works offline); `saved`

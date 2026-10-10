@@ -72,6 +72,8 @@ src/
     space-actions.ts
   client/                  # browser Firestore access
     space-client.ts
+  parsers/                 # Firestore snapshot parsers
+    space-parser.ts
   components/
     firebase/              # immutable upstream Firebase UI reference (ADR 0004)
     notes-app/             # application-owned auth cards, forms, dialogs (ADR 0004)
@@ -180,7 +182,8 @@ routes, and the protected `(protected)` routes `/dashboard` and `/settings`.
 The browser Firestore base configuration
 (persistent multi-tab cache, emulator connection, cache cleanup on sign-out)
 exists in `src/lib/firebase/firestore.ts` (ADR 0008). The Space module supports
-owner-scoped Space reads and writes in `src/client/space-client.ts`, while
+owner-scoped Space reads and writes in `src/client/space-client.ts`, with
+Firestore snapshot parsing in `src/parsers/space-parser.ts`, while
 Space and Object Type deletion is a narrow **server-only** Admin SDK Data
 Access Layer in `src/data/`, reached through the thin Server Actions in
 `src/actions/space-actions.ts` (ADR 0011). The DAL obtains the current

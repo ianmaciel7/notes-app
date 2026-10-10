@@ -15,6 +15,7 @@ src/
 │   ├── firebase/         # Immutable upstream Firebase UI reference layer
 │   └── ui/               # Owned shadcn Base Nova / Base UI primitive layer
 ├── data/                 # Server-only Admin SDK data access layer
+├── parsers/              # Firestore snapshot parser layer
 ├── domain/               # SDK-free domain rules
 ├── hooks/                # Shared application and component hooks
 ├── i18n/                 # next-intl request configuration

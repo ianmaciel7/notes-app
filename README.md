@@ -29,7 +29,8 @@ The `dev` branch currently contains the application foundation:
 The exam domain and assessment workflows are not yet implemented.
 Authentication and cookie-based localization are present. The repository has
 an SDK-free domain layer (`src/domain/`), browser Firestore access
-(`src/client/`), a server-only Admin SDK Data Access Layer (`src/data/`), and
+(`src/client/`) and snapshot parsers (`src/parsers/`), a server-only Admin SDK
+Data Access Layer (`src/data/`), and
 thin Server Actions (`src/actions/`). The implemented data access covers
 Spaces, Object Type deletion, and signed-in locale preferences; broader
 exam-domain persistence remains planned. Browser Firestore configuration also

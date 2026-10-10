@@ -200,7 +200,8 @@ other generic logic in `src/lib/<domain>/`; the Vitest structure guard enforces
 this. Component `.tsx` files under `src/` must be named as the kebab-case of
 their exported PascalCase component; a Vitest guard enforces this. SDK-free
 business rules live in `src/domain/`, browser Firestore access lives in
-`src/client/`, the server-only Data Access Layer lives in `src/data/`,
+`src/client/`, Firestore snapshot parsers live in `src/parsers/`, and the
+server-only Data Access Layer lives in `src/data/`,
 and Server Actions live in `src/actions/` (ADR 0011). The data-access and
 Server Action requirements are defined once in [section 2](#2-nextjs-app-router).
 

@@ -72,6 +72,7 @@ requires the emulator prerequisites, including Java. See
 
 The application is organized by runtime boundary. `src/domain/` contains
 SDK-free domain rules; `src/client/` contains browser Firestore access;
+`src/parsers/` contains Firestore snapshot parsers;
 `src/data/` contains the server-only Admin SDK Data Access Layer; and
 `src/actions/` contains thin Server Actions that validate arguments and
 delegate. `src/components/notes-app/` contains application components,

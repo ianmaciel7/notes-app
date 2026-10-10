@@ -1,10 +1,6 @@
 import type { DocumentSnapshot } from "firebase/firestore";
-import { describe, expect, it, vi } from "vitest";
-import { parseSpace } from "@/client/space-client";
-
-vi.mock("@/actions/space-actions", () => ({
-  deleteSpaceAction: vi.fn(),
-}));
+import { describe, expect, it } from "vitest";
+import { parseSpace, parseSpaces } from "@/parsers/space-parser";
 
 const when = new Date("2026-10-09T10:00:00Z");
 const stamp = { toDate: () => when };
@@ -54,5 +50,20 @@ describe("parseSpace", () => {
     ["a non-timestamp updatedAt", { ...valid, updatedAt: "now" }],
   ])("returns null for %s", (_label, data) => {
     expect(parseSpace(snapshot(data))).toBeNull();
+  });
+});
+
+describe("parseSpaces", () => {
+  it("skips invalid snapshots and preserves valid order", () => {
+    expect(
+      parseSpaces([
+        snapshot(valid),
+        snapshot(undefined),
+        snapshot({ ...valid, name: "Later" }),
+      ]),
+    ).toEqual([
+      expect.objectContaining({ name: "Studies" }),
+      expect.objectContaining({ name: "Later" }),
+    ]);
   });
 });

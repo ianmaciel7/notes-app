@@ -101,7 +101,7 @@ module.exports = {
         path: "^src/domain/",
       },
       to: {
-        path: "^(src/(app|actions|client|data|components|hooks|lib)/|node_modules/(firebase|firebase-admin|@firebase/[^/]+|@google-cloud/[^/]+)/|node_modules/[.]pnpm/[^/]+/node_modules/(firebase|firebase-admin|@firebase/[^/]+|@google-cloud/[^/]+)/)",
+        path: "^(src/(app|actions|client|data|components|hooks|lib|parsers)/|node_modules/(firebase|firebase-admin|@firebase/[^/]+|@google-cloud/[^/]+)/|node_modules/[.]pnpm/[^/]+/node_modules/(firebase|firebase-admin|@firebase/[^/]+|@google-cloud/[^/]+)/)",
       },
     },
     {
@@ -117,6 +117,18 @@ module.exports = {
       },
     },
     {
+      name: "parsers-cannot-import-server-layers",
+      severity: "error",
+      comment:
+        "src/parsers runs in the browser: it cannot import server layers or the Admin SDK.",
+      from: {
+        path: "^src/parsers/",
+      },
+      to: {
+        path: "^(src/(data|app|actions|client|components|hooks)/|node_modules/firebase-admin/|node_modules/[.]pnpm/[^/]+/node_modules/firebase-admin/)",
+      },
+    },
+    {
       name: "data-cannot-import-client-layers",
       severity: "error",
       comment:
@@ -125,7 +137,7 @@ module.exports = {
         path: "^src/data/",
       },
       to: {
-        path: "^src/(client|components|hooks|app)/",
+        path: "^src/(client|components|hooks|app|parsers)/",
       },
     },
     {
@@ -134,7 +146,7 @@ module.exports = {
       comment:
         "Browser-capable layers must not import the server-only Data Access Layer; only src/app and src/actions may depend on it.",
       from: {
-        path: "^src/(components|hooks|client|domain|lib)/",
+        path: "^src/(components|hooks|client|domain|lib|parsers)/",
       },
       to: {
         path: "^src/data/",
@@ -160,7 +172,7 @@ module.exports = {
         path: "^src/actions/",
       },
       to: {
-        path: "^src/(client|components|hooks|app)/",
+        path: "^src/(client|components|hooks|app|parsers)/",
       },
     },
     {
