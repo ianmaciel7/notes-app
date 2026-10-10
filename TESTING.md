@@ -45,7 +45,7 @@ Examples of current coverage (not an exhaustive file inventory):
   for the second-factor settings: failure classification, factor listing and
   removal, the verified-e-mail gate, recent-login handling, and session renewal
   or sign-out after a factor change (ADR 0005).
-- `tests/unit/space-client.test.ts` and `space-actions.test.ts` for Space
+- `tests/unit/space-parser.test.ts` and `space-actions.test.ts` for Space
   document parsing and the thin deletion Server Actions.
 - `tests/unit/locale-actions.test.ts` and `locale-actions-profile.test.ts` for
   locale cookies, profile preference writes, sign-in synchronization, and

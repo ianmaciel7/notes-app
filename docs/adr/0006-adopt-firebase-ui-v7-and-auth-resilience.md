@@ -17,10 +17,10 @@ Implemented
 The decision is implemented on `dev`. The packages (`@firebase-oss/ui-react`
 7.1.0, `@firebase-oss/ui-core` 7.1.0, `react-hook-form` 7.89.0,
 `@hookform/resolvers` 5.9.1), the upstream reference components, and the
-application-owned auth cards, forms, and dialogs in `src/components/notes-app/`
+application-owned auth cards, forms, and dialogs in `src/app/**/_components/`
 are present.
 
-- `AuthProvider` (`src/components/notes-app/auth-provider.tsx`) initializes
+- `AuthProvider` (`src/app/_components/auth-provider.tsx`) initializes
   FirebaseUI through `src/hooks/use-auth-provider.ts` and exchanges authenticated
   browser tokens for a same-origin server session (see
   [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md)). It is mounted
@@ -81,7 +81,7 @@ requires a production or preview deployment.
   `use-translation.ts`. They continue to use Firebase UI translation
   primitives rather than application-owned `next-intl` messages.
 - The sign-in route visibly renders the Google provider button.
-  Other provider components in `src/components/notes-app/` do **not**
+  Other provider components in `src/app/**/_components/` do **not**
   establish that those OAuth providers are configured or E2E-tested.
 - The source and Playwright test definitions were inspected, but this review
   did not run browser tests or verify production OAuth configuration. That
@@ -120,7 +120,7 @@ Key architectural rules and structure:
   Auth forms leverage `react-hook-form` with schema validation from
   `@hookform/resolvers`.
 - **Canonical Card & Form Delegation**: Authentication flows delegate to the
-  canonical card components in `src/components/notes-app/` (`SignInAuthCard`,
+  canonical card components in `src/app/(public)/_components/` (`SignInAuthCard`,
   `SignUpAuthCard`, `EmailLinkAuthCard`, `ForgotPasswordAuthCard`,
   `MultiFactorAuthAssertionCard`, `MultiFactorAuthEnrollmentCard`,
   `PhoneAuthCard`, `OAuthCard`), avoiding custom form state duplication.
@@ -131,7 +131,7 @@ Key architectural rules and structure:
   In embedded Electron browsers the same hook selects the redirect strategy, so
   the page leaves and returns with the result.
 - **Redirect error display**: Cards that host provider buttons render
-  `RedirectError` (`src/components/notes-app/redirect-error.tsx`). It only has an
+  `RedirectError` (`src/app/(public)/_components/redirect-error.tsx`). It only has an
   effect if a redirect strategy is configured again; keep it in new provider
   cards so switching strategy does not silently drop errors.
 - **Form root errors**: `setFormRootError()` stores the failure classification as
@@ -168,7 +168,7 @@ Key architectural rules and structure:
 - Centralizes authentication provider setup inside `AuthProvider` without
   duplicating state management.
 - Leverages canonical FirebaseUI v7 card components maintained under
-  `src/components/notes-app/`.
+  `src/app/(public)/_components/`.
 - Provider sign-in failures are surfaced to the user by `OAuthButton`.
 - Form validation is consistent across the authentication forms through
   `react-hook-form` and `@hookform/resolvers`.

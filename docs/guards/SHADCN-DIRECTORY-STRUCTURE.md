@@ -137,8 +137,11 @@ Boundary integrity is verified mechanically across multiple layers:
    Enforces that application consumers import primitives and helpers using their canonical aliases (`@/components/ui`, `@/lib/utils`, `@/hooks`) rather than deep relative paths (`../../components/ui/*`).
 2. **Dependency Cruiser (`.dependency-cruiser.cjs`)**:
    Cruises `src/components/ui/**` and enforces the historically named
-   `ui-primitives-cannot-import-domain` rule, which blocks imports from
-   `src/components/notes-app`, `src/components/firebase`, and `src/app`.
+   `ui-primitives-cannot-import-domain` rule. Its `to` pattern covers
+   `src/components/firebase` and `src/app`; it still lists
+   `src/components/notes-app`, a directory removed by the ADR 0005 amendment,
+   only as a harmless guard against recreating it. Current application
+   components live in route-private `src/app/**/_components/` folders.
    It does not currently enforce the separate no-`src/domain/` convention.
 3. **Biome Guard Boundary**:
    Excludes both `src/components/ui/**` (owned implementation) and

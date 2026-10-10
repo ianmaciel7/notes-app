@@ -76,7 +76,7 @@ src/
     space-parser.ts
   components/
     firebase/              # immutable upstream Firebase UI reference (ADR 0004)
-    notes-app/             # application-owned auth cards, forms, dialogs (ADR 0004)
+    app/_components/       # route-private application components (ADR 0005, Amendment 2026-10-09)
     ui/                    # project-owned shadcn implementation layer
   data/                    # server-only Data Access Layer (*-dal.ts only)
     locale-dal.ts
@@ -153,7 +153,7 @@ tests/
     sign-out-button.test.tsx
     smoke.test.ts
     space-actions.test.ts
-    space-client.test.ts
+    space-parser.test.ts
     space-domain.test.ts
     theme-script.test.ts
     use-auth-provider.test.ts
@@ -172,9 +172,9 @@ docs/
 ```
 
 `src/components/firebase/` holds the immutable upstream Firebase UI reference
-components (ADR 0004). `src/components/notes-app/` holds application-owned
-authentication cards, forms, and dialogs built with project shadcn primitives
-(ADR 0004). Their state and form logic lives in `src/hooks/` (see
+components (ADR 0004). Application-owned authentication cards, forms, and
+dialogs now live in route-private `_components` folders under `src/app/`
+(ADR 0005, Amendment 2026-10-09), built with project shadcn primitives. Their state and form logic lives in `src/hooks/` (see
 `CODING_STANDARDS.md` section 4). The implemented authentication slice (ADR
 0005) uses `src/lib/firebase/session.ts` and `src/lib/firebase/identity.ts` for
 the server-side session and identity boundary, public `(public)` sign-in

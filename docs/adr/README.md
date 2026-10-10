@@ -33,10 +33,10 @@ Check it and the source tree before treating an accepted ADR as built.
 
 ## Source review — 2026-10-09
 
-All eleven records were reconciled against available files on the remote
-`dev` branch. The original decision dates are retained; the
-`Current State` sections describe what is present now, not what was
-envisioned when each decision was made.
+Records 0001-0011 were reconciled against available files on the remote
+`dev` branch. The original decision dates are retained; the `Current State`
+sections describe what is present now, not what was envisioned when each
+decision was made.
 
 - **0001–0003:** framework, Base UI/shadcn, and Typeset foundations are
   present in configuration and implementation files.
@@ -57,6 +57,11 @@ envisioned when each decision was made.
 - **0011:** root Object Type Rules, parsing, inheritance helpers, and
   server-side deletion are partially implemented; a runtime non-null-parent
   write path and operational inheritance remain pending.
+- **Current-state reconciliation:** application components have moved out of
+  `src/components/notes-app/`, `allowBuilds` is now false, and Space snapshot
+  parsers have been extracted to `src/parsers/`. The layered code layout was
+  recorded as an amendment to ADR 0011, component colocation as an amendment
+  to ADR 0005, and theme selection as an amendment to ADR 0009.
 
 **Verification level:** source inspection only for this documentation update.
 No local dependency installation, Biome, TypeScript, Vitest, Playwright, or

@@ -125,7 +125,7 @@ Multi-factor authentication:
   discarding the challenge. `src/hooks/use-multi-factor-auth-assertion-form.ts`
   defers that cleanup so a remount cancels it.
 - Second-factor management lives on `/settings`
-  (`src/components/notes-app/second-factor-panel.tsx`,
+  (`src/app/(protected)/_components/second-factor-panel.tsx`,
   `src/hooks/use-second-factor-panel.ts`) and offers only the SMS factor. It
   follows the Firebase Auth Web multi-factor guidance, which was checked against
   the Firebase documentation on 2026-10-08:
@@ -217,11 +217,11 @@ Key requirements include:
 
 ## Decision
 
-We adopt Firebase Authentication with the local Firebase Auth Emulator (`port: 9099`) and compose appropriate upstream Firebase UI behaviors into application-owned auth cards and forms in `src/components/notes-app/`, using project-owned shadcn primitives.
+We adopt Firebase Authentication with the local Firebase Auth Emulator (`port: 9099`) and compose appropriate upstream Firebase UI behaviors into application-owned auth cards and forms in `src/app/**/_components/`, using project-owned shadcn primitives. These components moved to route-private folders in commit 3536b7f6; see the amendment below.
 
 Key architectural rules and structure:
 - **Emulator Configuration**: The Auth emulator runs on `127.0.0.1:9099` (with emulator UI on `127.0.0.1:4000`), loaded with pre-seeded test accounts from `.firebase/seeds/`.
-- **Runtime Dependency Governance**: Dependencies are anchored on `firebase` 12.19.0 and `@firebase-oss/ui-core` 7.1.0. The `postinstall` scripts declared by `@firebase/util` (1.15.3) and `protobufjs` (7.6.6) are approved via `pnpm approve-builds` in `pnpm-workspace.yaml`. Both are transitive dependencies of the `firebase` SDK (`protobufjs` arrives through `@firebase/firestore` → `@grpc/proto-loader`); neither is used by the emulator, which runs from `firebase-tools`.
+- **Runtime Dependency Governance**: Dependencies are anchored on `firebase` 12.19.0 and `@firebase-oss/ui-core` 7.1.0. The `postinstall` scripts declared by `@firebase/util` (1.15.3) and `protobufjs` (7.6.6) are recorded as `allowBuilds: false` in `pnpm-workspace.yaml` because their scripts are inert here; see [ADR 0008](./0008-adopt-native-firebase-firestore-with-persistent-local-cache.md). Both are transitive dependencies of the `firebase` SDK (`protobufjs` arrives through `@firebase/firestore` → `@grpc/proto-loader`); neither is used by the emulator, which runs from `firebase-tools`.
 - **Flow availability follows the support matrix**: Component presence from
   [ADR 0004](./0004-adopt-firebase-ui-components.md) is not evidence that its
   corresponding authentication flow is usable. New flows require an
@@ -242,8 +242,30 @@ Key architectural rules and structure:
   `src/app/(protected)/layout.tsx`), keeping the Firebase UI client boundary off
   the root layout. New protected routes must be added to both `isProtectedPath()` and
   the `src/proxy.ts` matcher.
-- **Application-Owned Auth Components**: Application-facing authentication cards, forms, and dialogs for supported flows live in `src/components/notes-app/` (created in commit 9686a943), composing project-owned shadcn Base Nova / Base UI primitives from `src/components/ui/` and following [`CODING_STANDARDS.md`](../../CODING_STANDARDS.md). They reference `src/components/firebase/` for behavioral parity without mutating the reference baseline (ADR 0004). Provider button theming is integrated into `src/app/globals.css` with `@layer components` custom CSS variables and `@variant dark` rules for full light/dark mode support.
+- **Application-Owned Auth Components**: Application-facing authentication cards, forms, and dialogs for supported flows were created in commit 9686a943 and now live in `src/app/**/_components/` after the move in commit 3536b7f6, composing project-owned shadcn Base Nova / Base UI primitives from `src/components/ui/` and following [`CODING_STANDARDS.md`](../../CODING_STANDARDS.md). They reference `src/components/firebase/` for behavioral parity without mutating the reference baseline (ADR 0004). Provider button theming is integrated into `src/app/globals.css` with `@layer components` custom CSS variables and `@variant dark` rules for full light/dark mode support.
 - **Architectural Alignment**: Aligns with upstream component baseline in [ADR 0004](./0004-adopt-firebase-ui-components.md) and resilient auth fallback logic defined in [ADR 0006](./0006-adopt-firebase-ui-v7-and-auth-resilience.md).
+
+## Amendment (2026-10-09): route-private component folders
+
+Application-owned components live in `src/app/_components`,
+`src/app/(public)/_components`, and `src/app/(protected)/_components`.
+`src/components/` holds only `ui/`, the owned shadcn implementation layer, and
+`firebase/`, the immutable Firebase OSS reference layer from ADR 0004.
+The former `src/components/notes-app/` application layer was removed by
+commits `3536b7f6` and `6f1decd1`; commit `98a8b090` added the file-name and
+primitive-name guards.
+
+A route group's private `_components` must not import another group's private
+`_components`; shared application components belong in the app-wide private
+folder or an appropriate shared layer. The boundary is enforced by the
+`components-layer-structure`, `component-file-name-guard`,
+`component-primitive-name-guard`, and `component-props-type-guard` tests, plus
+the Dependency Cruiser rule `components-cannot-import-app`.
+
+Known stale references remain in `knip.json`, `cspell.json`, and the fixture
+paths in `tests/unit/components-layer-structure.test.ts`. They are
+intentionally not changed here because they are gate configurations or gate
+fixtures.
 
 ## Consequences
 
@@ -254,7 +276,7 @@ Key architectural rules and structure:
 - Defines deterministic local test seams for e-mail-link, phone/SMS, and SMS
   MFA before those application flows are exposed.
 - Eliminates reliance on live Firebase production or staging environments during development and CI runs.
-- Resolves pnpm build script warnings (`ERR_PNPM_IGNORED_BUILDS`) by explicitly authorizing `@firebase/util` and `protobufjs`.
+- Records an explicit build-script decision for `@firebase/util` and `protobufjs` (currently `false`) so installs do not raise `ERR_PNPM_IGNORED_BUILDS`.
 - Provides application-owned auth components that mirror upstream behavioral parity while maintaining project design system consistency.
 
 ### Trade-offs and Considerations
@@ -285,4 +307,4 @@ Key architectural rules and structure:
 - The password-reset E2E stops at the request; the reset link itself is not
   followed, and the dev server logs an `invalid or has expired` Firebase error
   during the E2E run that has not been investigated.
-- Application-owned components in `src/components/notes-app/` must mirror upstream behavioral parity while maintaining project design system consistency; this requires active maintenance as upstream components evolve.
+- Application-owned components in `src/app/**/_components/` must mirror upstream behavioral parity while maintaining project design system consistency; this requires active maintenance as upstream components evolve.

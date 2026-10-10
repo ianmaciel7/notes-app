@@ -27,7 +27,7 @@ introduce a general Firestore browser data layer, which remains ADR 0008.
   remain automatic and are never written as a preference.
 - The root layout retains a static `<html lang>` and a
   `beforeInteractive` language script. The async
-  `src/components/notes-app/intl-provider.tsx` runs under `Suspense`
+  `src/app/_components/intl-provider.tsx` runs under `Suspense`
   and supplies `NextIntlClientProvider` to client routes and controls.
 - The page-header `LocalePicker` uses the project's shadcn/Base UI Select.
   `src/hooks/use-locale-picker.ts` invokes a Server Action, updates the
@@ -111,7 +111,7 @@ An absent cookie means "automatic". Auto-detected values are never persisted to 
 
 - `auth.languageCode` mirrors the already-resolved locale for Firebase Auth emails, SMS, reCAPTCHA, and OAuth flows. `auth.useDeviceLanguage()` is not used for UI locale selection.
 - Firebase UI v7 ships its own translations in `@firebase-oss/ui-translations` (`enUs`, `ptBr`, `esEs`, `esLa`, among others) and exposes `initializeUI({ locale })` and `setLocale()`. Firebase UI text is localized through these, mapping `en` to `enUs`, `pt-BR` to `ptBr`, and `es` to `esLa` (to be confirmed against the target audience; `esEs` is the alternative). These strings are not duplicated in `src/messages/*.json`.
-- Application-owned strings (validation messages from `@hookform/resolvers`, the app-owned auth cards and dialogs in `src/components/notes-app/`, and redirect error text we render ourselves) come from `src/messages/*.json`. Files under `src/components/firebase/` remain unmodified upstream components.
+- Application-owned strings (validation messages from `@hookform/resolvers`, the app-owned auth cards and dialogs in `src/app/**/_components/`, and redirect error text we render ourselves) come from `src/messages/*.json`. Files under `src/components/firebase/` remain unmodified upstream components. See [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md), Amendment 2026-10-09.
 
 ### Cache Components and `<html lang>`
 

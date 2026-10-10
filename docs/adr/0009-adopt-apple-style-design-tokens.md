@@ -29,7 +29,8 @@ uses it. The motion rules were extracted from DESIGN.md into
 [MOTION.md](../../MOTION.md); DESIGN.md links to it.
 
 The 2026-10-08 static audit of `src/app`, `src/components/ui`, and
-`src/components/notes-app` found 44 occurrences (4 high, 22 medium, 18 low),
+The application component audit covered the current route-private `_components`
+folders (44 occurrences: 4 high, 22 medium, 18 low),
 mainly: nonexistent classes (`text-text-muted` in `policies.tsx`,
 `easing-[ease]` in `navigation-menu.tsx`, `shimmer` and `scroll-fade-x` in
 `attachment.tsx`); `shadow-*` still present in several UI primitives;
@@ -195,7 +196,11 @@ MOTION.md checks; none is exempt.
 - `toggle-group`
 - `tooltip`
 
-### `src/components/notes-app`
+### Current application components under `src/app/**/_components`
+
+Shared: `src/app/_components/{auth-field-error,auth-provider,country-selector,intl-provider,locale-picker,sign-out-button,theme-dropdown-menu,theme-provider}.tsx`.
+Public auth: `src/app/(public)/_components/{apple-sign-in-button,auth-page-heading,email-link-auth-card,email-link-auth-form,facebook-sign-in-button,forgot-password-auth-card,forgot-password-auth-form,github-sign-in-button,google-sign-in-button,microsoft-sign-in-button,multi-factor-auth-assertion-card,multi-factor-auth-assertion-form,oauth-button,oauth-card,phone-auth-card,phone-auth-form,policies,redirect-error,sign-in-auth-card,sign-in-auth-form,sign-up-auth-card,sign-up-auth-form,sms-multi-factor-assertion-form,totp-multi-factor-assertion-form,twitter-sign-in-button,yahoo-sign-in-button}.tsx`.
+Protected settings: `src/app/(protected)/_components/{multi-factor-auth-enrollment-card,multi-factor-auth-enrollment-form,reauthenticate-button,second-factor-panel,sms-multi-factor-enrollment-form,totp-multi-factor-enrollment-form}.tsx`.
 
 - `apple-sign-in-button`
 - `auth-field-error`
@@ -210,7 +215,6 @@ MOTION.md checks; none is exempt.
 - `github-sign-in-button`
 - `google-sign-in-button`
 - `intl-provider`
-- `locale-lang-script`
 - `locale-picker`
 - `microsoft-sign-in-button`
 - `multi-factor-auth-assertion-card`
@@ -232,9 +236,6 @@ MOTION.md checks; none is exempt.
 - `sign-up-auth-form`
 - `sms-multi-factor-assertion-form`
 - `sms-multi-factor-enrollment-form`
-- `theme`
-- `theme-script`
-- `theme-toggle`
 - `totp-multi-factor-assertion-form`
 - `totp-multi-factor-enrollment-form`
 - `twitter-sign-in-button`
@@ -284,8 +285,41 @@ exit on dialog/drawer/navigation-menu/toast) and both color schemes.
 
 ## Amendment (2026-10-08)
 
-`locale-lang-script` and `theme-script` moved from
-`src/components/notes-app/` to `src/lib/i18n/` and `src/lib/theme/`.
-They contain pure logic and script builders rather than JSX or components, so
-the move aligns them with the shared-helper and shadcn registry type
-conventions.
+`locale-lang-script` and `theme-script` moved from the former component area to
+`src/lib/i18n/locale-lang-script.ts` and `src/lib/theme/theme-script.ts`.
+Theme selection is implemented by `theme-provider.tsx` and
+`theme-dropdown-menu.tsx`. They contain pure logic and script builders rather
+than JSX or components, so the move aligns them with the shared-helper and
+shadcn registry type conventions.
+
+## Amendment (2026-10-09): light/dark/system theme selection
+
+Use three explicit values: `light`, `dark`, and `system`. Persist the selected
+value per device in `localStorage["theme"]`; it is not synchronized to
+Firestore. Represent `system` by adding no theme class, allowing CSS
+`prefers-color-scheme` rules to select the appearance.
+
+`src/lib/theme/theme-script.ts` provides the theme values, storage key, parser,
+and a try/catch pre-paint script. `src/app/layout.tsx` injects that script with
+`beforeInteractive`. `ThemeProvider` reads and writes local storage, applies
+classes, listens for storage events, and uses `useSyncExternalStore` with a
+`system` server snapshot. The root `<html>` uses `suppressHydrationWarning`.
+The dropdown control is a labelled icon button containing a radio group with
+translated light, dark, and system choices.
+
+Applying the stored class only after client effects was rejected because it
+would miss the pre-paint requirement. Storing the preference in Firestore was
+also rejected; this implementation uses per-device local storage only.
+
+The choice survives reloads on the same device and storage scope, but there is
+no cross-device synchronization. The server renders the `system` snapshot;
+the browser script corrects an explicit stored choice before interaction.
+
+## Amendment verification
+
+- [x] `tests/unit/theme-script.test.ts` covers parsing, explicit classes,
+  system/invalid/missing values, stale-class removal, preservation of
+  unrelated classes, and storage failure handling.
+- [x] `src/app/layout.tsx` contains the before-interactive script and
+  hydration-warning handling described here.
+- [ ] Full verification gates were not re-run in this documentation edit.

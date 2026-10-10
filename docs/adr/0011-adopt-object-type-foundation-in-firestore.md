@@ -185,6 +185,8 @@ locale preference (ADR 0007) uses the same layout:
 | --- | --- | --- |
 | `src/domain/` | `space.ts`, `object-type.ts`, `object-type-inheritance.ts`: SDK-free types, errors, parsing, inheritance rules | nothing else in `src/` and no Firebase SDK |
 | `src/client/` | `space-client.ts`: browser Firestore access | `src/domain/`, `src/lib/`, and the Server Actions in `src/actions/` |
+| `src/parsers/` | Browser-side Firestore snapshot parsers such as `space-parser.ts` | `src/domain/` and `src/lib/`; must not import server layers or the Admin SDK |
+| `src/lib/parser.ts` | Shared parser helpers such as `parseDate` | no application-layer imports |
 | `src/domain/` (Space validation) | `space.ts` also holds the pure UUID v4 and owner-id validation (`assertValidSpaceDeletionIds`, `assertValidSpaceOwnerId`) | nothing else in `src/` and no Firebase SDK |
 | `src/lib/firebase/` | Server-only Firebase adapters such as `admin.ts` and `identity.ts`, shared by server-side modules where needed | `src/domain/` and other `src/lib/` modules |
 | `src/data/` | Only `*-dal.ts` files, each `import "server-only"` and exporting only async DAL operations that authenticate and authorize their own caller and take no `uid`, `userId`, or `ownerId`: `space-dal.ts`: `deleteSpaceTree(spaceId)`; `object-type-dal.ts`: `deleteObjectType(spaceId, objectTypeId)`; `current-identity-dal.ts`: `requireOwnedSpaceRef(spaceId)`; `locale-dal.ts`: `readProfileLocale`, `writeProfileLocale`, and `syncProfileLocale(explicitLocale)`. No exported types, constants, classes, non-async functions, re-exports, or default exports | `src/domain/` and `src/lib/` |
@@ -197,14 +199,17 @@ generic helpers. The Next.js documentation prescribes no folder for domain
 rules or for Server Actions: its examples use `app/actions/`, but any
 `"use server"` file works. Actions sit outside `src/app/` because they are not
 routes and are imported by `src/client/`, which must not depend on app routing.
-The Dependency Cruiser rules `domain-is-pure`,
-`client-cannot-import-server-layers`, `data-cannot-import-client-layers`,
+The Dependency Cruiser rules `ui-primitives-cannot-import-domain`,
+`lib-and-hooks-cannot-import-ui-layers`, `domain-is-pure`,
+`client-cannot-import-server-layers`, `parsers-cannot-import-server-layers`,
+`data-cannot-import-client-layers`,
 `data-not-importable-by-browser-layers` (only `src/app/` and `src/actions/`
 may import `src/data/`; `src/components/`, `src/hooks/`, `src/client/`,
-`src/domain/`, and `src/lib/` may not), `data-files-must-be-dal` (a partial,
+`src/domain/`, `src/lib/`, and `src/parsers/` may not), `data-files-must-be-dal`,
+`actions-cannot-import-client-layers`, and `components-cannot-import-app`
+enforce the table. `data-files-must-be-dal` is a partial,
 redundant check that `src/data/` files match `*-dal.ts`; it only sees files
-with at least one dependency), and
-`actions-cannot-import-client-layers` enforce the table. The Vitest suite
+with at least one dependency). The Vitest suite
 `tests/unit/data-layer-structure.test.ts` (with its helper
 `tests/unit/data-layer-structure-lib.ts`, which parses each `src/data/` file
 with the TypeScript compiler) additionally checks the file structure: the
@@ -215,6 +220,14 @@ imports. The `domain-is-pure` and `client-cannot-import-server-layers` rules
 also match Firebase SDK paths resolved through pnpm's virtual store
 (`node_modules/.pnpm/<pkg>/node_modules/...`); planted forbidden SDK imports
 were reported by Dependency Cruiser.
+
+**Amendment (2026-10-09): code layout.** The code-layout decision rejects
+keeping data access in the client or app/component layers because those layers
+cannot provide the server-only boundary. Pure rules remain in `src/domain/`,
+not `src/data/`, because the Data Access Layer is reserved for authenticated
+and authorized persistence operations. DAL functions authenticate their own
+caller, so caller-supplied `uid`, `userId`, or `ownerId` parameters are not
+accepted.
 
 **Data Access Layer and DTOs.** This follows the Next.js data security guide.
 The Data Access Layer holds only `*-dal.ts` files that are `server-only` and
@@ -303,7 +316,13 @@ scopes the Space to the verified uid.
   helpers and Server Action delegation and error handling.
 - [x] `tests/unit/space-domain.test.ts` (5 cases) covers the pure Space and
   Object Type UUID v4 validation and owner-id checks in `src/domain/space.ts`.
-  `tests/unit/data-layer-structure.test.ts` (15 cases, with helper
+- [x] `tests/unit/space-parser.test.ts` (9 cases) covers valid Space mapping,
+  optional description handling, invalid document rejection, and ordered
+  filtering in `parseSpaces`.
+- [x] `tests/unit/current-identity-dal.test.ts` (4 cases) covers unauthenticated
+  rejection, missing-Space rejection, rejection of another owner's Space, and
+  returning an owned Space reference from `requireOwnedSpaceRef`.
+- [x] `tests/unit/data-layer-structure.test.ts` (15 cases, with helper
   `tests/unit/data-layer-structure-lib.ts`) checks that the real `src/data/`
   files are `*-dal.ts` modules importing `server-only` and exporting only async
   operations without uid parameters, and that 13 non-conforming fixtures are

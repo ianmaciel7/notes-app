@@ -17,11 +17,12 @@ Implemented for the Firebase layer. `DER.md` documents the Space model and ADR 0
 Delivered: the Space rules in `firestore.rules` (`tests/rules/spaces.rules.test.ts`),
 `src/client/space-client.ts` with emulator-backed tests
 (`tests/rules/spaces-client.rules.test.ts`, `tests/rules/spaces-offline.rules.test.ts`) and
-unit tests for document parsing (`tests/unit/space-client.test.ts`). The
+unit tests for document parsing (`tests/unit/space-parser.test.ts`). The
 Space ID was changed from the Firestore automatic ID to a UUID v4 on the same
 day, before any data existed, so no migration is needed.
-`getDb()` is exported for data modules in `src/lib/firebase/`. No UI, route or
-component consumes the module: that is out of scope for this ADR.
+`getDb()` is exported from `src/lib/firebase/firestore.ts` and consumed by
+`src/client/space-client.ts`. No UI, route or component consumes the module:
+that is out of scope for this ADR.
 
 ## Context
 
@@ -66,8 +67,10 @@ conflict that carries the user's attempted changes, and the Space is re-read
 from the server, so nothing is lost silently.
 
 **Client.** `src/client/space-client.ts` (types and errors live in
-`src/domain/space.ts`, ADR 0011): hand-written
-document parsing (no schema library), `createSpace`, `getSpace`, `listSpaces`
+`src/domain/space.ts`, ADR 0011) uses the extracted browser-side parsers
+`parseSpace` and `parseSpaces` from `src/parsers/space-parser.ts`; those parsers
+use the shared `parseDate` helper in `src/lib/parser.ts`. The client provides
+`createSpace`, `getSpace`, `listSpaces`
 (ordered by `createdAt`), `updateSpace`, `deleteSpace` and `subscribeToSpaces`
 (`onSnapshot`). It uses the internal `getDb()`; `db` is not exported.
 `deleteSpace` calls the server-side deletion action from ADR 0011 rather than

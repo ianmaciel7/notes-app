@@ -26,7 +26,8 @@ remains excluded from application-specific Biome/GritQL enforcement as
 documented in [Coding Standards](../../CODING_STANDARDS.md) and
 [shadcn guard coverage](../guards/SHADCN-GUARD-COVERAGE.md).
 The historical installation inventory below is not a guarantee that every
-originally listed file is still present (for example, `sonner.tsx` is absent).
+originally listed file is still present (for example, `form.tsx` and
+`sonner.tsx` are absent).
 No browser accessibility or interaction test was rerun in this ADR review.
 
 ## Context
@@ -54,7 +55,7 @@ Key architectural facets of this adoption include:
    - Wired Tailwind CSS v4 integration with CSS variable token mapping (`cssVariables: true`, `css: "src/app/globals.css"`).
 
 2. **In-Tree Primitives Installation (`src/components/ui/`)**:
-   - Vendorized all 61 standard UI primitives into `src/components/ui/` (e.g., `accordion`, `alert-dialog`, `avatar`, `badge`, `button`, `calendar`, `card`, `carousel`, `chart`, `checkbox`, `collapsible`, `command`, `context-menu`, `dialog`, `dropdown-menu`, `form`, `hover-card`, `input`, `input-otp`, `menubar`, `navigation-menu`, `popover`, `resizable`, `scroll-area`, `select`, `separator`, `sheet`, `sidebar`, `skeleton`, `slider`, `sonner`, `switch`, `table`, `tabs`, `textarea`, `tooltip`, etc.).
+   - Vendorized the current UI primitives into `src/components/ui/`; the historical inventory included `form` and `sonner`, but `form.tsx` and `sonner.tsx` are absent from the current 61-file directory.
    - Relies on headless `@base-ui/react` primitives alongside focused community packages (`cmdk`, `recharts`, `react-day-picker`, `embla-carousel-react`, `react-resizable-panels`, `input-otp`).
    - Shared utility classes and class variance authority (`class-variance-authority`, `clsx`, `tailwind-merge` encapsulated in `src/lib/utils.ts`).
 

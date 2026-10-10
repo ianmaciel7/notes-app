@@ -21,13 +21,13 @@ Implemented
 `firebase-reference.test.ts` integrity test checks hashes and file
 additions/deletions. `biome.json` and `tsconfig.check.json` exclude this
 upstream reference layer from project-specific checks. `pnpm-workspace.yaml`
-allows build scripts for `@firebase/util` and `protobufjs`.
+records the build-script decision for `@firebase/util` and `protobufjs`.
 `package.json` declares `firebase` ^12.19.0 and Firebase UI core/react
 ^7.1.0; exact installed versions depend on the lockfile.
 
 **Scope clarification:** these 30 files are vendored **references**, not
 30 distinct authentication flows enabled in the application.
-`src/components/notes-app/` owns active user-facing composition, with
+`src/app/**/_components/` owns active user-facing composition, with
 actual supported flows documented in [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md).
 This review checked the manifest and test source but did not execute the test
 or re-run the upstream registry installer.
@@ -62,12 +62,15 @@ Key architectural rules and structure:
   - **Authentication Forms (11)**: `@firebase/email-link-auth-form`, `@firebase/forgot-password-auth-form`, `@firebase/phone-auth-form`, `@firebase/sign-in-auth-form`, `@firebase/sign-up-auth-form`, `@firebase/multi-factor-auth-assertion-form`, `@firebase/multi-factor-auth-enrollment-form`, `@firebase/sms-multi-factor-assertion-form`, `@firebase/sms-multi-factor-enrollment-form`, `@firebase/totp-multi-factor-assertion-form`, `@firebase/totp-multi-factor-enrollment-form`.
   - **Authentication Screens (8)**: `@firebase/email-link-auth-screen`, `@firebase/forgot-password-auth-screen`, `@firebase/multi-factor-auth-assertion-screen`, `@firebase/multi-factor-auth-enrollment-screen`, `@firebase/oauth-screen`, `@firebase/phone-auth-screen`, `@firebase/sign-in-auth-screen`, `@firebase/sign-up-auth-screen`.
   - **Support & Helper Blocks (3)**: `@firebase/country-selector`, `@firebase/policies`, `@firebase/redirect-error`.
-- **Package Manager Build Script Approval (`allowBuilds`)**: Due to pnpm strict supply-chain policy (`ERR_PNPM_IGNORED_BUILDS`), packages containing build/postinstall scripts (`@firebase/util` and `protobufjs`) are explicitly approved using `pnpm approve-builds` and recorded in `pnpm-workspace.yaml`:
+- **Package Manager Build Script Decision (`allowBuilds`)**: pnpm's strict build-script policy (`ERR_PNPM_IGNORED_BUILDS`) requires an explicit decision for `@firebase/util` and `protobufjs`. That decision was first recorded as approved (`true`) and is now recorded as `false` because their scripts are inert here; see [ADR 0008](./0008-adopt-native-firebase-firestore-with-persistent-local-cache.md):
   ```yaml
   allowBuilds:
-    '@firebase/util': true
-    protobufjs: true
+    '@firebase/util': false
+    protobufjs: false
   ```
+  These entries were originally approved as `true`; they are now `false`
+  because the scripts are inert here. Application components moved to route-
+  private folders; see [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md), Amendment 2026-10-09.
 - **Reference-Only Guard & Immutability**: `src/components/firebase/` serves exclusively as an immutable upstream reference baseline. Biome excludes the directory from lint and GritQL guard evaluation, `tsconfig.check.json` (used by `check:types` and `next build`) excludes it from `tsc` while `tsconfig.json` keeps it for editor path resolution (upstream types are not guaranteed to match the installed package versions), while the Vitest guard `tests/unit/firebase-reference.test.ts` compares every file in that directory against a SHA-256 manifest (`tests/unit/firebase-reference.manifest.sha256`) and fails on modified, deleted, or added files, independent of git state. It runs with `pnpm test` and therefore `verify:fast` and CI. Intentional upstream syncs regenerate the manifest with `FIREBASE_REFERENCE_UPDATE=1 pnpm test firebase-reference`.
 - **Architectural Alignment**: This decision establishes the upstream component baseline for use in [ADR 0005](./0005-adopt-firebase-auth-with-local-emulator.md) (application-owned auth components and routes) and [ADR 0006](./0006-adopt-firebase-ui-v7-and-auth-resilience.md) (resilient auth fallback logic).
 
@@ -78,7 +81,7 @@ Key architectural rules and structure:
 - Provides direct, automated access to official Firebase UI component definitions via the shadcn CLI registry mechanism across all 30 upstream blocks.
 - Establishes `src/components/firebase/` as an immutable upstream baseline, eliminating confusion about what originates from upstream versus project code.
 - Guard enforcement prevents unintentional edits and drift in the reference components.
-- Enforces explicit build security governance in `pnpm-workspace.yaml` for `@firebase/util` and `protobufjs`.
+- Records an explicit build-script decision in `pnpm-workspace.yaml` for `@firebase/util` and `protobufjs`.
 - Enables Biome, TypeScript, dependency-cruiser, and project guards to clearly distinguish between reference code and active application code.
 
 ### Trade-offs and Considerations

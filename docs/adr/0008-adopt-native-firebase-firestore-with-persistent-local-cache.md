@@ -41,9 +41,11 @@ Delivered:
   `@firebase/util`; their install scripts are inert here.
 - The JS size budget was raised to 600 kB for the Firestore SDK.
 
-Still pending (needs a feature that reads Firestore from the browser):
+Still pending (the listener API is implemented; what remains is a UI consumer
+and browser-level persistence coverage):
 
-- `onSnapshot` listeners and optimistic writes for application data.
+- A UI consumer of the existing `subscribeToSpaces` `onSnapshot` listener and
+  optimistic-write behavior for application data.
 - Browser tests of IndexedDB persistence across reloads and multi-tab
   behavior. Observed in Chromium with Firebase 12.19.0: `clearIndexedDbPersistence`
   did not reject while a second tab was open, contrary to the failure scenario
@@ -73,7 +75,7 @@ We adopt native Firebase Firestore (`firebase/firestore` via `firebase` 12.19.0)
 
 Key architectural rules and structure:
 - **Persistent Local Cache Configuration**: In browser environments (`typeof window !== "undefined"`), initialize Firestore via `initializeFirestore(app, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) })`. This stores the cache in IndexedDB for durable offline data and lets the SDK coordinate which tab owns the network connection, so the app does not implement its own cross-tab locking.
-- **Dependency Build-Script Policy**: `pnpm-workspace.yaml` currently sets `allowBuilds` to `true` for `protobufjs` (7.6.6) and `@firebase/util` (1.15.3) to clear `ERR_PNPM_IGNORED_BUILDS`. Neither script compiles native code or is needed for the IndexedDB cache: the `protobufjs` `postinstall` only checks the dependent's version scheme (verified in the installed 7.6.6), and the `@firebase/util` `postinstall` only generates default-config files from `FIREBASE_WEBAPP_CONFIG` for App Hosting (verified against `main` in the firebase-js-sdk repository; the installed 1.15.3 copy was not readable). In the browser, Firestore does not use `protobufjs` for its cache; it is a transitive dependency of the gRPC path used on Node. Whether these entries must stay `true` (or can be `false`) is an open supply-chain decision that needs human approval before `pnpm-workspace.yaml` changes.
+- **Dependency Build-Script Policy**: `pnpm-workspace.yaml` currently sets `allowBuilds` to `false` for `protobufjs` (7.6.6) and `@firebase/util` (1.15.3). These entries were originally approved as `true`; they are now `false` because the scripts are inert here. In the browser, Firestore does not use `protobufjs` for its cache; it is a transitive dependency of the gRPC path used on Node.
 - **Resilient Initialization and SSR Fallback**: Persistent IndexedDB cache is browser-only, and the Firestore docs list support only for Chrome, Safari and Firefox. On the server (Server Component / SSR) use the default in-memory cache (`getFirestore(app)` or `initializeFirestore(app, { localCache: memoryLocalCache() })`). In the browser, wrap persistent initialization in `try/catch` and fall back to `memoryLocalCache()`. Two caveats must be covered by tests rather than assumed:
   - The SDK can log "Falling back to memory cache" and continue without throwing (reported in firebase-js-sdk issues), so a `catch` alone does not prove persistence is active.
   - `initializeFirestore` can be called only once per app with a given configuration; after a failed or repeated call, `getFirestore(app)` returns whatever instance already exists. Guard initialization so Fast Refresh and the fallback path never create conflicting instances.
@@ -94,7 +96,7 @@ Key architectural rules and structure:
 
 - **Local-First Reads and Writes**: Snapshot listeners and writes act on the local cache immediately, and the SDK syncs with the backend in the background. Promises from writes still resolve only after backend acknowledgment, so UI code must rely on listeners and latency compensation, not on awaiting writes.
 - **Simplified Stack**: Single SDK and API surface eliminate duplicate validation and manual synchronization layers.
-- **Build Policy Compliance**: `allowBuilds` entries keep installs free of `ERR_PNPM_IGNORED_BUILDS` (see the open build-script question above).
+- **Build Policy Compliance**: `allowBuilds: false` keeps the inert scripts disabled without affecting the Firestore cache.
 - **Built-In Multi-Tab Sync**: `persistentMultipleTabManager` shares the local cache and coordinates listeners across open tabs.
 - **Hermetic Local Testing**: The Firestore emulator is already configured in `firebase.json`, enabling local and CI tests once the npm scripts start it (see Trade-offs).
 - **SSR and Restricted-Context Safety**: The in-memory fallback is intended to avoid crashes in Node.js and restricted browser contexts; this must be proven by tests in both environments.
