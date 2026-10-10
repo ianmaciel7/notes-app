@@ -62,7 +62,7 @@ vi.mock("@/lib/firebase/session-client", () => ({
   createServerSession: mocks.createServerSession,
 }));
 vi.mock(
-  "@/components/notes-app/multi-factor-auth-enrollment-card",
+  "@/app/(protected)/_components/multi-factor-auth-enrollment-card",
   async () => {
     const { Button } = await import("@/components/ui/button");
     return {
