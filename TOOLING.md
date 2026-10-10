@@ -5,8 +5,9 @@ development machine: what each tool is for, where it is configured, and where
 it runs. Policy lives in the documents linked below; this file only maps tools
 to commands and configuration.
 
-Snapshot taken on 2026-10-07. Versions in the machine tables go stale; re-check
-with each tool's `--version`.
+Machine-level CLI snapshot taken on 2026-10-07; repository configuration
+rechecked against `firebase/object-type` on 2026-10-09. Machine versions can
+become stale; re-check with each tool's `--version`.
 
 - Coding policy: [CODING_STANDARDS.md](./CODING_STANDARDS.md)
 - Test strategy: [TESTING.md](./TESTING.md)
@@ -20,9 +21,9 @@ with each tool's `--version`.
 | --- | --- | --- |
 | Node.js | 22.19.0 | `.node-version` |
 | Package manager | pnpm 12.8.1 | `packageManager` in `package.json` |
-| Build-script allowlist | `@firebase/util`, `protobufjs` allowed; `sharp`, `unrs-resolver`, `@parcel/watcher`, `@swc/core` blocked | `pnpm-workspace.yaml` `allowBuilds` |
-| Dependency overrides | `@grpc/grpc-js`, `qs`, `smol-toml` | `pnpm-workspace.yaml` `overrides` |
-| Audit exception | `GHSA-vfj7-8cjw-p6xm` (markdownlint-cli2 globs only) | `pnpm-workspace.yaml` `audit.ignore` |
+| Build-script policy | `@firebase/util`, `protobufjs`, `sharp`, `unrs-resolver`, `@parcel/watcher`, `@swc/core` all blocked (`false`) | `pnpm-workspace.yaml` `allowBuilds` |
+| Dependency overrides | `@grpc/grpc-js`, `qs`, `basic-ftp`, `smol-toml` | `pnpm-workspace.yaml` `overrides` |
+| Audit exceptions | `GHSA-vfj7-8cjw-p6xm` (markdownlint-cli2) and `GHSA-86w9-cpqp-85rv` (transitive node-forge); see recorded rationale | `pnpm-workspace.yaml` `audit.ignore` |
 | Dependency updates | Renovate; `next`, `react`, `react-dom` grouped as `core-framework` | `renovate.json` |
 
 ## 2. Application stack
@@ -158,7 +159,8 @@ development must set both `FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099`
 and `FIRESTORE_EMULATOR_HOST=127.0.0.1:8080`; the E2E runner sets
 them through the emulator launcher. See [ADR 0005](./docs/adr/0005-adopt-firebase-auth-with-local-emulator.md)
 and [ADR 0007](./docs/adr/0007-adopt-cookie-based-next-intl-with-firebase-sync.md).
-ADR 0008's browser persistent cache remains unimplemented.
+ADR 0008's browser `persistentLocalCache` is configured; a UI consumer and
+browser-level reload/multi-tab persistence tests remain pending.
 
 ## 8. Agent tooling
 

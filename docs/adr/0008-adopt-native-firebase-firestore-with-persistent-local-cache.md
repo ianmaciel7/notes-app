@@ -12,11 +12,13 @@ Partially implemented
 
 2026-09-29
 
-## Current State (2026-10-08)
+## Current State (2026-10-09)
 
 **Implementation: base Firestore configuration, security rules, cache cleanup,
-and their tests are delivered (GitHub CI green on `dev`). The Space client now
-reads and writes owner-scoped Space data through Firestore; broader application
+and their tests are delivered. GitHub CI was green on `dev` at review time,
+which does not independently verify this feature branch. The Space client
+reads and writes owner-scoped Space data; root Object Type reads and writes
+are permitted by Rules, but have no application client yet. Broader application
 data access remains pending.**
 
 Delivered:
@@ -31,9 +33,13 @@ Delivered:
 - `clearFirestoreCache()` runs `terminate` then `clearIndexedDbPersistence`
   and rejects on failure. The sign-out hook calls it after Auth sign-out and
   surfaces the error without redirecting.
-- `firestore.rules` (deny by default; a user may read only `users/{uid}`; no
-  client writes) wired through `firebase.json`, with emulator tests in
-  `tests/rules/` (`pnpm run test:rules`, also run in CI).
+- `firestore.rules` (deny by default): an authenticated user may read their
+  `/users/{uid}` profile but cannot write that document from the browser.
+  Owners may read, list, create, and update their own Spaces (ADR 0010) and
+  root Object Types (ADR 0011); browser deletion is denied for both, and
+  inherited Object Type writes are not supported. Rules are wired through
+  `firebase.json` and covered by emulator tests in `tests/rules/`
+  (`pnpm run test:rules`, also run in CI).
 - Unit tests (`tests/unit/firebase-firestore.test.ts` and the sign-out cases)
   and `tests/e2e/firestore-cache.spec.ts` (sign-out leaves no `firestore/`
   IndexedDB database in Chromium).
@@ -76,10 +82,10 @@ We adopt native Firebase Firestore (`firebase/firestore` via `firebase` 12.19.0)
 Key architectural rules and structure:
 - **Persistent Local Cache Configuration**: In browser environments (`typeof window !== "undefined"`), initialize Firestore via `initializeFirestore(app, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) })`. This stores the cache in IndexedDB for durable offline data and lets the SDK coordinate which tab owns the network connection, so the app does not implement its own cross-tab locking.
 - **Dependency Build-Script Policy**: `pnpm-workspace.yaml` currently sets `allowBuilds` to `false` for `protobufjs` (7.6.6) and `@firebase/util` (1.15.3). These entries were originally approved as `true`; they are now `false` because the scripts are inert here. In the browser, Firestore does not use `protobufjs` for its cache; it is a transitive dependency of the gRPC path used on Node.
-- **Resilient Initialization and SSR Fallback**: Persistent IndexedDB cache is browser-only, and the Firestore docs list support only for Chrome, Safari and Firefox. On the server (Server Component / SSR) use the default in-memory cache (`getFirestore(app)` or `initializeFirestore(app, { localCache: memoryLocalCache() })`). In the browser, wrap persistent initialization in `try/catch` and fall back to `memoryLocalCache()`. Two caveats must be covered by tests rather than assumed:
+- **Resilient Initialization and SSR Fallback**: Persistent IndexedDB cache is browser-only, and the Firestore docs list support only for Chrome, Safari and Firefox. On the server (Server Component / SSR) use the default in-memory cache (`getFirestore(app)` or `initializeFirestore(app, { localCache: memoryLocalCache() })`). In the browser, wrap persistent initialization in `try/catch` and call `getFirestore(app)` to reuse the existing instance or obtain the SDK's default in-memory instance on failure. Two caveats must be covered by tests rather than assumed:
   - The SDK can log "Falling back to memory cache" and continue without throwing (reported in firebase-js-sdk issues), so a `catch` alone does not prove persistence is active.
   - `initializeFirestore` can be called only once per app with a given configuration; after a failed or repeated call, `getFirestore(app)` returns whatever instance already exists. Guard initialization so Fast Refresh and the fallback path never create conflicting instances.
-- **Local Emulator Integration**: Connect to the Firestore emulator (`127.0.0.1:8080`) with `connectFirestoreEmulator` only in local development and test runs, gated by an explicit environment flag so production builds never connect to it. Run it alongside the Auth emulator (`127.0.0.1:9099`) for deterministic offline and multi-client testing.
+- **Local Emulator Integration**: Connect to the Firestore emulator (`127.0.0.1:8080`) with `connectFirestoreEmulator` only in local development and test runs, gated by `process.env.NODE_ENV !== "production"` so production builds never connect to it. Run it alongside the Auth emulator (`127.0.0.1:9099`) for deterministic offline and multi-client testing.
 - **Unified Firebase SDK**: Use the native Firestore client as the single data persistence layer with snapshot listeners (`onSnapshot`) and optimistic writes, so the UI reacts to local state immediately (latency compensation) while the SDK syncs with the backend in the background.
 - **Single Source of Truth Export**: All browser Firestore access goes through
   `getDb()` in `src/lib/firebase/firestore.ts`. Initialization and emulator

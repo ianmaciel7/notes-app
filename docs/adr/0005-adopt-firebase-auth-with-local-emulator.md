@@ -27,8 +27,9 @@ fixture. Delivered flows:
 
 - E-mail/password sign-up, sign-in, password-reset request, and sign-out.
 - E-mail-link sign-in (`/email-link`) and phone/SMS sign-in (`/phone`).
-- Google OAuth through the Firebase SDK-managed redirect flow, served by the
-  Emulator's local provider page.
+- Google OAuth through FirebaseUI's SDK-managed popup flow by default; embedded
+  Electron browsers use the SDK-managed redirect strategy instead. The Auth
+  Emulator serves its local provider page for both strategies.
 - SMS multi-factor authentication: enrollment, listing, and removal from
   `/settings` (account-management behavior follows the Firebase Auth Web
   multi-factor guidance, see "Multi-factor authentication") and assertion at
@@ -104,11 +105,11 @@ Session model:
 Client behavior specific to the Emulator:
 
 - `src/lib/firebase/client.ts` connects the Auth client to the Emulator on the
-  same host as the page (`localhost` or `127.0.0.1`). The redirect flow relays
-  its result through an iframe served by the Emulator, and browsers partition
-  that storage when the page and Emulator hosts are cross-site. This alignment is
-  a mitigation for that failure mode; the automated E2E passed without it, so it
-  was not reproduced under automation.
+  same host as the page (`localhost` or `127.0.0.1`). The redirect fallback
+  relays its result through an iframe served by the Emulator, and browsers may
+  partition that storage when the page and Emulator hosts are cross-site. This
+  alignment mitigates that failure mode; the automated E2E passed without it,
+  so it was not reproduced under automation.
 - Outside production the client sets `appVerificationDisabledForTesting`, and
   `src/hooks/use-app-verifier.ts` supplies a stub verifier until the real
   reCAPTCHA verifier is ready. The phone, MFA enrollment, and MFA assertion
@@ -172,11 +173,11 @@ Local commands and verification:
   configurations.
 - Playwright reuses an already running dev server and cannot start a second
   Emulator while port 9099 is taken.
-- `tests/e2e/home.spec.ts` contains four journeys: password sign-up, sign-in,
-  sign-out, reset request, e-mail link, phone sign-in, and protected-route
-  checks with axe audits; SMS MFA enrollment, persistence after reload,
-  assertion at sign-in, and removal; the unverified-e-mail gate on `/settings`;
-  and the Google redirect through the Emulator provider page. Unit tests cover
+- `tests/e2e/home.spec.ts` covers password sign-up, sign-in, sign-out, reset
+  request, e-mail link, phone sign-in, and protected-route checks with axe
+  audits; SMS MFA enrollment, persistence after reload, assertion at sign-in,
+  and removal; the unverified-e-mail gate on `/settings`; and Google OAuth via
+  the Emulator provider page using the default popup flow. Unit tests cover
   the session Route Handler, the failure classifier, and the second-factor
   panel (listing, removal, verified-e-mail gate, recent-login and revoked
   session handling).
@@ -196,7 +197,7 @@ Firebase for the Auth Emulator or confirmed from the installed `firebase-tools`
 | Phone/SMS | Yes; each verification code is generated per attempt | Route implemented; completion covered by E2E | `verificationCodes` emulator REST endpoint |
 | SMS MFA | Yes | Enrollment, listing, removal, and sign-in assertion implemented; covered by E2E | `verificationCodes` emulator REST endpoint |
 | TOTP MFA | No supported local claim | Components exist, but must not be exposed as an Emulator-backed flow | Not applicable until an Emulator release and an E2E prove it |
-| OAuth / third-party IDP | Yes for SDK-managed flows; the Emulator serves a local provider page with mock accounts | Google button implemented with redirect recovery; covered by E2E | Emulator-hosted provider page |
+| OAuth / third-party IDP | Yes for SDK-managed flows; the Emulator serves a local provider page with mock accounts | Google button uses popup by default and redirect in Electron; covered by E2E | Emulator-hosted provider page |
 
 The Auth Emulator never sends e-mail or SMS. It stores OOB links and generated
 SMS codes locally, where deterministic tests can retrieve them from the
@@ -227,9 +228,10 @@ Key architectural rules and structure:
   corresponding authentication flow is usable. New flows require an
   application route, session exchange, and a deterministic test using the
   relevant Emulator REST seam. TOTP must remain unavailable until the pinned
-  Emulator demonstrates support. OAuth must use the Firebase SDK-managed
-  redirect flow so the Emulator can serve its local provider page; manually
-  supplied credentials remain subject to the Emulator's credential limits.
+  Emulator demonstrates support. OAuth must use an SDK-managed provider flow:
+  popup by default, redirect for embedded Electron browsers. The Emulator
+  serves the provider page in either case; manually supplied credentials
+  remain subject to its credential limits.
 - **Server-verified sessions**: The browser's Firebase state is never trusted by
   the server. Protected pages authorize with an Admin SDK–verified,
   revocation-checked session cookie created by `POST /api/auth/session`

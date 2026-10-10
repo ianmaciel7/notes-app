@@ -1,7 +1,7 @@
 # Architecture
 
-This document describes the architecture that is actually present on the
-current `dev` branch. Planned product architecture belongs in product specs,
+This document describes the architecture present in the current source tree.
+Planned product architecture belongs in product specs,
 ADRs, or `DER.md` and must not be described here as already implemented.
 
 ## 1. Current system
@@ -46,6 +46,7 @@ Current core versions:
 ```text
 src/
   app/
+    _components/          # application-level providers and controls
     (public)/             # email-link, forgot-password, phone, sign-in, sign-up
       email-link/page.tsx
       forgot-password/page.tsx
@@ -76,7 +77,6 @@ src/
     space-parser.ts
   components/
     firebase/              # immutable upstream Firebase UI reference (ADR 0004)
-    app/_components/       # route-private application components (ADR 0005, Amendment 2026-10-09)
     ui/                    # project-owned shadcn implementation layer
   data/                    # server-only Data Access Layer (*-dal.ts only)
     locale-dal.ts

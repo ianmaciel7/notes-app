@@ -14,7 +14,20 @@ and rules; if they disagree, fix the one that is wrong in the same change.
 - Chrome recedes. Separation comes from surface change and hairlines, not shadows.
 - Three shapes only: pill (actions), 8px (fields and menus), 18px (containers).
 - Body copy is 17px, not 16px.
-- Both color schemes ship together and follow `prefers-color-scheme`.
+- Both color schemes ship together. The `system` preference follows
+  `prefers-color-scheme`; explicit `light` and `dark` choices override it.
+
+## Theme preference
+
+The theme selector provides `light`, `dark`, and `system`. The selected value
+is stored per device in `localStorage["theme"]`, not in Firestore, so there is
+no cross-device synchronization. `system` is the default and follows the OS
+preference; explicit choices apply an HTML `light` or `dark` class.
+
+`src/lib/theme/theme-script.ts` applies the stored choice before hydration.
+`src/app/_components/theme-provider.tsx` manages changes and storage events;
+`src/app/_components/theme-dropdown-menu.tsx` provides the selector. See the
+2026-10-09 amendment to [ADR 0009](./docs/adr/0009-adopt-apple-style-design-tokens.md).
 
 ## Color
 

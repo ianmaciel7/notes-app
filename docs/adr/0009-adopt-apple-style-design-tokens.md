@@ -28,10 +28,9 @@ OAuth buttons keep brand colors. `--product-shadow` was removed because nothing
 uses it. The motion rules were extracted from DESIGN.md into
 [MOTION.md](../../MOTION.md); DESIGN.md links to it.
 
-The 2026-10-08 static audit of `src/app`, `src/components/ui`, and
-The application component audit covered the current route-private `_components`
-folders (44 occurrences: 4 high, 22 medium, 18 low),
-mainly: nonexistent classes (`text-text-muted` in `policies.tsx`,
+The 2026-10-08 static audit of `src/app` and `src/components/ui` identified
+44 occurrences in the current route-private `_components` folders (4 high,
+22 medium, 18 low), mainly: nonexistent classes (`text-text-muted` in `policies.tsx`,
 `easing-[ease]` in `navigation-menu.tsx`, `shimmer` and `scroll-fade-x` in
 `attachment.tsx`); `shadow-*` still present in several UI primitives;
 hardcoded durations and easings outside the MOTION.md tokens (dialog,
@@ -287,10 +286,10 @@ exit on dialog/drawer/navigation-menu/toast) and both color schemes.
 
 `locale-lang-script` and `theme-script` moved from the former component area to
 `src/lib/i18n/locale-lang-script.ts` and `src/lib/theme/theme-script.ts`.
-Theme selection is implemented by `theme-provider.tsx` and
-`theme-dropdown-menu.tsx`. They contain pure logic and script builders rather
-than JSX or components, so the move aligns them with the shared-helper and
-shadcn registry type conventions.
+These modules contain pure logic and script builders, not JSX or components.
+The UI remains in `src/app/_components/theme-provider.tsx` and
+`src/app/_components/theme-dropdown-menu.tsx`. This separation aligns shared
+helpers with the project's component-placement conventions.
 
 ## Amendment (2026-10-09): light/dark/system theme selection
 
