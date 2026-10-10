@@ -8,7 +8,7 @@ import {
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { setFormRootError } from "@/hooks/set-form-root-error";
+import { setFormRootError } from "@/lib/firebase/form-error";
 
 export function useForgotPasswordAuthForm({
   onPasswordSent,

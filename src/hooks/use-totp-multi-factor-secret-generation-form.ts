@@ -6,7 +6,7 @@ import {
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { TotpSecret } from "firebase/auth";
 import { useForm } from "react-hook-form";
-import { setFormRootError } from "@/hooks/set-form-root-error";
+import { setFormRootError } from "@/lib/firebase/form-error";
 
 type UseTotpMultiFactorSecretGenerationFormProps = {
   onSubmit: (secret: TotpSecret, displayName: string) => void;

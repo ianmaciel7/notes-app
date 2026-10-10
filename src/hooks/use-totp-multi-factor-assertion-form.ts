@@ -3,11 +3,11 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { MultiFactorInfo, UserCredential } from "firebase/auth";
-import { setFormRootError } from "@/hooks/set-form-root-error";
 import {
   type TotpVerifyCodeValues,
   useTotpVerifyCodeForm,
 } from "@/hooks/use-totp-verify-code-form";
+import { setFormRootError } from "@/lib/firebase/form-error";
 
 type UseTotpMultiFactorAssertionFormProps = {
   hint: MultiFactorInfo;

@@ -7,7 +7,7 @@ import {
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { UserCredential } from "firebase/auth";
 import { useForm } from "react-hook-form";
-import { setFormRootError } from "@/hooks/set-form-root-error";
+import { setFormRootError } from "@/lib/firebase/form-error";
 
 type UsePhoneVerifyFormProps = {
   verificationId: string;

@@ -7,7 +7,7 @@ import {
 } from "@firebase-oss/ui-react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
-import { setFormRootError } from "@/hooks/set-form-root-error";
+import { setFormRootError } from "@/lib/firebase/form-error";
 
 export function useSignInAuthForm(props: SignInAuthFormProps) {
   const ui = useUI();

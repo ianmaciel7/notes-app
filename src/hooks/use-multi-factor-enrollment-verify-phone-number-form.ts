@@ -1,11 +1,11 @@
 import { enrollWithMultiFactorAssertion } from "@firebase-oss/ui-core";
 import { useUI } from "@firebase-oss/ui-react";
 import { PhoneAuthProvider, PhoneMultiFactorGenerator } from "firebase/auth";
-import { setFormRootError } from "@/hooks/set-form-root-error";
 import {
   type PhoneVerifyCodeValues,
   usePhoneVerifyCodeForm,
 } from "@/hooks/use-phone-verify-code-form";
+import { setFormRootError } from "@/lib/firebase/form-error";
 
 type UseMultiFactorEnrollmentVerifyPhoneNumberFormProps = {
   verificationId: string;

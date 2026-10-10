@@ -13,8 +13,8 @@ import { useRef } from "react";
 import { useForm } from "react-hook-form";
 
 import type { CountrySelectorRef } from "@/components/notes-app/country-selector";
-import { setFormRootError } from "@/hooks/set-form-root-error";
 import { useAppVerifier } from "@/hooks/use-app-verifier";
+import { setFormRootError } from "@/lib/firebase/form-error";
 
 export function usePhoneNumberForm(
   onVerificationSent: (verificationId: string) => void,
